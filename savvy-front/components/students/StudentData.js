@@ -173,7 +173,8 @@ const Person = (props) => {
         </Name>
         <ButtonBox>
           <StyledButton className="div3" onClick={(e) => setSecret(!secret)}>
-            {secret ? "Открыть" : "Закрыть"}
+            {/* {secret ? "Открыть" : "Закрыть"} */}
+            {secret ? "Open" : "Close"}
           </StyledButton>
         </ButtonBox>
       </Header>

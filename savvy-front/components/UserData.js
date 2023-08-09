@@ -180,6 +180,11 @@ const ClientData = (props) => {
   // Calculating total number of pages
   const totalPages = Math.ceil(clients.length / itemsPerPage);
 
+  const searchWithoutTags = () => {
+    let filtered_clients = clients.filter((c) => c.tags.length == 0);
+    setClients(filtered_clients);
+  };
+
   const search = (val) => {
     let filtered_clients = clients.filter(
       (c) => c.tags.includes(val) || c.tags.includes(val.toLowerCase())
@@ -313,17 +318,31 @@ const ClientData = (props) => {
       const hasLesson = client.lessonResults.some(
         (lessonResult) => lessonResult.lesson.coursePage.id === coursePageId
       );
-
+      console.log("hasLesson", hasLesson);
+      // const newTags = ["Английский", "IQL"];
+      // console.log("email", client.email, client.tags);
+      // updateUser({
+      //   variables: {
+      //     id: client.id,
+      //     tags: newTags,
+      //   },
+      // });
+      let num = 0;
       if (
-        hasLesson &&
-        !client.tags.includes("IQL") &&
-        !client.tags.includes("MQL") &&
-        !client.tags.includes("SQL")
+        hasLesson
+        // && !client.tags.includes("corp") &&
+        // !client.tags.includes("Corp")
+        // && !client.tags.includes("английский")
+        // !client.tags.includes("IQL") &&
+        // !client.tags.includes("MQL") &&
+        // !client.tags.includes("SQL")
       ) {
         // Add the new tag to the 'tags' array
-        const newTags = [...client.tags, tag];
+        const newTags = [...client.tags, tag, "IQL"];
         // Update the client
-        console.log("newTags", newTags);
+        // console.log("client", client);
+        // console.log("newTags", newTags);
+        num = num + 1;
         updateUser({
           variables: {
             id: client.id,
@@ -365,6 +384,7 @@ const ClientData = (props) => {
       );
       if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
         num = num + 1;
+        console.log("next_email", next_email);
         const res = sendMessage({
           variables: {
             userId: c.id,
@@ -402,7 +422,7 @@ const ClientData = (props) => {
         <div>MQL: {MQL_clients.length}</div>
         <div>SQL: {SQL_clients.length}</div>
         <button
-          onClick={(e) => addTagToClient("cjtreu3md00fp0897ga13aktp", "IQL")}
+          onClick={(e) => addTagToClient("ck4n47a2j01jg0790gspxqxju", "ГП")}
         >
           Add tag to client
         </button>
@@ -431,6 +451,10 @@ const ClientData = (props) => {
         <div>
           <input onChange={(e) => setTag(e.target.value)} />
           <button onClick={(e) => search(tag)}>Искать по тегам</button> <br />
+          <button onClick={(e) => searchWithoutTags()}>
+            Показать без тегов
+          </button>{" "}
+          <br />
           <input onChange={(e) => setStartTime(e.target.value)} />
           <input onChange={(e) => setEndTime(e.target.value)} />
           <button onClick={(e) => search7(startTime, endTime)}>

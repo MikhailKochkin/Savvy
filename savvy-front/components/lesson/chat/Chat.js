@@ -17,6 +17,9 @@ const UPDATE_CHAT_MUTATION = gql`
     }
   }
 `;
+
+const Buttons = styled.div``;
+
 const Styles = styled.div`
   /* padding: 70% 0; */
   width: 570px;
@@ -289,12 +292,14 @@ const Chat = (props) => {
         }
       }}
     >
-      {!story && (
-        <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
-      )}
-      {me && !story && (
-        <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
-      )}
+      <Buttons>
+        {!story && (
+          <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
+        )}
+        {me && !story && (
+          <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
+        )}
+      </Buttons>
       {!isRevealed && (
         <Secret shiver={shiver}>
           <Messages isRevealed={isRevealed}>

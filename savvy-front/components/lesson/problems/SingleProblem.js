@@ -198,7 +198,8 @@ const StyledButton = withStyles({
     fontWeight: "600",
     textTransform: "none",
     padding: "10px",
-    width: "170px",
+    width: "140px",
+    height: "45px",
   },
 })(Button);
 
@@ -291,16 +292,22 @@ const SingleProblem = (props) => {
     props.passUpdated(true);
   };
 
+  const getSteps = (val) => {
+    props.getSteps(val);
+  };
+
   return (
     <>
-      {me && !story && (
-        <StyledButton onClick={(e) => setUpdate(!update)}>
-          {!update ? t("update") : t("back")}
-        </StyledButton>
-      )}
-      {me && !story ? (
-        <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />
-      ) : null}
+      <Buttons>
+        {me && !story && (
+          <StyledButton onClick={(e) => setUpdate(!update)}>
+            {!update ? t("update") : t("back")}
+          </StyledButton>
+        )}
+        {me && !story ? (
+          <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />
+        ) : null}
+      </Buttons>
       {!update && (
         <TextBar id={problem.id} story={story}>
           <div id="text">{parse(problem.text)}</div>
@@ -313,6 +320,10 @@ const SingleProblem = (props) => {
               author={author}
               onFinish={onFinish}
             />
+          )}
+          {console.log(
+            "problem.steps.problemItems",
+            problem.steps.problemItems
           )}
           {problem.steps && problem.steps.problemItems.length >= 1 && (
             <NewInteractive
@@ -405,6 +416,13 @@ const SingleProblem = (props) => {
             getResult={getResult}
             switchUpdate={switchUpdate}
             passUpdated={passUpdated}
+            steps={problem.steps}
+            lesson={lesson}
+            problem={problem}
+            story={story}
+            author={author}
+            me={me}
+            getSteps={getSteps}
           />
         </>
       )}

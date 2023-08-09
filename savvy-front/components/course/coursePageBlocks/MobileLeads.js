@@ -36,9 +36,9 @@ const Styles = styled.div`
   width: 100%;
   border-top: 2px solid #d6d6d6;
   border-bottom: 2px solid #d6d6d6;
-  padding: 40px 0;
+  padding: 50px 0;
   margin-top: 40px;
-  background: #fff;
+  background: #e7eff6;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -249,11 +249,12 @@ const Fieldset = styled.fieldset`
   justify-content: center;
   align-items: center;
   border: none;
-  background: #fff;
+  background: #e7eff6;
   padding: 0;
   input {
     font-size: 1.6rem;
     font-family: Montserrat;
+    background: #fff;
   }
   .condition {
     font-size: 1.4rem;
@@ -363,6 +364,15 @@ const MobileBuy = (props) => {
   let in_two_days = new Date();
   in_two_days.setDate(in_two_days.getDate() + 2);
 
+  let currency_symbol;
+  if (coursePage.currency == "ruble") {
+    currency_symbol = "₽";
+  } else if (coursePage.currency == "usd") {
+    currency_symbol = "$";
+  } else if (coursePage.currency == "ruble") {
+    currency_symbol = "$";
+  }
+
   return (
     <Styles id="buy_section">
       <>
@@ -446,6 +456,9 @@ const MobileBuy = (props) => {
           <div className="">{t("access")}</div>
           <div className="">{t("chat")}</div>
           <div className="">{t("certificate")}</div>
+          <div className="">
+            {price ? `${price} ${currency_symbol}` : t("free")}
+          </div>
           {/* <div className="">
             {price}
             {coursePage.currency == "ruble" ? "₽" : "$"}

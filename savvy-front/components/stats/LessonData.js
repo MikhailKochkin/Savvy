@@ -222,7 +222,8 @@ const LessonData = (props) => {
               setShow(!show);
           }}
         >
-          {show ? "Скрыть" : "Подробнее"}
+          {/* {show ? "Скрыть" : "Подробнее"} */}
+          {show ? "Close" : "Open"}
         </StyledButton>
         {res.length > 0 && (
           <StyledButton
@@ -232,7 +233,8 @@ const LessonData = (props) => {
               });
             }}
           >
-            {res[0].checked ? "✅ Проверено" : "Проверить"}
+            {/* {res[0].checked ? "✅ Проверено" : "Проверить"} */}
+            {res[0].checked ? "✅ Checked" : "Check"}
           </StyledButton>
         )}
       </Data>
@@ -246,21 +248,29 @@ const LessonData = (props) => {
               ).toFixed(2) * 100}
             %{" "}
           </div>
-          <div className="div2">Заходов: {res[0].visitsNumber} </div>
+          <div className="div2">
+            {/* Заходов:  */}
+            Visits:
+            {res[0].visitsNumber}{" "}
+          </div>
           <div className="div3">
-            Первый заход: {moment(res[0].createdAt).format("LLL")}
+            {/* Первый заход:  */}
+            First visit: {moment(res[0].createdAt).format("LLL")}
           </div>
           <div className="div4">
-            Последний заход: {moment(res[0].updatedAt).format("LLL")}
+            {/* Последний заход:  */}
+            Last visit: {moment(res[0].updatedAt).format("LLL")}
             {"–"}
             {moment(res[0].updatedAt).fromNow()}
           </div>
         </Box>
       ) : (
         <div className="time">
-          Нет данных по заходам на урок или это был урок-испытание
+          {/* Нет данных по заходам на урок или это был урок-испытание */}
+          No data
         </div>
       )}
+      {console.log("show", show, data)}
       {show && data !== undefined && (
         <>
           {lesson.structure.lessonItems.map((l) => {

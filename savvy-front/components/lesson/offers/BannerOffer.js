@@ -4,7 +4,7 @@ import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import UpdateOffer from "./UpdateOffer";
 
@@ -92,12 +92,11 @@ const Styles = styled.div`
 
 const BiggerBlock = styled.div`
   width: 75%;
-  max-width: 900px:
+  max-width: 900px;
   background: none;
   border-radius: 40px;
   @media (max-width: 800px) {
-      width: 95%;
-
+    width: 95%;
   }
 `;
 
@@ -412,7 +411,7 @@ const Syllabus = styled.div`
 `;
 
 const BannerOffer = (props) => {
-  const { me, offer, coursePageId, coursePage } = props;
+  const { me, offer, coursePageId } = props;
   const [timeRemaining, setTimeRemaining] = useState({
     hours: 0,
     minutes: 0,
@@ -575,6 +574,10 @@ const BannerOffer = (props) => {
       prompt(
         "Пожалуйста, укажите свой номер телефона, чтобы мы могли с вами связаться: "
       );
+
+    if (!number) {
+      return;
+    }
 
     const res = await createBusinessClient({
       variables: {

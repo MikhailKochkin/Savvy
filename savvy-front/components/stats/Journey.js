@@ -50,7 +50,7 @@ const Journey = (props) => {
     labels: data_data,
     datasets: [
       {
-        label: "Результаты по урокам",
+        label: "Lessons results",
         backgroundColor: background_color,
         borderColor: background_color,
         borderWidth: 1,

@@ -525,148 +525,50 @@ const Action = (props) => {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
   }
 
+  let currency_symbol;
+  if (coursePage.currency == "ruble") {
+    currency_symbol = "₽";
+  } else if (coursePage.currency == "usd") {
+    currency_symbol = "$";
+  } else if (coursePage.currency == "ruble") {
+    currency_symbol = "$";
+  }
   return (
     <Styles id="c2a">
       <Container>
         <Contact>
+          {/* Part 1. Header. Price tag or discount offer */}
           {props.coursePage.courseType == "FORMONEY" && (
-            <>
-              <ButtonOpen
-                id="coursePage_to_demolesson"
-                onClick={(e) => {
-                  e.preventDefault();
-                  Router.push({
-                    pathname: "/navigator",
-                    query: {
-                      level: "post",
-                      id: coursePage.promotionId,
-                      source: "coursePage",
-                      name: coursePage.title,
-                    },
-                  });
-                }}
-              >
-                {t("start_open_lesson")}
-              </ButtonOpen>
-            </>
-          )}
-          {props.coursePage.courseType == "PUBLIC" && (
-            <div className="price">{t("free")}</div>
-          )}
-          {props.coursePage.courseType == "PUBLIC" && (
             <ButtonOpen
               id="coursePage_to_demolesson"
-              onClick={async (e) => {
+              onClick={(e) => {
                 e.preventDefault();
-                if (!me) {
-                  alert(`Set up an account on BeSavvy`);
-                  toggleModal();
-                } else {
-                  let enroll = await enrollOnCourse({
-                    variables: {
-                      id: me.id,
-                      coursePageId: coursePage.id,
-                    },
-                  });
-                  Router.push({
-                    pathname: "/course",
-                    query: {
-                      id: coursePage.id,
-                    },
-                  });
-                }
+                Router.push({
+                  pathname: "/navigator",
+                  query: {
+                    level: "post",
+                    id: coursePage.promotionId,
+                    source: "coursePage",
+                    name: coursePage.title,
+                  },
+                });
               }}
             >
-              {enroll_loading ? "..." : t("enroll")}
+              {t("start_open_lesson")}
             </ButtonOpen>
           )}
 
-          <div className="details">
-            <div className="">
-              ◼️ {coursePage.lessons.filter((l) => l.type !== "HIDDEN").length}{" "}
-              {t("online_lessons")}
-            </div>
-            {price > 4000 && <div className="">◼️ {t("webinars")}</div>}
-            <div className="">◼️ {t("access")}</div>
-            <div className="">◼️ {t("chat")}</div>
-            <div className="">◼️ {t("certificate")}</div>
-            <div className="price_div">
-              ◼️ {price ? `${price} ₽` : t("free")}
-            </div>
-
-            {props.coursePage.courseType == "FORMONEY" && (
-              <>
-                {props.coursePage.prices &&
-                  props.coursePage.prices.prices &&
-                  props.coursePage.prices.prices.length > 1 && (
-                    <div className="choose">
-                      <select onChange={(e) => setPrice(e.target.value)}>
-                        {props.coursePage.prices.prices.map((p) => (
-                          <option value={p.price}>{p.name} тариф</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                <ButtonBuy
-                  id="coursePage_buy_button"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    if (!me) {
-                      alert(`Set up an account on BeSavvy`);
-                      toggleModal();
-                    } else {
-                      const res = await createOrder({
-                        variables: {
-                          coursePageId: coursePage.id,
-                          price: props.coursePage.discountPrice
-                            ? props.coursePage.discountPrice
-                            : price,
-                          userId: me.id,
-                          promocode: promo,
-                        },
-                      });
-                      location.href = res.data.createOrder.url;
-                    }
-                  }}
-                >
-                  {loading_data ? `...` : t("buy")}
-                </ButtonBuy>
-                <ButtonBuySmall
-                  id="coursePage_buy_button"
-                  onClick={(e) => getInstallments()}
-                >
-                  Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
-                </ButtonBuySmall>
-              </>
-            )}
-          </div>
-          {props.coursePage.courseType !== "PUBLIC" && (
-            <div className="open">
-              <div className="">{t("after")}</div>
-              <OpenCourse
-                id="coursePage_open_course_button"
+          {props.coursePage.courseType == "PUBLIC" && (
+            <>
+              <div className="price">{t("free")}</div>
+              <ButtonOpen
+                id="coursePage_to_demolesson"
                 onClick={async (e) => {
                   e.preventDefault();
-                  let results = [];
-                  let checked_orders = await Promise.all(
-                    my_orders.map(async (o) => {
-                      let updated_res = await updateOrderAuto({
-                        variables: {
-                          userId: me.id,
-                          id: o.id,
-                        },
-                      });
-                      return updated_res;
-                    })
-                  );
-
-                  const checked_orders2 = checked_orders.filter(
-                    (c) =>
-                      c.data.updateOrderAuto !== null &&
-                      c.data.updateOrderAuto.isPaid == true
-                  );
-
-                  if (checked_orders2.length > 0) {
+                  if (!me) {
+                    alert(`Set up an account on BeSavvy`);
+                    toggleModal();
+                  } else {
                     let enroll = await enrollOnCourse({
                       variables: {
                         id: me.id,
@@ -679,17 +581,129 @@ const Action = (props) => {
                         id: coursePage.id,
                       },
                     });
-                  } else {
-                    alert("Payment not found.");
                   }
                 }}
               >
-                {updated_loading || enroll_loading
-                  ? t("check")
-                  : t("open_acess")}
-              </OpenCourse>
-            </div>
+                {enroll_loading ? "..." : t("enroll")}
+              </ButtonOpen>
+            </>
           )}
+          {/* Part 2. Course description and Purchase button */}
+
+          <div className="details">
+            <div className="">
+              ◼️ {coursePage.lessons.filter((l) => l.type !== "HIDDEN").length}{" "}
+              {t("online_lessons")}
+            </div>
+            {price > 4000 && <div className="">◼️ {t("webinars")}</div>}
+            <div className="">◼️ {t("access")}</div>
+            <div className="">◼️ {t("chat")}</div>
+            <div className="">◼️ {t("certificate")}</div>
+            <div className="price_div">
+              ◼️ {price ? `${price} ${currency_symbol}` : t("free")}
+            </div>
+
+            {props.coursePage.currency == "ruble" &&
+              props.coursePage.courseType == "FORMONEY" && (
+                <>
+                  {props.coursePage.prices &&
+                    props.coursePage.prices.prices &&
+                    props.coursePage.prices.prices.length > 1 && (
+                      <div className="choose">
+                        <select onChange={(e) => setPrice(e.target.value)}>
+                          {props.coursePage.prices.prices.map((p) => (
+                            <option value={p.price}>{p.name} тариф</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  <ButtonBuy
+                    id="coursePage_buy_button"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      if (!me) {
+                        alert(`Set up an account on BeSavvy`);
+                        toggleModal();
+                      } else {
+                        const res = await createOrder({
+                          variables: {
+                            coursePageId: coursePage.id,
+                            price: props.coursePage.discountPrice
+                              ? props.coursePage.discountPrice
+                              : price,
+                            userId: me.id,
+                            promocode: promo,
+                          },
+                        });
+                        location.href = res.data.createOrder.url;
+                      }
+                    }}
+                  >
+                    {loading_data ? `...` : t("buy")}
+                  </ButtonBuy>
+                  <ButtonBuySmall
+                    id="coursePage_buy_button"
+                    onClick={(e) => getInstallments()}
+                  >
+                    Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
+                  </ButtonBuySmall>
+                </>
+              )}
+          </div>
+
+          {/* Part 3. Get access to course after purchase */}
+
+          {props.coursePage.currency == "ruble" &&
+            props.coursePage.courseType !== "PUBLIC" && (
+              <div className="open">
+                <div className="">{t("after")}</div>
+                <OpenCourse
+                  id="coursePage_open_course_button"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    let results = [];
+                    let checked_orders = await Promise.all(
+                      my_orders.map(async (o) => {
+                        let updated_res = await updateOrderAuto({
+                          variables: {
+                            userId: me.id,
+                            id: o.id,
+                          },
+                        });
+                        return updated_res;
+                      })
+                    );
+
+                    const checked_orders2 = checked_orders.filter(
+                      (c) =>
+                        c.data.updateOrderAuto !== null &&
+                        c.data.updateOrderAuto.isPaid == true
+                    );
+
+                    if (checked_orders2.length > 0) {
+                      let enroll = await enrollOnCourse({
+                        variables: {
+                          id: me.id,
+                          coursePageId: coursePage.id,
+                        },
+                      });
+                      Router.push({
+                        pathname: "/course",
+                        query: {
+                          id: coursePage.id,
+                        },
+                      });
+                    } else {
+                      alert("Payment not found.");
+                    }
+                  }}
+                >
+                  {updated_loading || enroll_loading
+                    ? t("check")
+                    : t("open_acess")}
+                </OpenCourse>
+              </div>
+            )}
         </Contact>
       </Container>
       <StyledModal

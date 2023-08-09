@@ -5,23 +5,25 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import ProblemBuilder from "../../create/ProblemBuilder";
+import UpdateProblemBuilder from "./UpdateProblemBuilder";
+import CanvasProblemBuilder from "../../create/CanvasProblemBuilder";
 
 const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
     $id: String!
     $text: String
-    # $nodeID: String
-    # $nodeType: String
     $complexity: Int
+    $steps: ProblemStructure
   ) {
     updateProblem(
       id: $id
       text: $text
-      # nodeID: $nodeID
-      # nodeType: $nodeType
+      steps: $steps
       complexity: $complexity
     ) {
       id
@@ -63,22 +65,12 @@ const useStyles = makeStyles({
   },
 });
 
-const Container = styled.div`
+const Styles = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  margin: 1% 0 0 0;
-  margin-top: 5%;
-  h4 {
-    padding: 0% 5%;
-  }
-  p > a {
-    font-weight: 700;
-  }
-  p > a:hover {
-    text-decoration: underline;
-  }
-  @media (max-width: 600px) {
-    width: 100%;
-  }
+  justify-content: center;
+  align-items: center;
   input {
     padding: 0.5%;
     height: 75%;
@@ -88,6 +80,16 @@ const Container = styled.div`
     border-radius: 3.5px;
     padding: 2%;
     font-size: 1.4rem;
+  }
+  textarea {
+    width: 100%;
+    height: 120px;
+  }
+  .editor_container {
+    width: 660px;
+  }
+  .canvas_container {
+    width: 100%;
   }
 `;
 
@@ -105,6 +107,7 @@ const ButtonTwo = styled.button`
   margin: 20px 0;
   margin-right: 10px;
   transition: 0.3s;
+  width: 250px;
   &:hover {
     background: #2e3b83;
     border: 2px solid #2e3b83;
@@ -133,6 +136,10 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 
 const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
+  const [updatedSteps, setUpdatedSteps] = useState(
+    props.steps.problemItems.length > 0 ? props.steps.problemItems : []
+  );
+
   // const [nodeID, setNodeID] = useState(props.nodeID);
   // const [nodeType, setNodeType] = useState(props.nodeType);
   const [complexity, setComplexity] = useState(
@@ -147,13 +154,32 @@ const UpdateProblem = (props) => {
     setNodeType(type);
   };
 
-  const classes = useStyles();
+  const getSteps = (val) => {
+    console.log("note 4", val);
 
-  const { id, quizes, lessonID, newTests, notes, nodeID, nodeType } = props;
+    setUpdatedSteps([...val]);
+  };
+
+  const {
+    id,
+    quizes,
+    lessonID,
+    newTests,
+    notes,
+    nodeID,
+    me,
+    nodeTyp,
+    steps,
+    lesson,
+    problem,
+    story,
+    author,
+  } = props;
+
   return (
-    <>
-      <Container>
-        <Complexity>
+    <Styles>
+      <div className="editor_container">
+        {/* <Complexity>
           <select
             value={complexity}
             onChange={(e) => setComplexity(parseInt(e.target.value))}
@@ -165,8 +191,11 @@ const UpdateProblem = (props) => {
             <option value={4}>4</option>
             <option value={5}>5</option>
           </select>
-        </Complexity>
+        </Complexity> */}
+        <h3>HTML Editor</h3>
+
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
+        <h3>Text Editor</h3>
 
         <DynamicLoadedEditor
           getEditorText={getText}
@@ -187,40 +216,54 @@ const UpdateProblem = (props) => {
             getNode={handleChange}
           />
         )}
-        <Mutation
-          mutation={UPDATE_PROBLEM_MUTATION}
-          variables={{
-            id,
-            text,
-            // nodeID,
-            // nodeType,
-            complexity,
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID },
-            },
-          ]}
-        >
-          {(updateProblem, { loading, error }) => (
-            <ButtonTwo
-              onClick={async (e) => {
-                // Stop the form from submitting
-                e.preventDefault();
-                // call the mutation
-                const res = await updateProblem();
-                props.getResult(res);
-                props.switchUpdate();
-                props.passUpdated();
-              }}
-            >
-              {loading ? t("saving") : t("save")}
-            </ButtonTwo>
-          )}
-        </Mutation>
-      </Container>
-    </>
+      </div>
+      <div className="canvas_container">
+        <DndProvider backend={HTML5Backend}>
+          <CanvasProblemBuilder
+            lesson={props.lesson}
+            me={props.me}
+            lessonID={lesson.id}
+            getSteps={getSteps}
+            items={steps.problemItems}
+          />
+        </DndProvider>
+      </div>
+      <Mutation
+        mutation={UPDATE_PROBLEM_MUTATION}
+        variables={{
+          id,
+          text,
+          complexity,
+          steps: {
+            problemItems: [...updatedSteps].map(
+              ({ position, content, ...keepAttrs }) => keepAttrs
+            ),
+          },
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID },
+          },
+        ]}
+      >
+        {(updateProblem, { loading, error }) => (
+          <ButtonTwo
+            onClick={async (e) => {
+              // Stop the form from submitting
+              e.preventDefault();
+              // call the mutation
+              const res = await updateProblem();
+              props.getResult(res);
+              props.switchUpdate();
+              props.passUpdated();
+            }}
+          >
+            {loading ? t("saving") : t("save")}
+          </ButtonTwo>
+        )}
+      </Mutation>
+    </Styles>
   );
 };
 

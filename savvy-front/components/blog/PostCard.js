@@ -71,6 +71,7 @@ const PostCard = (props) => {
       <div>
         <div className="title">
           <Link
+            legacyBehavior
             href={{
               pathname: "/post",
               query: {
@@ -83,6 +84,7 @@ const PostCard = (props) => {
         </div>
         <img src={image} />
         <Link
+          legacyBehavior
           href={{
             pathname: "/post",
             query: {

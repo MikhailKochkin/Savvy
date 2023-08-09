@@ -223,6 +223,17 @@ const Article = styled.div`
   }
 `;
 
+const Quote = styled.blockquote`
+  font-size: 1.6rem;
+  width: 100%;
+  margin: 1% 1%;
+  padding: 1% 4%;
+  border-left: 3px solid #0094c6;
+  p {
+    margin: 10px 0;
+  }
+`;
+
 const Flag = styled.div`
   color: #008489;
   font-size: 2rem;
@@ -275,7 +286,7 @@ const StyledModal = Modal.styled`
   padding: 2%;
   textarea {
     width: 80%;
-    height: 150px;
+    height: 110px;
     font-family: Montserrat;
     margin: 15px 0;
   }
@@ -342,13 +353,13 @@ const serialize = (node) => {
   const children = node.children.map((n) => serialize(n)).join("");
   switch (node.type) {
     case "quote":
-      return `<blockquote><p>${children}</p></blockquote>`;
+      return `<blockquote>${children}</blockquote>`;
     case "question":
       return `<div className="question">${children}</div>`;
     case "flag":
       return `<div className="flag">${children}</div>`;
     case "article":
-      return `<div className="article">${children}</div>`;
+      return `<blockquote>${children}</blockquote>`;
     case "conceal":
       return `<div id="conceal" data-text="${escapeHtml(
         node.data
@@ -677,24 +688,6 @@ const CustomEditor = {
     });
   },
 
-  // addError(editor) {
-  //   let correct = prompt("Правильный ответ: ");
-  //   Transforms.setNodes(
-  //     editor,
-  //     { type: "error", error: true, error_text: correct, error_data: correct },
-  //     { match: (n) => Text.isText(n), split: true }
-  //   );
-  // },
-
-  // addComment(editor) {
-  //   let my_data = prompt("Комментарий: ");
-  //   Transforms.setNodes(
-  //     editor,
-  //     { type: "note", note: my_data },
-  //     { match: (n) => Text.isText(n), split: true }
-  //   );
-  // },
-
   makeList(editor, format) {
     const isActive = isBlockActive(editor, format);
     const isList = LIST_TYPES.includes(format);
@@ -782,7 +775,7 @@ const insertComment = (editor, data, setModalData, setModalOpen) => {
     wrapComment(editor, data);
     // Open the modal and set the initial modal data
     setModalData(data);
-    setModalOpen(true);
+    // setModalOpen(true);
   }
 };
 
@@ -808,13 +801,16 @@ const wrapComment = (editor, data) => {
   }
 };
 
-const insertError = (editor, data) => {
+const insertError = (editor, data, setModalData) => {
   if (editor.selection) {
     wrapError(editor, data);
+    setModalData(data);
   }
 };
 
 const updateError = (editor, modalData, setModalOpen, notePath) => {
+  console.log("notePath", notePath);
+
   Transforms.setNodes(
     editor,
     { error_data: modalData, error_text: modalData },
@@ -843,10 +839,21 @@ const wrapError = (editor, data) => {
   }
 };
 
-const insertQuiz = (editor, q, a, ifr, ifw) => {
+const insertQuiz = (editor, q, a, ifr, ifw, setModalData, setModalOpen) => {
   if (editor.selection) {
     wrapQuiz(editor, q, a, ifr, ifw);
   }
+};
+
+const updateQuiz = (editor, q, a, ifr, ifw, notePath) => {
+  console.log("q, a, ifr, ifw", q, a, ifr, ifw);
+  console.log("notePath", notePath);
+  Transforms.setNodes(
+    editor,
+    { question: q, answer: a, ifRight: ifr, ifWrong: ifw },
+    { at: notePath }
+  );
+  console.log(JSON.stringify("editor.children", editor.children, null, 2));
 };
 
 const wrapQuiz = (editor, q, a, ifr, ifw) => {
@@ -925,6 +932,10 @@ const App = (props) => {
   const [modalData, setModalData] = useState("");
   const [type, setType] = useState(null);
   const [notePath, setNotePath] = useState(null);
+  const [modalQuestionAnswerData, setModalQuestionAnswerData] = useState("");
+  const [modalIfWrongData, setModalIfWrongData] = useState("");
+  const [modalIfRightData, setModalIfRightData] = useState("");
+
   const editor = useMemo(
     () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),
     []
@@ -938,14 +949,38 @@ const App = (props) => {
   };
 
   const handleSubmitModal = (type) => {
-    console.log(1);
+    console.log(1, type);
     if (type == "note") {
       updateComment(editor, modalData, setModalOpen, notePath);
+    } else if (type == "createNote") {
+      insertComment(editor, modalData, setModalOpen, notePath);
+    } else if (type == "createError") {
+      insertError(editor, modalData, setModalOpen, notePath);
     } else if (type == "error") {
       updateError(editor, modalData, setModalOpen, notePath);
+    } else if (type == "createQuestion") {
+      insertQuiz(
+        editor,
+        modalData,
+        modalQuestionAnswerData,
+        modalIfRightData,
+        modalIfWrongData,
+        notePath
+      );
+    } else if (type == "updateQuestion") {
+      console.log("2 note path", notePath);
+      updateQuiz(
+        editor,
+        modalData,
+        modalQuestionAnswerData,
+        modalIfRightData,
+        modalIfWrongData,
+        notePath
+      );
     }
     handleCloseModal();
   };
+
   // 4.1 Element renderer
 
   const renderElement = useCallback((props) => {
@@ -974,7 +1009,19 @@ const App = (props) => {
           </LinkElement>
         );
       case "quiz":
-        return <QuizElement {...props} />;
+        return (
+          <QuizElement
+            editor={editor}
+            setModalData={setModalData}
+            setModalOpen={setModalOpen}
+            setModalQuestionAnswerData={setModalQuestionAnswerData}
+            setModalIfRightData={setModalIfRightData}
+            setModalIfWrongData={setModalIfWrongData}
+            setNotePath={setNotePath}
+            setType={setType}
+            {...props}
+          />
+        );
       case "table":
         return (
           <TableElement>
@@ -1041,27 +1088,50 @@ const App = (props) => {
       >
         <div>
           Element type: {type}.{" "}
-          {type == "note" && "Write a comment to the highlighted text"}
-          {type == "error" && "Write a correct version of the incorrect text"}
+          {type === "note" && "Write a comment to the highlighted text"}
+          {type === "error" && "Write a correct version of the incorrect text"}
         </div>
         <textarea
           type="text"
+          placeholder={type == "createQuestion" ? "Your question" : ""}
           value={modalData}
           onChange={(e) => setModalData(e.target.value)}
         />
-        <button onClick={(e) => handleSubmitModal(type)}>Update</button>
+        {(type == "createQuestion" || type == "updateQuestion") && (
+          <>
+            <textarea
+              type="text"
+              placeholder="sample answer"
+              value={modalQuestionAnswerData}
+              onChange={(e) => setModalQuestionAnswerData(e.target.value)}
+            />
+            <textarea
+              type="text"
+              placeholder="comment if wrong answer is given"
+              value={modalIfWrongData}
+              onChange={(e) => setModalIfWrongData(e.target.value)}
+            />
+            <textarea
+              type="text"
+              placeholder="comment if correct answer is given"
+              value={modalIfRightData}
+              onChange={(e) => setModalIfRightData(e.target.value)}
+            />
+          </>
+        )}
+        <div>Type: {type}</div>
+        <button
+          onClick={(e) => {
+            handleSubmitModal(type);
+            // if (modalData.trim() !== "") {
+            //   insertComment(editor, modalData, setModalData, setModalOpen);
+            // }
+          }}
+        >
+          Update
+        </button>
       </StyledModal>
-      {/* <Modal
-        isOpen={modalOpen}
-        onClose={handleCloseModal}
-        onSubmit={() => handleSubmitModal(type)} // Use an arrow function here
-      >
-        <input
-          type="text"
-          value={modalData}
-          onChange={(e) => setModalData(e.target.value)}
-        />
-      </Modal> */}
+
       <Slate
         editor={editor}
         value={value}
@@ -1175,7 +1245,7 @@ const App = (props) => {
             <ButtonStyle
               onMouseDown={(event) => {
                 event.preventDefault();
-                toggleElement(editor, "article");
+                toggleElement(editor, "quote");
               }}
             >
               <FaQuoteLeft value={{ className: "react-icons" }} />
@@ -1213,9 +1283,12 @@ const App = (props) => {
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    const data = window.prompt("Напишите комментарий:");
-                    if (!data) return;
-                    insertComment(editor, data, setModalData, setModalOpen);
+                    // const data = window.prompt("Напишите комментарий:");
+                    // if (!data) return;
+                    // insertComment(editor, data, setModalData, setModalOpen);
+                    setType("createNote");
+
+                    setModalOpen(true);
                   }}
                 >
                   <BiCommentAdd value={{ className: "react-icons" }} />
@@ -1223,9 +1296,10 @@ const App = (props) => {
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    const data = window.prompt("Правильный вариант:");
-                    if (!data) return;
-                    insertError(editor, data);
+                    // const data = window.prompt("Правильный вариант:");
+                    // if (!data) return;
+                    setType("createError");
+                    setModalOpen(true);
                   }}
                 >
                   <BiCommentError value={{ className: "react-icons" }} />
@@ -1234,11 +1308,13 @@ const App = (props) => {
                   onMouseDown={(event) => {
                     event.preventDefault();
                     // CustomEditor.addQuiz(editor);
-                    let q = window.prompt("Вопрос: ");
-                    let a = window.prompt("Ответ: ");
-                    let ifr = window.prompt("Если правильно: ");
-                    let ifw = window.prompt("Если неправильно: ");
-                    insertQuiz(editor, q, a, ifr, ifw);
+                    // let q = window.prompt("Вопрос: ");
+                    // let a = window.prompt("Ответ: ");
+                    // let ifr = window.prompt("Если правильно: ");
+                    // let ifw = window.prompt("Если неправильно: ");
+                    // insertQuiz(editor, q, a, ifr, ifw);
+                    setType("createQuestion");
+                    setModalOpen(true);
                   }}
                 >
                   <BiCommentCheck value={{ className: "react-icons" }} />
@@ -1302,22 +1378,18 @@ const Leaf = ({ attributes, children, leaf }) => {
 
 // 6. Code element declaration
 
-const CodeElement = (props) => {
-  return (
-    <blockquote {...props.attributes}>
-      <p>{props.children}</p>
-    </blockquote>
-  );
-};
+// const CodeElement = (props) => {
+//   return (
+//     <blockquote {...props.attributes}>
+//       <p>{props.children}</p>
+//     </blockquote>
+//   );
+// };
 
 // 7. Quote element declaration
 
 const QuoteElement = (props) => {
-  return (
-    <pre {...props.attributes}>
-      <code>{props.children}</code>
-    </pre>
-  );
+  return <Quote {...props.attributes}>{props.children}</Quote>;
 };
 
 // 8. Header element declaration
@@ -1380,8 +1452,37 @@ const ErrorElement = ({
   );
 };
 
-const QuizElement = (props) => {
-  return <Quiz {...props.attributes}>{props.children}</Quiz>;
+const QuizElement = ({
+  editor,
+  setModalData,
+  setModalQuestionAnswerData,
+  setModalIfRightData,
+  setModalIfWrongData,
+  setModalOpen,
+  setNotePath,
+  setType,
+  ...props
+}) => {
+  return (
+    <Quiz
+      {...props.attributes}
+      onMouseDown={(event) => {
+        event.preventDefault(); // prevent Slate's default mouse down handling
+        console.log("props.element", props.element);
+        setModalData(props.element.question);
+        setModalQuestionAnswerData(props.element.answer);
+        setModalIfRightData(props.element.ifRight);
+        setModalIfWrongData(props.element.ifWrong);
+        setModalOpen(true);
+        const path = ReactEditor.findPath(editor, props.element);
+        console.log("the path", path);
+        setNotePath(path); // store the path
+        setType("updateQuestion");
+      }}
+    >
+      {props.children}
+    </Quiz>
+  );
 };
 
 const DefaultElement = (props) => {

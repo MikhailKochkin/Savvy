@@ -455,6 +455,15 @@ const Action = (props) => {
     }, 0);
   }
 
+  let currency_symbol;
+  if (coursePage.currency == "ruble") {
+    currency_symbol = "₽";
+  } else if (coursePage.currency == "usd") {
+    currency_symbol = "$";
+  } else if (coursePage.currency == "ruble") {
+    currency_symbol = "$";
+  }
+
   return (
     <Styles id="c2a">
       <Container>
@@ -566,7 +575,7 @@ const Action = (props) => {
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
             <div className="">
-              ◼️ {program ? program.price : coursePage.price} ₽
+              ◼️ {program ? program.price : coursePage.price} {currency_symbol}
             </div>
           </div>
         </Contact>

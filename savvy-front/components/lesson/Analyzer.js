@@ -2,7 +2,12 @@ import { enableExperimentalFragmentVariables } from "@apollo/client";
 import { useState } from "react";
 import styled from "styled-components";
 import { Bar } from "react-chartjs-2";
-import { LoneAnonymousOperationRule } from "graphql";
+import parse from "html-react-parser";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
+import calculateSum from "../../functions.js";
+import _ from "lodash";
 
 const Styles = styled.div`
   width: 660px;
@@ -15,7 +20,19 @@ const Container = styled.div`
   width: 100%;
   margin: 5% 0;
   .box {
+    .circle {
+      width: 10px;
+      height: 10px;
+      background: blue;
+      display: inline;
+    }
     margin-bottom: 15px;
+    .block {
+      margin-bottom: 15px;
+    }
+    .loop_box {
+      margin-bottom: 25px;
+    }
   }
   h4 {
     padding: 0% 5%;
@@ -28,6 +45,9 @@ const Container = styled.div`
   }
   @media (max-width: 600px) {
     width: 100%;
+  }
+  .chart-container canvas {
+    height: 275px !important;
   }
   input {
     padding: 1.5% 2%;
@@ -62,6 +82,147 @@ const Container = styled.div`
     background-position: right 0.7em top 50%, 0 0;
     background-size: 0.65em auto, 100%;
   }
+  .video-container {
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  .video-fit {
+    width: 400px;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 800px) {
+    .video-container {
+      width: 350px;
+    }
+    .video-fit {
+      width: 350px;
+      height: 100%;
+    }
+  }
+  @media (max-width: 800px) {
+    font-size: 1.6rem;
+    width: 90%;
+    order: 3;
+    h2 {
+      font-size: 2.2rem;
+      line-height: 1.4;
+    }
+  }
+  .header {
+    background: #e0e0e0;
+  }
+  h3 {
+    border-top: 1px solid grey;
+    padding-top: 30px;
+  }
+
+  h2 {
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  img {
+    display: block;
+    width: 100%;
+    /* max-height: 50em; */
+    box-shadow: "0 0 0 2px blue;";
+    object-fit: contain;
+  }
+  p {
+    margin: 20px 0;
+  }
+  iframe {
+    min-width: 600px;
+    width: 100%;
+    height: 400px;
+    @media (max-width: 800px) {
+      min-width: 300px;
+      min-height: 200px;
+      width: 100%;
+      height: auto;
+    }
+  }
+  a {
+    border-bottom: 2px solid #26ba8d;
+    padding: 0%;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  .flag {
+    color: #008489;
+    font-size: 1.8rem;
+    width: 100%;
+    margin: 3% 0;
+    padding: 3% 8%;
+    background-color: #f2fafb;
+    border-radius: 5px;
+  }
+  .article {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 1% 1%;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    /* line-height: 1.6; */
+    p {
+      margin: 10px 0;
+    }
+  }
+  blockquote {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 0;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    /* line-height: 1.6; */
+    p {
+      margin: 10px 0;
+    }
+  }
+  pre {
+    background: #282c34;
+    color: white;
+    padding: 2% 4%;
+    line-height: 1;
+    font-size: 1.4rem;
+    border-radius: 10px;
+    overflow-x: scroll;
+  }
+  table {
+    width: 100%;
+    border: 1px solid #edefed;
+    border-collapse: collapse;
+    font-size: 1.4rem;
+    tr {
+      border: 1px solid #edefed;
+    }
+    tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+    thead {
+      background: #36304a;
+      color: #fff;
+    }
+    th {
+      border: 1px solid #edefed;
+      padding: 15px 0;
+    }
+    td {
+      border: 1px solid #edefed;
+      border-top: none;
+      border-bottom: none;
+      border-right: none;
+      padding: 0% 2.5%;
+      position: relative;
+      padding: 15px 15px;
+    }
+  }
 `;
 
 const Button = styled.button`
@@ -82,6 +243,24 @@ const Button = styled.button`
   &:hover {
     background: #2e3b83;
     border: 2px solid #2e3b83;
+  }
+`;
+
+const SimpleButton = styled.button`
+  width: 230px;
+  height: 40px;
+  background: none;
+  padding: 5px 0;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
   }
 `;
 
@@ -159,82 +338,64 @@ const Analyzer = (props) => {
   const [communication, setCommunication] = useState(0);
   const [theory, setTheory] = useState(0);
   const [practice, setPractice] = useState(0);
+  const [longreadComments, setLongreadComments] = useState([]);
+  const [chatComments, setChatComments] = useState([]);
+  const [lessonRecommendations, setLessonRecommendations] = useState([]);
+  const [isLongreadOpen, setIsLongreadOpen] = useState(false);
+  const [isDialogueOpen, setIsDialogueOpen] = useState(false);
+
+  const { t } = useTranslation("lesson");
 
   const { elements, lesson } = props;
 
-  let lesson_structure = [];
-  elements
-    .filter((el) => el.id !== undefined)
-    .map((el, i) => {
-      if (i == 0) {
-        lesson_structure.push([el]);
-      } else {
-        if (elements[i - 1].id == undefined) {
-          return;
-        }
-
-        if (elements[i - 1].type.toLowerCase() == el.type.toLowerCase()) {
-          lesson_structure[lesson_structure.length - 1].push(el);
-        } else {
-          lesson_structure.push([el]);
-        }
-      }
-    });
-
+  // 1. Build the labels map for the lesson difficulty map
   let lesson_difficulty_map = [];
   let lesson_labels = [];
   elements
     .filter((el) => el.id !== undefined)
     .map((el, i) => {
-      if (el.type.toLowerCase() == "quiz") {
-        lesson_difficulty_map.push(2);
-        lesson_labels.push("quiz");
-      } else if (el.type.toLowerCase() == "testpractice") {
-        lesson_difficulty_map.push(3);
-        lesson_labels.push("testpractice");
-      } else if (
-        el.type.toLowerCase() == "texteditor" ||
-        el.type.toLowerCase() == "construction"
-      ) {
-        lesson_difficulty_map.push(4);
-        if (el.type.toLowerCase() == "texteditor") {
-          lesson_labels.push("text editor");
-        } else if (el.type.toLowerCase() == "construction") {
-          lesson_labels.push("doc builder");
-        }
-      } else if (el.type.toLowerCase() == "problem") {
-        lesson_difficulty_map.push(5);
-        lesson_labels.push("problem");
-      } else if (el.type.toLowerCase() == "newtest") {
-        lesson_difficulty_map.push(1);
-        lesson_labels.push("newtest");
-      } else if (el.type.toLowerCase() == "note") {
-        lesson_difficulty_map.push(1);
-        lesson_labels.push("longread");
-      } else if (el.type.toLowerCase() == "shot") {
-        lesson_difficulty_map.push(2);
-        lesson_labels.push("slides");
-      } else if (el.type.toLowerCase() == "chat") {
-        lesson_difficulty_map.push(1);
-        lesson_labels.push("chat");
-      } else if (el.type.toLowerCase() == "forum") {
-        lesson_difficulty_map.push(1);
-        lesson_labels.push("forum");
-      }
-      //   else {
-      //     lesson_difficulty_map.push(1);
-      //     if (el.type.toLowerCase() == "newTest") {
-      //       lesson_labels.push("test");
-      //     } else if (el.type.toLowerCase() == "note") {
-      //       lesson_labels.push("longread");
-      //     } else if (el.type.toLowerCase() == "chat") {
-      //       lesson_labels.push("chat");
-      //     }
-      //   }
-    });
+      const typeDifficultyMap = {
+        quiz: 2,
+        testpractice: 3,
+        texteditor: 4,
+        construction: 4,
+        problem: 5,
+        testpractice: 4,
+        newtest: 1,
+        document: 5,
+        note: 2,
+        shot: 2,
+        chat: 1,
+        forum: 3,
+        document: 4,
+        offer: 0,
+      };
 
-  // let arr = [1, 2, 2, 2, 3, 4, 4, 4]
-  // result = [[1],[2,2,2],[3],[4, 4, 4]]
+      const typeLabelMap = {
+        quiz: t("Quiz"),
+        testpractice: t("TestPractice"),
+        texteditor: t("TextEditor"),
+        construction: t("Construction"),
+        problem: t("Problem"),
+        newtest: t("NewTest"),
+        note: t("Note"),
+        shot: t("Shot"),
+        chat: t("Chat"),
+        forum: t("Forum"),
+        document: t("Document"),
+        testpractice: t("TestPractice"),
+        offer: t("Offer"),
+      };
+
+      const lowerType = el.type.toLowerCase();
+      if (typeLabelMap[lowerType]) {
+        lesson_labels.push(`${i + 1}. ${typeLabelMap[lowerType]}`);
+      }
+
+      if (typeDifficultyMap[lowerType] !== undefined) {
+        lesson_difficulty_map.push(typeDifficultyMap[lowerType]);
+      }
+    });
 
   let communicationElements = [];
   let theoryElements = [];
@@ -243,302 +404,524 @@ const Analyzer = (props) => {
   let theoryLevel = 0;
   let practiceLevel = 0;
   let total_number = 0;
-
   let communicationComment;
   let practiceComment;
   let theoryComment;
 
   if (communication < 5) {
-    communicationComment =
-      "❌ ⬆️ Add more communication elements (intro chat, forum or forms) to communicate more with your students";
-  } else if (communication >= 5 && communication < 11) {
-    communicationComment = "✅  Communication is fine";
+    communicationComment = t("add_communication");
+  } else if (communication >= 5 && communication < 20) {
+    communicationComment = t("communication_ok");
   } else if (communication >= 11) {
-    communicationComment = "❌ ⬇️ Cut down on communication elements";
+    communicationComment = t("reduce_communication");
   }
   if (practice < 40) {
-    practiceComment =
-      "❌ ⬆️ Add more practice elements (quizes, texteditors, doc builders or case studies) to help your students practice more";
+    practiceComment = t("add_practice");
   } else if (practice >= 40 && practice < 66) {
-    practiceComment = "✅  Practice is fine";
+    practiceComment = t("practice_ok");
   } else if (practice >= 66) {
-    practiceComment =
-      "❌ ⬇️ Are you sure that all these practical assignments are supported by the theory block?";
+    practiceComment = t("check_practice_theory");
   }
   if (theory < 25) {
-    theoryComment = "❌ ⬆️ Add more theory and explanations";
+    theoryComment = t("add_theory");
   } else if (theory >= 25 && theory < 50) {
-    theoryComment = "✅  Theory and explanations are fine";
+    theoryComment = t("theory_ok");
   } else if (theory >= 50) {
-    theoryComment =
-      "❌ ⬇️ Isn't that too much theory for one lesson? Or maybe you should add more exercises?";
+    theoryComment = t("too_much_theory");
   }
 
+  // 2. Start the anlysis
+
   const analyzeLesson = () => {
+    const typeLevels = {
+      communication: {
+        forum: 3,
+        chat: 1,
+        newtest: 2,
+      },
+      theory: {
+        note: 3,
+        chat: 1,
+        shot: 2,
+      },
+      practice: {
+        newtest: 1,
+        quiz: 1,
+        testpractice: 3,
+        texteditor: 3,
+        document: 4,
+        construction: 2,
+        problem: 5,
+      },
+    };
+
+    const getLessonType = (type) => {
+      if (typeLevels.communication[type]) return "communication";
+      if (typeLevels.theory[type]) return "theory";
+      if (typeLevels.practice[type]) return "practice";
+      return null;
+    };
+
     elements
+      // remove unsaved lesson blocks
       .filter((el) => el.id !== undefined)
-      .map((el, i) => {
-        if (
-          el.type.toLowerCase() == "forum" ||
-          (el.type.toLowerCase() == "chat" && i == 0) ||
-          (el.type.toLowerCase() == "newtest" &&
-            lesson.newTests.find((nt) => nt.id == el.id).type &&
-            lesson.newTests.find((nt) => nt.id == el.id).type.toLowerCase() ==
-              "form")
-        ) {
-          communicationElements.push(el);
-          if (el.type.toLowerCase() == "forum") {
-            communicationLevel = communicationLevel + 3;
-          } else if (el.type.toLowerCase() == "chat") {
-            communicationLevel = communicationLevel + 1;
-          } else if (el.type.toLowerCase() == "newtest") {
-            communicationLevel = communicationLevel + 2;
-          }
-        } else if (
-          el.type.toLowerCase() == "note" ||
-          el.type.toLowerCase() == "chat" ||
-          el.type.toLowerCase() == "shot"
-        ) {
-          theoryElements.push(el);
-          if (el.type.toLowerCase() == "note") {
-            theoryLevel = theoryLevel + 3;
-          } else if (el.type.toLowerCase() == "chat") {
-            theoryLevel = theoryLevel + 1;
-          } else if (el.type.toLowerCase() == "shot") {
-            theoryLevel = theoryLevel + 2;
-          }
-        } else if (
-          el.type.toLowerCase() == "newtest" ||
-          el.type.toLowerCase() == "quiz" ||
-          el.type.toLowerCase() == "testpractice" ||
-          el.type.toLowerCase() == "texteditor" ||
-          el.type.toLowerCase() == "document" ||
-          el.type.toLowerCase() == "construction" ||
-          el.type.toLowerCase() == "problem"
-        ) {
-          practiceElements.push(el);
-          if (
-            el.type.toLowerCase() == "newtest" ||
-            el.type.toLowerCase() == "quiz"
-          ) {
-            practiceLevel = practiceLevel + 1;
+      // go through each lesson block
+
+      .forEach((el, i) => {
+        // get lesson block type and decide which category it belongs to
+
+        const type = el.type.toLowerCase();
+        const lessonType = getLessonType(type);
+
+        // after distribution between categories we determine
+        // the value of every block using the coefs from typeLevels
+
+        if (lessonType) {
+          if (type === "chat" && i == 0) {
+            communicationElements.push(el);
+            communicationLevel += typeLevels.communication[type];
+            console.log(1);
+          } else if (type === "chat" && i !== 0) {
+            theoryElements.push(el);
+            theoryLevel += typeLevels.theory[type];
           } else if (
-            el.type.toLowerCase() == "testpractice" ||
-            el.type.toLowerCase() == "problem" ||
-            el.type.toLowerCase() == "document"
+            (type === "newtest" || type === "quiz") &&
+            (lesson.newTests
+              .find((nt) => nt.id === el.id)
+              ?.type?.toLowerCase() == "form" ||
+              lesson.quizes
+                .find((nt) => nt.id === el.id)
+                ?.type?.toLowerCase() == "form")
           ) {
-            practiceLevel = practiceLevel + 3;
-          } else if (
-            el.type.toLowerCase() == "construction" ||
-            el.type.toLowerCase() == "texteditor"
-          ) {
-            practiceLevel = practiceLevel + 2;
+            console.log(
+              2,
+              lesson.newTests.find((nt) => nt.id === el.id)
+            );
+
+            communicationElements.push(el);
+            communicationLevel += typeLevels.communication[type];
+          } else if (lessonType === "communication") {
+            console.log(3);
+            communicationElements.push(el);
+            communicationLevel += typeLevels.communication[type];
+          } else if (lessonType === "theory") {
+            theoryElements.push(el);
+            theoryLevel += typeLevels.theory[type];
+          } else if (lessonType === "practice") {
+            practiceElements.push(el);
+            practiceLevel += typeLevels.practice[type];
           }
         }
       });
 
-    total_number = communicationLevel + theoryLevel + practiceLevel;
+    console.log("total_number", communicationLevel, theoryLevel, practiceLevel);
+
+    // get the numbers
+    const total_number = communicationLevel + theoryLevel + practiceLevel;
     setCommunication(Math.round((communicationLevel / total_number) * 100));
     setPractice(Math.round((practiceLevel / total_number) * 100));
     setTheory(Math.round((theoryLevel / total_number) * 100));
     setShow(true);
   };
 
-  // find value in lesson. Lesson is a loop: learn –> test / practice -> get feedback
-  // 1. Break lesson into chunks by 2 / by 3 / by 4 / by 5
-  const sliceIntoChunks = (arr, chunkSize) => {
-    const res = [];
-    for (let i = 0; i < arr.length; i += chunkSize) {
-      const chunk = arr.slice(i, i + chunkSize);
-      res.push(chunk);
-    }
-    return res;
+  // 3. Provide lesson structure insights
+
+  const difficultyLevels = {
+    theory: {
+      note: 2,
+      chat: 1,
+      shot: 2,
+    },
+    practice: {
+      newtest: 1,
+      quiz: 2,
+      testpractice: 3,
+      texteditor: 3,
+      document: 4,
+      construction: 2,
+      problem: 5,
+    },
   };
 
-  let elems_2 = sliceIntoChunks(elements, 2);
-  let elems_3 = sliceIntoChunks(elements, 3);
-  let elems_4 = sliceIntoChunks(elements, 4);
+  console.log(elements);
 
-  // 1. learn
-  let learn_box = ["chat", "note", "shot"];
-  // 1. test
-  let test_box = ["newtest", "quiz", "problem", "texteditor", "construction"];
-  // 1. feedback
-  let feedback_box = ["chat", "note"];
-  let study_loops = [];
-  elements.map((el, i) => {
-    if (el.type && learn_box.includes(el.type.toLowerCase())) {
-      if (
-        elements[i + 1] &&
-        elements[i + 1].type &&
-        test_box.includes(elements[i + 1].type.toLowerCase())
-      ) {
-        let index = elements
-          .slice(i + 1)
-          .findIndex(
-            (el) => el.type && learn_box.includes(el.type.toLowerCase())
-          );
-        study_loops.push(
-          elements
-            .slice(i)
-            .slice(0, index == -1 ? elements.length - 1 : index + 2)
-        );
+  const getRecommendations = (elements) => {
+    const recommendations = [];
+    const uniqueElementTypes = new Set();
+
+    let consecutiveSameType = 0;
+    let consecutiveSameDifficulty = 0;
+    let consecutiveOverall = 0;
+
+    let prevElement = null;
+    let prevDifficulty = null;
+
+    let elementsAboveDifficultyOne = 0;
+
+    for (let i = 0; i < elements.length; i++) {
+      const el = elements[i];
+      let currentType = null;
+
+      // Store unique element types
+      uniqueElementTypes.add(el.type.toLowerCase());
+
+      if (el.type.toLowerCase() in difficultyLevels["theory"]) {
+        currentType = "theory";
+      } else if (el.type.toLowerCase() in difficultyLevels["practice"]) {
+        currentType = "practice";
       }
-    } else {
-      return;
-    }
-  });
 
-  // console.log("study_loops", study_loops);
-  // console.log("elems_3", elems_3);
-  // console.log("elems_4", elems_4);
+      if (currentType) {
+        const currentDifficulty =
+          difficultyLevels[currentType][el.type.toLowerCase()];
+
+        if (currentDifficulty > 2) {
+          elementsAboveDifficultyOne++;
+        }
+
+        // Check consecutive type
+        if (
+          prevElement &&
+          prevElement.type.toLowerCase() === el.type.toLowerCase()
+        ) {
+          consecutiveSameType++;
+          consecutiveOverall++;
+
+          // Check consecutive difficulty within the same type block
+          if (prevDifficulty && prevDifficulty === currentDifficulty) {
+            consecutiveSameDifficulty++;
+          } else {
+            consecutiveSameDifficulty = 1;
+          }
+        } else {
+          consecutiveSameType = 1;
+          consecutiveOverall = 1;
+          consecutiveSameDifficulty = 1; // Reset the counter when type changes
+        }
+
+        // Make recommendations based on consecutive counts
+        if (consecutiveSameType >= 3) {
+          recommendations.push(
+            `Three or more consecutive elements (Element number ${i + 1 - 2}, ${
+              i + 1 - 1
+            }, and ${i + 1}) have the same type: ${
+              el.type
+            }. Consider diversifying the type of elements.`
+          );
+        }
+
+        if (consecutiveSameType >= 3 && consecutiveSameDifficulty >= 3) {
+          recommendations.push(
+            `Three or more consecutive elements (Element number ${i + 1 - 2}, ${
+              i + 1 - 1
+            }, and ${i + 1}) of type: ${
+              el.type
+            } have the same difficulty level: ${
+              difficultyLevels[currentType][el.type.toLowerCase()]
+            }. Consider adjusting the difficulty progression for this type.`
+          );
+        }
+
+        if (consecutiveOverall >= 5) {
+          recommendations.push(
+            `Five or more consecutive elements (ending at element number ${
+              i + 1 + 1
+            }) are of the same ${
+              consecutiveSameType >= 5 ? "type" : "difficulty level"
+            }. Please diversify.`
+          );
+          consecutiveOverall = 0; // reset after making the recommendation
+        }
+
+        prevElement = el;
+        prevDifficulty = currentDifficulty;
+      }
+    }
+
+    const requiredCount = elements.length * 0.2;
+    if (elementsAboveDifficultyOne < requiredCount) {
+      recommendations.push(
+        `There are only ${elementsAboveDifficultyOne} elements with a difficulty level above 2. At least 20% of the lesson elements should have a difficulty level more than 2.`
+      );
+    }
+
+    if (recommendations.length === 0) {
+      recommendations.push("The lesson is well built!");
+    }
+
+    // Check for the number of unique element types in the lesson
+    if (uniqueElementTypes.size < 6) {
+      recommendations.push(
+        `The lesson has only ${uniqueElementTypes.size} different element types. It is recommended to include at least 6 different element types for diversity.`
+      );
+    }
+
+    // Check the total number of element types
+    if (elements.length < 10) {
+      recommendations.push(
+        `The total number of elements in the lesson is ${elements.length}. The lesson should contain at least 10 elements for a comprehensive experience.`
+      );
+    }
+
+    setLessonRecommendations(recommendations);
+    return recommendations;
+  };
+
+  // 4. Check notes / check longreads
+
+  function extractNotesText(lessonStructure, lessonNotes) {
+    let notesText = [];
+    function traverse(structure) {
+      if (Array.isArray(structure)) {
+        for (let item of structure) {
+          if (item.type === "Note") {
+            if (item?.data?.text) {
+              notesText.push({ id: item.id, text: item.data.text });
+            } else if (lessonNotes.find((el) => el.id == item.id)) {
+              notesText.push({
+                id: item.id,
+                text: lessonNotes.find((el) => el.id == item.id).text,
+              });
+            }
+          }
+        }
+      }
+    }
+
+    traverse(lessonStructure);
+    return notesText;
+  }
+
+  function countWords(str) {
+    return str.trim().split(/\s+/).length;
+  }
+
+  function checkHTML(html) {
+    const checks = [
+      {
+        regex: /<h2\b[^>]*>(.*?)<\/h2>/gi,
+        msg: "Your text lacks a main header. This is necessary for giving a clear idea of the topic.",
+      },
+      {
+        regex: /<img\b[^>]*>/gi,
+        msg: "Your text could be enhanced with visuals. They support learning and engage readers more effectively.",
+      },
+      {
+        condition: () => countWords(html) > 400,
+        regex: /<h3\b[^>]*>(.*?)<\/h3>/gi,
+        msg: "Your text could use some subheadings. These help guide the reader through longer pieces of content.",
+      },
+      {
+        regex: /<a\b[^>]*>(.*?)<\/a>/gi,
+        msg: "Including links in your text provides additional context and useful references for the reader.",
+      },
+      {
+        regex: /<li\b[^>]*>(.*?)<\/li>/gi,
+        msg: "You have no lists. These help structure information. Maybe you can add them?",
+      },
+      {
+        regex: /<p\b[^>]*>([^.]*\.){7,}<\/p>/gi,
+        msg: "Some paragraphs in your text are quite long. Consider breaking them down into shorter ones for better readability.",
+      },
+      {
+        regex: /<blockquote\b[^>]*>(.*?)<\/blockquote>/gi,
+        msg: "Quotes can serve as effective emphasis points. If you have any, consider highlighting them.",
+      },
+    ];
+
+    const comments = [];
+
+    checks.forEach((check) => {
+      if (
+        check.condition
+          ? check.condition() && !check.regex.test(html)
+          : !check.regex.test(html)
+      ) {
+        comments.push(check.msg);
+      }
+    });
+
+    if (comments.length === 0) {
+      comments.push("Your text meets all the guidelines. Good job!");
+    }
+
+    return comments;
+  }
+
+  function checkChatsInLesson(lessonStructure, lessonData) {
+    const chatCommentsArray = [];
+
+    function traverse(structure) {
+      if (Array.isArray(structure)) {
+        for (let item of structure) {
+          if (item.type === "Chat") {
+            const chatData = lessonData.find((chat) => chat.id === item.id);
+            if (chatData) {
+              const comments = [];
+
+              // Check if chat has at least 3 messages
+              if (chatData.messages.messagesList.length < 3) {
+                comments.push("The chat should have at least 3 messages.");
+              }
+
+              // Check if chat has messages from both student and author
+              const hasStudentMessage = chatData.messages.messagesList.some(
+                (msg) => msg.author === "student"
+              );
+              const hasAuthorMessage = chatData.messages.messagesList.some(
+                (msg) => msg.author === "author"
+              );
+              if (!hasStudentMessage) {
+                comments.push(
+                  "The chat should have messages from the student."
+                );
+              }
+              if (!hasAuthorMessage) {
+                comments.push("The chat should have messages from the author.");
+              }
+
+              // Check if every message has no more than 2 paragraphs
+              chatData.messages.messagesList.forEach((msg) => {
+                const paragraphCount = (
+                  msg.text.match(/<p\b[^>]*>(.*?)<\/p>/gi) || []
+                ).length;
+                if (paragraphCount > 2) {
+                  comments.push(
+                    `A message in the chat has more than 2 paragraphs.`
+                  );
+                }
+              });
+
+              chatCommentsArray.push({
+                data: chatData,
+                comments: comments.length
+                  ? comments
+                  : ["Your chat meets all the guidelines. Good job!"],
+              });
+            }
+          }
+        }
+      }
+    }
+
+    traverse(lessonStructure);
+    return chatCommentsArray;
+  }
+
+  let lesson_length = calculateSum(
+    elements.filter((el) => el.id !== undefined)
+  );
+  // Identify types of content
+  const communicationTypes = ["chat", "newtest", "quiz", "forum"];
+
+  const theoreticalTypes = ["chat", "note", "shot"];
+  const practicalTypes = [
+    "newtest",
+    "texteditor",
+    "problem",
+    "testpractice",
+    "quiz",
+    "construction",
+    "offer",
+  ]; // and more if needed
+
+  const getBarColor = (element, lesson, position) => {
+    const elementType = element.type.toLowerCase();
+    // Check for yellow color conditions
+    if (
+      elementType === "forum" ||
+      (elementType === "chat" && position === 0) ||
+      (elementType === "newtest" &&
+        lesson.newTests
+          .find((nt) => nt.id === element.id)
+          ?.type?.toLowerCase() === "form") ||
+      (elementType === "quiz" &&
+        lesson.quizes
+          .find((qz) => qz.id === element.id)
+          ?.type?.toLowerCase() === "form")
+    ) {
+      return "#ffd700"; // yellow
+    }
+
+    // Check for blue color conditions
+    if (theoreticalTypes.includes(elementType)) {
+      return "#118ab2"; // blue
+    }
+
+    // Check for green color conditions
+    if (practicalTypes.includes(elementType)) {
+      return "#06d6a0"; // green
+    }
+
+    // Default color for unclassified types
+    return "#073b4c"; // gray
+  };
 
   return (
     <Styles>
       <Container>
-        <Button onClick={(e) => analyzeLesson()}>Analyze lesson</Button>
+        <Button onClick={(e) => analyzeLesson()}>{t("analyze_lesson")}</Button>
         {show ? (
           <div>
-            <div>
-              <b>Lesson size:</b>
-            </div>
+            <h2>
+              <b>{t("page_size")}:</b>
+            </h2>
             <div className="box">
               <div>
-                – Estimated time to complete the lesson:{" "}
+                – {t("estimated_lesson_time")}:{" "}
                 <b>
-                  {elements.filter((el) => el.id !== undefined).length * 3} min
+                  {lesson_length} {t("min")}
                 </b>
-                :
-                {elements.filter((el) => el.id !== undefined).length * 3 >=
-                  30 && elements.length * 3 <= 80 ? (
-                  <div>✅ That's a good lesson size.</div>
+                {lesson_length >= 30 && lesson_length <= 80 ? (
+                  <div>✅ {t("good_lesson_size")}.</div>
                 ) : null}
-                {elements.filter((el) => el.id !== undefined).length * 3 <
-                30 ? (
-                  <div>
-                    ❌ ⬆️ Don't you think it's a good idea to make this lesson
-                    slighly bigger?
-                  </div>
+                {lesson_length < 30 ? (
+                  <div>❌ ⬆️ {t("make_bigger")}</div>
                 ) : null}
-                {elements.filter((el) => el.id !== undefined).length * 3 >
-                80 ? (
-                  <div>
-                    ❌ ⬇️ Don't you think it's a good idea to make this lesson
-                    slighly smaller? Maybe we can unite separate tests into a
-                    test group?
-                  </div>
+                {lesson_length > 80 ? (
+                  <div>❌ ⬇️ {t("make_smaller")}</div>
                 ) : null}
               </div>
             </div>
-            <div>
-              <b>Lesson proportions:</b>
-            </div>
             <div className="box">
+              <h2>
+                <b>{t("lesson_content")}</b>
+              </h2>
               <div>
-                – Communication with students: <b>{communication}%</b>:{" "}
+                <b>{t("page_proportions")}:</b>
               </div>
-              <div>{communicationComment} </div>
-            </div>
-            <div className="box">
-              <div>
-                – Theory: <b>{theory}</b>%
-              </div>
-              <div>{theoryComment}</div>
-            </div>
-            <div className="box">
-              <div>
-                – Practice: <b>{practice}</b>%
-              </div>
-              <div>{practiceComment}</div>
-            </div>
-            <div className="box">
-              <div>
-                <b>Study loops</b>
-              </div>
-              <div>
+              <div className="box">
                 <div>
-                  Study loops are a sequence of learning actvities aimed at:
+                  – Yellow: {t("communication_with_students")}:{" "}
+                  <b>{communication}%</b>:{" "}
                 </div>
-                <ol>
-                  <li>Provoking interest</li>
-                  <li>Teaching smth new</li>
-                  <li>Testing new knowledge / practicing new skill</li>
-                  <li>Reflecting on the learning experience</li>
-                </ol>
+                <div>{communicationComment} </div>
+              </div>
+              <div className="box">
                 <div>
-                  The more study loops your lesson has, the better learning
-                  experience you will have.
+                  – Blue: {t("theory")}: <b>{theory}</b>%
                 </div>
+                <div>{theoryComment}</div>
               </div>
-            </div>
-            <div className="box">
-              <div>
-                <b>Your study loops:</b>
+              <div className="box">
+                <div>
+                  – Green: {t("practice2")}: <b>{practice}</b>%
+                </div>
+                <div>{practiceComment}</div>
               </div>
-              <div>
-                {study_loops.map((sl, i) => (
-                  <>
-                    <div>Loop {i + 1}.</div>
-                    <div>
-                      {sl.map((el) => (
-                        <li>{el.type}</li>
-                      ))}
-                    </div>
-                    <div>
-                      <b>Comments:</b>
-                    </div>
-                    <div>
-                      {sl.length < 4 &&
-                        "❌ ⬆️ This loop's size is probably too small. Are you sure that we have given our student a chance to learn and reflect?"}
-
-                      {sl.length >= 4 &&
-                        sl.length <= 7 &&
-                        "✅ This loop's size is great!"}
-
-                      {sl.length > 7 &&
-                        "❌ ⬇️This loop's size is probably too big. It may be confusing and overwhelming."}
-                    </div>
-                  </>
-                ))}
-              </div>
-            </div>
-            <div className="box">
-              <div>
-                <b>Advice:</b>
-              </div>
-              <div>
-                {lesson_structure.map((arr) => {
-                  if (arr.length > 3) {
-                    return (
-                      <li>
-                        There are probably too many elements of the same type (
-                        {arr[0].type}) in a row: {elements.indexOf(arr[0]) + 1}{" "}
-                        - {elements.indexOf(arr.at(-1)) + 1}. It may be boring
-                        to go through the same elements for a long time.
-                      </li>
-                    );
-                  }
-                })}
-              </div>
-            </div>
-            <div className="box">
-              <div>
-                <b>Lesson difficulty map:</b>
-              </div>
-              <div>
-                Look at the difficulty map of your lesson. A good lesson goes
-                from level 1 to level 5 inside <b>one study loop</b> (like a
-                computer game). Does your lesson follow this pattern?
-              </div>
-              <div>
+              <div classname="chart-container" style={{ height: "275px" }}>
                 <Bar
                   data={{
                     labels: lesson_labels,
                     datasets: [
                       {
-                        label: "Elements difficulty",
-                        backgroundColor: "#60B55A",
-                        borderColor: "#60B55A",
+                        label: t("elements_difficulty"),
+                        backgroundColor: elements.map((el, i) =>
+                          getBarColor(el, props.lesson, i)
+                        ),
+                        borderColor: elements.map((el, i) =>
+                          getBarColor(el, props.lesson, i)
+                        ),
                         borderWidth: 1,
                         data: lesson_difficulty_map,
                       },
@@ -546,6 +929,8 @@ const Analyzer = (props) => {
                   }}
                   options={{
                     maintainAspectRatio: false,
+                    responsive: true,
+
                     legend: {
                       display: true,
                     },
@@ -565,6 +950,87 @@ const Analyzer = (props) => {
                     },
                   }}
                 />
+              </div>
+              <br />
+              <SimpleButton onClick={(e) => getRecommendations(elements)}>
+                {t("get_recommendations")}
+              </SimpleButton>
+              <div>
+                <ol>
+                  {lessonRecommendations.map((lr) => (
+                    <li>{lr}</li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+            <div className="box">
+              <h2>
+                <b>{t("longreads")}:</b>
+              </h2>
+              <SimpleButton
+                onClick={(e) => {
+                  let longreads = extractNotesText(
+                    props.elements,
+                    props.lesson.notes
+                  );
+                  let arr = [];
+                  longreads.map((l) =>
+                    arr.push({
+                      comments: checkHTML(l.text),
+                      text: l.text,
+                    })
+                  );
+                  setLongreadComments(arr);
+                  setIsLongreadOpen(!isLongreadOpen);
+                }}
+              >
+                {t("check_longreads")}
+              </SimpleButton>
+              <div>
+                {isLongreadOpen &&
+                  longreadComments.map((l) => (
+                    <div>
+                      <div>{parse(l.text)}</div>
+                      <h3>{t("comments")}</h3>
+                      <ul>
+                        {l.comments.map((c) => (
+                          <li>{c}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+              </div>
+            </div>
+            <div className="box">
+              <h2>
+                <b>{t("dialogues")}:</b>
+              </h2>
+              <SimpleButton
+                onClick={(e) => {
+                  let comments = checkChatsInLesson(
+                    elements,
+                    props.lesson.chats
+                  );
+                  setChatComments(comments);
+                  // if(chatComments.length > 0){
+                  //   setChatComments([]);
+                  // }
+                }}
+              >
+                Check chats
+              </SimpleButton>
+              <div>
+                {chatComments.map((l) => (
+                  <div>
+                    <div>{parse(l.data.messages.messagesList[0].text)}</div>
+                    <h3>{t("comments")}</h3>
+                    <ul>
+                      {l.comments.map((c) => (
+                        <li>{c}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

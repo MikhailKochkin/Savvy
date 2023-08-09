@@ -223,6 +223,34 @@ const Comment = styled.div`
   }
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0;
+  padding-bottom: 20px;
+  .number {
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 10px;
+    display: flex;
+    font-size: 1.4rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    // width: 110px;
+    height: 25px;
+    margin-right: 15px;
+    padding: 0 20px;
+    button {
+      border: none;
+      cursor: pointer;
+      background: none;
+      font-size: 1.2rem;
+      font-family: Montserrat;
+    }
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -361,16 +389,24 @@ All text should be given in Russian.
                 onChange={handleInputChange}
                 placeholder="Enter the quiz context here. Not the question  or the answer. For example: A contract is an agreement giving rise to obligations which are enforced or recognised by law. In common law, there are 3 basic essentials to the creation of a contract: (i) agreement; (ii) contractual intention; and (iii) consideration."
               />
-              <button onClick={handleButtonClick}>Generate Quiz</button>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setDataLoaded(true);
-                }}
-              >
-                Create yourself
-              </button>
+              <Buttons>
+                <div className="number">
+                  <button onClick={handleButtonClick}>
+                    Generate Quiz with AI 🤖
+                  </button>
+                </div>
 
+                <div className="number">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDataLoaded(true);
+                    }}
+                  >
+                    Create yourself
+                  </button>{" "}
+                </div>
+              </Buttons>
               {generating && (
                 <div>Generating... It can take up to 30 seconds.</div>
               )}
@@ -497,6 +533,7 @@ All text should be given in Russian.
                     arr.length = answers.filter((an) => an !== "").length;
                     const res2 = await setCorrect(arr);
                     const res3 = await createNewTest();
+                    console.log("get test data", res3);
                     props.getResult(res3);
                   }}
                 >

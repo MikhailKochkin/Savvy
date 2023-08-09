@@ -85,6 +85,35 @@ const Bottom = styled.div`
   }
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #cacaca;
+  .number {
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 10px;
+    display: flex;
+    font-size: 1.4rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    // width: 110px;
+    height: 25px;
+    margin-right: 15px;
+    padding: 0 20px;
+    button {
+      border: none;
+      cursor: pointer;
+      background: none;
+      font-size: 1.2rem;
+      font-family: Montserrat;
+    }
+  }
+`;
+
 const CreateChat = (props) => {
   const { me, lessonData } = props;
   const [name, setName] = useState("Dialogue");
@@ -178,8 +207,16 @@ const CreateChat = (props) => {
       />
       <br /> */}
       <div>Do you want to generate this block with AI?</div>
-      <button onClick={(e) => onGenerate(e)}>Use AI</button>
-      <button onClick={(e) => setIsGenerated(true)}>Do it on your own</button>
+      <Buttons>
+        <div className="number">
+          <button onClick={(e) => onGenerate(e)}>Use AI 🤖</button>
+        </div>
+        <div className="number">
+          <button onClick={(e) => setIsGenerated(true)}>
+            Do it on your own
+          </button>
+        </div>
+      </Buttons>
       {generating && (
         <div>Generating the chat... It can take up to one minute.</div>
       )}

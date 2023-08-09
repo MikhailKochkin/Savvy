@@ -437,7 +437,8 @@ const LessonBlock = (props) => {
         isAdded={isAdded}
         width={
           type.toLowerCase() == "texteditor" ||
-          type.toLowerCase() == "construction"
+          type.toLowerCase() == "construction" ||
+          type.toLowerCase() == "problem"
         }
       >
         {!isSaved && (

@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UpdateClause from "./UpdateClause";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const Styles = styled.div`
   margin-top: 2%;
@@ -135,7 +135,7 @@ const Clause = (props) => {
         <>
           <div>
             {" "}
-            Section {index}.<b>{parse(commentary)}</b>
+            Section {index}.{parse(commentary)}
           </div>
           <Frame>
             <DynamicLoadedEditor getEditorText={myCallback} />

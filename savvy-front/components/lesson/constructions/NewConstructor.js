@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
@@ -76,7 +76,8 @@ const ButtonTwo = styled.button`
 `;
 
 const Block = styled.div`
-  width: 800px;
+  overflow: auto; // Add this line
+  width: 1200px;
   height: auto;
   display: grid;
   background: #fff;
@@ -103,7 +104,6 @@ const Element = styled.div`
   border: ${(props) =>
     !props.isTest ? "1px solid #fff" : "1px dashed #c4c4c4"};
   padding: 15px;
-
   grid-column: ${(props) => {
     return `1/${props.size}`;
   }};
@@ -339,9 +339,9 @@ const Number_Input = styled.input`
 
 const ConElement = (props) => {
   const [size, setSize] = useState(props.size);
+  console.log("size", size);
   const [value, setValue] = useState();
   const [correct, setCorrect] = useState(null);
-
   const {
     elems,
     isTest,
@@ -377,6 +377,7 @@ const ConElement = (props) => {
       check={check}
       size={size}
       display={display}
+      colored={text !== "<p></p>"}
     >
       {isTest && (
         <Number_Input

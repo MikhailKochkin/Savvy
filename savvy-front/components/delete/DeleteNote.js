@@ -16,7 +16,9 @@ const DELETE_NOTE_MUTATION = gql`
 
 const useStyles = makeStyles({
   button: {
-    margin: "4% 0",
+    width: "140px",
+    height: "45px",
+    margin: "0",
     fontSize: "1.6rem",
     textTransform: "none",
   },

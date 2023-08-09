@@ -73,7 +73,7 @@ const Progress = styled.div`
 `;
 
 const StoryEx = (props) => {
-  const { tasks, me, lesson, next, coursePageID } = props;
+  const { tasks, me, lesson, next, coursePageID, coursePage } = props;
   const [experience, setExperience] = useState(0);
   const [showArrow, setShowArrow] = useState(true);
   const [solved, setSolved] = useState([]);
@@ -448,13 +448,9 @@ const StoryEx = (props) => {
   const passStep = (num) => {
     props.passStep(num);
   };
+
   return (
     <Container>
-      {/* <CSSTransitionGroup
-        transitionName="fade"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={10}
-      > */}
       {me && (
         <Feed
           move_statuses={move_statuses}
@@ -464,7 +460,11 @@ const StoryEx = (props) => {
           next={next}
           number_of_tasks={tasks.length}
           coursePageID={coursePageID}
+          coursePageId={coursePageID}
+          coursePage={coursePage}
           me={me}
+          lesson_structure={lesson.structure.lessonItems}
+          openLesson={props.openLesson}
           move={false}
           hasSecret={lesson.hasSecret}
           lesson_number={lesson.number}
@@ -475,7 +475,6 @@ const StoryEx = (props) => {
           passStep={passStep}
         />
       )}
-      {/* </CSSTransitionGroup> */}
     </Container>
   );
 };

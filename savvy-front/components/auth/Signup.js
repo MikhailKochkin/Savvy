@@ -56,6 +56,8 @@ const SIGNUP_MUTATION = gql`
 
 const Form = styled.form`
   min-width: 450px;
+  max-width: 520px;
+
   font-size: 1.6rem;
   overflow-y: scroll;
 
@@ -95,7 +97,7 @@ const Fieldset = styled.fieldset`
 const Comment = styled.div`
   font-size: 1.2rem;
   line-height: 1.4;
-  max-width: 450px;
+  width: 100%;
   margin-bottom: 10px;
 `;
 
@@ -181,6 +183,9 @@ const Title = styled.div`
   line-height: 1.4;
   width: 60%;
   text-align: center;
+  @media (max-width: 800px) {
+    width: 85%;
+  }
 `;
 
 const Transit = styled.div`
@@ -290,7 +295,7 @@ const Signup = (props) => {
               return;
             }
             const res = await signup();
-            props.closeNavBar(true);
+            props.closeNavBar() ? props.closeNavBar(true) : null;
             setEmail("");
             setName("");
             setSurname("");
@@ -616,10 +621,7 @@ const Signup = (props) => {
               onChange={(e) => setNumber(e.target.value)}
               label="Number"
             />
-            <Comment>
-              We need your phone number to send personalized feedback to your
-              WhatsApp
-            </Comment>
+            <Comment>{t("need_whatsapp")}</Comment>
             <Input
               className="password"
               type="password"
@@ -637,10 +639,7 @@ const Signup = (props) => {
             >
               {loading ? t("signing_up") : t("button")}
             </Button>
-            <Comment>
-              By clicking Sign Up, I agree to the the Terms of Service and
-              Privacy Policy.
-            </Comment>
+            <Comment>{t("agree_terms")}</Comment>
             <Transit>
               {t("already_registered")}{" "}
               <span name="signin" onClick={move}>

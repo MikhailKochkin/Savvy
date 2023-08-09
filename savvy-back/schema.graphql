@@ -15,24 +15,40 @@ input ApplicationListRelationFilter {
   some: ApplicationWhereInput
 }
 
+input ApplicationOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input ApplicationWhereInput {
   AND: [ApplicationWhereInput!]
+  NOT: [ApplicationWhereInput!]
+  OR: [ApplicationWhereInput!]
   applicantId: StringFilter
   applicantName: StringFilter
   coursePage: CoursePageWhereInput
-  coursePageId: StringFilter
   coursePageID: StringFilter
+  coursePageId: StringFilter
   createdAt: DateTimeFilter
   id: StringFilter
   message: StringNullableFilter
-  NOT: [ApplicationWhereInput!]
-  OR: [ApplicationWhereInput!]
   promocode: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
 input ApplicationWhereUniqueInput {
+  AND: [ApplicationWhereInput!]
+  NOT: [ApplicationWhereInput!]
+  OR: [ApplicationWhereInput!]
+  applicantId: StringFilter
+  applicantName: StringFilter
+  coursePage: CoursePageWhereInput
+  coursePageID: StringFilter
+  coursePageId: StringFilter
+  createdAt: DateTimeFilter
   id: String
+  message: StringNullableFilter
+  promocode: StringNullableFilter
+  updatedAt: DateTimeFilter
 }
 
 type AuthMessage {
@@ -71,29 +87,37 @@ type BotDialogue {
   updatedAt: DateTime!
 }
 
-input BotDialogueOrderByInput {
+input BotDialogueOrderByWithRelationInput {
   createdAt: SortOrder
   id: SortOrder
   journey: SortOrder
-  rating: SortOrder
-  source: SortOrder
+  rating: SortOrderInput
+  source: SortOrderInput
   updatedAt: SortOrder
 }
 
 input BotDialogueWhereInput {
   AND: [BotDialogueWhereInput!]
+  NOT: [BotDialogueWhereInput!]
+  OR: [BotDialogueWhereInput!]
   createdAt: DateTimeFilter
   id: StringFilter
   journey: StringNullableListFilter
-  NOT: [BotDialogueWhereInput!]
-  OR: [BotDialogueWhereInput!]
   rating: IntNullableFilter
   source: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
 input BotDialogueWhereUniqueInput {
+  AND: [BotDialogueWhereInput!]
+  NOT: [BotDialogueWhereInput!]
+  OR: [BotDialogueWhereInput!]
+  createdAt: DateTimeFilter
   id: String
+  journey: StringNullableListFilter
+  rating: IntNullableFilter
+  source: StringNullableFilter
+  updatedAt: DateTimeFilter
 }
 
 type BusinessClient {
@@ -122,27 +146,34 @@ input BusinessClientListRelationFilter {
   some: BusinessClientWhereInput
 }
 
-input BusinessClientOrderByInput {
-  comment: SortOrder
-  communication_history: SortOrder
-  communication_medium: SortOrder
-  country: SortOrder
-  coursePageId: SortOrder
+input BusinessClientOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input BusinessClientOrderByWithRelationInput {
+  comment: SortOrderInput
+  communication_history: SortOrderInput
+  communication_medium: SortOrderInput
+  country: SortOrderInput
+  coursePage: CoursePageOrderByWithRelationInput
+  coursePageId: SortOrderInput
   createdAt: SortOrder
   email: SortOrder
   id: SortOrder
-  name: SortOrder
-  number: SortOrder
-  sales_cycle: SortOrder
-  source: SortOrder
-  surname: SortOrder
+  name: SortOrderInput
+  number: SortOrderInput
+  sales_cycle: SortOrderInput
+  source: SortOrderInput
+  surname: SortOrderInput
   tags: SortOrder
-  type: SortOrder
+  type: SortOrderInput
   updatedAt: SortOrder
 }
 
 input BusinessClientWhereInput {
   AND: [BusinessClientWhereInput!]
+  NOT: [BusinessClientWhereInput!]
+  OR: [BusinessClientWhereInput!]
   comment: StringNullableFilter
   communication_history: JsonNullableFilter
   communication_medium: StringNullableFilter
@@ -153,9 +184,7 @@ input BusinessClientWhereInput {
   email: StringFilter
   id: StringFilter
   name: StringNullableFilter
-  NOT: [BusinessClientWhereInput!]
   number: StringNullableFilter
-  OR: [BusinessClientWhereInput!]
   sales_cycle: JsonNullableFilter
   source: StringNullableFilter
   surname: StringNullableFilter
@@ -165,7 +194,26 @@ input BusinessClientWhereInput {
 }
 
 input BusinessClientWhereUniqueInput {
+  AND: [BusinessClientWhereInput!]
+  NOT: [BusinessClientWhereInput!]
+  OR: [BusinessClientWhereInput!]
+  comment: StringNullableFilter
+  communication_history: JsonNullableFilter
+  communication_medium: StringNullableFilter
+  country: StringNullableFilter
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
+  createdAt: DateTimeFilter
+  email: StringFilter
   id: String
+  name: StringNullableFilter
+  number: StringNullableFilter
+  sales_cycle: JsonNullableFilter
+  source: StringNullableFilter
+  surname: StringNullableFilter
+  tags: StringNullableListFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
 }
 
 input CareerTrackListRelationFilter {
@@ -174,24 +222,43 @@ input CareerTrackListRelationFilter {
   some: CareerTrackWhereInput
 }
 
+input CareerTrackOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CareerTrackOrderByWithRelationInput {
+  careerTrackUnit: CareerTrackUnitOrderByRelationAggregateInput
+  coursePage: CoursePageOrderByRelationAggregateInput
+  createdAt: SortOrder
+  id: SortOrder
+  img: SortOrderInput
+  name: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+}
+
 input CareerTrackUnitListRelationFilter {
   every: CareerTrackUnitWhereInput
   none: CareerTrackUnitWhereInput
   some: CareerTrackUnitWhereInput
 }
 
+input CareerTrackUnitOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input CareerTrackUnitWhereInput {
   AND: [CareerTrackUnitWhereInput!]
+  NOT: [CareerTrackUnitWhereInput!]
+  OR: [CareerTrackUnitWhereInput!]
   articles: StringNullableListFilter
   careerTrack: CareerTrackWhereInput
   careerTrackId: StringFilter
-  coursePages: CoursePageListRelationFilter
+  coursePage: CoursePageListRelationFilter
   createdAt: DateTimeFilter
   id: StringFilter
   img: StringNullableFilter
-  NOT: [CareerTrackUnitWhereInput!]
   number: IntNullableFilter
-  OR: [CareerTrackUnitWhereInput!]
   title: StringFilter
   topics: StringNullableListFilter
   updatedAt: DateTimeFilter
@@ -199,16 +266,16 @@ input CareerTrackUnitWhereInput {
 
 input CareerTrackWhereInput {
   AND: [CareerTrackWhereInput!]
-  careerTrackUnits: CareerTrackUnitListRelationFilter
-  coursePages: CoursePageListRelationFilter
+  NOT: [CareerTrackWhereInput!]
+  OR: [CareerTrackWhereInput!]
+  careerTrackUnit: CareerTrackUnitListRelationFilter
+  coursePage: CoursePageListRelationFilter
   createdAt: DateTimeFilter
   id: StringFilter
   img: StringNullableFilter
-  members: UserWhereInput
   name: StringFilter
-  NOT: [CareerTrackWhereInput!]
-  OR: [CareerTrackWhereInput!]
   updatedAt: DateTimeFilter
+  user: UserWhereInput
 }
 
 type Certificate {
@@ -227,29 +294,44 @@ input CertificateListRelationFilter {
   some: CertificateWhereInput
 }
 
-input CertificateOrderByInput {
+input CertificateOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CertificateOrderByWithRelationInput {
+  coursePage: CoursePageOrderByWithRelationInput
   coursePageId: SortOrder
   createdAt: SortOrder
   id: SortOrder
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
   updatedAt: SortOrder
 }
 
 input CertificateWhereInput {
   AND: [CertificateWhereInput!]
+  NOT: [CertificateWhereInput!]
+  OR: [CertificateWhereInput!]
   coursePage: CoursePageWhereInput
   coursePageId: StringFilter
   createdAt: DateTimeFilter
   id: StringFilter
-  NOT: [CertificateWhereInput!]
-  OR: [CertificateWhereInput!]
   student: UserWhereInput
   studentId: StringFilter
   updatedAt: DateTimeFilter
 }
 
 input CertificateWhereUniqueInput {
+  AND: [CertificateWhereInput!]
+  NOT: [CertificateWhereInput!]
+  OR: [CertificateWhereInput!]
+  coursePage: CoursePageWhereInput
+  coursePageId: StringFilter
+  createdAt: DateTimeFilter
   id: String
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 type ChallengeResult {
@@ -271,26 +353,32 @@ input ChallengeResultListRelationFilter {
   some: ChallengeResultWhereInput
 }
 
-input ChallengeResultOrderByInput {
-  correct: SortOrder
+input ChallengeResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ChallengeResultOrderByWithRelationInput {
+  correct: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
+  lesson: LessonOrderByWithRelationInput
   lessonId: SortOrder
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
-  time: SortOrder
+  time: SortOrderInput
   updatedAt: SortOrder
-  wrong: SortOrder
+  wrong: SortOrderInput
 }
 
 input ChallengeResultWhereInput {
   AND: [ChallengeResultWhereInput!]
+  NOT: [ChallengeResultWhereInput!]
+  OR: [ChallengeResultWhereInput!]
   correct: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
-  NOT: [ChallengeResultWhereInput!]
-  OR: [ChallengeResultWhereInput!]
   student: UserWhereInput
   studentId: StringFilter
   time: IntNullableFilter
@@ -299,7 +387,19 @@ input ChallengeResultWhereInput {
 }
 
 input ChallengeResultWhereUniqueInput {
+  AND: [ChallengeResultWhereInput!]
+  NOT: [ChallengeResultWhereInput!]
+  OR: [ChallengeResultWhereInput!]
+  correct: IntNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  time: IntNullableFilter
+  updatedAt: DateTimeFilter
+  wrong: IntNullableFilter
 }
 
 type Chat {
@@ -322,21 +422,29 @@ input ChatListRelationFilter {
   some: ChatWhereInput
 }
 
-input ChatOrderByInput {
-  complexity: SortOrder
+input ChatOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ChatOrderByWithRelationInput {
+  complexity: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
-  isSecret: SortOrder
+  isSecret: SortOrderInput
+  lesson: LessonOrderByWithRelationInput
   lessonId: SortOrder
-  link_clicks: SortOrder
-  messages: SortOrder
-  name: SortOrder
+  link_clicks: SortOrderInput
+  messages: SortOrderInput
+  name: SortOrderInput
   updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
   userId: SortOrder
 }
 
 input ChatWhereInput {
   AND: [ChatWhereInput!]
+  NOT: [ChatWhereInput!]
+  OR: [ChatWhereInput!]
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
@@ -346,15 +454,27 @@ input ChatWhereInput {
   link_clicks: IntNullableFilter
   messages: JsonNullableFilter
   name: StringNullableFilter
-  NOT: [ChatWhereInput!]
-  OR: [ChatWhereInput!]
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
 }
 
 input ChatWhereUniqueInput {
+  AND: [ChatWhereInput!]
+  NOT: [ChatWhereInput!]
+  OR: [ChatWhereInput!]
+  complexity: IntNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  isSecret: BoolNullableFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  link_clicks: IntNullableFilter
+  messages: JsonNullableFilter
+  name: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 type Clause {
@@ -377,17 +497,21 @@ input ClauseListRelationFilter {
   some: ClauseWhereInput
 }
 
+input ClauseOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input ClauseWhereInput {
   AND: [ClauseWhereInput!]
+  NOT: [ClauseWhereInput!]
+  OR: [ClauseWhereInput!]
   commentary: StringFilter
   createdAt: DateTimeFilter
   document: DocumentWhereInput
   documentId: StringFilter
   id: StringFilter
   keywords: StringNullableListFilter
-  NOT: [ClauseWhereInput!]
   number: IntFilter
-  OR: [ClauseWhereInput!]
   sample: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -395,7 +519,20 @@ input ClauseWhereInput {
 }
 
 input ClauseWhereUniqueInput {
+  AND: [ClauseWhereInput!]
+  NOT: [ClauseWhereInput!]
+  OR: [ClauseWhereInput!]
+  commentary: StringFilter
+  createdAt: DateTimeFilter
+  document: DocumentWhereInput
+  documentId: StringFilter
   id: String
+  keywords: StringNullableListFilter
+  number: IntFilter
+  sample: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 input ClientMessage {
@@ -425,17 +562,27 @@ type Company {
   name: String!
 }
 
+input CompanyOrderByWithRelationInput {
+  coursePage: CoursePageOrderByRelationAggregateInput
+  createdAt: SortOrder
+  id: SortOrder
+  name: SortOrder
+  paidMonths: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByRelationAggregateInput
+}
+
 input CompanyWhereInput {
   AND: [CompanyWhereInput!]
-  coursePage: CoursePageListRelationFilter
-  createdAt: DateTimeFilter
-  hrs: UserListRelationFilter
-  id: StringFilter
-  name: StringFilter
   NOT: [CompanyWhereInput!]
   OR: [CompanyWhereInput!]
+  coursePage: CoursePageListRelationFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  name: StringFilter
   paidMonths: IntNullableFilter
   updatedAt: DateTimeFilter
+  user: UserListRelationFilter
 }
 
 type ConfUser {
@@ -459,8 +606,8 @@ type Construction {
   hint: String
   id: String!
   lesson: Lesson!
-  lessonId: String!
   lessonID: String!
+  lessonId: String!
   name: String!
   text: String
   type: String!
@@ -476,18 +623,22 @@ input ConstructionListRelationFilter {
   some: ConstructionWhereInput
 }
 
+input ConstructionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 type ConstructionResult {
   answer: String
   attempts: Int
   construction: Construction
-  constructionId: String
   constructionID: String
+  constructionId: String
   createdAt: DateTime!
   id: String!
   inputs: [String!]!
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   student: User!
   studentId: String!
   updatedAt: DateTime!
@@ -499,32 +650,54 @@ input ConstructionResultListRelationFilter {
   some: ConstructionResultWhereInput
 }
 
+input ConstructionResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input ConstructionResultWhereInput {
   AND: [ConstructionResultWhereInput!]
+  NOT: [ConstructionResultWhereInput!]
+  OR: [ConstructionResultWhereInput!]
   answer: StringNullableFilter
   attempts: IntNullableFilter
   construction: ConstructionWhereInput
-  constructionId: StringNullableFilter
   constructionID: StringNullableFilter
+  constructionId: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   inputs: StringNullableListFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
-  NOT: [ConstructionResultWhereInput!]
-  OR: [ConstructionResultWhereInput!]
+  lessonId: StringNullableFilter
   student: UserWhereInput
   studentId: StringFilter
   updatedAt: DateTimeFilter
 }
 
 input ConstructionResultWhereUniqueInput {
+  AND: [ConstructionResultWhereInput!]
+  NOT: [ConstructionResultWhereInput!]
+  OR: [ConstructionResultWhereInput!]
+  answer: StringNullableFilter
+  attempts: IntNullableFilter
+  construction: ConstructionWhereInput
+  constructionID: StringNullableFilter
+  constructionId: StringNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  inputs: StringNullableListFilter
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 input ConstructionWhereInput {
   AND: [ConstructionWhereInput!]
+  NOT: [ConstructionWhereInput!]
+  OR: [ConstructionWhereInput!]
   answer: StringNullableListFilter
   columnsNum: IntNullableFilter
   complexity: IntNullableFilter
@@ -535,11 +708,9 @@ input ConstructionWhereInput {
   hint: StringNullableFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringFilter
   lessonID: StringFilter
+  lessonId: StringFilter
   name: StringFilter
-  NOT: [ConstructionWhereInput!]
-  OR: [ConstructionWhereInput!]
   text: StringNullableFilter
   type: StringFilter
   updatedAt: DateTimeFilter
@@ -549,7 +720,28 @@ input ConstructionWhereInput {
 }
 
 input ConstructionWhereUniqueInput {
+  AND: [ConstructionWhereInput!]
+  NOT: [ConstructionWhereInput!]
+  OR: [ConstructionWhereInput!]
+  answer: StringNullableListFilter
+  columnsNum: IntNullableFilter
+  complexity: IntNullableFilter
+  constructionResults: ConstructionResultListRelationFilter
+  createdAt: DateTimeFilter
+  elements: JsonNullableFilter
+  hasText: BoolFilter
+  hint: StringNullableFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringFilter
+  lessonId: StringFilter
+  name: StringFilter
+  text: StringNullableFilter
+  type: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+  variants: StringNullableListFilter
 }
 
 input ConsumedContent {
@@ -617,55 +809,81 @@ input CoursePageListRelationFilter {
   some: CoursePageWhereInput
 }
 
-input CoursePageOrderByInput {
-  audience: SortOrder
-  banner: SortOrder
-  batch: SortOrder
-  companyId: SortOrder
+input CoursePageOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CoursePageOrderByWithRelationInput {
+  applications: ApplicationOrderByRelationAggregateInput
+  audience: SortOrderInput
+  authors: UserOrderByRelationAggregateInput
+  banner: SortOrderInput
+  batch: SortOrderInput
+  businessClients: BusinessClientOrderByRelationAggregateInput
+  careerTrack: CareerTrackOrderByRelationAggregateInput
+  careerTrackUnit: CareerTrackUnitOrderByRelationAggregateInput
+  certificates: CertificateOrderByRelationAggregateInput
+  company: CompanyOrderByWithRelationInput
+  companyId: SortOrderInput
   countries: SortOrder
-  courseType: SortOrder
+  courseType: SortOrderInput
+  courseVisits: CourseVisitOrderByRelationAggregateInput
   createdAt: SortOrder
-  currency: SortOrder
+  currency: SortOrderInput
   description: SortOrder
-  discountPrice: SortOrder
-  examQuestionId: SortOrder
+  discountPrice: SortOrderInput
+  emailReminder: EmailReminderOrderByRelationAggregateInput
+  examQuestion: ExamQuestionOrderByWithRelationInput
+  examQuestionId: SortOrderInput
   goals: SortOrder
   header: SortOrder
   id: SortOrder
   image: SortOrder
-  installments: SortOrder
-  methods: SortOrder
-  modules: SortOrder
-  news: SortOrder
-  nextStart: SortOrder
-  numInCareerTrack: SortOrder
-  openLesson: SortOrder
-  price: SortOrder
-  prices: SortOrder
-  promocode: SortOrder
-  promotionId: SortOrder
-  published: SortOrder
-  result: SortOrder
-  reviews: SortOrder
+  installments: SortOrderInput
+  lawrdles: LawrdleOrderByRelationAggregateInput
+  lessons: LessonOrderByRelationAggregateInput
+  methods: SortOrderInput
+  modules: SortOrderInput
+  new_students: UserOrderByRelationAggregateInput
+  news: SortOrderInput
+  nextStart: SortOrderInput
+  numInCareerTrack: SortOrderInput
+  openLesson: SortOrderInput
+  orders: OrderOrderByRelationAggregateInput
+  pointA: PointAOrderByRelationAggregateInput
+  pointATest: PointATestOrderByRelationAggregateInput
+  posts: PostOrderByRelationAggregateInput
+  price: SortOrderInput
+  prices: SortOrderInput
+  programs: ProgramOrderByRelationAggregateInput
+  promocode: SortOrderInput
+  promotionId: SortOrderInput
+  published: SortOrderInput
+  result: SortOrderInput
+  reviews: SortOrderInput
   students: SortOrder
   subheader: SortOrder
-  subscription: SortOrder
-  subscriptionPrice: SortOrder
+  subscription: SortOrderInput
+  subscriptionPrice: SortOrderInput
   tags: SortOrder
-  tariffs: SortOrder
+  tariffs: SortOrderInput
   title: SortOrder
-  uniId: SortOrder
-  uniID: SortOrder
+  uni: UniOrderByWithRelationInput
+  uniID: SortOrderInput
+  uniId: SortOrderInput
   updatedAt: SortOrder
-  uptodateAt: SortOrder
+  uptodateAt: SortOrderInput
+  user: UserOrderByWithRelationInput
   userId: SortOrder
-  video: SortOrder
+  video: SortOrderInput
   view: SortOrder
-  weeks: SortOrder
+  weeks: SortOrderInput
 }
 
 input CoursePageWhereInput {
   AND: [CoursePageWhereInput!]
+  NOT: [CoursePageWhereInput!]
+  OR: [CoursePageWhereInput!]
   applications: ApplicationListRelationFilter
   audience: StringNullableFilter
   authors: UserListRelationFilter
@@ -679,11 +897,12 @@ input CoursePageWhereInput {
   companyId: StringNullableFilter
   countries: StringNullableListFilter
   courseType: EnumCourseTypeNullableFilter
+  courseVisits: CourseVisitListRelationFilter
   createdAt: DateTimeFilter
   currency: StringNullableFilter
   description: StringFilter
   discountPrice: IntNullableFilter
-  emailReminders: EmailReminderListRelationFilter
+  emailReminder: EmailReminderListRelationFilter
   examQuestion: ExamQuestionWhereInput
   examQuestionId: StringNullableFilter
   goals: StringNullableListFilter
@@ -698,13 +917,11 @@ input CoursePageWhereInput {
   new_students: UserListRelationFilter
   news: StringNullableFilter
   nextStart: DateTimeNullableFilter
-  NOT: [CoursePageWhereInput!]
   numInCareerTrack: IntNullableFilter
   openLesson: StringNullableFilter
-  OR: [CoursePageWhereInput!]
   orders: OrderListRelationFilter
-  PointA: PointAListRelationFilter
-  PointATest: PointATestListRelationFilter
+  pointA: PointAListRelationFilter
+  pointATest: PointATestListRelationFilter
   posts: PostListRelationFilter
   price: IntNullableFilter
   prices: JsonNullableFilter
@@ -722,21 +939,85 @@ input CoursePageWhereInput {
   tariffs: StringNullableFilter
   title: StringFilter
   uni: UniWhereInput
-  uniId: StringNullableFilter
   uniID: StringNullableFilter
+  uniId: StringNullableFilter
   updatedAt: DateTimeFilter
   uptodateAt: DateTimeNullableFilter
   user: UserWhereInput
   userId: StringFilter
   video: StringNullableFilter
   view: EnumPageViewFilter
-  visits: CourseVisitListRelationFilter
   weeks: IntNullableFilter
 }
 
 input CoursePageWhereUniqueInput {
+  AND: [CoursePageWhereInput!]
+  NOT: [CoursePageWhereInput!]
+  OR: [CoursePageWhereInput!]
+  applications: ApplicationListRelationFilter
+  audience: StringNullableFilter
+  authors: UserListRelationFilter
+  banner: StringNullableFilter
+  batch: StringNullableFilter
+  businessClients: BusinessClientListRelationFilter
+  careerTrack: CareerTrackListRelationFilter
+  careerTrackUnit: CareerTrackUnitListRelationFilter
+  certificates: CertificateListRelationFilter
+  company: CompanyWhereInput
+  companyId: StringNullableFilter
+  countries: StringNullableListFilter
+  courseType: EnumCourseTypeNullableFilter
+  courseVisits: CourseVisitListRelationFilter
+  createdAt: DateTimeFilter
+  currency: StringNullableFilter
+  description: StringFilter
+  discountPrice: IntNullableFilter
+  emailReminder: EmailReminderListRelationFilter
+  examQuestion: ExamQuestionWhereInput
   examQuestionId: String
+  goals: StringNullableListFilter
+  header: StringNullableListFilter
   id: String
+  image: StringFilter
+  installments: IntNullableFilter
+  lawrdles: LawrdleListRelationFilter
+  lessons: LessonListRelationFilter
+  methods: StringNullableFilter
+  modules: JsonNullableFilter
+  new_students: UserListRelationFilter
+  news: StringNullableFilter
+  nextStart: DateTimeNullableFilter
+  numInCareerTrack: IntNullableFilter
+  openLesson: StringNullableFilter
+  orders: OrderListRelationFilter
+  pointA: PointAListRelationFilter
+  pointATest: PointATestListRelationFilter
+  posts: PostListRelationFilter
+  price: IntNullableFilter
+  prices: JsonNullableFilter
+  programs: ProgramListRelationFilter
+  promocode: JsonNullableFilter
+  promotionId: StringNullableFilter
+  published: BoolNullableFilter
+  result: StringNullableFilter
+  reviews: JsonNullableFilter
+  students: StringNullableListFilter
+  subheader: StringNullableListFilter
+  subscription: BoolNullableFilter
+  subscriptionPrice: IntNullableFilter
+  tags: StringNullableListFilter
+  tariffs: StringNullableFilter
+  title: StringFilter
+  uni: UniWhereInput
+  uniID: StringNullableFilter
+  uniId: StringNullableFilter
+  updatedAt: DateTimeFilter
+  uptodateAt: DateTimeNullableFilter
+  user: UserWhereInput
+  userId: StringFilter
+  video: StringNullableFilter
+  view: EnumPageViewFilter
+  weeks: IntNullableFilter
 }
 
 """The first Star Wars episodes released"""
@@ -766,21 +1047,29 @@ input CourseVisitListRelationFilter {
   some: CourseVisitWhereInput
 }
 
-input CourseVisitOrderByInput {
-  comment: SortOrder
+input CourseVisitOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CourseVisitOrderByWithRelationInput {
+  comment: SortOrderInput
+  coursePage: CoursePageOrderByWithRelationInput
   coursePageId: SortOrder
   createdAt: SortOrder
-  finish: SortOrder
+  finish: SortOrderInput
   id: SortOrder
-  info: SortOrder
+  info: SortOrderInput
   reminders: SortOrder
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
   updatedAt: SortOrder
-  visitsNumber: SortOrder
+  visitsNumber: SortOrderInput
 }
 
 input CourseVisitWhereInput {
   AND: [CourseVisitWhereInput!]
+  NOT: [CourseVisitWhereInput!]
+  OR: [CourseVisitWhereInput!]
   comment: StringNullableFilter
   coursePage: CoursePageWhereInput
   coursePageId: StringFilter
@@ -788,8 +1077,6 @@ input CourseVisitWhereInput {
   finish: DateTimeNullableFilter
   id: StringFilter
   info: JsonNullableFilter
-  NOT: [CourseVisitWhereInput!]
-  OR: [CourseVisitWhereInput!]
   reminders: DateTimeNullableListFilter
   student: UserWhereInput
   studentId: StringFilter
@@ -798,12 +1085,23 @@ input CourseVisitWhereInput {
 }
 
 input CourseVisitWhereUniqueInput {
+  AND: [CourseVisitWhereInput!]
+  NOT: [CourseVisitWhereInput!]
+  OR: [CourseVisitWhereInput!]
+  comment: StringNullableFilter
+  coursePage: CoursePageWhereInput
+  coursePageId: StringFilter
+  createdAt: DateTimeFilter
+  finish: DateTimeNullableFilter
   id: String
+  info: JsonNullableFilter
+  reminders: DateTimeNullableListFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
+  visitsNumber: IntNullableFilter
 }
 
-"""
-A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
-"""
 scalar DateTime
 
 input DateTimeFilter {
@@ -836,6 +1134,19 @@ input DateTimeNullableListFilter {
   isEmpty: Boolean
 }
 
+scalar Decimal
+
+input DecimalNullableFilter {
+  equals: Decimal
+  gt: Decimal
+  gte: Decimal
+  in: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  not: NestedDecimalNullableFilter
+  notIn: [Decimal!]
+}
+
 type Document {
   clauses(after: ClauseWhereUniqueInput, before: ClauseWhereUniqueInput, first: Int, last: Int): [Clause!]!
   complexity: Int
@@ -854,6 +1165,10 @@ input DocumentListRelationFilter {
   every: DocumentWhereInput
   none: DocumentWhereInput
   some: DocumentWhereInput
+}
+
+input DocumentOrderByRelationAggregateInput {
+  _count: SortOrder
 }
 
 type DocumentResult {
@@ -876,8 +1191,14 @@ input DocumentResultListRelationFilter {
   some: DocumentResultWhereInput
 }
 
+input DocumentResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input DocumentResultWhereInput {
   AND: [DocumentResultWhereInput!]
+  NOT: [DocumentResultWhereInput!]
+  OR: [DocumentResultWhereInput!]
   answers: StringNullableListFilter
   createdAt: DateTimeFilter
   document: DocumentWhereInput
@@ -886,19 +1207,32 @@ input DocumentResultWhereInput {
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [DocumentResultWhereInput!]
-  OR: [DocumentResultWhereInput!]
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringNullableFilter
 }
 
 input DocumentResultWhereUniqueInput {
+  AND: [DocumentResultWhereInput!]
+  NOT: [DocumentResultWhereInput!]
+  OR: [DocumentResultWhereInput!]
+  answers: StringNullableListFilter
+  createdAt: DateTimeFilter
+  document: DocumentWhereInput
+  documentId: StringNullableFilter
+  drafts: StringNullableListFilter
   id: String
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
 }
 
 input DocumentWhereInput {
   AND: [DocumentWhereInput!]
+  NOT: [DocumentWhereInput!]
+  OR: [DocumentWhereInput!]
   clauses: ClauseListRelationFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
@@ -906,8 +1240,6 @@ input DocumentWhereInput {
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
-  NOT: [DocumentWhereInput!]
-  OR: [DocumentWhereInput!]
   title: StringFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -915,7 +1247,20 @@ input DocumentWhereInput {
 }
 
 input DocumentWhereUniqueInput {
+  AND: [DocumentWhereInput!]
+  NOT: [DocumentWhereInput!]
+  OR: [DocumentWhereInput!]
+  clauses: ClauseListRelationFilter
+  complexity: IntNullableFilter
+  createdAt: DateTimeFilter
+  documentResults: DocumentResultListRelationFilter
   id: String
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  title: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 input Element {
@@ -949,32 +1294,46 @@ type EmailCampaign {
   updatedAt: DateTime!
 }
 
-input EmailCampaignOrderByInput {
+input EmailCampaignOrderByWithRelationInput {
   content: SortOrder
   createdAt: SortOrder
-  emails: SortOrder
+  emailReminders: EmailReminderOrderByRelationAggregateInput
+  emails: SortOrderInput
   id: SortOrder
-  name: SortOrder
+  lawrdle: LawrdleOrderByRelationAggregateInput
+  name: SortOrderInput
+  post: PostOrderByRelationAggregateInput
   updatedAt: SortOrder
 }
 
 input EmailCampaignWhereInput {
   AND: [EmailCampaignWhereInput!]
+  NOT: [EmailCampaignWhereInput!]
+  OR: [EmailCampaignWhereInput!]
   content: StringFilter
   createdAt: DateTimeFilter
   emailReminders: EmailReminderListRelationFilter
   emails: JsonNullableFilter
   id: StringFilter
-  lawrdles: LawrdleListRelationFilter
+  lawrdle: LawrdleListRelationFilter
   name: StringNullableFilter
-  NOT: [EmailCampaignWhereInput!]
-  OR: [EmailCampaignWhereInput!]
-  posts: PostListRelationFilter
+  post: PostListRelationFilter
   updatedAt: DateTimeFilter
 }
 
 input EmailCampaignWhereUniqueInput {
+  AND: [EmailCampaignWhereInput!]
+  NOT: [EmailCampaignWhereInput!]
+  OR: [EmailCampaignWhereInput!]
+  content: StringFilter
+  createdAt: DateTimeFilter
+  emailReminders: EmailReminderListRelationFilter
+  emails: JsonNullableFilter
   id: String
+  lawrdle: LawrdleListRelationFilter
+  name: StringNullableFilter
+  post: PostListRelationFilter
+  updatedAt: DateTimeFilter
 }
 
 input EmailInfo {
@@ -1006,22 +1365,31 @@ input EmailReminderListRelationFilter {
   some: EmailReminderWhereInput
 }
 
-input EmailReminderOrderByInput {
-  coursePageId: SortOrder
+input EmailReminderOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input EmailReminderOrderByWithRelationInput {
+  coursePage: CoursePageOrderByWithRelationInput
+  coursePageId: SortOrderInput
   createdAt: SortOrder
-  emailCampaignId: SortOrder
+  emailCampaign: EmailCampaignOrderByWithRelationInput
+  emailCampaignId: SortOrderInput
   emailsSent: SortOrder
-  gap: SortOrder
+  gap: SortOrderInput
   id: SortOrder
-  link: SortOrder
-  sendAt: SortOrder
-  status: SortOrder
+  link: SortOrderInput
+  sendAt: SortOrderInput
+  status: SortOrderInput
   updatedAt: SortOrder
-  userId: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
 }
 
 input EmailReminderWhereInput {
   AND: [EmailReminderWhereInput!]
+  NOT: [EmailReminderWhereInput!]
+  OR: [EmailReminderWhereInput!]
   coursePage: CoursePageWhereInput
   coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
@@ -1031,8 +1399,6 @@ input EmailReminderWhereInput {
   gap: IntNullableFilter
   id: StringFilter
   link: StringNullableFilter
-  NOT: [EmailReminderWhereInput!]
-  OR: [EmailReminderWhereInput!]
   sendAt: DateTimeNullableFilter
   status: IntNullableFilter
   updatedAt: DateTimeFilter
@@ -1041,7 +1407,23 @@ input EmailReminderWhereInput {
 }
 
 input EmailReminderWhereUniqueInput {
+  AND: [EmailReminderWhereInput!]
+  NOT: [EmailReminderWhereInput!]
+  OR: [EmailReminderWhereInput!]
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
+  createdAt: DateTimeFilter
+  emailCampaign: EmailCampaignWhereInput
+  emailCampaignId: StringNullableFilter
+  emailsSent: StringNullableListFilter
+  gap: IntNullableFilter
   id: String
+  link: StringNullableFilter
+  sendAt: DateTimeNullableFilter
+  status: IntNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
 }
 
 input EmailsList {
@@ -1083,17 +1465,21 @@ input ExamAnswerListRelationFilter {
   some: ExamAnswerWhereInput
 }
 
+input ExamAnswerOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input ExamAnswerWhereInput {
   AND: [ExamAnswerWhereInput!]
+  NOT: [ExamAnswerWhereInput!]
+  OR: [ExamAnswerWhereInput!]
   answer: StringFilter
   createdAt: DateTimeFilter
   examQuestion: ExamQuestionWhereInput
-  examQuestionId: StringFilter
   examQuestionID: StringFilter
+  examQuestionId: StringFilter
   id: StringFilter
   legalPortfolio: LegalPortfolioListRelationFilter
-  NOT: [ExamAnswerWhereInput!]
-  OR: [ExamAnswerWhereInput!]
   studentId: StringFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -1105,15 +1491,29 @@ input ExamListRelationFilter {
   some: ExamWhereInput
 }
 
+input ExamOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ExamQuestionOrderByWithRelationInput {
+  coursePage: CoursePageOrderByWithRelationInput
+  coursePageID: SortOrder
+  createdAt: SortOrder
+  examAnswer: ExamAnswerOrderByRelationAggregateInput
+  id: SortOrder
+  question: SortOrder
+  updatedAt: SortOrder
+}
+
 input ExamQuestionWhereInput {
   AND: [ExamQuestionWhereInput!]
+  NOT: [ExamQuestionWhereInput!]
+  OR: [ExamQuestionWhereInput!]
   coursePage: CoursePageWhereInput
   coursePageID: StringFilter
   createdAt: DateTimeFilter
   examAnswer: ExamAnswerListRelationFilter
   id: StringFilter
-  NOT: [ExamQuestionWhereInput!]
-  OR: [ExamQuestionWhereInput!]
   question: StringFilter
   updatedAt: DateTimeFilter
 }
@@ -1124,8 +1524,14 @@ input ExamResultListRelationFilter {
   some: ExamResultWhereInput
 }
 
+input ExamResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input ExamResultWhereInput {
   AND: [ExamResultWhereInput!]
+  NOT: [ExamResultWhereInput!]
+  OR: [ExamResultWhereInput!]
   answers: StringNullableListFilter
   createdAt: DateTimeFilter
   exam: ExamWhereInput
@@ -1133,8 +1539,6 @@ input ExamResultWhereInput {
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [ExamResultWhereInput!]
-  OR: [ExamResultWhereInput!]
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringNullableFilter
@@ -1142,6 +1546,8 @@ input ExamResultWhereInput {
 
 input ExamWhereInput {
   AND: [ExamWhereInput!]
+  NOT: [ExamWhereInput!]
+  OR: [ExamWhereInput!]
   createdAt: DateTimeFilter
   examResult: ExamResultListRelationFilter
   id: StringFilter
@@ -1150,8 +1556,6 @@ input ExamWhereInput {
   name: StringNullableFilter
   nodeID: StringNullableFilter
   nodeType: StringNullableFilter
-  NOT: [ExamWhereInput!]
-  OR: [ExamWhereInput!]
   question: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -1177,11 +1581,18 @@ input FeedbackListRelationFilter {
   some: FeedbackWhereInput
 }
 
-input FeedbackOrderByInput {
+input FeedbackOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input FeedbackOrderByWithRelationInput {
   createdAt: SortOrder
   id: SortOrder
-  lessonId: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrderInput
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
+  teacher: UserOrderByWithRelationInput
   teacherId: SortOrder
   text: SortOrder
   updatedAt: SortOrder
@@ -1189,12 +1600,12 @@ input FeedbackOrderByInput {
 
 input FeedbackWhereInput {
   AND: [FeedbackWhereInput!]
+  NOT: [FeedbackWhereInput!]
+  OR: [FeedbackWhereInput!]
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [FeedbackWhereInput!]
-  OR: [FeedbackWhereInput!]
   student: UserWhereInput
   studentId: StringFilter
   teacher: UserWhereInput
@@ -1204,18 +1615,19 @@ input FeedbackWhereInput {
 }
 
 input FeedbackWhereUniqueInput {
+  AND: [FeedbackWhereInput!]
+  NOT: [FeedbackWhereInput!]
+  OR: [FeedbackWhereInput!]
+  createdAt: DateTimeFilter
   id: String
-}
-
-input FloatNullableFilter {
-  equals: Float
-  gt: Float
-  gte: Float
-  in: [Float!]
-  lt: Float
-  lte: Float
-  not: NestedFloatNullableFilter
-  notIn: [Float!]
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  teacher: UserWhereInput
+  teacherId: StringFilter
+  text: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 type Forum {
@@ -1236,13 +1648,29 @@ input ForumListRelationFilter {
   some: ForumWhereInput
 }
 
+input ForumOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ForumOrderByWithRelationInput {
+  createdAt: SortOrder
+  id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  rating: RatingOrderByRelationAggregateInput
+  statements: StatementOrderByRelationAggregateInput
+  text: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
+}
+
 input ForumWhereInput {
   AND: [ForumWhereInput!]
+  NOT: [ForumWhereInput!]
+  OR: [ForumWhereInput!]
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  NOT: [ForumWhereInput!]
-  OR: [ForumWhereInput!]
   rating: RatingListRelationFilter
   statements: StatementListRelationFilter
   text: StringNullableFilter
@@ -1267,30 +1695,44 @@ input GrowthAreaListRelationFilter {
   some: GrowthAreaWhereInput
 }
 
-input GrowthAreaOrderByInput {
+input GrowthAreaOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input GrowthAreaOrderByWithRelationInput {
   createdAt: SortOrder
   id: SortOrder
-  marks: SortOrder
-  maxProgress: SortOrder
+  marks: SortOrderInput
+  maxProgress: SortOrderInput
   name: SortOrder
   updatedAt: SortOrder
+  userLevels: UserLevelOrderByRelationAggregateInput
 }
 
 input GrowthAreaWhereInput {
   AND: [GrowthAreaWhereInput!]
+  NOT: [GrowthAreaWhereInput!]
+  OR: [GrowthAreaWhereInput!]
   createdAt: DateTimeFilter
   id: StringFilter
   marks: JsonNullableFilter
   maxProgress: IntNullableFilter
   name: StringFilter
-  NOT: [GrowthAreaWhereInput!]
-  OR: [GrowthAreaWhereInput!]
   updatedAt: DateTimeFilter
   userLevels: UserLevelListRelationFilter
 }
 
 input GrowthAreaWhereUniqueInput {
+  AND: [GrowthAreaWhereInput!]
+  NOT: [GrowthAreaWhereInput!]
+  OR: [GrowthAreaWhereInput!]
+  createdAt: DateTimeFilter
   id: String
+  marks: JsonNullableFilter
+  maxProgress: IntNullableFilter
+  name: StringFilter
+  updatedAt: DateTimeFilter
+  userLevels: UserLevelListRelationFilter
 }
 
 input IntFilter {
@@ -1315,14 +1757,22 @@ input IntNullableFilter {
   notIn: [Int!]
 }
 
-"""
-The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
 scalar Json
 
 input JsonNullableFilter {
+  array_contains: Json
+  array_ends_with: Json
+  array_starts_with: Json
   equals: Json
+  gt: Json
+  gte: Json
+  lt: Json
+  lte: Json
   not: Json
+  path: [String!]
+  string_contains: String
+  string_ends_with: String
+  string_starts_with: String
 }
 
 input JsonNullableListFilter {
@@ -1345,6 +1795,7 @@ type Lawrdle {
   emailCampaignId: String
   id: String!
   leadin: String
+  lessonId: String
   link: String
   story: String!
   updatedAt: DateTime!
@@ -1357,16 +1808,24 @@ input LawrdleListRelationFilter {
   some: LawrdleWhereInput
 }
 
-input LawrdleOrderByInput {
+input LawrdleOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input LawrdleOrderByWithRelationInput {
   active: SortOrder
+  author: UserOrderByWithRelationInput
   authorId: SortOrder
-  buttonText: SortOrder
-  coursePageId: SortOrder
+  buttonText: SortOrderInput
+  coursePage: CoursePageOrderByWithRelationInput
+  coursePageId: SortOrderInput
   createdAt: SortOrder
-  emailCampaignId: SortOrder
+  emailCampaign: EmailCampaignOrderByWithRelationInput
+  emailCampaignId: SortOrderInput
   id: SortOrder
-  leadin: SortOrder
-  link: SortOrder
+  leadin: SortOrderInput
+  lessonId: SortOrderInput
+  link: SortOrderInput
   pros: SortOrder
   story: SortOrder
   tags: SortOrder
@@ -1375,8 +1834,10 @@ input LawrdleOrderByInput {
 }
 
 input LawrdleWhereInput {
-  active: BoolFilter
   AND: [LawrdleWhereInput!]
+  NOT: [LawrdleWhereInput!]
+  OR: [LawrdleWhereInput!]
+  active: BoolFilter
   author: UserWhereInput
   authorId: StringFilter
   buttonText: StringNullableFilter
@@ -1387,9 +1848,8 @@ input LawrdleWhereInput {
   emailCampaignId: StringNullableFilter
   id: StringFilter
   leadin: StringNullableFilter
+  lessonId: StringNullableFilter
   link: StringNullableFilter
-  NOT: [LawrdleWhereInput!]
-  OR: [LawrdleWhereInput!]
   pros: StringNullableListFilter
   story: StringFilter
   tags: StringNullableListFilter
@@ -1398,7 +1858,27 @@ input LawrdleWhereInput {
 }
 
 input LawrdleWhereUniqueInput {
+  AND: [LawrdleWhereInput!]
+  NOT: [LawrdleWhereInput!]
+  OR: [LawrdleWhereInput!]
+  active: BoolFilter
+  author: UserWhereInput
+  authorId: StringFilter
+  buttonText: StringNullableFilter
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
+  createdAt: DateTimeFilter
+  emailCampaign: EmailCampaignWhereInput
+  emailCampaignId: StringNullableFilter
   id: String
+  leadin: StringNullableFilter
+  lessonId: StringNullableFilter
+  link: StringNullableFilter
+  pros: StringNullableListFilter
+  story: StringFilter
+  tags: StringNullableListFilter
+  updatedAt: DateTimeFilter
+  word: StringFilter
 }
 
 input LegalPortfolioListRelationFilter {
@@ -1407,15 +1887,27 @@ input LegalPortfolioListRelationFilter {
   some: LegalPortfolioWhereInput
 }
 
+input LegalPortfolioOrderByWithRelationInput {
+  createdAt: SortOrder
+  cv: SortOrderInput
+  examAnswer: ExamAnswerOrderByRelationAggregateInput
+  id: SortOrder
+  open: SortOrder
+  portfolioIDs: SortOrder
+  resume: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+}
+
 input LegalPortfolioWhereInput {
   AND: [LegalPortfolioWhereInput!]
+  NOT: [LegalPortfolioWhereInput!]
+  OR: [LegalPortfolioWhereInput!]
   createdAt: DateTimeFilter
   cv: StringNullableFilter
   examAnswer: ExamAnswerListRelationFilter
   id: StringFilter
-  NOT: [LegalPortfolioWhereInput!]
   open: BoolFilter
-  OR: [LegalPortfolioWhereInput!]
   portfolioIDs: StringNullableListFilter
   resume: StringNullableFilter
   updatedAt: DateTimeFilter
@@ -1436,15 +1928,15 @@ input LesResultsList {
 
 type Lesson {
   assignment: Boolean
-  challenge_num: Int
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
+  challenge_num: Int
   change: String
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int): [Chat!]!
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   constructions(after: ConstructionWhereUniqueInput, before: ConstructionWhereUniqueInput, first: Int, last: Int): [Construction!]!
   coursePage: CoursePage!
-  coursePageId: String!
   coursePageID: String!
+  coursePageId: String!
   createdAt: DateTime!
   description: String
   documents(after: DocumentWhereUniqueInput, before: DocumentWhereUniqueInput, first: Int, last: Int): [Document!]!
@@ -1464,8 +1956,8 @@ type Lesson {
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
   problems(after: ProblemWhereUniqueInput, before: ProblemWhereUniqueInput, first: Int, last: Int): [Problem!]!
   published: Boolean
-  quizes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int): [Quiz!]!
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int): [QuizResult!]!
+  quizes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int): [Quiz!]!
   short_structure: Json
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   shots(after: ShotWhereUniqueInput, before: ShotWhereUniqueInput, first: Int, last: Int): [Shot!]!
@@ -1499,6 +1991,67 @@ input LessonListRelationFilter {
   some: LessonWhereInput
 }
 
+input LessonOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input LessonOrderByWithRelationInput {
+  assignment: SortOrderInput
+  challengeResults: ChallengeResultOrderByRelationAggregateInput
+  challenge_num: SortOrderInput
+  change: SortOrderInput
+  chats: ChatOrderByRelationAggregateInput
+  constructionResults: ConstructionResultOrderByRelationAggregateInput
+  constructions: ConstructionOrderByRelationAggregateInput
+  coursePage: CoursePageOrderByWithRelationInput
+  coursePageID: SortOrder
+  coursePageId: SortOrder
+  createdAt: SortOrder
+  description: SortOrderInput
+  documentResults: DocumentResultOrderByRelationAggregateInput
+  documents: DocumentOrderByRelationAggregateInput
+  examResults: ExamResultOrderByRelationAggregateInput
+  exams: ExamOrderByRelationAggregateInput
+  feedback: FeedbackOrderByRelationAggregateInput
+  forum: ForumOrderByWithRelationInput
+  forumId: SortOrderInput
+  hasSecret: SortOrderInput
+  id: SortOrder
+  image: SortOrderInput
+  lessonResults: LessonResultOrderByRelationAggregateInput
+  map: SortOrder
+  miniforums: MiniForumOrderByRelationAggregateInput
+  name: SortOrder
+  newTests: NewTestOrderByRelationAggregateInput
+  notes: NoteOrderByRelationAggregateInput
+  number: SortOrderInput
+  offers: OfferOrderByRelationAggregateInput
+  open: SortOrderInput
+  problemResults: ProblemResultOrderByRelationAggregateInput
+  problems: ProblemOrderByRelationAggregateInput
+  published: SortOrderInput
+  quizResults: QuizResultOrderByRelationAggregateInput
+  quizes: QuizOrderByRelationAggregateInput
+  short_structure: SortOrderInput
+  shotResults: ShotResultOrderByRelationAggregateInput
+  shots: ShotOrderByRelationAggregateInput
+  structure: SortOrderInput
+  teamQuestResults: TeamQuestResultOrderByRelationAggregateInput
+  teamQuests: TeamQuestOrderByRelationAggregateInput
+  test: TestOrderByRelationAggregateInput
+  testPracticeResults: TestPracticeResultOrderByRelationAggregateInput
+  testPractices: TestPracticeOrderByRelationAggregateInput
+  testResults: TestResultOrderByRelationAggregateInput
+  text: SortOrder
+  textEditorResults: TextEditorResultOrderByRelationAggregateInput
+  texteditors: TextEditorOrderByRelationAggregateInput
+  totalPoints: SortOrderInput
+  type: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
 type LessonResult {
   checked: Boolean
   createdAt: DateTime!
@@ -1517,28 +2070,34 @@ input LessonResultListRelationFilter {
   some: LessonResultWhereInput
 }
 
-input LessonResultOrderByInput {
-  checked: SortOrder
+input LessonResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input LessonResultOrderByWithRelationInput {
+  checked: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
   lessonId: SortOrder
-  lessonID: SortOrder
-  progress: SortOrder
+  progress: SortOrderInput
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
   updatedAt: SortOrder
-  visitsNumber: SortOrder
+  visitsNumber: SortOrderInput
 }
 
 input LessonResultWhereInput {
   AND: [LessonResultWhereInput!]
+  NOT: [LessonResultWhereInput!]
+  OR: [LessonResultWhereInput!]
   checked: BoolNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringFilter
   lessonID: StringNullableFilter
-  NOT: [LessonResultWhereInput!]
-  OR: [LessonResultWhereInput!]
+  lessonId: StringFilter
   progress: IntNullableFilter
   student: UserWhereInput
   studentId: StringFilter
@@ -1547,7 +2106,20 @@ input LessonResultWhereInput {
 }
 
 input LessonResultWhereUniqueInput {
+  AND: [LessonResultWhereInput!]
+  NOT: [LessonResultWhereInput!]
+  OR: [LessonResultWhereInput!]
+  checked: BoolNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringFilter
+  progress: IntNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
+  visitsNumber: IntNullableFilter
 }
 
 input LessonStructure {
@@ -1556,44 +2128,44 @@ input LessonStructure {
 
 input LessonWhereInput {
   AND: [LessonWhereInput!]
+  NOT: [LessonWhereInput!]
+  OR: [LessonWhereInput!]
   assignment: BoolNullableFilter
-  challenge_num: IntNullableFilter
   challengeResults: ChallengeResultListRelationFilter
+  challenge_num: IntNullableFilter
   change: StringNullableFilter
   chats: ChatListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
   coursePage: CoursePageWhereInput
-  coursePageId: StringFilter
   coursePageID: StringFilter
+  coursePageId: StringFilter
   createdAt: DateTimeFilter
   description: StringNullableFilter
-  documentResult: DocumentResultListRelationFilter
+  documentResults: DocumentResultListRelationFilter
   documents: DocumentListRelationFilter
-  exam: ExamListRelationFilter
-  examResult: ExamResultListRelationFilter
+  examResults: ExamResultListRelationFilter
+  exams: ExamListRelationFilter
+  feedback: FeedbackListRelationFilter
   forum: ForumWhereInput
   forumId: StringNullableFilter
   hasSecret: BoolNullableFilter
   id: StringFilter
   image: StringNullableFilter
-  lessonFeedback: FeedbackListRelationFilter
   lessonResults: LessonResultListRelationFilter
   map: JsonNullableListFilter
   miniforums: MiniForumListRelationFilter
   name: StringFilter
   newTests: NewTestListRelationFilter
-  NOT: [LessonWhereInput!]
   notes: NoteListRelationFilter
   number: IntNullableFilter
   offers: OfferListRelationFilter
   open: BoolNullableFilter
-  OR: [LessonWhereInput!]
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
   published: BoolNullableFilter
-  quizes: QuizListRelationFilter
   quizResults: QuizResultListRelationFilter
+  quizes: QuizListRelationFilter
   short_structure: JsonNullableFilter
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
@@ -1615,8 +2187,63 @@ input LessonWhereInput {
 }
 
 input LessonWhereUniqueInput {
+  AND: [LessonWhereInput!]
+  NOT: [LessonWhereInput!]
+  OR: [LessonWhereInput!]
+  assignment: BoolNullableFilter
+  challengeResults: ChallengeResultListRelationFilter
+  challenge_num: IntNullableFilter
+  change: StringNullableFilter
+  chats: ChatListRelationFilter
+  constructionResults: ConstructionResultListRelationFilter
+  constructions: ConstructionListRelationFilter
+  coursePage: CoursePageWhereInput
+  coursePageID: StringFilter
+  coursePageId: StringFilter
+  createdAt: DateTimeFilter
+  description: StringNullableFilter
+  documentResults: DocumentResultListRelationFilter
+  documents: DocumentListRelationFilter
+  examResults: ExamResultListRelationFilter
+  exams: ExamListRelationFilter
+  feedback: FeedbackListRelationFilter
+  forum: ForumWhereInput
   forumId: String
+  hasSecret: BoolNullableFilter
   id: String
+  image: StringNullableFilter
+  lessonResults: LessonResultListRelationFilter
+  map: JsonNullableListFilter
+  miniforums: MiniForumListRelationFilter
+  name: StringFilter
+  newTests: NewTestListRelationFilter
+  notes: NoteListRelationFilter
+  number: IntNullableFilter
+  offers: OfferListRelationFilter
+  open: BoolNullableFilter
+  problemResults: ProblemResultListRelationFilter
+  problems: ProblemListRelationFilter
+  published: BoolNullableFilter
+  quizResults: QuizResultListRelationFilter
+  quizes: QuizListRelationFilter
+  short_structure: JsonNullableFilter
+  shotResults: ShotResultListRelationFilter
+  shots: ShotListRelationFilter
+  structure: JsonNullableFilter
+  teamQuestResults: TeamQuestResultListRelationFilter
+  teamQuests: TeamQuestListRelationFilter
+  test: TestListRelationFilter
+  testPracticeResults: TestPracticeResultListRelationFilter
+  testPractices: TestPracticeListRelationFilter
+  testResults: TestResultListRelationFilter
+  text: StringFilter
+  textEditorResults: TextEditorResultListRelationFilter
+  texteditors: TextEditorListRelationFilter
+  totalPoints: IntNullableFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 enum Level {
@@ -1662,19 +2289,19 @@ input MessageListRelationFilter {
   some: MessageWhereInput
 }
 
-input Messages {
-  messagesList: [MessageElement]
+input MessageOrderByRelationAggregateInput {
+  _count: SortOrder
 }
 
 input MessageWhereInput {
   AND: [MessageWhereInput!]
+  NOT: [MessageWhereInput!]
+  OR: [MessageWhereInput!]
   comment: StringNullableFilter
   coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   link: StringNullableFilter
-  NOT: [MessageWhereInput!]
-  OR: [MessageWhereInput!]
   subject: StringNullableFilter
   text: StringNullableFilter
   updatedAt: DateTimeFilter
@@ -1683,7 +2310,23 @@ input MessageWhereInput {
 }
 
 input MessageWhereUniqueInput {
+  AND: [MessageWhereInput!]
+  NOT: [MessageWhereInput!]
+  OR: [MessageWhereInput!]
+  comment: StringNullableFilter
+  coursePageId: StringNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  link: StringNullableFilter
+  subject: StringNullableFilter
+  text: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+}
+
+input Messages {
+  messagesList: [MessageElement]
 }
 
 type MiniForum {
@@ -1705,14 +2348,18 @@ input MiniForumListRelationFilter {
   some: MiniForumWhereInput
 }
 
+input MiniForumOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input MiniForumWhereInput {
   AND: [MiniForumWhereInput!]
+  NOT: [MiniForumWhereInput!]
+  OR: [MiniForumWhereInput!]
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [MiniForumWhereInput!]
-  OR: [MiniForumWhereInput!]
   statements: StatementListRelationFilter
   text: StringNullableFilter
   type: StringNullableFilter
@@ -1723,7 +2370,20 @@ input MiniForumWhereInput {
 }
 
 input MiniForumWhereUniqueInput {
+  AND: [MiniForumWhereInput!]
+  NOT: [MiniForumWhereInput!]
+  OR: [MiniForumWhereInput!]
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  statements: StatementListRelationFilter
+  text: StringNullableFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+  value: StringNullableFilter
 }
 
 input Module {
@@ -1742,7 +2402,7 @@ type Mutation {
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   botSignup(email: String, name: String, number: String, password: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
-  copyLesson(id: String!): Lesson
+  copyLesson(coursePageId: String!, id: String!): Lesson
   createBotDialogue(journey: [String], source: String): BotDialogue
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
@@ -1848,7 +2508,7 @@ type Mutation {
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
-  updateProblem(complexity: Int, id: String, isSecret: Boolean, text: String): Problem
+  updateProblem(complexity: Int, id: String, isSecret: Boolean, steps: ProblemStructure, text: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
@@ -1903,6 +2563,17 @@ input NestedDateTimeNullableFilter {
   notIn: [DateTime!]
 }
 
+input NestedDecimalNullableFilter {
+  equals: Decimal
+  gt: Decimal
+  gte: Decimal
+  in: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  not: NestedDecimalNullableFilter
+  notIn: [Decimal!]
+}
+
 input NestedEnumCourseTypeNullableFilter {
   equals: CourseType
   in: [CourseType!]
@@ -1922,17 +2593,6 @@ input NestedEnumPageViewFilter {
   in: [PageView!]
   not: NestedEnumPageViewFilter
   notIn: [PageView!]
-}
-
-input NestedFloatNullableFilter {
-  equals: Float
-  gt: Float
-  gte: Float
-  in: [Float!]
-  lt: Float
-  lte: Float
-  not: NestedFloatNullableFilter
-  notIn: [Float!]
 }
 
 input NestedIntFilter {
@@ -1995,8 +2655,8 @@ type NewTest {
   ifRight: String
   ifWrong: String
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   next: Json
   question: [String!]!
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int): [TestResult!]!
@@ -2012,8 +2672,35 @@ input NewTestListRelationFilter {
   some: NewTestWhereInput
 }
 
+input NewTestOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input NewTestOrderByWithRelationInput {
+  answers: SortOrder
+  comments: SortOrder
+  complexity: SortOrderInput
+  correct: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  ifRight: SortOrderInput
+  ifWrong: SortOrderInput
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
+  lessonId: SortOrderInput
+  next: SortOrderInput
+  question: SortOrder
+  testResults: TestResultOrderByRelationAggregateInput
+  type: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
 input NewTestWhereInput {
   AND: [NewTestWhereInput!]
+  NOT: [NewTestWhereInput!]
+  OR: [NewTestWhereInput!]
   answers: StringNullableListFilter
   comments: StringNullableListFilter
   complexity: IntNullableFilter
@@ -2023,11 +2710,9 @@ input NewTestWhereInput {
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
   next: JsonNullableFilter
-  NOT: [NewTestWhereInput!]
-  OR: [NewTestWhereInput!]
   question: StringNullableListFilter
   testResults: TestResultListRelationFilter
   type: StringNullableFilter
@@ -2037,7 +2722,27 @@ input NewTestWhereInput {
 }
 
 input NewTestWhereUniqueInput {
+  AND: [NewTestWhereInput!]
+  NOT: [NewTestWhereInput!]
+  OR: [NewTestWhereInput!]
+  answers: StringNullableListFilter
+  comments: StringNullableListFilter
+  complexity: IntNullableFilter
+  correct: BoolNullableListFilter
+  createdAt: DateTimeFilter
   id: String
+  ifRight: StringNullableFilter
+  ifWrong: StringNullableFilter
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  next: JsonNullableFilter
+  question: StringNullableListFilter
+  testResults: TestResultListRelationFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 input NextFalseType {
@@ -2061,8 +2766,8 @@ type Note {
   id: String!
   isSecret: Boolean
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   link_clicks: Int
   next: Json
   text: String!
@@ -2078,20 +2783,24 @@ input NoteListRelationFilter {
   some: NoteWhereInput
 }
 
+input NoteOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input NoteWhereInput {
   AND: [NoteWhereInput!]
+  NOT: [NoteWhereInput!]
+  OR: [NoteWhereInput!]
   chat: BoolNullableFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   isSecret: BoolNullableFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
   link_clicks: IntNullableFilter
   next: JsonNullableFilter
-  NOT: [NoteWhereInput!]
-  OR: [NoteWhereInput!]
   text: StringFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
@@ -2100,7 +2809,29 @@ input NoteWhereInput {
 }
 
 input NoteWhereUniqueInput {
+  AND: [NoteWhereInput!]
+  NOT: [NoteWhereInput!]
+  OR: [NoteWhereInput!]
+  chat: BoolNullableFilter
+  complexity: IntNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  isSecret: BoolNullableFilter
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  link_clicks: IntNullableFilter
+  next: JsonNullableFilter
+  text: StringFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+}
+
+enum NullsOrder {
+  first
+  last
 }
 
 type Offer {
@@ -2127,23 +2858,32 @@ input OfferListRelationFilter {
   some: OfferWhereInput
 }
 
-input OfferOrderByInput {
-  courseId: SortOrder
+input OfferOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input OfferOrderByWithRelationInput {
+  courseId: SortOrderInput
   createdAt: SortOrder
-  discountPrice: SortOrder
+  discountPrice: SortOrderInput
   header: SortOrder
   id: SortOrder
-  lessonId: SortOrder
-  price: SortOrder
-  programId: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrderInput
+  price: SortOrderInput
+  program: ProgramOrderByWithRelationInput
+  programId: SortOrderInput
   text: SortOrder
-  type: SortOrder
+  type: SortOrderInput
   updatedAt: SortOrder
-  userId: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
 }
 
 input OfferWhereInput {
   AND: [OfferWhereInput!]
+  NOT: [OfferWhereInput!]
+  OR: [OfferWhereInput!]
   courseId: StringNullableFilter
   createdAt: DateTimeFilter
   discountPrice: IntNullableFilter
@@ -2151,8 +2891,6 @@ input OfferWhereInput {
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [OfferWhereInput!]
-  OR: [OfferWhereInput!]
   price: IntNullableFilter
   program: ProgramWhereInput
   programId: StringNullableFilter
@@ -2164,7 +2902,24 @@ input OfferWhereInput {
 }
 
 input OfferWhereUniqueInput {
+  AND: [OfferWhereInput!]
+  NOT: [OfferWhereInput!]
+  OR: [OfferWhereInput!]
+  courseId: StringNullableFilter
+  createdAt: DateTimeFilter
+  discountPrice: IntNullableFilter
+  header: StringFilter
   id: String
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  price: IntNullableFilter
+  program: ProgramWhereInput
+  programId: StringNullableFilter
+  text: StringFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
 }
 
 type Order {
@@ -2190,24 +2945,34 @@ input OrderListRelationFilter {
   some: OrderWhereInput
 }
 
-input OrderOrderByInput {
-  comment: SortOrder
+input OrderOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input OrderOrderByWithRelationInput {
+  comment: SortOrderInput
+  coursePage: CoursePageOrderByWithRelationInput
   coursePageId: SortOrder
   createdAt: SortOrder
   id: SortOrder
-  isPaid: SortOrder
-  level: SortOrder
-  paymentID: SortOrder
-  price: SortOrder
-  programId: SortOrder
-  promocode: SortOrder
-  teamId: SortOrder
+  isPaid: SortOrderInput
+  level: SortOrderInput
+  paymentID: SortOrderInput
+  price: SortOrderInput
+  program: ProgramOrderByWithRelationInput
+  programId: SortOrderInput
+  promocode: SortOrderInput
+  team: TeamOrderByWithRelationInput
+  teamId: SortOrderInput
   updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
   userId: SortOrder
 }
 
 input OrderWhereInput {
   AND: [OrderWhereInput!]
+  NOT: [OrderWhereInput!]
+  OR: [OrderWhereInput!]
   comment: StringNullableFilter
   coursePage: CoursePageWhereInput
   coursePageId: StringFilter
@@ -2215,8 +2980,6 @@ input OrderWhereInput {
   id: StringFilter
   isPaid: BoolNullableFilter
   level: EnumLevelNullableFilter
-  NOT: [OrderWhereInput!]
-  OR: [OrderWhereInput!]
   paymentID: StringNullableFilter
   price: IntNullableFilter
   program: ProgramWhereInput
@@ -2230,7 +2993,26 @@ input OrderWhereInput {
 }
 
 input OrderWhereUniqueInput {
+  AND: [OrderWhereInput!]
+  NOT: [OrderWhereInput!]
+  OR: [OrderWhereInput!]
+  comment: StringNullableFilter
+  coursePage: CoursePageWhereInput
+  coursePageId: StringFilter
+  createdAt: DateTimeFilter
   id: String
+  isPaid: BoolNullableFilter
+  level: EnumLevelNullableFilter
+  paymentID: StringNullableFilter
+  price: IntNullableFilter
+  program: ProgramWhereInput
+  programId: StringNullableFilter
+  promocode: StringNullableFilter
+  team: TeamWhereInput
+  teamId: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 enum PageView {
@@ -2260,14 +3042,24 @@ input PointAListRelationFilter {
   some: PointAWhereInput
 }
 
+input PointAOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input PointATestListRelationFilter {
   every: PointATestWhereInput
   none: PointATestWhereInput
   some: PointATestWhereInput
 }
 
+input PointATestOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input PointATestWhereInput {
   AND: [PointATestWhereInput!]
+  NOT: [PointATestWhereInput!]
+  OR: [PointATestWhereInput!]
   answer1: StringFilter
   answer1Correct: StringFilter
   answer2: StringFilter
@@ -2277,12 +3069,10 @@ input PointATestWhereInput {
   answer4: StringNullableFilter
   answer4Correct: StringNullableFilter
   coursePage: CoursePageWhereInput
-  coursePageId: StringNullableFilter
   coursePageID: StringNullableFilter
+  coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
-  NOT: [PointATestWhereInput!]
-  OR: [PointATestWhereInput!]
   pointA: PointAListRelationFilter
   question: StringFilter
   updatedAt: DateTimeFilter
@@ -2292,15 +3082,16 @@ input PointATestWhereInput {
 
 input PointAWhereInput {
   AND: [PointAWhereInput!]
+  NOT: [PointAWhereInput!]
+  OR: [PointAWhereInput!]
   coursePage: CoursePageWhereInput
-  coursePageId: StringFilter
   coursePageID: StringNullableFilter
+  coursePageId: StringFilter
   createdAt: DateTimeFilter
   description: StringNullableFilter
   id: StringFilter
-  NOT: [PointAWhereInput!]
-  OR: [PointAWhereInput!]
   pointATest: PointATestListRelationFilter
+  text: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -2332,26 +3123,35 @@ input PostListRelationFilter {
   some: PostWhereInput
 }
 
-input PostOrderByInput {
-  coursePageId: SortOrder
+input PostOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input PostOrderByWithRelationInput {
+  coursePage: CoursePageOrderByWithRelationInput
+  coursePageId: SortOrderInput
   createdAt: SortOrder
-  emailCampaignId: SortOrder
+  emailCampaign: EmailCampaignOrderByWithRelationInput
+  emailCampaignId: SortOrderInput
   id: SortOrder
-  image: SortOrder
-  language: SortOrder
-  leadin: SortOrder
-  lessonId: SortOrder
-  likes: SortOrder
-  summary: SortOrder
+  image: SortOrderInput
+  language: SortOrderInput
+  leadin: SortOrderInput
+  lessonId: SortOrderInput
+  likes: SortOrderInput
+  summary: SortOrderInput
   tags: SortOrder
-  text: SortOrder
-  title: SortOrder
+  text: SortOrderInput
+  title: SortOrderInput
   updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
   userId: SortOrder
 }
 
 input PostWhereInput {
   AND: [PostWhereInput!]
+  NOT: [PostWhereInput!]
+  OR: [PostWhereInput!]
   coursePage: CoursePageWhereInput
   coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
@@ -2363,8 +3163,6 @@ input PostWhereInput {
   leadin: StringNullableFilter
   lessonId: StringNullableFilter
   likes: IntNullableFilter
-  NOT: [PostWhereInput!]
-  OR: [PostWhereInput!]
   summary: StringNullableFilter
   tags: StringNullableListFilter
   text: StringNullableFilter
@@ -2375,7 +3173,27 @@ input PostWhereInput {
 }
 
 input PostWhereUniqueInput {
+  AND: [PostWhereInput!]
+  NOT: [PostWhereInput!]
+  OR: [PostWhereInput!]
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
+  createdAt: DateTimeFilter
+  emailCampaign: EmailCampaignWhereInput
+  emailCampaignId: StringNullableFilter
   id: String
+  image: StringNullableFilter
+  language: StringNullableFilter
+  leadin: StringNullableFilter
+  lessonId: StringNullableFilter
+  likes: IntNullableFilter
+  summary: StringNullableFilter
+  tags: StringNullableListFilter
+  text: StringNullableFilter
+  title: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 input Price {
@@ -2399,8 +3217,8 @@ type Problem {
   id: String!
   isSecret: Boolean
   lesson: Lesson!
-  lessonId: String!
   lessonID: String!
+  lessonId: String!
   nodeID: String
   nodeType: String
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
@@ -2413,6 +3231,7 @@ type Problem {
 
 input ProblemItem {
   id: String
+  index: Int
   next: NextType
   type: String
 }
@@ -2423,16 +3242,43 @@ input ProblemListRelationFilter {
   some: ProblemWhereInput
 }
 
+input ProblemOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ProblemOrderByWithRelationInput {
+  answer: SortOrderInput
+  complexity: SortOrderInput
+  createdAt: SortOrder
+  hints: SortOrderInput
+  hintsList: SortOrder
+  id: SortOrder
+  isSecret: SortOrderInput
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrder
+  lessonId: SortOrder
+  nodeID: SortOrderInput
+  nodeType: SortOrderInput
+  problemResults: ProblemResultOrderByRelationAggregateInput
+  solution: SortOrderInput
+  solutionList: SortOrder
+  steps: SortOrderInput
+  text: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
 type ProblemResult {
   answer: String
   createdAt: DateTime!
   id: String!
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   problem: Problem
-  problemId: String
   problemID: String
+  problemId: String
   revealed: [String!]!
   student: User!
   studentId: String!
@@ -2445,32 +3291,39 @@ input ProblemResultListRelationFilter {
   some: ProblemResultWhereInput
 }
 
-input ProblemResultOrderByInput {
-  answer: SortOrder
+input ProblemResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ProblemResultOrderByWithRelationInput {
+  answer: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
-  lessonId: SortOrder
-  lessonID: SortOrder
-  problemId: SortOrder
-  problemID: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
+  lessonId: SortOrderInput
+  problem: ProblemOrderByWithRelationInput
+  problemID: SortOrderInput
+  problemId: SortOrderInput
   revealed: SortOrder
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
   updatedAt: SortOrder
 }
 
 input ProblemResultWhereInput {
   AND: [ProblemResultWhereInput!]
+  NOT: [ProblemResultWhereInput!]
+  OR: [ProblemResultWhereInput!]
   answer: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
-  NOT: [ProblemResultWhereInput!]
-  OR: [ProblemResultWhereInput!]
+  lessonId: StringNullableFilter
   problem: ProblemWhereInput
-  problemId: StringNullableFilter
   problemID: StringNullableFilter
+  problemId: StringNullableFilter
   revealed: StringNullableListFilter
   student: UserWhereInput
   studentId: StringFilter
@@ -2478,7 +3331,22 @@ input ProblemResultWhereInput {
 }
 
 input ProblemResultWhereUniqueInput {
+  AND: [ProblemResultWhereInput!]
+  NOT: [ProblemResultWhereInput!]
+  OR: [ProblemResultWhereInput!]
+  answer: StringNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  problem: ProblemWhereInput
+  problemID: StringNullableFilter
+  problemId: StringNullableFilter
+  revealed: StringNullableListFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 input ProblemStructure {
@@ -2487,6 +3355,8 @@ input ProblemStructure {
 
 input ProblemWhereInput {
   AND: [ProblemWhereInput!]
+  NOT: [ProblemWhereInput!]
+  OR: [ProblemWhereInput!]
   answer: StringNullableFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
@@ -2495,12 +3365,10 @@ input ProblemWhereInput {
   id: StringFilter
   isSecret: BoolNullableFilter
   lesson: LessonWhereInput
-  lessonId: StringFilter
   lessonID: StringFilter
+  lessonId: StringFilter
   nodeID: StringNullableFilter
   nodeType: StringNullableFilter
-  NOT: [ProblemWhereInput!]
-  OR: [ProblemWhereInput!]
   problemResults: ProblemResultListRelationFilter
   solution: StringNullableFilter
   solutionList: StringNullableListFilter
@@ -2512,7 +3380,29 @@ input ProblemWhereInput {
 }
 
 input ProblemWhereUniqueInput {
+  AND: [ProblemWhereInput!]
+  NOT: [ProblemWhereInput!]
+  OR: [ProblemWhereInput!]
+  answer: StringNullableFilter
+  complexity: IntNullableFilter
+  createdAt: DateTimeFilter
+  hints: StringNullableFilter
+  hintsList: StringNullableListFilter
   id: String
+  isSecret: BoolNullableFilter
+  lesson: LessonWhereInput
+  lessonID: StringFilter
+  lessonId: StringFilter
+  nodeID: StringNullableFilter
+  nodeType: StringNullableFilter
+  problemResults: ProblemResultListRelationFilter
+  solution: StringNullableFilter
+  solutionList: StringNullableListFilter
+  steps: JsonNullableFilter
+  text: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 type Program {
@@ -2561,40 +3451,49 @@ input ProgramModule {
   topic: [String]
 }
 
-input ProgramOrderByInput {
-  audience: SortOrder
-  batch: SortOrder
+input ProgramOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ProgramOrderByWithRelationInput {
+  audience: SortOrderInput
+  batch: SortOrderInput
+  coursePages: CoursePageOrderByRelationAggregateInput
   createdAt: SortOrder
-  currency: SortOrder
+  currency: SortOrderInput
   description: SortOrder
-  discountPrice: SortOrder
+  discountPrice: SortOrderInput
   goals: SortOrder
   header: SortOrder
   id: SortOrder
   image: SortOrder
-  installments: SortOrder
-  methods: SortOrder
-  months: SortOrder
-  news: SortOrder
-  nextStart: SortOrder
-  price: SortOrder
-  promocode: SortOrder
-  promotionId: SortOrder
-  published: SortOrder
-  result: SortOrder
-  reviews: SortOrder
+  installments: SortOrderInput
+  methods: SortOrderInput
+  months: SortOrderInput
+  news: SortOrderInput
+  nextStart: SortOrderInput
+  offers: OfferOrderByRelationAggregateInput
+  orders: OrderOrderByRelationAggregateInput
+  price: SortOrderInput
+  promocode: SortOrderInput
+  promotionId: SortOrderInput
+  published: SortOrderInput
+  result: SortOrderInput
+  reviews: SortOrderInput
   subheader: SortOrder
-  syllabus: SortOrder
+  syllabus: SortOrderInput
   tags: SortOrder
-  tariffs: SortOrder
+  tariffs: SortOrderInput
   title: SortOrder
   updatedAt: SortOrder
-  uptodateAt: SortOrder
-  video: SortOrder
+  uptodateAt: SortOrderInput
+  video: SortOrderInput
 }
 
 input ProgramWhereInput {
   AND: [ProgramWhereInput!]
+  NOT: [ProgramWhereInput!]
+  OR: [ProgramWhereInput!]
   audience: StringNullableFilter
   batch: StringNullableFilter
   coursePages: CoursePageListRelationFilter
@@ -2611,9 +3510,7 @@ input ProgramWhereInput {
   months: IntNullableFilter
   news: StringNullableFilter
   nextStart: DateTimeNullableFilter
-  NOT: [ProgramWhereInput!]
   offers: OfferListRelationFilter
-  OR: [ProgramWhereInput!]
   orders: OrderListRelationFilter
   price: IntNullableFilter
   promocode: JsonNullableFilter
@@ -2632,7 +3529,41 @@ input ProgramWhereInput {
 }
 
 input ProgramWhereUniqueInput {
+  AND: [ProgramWhereInput!]
+  NOT: [ProgramWhereInput!]
+  OR: [ProgramWhereInput!]
+  audience: StringNullableFilter
+  batch: StringNullableFilter
+  coursePages: CoursePageListRelationFilter
+  createdAt: DateTimeFilter
+  currency: StringNullableFilter
+  description: StringFilter
+  discountPrice: IntNullableFilter
+  goals: StringNullableListFilter
+  header: StringNullableListFilter
   id: String
+  image: StringFilter
+  installments: IntNullableFilter
+  methods: StringNullableFilter
+  months: IntNullableFilter
+  news: StringNullableFilter
+  nextStart: DateTimeNullableFilter
+  offers: OfferListRelationFilter
+  orders: OrderListRelationFilter
+  price: IntNullableFilter
+  promocode: JsonNullableFilter
+  promotionId: StringNullableFilter
+  published: BoolNullableFilter
+  result: StringNullableFilter
+  reviews: JsonNullableFilter
+  subheader: StringNullableListFilter
+  syllabus: JsonNullableFilter
+  tags: StringNullableListFilter
+  tariffs: StringNullableFilter
+  title: StringFilter
+  updatedAt: DateTimeFilter
+  uptodateAt: DateTimeNullableFilter
+  video: StringNullableFilter
 }
 
 input Promocode {
@@ -2646,59 +3577,59 @@ input PromocodeList {
 
 type Query {
   botDialogue(where: BotDialogueWhereUniqueInput!): BotDialogue
-  botDialogues(after: BotDialogueWhereUniqueInput, before: BotDialogueWhereUniqueInput, first: Int, last: Int, orderBy: [BotDialogueOrderByInput!], where: BotDialogueWhereInput): [BotDialogue!]!
-  businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByInput!], where: BusinessClientWhereInput): [BusinessClient!]!
+  botDialogues(after: BotDialogueWhereUniqueInput, before: BotDialogueWhereUniqueInput, first: Int, last: Int, orderBy: [BotDialogueOrderByWithRelationInput!], where: BotDialogueWhereInput): [BotDialogue!]!
+  businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByWithRelationInput!], where: BusinessClientWhereInput): [BusinessClient!]!
   certificate(where: CertificateWhereUniqueInput!): Certificate
-  certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByInput!], where: CertificateWhereInput): [Certificate!]!
-  challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int, orderBy: [ChallengeResultOrderByInput!], where: ChallengeResultWhereInput): [ChallengeResult!]!
+  certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByWithRelationInput!], where: CertificateWhereInput): [Certificate!]!
+  challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int, orderBy: [ChallengeResultOrderByWithRelationInput!], where: ChallengeResultWhereInput): [ChallengeResult!]!
   chat(where: ChatWhereUniqueInput!): Chat
-  chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByInput!], where: ChatWhereInput): [Chat!]!
+  chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByWithRelationInput!], where: ChatWhereInput): [Chat!]!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
-  coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [CoursePageOrderByInput!], where: CoursePageWhereInput): [CoursePage!]!
+  coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [CoursePageOrderByWithRelationInput!], where: CoursePageWhereInput): [CoursePage!]!
   courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit
-  courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int, orderBy: [CourseVisitOrderByInput!], where: CourseVisitWhereInput): [CourseVisit!]!
+  courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int, orderBy: [CourseVisitOrderByWithRelationInput!], where: CourseVisitWhereInput): [CourseVisit!]!
   emailCampaign(where: EmailCampaignWhereUniqueInput!): EmailCampaign
-  emailCampaigns(after: EmailCampaignWhereUniqueInput, before: EmailCampaignWhereUniqueInput, first: Int, last: Int, orderBy: [EmailCampaignOrderByInput!], where: EmailCampaignWhereInput): [EmailCampaign!]!
+  emailCampaigns(after: EmailCampaignWhereUniqueInput, before: EmailCampaignWhereUniqueInput, first: Int, last: Int, orderBy: [EmailCampaignOrderByWithRelationInput!], where: EmailCampaignWhereInput): [EmailCampaign!]!
   emailReminder(where: EmailReminderWhereUniqueInput!): EmailReminder
-  emailReminders(after: EmailReminderWhereUniqueInput, before: EmailReminderWhereUniqueInput, first: Int, last: Int, orderBy: [EmailReminderOrderByInput!], where: EmailReminderWhereInput): [EmailReminder!]!
-  feedbacks(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int, orderBy: [FeedbackOrderByInput!], where: FeedbackWhereInput): [Feedback!]!
+  emailReminders(after: EmailReminderWhereUniqueInput, before: EmailReminderWhereUniqueInput, first: Int, last: Int, orderBy: [EmailReminderOrderByWithRelationInput!], where: EmailReminderWhereInput): [EmailReminder!]!
+  feedbacks(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int, orderBy: [FeedbackOrderByWithRelationInput!], where: FeedbackWhereInput): [Feedback!]!
   growthArea(where: GrowthAreaWhereUniqueInput!): GrowthArea
-  growthAreas(after: GrowthAreaWhereUniqueInput, before: GrowthAreaWhereUniqueInput, first: Int, last: Int, orderBy: [GrowthAreaOrderByInput!], where: GrowthAreaWhereInput): [GrowthArea!]!
+  growthAreas(after: GrowthAreaWhereUniqueInput, before: GrowthAreaWhereUniqueInput, first: Int, last: Int, orderBy: [GrowthAreaOrderByWithRelationInput!], where: GrowthAreaWhereInput): [GrowthArea!]!
   lawrdle(where: LawrdleWhereUniqueInput!): Lawrdle
-  lawrdles(after: LawrdleWhereUniqueInput, before: LawrdleWhereUniqueInput, first: Int, last: Int, orderBy: [LawrdleOrderByInput!], where: LawrdleWhereInput): [Lawrdle!]!
+  lawrdles(after: LawrdleWhereUniqueInput, before: LawrdleWhereUniqueInput, first: Int, last: Int, orderBy: [LawrdleOrderByWithRelationInput!], where: LawrdleWhereInput): [Lawrdle!]!
   lesson(where: LessonWhereUniqueInput!): Lesson
-  lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int, orderBy: [LessonResultOrderByInput!], where: LessonResultWhereInput): [LessonResult!]!
+  lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int, orderBy: [LessonResultOrderByWithRelationInput!], where: LessonResultWhereInput): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int, where: LessonWhereInput): [Lesson!]!
   me: User
   miniForums(after: MiniForumWhereUniqueInput, before: MiniForumWhereUniqueInput, first: Int, last: Int, where: MiniForumWhereInput): [MiniForum!]!
   newTest(where: NewTestWhereUniqueInput!): NewTest
   offer(where: OfferWhereUniqueInput!): Offer
-  offers(after: OfferWhereUniqueInput, before: OfferWhereUniqueInput, first: Int, last: Int, orderBy: [OfferOrderByInput!], where: OfferWhereInput): [Offer!]!
-  orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: [OrderOrderByInput!], where: OrderWhereInput): [Order!]!
+  offers(after: OfferWhereUniqueInput, before: OfferWhereUniqueInput, first: Int, last: Int, orderBy: [OfferOrderByWithRelationInput!], where: OfferWhereInput): [Offer!]!
+  orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: [OrderOrderByWithRelationInput!], where: OrderWhereInput): [Order!]!
   post(where: PostWhereUniqueInput!): Post
-  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByInput!], where: PostWhereInput): [Post!]!
-  problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int, orderBy: [ProblemResultOrderByInput!], where: ProblemResultWhereInput): [ProblemResult!]!
+  posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByWithRelationInput!], where: PostWhereInput): [Post!]!
+  problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int, orderBy: [ProblemResultOrderByWithRelationInput!], where: ProblemResultWhereInput): [ProblemResult!]!
   program(where: ProgramWhereUniqueInput!): Program
-  programs(after: ProgramWhereUniqueInput, before: ProgramWhereUniqueInput, first: Int, last: Int, orderBy: [ProgramOrderByInput!], where: ProgramWhereInput): [Program!]!
+  programs(after: ProgramWhereUniqueInput, before: ProgramWhereUniqueInput, first: Int, last: Int, orderBy: [ProgramOrderByWithRelationInput!], where: ProgramWhereInput): [Program!]!
   questResults(lessonId: String, list_of_ids: [String]): QuestResults
   quizResult(where: QuizResultWhereUniqueInput!): QuizResult
-  quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int, orderBy: [QuizResultOrderByInput!], where: QuizResultWhereInput): [QuizResult!]!
-  quizzes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int, orderBy: [QuizOrderByInput!], where: QuizWhereInput): [Quiz!]!
+  quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int, orderBy: [QuizResultOrderByWithRelationInput!], where: QuizResultWhereInput): [QuizResult!]!
+  quizzes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int, orderBy: [QuizOrderByWithRelationInput!], where: QuizWhereInput): [Quiz!]!
   rating(where: RatingWhereUniqueInput!): Rating
-  ratings(after: RatingWhereUniqueInput, before: RatingWhereUniqueInput, first: Int, last: Int, orderBy: [RatingOrderByInput!], where: RatingWhereInput): [Rating!]!
+  ratings(after: RatingWhereUniqueInput, before: RatingWhereUniqueInput, first: Int, last: Int, orderBy: [RatingOrderByWithRelationInput!], where: RatingWhereInput): [Rating!]!
   stats(lessonId: String, userId: String): Stats
   team(where: TeamWhereUniqueInput!): Team
-  teams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int, orderBy: [TeamOrderByInput!], where: TeamWhereInput): [Team!]!
+  teams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int, orderBy: [TeamOrderByWithRelationInput!], where: TeamWhereInput): [Team!]!
   testResult(where: TestResultWhereUniqueInput!): TestResult
-  testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestResultOrderByInput!], where: TestResultWhereInput): [TestResult!]!
+  testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestResultOrderByWithRelationInput!], where: TestResultWhereInput): [TestResult!]!
   textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
-  textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int, orderBy: [TextEditorResultOrderByInput!], where: TextEditorResultWhereInput): [TextEditorResult!]!
+  textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int, orderBy: [TextEditorResultOrderByWithRelationInput!], where: TextEditorResultWhereInput): [TextEditorResult!]!
   useful(where: UsefulWhereUniqueInput!): Useful
   usefuls(after: UsefulWhereUniqueInput, before: UsefulWhereUniqueInput, first: Int, last: Int, where: UsefulWhereInput): [Useful!]!
   user(where: UserWhereUniqueInput!): User
   userLevel(where: UserLevelWhereUniqueInput!): UserLevel
-  userLevels(after: UserLevelWhereUniqueInput, before: UserLevelWhereUniqueInput, first: Int, last: Int, orderBy: [UserLevelOrderByInput!], where: UserLevelWhereInput): [UserLevel!]!
-  users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByInput!], where: UserWhereInput): [User!]!
+  userLevels(after: UserLevelWhereUniqueInput, before: UserLevelWhereUniqueInput, first: Int, last: Int, orderBy: [UserLevelOrderByWithRelationInput!], where: UserLevelWhereInput): [UserLevel!]!
+  users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByWithRelationInput!], where: UserWhereInput): [User!]!
 }
 
 enum QueryMode {
@@ -2731,8 +3662,8 @@ type Quiz {
   ifRight: String
   ifWrong: String
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   next: Json
   question: String!
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int): [QuizResult!]!
@@ -2748,20 +3679,27 @@ input QuizListRelationFilter {
   some: QuizWhereInput
 }
 
-input QuizOrderByInput {
+input QuizOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input QuizOrderByWithRelationInput {
   answer: SortOrder
-  check: SortOrder
-  complexity: SortOrder
+  check: SortOrderInput
+  complexity: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
-  ifRight: SortOrder
-  ifWrong: SortOrder
-  lessonId: SortOrder
-  lessonID: SortOrder
-  next: SortOrder
+  ifRight: SortOrderInput
+  ifWrong: SortOrderInput
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
+  lessonId: SortOrderInput
+  next: SortOrderInput
   question: SortOrder
-  type: SortOrder
+  quizResults: QuizResultOrderByRelationAggregateInput
+  type: SortOrderInput
   updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
   userId: SortOrder
 }
 
@@ -2772,8 +3710,8 @@ type QuizResult {
   createdAt: DateTime!
   id: String!
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   quiz: Quiz
   quizId: String
   student: User!
@@ -2787,31 +3725,38 @@ input QuizResultListRelationFilter {
   some: QuizResultWhereInput
 }
 
-input QuizResultOrderByInput {
-  answer: SortOrder
-  attempts: SortOrder
-  correct: SortOrder
+input QuizResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input QuizResultOrderByWithRelationInput {
+  answer: SortOrderInput
+  attempts: SortOrderInput
+  correct: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
-  lessonId: SortOrder
-  lessonID: SortOrder
-  quizId: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
+  lessonId: SortOrderInput
+  quiz: QuizOrderByWithRelationInput
+  quizId: SortOrderInput
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
   updatedAt: SortOrder
 }
 
 input QuizResultWhereInput {
   AND: [QuizResultWhereInput!]
+  NOT: [QuizResultWhereInput!]
+  OR: [QuizResultWhereInput!]
   answer: StringNullableFilter
   attempts: IntNullableFilter
   correct: BoolNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
-  NOT: [QuizResultWhereInput!]
-  OR: [QuizResultWhereInput!]
+  lessonId: StringNullableFilter
   quiz: QuizWhereInput
   quizId: StringNullableFilter
   student: UserWhereInput
@@ -2820,11 +3765,28 @@ input QuizResultWhereInput {
 }
 
 input QuizResultWhereUniqueInput {
+  AND: [QuizResultWhereInput!]
+  NOT: [QuizResultWhereInput!]
+  OR: [QuizResultWhereInput!]
+  answer: StringNullableFilter
+  attempts: IntNullableFilter
+  correct: BoolNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  quiz: QuizWhereInput
+  quizId: StringNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 input QuizWhereInput {
   AND: [QuizWhereInput!]
+  NOT: [QuizWhereInput!]
+  OR: [QuizWhereInput!]
   answer: StringFilter
   check: StringNullableFilter
   complexity: IntNullableFilter
@@ -2833,11 +3795,9 @@ input QuizWhereInput {
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
   next: JsonNullableFilter
-  NOT: [QuizWhereInput!]
-  OR: [QuizWhereInput!]
   question: StringFilter
   quizResults: QuizResultListRelationFilter
   type: StringNullableFilter
@@ -2847,7 +3807,26 @@ input QuizWhereInput {
 }
 
 input QuizWhereUniqueInput {
+  AND: [QuizWhereInput!]
+  NOT: [QuizWhereInput!]
+  OR: [QuizWhereInput!]
+  answer: StringFilter
+  check: StringNullableFilter
+  complexity: IntNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  ifRight: StringNullableFilter
+  ifWrong: StringNullableFilter
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  next: JsonNullableFilter
+  question: StringFilter
+  quizResults: QuizResultListRelationFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 type Rating {
@@ -2867,23 +3846,29 @@ input RatingListRelationFilter {
   some: RatingWhereInput
 }
 
-input RatingOrderByInput {
+input RatingOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input RatingOrderByWithRelationInput {
   createdAt: SortOrder
-  forumId: SortOrder
+  forum: ForumOrderByWithRelationInput
+  forumId: SortOrderInput
   id: SortOrder
-  rating: SortOrder
+  rating: SortOrderInput
   updatedAt: SortOrder
-  userId: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
 }
 
 input RatingWhereInput {
   AND: [RatingWhereInput!]
+  NOT: [RatingWhereInput!]
+  OR: [RatingWhereInput!]
   createdAt: DateTimeFilter
   forum: ForumWhereInput
   forumId: StringNullableFilter
   id: StringFilter
-  NOT: [RatingWhereInput!]
-  OR: [RatingWhereInput!]
   rating: IntNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -2891,7 +3876,17 @@ input RatingWhereInput {
 }
 
 input RatingWhereUniqueInput {
+  AND: [RatingWhereInput!]
+  NOT: [RatingWhereInput!]
+  OR: [RatingWhereInput!]
+  createdAt: DateTimeFilter
+  forum: ForumWhereInput
+  forumId: StringNullableFilter
   id: String
+  rating: IntNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
 }
 
 input Reaction {
@@ -2933,17 +3928,21 @@ input SandboxPageGoalListRelationFilter {
   some: SandboxPageGoalWhereInput
 }
 
+input SandboxPageGoalOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input SandboxPageGoalWhereInput {
   AND: [SandboxPageGoalWhereInput!]
+  NOT: [SandboxPageGoalWhereInput!]
+  OR: [SandboxPageGoalWhereInput!]
   completed: BoolFilter
   createdAt: DateTimeFilter
   goal: StringFilter
   id: StringFilter
-  NOT: [SandboxPageGoalWhereInput!]
-  OR: [SandboxPageGoalWhereInput!]
   sandboxPage: SandboxPageWhereInput
-  sandboxPageId: StringNullableFilter
   sandboxPageID: StringFilter
+  sandboxPageId: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -2955,14 +3954,18 @@ input SandboxPageListRelationFilter {
   some: SandboxPageWhereInput
 }
 
+input SandboxPageOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input SandboxPageWhereInput {
   AND: [SandboxPageWhereInput!]
+  NOT: [SandboxPageWhereInput!]
+  OR: [SandboxPageWhereInput!]
   createdAt: DateTimeFilter
   description: StringFilter
   id: StringFilter
   image: StringFilter
-  NOT: [SandboxPageWhereInput!]
-  OR: [SandboxPageWhereInput!]
   sandbox: SandboxListRelationFilter
   sandboxPageGoal: SandboxPageGoalListRelationFilter
   students: StringNullableListFilter
@@ -2974,15 +3977,15 @@ input SandboxPageWhereInput {
 
 input SandboxWhereInput {
   AND: [SandboxWhereInput!]
+  NOT: [SandboxWhereInput!]
+  OR: [SandboxWhereInput!]
   createdAt: DateTimeFilter
   id: StringFilter
   likes: IntNullableFilter
   link: StringNullableFilter
-  NOT: [SandboxWhereInput!]
-  OR: [SandboxWhereInput!]
   sandboxPage: SandboxPageWhereInput
-  sandboxPageId: StringFilter
   sandboxPageID: StringFilter
+  sandboxPageId: StringFilter
   text: StringFilter
   updatedAt: DateTimeFilter
   video: StringNullableFilter
@@ -2993,8 +3996,8 @@ type Shot {
   createdAt: DateTime!
   id: String!
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   parts: [String!]!
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   title: String!
@@ -3007,6 +4010,10 @@ input ShotListRelationFilter {
   every: ShotWhereInput
   none: ShotWhereInput
   some: ShotWhereInput
+}
+
+input ShotOrderByRelationAggregateInput {
+  _count: SortOrder
 }
 
 type ShotResult {
@@ -3028,38 +4035,56 @@ input ShotResultListRelationFilter {
   some: ShotResultWhereInput
 }
 
+input ShotResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input ShotResultWhereInput {
   AND: [ShotResultWhereInput!]
+  NOT: [ShotResultWhereInput!]
+  OR: [ShotResultWhereInput!]
   answer: StringFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
-  NOT: [ShotResultWhereInput!]
-  OR: [ShotResultWhereInput!]
+  lessonId: StringNullableFilter
   shot: ShotWhereInput
-  shotId: StringNullableFilter
   shotID: StringNullableFilter
+  shotId: StringNullableFilter
   student: UserWhereInput
   studentId: StringFilter
   updatedAt: DateTimeFilter
 }
 
 input ShotResultWhereUniqueInput {
+  AND: [ShotResultWhereInput!]
+  NOT: [ShotResultWhereInput!]
+  OR: [ShotResultWhereInput!]
+  answer: StringFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  shot: ShotWhereInput
+  shotID: StringNullableFilter
+  shotId: StringNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
 }
 
 input ShotWhereInput {
   AND: [ShotWhereInput!]
+  NOT: [ShotWhereInput!]
+  OR: [ShotWhereInput!]
   comments: StringNullableListFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
-  NOT: [ShotWhereInput!]
-  OR: [ShotWhereInput!]
+  lessonId: StringNullableFilter
   parts: StringNullableListFilter
   shotResults: ShotResultListRelationFilter
   title: StringFilter
@@ -3069,7 +4094,21 @@ input ShotWhereInput {
 }
 
 input ShotWhereUniqueInput {
+  AND: [ShotWhereInput!]
+  NOT: [ShotWhereInput!]
+  OR: [ShotWhereInput!]
+  comments: StringNullableListFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  parts: StringNullableListFilter
+  shotResults: ShotResultListRelationFilter
+  title: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 type SignOut {
@@ -3079,6 +4118,11 @@ type SignOut {
 enum SortOrder {
   asc
   desc
+}
+
+input SortOrderInput {
+  nulls: NullsOrder
+  sort: SortOrder!
 }
 
 type Statement {
@@ -3100,18 +4144,22 @@ input StatementListRelationFilter {
   some: StatementWhereInput
 }
 
+input StatementOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input StatementWhereInput {
   AND: [StatementWhereInput!]
+  NOT: [StatementWhereInput!]
+  OR: [StatementWhereInput!]
   answered: BoolNullableFilter
   comments: StringNullableListFilter
   createdAt: DateTimeFilter
   forum: ForumWhereInput
   forumId: StringNullableFilter
   id: StringFilter
-  miniforum: MiniForumWhereInput
+  miniForum: MiniForumWhereInput
   miniforumId: StringNullableFilter
-  NOT: [StatementWhereInput!]
-  OR: [StatementWhereInput!]
   text: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -3119,7 +4167,21 @@ input StatementWhereInput {
 }
 
 input StatementWhereUniqueInput {
+  AND: [StatementWhereInput!]
+  NOT: [StatementWhereInput!]
+  OR: [StatementWhereInput!]
+  answered: BoolNullableFilter
+  comments: StringNullableListFilter
+  createdAt: DateTimeFilter
+  forum: ForumWhereInput
+  forumId: StringNullableFilter
   id: String
+  miniForum: MiniForumWhereInput
+  miniforumId: StringNullableFilter
+  text: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
 }
 
 type Stats {
@@ -3200,13 +4262,20 @@ input TeamListRelationFilter {
   some: TeamWhereInput
 }
 
-input TeamOrderByInput {
+input TeamOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input TeamOrderByWithRelationInput {
   createdAt: SortOrder
+  founder: UserOrderByWithRelationInput
   founderId: SortOrder
   id: SortOrder
-  image: SortOrder
+  image: SortOrderInput
   name: SortOrder
+  orders: OrderOrderByRelationAggregateInput
   updatedAt: SortOrder
+  users: UserOrderByRelationAggregateInput
 }
 
 type TeamQuest {
@@ -3229,6 +4298,10 @@ input TeamQuestListRelationFilter {
   some: TeamQuestWhereInput
 }
 
+input TeamQuestOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 type TeamQuestResult {
   answer: String
   createdAt: DateTime!
@@ -3248,15 +4321,19 @@ input TeamQuestResultListRelationFilter {
   some: TeamQuestResultWhereInput
 }
 
+input TeamQuestResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input TeamQuestResultWhereInput {
   AND: [TeamQuestResultWhereInput!]
+  NOT: [TeamQuestResultWhereInput!]
+  OR: [TeamQuestResultWhereInput!]
   answer: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [TeamQuestResultWhereInput!]
-  OR: [TeamQuestResultWhereInput!]
   student: UserWhereInput
   studentId: StringFilter
   teamQuest: TeamQuestWhereInput
@@ -3265,18 +4342,30 @@ input TeamQuestResultWhereInput {
 }
 
 input TeamQuestResultWhereUniqueInput {
+  AND: [TeamQuestResultWhereInput!]
+  NOT: [TeamQuestResultWhereInput!]
+  OR: [TeamQuestResultWhereInput!]
+  answer: StringNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  teamQuest: TeamQuestWhereInput
+  teamQuestId: StringNullableFilter
+  updatedAt: DateTimeFilter
 }
 
 input TeamQuestWhereInput {
   AND: [TeamQuestWhereInput!]
+  NOT: [TeamQuestWhereInput!]
+  OR: [TeamQuestWhereInput!]
   createdAt: DateTimeFilter
   id: StringFilter
   introduction: StringFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
-  NOT: [TeamQuestWhereInput!]
-  OR: [TeamQuestWhereInput!]
   solution: StringNullableFilter
   teamQuestResults: TeamQuestResultListRelationFilter
   updatedAt: DateTimeFilter
@@ -3285,32 +4374,59 @@ input TeamQuestWhereInput {
 }
 
 input TeamQuestWhereUniqueInput {
+  AND: [TeamQuestWhereInput!]
+  NOT: [TeamQuestWhereInput!]
+  OR: [TeamQuestWhereInput!]
+  createdAt: DateTimeFilter
   id: String
+  introduction: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  solution: StringNullableFilter
+  teamQuestResults: TeamQuestResultListRelationFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 input TeamWhereInput {
   AND: [TeamWhereInput!]
+  NOT: [TeamWhereInput!]
+  OR: [TeamWhereInput!]
   createdAt: DateTimeFilter
   founder: UserWhereInput
   founderId: StringFilter
   id: StringFilter
   image: StringNullableFilter
   name: StringFilter
-  NOT: [TeamWhereInput!]
-  OR: [TeamWhereInput!]
   orders: OrderListRelationFilter
   updatedAt: DateTimeFilter
   users: UserListRelationFilter
 }
 
 input TeamWhereUniqueInput {
+  AND: [TeamWhereInput!]
+  NOT: [TeamWhereInput!]
+  OR: [TeamWhereInput!]
+  createdAt: DateTimeFilter
+  founder: UserWhereInput
+  founderId: StringFilter
   id: String
+  image: StringNullableFilter
+  name: StringFilter
+  orders: OrderListRelationFilter
+  updatedAt: DateTimeFilter
+  users: UserListRelationFilter
 }
 
 input TestListRelationFilter {
   every: TestWhereInput
   none: TestWhereInput
   some: TestWhereInput
+}
+
+input TestOrderByRelationAggregateInput {
+  _count: SortOrder
 }
 
 type TestPractice {
@@ -3330,6 +4446,10 @@ input TestPracticeListRelationFilter {
   every: TestPracticeWhereInput
   none: TestPracticeWhereInput
   some: TestPracticeWhereInput
+}
+
+input TestPracticeOrderByRelationAggregateInput {
+  _count: SortOrder
 }
 
 type TestPracticeResult {
@@ -3352,15 +4472,19 @@ input TestPracticeResultListRelationFilter {
   some: TestPracticeResultWhereInput
 }
 
+input TestPracticeResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input TestPracticeResultWhereInput {
   AND: [TestPracticeResultWhereInput!]
+  NOT: [TestPracticeResultWhereInput!]
+  OR: [TestPracticeResultWhereInput!]
   correct: IntFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [TestPracticeResultWhereInput!]
-  OR: [TestPracticeResultWhereInput!]
   student: UserWhereInput
   studentId: StringFilter
   tasks: StringNullableListFilter
@@ -3371,18 +4495,18 @@ input TestPracticeResultWhereInput {
 
 input TestPracticeWhereInput {
   AND: [TestPracticeWhereInput!]
+  NOT: [TestPracticeWhereInput!]
+  OR: [TestPracticeWhereInput!]
   createdAt: DateTimeFilter
   failureText: StringNullableFilter
   id: StringFilter
   intro: StringNullableFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [TestPracticeWhereInput!]
-  OR: [TestPracticeWhereInput!]
   successText: StringNullableFilter
   tasks: StringNullableListFilter
   tasksNum: IntFilter
-  testPracticeResults: TestPracticeResultListRelationFilter
+  testPracticeResult: TestPracticeResultListRelationFilter
   text: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -3390,7 +4514,23 @@ input TestPracticeWhereInput {
 }
 
 input TestPracticeWhereUniqueInput {
+  AND: [TestPracticeWhereInput!]
+  NOT: [TestPracticeWhereInput!]
+  OR: [TestPracticeWhereInput!]
+  createdAt: DateTimeFilter
+  failureText: StringNullableFilter
   id: String
+  intro: StringNullableFilter
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  successText: StringNullableFilter
+  tasks: StringNullableListFilter
+  tasksNum: IntFilter
+  testPracticeResult: TestPracticeResultListRelationFilter
+  text: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
 }
 
 type TestResult {
@@ -3399,13 +4539,13 @@ type TestResult {
   createdAt: DateTime!
   id: String!
   lesson: Lesson
-  lessonId: String
   lessonID: String
+  lessonId: String
   student: User!
   studentId: String!
   test: NewTest
-  testId: String
   testID: String
+  testId: String
   updatedAt: DateTime!
 }
 
@@ -3415,44 +4555,68 @@ input TestResultListRelationFilter {
   some: TestResultWhereInput
 }
 
-input TestResultOrderByInput {
-  answer: SortOrder
-  attempts: SortOrder
+input TestResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input TestResultOrderByWithRelationInput {
+  answer: SortOrderInput
+  attempts: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
-  lessonId: SortOrder
-  lessonID: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
+  lessonId: SortOrderInput
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
-  testId: SortOrder
-  testID: SortOrder
+  test: NewTestOrderByWithRelationInput
+  testID: SortOrderInput
+  testId: SortOrderInput
   updatedAt: SortOrder
 }
 
 input TestResultWhereInput {
   AND: [TestResultWhereInput!]
+  NOT: [TestResultWhereInput!]
+  OR: [TestResultWhereInput!]
   answer: StringNullableFilter
   attempts: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
-  NOT: [TestResultWhereInput!]
-  OR: [TestResultWhereInput!]
+  lessonId: StringNullableFilter
   student: UserWhereInput
   studentId: StringFilter
   test: NewTestWhereInput
-  testId: StringNullableFilter
   testID: StringNullableFilter
+  testId: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
 input TestResultWhereUniqueInput {
+  AND: [TestResultWhereInput!]
+  NOT: [TestResultWhereInput!]
+  OR: [TestResultWhereInput!]
+  answer: StringNullableFilter
+  attempts: IntNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringNullableFilter
+  lessonId: StringNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  test: NewTestWhereInput
+  testID: StringNullableFilter
+  testId: StringNullableFilter
+  updatedAt: DateTimeFilter
 }
 
 input TestWhereInput {
   AND: [TestWhereInput!]
+  NOT: [TestWhereInput!]
+  OR: [TestWhereInput!]
   answer1: StringFilter
   answer1Correct: StringFilter
   answer2: StringFilter
@@ -3464,10 +4628,8 @@ input TestWhereInput {
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringNullableFilter
   lessonID: StringNullableFilter
-  NOT: [TestWhereInput!]
-  OR: [TestWhereInput!]
+  lessonId: StringNullableFilter
   question: StringFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -3479,8 +4641,8 @@ type TextEditor {
   createdAt: DateTime!
   id: String!
   lesson: Lesson!
-  lessonId: String!
   lessonID: String!
+  lessonId: String!
   name: String!
   text: String!
   textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int): [TextEditorResult!]!
@@ -3494,6 +4656,26 @@ input TextEditorListRelationFilter {
   every: TextEditorWhereInput
   none: TextEditorWhereInput
   some: TextEditorWhereInput
+}
+
+input TextEditorOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input TextEditorOrderByWithRelationInput {
+  complexity: SortOrderInput
+  createdAt: SortOrder
+  id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrder
+  lessonId: SortOrder
+  name: SortOrder
+  text: SortOrder
+  textEditorResults: TextEditorResultOrderByRelationAggregateInput
+  totalMistakes: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
 }
 
 type TextEditorResult {
@@ -3520,23 +4702,32 @@ input TextEditorResultListRelationFilter {
   some: TextEditorResultWhereInput
 }
 
-input TextEditorResultOrderByInput {
-  attempts: SortOrder
-  correct: SortOrder
+input TextEditorResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input TextEditorResultOrderByWithRelationInput {
+  attempts: SortOrderInput
+  correct: SortOrderInput
   createdAt: SortOrder
   guess: SortOrder
   id: SortOrder
-  lessonId: SortOrder
-  result: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrderInput
+  result: SortOrderInput
+  student: UserOrderByWithRelationInput
   studentId: SortOrder
-  textEditorId: SortOrder
-  type: SortOrder
+  textEditor: TextEditorOrderByWithRelationInput
+  textEditorId: SortOrderInput
+  type: SortOrderInput
   updatedAt: SortOrder
-  wrong: SortOrder
+  wrong: SortOrderInput
 }
 
 input TextEditorResultWhereInput {
   AND: [TextEditorResultWhereInput!]
+  NOT: [TextEditorResultWhereInput!]
+  OR: [TextEditorResultWhereInput!]
   attempts: IntNullableFilter
   correct: StringNullableFilter
   createdAt: DateTimeFilter
@@ -3544,8 +4735,6 @@ input TextEditorResultWhereInput {
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
-  NOT: [TextEditorResultWhereInput!]
-  OR: [TextEditorResultWhereInput!]
   result: BoolNullableFilter
   student: UserWhereInput
   studentId: StringFilter
@@ -3557,20 +4746,37 @@ input TextEditorResultWhereInput {
 }
 
 input TextEditorResultWhereUniqueInput {
+  AND: [TextEditorResultWhereInput!]
+  NOT: [TextEditorResultWhereInput!]
+  OR: [TextEditorResultWhereInput!]
+  attempts: IntNullableFilter
+  correct: StringNullableFilter
+  createdAt: DateTimeFilter
+  guess: StringFilter
   id: String
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  result: BoolNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  textEditor: TextEditorWhereInput
+  textEditorId: StringNullableFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  wrong: StringNullableFilter
 }
 
 input TextEditorWhereInput {
   AND: [TextEditorWhereInput!]
+  NOT: [TextEditorWhereInput!]
+  OR: [TextEditorWhereInput!]
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
-  lessonId: StringFilter
   lessonID: StringFilter
+  lessonId: StringFilter
   name: StringFilter
-  NOT: [TextEditorWhereInput!]
-  OR: [TextEditorWhereInput!]
   text: StringFilter
   textEditorResults: TextEditorResultListRelationFilter
   totalMistakes: IntNullableFilter
@@ -3580,7 +4786,22 @@ input TextEditorWhereInput {
 }
 
 input TextEditorWhereUniqueInput {
+  AND: [TextEditorWhereInput!]
+  NOT: [TextEditorWhereInput!]
+  OR: [TextEditorWhereInput!]
+  complexity: IntNullableFilter
+  createdAt: DateTimeFilter
   id: String
+  lesson: LessonWhereInput
+  lessonID: StringFilter
+  lessonId: StringFilter
+  name: StringFilter
+  text: StringFilter
+  textEditorResults: TextEditorResultListRelationFilter
+  totalMistakes: IntNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 type Uni {
@@ -3591,14 +4812,25 @@ type Uni {
   title: String!
 }
 
+input UniOrderByWithRelationInput {
+  capacity: SortOrderInput
+  coursePage: CoursePageOrderByRelationAggregateInput
+  createdAt: SortOrder
+  id: SortOrder
+  paidMonths: SortOrderInput
+  teachers: UserOrderByRelationAggregateInput
+  title: SortOrder
+  updatedAt: SortOrder
+}
+
 input UniWhereInput {
   AND: [UniWhereInput!]
+  NOT: [UniWhereInput!]
+  OR: [UniWhereInput!]
   capacity: IntNullableFilter
   coursePage: CoursePageListRelationFilter
   createdAt: DateTimeFilter
   id: StringFilter
-  NOT: [UniWhereInput!]
-  OR: [UniWhereInput!]
   paidMonths: IntNullableFilter
   teachers: UserListRelationFilter
   title: StringFilter
@@ -3619,6 +4851,8 @@ type Useful {
 
 input UsefulWhereInput {
   AND: [UsefulWhereInput!]
+  NOT: [UsefulWhereInput!]
+  OR: [UsefulWhereInput!]
   buttonText: StringFilter
   createdAt: DateTimeFilter
   header: StringFilter
@@ -3626,14 +4860,23 @@ input UsefulWhereInput {
   image: StringFilter
   link: StringFilter
   name: StringNullableFilter
-  NOT: [UsefulWhereInput!]
-  OR: [UsefulWhereInput!]
   tags: StringNullableListFilter
   updatedAt: DateTimeFilter
 }
 
 input UsefulWhereUniqueInput {
+  AND: [UsefulWhereInput!]
+  NOT: [UsefulWhereInput!]
+  OR: [UsefulWhereInput!]
+  buttonText: StringFilter
+  createdAt: DateTimeFilter
+  header: StringFilter
   id: String
+  image: StringFilter
+  link: StringFilter
+  name: StringNullableFilter
+  tags: StringNullableListFilter
+  updatedAt: DateTimeFilter
 }
 
 type User {
@@ -3696,7 +4939,7 @@ type UserLevel {
   id: String!
   isProgressPublic: Boolean
   learningStreak: [DateTime!]!
-  level: Float
+  level: Decimal
   myProgress: Json
   updatedAt: DateTime!
   user: User
@@ -3708,35 +4951,53 @@ input UserLevelListRelationFilter {
   some: UserLevelWhereInput
 }
 
-input UserLevelOrderByInput {
-  consumedContent: SortOrder
+input UserLevelOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input UserLevelOrderByWithRelationInput {
+  consumedContent: SortOrderInput
   createdAt: SortOrder
+  growthAreas: GrowthAreaOrderByRelationAggregateInput
   id: SortOrder
-  isProgressPublic: SortOrder
+  isProgressPublic: SortOrderInput
   learningStreak: SortOrder
-  level: SortOrder
-  myProgress: SortOrder
+  level: SortOrderInput
+  myProgress: SortOrderInput
   updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
 }
 
 input UserLevelWhereInput {
   AND: [UserLevelWhereInput!]
+  NOT: [UserLevelWhereInput!]
+  OR: [UserLevelWhereInput!]
   consumedContent: JsonNullableFilter
   createdAt: DateTimeFilter
   growthAreas: GrowthAreaListRelationFilter
   id: StringFilter
   isProgressPublic: BoolNullableFilter
   learningStreak: DateTimeNullableListFilter
-  level: FloatNullableFilter
+  level: DecimalNullableFilter
   myProgress: JsonNullableFilter
-  NOT: [UserLevelWhereInput!]
-  OR: [UserLevelWhereInput!]
   updatedAt: DateTimeFilter
   user: UserWhereInput
 }
 
 input UserLevelWhereUniqueInput {
+  AND: [UserLevelWhereInput!]
+  NOT: [UserLevelWhereInput!]
+  OR: [UserLevelWhereInput!]
+  consumedContent: JsonNullableFilter
+  createdAt: DateTimeFilter
+  growthAreas: GrowthAreaListRelationFilter
   id: String
+  isProgressPublic: BoolNullableFilter
+  learningStreak: DateTimeNullableListFilter
+  level: DecimalNullableFilter
+  myProgress: JsonNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
 }
 
 input UserListRelationFilter {
@@ -3745,74 +5006,136 @@ input UserListRelationFilter {
   some: UserWhereInput
 }
 
-input UserOrderByInput {
-  active: SortOrder
-  careerTrackId: SortOrder
-  careerTrackID: SortOrder
-  comment: SortOrder
-  companyId: SortOrder
-  country: SortOrder
-  coverLetter: SortOrder
+input UserOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input UserOrderByWithRelationInput {
+  active: SortOrderInput
+  careerTrack: CareerTrackOrderByWithRelationInput
+  careerTrackID: SortOrderInput
+  careerTrackId: SortOrderInput
+  certificates: CertificateOrderByRelationAggregateInput
+  challengeResults: ChallengeResultOrderByRelationAggregateInput
+  chat: ChatOrderByRelationAggregateInput
+  clause: ClauseOrderByRelationAggregateInput
+  co_coursePages: CoursePageOrderByRelationAggregateInput
+  comment: SortOrderInput
+  company: CompanyOrderByWithRelationInput
+  companyId: SortOrderInput
+  construction: ConstructionOrderByRelationAggregateInput
+  constructionResult: ConstructionResultOrderByRelationAggregateInput
+  country: SortOrderInput
+  coursePages: CoursePageOrderByRelationAggregateInput
+  courseVisits: CourseVisitOrderByRelationAggregateInput
+  coverLetter: SortOrderInput
   createdAt: SortOrder
-  description: SortOrder
+  description: SortOrderInput
+  document: DocumentOrderByRelationAggregateInput
+  documentResult: DocumentResultOrderByRelationAggregateInput
   email: SortOrder
+  emailReminders: EmailReminderOrderByRelationAggregateInput
+  exam: ExamOrderByRelationAggregateInput
+  examAnswer: ExamAnswerOrderByRelationAggregateInput
+  examResult: ExamResultOrderByRelationAggregateInput
   favourites: SortOrder
+  forum: ForumOrderByRelationAggregateInput
   id: SortOrder
-  image: SortOrder
+  image: SortOrderInput
   isFamiliar: SortOrder
-  legalPortfolioId: SortOrder
-  levelId: SortOrder
+  lawrdles: LawrdleOrderByRelationAggregateInput
+  legalPortfolio: LegalPortfolioOrderByWithRelationInput
+  legalPortfolioId: SortOrderInput
+  lessonResults: LessonResultOrderByRelationAggregateInput
+  lessons: LessonOrderByRelationAggregateInput
+  level: UserLevelOrderByWithRelationInput
+  levelId: SortOrderInput
+  messages: MessageOrderByRelationAggregateInput
+  miniforums: MiniForumOrderByRelationAggregateInput
+  myTeams: TeamOrderByRelationAggregateInput
   name: SortOrder
-  number: SortOrder
+  newTests: NewTestOrderByRelationAggregateInput
+  new_subjects: CoursePageOrderByRelationAggregateInput
+  notes: NoteOrderByRelationAggregateInput
+  number: SortOrderInput
+  offers: OfferOrderByRelationAggregateInput
+  orders: OrderOrderByRelationAggregateInput
   password: SortOrder
   permissions: SortOrder
-  referal: SortOrder
-  resetToken: SortOrder
-  resetTokenExpiry: SortOrder
-  resume: SortOrder
-  score: SortOrder
-  status: SortOrder
+  pointATests: PointATestOrderByRelationAggregateInput
+  pointAs: PointAOrderByRelationAggregateInput
+  posts: PostOrderByRelationAggregateInput
+  problemResults: ProblemResultOrderByRelationAggregateInput
+  problems: ProblemOrderByRelationAggregateInput
+  quizResults: QuizResultOrderByRelationAggregateInput
+  quizes: QuizOrderByRelationAggregateInput
+  ratings: RatingOrderByRelationAggregateInput
+  referal: SortOrderInput
+  resetToken: SortOrderInput
+  resetTokenExpiry: SortOrderInput
+  resume: SortOrderInput
+  sandboxPage: SandboxPageOrderByRelationAggregateInput
+  sandboxPageGoal: SandboxPageGoalOrderByRelationAggregateInput
+  score: SortOrderInput
+  shot: ShotOrderByRelationAggregateInput
+  shotResult: ShotResultOrderByRelationAggregateInput
+  statement: StatementOrderByRelationAggregateInput
+  status: SortOrderInput
+  studentFeedback: FeedbackOrderByRelationAggregateInput
   subjects: SortOrder
-  surname: SortOrder
+  surname: SortOrderInput
   tags: SortOrder
-  traffic_sources: SortOrder
-  uniId: SortOrder
-  uniID: SortOrder
+  teacherFeedback: FeedbackOrderByRelationAggregateInput
+  teamQuestResults: TeamQuestResultOrderByRelationAggregateInput
+  teamQuests: TeamQuestOrderByRelationAggregateInput
+  teams: TeamOrderByRelationAggregateInput
+  test: TestOrderByRelationAggregateInput
+  testPracticeResult: TestPracticeResultOrderByRelationAggregateInput
+  testPractices: TestPracticeOrderByRelationAggregateInput
+  testResults: TestResultOrderByRelationAggregateInput
+  textEditorResults: TextEditorResultOrderByRelationAggregateInput
+  textEditors: TextEditorOrderByRelationAggregateInput
+  traffic_sources: SortOrderInput
+  uni: UniOrderByWithRelationInput
+  uniID: SortOrderInput
+  uniId: SortOrderInput
   updatedAt: SortOrder
-  work: SortOrder
+  work: SortOrderInput
 }
 
 input UserWhereInput {
-  active: BoolNullableFilter
   AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  active: BoolNullableFilter
   careerTrack: CareerTrackWhereInput
-  careerTrackId: StringNullableFilter
   careerTrackID: StringNullableFilter
+  careerTrackId: StringNullableFilter
   certificates: CertificateListRelationFilter
   challengeResults: ChallengeResultListRelationFilter
-  chats: ChatListRelationFilter
-  clauses: ClauseListRelationFilter
+  chat: ChatListRelationFilter
+  clause: ClauseListRelationFilter
   co_coursePages: CoursePageListRelationFilter
   comment: StringNullableFilter
   company: CompanyWhereInput
   companyId: StringNullableFilter
-  constructionResults: ConstructionResultListRelationFilter
-  constructions: ConstructionListRelationFilter
+  construction: ConstructionListRelationFilter
+  constructionResult: ConstructionResultListRelationFilter
   country: StringNullableFilter
   coursePages: CoursePageListRelationFilter
   courseVisits: CourseVisitListRelationFilter
   coverLetter: StringNullableFilter
   createdAt: DateTimeFilter
   description: StringNullableFilter
-  documentResults: DocumentResultListRelationFilter
-  documents: DocumentListRelationFilter
+  document: DocumentListRelationFilter
+  documentResult: DocumentResultListRelationFilter
   email: StringFilter
   emailReminders: EmailReminderListRelationFilter
-  examAnswers: ExamAnswerListRelationFilter
-  examResults: ExamResultListRelationFilter
-  exams: ExamListRelationFilter
+  exam: ExamListRelationFilter
+  examAnswer: ExamAnswerListRelationFilter
+  examResult: ExamResultListRelationFilter
   favourites: StringNullableListFilter
-  forums: ForumListRelationFilter
+  forum: ForumListRelationFilter
   id: StringFilter
   image: StringNullableFilter
   isFamiliar: BoolFilter
@@ -3827,34 +5150,32 @@ input UserWhereInput {
   miniforums: MiniForumListRelationFilter
   myTeams: TeamListRelationFilter
   name: StringFilter
-  new_subjects: CoursePageListRelationFilter
   newTests: NewTestListRelationFilter
-  NOT: [UserWhereInput!]
+  new_subjects: CoursePageListRelationFilter
   notes: NoteListRelationFilter
   number: StringNullableFilter
   offers: OfferListRelationFilter
-  OR: [UserWhereInput!]
   orders: OrderListRelationFilter
   password: StringFilter
   permissions: EnumPermissionNullableListFilter
-  pointAs: PointAListRelationFilter
   pointATests: PointATestListRelationFilter
+  pointAs: PointAListRelationFilter
   posts: PostListRelationFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
-  quizes: QuizListRelationFilter
   quizResults: QuizResultListRelationFilter
+  quizes: QuizListRelationFilter
   ratings: RatingListRelationFilter
   referal: StringNullableFilter
   resetToken: StringNullableFilter
-  resetTokenExpiry: FloatNullableFilter
+  resetTokenExpiry: DecimalNullableFilter
   resume: StringNullableFilter
-  sandboxPageGoals: SandboxPageGoalListRelationFilter
-  sandboxPages: SandboxPageListRelationFilter
+  sandboxPage: SandboxPageListRelationFilter
+  sandboxPageGoal: SandboxPageGoalListRelationFilter
   score: IntNullableFilter
-  shotResults: ShotResultListRelationFilter
-  shots: ShotListRelationFilter
-  statements: StatementListRelationFilter
+  shot: ShotListRelationFilter
+  shotResult: ShotResultListRelationFilter
+  statement: StatementListRelationFilter
   status: StringNullableFilter
   studentFeedback: FeedbackListRelationFilter
   subjects: StringNullableListFilter
@@ -3864,26 +5185,114 @@ input UserWhereInput {
   teamQuestResults: TeamQuestResultListRelationFilter
   teamQuests: TeamQuestListRelationFilter
   teams: TeamListRelationFilter
-  testPracticeResults: TestPracticeResultListRelationFilter
+  test: TestListRelationFilter
+  testPracticeResult: TestPracticeResultListRelationFilter
   testPractices: TestPracticeListRelationFilter
   testResults: TestResultListRelationFilter
-  tests: TestListRelationFilter
   textEditorResults: TextEditorResultListRelationFilter
   textEditors: TextEditorListRelationFilter
   traffic_sources: JsonNullableFilter
   uni: UniWhereInput
-  uniId: StringNullableFilter
   uniID: StringNullableFilter
+  uniId: StringNullableFilter
   updatedAt: DateTimeFilter
   work: StringNullableFilter
 }
 
 input UserWhereUniqueInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  active: BoolNullableFilter
+  careerTrack: CareerTrackWhereInput
+  careerTrackID: StringNullableFilter
   careerTrackId: String
+  certificates: CertificateListRelationFilter
+  challengeResults: ChallengeResultListRelationFilter
+  chat: ChatListRelationFilter
+  clause: ClauseListRelationFilter
+  co_coursePages: CoursePageListRelationFilter
+  comment: StringNullableFilter
+  company: CompanyWhereInput
+  companyId: StringNullableFilter
+  construction: ConstructionListRelationFilter
+  constructionResult: ConstructionResultListRelationFilter
+  country: StringNullableFilter
+  coursePages: CoursePageListRelationFilter
+  courseVisits: CourseVisitListRelationFilter
+  coverLetter: StringNullableFilter
+  createdAt: DateTimeFilter
+  description: StringNullableFilter
+  document: DocumentListRelationFilter
+  documentResult: DocumentResultListRelationFilter
   email: String
+  emailReminders: EmailReminderListRelationFilter
+  exam: ExamListRelationFilter
+  examAnswer: ExamAnswerListRelationFilter
+  examResult: ExamResultListRelationFilter
+  favourites: StringNullableListFilter
+  forum: ForumListRelationFilter
   id: String
+  image: StringNullableFilter
+  isFamiliar: BoolFilter
+  lawrdles: LawrdleListRelationFilter
+  legalPortfolio: LegalPortfolioWhereInput
   legalPortfolioId: String
+  lessonResults: LessonResultListRelationFilter
+  lessons: LessonListRelationFilter
+  level: UserLevelWhereInput
   levelId: String
+  messages: MessageListRelationFilter
+  miniforums: MiniForumListRelationFilter
+  myTeams: TeamListRelationFilter
+  name: StringFilter
+  newTests: NewTestListRelationFilter
+  new_subjects: CoursePageListRelationFilter
+  notes: NoteListRelationFilter
+  number: StringNullableFilter
+  offers: OfferListRelationFilter
+  orders: OrderListRelationFilter
+  password: StringFilter
+  permissions: EnumPermissionNullableListFilter
+  pointATests: PointATestListRelationFilter
+  pointAs: PointAListRelationFilter
+  posts: PostListRelationFilter
+  problemResults: ProblemResultListRelationFilter
+  problems: ProblemListRelationFilter
+  quizResults: QuizResultListRelationFilter
+  quizes: QuizListRelationFilter
+  ratings: RatingListRelationFilter
+  referal: StringNullableFilter
+  resetToken: StringNullableFilter
+  resetTokenExpiry: DecimalNullableFilter
+  resume: StringNullableFilter
+  sandboxPage: SandboxPageListRelationFilter
+  sandboxPageGoal: SandboxPageGoalListRelationFilter
+  score: IntNullableFilter
+  shot: ShotListRelationFilter
+  shotResult: ShotResultListRelationFilter
+  statement: StatementListRelationFilter
+  status: StringNullableFilter
+  studentFeedback: FeedbackListRelationFilter
+  subjects: StringNullableListFilter
+  surname: StringNullableFilter
+  tags: StringNullableListFilter
+  teacherFeedback: FeedbackListRelationFilter
+  teamQuestResults: TeamQuestResultListRelationFilter
+  teamQuests: TeamQuestListRelationFilter
+  teams: TeamListRelationFilter
+  test: TestListRelationFilter
+  testPracticeResult: TestPracticeResultListRelationFilter
+  testPractices: TestPracticeListRelationFilter
+  testResults: TestResultListRelationFilter
+  textEditorResults: TextEditorResultListRelationFilter
+  textEditors: TextEditorListRelationFilter
+  traffic_sources: JsonNullableFilter
+  uni: UniWhereInput
+  uniID: StringNullableFilter
+  uniId: StringNullableFilter
+  updatedAt: DateTimeFilter
+  work: StringNullableFilter
 }
 
 input Visit {

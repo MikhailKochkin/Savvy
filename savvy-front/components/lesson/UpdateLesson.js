@@ -46,8 +46,8 @@ const UPDATE_LESSON_MUTATION = gql`
 `;
 
 const COPY_LESSON_MUTATION = gql`
-  mutation CopyLesson($id: String!) {
-    copyLesson(id: $id) {
+  mutation CopyLesson($id: String!, $coursePageId: String!) {
+    copyLesson(id: $id, coursePageId: $coursePageId) {
       id
     }
   }
@@ -154,6 +154,22 @@ const Row = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    button {
+      width: 120px;
+      background: none;
+      padding: 5px 0;
+      border: 2px solid #69696a;
+      border-radius: 5px;
+      font-family: Montserrat;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #323334;
+      cursor: pointer;
+      transition: 0.3s;
+      &:hover {
+        background: #f4f4f4;
+      }
+    }
   }
   .input {
     width: 75%;
@@ -250,6 +266,7 @@ const UpdateLesson = (props) => {
   const [description, setDescription] = useState(props.lesson.description);
   const [hasSecret, setHasSecret] = useState(props.lesson.hasSecret);
   const [totalPoints, setTotalPoints] = useState(props.lesson.totalPoints);
+  const [coursePageId, setCoursePageId] = useState(props.lesson.totalPoints);
   const [copyLesson, { data: copyData }] = useMutation(COPY_LESSON_MUTATION);
 
   const { t } = useTranslation("lesson");
@@ -286,15 +303,33 @@ const UpdateLesson = (props) => {
             />
           </div>
         </Row>
-        <button
-          onClick={async (e) => {
-            e.preventDefault();
-            const res = await copyLesson({ variables: { id: lessonID } });
-            // alert("New lesson ID:", res.data.copyLesson.id);
-          }}
-        >
-          Copy Lesson
-        </button>
+
+        <Row>
+          <div className="description">
+            {" "}
+            <button
+              onClick={async (e) => {
+                e.preventDefault();
+                if (!coursePageId) {
+                  alert("Set the target course page id");
+                  return;
+                }
+                const res = await copyLesson({
+                  variables: { id: lessonID, coursePageId: coursePageId },
+                });
+                alert("Copied!");
+              }}
+            >
+              Copy Lesson
+            </button>
+          </div>
+          <div className="input">
+            <input
+              placeholder="target coursePage Id"
+              onChange={(e) => setCoursePageId(e.target.value)}
+            />
+          </div>
+        </Row>
         <Row>
           <div className="description">{t("number")}</div>
           <div className="input">

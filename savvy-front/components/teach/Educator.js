@@ -275,7 +275,7 @@ const Educator = (props) => {
                     </>
                   )} */}
                   <>
-                    <Link href="/create">
+                    <Link legacyBehavior href="/create">
                       <Button>
                         <a>{t("Create_Course")}</a>
                       </Button>

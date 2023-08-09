@@ -41,12 +41,12 @@ const ButtonTwo = styled.button`
 `;
 
 const NewBlock = (props) => {
-  const [type, setType] = useState();
+  const [type, setType] = useState(props.type);
   const [data, setData] = useState(null);
   const [saved, setSaved] = useState(false);
-  const getData = (d) => props.getData(d);
+  // const getData = (d) => props.getData(d);
   const { t } = useTranslation("lesson");
-
+  console.log("new block data", data);
   const add = () => {
     props.add(props.obj.id, props.obj.index);
   };
@@ -55,47 +55,59 @@ const NewBlock = (props) => {
     // setSaved(false);
   };
 
+  useEffect(() => {
+    console.log("use effect", props.data);
+    setData(props.data);
+    setSaved(props.data ? true : false);
+  }, [props.data]);
+
   const { lesson, me } = props;
 
   const getResult = async (res) => {
+    console.log("1");
+
     setSaved(true);
+
+    let newData = null;
+
     if (res.data.createNote) {
       setType("Note");
-      setData(res.data.createNote);
-      props.getData(
-        res.data.createNote.id,
-        res.data.createNote.__typename,
-        props.obj.index
-      );
+      newData = res.data.createNote;
+    } else if (res.data.updateNote) {
+      setType("Note");
+      newData = res.data.updateNote;
     } else if (res.data.createNewTest) {
+      console.log("inside New Test");
       setType("NewTest");
-      setData(res.data.createNewTest);
-      props.getData(
-        res.data.createNewTest.id,
-        res.data.createNewTest.__typename,
-        props.obj.index
-      );
+      newData = res.data.createNewTest;
+    } else if (res.data.updateNewTest) {
+      setType("NewTest");
+      newData = res.data.updateNewTest;
     } else if (res.data.createQuiz) {
       setType("Quiz");
-      setData(res.data.createQuiz);
-      props.getData(
-        res.data.createQuiz.id,
-        res.data.createQuiz.__typename,
-        props.obj.index
-      );
+      newData = res.data.createQuiz;
+    } else if (res.data.updateQuiz) {
+      setType("Quiz");
+      newData = res.data.updateQuiz;
+    }
+    console.log("newData", newData);
+
+    setData((prevData) => {
+      return newData;
+    });
+
+    // If you still need to pass the data to the parent component
+    if (newData) {
+      props.getData(newData.id, newData.__typename);
     }
   };
+  console.log("type", type);
 
   return (
     <Block>
-      {/* <div>Index: {props.obj.index}</div>
-      <div>ID: {props.obj.id}</div>
-      <div>Next: {props.obj.next.true.value}</div> */}
       {!saved && type == "Note" && (
         <CreateNote lessonID={lesson.id} getResult={getResult} />
       )}
-      <h3>{t("guiding_questions")}</h3>
-
       {saved && type == "Note" && data && (
         <Note
           text={data.text}
@@ -145,7 +157,7 @@ const NewBlock = (props) => {
           testID={data.id}
           question={data.question}
           type={data.type}
-          answers={data.answers}
+          answer={data.answer}
           true={data.correct}
           comments={data.comments}
           complexity={data.complexity}
@@ -156,9 +168,11 @@ const NewBlock = (props) => {
           user_name={data.user}
           me={me}
           lessonID={lesson.id}
+          getResult={getResult}
+          passUpdated={passUpdated}
         />
       )}
-      {!saved && (
+      {/* {!saved && (
         <>
           <ButtonTwo onClick={(e) => setType("Note")}>
             {t("add_note")}{" "}
@@ -171,7 +185,7 @@ const NewBlock = (props) => {
           </ButtonTwo>
         </>
       )}
-      {saved && <ButtonTwo onClick={(e) => add()}>Add Block</ButtonTwo>}
+      {saved && <ButtonTwo onClick={(e) => add()}>Add Block</ButtonTwo>} */}
     </Block>
   );
 };

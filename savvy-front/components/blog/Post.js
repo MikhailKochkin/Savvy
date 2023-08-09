@@ -4,7 +4,7 @@ import styled from "styled-components";
 import moment from "moment";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import UpdatePost from "./UpdatePost";
 import Modal from "styled-react-modal";
@@ -123,10 +123,10 @@ const Styles = styled.div`
   }
   @media (max-width: 800px) {
     .video-container {
-    width: 350px;
-  }
+      width: 350px;
+    }
     .video-fit {
-      width: 350px
+      width: 350px;
       height: 100%;
     }
   }
@@ -477,6 +477,7 @@ const Post = (props) => {
       <Styles id={props.id}>
         {/* <div className="title">
           <Link
+          legacyBehavior
             href={{
               pathname: "/blog",
             }}

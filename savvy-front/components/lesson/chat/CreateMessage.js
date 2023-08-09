@@ -246,7 +246,7 @@ const CreateMessage = (props) => {
                 setName(e.target.value);
                 props.updateName(e.target.value, props.index);
               }}
-              value={name}
+              defaultValue={name}
             />
           </div>
         </IconBlock>

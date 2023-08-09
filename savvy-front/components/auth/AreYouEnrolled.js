@@ -73,6 +73,7 @@ const AreYouEnrolled = (props) =>
                     access to the course.
                   </Title>
                   <Link
+                    legacyBehavior
                     href={{
                       pathname: "/coursePage",
                       query: { id: props.subject },
@@ -89,5 +90,30 @@ const AreYouEnrolled = (props) =>
       }}
     </Query>
   );
+
+// const AreYouEnrolled = (props) => {
+//   if (props.open) {
+//     return props.children;
+//   } else {
+//     return (
+//       <Styles>
+//         <Box>
+//           <Title>
+//             You are not enrolled. Please go to the course page to get access to
+//             the course.
+//           </Title>
+//           <Link
+//             href={{
+//               pathname: "/coursePage",
+//               query: { id: props.subject },
+//             }}
+//           >
+//             <a>Go to course page</a>
+//           </Link>
+//         </Box>
+//       </Styles>
+//     );
+//   }
+// };
 
 export default AreYouEnrolled;

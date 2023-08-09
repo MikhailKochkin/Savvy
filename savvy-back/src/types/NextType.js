@@ -1,4 +1,4 @@
-const { inputObjectType } = require("@nexus/schema");
+const { inputObjectType } = require("nexus");
 
 const NextTrueType = inputObjectType({
   name: "NextTrueType",
@@ -29,6 +29,7 @@ const ProblemItem = inputObjectType({
   definition(t) {
     t.string("type");
     t.string("id");
+    t.int("index");
     t.field("next", { type: "NextType" });
   },
 });

@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import UpdateNote from "./UpdateNote";
 import DeleteNote from "../../delete/DeleteNote";
@@ -12,13 +12,15 @@ import Chat from "../questions/Chat";
 
 const StyledButton = withStyles({
   root: {
-    width: "15%",
+    width: "140px",
     height: "45px",
     marginRight: "2%",
     fontSize: "1.6rem",
     textTransform: "none",
   },
 })(Button);
+
+const Body = styled.div``;
 
 const Container = styled.div`
   width: ${(props) => props.width};
@@ -37,7 +39,7 @@ const Container = styled.div`
     background-size: 200% auto;
     color: #fff;
     background-clip: text;
-    text-fill-color: transparent;
+    /* text-fill-color: transparent; */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
@@ -232,7 +234,7 @@ const Secret = styled.div`
 `;
 
 const NoteStyles = styled.div`
-  max-width: 570px;
+  max-width: 660px;
   background: #fff;
   margin: 2% 0 0 0;
   filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
@@ -252,10 +254,10 @@ const NoteStyles = styled.div`
   }
   @media (max-width: 800px) {
     .video-container {
-    width: 350px;
-  }
+      width: 350px;
+    }
     .video-fit {
-      width: 350px
+      width: 350px;
       height: 100%;
     }
   }
@@ -316,6 +318,17 @@ const NoteStyles = styled.div`
     font-size: 1.6rem;
     width: 100%;
     margin: 1% 1%;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    /* line-height: 1.6; */
+    p {
+      margin: 10px 0;
+    }
+  }
+  blockquote {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 0;
     padding: 1% 4%;
     border-left: 3px solid #0094c6;
     /* line-height: 1.6; */
@@ -453,7 +466,6 @@ const EmailInfo = styled.div`
     }
   }
 `;
-const Body = styled.div``;
 
 const Note = (props) => {
   const [update, setUpdate] = useState(false);

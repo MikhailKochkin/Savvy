@@ -195,6 +195,7 @@ const Course = (props) => {
           <div>
             {!me && (
               <Link
+                legacyBehavior
                 href={{
                   pathname: "/course",
                   query: { id },
@@ -248,6 +249,7 @@ const Course = (props) => {
                                 <>
                                   {me && coursePage && (
                                     <Link
+                                      legacyBehavior
                                       href={{
                                         pathname: "/course",
                                         query: { id },
@@ -293,6 +295,7 @@ const Course = (props) => {
                               me &&
                               coursePage && (
                                 <Link
+                                  legacyBehavior
                                   href={{
                                     pathname: "/course",
                                     query: { id },

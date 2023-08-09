@@ -41,10 +41,13 @@ const MobileAction = (props) => {
 
   const slide = () => {
     var my_element = document.getElementById("buy_section");
-    my_element.scrollIntoView({
+
+    var rect = my_element.getBoundingClientRect();
+    var offsetTop = window.pageYOffset + rect.top;
+
+    window.scrollTo({
+      top: offsetTop - 120, // Adjust for the desired margin
       behavior: "smooth",
-      block: "start",
-      inline: "nearest",
     });
   };
 

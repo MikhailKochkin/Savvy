@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import parse from "html-react-parser";
+import calculateSum from "../../functions.js";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
@@ -351,30 +352,13 @@ const LessonHeader = (props) => {
   let forums = [];
   let ratings = [];
   let average;
-  // if (lesson) {
-  //   if (lesson.forum && lesson.forum.rating) {
-  //     lesson.forum.rating.map((r) => ratings.push(r.rating));
-  //   }
-  //   average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
-
-  //   // lesson.map((l) => forums.push(l.forum ? l.forum.rating : null));
-  //   // forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
-  //   // forums.map((f) => f.map((r) => ratings.push(r.rating)));
-  //   // average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
-  // }
 
   let time;
-  if (lesson.structure && lesson.structure.lessonItems) {
-    time = lesson.structure.lessonItems.length * 3;
-  } else {
-    time = 30;
-  }
 
-  let need_response;
-  if (statements) {
-    need_response = statements.filter((s) => s.comments.length === 0);
+  if (lesson.structure && lesson.structure.lessonItems) {
+    time = calculateSum(lesson.structure.lessonItems);
   } else {
-    need_response = [];
+    time = 40;
   }
 
   const slide2 = () => {
@@ -503,6 +487,7 @@ const LessonHeader = (props) => {
                 me.permissions.includes("ADMIN") ||
                 i_am_author) && (
                 <Link
+                  legacyBehavior
                   // author or admin or openLesson if the lesson is not published.
                   href={{
                     pathname: "/lesson",
@@ -526,6 +511,7 @@ const LessonHeader = (props) => {
                 i_am_author ||
                 lesson.open) && (
                 <Link
+                  legacyBehavior
                   href={{
                     pathname: "/lesson",
                     query: {

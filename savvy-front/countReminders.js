@@ -14,29 +14,49 @@ function countUniqueEmails(data) {
 // Example usage
 const data = [
   {
-    id: "cljw4zu99713771ft3560zi4sg",
+    id: "clkqbkjyl406341fxmkhvl6zup",
     emailCampaign: {
-      name: "Corporate",
+      name: "Гражданское право. Фундамент карьеры",
     },
     user: {
-      id: "clau57pwx321961h4ulgpuygdf",
-      email: "nastjaant@gmail.com",
+      id: "clkqbkic3406021fxmfj47zht3",
+      email: "letokyky@mail.ru",
     },
   },
   {
-    id: "cljwl71pn160731fx52athdixo",
+    id: "clkqh30ls439111fxmt82gbvwi",
+    emailCampaign: {
+      name: "МЧП",
+    },
+    user: {
+      id: "cljh58611484771f12uv4rmnlw",
+      email: "keyliabash@gmail.com",
+    },
+  },
+  {
+    id: "clkqjyhhi464671fxmsgj8esbg",
+    emailCampaign: {
+      name: "МЧП",
+    },
+    user: {
+      id: "clkqjyfy4464221fxmquwkuir3",
+      email: "vladvettel@gmail.com",
+    },
+  },
+  {
+    id: "clkqq67hg578741fxmwzbwol3g",
     emailCampaign: {
       name: "70 новых слов из Legal English за 3 дня",
     },
     user: {
-      id: "clidgccgy116091ftggbt35a1z",
-      email: "aksakalipn@gmail.com",
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
     },
   },
   {
-    id: "cljwtth40537031fx5ywspe7dk",
+    id: "clkqroqz4600061fxm7wndy429",
     emailCampaign: {
-      name: "Налоги",
+      name: "Компетенция арбитражных судов",
     },
     user: {
       id: "cjqy9i57l000k0821rj0oo8l4",
@@ -44,59 +64,9 @@ const data = [
     },
   },
   {
-    id: "cljx8mzaw890651fx5mwulwa9d",
+    id: "clkqrqb4i605891fxmmr1bnd3m",
     emailCampaign: {
-      name: "Speaking",
-    },
-    user: {
-      id: "cl5t1m2i7860631hzqnri2cmav",
-      email: "fhcc@mai.ru",
-    },
-  },
-  {
-    id: "cljxvj68r53711f2w1fqmm9qo",
-    emailCampaign: {
-      name: "Corporate",
-    },
-    user: {
-      id: "cljxvj4sb53421f2wvlougeq0",
-      email: "anuta.grischina2016@yandex.ru",
-    },
-  },
-  {
-    id: "cljy0antm126401f2ww2mljlpa",
-    emailCampaign: {
-      name: "Corporate",
-    },
-    user: {
-      id: "ck0rwtqoq01970787ak54osqs",
-      email: "olga_romanova@ratum.ru",
-    },
-  },
-  {
-    id: "cljy7i735253321f2wddfktjjz",
-    emailCampaign: {
-      name: "Corporate",
-    },
-    user: {
-      id: "cljy7i5pe253051f2w0psqnm5p",
-      email: "gabrielchochola@gmail.com",
-    },
-  },
-  {
-    id: "cljydd3do425821f2wmggd78u7",
-    emailCampaign: {
-      name: "Гражданское право. Фундамент карьеры",
-    },
-    user: {
-      id: "ckfc8q1yc044w0702uaqbs6sb",
-      email: "dr.anastasiaaa@gmail.com",
-    },
-  },
-  {
-    id: "cljye7kx4541931f2wh072o24k",
-    emailCampaign: {
-      name: "Гражданское право. Фундамент карьеры",
+      name: "Арбитражный процесс",
     },
     user: {
       id: "cjqy9i57l000k0821rj0oo8l4",
@@ -104,179 +74,29 @@ const data = [
     },
   },
   {
-    id: "cljye85jx547401f2w74isl9vq",
+    id: "clkqsg3ov617381fxmduvto9wv",
+    emailCampaign: {
+      name: "Corporate",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "clkqvhoy2635631fxms2ezrb14",
     emailCampaign: {
       name: "Гражданское право. Фундамент карьеры",
     },
     user: {
-      id: "ckfc8q1yc044w0702uaqbs6sb",
-      email: "dr.anastasiaaa@gmail.com",
+      id: "clkqvhmih635221fxmpooblomw",
+      email: "andrey.tolstik.mail@gmail.com",
     },
   },
   {
-    id: "cljye8zpu550821f2wmgnmjsti",
+    id: "clkr2w6kr04631fwd1s9le6bg",
     emailCampaign: {
-      name: "Гражданское право. Фундамент карьеры",
-    },
-    user: {
-      id: "ckfc8q1yc044w0702uaqbs6sb",
-      email: "dr.anastasiaaa@gmail.com",
-    },
-  },
-  {
-    id: "cljyk267e683211f2wev8hzv6p",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljyk24ch682921f2wdgmvri5f",
-      email: "dmitrieva-n-s@mail.ru",
-    },
-  },
-  {
-    id: "cljylf89l707121f2wtbdcx19h",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljylf5kq706711f2wm7wfqt2c",
-      email: "anton_zventa@mail.ru",
-    },
-  },
-  {
-    id: "cljz9u37s09711fxt95bdxixv",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljz9u0lr09431fxtt6fx6qzf",
-      email: "katedemen137@gmail.com",
-    },
-  },
-  {
-    id: "cljzdo64q54831fxty1k48o4p",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clio70w3y381101fxqo5453w6i",
-      email: "popova.avp26@gmail.com",
-    },
-  },
-  {
-    id: "cljze17xq58711fxt67qeonxv",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljze16az58441fxtgkbjnp37",
-      email: "milena.krivozub@mail.ru",
-    },
-  },
-  {
-    id: "cljzeeoih83081fxt3s5w36bd",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clictxdxr573961f2ym9uxgw34",
-      email: "fevral17m@mail.ru",
-    },
-  },
-  {
-    id: "cljzfd5av210851fxtfpznxfaa",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljzfd3pj210341fxt5xff9qxy",
-      email: "g.alena0310@gmail.com",
-    },
-  },
-  {
-    id: "cljzfrsx1230901fxtxgd2l5eh",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cla7x7pop723371hukg4r2sxml",
-      email: "nick.berezhnov@gmail.com",
-    },
-  },
-  {
-    id: "cljzh67hc323361fxt3gc8c9zc",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljzh6641323091fxtqmo8korw",
-      email: "euginetwinkling17@gmail.com",
-    },
-  },
-  {
-    id: "cljzhi77y339651fxtbaawxr3h",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljzhi64h339371fxt38irx7f9",
-      email: "missis.pandochka@yandex.ru",
-    },
-  },
-  {
-    id: "cljzicd9b373291fxt6lx9mr0p",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljy3c69t186531f2wli21ek33",
-      email: "albrandt.angelina@ya.ru",
-    },
-  },
-  {
-    id: "cljzjh461424851fxt4hjjl2rf",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clelp1maj889831frea3w8ieke",
-      email: "sandra_a_88@mail.ru",
-    },
-  },
-  {
-    id: "cljzlypgl595551fxt24bp1z8x",
-    emailCampaign: {
-      name: "Гражданское право. Фундамент карьеры",
-    },
-    user: {
-      id: "ckfc8q1yc044w0702uaqbs6sb",
-      email: "dr.anastasiaaa@gmail.com",
-    },
-  },
-  {
-    id: "cljznd1e4619631fxtb8hldytd",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cjuptmzob00080759j1wrgjar",
-      email: "kotkova.victoria@yandex.ru",
-    },
-  },
-  {
-    id: "cljzuh07e810141fxttsofdydb",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clj6udztq487081fs8qz2pvmes",
-      email: "lizaveta1902@icloud.com",
-    },
-  },
-  {
-    id: "cljzy1ecn825091fxt7ffdrmm4",
-    emailCampaign: {
-      name: "Адвокатский экзамен",
+      name: "70 новых слов из Legal English за 3 дня",
     },
     user: {
       id: "cksf3534o215881guv92uxlr1m",
@@ -284,49 +104,9 @@ const data = [
     },
   },
   {
-    id: "cljzys4wp874261fxt89qaxdy8",
+    id: "clkr35uql33101fwdd95mq76b",
     emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljzys3bq873951fxtmfsrtyyj",
-      email: "alena.beller@mail.ru",
-    },
-  },
-  {
-    id: "clk03uh1z1129171fxteg1lf868",
-    emailCampaign: {
-      name: "Адвокатский экзамен",
-    },
-    user: {
-      id: "clbscrs0f545031h0hs8fykmfh",
-      email: "notak66375@bitvoo.com",
-    },
-  },
-  {
-    id: "clk046khw1150621fxtdubd3ulv",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "ckwtkmdp01280811hw04oa2gmin",
-      email: "706lena@gmail.com",
-    },
-  },
-  {
-    id: "clk0eano901031ftnhb51ld3i",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clk0eam1u00671ftni9h3www2",
-      email: "ya.oksana@hotmail.com",
-    },
-  },
-  {
-    id: "clk0om6v523201ftnv73d1nad",
-    emailCampaign: {
-      name: "Speaking",
+      name: "70 новых слов из Legal English за 3 дня",
     },
     user: {
       id: "cljbwk9qa71951fvocorasg3n",
@@ -334,49 +114,179 @@ const data = [
     },
   },
   {
-    id: "clk13bx8h210981ftn92vlgqlu",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cjqziydoy000u0817fw7b7x3h",
-      email: "nexian321@gmail.com",
-    },
-  },
-  {
-    id: "clk13cnum214371ftn8nd1qglj",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cjqziydoy000u0817fw7b7x3h",
-      email: "nexian321@gmail.com",
-    },
-  },
-  {
-    id: "clk17e40v257731ftn6syvrfqk",
+    id: "clkr36ho740391fwd3t1qck7c",
     emailCampaign: {
       name: "Гражданское право. Фундамент карьеры",
     },
     user: {
-      id: "clk17e20c257311ftnyfbci60g",
-      email: "ivanzolud86@gmail.com",
+      id: "clf2srmj342771f0cilrdsgr3",
+      email: "daryakiselevskaya@yandex.ru",
     },
   },
   {
-    id: "clk17imyf280961ftn145bdts8",
+    id: "clkr3d9y252931fwdyyam3jjl",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cljh58611484771f12uv4rmnlw",
+      email: "keyliabash@gmail.com",
+    },
+  },
+  {
+    id: "clkr3he1176671fwd0swc5db7",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cljyk24ch682921f2wdgmvri5f",
+      email: "dmitrieva-n-s@mail.ru",
+    },
+  },
+  {
+    id: "clkr3l2bn81911fwdb6j35y4u",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cljbwk9qa71951fvocorasg3n",
+      email: "neweshdz@gmail.com",
+    },
+  },
+  {
+    id: "clkr3rmdw93951fwdz4wssali",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkr3rkzu93641fwdxcqvznwe",
+      email: "chffgjt@mail.ru",
+    },
+  },
+  {
+    id: "clkr76avf136371fwdxcmdhkzn",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkauroz1531761fzref96uvtt",
+      email: "bbziev@mail.ru",
+    },
+  },
+  {
+    id: "clkray7fd201811fwdm2zrrvc5",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cljab583l163421fyz13rbmx2j",
+      email: "marimir433@gmail.com",
+    },
+  },
+  {
+    id: "clkrzidf2352081fwd8sxmf0cs",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "ckbw9bcmr02l70725ey0jgnxr",
+      email: "vadim-efremov-00@mail.ru",
+    },
+  },
+  {
+    id: "clksefdw5469091fwd48dz3y0e",
+    emailCampaign: {
+      name: "МЧП",
+    },
+    user: {
+      id: "clksedkxo464001fwd1uqg15of",
+      email: "ilshunkov@gmail.com",
+    },
+  },
+  {
+    id: "clksin0vl502381fwdtbx94bt9",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cljaa13hf26921fyzmvwdv9c9",
+      email: "aazarya777@yandex.ru",
+    },
+  },
+  {
+    id: "clksir9ad504661fwds6dsxwyy",
     emailCampaign: {
       name: "Гражданское право. Фундамент карьеры",
     },
     user: {
-      id: "clk17e20c257311ftnyfbci60g",
-      email: "ivanzolud86@gmail.com",
+      id: "clksir7s9504371fwdacf99lau",
+      email: "dmitriy0039@gmail.com",
     },
   },
   {
-    id: "clk1mthgc463791ftnscgnevcf",
+    id: "clksj1inx510831fwd1yqrqg0o",
     emailCampaign: {
-      name: "Адвокатский экзамен",
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "ckvduq9l306671hxnn5g5qrqx",
+      email: "gozakharov@edu.hse.ru",
+    },
+  },
+  {
+    id: "clksj2etl515411fwd2uqs3xat",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "ckvduq9l306671hxnn5g5qrqx",
+      email: "gozakharov@edu.hse.ru",
+    },
+  },
+  {
+    id: "clksjbzyp03641fx9svcg8ir4",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cl26whnsl390591hwzv4wwo6ld",
+      email: "elenabekareva03@gmail.com",
+    },
+  },
+  {
+    id: "clksjovi622671fx9o1t6dabu",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cl26whnsl390591hwzv4wwo6ld",
+      email: "elenabekareva03@gmail.com",
+    },
+  },
+  {
+    id: "clksjxza153541fx9o61n59r0",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkbctt68285951fy1fs2q297u",
+      email: "abror.rsgov@gmail.com",
+    },
+  },
+  {
+    id: "clksuuxml238451fx9vxio8mnq",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cljplplgl243611fys2tygenrf",
+      email: "aina-pererva@mail.ru",
+    },
+  },
+  {
+    id: "clktf8mng270711fx92jio3ivi",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
     },
     user: {
       id: "cjxqs08am000f07421ctv187d",
@@ -384,27 +294,287 @@ const data = [
     },
   },
   {
-    id: "clk1queqm491791ftnyq55fpwy",
+    id: "clktfnfa3292941fx9sjz392tn",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "cjxqs08am000f07421ctv187d",
+      email: "popkov_artem_bratsk@mail.ru",
+    },
+  },
+  {
+    id: "clktst6fw531471fx9jxofs9c9",
+    emailCampaign: {
+      name: "Корпоративное право",
+    },
+    user: {
+      id: "cjywzu83702tw0753sftzwnux",
+      email: "www.wladusha@mail.ru",
+    },
+  },
+  {
+    id: "clktthg4g543041fx969kefbyb",
+    emailCampaign: {
+      name: "Corporate",
+    },
+    user: {
+      id: "clh7i26vp13801f50oqzl7nzn",
+      email: "bulavin.1997@yandex.ru",
+    },
+  },
+  {
+    id: "clku0drvh740441fx96z0e8vs4",
+    emailCampaign: {
+      name: "Арбитражный процесс",
+    },
+    user: {
+      id: "cljabxtps219341fyz4gdu5mkc",
+      email: "ti2001@inbox.ru",
+    },
+  },
+  {
+    id: "clku10g7e11111f1388gql0cm",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clhouvw1b202681fxo42p1higd",
+      email: "jahancoolbest@gmail.com",
+    },
+  },
+  {
+    id: "clku1mckk50351f133hvk7u8m",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cl318a5rr122091h0g5fatrhbt",
+      email: "d.tatyana@gmail.com",
+    },
+  },
+  {
+    id: "clku2nezy89731f13wkmfr6zo",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clguv68d0838901f032cxt3hyw",
+      email: "vesennea@yandex.ru",
+    },
+  },
+  {
+    id: "clku2t5ff97241f135siw5au8",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clguv68d0838901f032cxt3hyw",
+      email: "vesennea@yandex.ru",
+    },
+  },
+  {
+    id: "clku58peb131151f1304vfmtqi",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clku58nsq130871f13l7xgvev1",
+      email: "fiorela@mail.ru",
+    },
+  },
+  {
+    id: "clku79vm9182361f13hcgxzqd5",
+    emailCampaign: {
+      name: "Корпоративное право",
+    },
+    user: {
+      id: "cjxqs08am000f07421ctv187d",
+      email: "popkov_artem_bratsk@mail.ru",
+    },
+  },
+  {
+    id: "clku7cmrl186941f1312hc4mux",
+    emailCampaign: {
+      name: "Арбитражный процесс",
+    },
+    user: {
+      id: "cjxqs08am000f07421ctv187d",
+      email: "popkov_artem_bratsk@mail.ru",
+    },
+  },
+  {
+    id: "clku8bjwn193171f138jtufa0t",
+    emailCampaign: {
+      name: "Due Diligence in M&A",
+    },
+    user: {
+      id: "cljabxtps219341fyz4gdu5mkc",
+      email: "ti2001@inbox.ru",
+    },
+  },
+  {
+    id: "clkujsgfw198621f13akx7p3nx",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkujsexw198381f13r76rc1wa",
+      email: "marina.borisowna2010@yandex.ru",
+    },
+  },
+  {
+    id: "clkul5p7c203491f13f6cfk4ng",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkul5nno203221f13v90wxneh",
+      email: "aleksandrina_vtu@mail.ru",
+    },
+  },
+  {
+    id: "clkuse2af244271f1393yfjkvi",
     emailCampaign: {
       name: "Speaking",
     },
     user: {
-      id: "clg1eamoo547111fx5zar1on93",
-      email: "egoekojber@gmail.com",
+      id: "cl5ax380f620331hpa9msto923",
+      email: "saburova.oksana@yandex.ru",
     },
   },
   {
-    id: "clk26x83831911fzqg2x8h0zv",
+    id: "clkuvdetz291031f13x3fkkbo0",
     emailCampaign: {
-      name: "Банкротство",
+      name: "70 новых слов из Legal English за 3 дня",
     },
     user: {
-      id: "clg5kuyy867101fz3rtr1eg0w",
-      email: "roman.tretyakov.97@mail.ru",
+      id: "cljsj9oqb334061f23cc8mklgg",
+      email: "annavikenteva@gmail.com",
     },
   },
   {
-    id: "clk2r8mym461641fzqyzw36jxw",
+    id: "clkuz2uvd458901f13hfxa93la",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clhouvw1b202681fxo42p1higd",
+      email: "jahancoolbest@gmail.com",
+    },
+  },
+  {
+    id: "clkv9swl6785821f13z9vulbyk",
+    emailCampaign: {
+      name: "IP",
+    },
+    user: {
+      id: "clkv9sv8m785531f13xw53tqr9",
+      email: "s0139934@msal.edu.ru",
+    },
+  },
+  {
+    id: "clkvdg6pu841341f13msvdv0m9",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkvdew14837181f13vcbbcw0x",
+      email: "newuser@besavvy.app",
+    },
+  },
+  {
+    id: "clkvdmmwm843391f138hap2mh5",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkvdmlid843111f13enb60ik6",
+      email: "artemmoskvichev05@mail.ru",
+    },
+  },
+  {
+    id: "clkveih7z858011f13yxtuisly",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clk4aju79313361fxj3x1dqp6i",
+      email: "sokolovalubov95@yandex.ru",
+    },
+  },
+  {
+    id: "clkvmm90c28951fzarjjuqmo8",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cjxqs08am000f07421ctv187d",
+      email: "popkov_artem_bratsk@mail.ru",
+    },
+  },
+  {
+    id: "clkvxo5mm88771fzafm46p7o9",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkul5nno203221f13v90wxneh",
+      email: "aleksandrina_vtu@mail.ru",
+    },
+  },
+  {
+    id: "clkw4mcez111291fza9b44m811",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkw4mb14111001fzalf1aahia",
+      email: "demitrieva99@mail.ru",
+    },
+  },
+  {
+    id: "clkwdho4x283571fzaddk9mv9g",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clkauroz1531761fzref96uvtt",
+      email: "bbziev@mail.ru",
+    },
+  },
+  {
+    id: "clkwfl3g4387251fza89322j6s",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkvdmlid843111f13enb60ik6",
+      email: "artemmoskvichev05@mail.ru",
+    },
+  },
+  {
+    id: "clkwfl9wb391661fzad3bmo9p2",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkvdmlid843111f13enb60ik6",
+      email: "artemmoskvichev05@mail.ru",
+    },
+  },
+  {
+    id: "clkwg9mc3415471fza12zg386a",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkvdmlid843111f13enb60ik6",
+      email: "artemmoskvichev05@mail.ru",
+    },
+  },
+  {
+    id: "clkwizmyf426311fzaqtthf2t9",
     emailCampaign: {
       name: "70 новых слов из Legal English за 3 дня",
     },
@@ -414,173 +584,153 @@ const data = [
     },
   },
   {
-    id: "clk2rqmxw467541fzqw7gzuyng",
+    id: "clkxtdnf8370441fvn2u8uc15p",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkxtdlot369871fvnr5ehkgxf",
+      email: "shekhanin.vova18@yandex.ru",
+    },
+  },
+  {
+    id: "clkxtzy5e397561fvnipju9azu",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkxtdlot369871fvnr5ehkgxf",
+      email: "shekhanin.vova18@yandex.ru",
+    },
+  },
+  {
+    id: "clkxu10z8402721fvnqw1rnyrf",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkxtdlot369871fvnr5ehkgxf",
+      email: "shekhanin.vova18@yandex.ru",
+    },
+  },
+  {
+    id: "clkxu1hzb405131fvny6qu674c",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkxtdlot369871fvnr5ehkgxf",
+      email: "shekhanin.vova18@yandex.ru",
+    },
+  },
+  {
+    id: "clkxu53wy408991fvnt8pz71mx",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clkxtdlot369871fvnr5ehkgxf",
+      email: "shekhanin.vova18@yandex.ru",
+    },
+  },
+  {
+    id: "clkxxtj6a215371f3ek9c7xmkp",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cjyli0kzn000t0794395y84md",
+      email: "mikhaylovkm24@gmail.com",
+    },
+  },
+  {
+    id: "clky12f26361231f3e8uexwrqi",
     emailCampaign: {
       name: "Банкротство",
     },
     user: {
-      id: "cjxrxqwxt033i0742aicn6f93",
-      email: "rocket_ride@mail.ru",
+      id: "clky12dgw360951f3ei6p0rm8u",
+      email: "denproc98@mail.ru",
     },
   },
   {
-    id: "clk2rqtbe469521fzqgcfs9jhe",
-    emailCampaign: {
-      name: "Банкротство",
-    },
-    user: {
-      id: "cjxrxqwxt033i0742aicn6f93",
-      email: "rocket_ride@mail.ru",
-    },
-  },
-  {
-    id: "clk2xk2ui538151fzqmqhw6u0u",
+    id: "clky14peu369561f3erqvpdqex",
     emailCampaign: {
       name: "Налоги",
     },
     user: {
-      id: "clk2xk0rm537681fzqcc0ltpr6",
-      email: "elenadom898959@gmail.com",
+      id: "clky12dgw360951f3ei6p0rm8u",
+      email: "denproc98@mail.ru",
     },
   },
   {
-    id: "clk2yap8e565411fzqwp9jkllt",
+    id: "clky83lva440981f3egg78j2ym",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cl56mc4kv79391h0mlc7795xh",
+      email: "nvfineyes@gmail.com",
+    },
+  },
+  {
+    id: "clky8hiqp502081f3eodwp54r5",
+    emailCampaign: {
+      name: "IP",
+    },
+    user: {
+      id: "clky8hh91501651f3eosmu8bbs",
+      email: "larag238r@gmail.com",
+    },
+  },
+  {
+    id: "clky8l4dl525241f3ei0zdjl63",
+    emailCampaign: {
+      name: "IP",
+    },
+    user: {
+      id: "clky8hh91501651f3eosmu8bbs",
+      email: "larag238r@gmail.com",
+    },
+  },
+  {
+    id: "clkycko71537281f3e22dri0ps",
     emailCampaign: {
       name: "Corporate",
     },
     user: {
-      id: "clk2xk0rm537681fzqcc0ltpr6",
-      email: "elenadom898959@gmail.com",
+      id: "clkbesh5z446171fy1nqx15b3n",
+      email: "what_splat0a@icloud.com",
     },
   },
   {
-    id: "clk2zaikn600701fzqbjaygc1k",
-    emailCampaign: {
-      name: "Корпоративное право",
-    },
-    user: {
-      id: "clk2xk0rm537681fzqcc0ltpr6",
-      email: "elenadom898959@gmail.com",
-    },
-  },
-  {
-    id: "clk4ajvmh313641fxjg0ojzbxv",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clk4aju79313361fxj3x1dqp6i",
-      email: "sokolovalubov95@yandex.ru",
-    },
-  },
-  {
-    id: "clk4cdc62407271fxj2xnx1of9",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "ckbw9bcmr02l70725ey0jgnxr",
-      email: "vadim-efremov-00@mail.ru",
-    },
-  },
-  {
-    id: "clk4cqh4j423461fxj0yk93xiw",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clk4cqfb9423091fxjvmyz2uef",
-      email: "chibi.tch@yandex.ru",
-    },
-  },
-  {
-    id: "clk4d9n8n450731fxj5eo2rhjd",
-    emailCampaign: {
-      name: "Speaking",
-    },
-    user: {
-      id: "clbjrv93f511601hvwvddbz7ax",
-      email: "dadzhiev.igor@gmail.com",
-    },
-  },
-  {
-    id: "clk4fhjm9475721fxj0g3ho1cr",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clk4fhi0e475431fxjq3t2ysm0",
-      email: "asya.vlasova2002@mail.ru",
-    },
-  },
-  {
-    id: "clk4flayl494541fxj7dkvfkpj",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clk4fhi0e475431fxjq3t2ysm0",
-      email: "asya.vlasova2002@mail.ru",
-    },
-  },
-  {
-    id: "clk4p39jt525921fxjjo88ssff",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "clemqmywe252831gyvmhjp35vm",
-      email: "sofiarotaru2005@gmail.com",
-    },
-  },
-  {
-    id: "clk59qp4411361f0p2xmktvm2",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "ckiovcg8p02hs0750z9ztqxk8",
-      email: "kamilkinsss@gmail.com",
-    },
-  },
-  {
-    id: "clk5bej9q25011f0ptr2qte8c",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljfp3qgl207311ftwjkfe42j3",
-      email: "simonenko01_alina@mail.ru",
-    },
-  },
-  {
-    id: "clk5bevu130991f0p0vll9ui5",
-    emailCampaign: {
-      name: "Налоги",
-    },
-    user: {
-      id: "cljfp3qgl207311ftwjkfe42j3",
-      email: "simonenko01_alina@mail.ru",
-    },
-  },
-  {
-    id: "clk5qkg66310071f0pc9p8v66q",
-    emailCampaign: {
-      name: "Адвокатский экзамен",
-    },
-    user: {
-      id: "ckv47x4xh455751i18iatl96ia",
-      email: "itsplokhovaa@gmail.com",
-    },
-  },
-  {
-    id: "clk5qp7we331071f0ph5aerdil",
+    id: "clkyjz3og561711f3eod7nt2rk",
     emailCampaign: {
       name: "Corporate",
     },
     user: {
-      id: "ckv47x4xh455751i18iatl96ia",
-      email: "itsplokhovaa@gmail.com",
+      id: "ck2gl7mzp03ks0757gae9vxo0",
+      email: "akievvvv@mail.ru",
+    },
+  },
+  {
+    id: "clkz55k4o627621f3ei0a0ug8a",
+    emailCampaign: {
+      name: "Налоги",
+    },
+    user: {
+      id: "clkz55im9627341f3ej3jlq17a",
+      email: "79476494055@yandex.ru",
+    },
+  },
+  {
+    id: "cll00p2n5419611fvxiu6mg220",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clbv5u7cs673311hxnq3i5ufqg",
+      email: "vilgelminavishnevskaya@yandex.ru",
     },
   },
 ];

@@ -287,15 +287,15 @@ const HoveringMenu = (props) => {
     []
   );
 
-  useEffect(() => {
-    let html;
-    props.value ? (html = props.value) : (html = `<p></p>`);
-    const document = new DOMParser().parseFromString(html, "text/html");
-    const newContent = deserialize(document.body);
-    if (!isEqual(newContent, editor.children)) {
-      editor.children = newContent;
-    }
-  }, [props.value, editor]);
+  // useEffect(() => {
+  //   let html;
+  //   props.value ? (html = props.value) : (html = `<p></p>`);
+  //   const document = new DOMParser().parseFromString(html, "text/html");
+  //   const newContent = deserialize(document.body);
+  //   if (!isEqual(newContent, editor.children)) {
+  //     editor.children = newContent;
+  //   }
+  // }, [props.value, editor]);
 
   // 4.1 Element renderer
 

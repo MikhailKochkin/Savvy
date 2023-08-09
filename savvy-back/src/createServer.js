@@ -1,9 +1,17 @@
-const { ApolloServer } = require("apollo-server-express");
+const { ApolloServer } = require("@apollo/server");
+const {
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} = require("@apollo/server-plugin-landing-page-graphql-playground");
+
+const {
+  ApolloServerPluginLandingPageDisabled,
+} = require("@apollo/server/plugin/disabled");
+
 const { PrismaClient } = require("@prisma/client");
-const { nexusPrisma } = require("nexus-plugin-prisma");
-const { DateTimeResolver, JSONObjectResolver } = require("graphql-scalars");
-const { GraphQLScalarType } = require("graphql/type");
-const { makeSchema, connectionPlugin } = require("@nexus/schema");
+const { nexusPrisma } = require("@mercurialweb/nexus-plugin-prisma");
+// const { DateTimeResolver, JSONObjectResolver } = require("graphql-scalars");
+// const { GraphQLScalarType } = require("graphql/type");
+const { makeSchema, connectionPlugin } = require("nexus");
 const types = require("./types");
 
 const prisma = new PrismaClient();
@@ -11,42 +19,27 @@ const prisma = new PrismaClient();
 const server = new ApolloServer({
   playground: true,
   introspection: true,
+  apollo: {
+    graphRef: process.env.APOLLO_GRAPH_REF, // replace with your graph id and variant
+  },
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   schema: makeSchema({
     types,
     plugins: [
       nexusPrisma({
+        prismaClient: (ctx) => (ctx.prisma = prisma),
         experimentalCRUD: true,
-        scalars: {
-          DateTime: DateTimeResolver,
-          Json: new GraphQLScalarType({
-            ...JSONObjectResolver,
-            name: "Json",
-            description:
-              "The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).",
-          }),
-        },
       }),
-      connectionPlugin(),
     ],
     outputs: {
       schema: __dirname + "/../schema.graphql",
       typegen: __dirname + "/generated/nexus.ts",
     },
-    // typegenAutoConfig: {
-    //   contextType: "Context.Context",
-    //   sources: [
-    //     {
-    //       source: "@prisma/client",
-    //       alias: "prisma",
-    //     },
-    //     {
-    //       source: require.resolve("./context.js"),
-    //       alias: "context",
-    //     },
-    //   ],
-    // },
   }),
-  context: (req) => ({ ...req, prisma }),
+  context: ({ req, res }) => {
+    console.log("apollo", req); // Log the req object here
+    return { req, res, prisma };
+  },
 });
 
 exports.server = server;

@@ -78,6 +78,7 @@ const TeacherCard = (props) => {
       <Header>{t("Tools")}</Header>
       <Buttons>
         <Link
+          legacyBehavior
           href={{
             pathname: "/createLesson",
             query: { id: props.id },
@@ -88,6 +89,7 @@ const TeacherCard = (props) => {
           </a>
         </Link>
         <Link
+          legacyBehavior
           href={{
             pathname: "/updateCoursePage",
             query: { id },
@@ -99,6 +101,7 @@ const TeacherCard = (props) => {
         </Link>
         <MakePublic published={coursePage.published} id={coursePage.id} />
         <Link
+          legacyBehavior
           href={{
             pathname: "/stats",
             query: {

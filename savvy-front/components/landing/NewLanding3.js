@@ -195,7 +195,6 @@ const Landing = (props) => {
   };
   return (
     <Styles>
-      {/* <Menu></Menu> */}
       <Info>
         <NewNav />
         <div className="container">

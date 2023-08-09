@@ -102,6 +102,7 @@ const Media = () => {
             <Header>
               <span>
                 <Link
+                  legacyBehavior
                   href={{
                     pathname: "/blog",
                   }}

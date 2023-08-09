@@ -330,17 +330,19 @@ const Head = styled.div`
   color: white;
   cursor: pointer;
   height: 10vh;
-  background: #1a2980; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #26d0ce,
-    #1a2980
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #26d0ce, #1a2980);
+  background-image: url("/static/pattern.svg");
+  background-size: cover;
   width: 100vw;
   font-size: 2rem;
+  padding: 0 20px;
+  #to_student_page {
+    width: 400px;
+    text-align: right;
+    font-size: 1.7rem;
+  }
   span {
     margin: 0 3%;
+    color: #fff;
   }
   #back {
     &:hover {
@@ -361,13 +363,8 @@ const Head2 = styled.div`
   flex-direction: row;
   justify-content: center;
   padding: 0;
-  background: #1a2980; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #26d0ce,
-    #1a2980
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #26d0ce, #1a2980);
+  background-image: url("/static/pattern.svg");
+  background-size: cover;
   color: white;
   width: 100vw;
   text-align: center;
@@ -521,7 +518,7 @@ const SingleLesson = (props) => {
                           },
                         }}
                       >
-                        <span>Back to course </span>
+                        <span>⬅</span>
                       </Link>
                     )}
                     {/* // : (
@@ -529,44 +526,24 @@ const SingleLesson = (props) => {
                       //   // <span onClick={(e) => openNav()}>Навигация</span>
                       // )
                     // )} */}
-                    <span>
-                      {t("lesson")} {lesson.number}. {lesson.name}
-                    </span>
+                    <div id="to_student_page">
+                      {me &&
+                        (lesson.user.id === me.id ||
+                          me.permissions.includes("ADMIN")) && (
+                          <Link
+                            href={{
+                              pathname: "/lesson",
+                              query: {
+                                id: lesson.id,
+                                type: "story",
+                              },
+                            }}
+                          >
+                            <span>{` ➡️ ${t("to_student_page")} `}</span>
+                          </Link>
+                        )}
+                    </div>
                   </Head>
-                  {me &&
-                    (lesson.user.id === me.id ||
-                      me.permissions.includes("ADMIN")) && (
-                      <Head2>
-                        <Link
-                          href={{
-                            pathname: "/lesson",
-                            query: {
-                              id: lesson.id,
-                              type: "story",
-                            },
-                          }}
-                        >
-                          <span>{` ➡️ ${t("to_student_page")} `}</span>
-                        </Link>
-
-                        {/* <>
-                          {" "}
-                          <span>{` |  `}</span>
-                        </> */}
-                        {/* <Link
-                          href={{
-                            pathname: "/lesson",
-                            query: {
-                              id: lesson.id,
-                              type: "challenge",
-                            },
-                          }}
-                        >
-                          <span> Испытание</span>
-                        </Link> */}
-                      </Head2>
-                    )}
-
                   <LessonStyles>
                     <LessonPart>
                       <LessonBuilder lesson={lesson} me={me} />

@@ -7,7 +7,7 @@ const {
   stringArg,
   queryType,
   arg,
-} = require("@nexus/schema");
+} = require("nexus");
 const Query = queryType({
   name: "Query",
   definition(t) {
@@ -65,13 +65,17 @@ const Query = queryType({
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {
-        if (!ctx.res.req.userId) {
+        if (!ctx.req.userId) {
           return null;
         }
-        const user = await ctx.prisma.user.findUnique({
-          where: { id: ctx.res.req.userId },
-        });
-        return user;
+        try {
+          const user = await ctx.prisma.user.findUnique({
+            where: { id: ctx.req.userId },
+          });
+          return user;
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
       },
     });
     t.field("stats", {

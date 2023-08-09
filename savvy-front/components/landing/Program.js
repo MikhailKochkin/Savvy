@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import moment from "moment";
@@ -58,12 +58,18 @@ const Down = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    height: 80px;
+    height: 90px;
     width: 100%;
     border-top: 1px solid rgba(149, 149, 149, 0.5);
     /* border-bottom: 1px solid rgba(149, 149, 149, 0.5); */
     /* margin-bottom: 10px; */
     padding: 15px 0;
+    a {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
   .price_container {
     width: 90%;
@@ -113,7 +119,7 @@ const Button = styled.button`
   border-radius: 5px;
   border: 1px solid;
   border-color: ${(props) => (props.program ? "#7000FF" : "#496ddb")};
-  height: 45px;
+  height: 55px;
   width: 90%;
   color: #fff;
   font-family: Montserrat;
@@ -170,7 +176,7 @@ const Program = (props) => {
                     ? parseInt(parseInt(price) / 1000)
                     : ""}{" "}
                   {parseInt(price) % 1000}
-                  {props.currency == "ruble" ? "₽" : "$"}{" "}
+                  {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
                 </div>
               )}
               <PriceBoxDescription discount={props.discountPrice}>

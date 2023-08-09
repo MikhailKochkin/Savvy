@@ -16,9 +16,10 @@ const DELETE_PROBLEM_MUTATION = gql`
 
 const useStyles = makeStyles({
   button: {
-    margin: "4% 0",
     fontSize: "1.6rem",
     textTransform: "none",
+    width: "140px",
+    height: "45px",
   },
 });
 

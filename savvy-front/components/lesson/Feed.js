@@ -7,11 +7,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-
+import Auth from "../auth/Auth.js";
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+import PagePurchase from "./PagePurchase.js";
+import calculateSum from "../../functions.js";
 
 const Buttons = styled.div`
   display: flex;
@@ -144,17 +146,17 @@ const MenuColumn = styled.div`
   justify-content: flex-start;
   align-items: center;
   @media (max-width: 800px) {
-  width: ${(props) => (props.open ? "100vw" : "0px")};
+    width: ${(props) => (props.open ? "100vw" : "0px")};
   }
   .container {
     width: 80%;
+    max-width: 350px;
     margin: 40px 0;
     .lesson_number {
       color: #8a8a8a;
       text-align: center;
       font-weight: 500;
       font-size: 1.8rem;
-
     }
     .lesson_name {
       text-align: center;
@@ -174,39 +176,38 @@ const MenuColumn = styled.div`
       font-weight: 600;
       margin-top: 50px;
       line-height: 1.3;
-      }
-      .go_to_chat {
-        width: 70%;
-        font-weight: 500;
-        line-height: 1.3;
-              margin-top: 10px;
+    }
+    .go_to_chat {
+      width: 70%;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-top: 10px;
 
-        font-size: 1.6rem;
-      }
-      button {
-        border: 1px solid #c2c2c2;
-        border-radius: 12px;
-        padding: 3% 4%;
-        cursor: pointer;
-        margin-top: 10px;
-          background: none;
-          outline: 0;
-          font-family: Montserrat;
-          font-size: 1.6rem;
-          font-weight: 500;
-          -moz-appearance: none;
-          -webkit-appearance: none;
-          appearance: none;
-          text-indent: 0.01px;
-          text-align-last: center;
-          text-align: center;
-          text-overflow: "";
-                  transition: 0.5s;
+      font-size: 1.6rem;
+    }
+    button {
+      border: 1px solid #c2c2c2;
+      border-radius: 12px;
+      padding: 3% 4%;
+      cursor: pointer;
+      margin-top: 10px;
+      background: none;
+      outline: 0;
+      font-family: Montserrat;
+      font-size: 1.6rem;
+      font-weight: 500;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      text-indent: 0.01px;
+      text-align-last: center;
+      text-align: center;
+      transition: 0.5s;
 
-          &:hover {
-          border: 1px solid #1a2980;
-        }
+      &:hover {
+        border: 1px solid #1a2980;
       }
+    }
     .nav {
       display: flex;
       flex-direction: row;
@@ -222,7 +223,7 @@ const MenuColumn = styled.div`
       }
       #button_square {
         margin-top: 10px;
-         margin-left: 20px;
+        margin-left: 20px;
         border: 1px solid #c2c2c2;
         color: #c2c2c2;
         width: 45px;
@@ -251,7 +252,7 @@ const MenuColumn = styled.div`
           appearance: none;
           text-indent: 0.01px;
           text-align-last: center;
-          text-align: center
+          text-align: center;
           text-overflow: "";
           cursor: pointer;
           /* &:hover {
@@ -265,7 +266,6 @@ const MenuColumn = styled.div`
           }
         }
       }
-      
     }
   }
 `;
@@ -422,7 +422,7 @@ const ProgressBarContainer = styled.div`
   left: 0;
   width: 100%;
   height: 45px;
-  z-index: 100;
+  z-index: 10;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -437,6 +437,7 @@ const ProgressBarContainer = styled.div`
     width: 50%;
     .timeLeft {
       min-width: 160px;
+      text-align: center;
     }
     .container {
       width: 500px;
@@ -448,6 +449,8 @@ const ProgressBarContainer = styled.div`
     }
   }
   @media (max-width: 800px) {
+    height: 70px;
+
     .box {
       display: flex;
       flex-direction: column;
@@ -473,6 +476,7 @@ const ProgressBar = styled.div`
   height: 100%;
   background: #3f51b5;
   width: ${(props) => props.progress};
+  /* max-width: 350px; */
   transition: all 0.5s;
   border-radius: 4px;
 `;
@@ -553,6 +557,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = (props) => {
+  const { me, coursePageId, coursePage, lesson_structure } = props;
+  let lessonElements;
+  let next_lesson = false;
+
+  if (props.me.id == "clkvdew14837181f13vcbbcw0x") {
+    lessonElements = [props.components.slice(0, 2), <Auth />];
+    next_lesson = false;
+  } else if (
+    !props.openLesson &&
+    me.new_subjects.filter((sbj) => sbj.id == coursePageId).length == 0 &&
+    me.coursePages.filter((c) => c.id == coursePageId).length == 0 &&
+    me.co_coursePages.filter((c) => c.id == coursePageId).length == 0 &&
+    !me.permissions.includes("ADMIN")
+  ) {
+    lessonElements = [
+      props.components.slice(0, 2),
+      <PagePurchase
+        coursePageId={coursePageId}
+        me={me}
+        coursePage={coursePage}
+        lesson_structure={lesson_structure}
+      />,
+    ];
+    next_lesson = false;
+  } else {
+    lessonElements = props.components;
+    next_lesson = true;
+  }
+  console.log("lesson coursePage", coursePage);
+
   const [num, setNum] = useState(0);
   const [result, setResult] = useState(
     props.my_result ? props.my_result.id : null
@@ -567,19 +601,19 @@ const Feed = (props) => {
   const { t } = useTranslation("lesson");
 
   const move = async (e) => {
-    if (props.components.length > num + 1) {
+    if (lessonElements.length > num + 1) {
       const data = await setNum(num + 1);
       props.passStep(num + 1);
-      if (props.components[num + 1].props.complexity > complexity) {
-        setComplexity(props.components[num + 1].props.complexity);
+      if (lessonElements[num + 1].props.complexity > complexity) {
+        setComplexity(lessonElements[num + 1].props.complexity);
         setVisible(true);
         setTimeout(function () {
           setVisible(false);
         }, 3000);
-      } else if (props.components[num + 1].props.complexity < complexity) {
-        setComplexity(props.components[num + 1].props.complexity);
+      } else if (lessonElements[num + 1].props.complexity < complexity) {
+        setComplexity(lessonElements[num + 1].props.complexity);
       }
-      if (props.components.length > num + 2) {
+      if (lessonElements.length > num + 2) {
         var my_element =
           document.getElementsByClassName("final")[0].previousSibling;
         my_element.scrollIntoView({
@@ -587,7 +621,7 @@ const Feed = (props) => {
           block: "start",
           inline: "nearest",
         });
-      } else if (props.components.length === num + 2) {
+      } else if (lessonElements.length === num + 2) {
         var my_element =
           document.getElementsByClassName("no")[
             document.getElementsByClassName("no").length - 1
@@ -602,9 +636,9 @@ const Feed = (props) => {
   };
 
   const search = async (num) => {
-    if (props.components.length > num + 1) {
+    if (lessonElements.length > num + 1) {
       const data = await setNum(num + 1);
-      if (props.components.length > num + 2) {
+      if (lessonElements.length > num + 2) {
         var my_element =
           document.getElementsByClassName("final")[0].previousSibling;
         my_element.scrollIntoView({
@@ -612,7 +646,7 @@ const Feed = (props) => {
           block: "start",
           inline: "nearest",
         });
-      } else if (props.components.length === num + 2) {
+      } else if (lessonElements.length === num + 2) {
         var my_element =
           document.getElementsByClassName("no")[
             document.getElementsByClassName("no").length - 1
@@ -652,11 +686,11 @@ const Feed = (props) => {
     );
     setSecondRound(true);
     if (
-      props.components.length > num + 1 &&
+      lessonElements.length > num + 1 &&
       props.my_result &&
       props.my_result.progress / props.number_of_tasks < 0.9
     ) {
-      if (props.components.length > num + 2) {
+      if (lessonElements.length > num + 2) {
         var my_element = document.getElementsByClassName("final")[0];
         my_element &&
           my_element.scrollIntoView({
@@ -664,7 +698,7 @@ const Feed = (props) => {
             block: "start",
             inline: "nearest",
           });
-      } else if (props.components.length === num + 2) {
+      } else if (lessonElements.length === num + 2) {
         var my_element =
           document.getElementsByClassName("no")[
             document.getElementsByClassName("no").length - 1
@@ -678,15 +712,15 @@ const Feed = (props) => {
     }
   }, [props.my_result]);
   // let color;
-  // if (props.components[num].props.complexity == 1) {
+  // if (lessonElements[num].props.complexity == 1) {
   //   color = "#55a630";
-  // } else if (props.components[num].props.complexity == 2) {
+  // } else if (lessonElements[num].props.complexity == 2) {
   //   color = "#3a86ff";
-  // } else if (props.components[num].props.complexity == 3) {
+  // } else if (lessonElements[num].props.complexity == 3) {
   //   color = "#f4d35e";
-  // } else if (props.components[num].props.complexity == 4) {
+  // } else if (lessonElements[num].props.complexity == 4) {
   //   color = "#f95738";
-  // } else if (props.components[num].props.complexity == 5) {
+  // } else if (lessonElements[num].props.complexity == 5) {
   //   color = "#201C35";
   // } else {
   //   color = "#55a630";
@@ -699,10 +733,7 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
-          <CustomProgressBar
-            myResult={num}
-            lessonItemsLength={props.components.length}
-          />
+          <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
           <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
@@ -730,7 +761,7 @@ const Feed = (props) => {
           </div>
           {result ? (
             <>
-              {props.components.slice(0, num + 2).map((c, i) => (
+              {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block"}
                   open={open}
@@ -760,14 +791,14 @@ const Feed = (props) => {
                         return (
                           <Buttons>
                             {/* Show move button if it is not the last block in the lesson */}
-                            {props.components.length > num + 1 && i === num && (
+                            {lessonElements.length > num + 1 && i === num && (
                               <>
                                 <div
                                   id="arrow_box"
                                   className="arrow_box"
                                   onClick={async (e) => {
                                     if (
-                                      props.components.length - (num + 2) ==
+                                      lessonElements.length - (num + 2) ==
                                       2
                                     ) {
                                       setSecondRound(true);
@@ -794,7 +825,7 @@ const Feed = (props) => {
             </>
           ) : (
             <>
-              {props.components.slice(0, num + 2).map((c, i) => (
+              {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block2"}
                   open={open}
@@ -820,16 +851,21 @@ const Feed = (props) => {
                       {(createLessonResult, { loading, error }) => {
                         return (
                           <Buttons>
-                            {props.components.length > num + 1 && i === num && (
+                            {lessonElements.length > num + 1 && i === num && (
                               <>
                                 <div
                                   id="arrow"
                                   className="arrow_box"
                                   onClick={async (e) => {
                                     let res2 = move();
-                                    let res = await createLessonResult();
+                                    if (
+                                      props.me.id !==
+                                      "clkvdew14837181f13vcbbcw0x"
+                                    ) {
+                                      let res = await createLessonResult();
 
-                                    setResult(res.data.createLessonResult.id);
+                                      setResult(res.data.createLessonResult.id);
+                                    }
                                   }}
                                 >
                                   <img
@@ -848,96 +884,102 @@ const Feed = (props) => {
               ))}
             </>
           )}
-          <Stepper>
-            {props.me &&
-              props.components.length === num + 1 &&
-              props.next &&
-              props.next.published && (
-                <>
-                  {visited.length === 0 ? (
-                    <Mutation
-                      mutation={CREATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        lessonID: props.next.id,
-                        visitsNumber: 1,
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_COURSEPAGE_QUERY,
-                          variables: { id: props.coursePageID },
-                        },
-                      ]}
-                    >
-                      {(createLessonResult, { loading, error }) => {
-                        return (
-                          <Link
-                            // The user HAS not yet visited the next lesson page
-                            href={{
-                              pathname: "/lesson",
-                              query: {
-                                id: props.next.id,
-                                type: props.next.type.toLowerCase(),
-                              },
-                            }}
-                          >
-                            <a>
-                              <Button
-                                className={classes.button}
-                                onClick={() => {
-                                  createLessonResult();
-                                }}
-                              >
-                                Следующий урок
-                              </Button>
-                            </a>
-                          </Link>
-                        );
-                      }}
-                    </Mutation>
-                  ) : (
-                    <Mutation
-                      mutation={UPDATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        id: visited[0].id,
-                        visitsNumber: visited[0].visitsNumber + 1,
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_COURSEPAGE_QUERY,
-                          variables: { id: props.coursePageID },
-                        },
-                      ]}
-                    >
-                      {(updateLessonResult, { loading, error }) => {
-                        return (
-                          <Link
-                            // The user HAS visited the next lesson page and we update it now
-                            href={{
-                              pathname: "/lesson",
-                              query: {
-                                id: props.next.id,
-                                type: props.next.type.toLowerCase(),
-                              },
-                            }}
-                          >
-                            <a>
-                              <Button
-                                className={classes.button}
-                                onClick={() => {
-                                  updateLessonResult();
-                                }}
-                              >
-                                Следующий урок
-                              </Button>
-                            </a>
-                          </Link>
-                        );
-                      }}
-                    </Mutation>
-                  )}
-                </>
-              )}
-          </Stepper>
+          {props.me.id !== "clkvdew14837181f13vcbbcw0x" && (
+            <Stepper>
+              {" "}
+              {props.me &&
+                next_lesson &&
+                lessonElements.length === num + 1 &&
+                props.next &&
+                props.next.published && (
+                  <>
+                    {visited.length === 0 ? (
+                      <Mutation
+                        mutation={CREATE_LESSONRESULT_MUTATION}
+                        variables={{
+                          lessonID: props.next.id,
+                          visitsNumber: 1,
+                        }}
+                        refetchQueries={() => [
+                          {
+                            query: SINGLE_COURSEPAGE_QUERY,
+                            variables: { id: props.coursePageID },
+                          },
+                        ]}
+                      >
+                        {(createLessonResult, { loading, error }) => {
+                          return (
+                            <Link
+                              legacyBehavior
+                              // The user HAS not yet visited the next lesson page
+                              href={{
+                                pathname: "/lesson",
+                                query: {
+                                  id: props.next.id,
+                                  type: props.next.type.toLowerCase(),
+                                },
+                              }}
+                            >
+                              <a>
+                                <Button
+                                  className={classes.button}
+                                  onClick={() => {
+                                    createLessonResult();
+                                  }}
+                                >
+                                  Следующий урок
+                                </Button>
+                              </a>
+                            </Link>
+                          );
+                        }}
+                      </Mutation>
+                    ) : (
+                      <Mutation
+                        mutation={UPDATE_LESSONRESULT_MUTATION}
+                        variables={{
+                          id: visited[0].id,
+                          visitsNumber: visited[0].visitsNumber + 1,
+                        }}
+                        refetchQueries={() => [
+                          {
+                            query: SINGLE_COURSEPAGE_QUERY,
+                            variables: { id: props.coursePageID },
+                          },
+                        ]}
+                      >
+                        {(updateLessonResult, { loading, error }) => {
+                          return (
+                            <Link
+                              legacyBehavior
+                              // The user HAS visited the next lesson page and we update it now
+                              href={{
+                                pathname: "/lesson",
+                                query: {
+                                  id: props.next.id,
+                                  type: props.next.type.toLowerCase(),
+                                },
+                              }}
+                            >
+                              <a>
+                                <Button
+                                  className={classes.button}
+                                  onClick={() => {
+                                    updateLessonResult();
+                                  }}
+                                >
+                                  Следующий урок
+                                </Button>
+                              </a>
+                            </Link>
+                          );
+                        }}
+                      </Mutation>
+                    )}
+                  </>
+                )}
+            </Stepper>
+          )}
         </Content>
         <MenuColumn open={open} className="lastColumn">
           <div className="container">
@@ -952,7 +994,7 @@ const Feed = (props) => {
               <Progress
                 className="progress"
                 progress={
-                  parseInt((100 * (num + 1)) / props.components.length) + "%"
+                  parseInt((100 * (num + 1)) / lessonElements.length) + "%"
                 }
               ></Progress>
             </div>
@@ -965,7 +1007,7 @@ const Feed = (props) => {
                   value={num - 1}
                   onChange={(e) => search(parseInt(e.target.value))}
                 >
-                  {props.components.map((el, i) => (
+                  {lessonElements.map((el, i) => (
                     <option key={i + "option3"} value={i - 1}>
                       {i + 1}
                     </option>
@@ -975,7 +1017,7 @@ const Feed = (props) => {
             </div>
             <div className="questions">{t("have_questions")}</div>
             <div className="go_to_chat">{t("chat_help")}</div>
-            <button onClick={(e) => search(props.components.length - 2)}>
+            <button onClick={(e) => search(lessonElements.length - 2)}>
               {t("get_to_chat")}
             </button>
             <br />
@@ -987,8 +1029,21 @@ const Feed = (props) => {
   );
 };
 
-const CustomProgressBar = ({ myResult, lessonItemsLength }) => {
-  const progress = myResult ? (100 * (myResult + 1)) / lessonItemsLength : 0;
+const CustomProgressBar = ({ myResult, lessonItems }) => {
+  let lesson_length = calculateSum(lessonItems);
+  let time_coef = lesson_length / lessonItems.length;
+
+  const progress = myResult
+    ? (((myResult + 1) * time_coef) / lesson_length) * 100
+    : 0;
+
+  console.log(myResult * time_coef, lesson_length);
+  let time_left = parseInt(lesson_length - (myResult + 1) * time_coef);
+  let time_passed = parseInt(myResult * time_coef);
+  console.log("time_left", parseInt(time_left));
+  console.log("time_passed", parseInt(myResult * time_coef));
+  console.log("total time", lesson_length);
+
   const router = useRouter();
   const { t } = useTranslation("lesson");
 
@@ -999,10 +1054,10 @@ const CustomProgressBar = ({ myResult, lessonItemsLength }) => {
           <ProgressBar progress={progress + "%"} />
         </div>
         <div className="timeLeft">
-          {(lessonItemsLength - myResult - 1) * 2 > 0
+          {time_left > 0
             ? router.locale == "ru"
-              ? `Осталось ${(lessonItemsLength - myResult - 1) * 2} мин.`
-              : `${(lessonItemsLength - myResult - 1) * 2} mins left`
+              ? `Осталось ${time_left} мин.`
+              : `${time_left} mins left`
             : t("lesson_is_done")}
         </div>
       </div>

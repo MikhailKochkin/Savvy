@@ -7,7 +7,7 @@ const {
   stringArg,
   nonNull,
   arg,
-} = require("@nexus/schema");
+} = require("nexus");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const postmark = require("postmark");
@@ -33,7 +33,7 @@ const Template = require("../emails/Template");
 
 const NextWeekEmail = require("../emails/nextWeek");
 const CommentEmail = require("../emails/Comment");
-const ConfEmail = require("../emails/Conf");
+// const ConfEmail = require("../emails/Conf");
 const { argsToArgsConfig } = require("graphql/type/definition");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
@@ -65,20 +65,20 @@ async function getMessageOpens(serverToken, messageID) {
 
 // const { exists } = require("fs");
 
-const { Client } = require("whatsapp-web.js");
-const wa_client = new Client();
+// const { Client } = require("whatsapp-web.js");
+// const wa_client = new Client();
 
-wa_client.on("qr", (qr) => {
-  console.log(1);
-  qrcode.generate(qr, { small: true });
-  console.log(2);
-});
+// wa_client.on("qr", (qr) => {
+//   console.log(1);
+//   qrcode.generate(qr, { small: true });
+//   console.log(2);
+// });
 
-wa_client.on("ready", () => {
-  console.log("Client is ready!");
-});
+// wa_client.on("ready", () => {
+//   console.log("Client is ready!");
+// });
 
-wa_client.initialize();
+// wa_client.initialize();
 
 // console.log(12);
 
@@ -909,6 +909,7 @@ const Mutation = mutationType({
           }`,
           HtmlBody: GenericEmail.GenericEmail(args.text),
           Tag: "communication_email",
+          MessageStream: "broadcast",
         });
         return message;
       },
@@ -1255,6 +1256,7 @@ const Mutation = mutationType({
       type: "Lesson",
       args: {
         id: nonNull(stringArg()),
+        coursePageId: nonNull(stringArg()),
       },
       resolve: async (_, args, ctx) => {
         const originalLessonId = args.id;
@@ -1292,8 +1294,9 @@ const Mutation = mutationType({
             text: originalLesson.text,
             number: 0,
             structure: originalLesson.structure, // Set the original structure for now, we'll update it later
-            coursePage: { connect: { id: originalLesson.coursePageId } },
+            coursePage: { connect: { id: args.coursePageId } },
             user: { connect: { id: userId } },
+            coursePageID: args.coursePageId,
           },
           include: {
             coursePage: true,
@@ -1403,6 +1406,7 @@ const Mutation = mutationType({
                 lesson: {
                   connect: { id: newLesson.id },
                 },
+                lessonID: newLesson.id,
               },
             });
             newIdMapping[texteditor.id] = createdEditor.id;
@@ -1547,6 +1551,7 @@ const Mutation = mutationType({
         lessonID: stringArg(),
       },
       resolve: async (_, args, ctx) => {
+        console.log("lessonResult args", args, ctx.res.req.userId);
         const LessonResult = await ctx.prisma.lessonResult.create({
           data: {
             student: {
@@ -2289,6 +2294,7 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
         delete args.lessonId;
+        console.log("args", args, lessonId);
         const Chat = await ctx.prisma.chat.create({
           data: {
             user: {
@@ -2347,6 +2353,7 @@ const Mutation = mutationType({
             lesson: {
               connect: { id: lessonId },
             },
+            lessonID: lessonId,
             ...args,
           },
         });
@@ -2654,8 +2661,9 @@ const Mutation = mutationType({
       args: {
         id: stringArg(),
         text: stringArg(),
-        // nodeID: stringArg(),
-        // nodeType: stringArg(),
+        steps: arg({
+          type: "ProblemStructure",
+        }),
         complexity: intArg(),
         isSecret: booleanArg(),
       },
@@ -2663,6 +2671,7 @@ const Mutation = mutationType({
         const updates = { ...args };
         //remove the ID from updates
         delete updates.id;
+        console.log("updates", updates.steps.problemItems);
         //run the update method
         return ctx.prisma.problem.update({
           data: updates,
@@ -3406,10 +3415,11 @@ const Mutation = mutationType({
         // 1.
 
         // const result = await yandex.createPayment({
-
+        console.log("args", args);
         const user = await ctx.prisma.user.findUnique({
           where: { id: args.userId },
         });
+
         const coursePage = await ctx.prisma.coursePage.findUnique({
           where: { id: args.coursePageId },
         });
@@ -3448,46 +3458,8 @@ const Mutation = mutationType({
         const payment = await community_checkout.createPayment(createPayload);
 
         const url = payment.confirmation.confirmation_url;
+        console.log("url", url);
 
-        // const createReceiptPayload = {
-        //   send: true,
-        //   customer: {
-        //     email: "mi.kochkin@ya.ru",
-        //   },
-        //   type: "payment",
-        //   payment_id: payment.id,
-        //   settlements: [
-        //     {
-        //       type: "cashless",
-        //       amount: {
-        //         value: "2.00",
-        //         currency: "RUB",
-        //       },
-        //     },
-        //   ],
-        //   items: [
-        //     {
-        //       description: "test",
-        //       quantity: "1",
-        //       amount: {
-        //         value: "2.00",
-        //         currency: "RUB",
-        //       },
-        //       vat_code: 1,
-        //     },
-        //   ],
-        // };
-
-        // try {
-        //   const receipt = await checkout.createReceipt(createReceiptPayload);
-        //   console.log("receipt", receipt);
-        // } catch (error) {
-        //   console.error("error1", error);
-        // }
-
-        // 2.
-        // const paymentID = result.id;
-        // console.log("args", args);
         const order = await ctx.prisma.order.create({
           data: {
             price: args.price,
@@ -3556,7 +3528,7 @@ const Mutation = mutationType({
           From: "Mikhail@besavvy.app",
           To: "Mikhail@besavvy.app",
           Subject: "Новый клиент",
-          Tag: "interenal_business_email",
+          Tag: "internal_business_email",
           HtmlBody: newOrderEmail(
             user.name,
             user.surname,

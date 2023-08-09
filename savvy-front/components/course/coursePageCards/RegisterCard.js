@@ -4,8 +4,7 @@ import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import parse from 'html-react-parser';
-
+import parse from "html-react-parser";
 
 import EnrollCoursePage from "../../EnrollCoursePage";
 import { CREATE_LESSONRESULT_MUTATION } from "../../lesson/LessonHeader";
@@ -168,6 +167,7 @@ const RegisterCard = (props) => {
               <Part2>
                 {applied && <Paid>{t("applied")}</Paid>}
                 <Link
+                  legacyBehavior
                   href={{
                     pathname: "/lesson",
                     query: {

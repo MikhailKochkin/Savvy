@@ -239,6 +239,7 @@ const LessonHeader = (props) => {
         {/* first visit: if you have an account but did not buy the new course => get the free version / link 1 */}
         {me && lesson && lesson.open && (
           <Link
+            legacyBehavior
             href={{
               pathname: "/lesson",
               query: {

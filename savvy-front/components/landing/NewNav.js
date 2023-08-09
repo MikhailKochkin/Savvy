@@ -241,7 +241,6 @@ const NewNav = (props) => {
       <div className="menu_bar">
         <Link href="/">
           <div className="logo">
-            {/* <a>BeSavvy</a> */}
             <img src="static/long_logo.svg" />
           </div>
         </Link>
@@ -258,31 +257,27 @@ const NewNav = (props) => {
               &times;
             </a>
 
-            <Link href="/">
+            <Link legacyBehavior href="/">
               <button onClick={(e) => closeNav()}>
                 <a>BeSavvy</a>
               </button>
             </Link>
-            {/* <Link href="/connect">
-              <button onClick={(e) => closeNav()}>
-                <a>{t("community")}</a>
-              </button>
-            </Link> */}
             {me && me.status === "AUTHOR" && (
-              <Link href="/educator">
+              <Link legacyBehavior href="/educator">
                 <button onClick={(e) => closeNav()}>
                   <a>{t("my_courses")}</a>
                 </button>
               </Link>
             )}
             {me && me.status === "SAVVY_AUTHOR" && (
-              <Link href="/educator">
+              <Link legacyBehavior href="/educator">
                 <button onClick={(e) => closeNav()}>
                   <a>{t("my_courses")}</a>
                 </button>
               </Link>
             )}
             <Link
+              legacyBehavior
               href={{
                 pathname: "/blog",
               }}
@@ -293,6 +288,7 @@ const NewNav = (props) => {
             </Link>
             {me && (
               <Link
+                legacyBehavior
                 href={{
                   pathname: "/account",
                   query: { id: me.id },
@@ -309,24 +305,20 @@ const NewNav = (props) => {
             me.status &&
             me.status !== "STUDENT" &&
             me.status !== "LAWYER" && (
-              <Link href="/educator">
+              <Link legacyBehavior href="/educator">
                 <div className="my">
                   <a>{t("my_courses")}</a>
                 </div>
               </Link>
             )}
-          <Link href="/blog">
+          <Link legacyBehavior href="/blog">
             <div className="blog">
               <a>{t("blog")}</a>
             </div>
           </Link>
-          {/* <Link href="/connect">
-            <div className="blog">
-              <a>{t("community")}</a>
-            </div>
-          </Link> */}
           {me && (
             <Link
+              legacyBehavior
               href={{
                 pathname: "/account",
                 query: { id: me.id },

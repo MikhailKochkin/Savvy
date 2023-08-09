@@ -47,6 +47,10 @@ const Container = styled.div`
   p > a:hover {
     text-decoration: underline;
   }
+  select {
+    margin-bottom: 20px;
+    width: 250px;
+  }
 
   @media (max-width: 600px) {
     width: 100%;
@@ -84,19 +88,20 @@ const ButtonTwo = styled.button`
   }
 `;
 
-const Button = styled.button`
-  padding: 0.5% 1%;
-  background: ${(props) => props.theme.green};
-  width: 25%;
+const SimpleButton = styled.button`
+  width: 120px;
+  background: none;
+  padding: 5px 0;
+  border: 2px solid #69696a;
   border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin: 2% 0;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
   cursor: pointer;
-  outline: 0;
-  &:active {
-    background-color: ${(props) => props.theme.darkGreen};
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
   }
 `;
 
@@ -149,6 +154,48 @@ const UpdateNote = (props) => {
     e.target.value = null;
   };
 
+  function checkHTML(html) {
+    const checks = [
+      {
+        regex: /<h2\b[^>]*>(.*?)<\/h2>/gi,
+        msg: "The HTML does not contain a <h2> tag. A text needs a header.",
+      },
+      {
+        regex: /<img\b[^>]*>/gi,
+        msg: "The HTML does not contain an <img> tag. Visuals support learning.",
+      },
+      {
+        regex: /<h3\b[^>]*>(.*?)<\/h3>/gi,
+        msg: "The HTML does not contain a <h3> tag. Subheadings help guide the reader.",
+      },
+      {
+        regex: /<a\b[^>]*>(.*?)<\/a>/gi,
+        msg: "The HTML does not contain an <a> tag. Links provide additional context.",
+      },
+      {
+        regex: /<ul\b[^>]*>(.*?)<\/ul>/gi,
+        msg: "The HTML does not contain a <ul> tag. Unordered lists help structure information.",
+      },
+      {
+        regex: /<ol\b[^>]*>(.*?)<\/ol>/gi,
+        msg: "The HTML does not contain an <ol> tag. Ordered lists help structure information.",
+      },
+    ];
+
+    let allChecksPassed = true;
+
+    checks.forEach((check) => {
+      if (!check.regex.test(html)) {
+        console.log(check.msg);
+        allChecksPassed = false;
+      }
+    });
+
+    if (allChecksPassed) {
+      console.log("The HTML meets all the criteria.");
+    }
+  }
+
   const { id, lessonID } = props;
   return (
     <>
@@ -194,9 +241,11 @@ const UpdateNote = (props) => {
             Создать таблицу
           </a>
         </button> */}
-        <button className="switch_button" onClick={(e) => setShow(!show)}>
+        <h3>Text Editor</h3>
+
+        <SimpleButton className="switch_button" onClick={(e) => setShow(!show)}>
           {show ? t("close") : t("open")}
-        </button>
+        </SimpleButton>
 
         {show && <DynamicLoadedEditor getEditorText={getText} value={text} />}
         <h3>HTML</h3>

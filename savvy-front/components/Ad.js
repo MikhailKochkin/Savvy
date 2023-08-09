@@ -30,7 +30,7 @@ const Ad = () => {
       <div>
         ⚡️ Новая программа "Старт в гражданском праве". Поможем подготовиться к
         экзаменам и собеседованиям.{" "}
-        <Link href="/coursePage?id=cjtreu3md00fp0897ga13aktp">
+        <Link legacyBehavior href="/coursePage?id=cjtreu3md00fp0897ga13aktp">
           <a>Подробнее</a>
         </Link>
       </div>

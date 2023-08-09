@@ -147,6 +147,7 @@ const Footer = () => {
         <div className="block">
           <div>
             <Link
+              legacyBehavior
               href={{
                 pathname: "/legal",
                 query: { name: "terms" },
@@ -158,6 +159,7 @@ const Footer = () => {
           <div id="cross"> × </div>
           <div>
             <Link
+              legacyBehavior
               href={{
                 pathname: "/legal",
                 query: { name: "privacy" },
@@ -169,6 +171,7 @@ const Footer = () => {
           <div id="cross"> × </div>
           <div>
             <Link
+              legacyBehavior
               href={{
                 pathname: "/legal",
                 query: { name: "cookie" },

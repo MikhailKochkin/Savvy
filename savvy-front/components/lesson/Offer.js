@@ -82,7 +82,6 @@ const Banner = styled.div`
     border: 1px solid #fcc419;
     border-radius: 5px;
     width: 250px;
-    min-width:
     font-family: Montserrat;
     font-size: 1.7rem;
     font-weight: 400;

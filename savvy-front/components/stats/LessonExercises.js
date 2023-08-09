@@ -8,10 +8,12 @@ const LessonExercises = (props) => {
     <div>
       <>
         {l.problems.length > 0 && (
-          <button onClick={(e) => setReveal("problems")}>Задачи</button>
+          // <button onClick={(e) => setReveal("problems")}>Задачи</button>
+          <button onClick={(e) => setReveal("problems")}>Case studies</button>
         )}
         {l.problems.length > 0 && (
-          <button onClick={(e) => setReveal("")}>Закрыть</button>
+          // <button onClick={(e) => setReveal("")}>Закрыть</button>
+          <button onClick={(e) => setReveal("")}>Close</button>
         )}
         {l.problems.length > 0 && reveal == "problems" && (
           <Problems lesson={l} />

@@ -235,7 +235,8 @@ const CourseData = (props) => {
             setShow(!show);
           }}
         >
-          {show ? "Скрыть" : "Подробнее"}
+          {/* {show ? "Скрыть" : "Подробнее"} */}
+          {show ? "Close" : "Open"}
         </StyledButton>
       </Data>
 

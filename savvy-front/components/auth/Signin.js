@@ -33,7 +33,9 @@ const SIGNIN_MUTATION = gql`
 
 const Form = styled.form`
   min-width: 450px;
+  max-width: 520px;
   font-size: 1.6rem;
+  z-index: 101;
   @media (max-width: 800px) {
     min-width: 100px;
     width: 100%;
@@ -81,6 +83,9 @@ const Title = styled.div`
   line-height: 1.4;
   width: 60%;
   text-align: center;
+  @media (max-width: 800px) {
+    width: 85%;
+  }
 `;
 
 const Transit = styled.div`
@@ -138,13 +143,15 @@ const Signin = (props) => {
           onSubmit={async (e) => {
             e.preventDefault();
             const res = await signin();
-            props.closeNavBar(true);
+            props.closeNavBar ? props.closeNavBar(true) : null;
             setPassword("");
             setEmail("");
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>
-            <Title>{t("c2a2")}</Title>
+            <Title>
+              👋 {props.page == "lesson" ? t("signin_lesson_page") : t("c2a2")}
+            </Title>
             <Error error={error} />
             <Input
               type="email"

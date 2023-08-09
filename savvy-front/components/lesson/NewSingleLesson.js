@@ -389,7 +389,49 @@ const NewSingleLesson = (props) => {
   const [width, setWidth] = useState(0);
   const { t } = useTranslation("lesson");
   const onResize = (width) => setWidth(width);
-  const me = useUser();
+  let loadedMe = useUser();
+
+  let me = {
+    company: {
+      __typename: "Company",
+      id: "ck95eoaef03600794opika5y8",
+      name: "BeSavvy",
+    },
+    coursePages: [],
+    courseVisits: [],
+    email: "newuser@besavvy.app",
+    id: "clkvdew14837181f13vcbbcw0x",
+    image: "",
+    tags: ["IP/IT", "Гражданское право"],
+    lessonResults: [],
+    lessons: [],
+    myTeams: [],
+    level: {
+      __typename: "UserLevel",
+      id: "clkvdewap837241f134ehs5su6",
+      level: 1,
+    },
+    image:
+      "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1691081083/Screenshot_2023-08-03_at_20.44.30.png",
+    name: "New User",
+    new_subjects: [],
+    orders: [],
+    permissions: ["USER"],
+    status: "STUDENT",
+    studentFeedback: [],
+    surname: "",
+    teacherFeedback: [],
+    uni: {
+      __typename: "Uni",
+      id: "cjyimfz2e00lp07174jpder3m",
+      title: "Другой",
+      capacity: -7,
+      paidMonths: 0,
+    },
+    __typename: "User",
+    __proto__: Object,
+  };
+  // const me = useUser();
   useEffect(() => {
     if (props.passStep) props.passStep(0);
   }, [0]);
@@ -398,12 +440,14 @@ const NewSingleLesson = (props) => {
     fetchPolicy: "no-cache",
   });
   if (loading) return <LoadingText />;
-
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
     (l) => l.number === lesson.number + 1
   );
-
+  console.log("loadedMe", loadedMe);
+  if (loadedMe) {
+    me = loadedMe;
+  }
   let i_am_author = false;
   let i_am_student = false;
 
@@ -429,7 +473,7 @@ const NewSingleLesson = (props) => {
     if (props.passStep) props.passStep(num);
   };
   return (
-    <PleaseSignIn>
+    <>
       {/* {!i_am_student &&
         lesson.open &&
         lesson.coursePage.courseType == "FORMONEY" && (
@@ -438,19 +482,14 @@ const NewSingleLesson = (props) => {
       <div id="root"></div>
       <>
         {lesson && (
-          <AreYouEnrolled
-            openLesson={lesson.open}
-            subject={lesson.coursePage.id}
-            lessonId={lesson.id}
-          >
+          <>
             <Container>
               <ReactResizeDetector
                 handleWidth
                 handleHeight
                 onResize={onResize}
               />
-
-              {!props.isBot && (
+              {!props.isBot && !props.embedded && (
                 <Navigation
                   i_am_author={i_am_author}
                   lesson={lesson}
@@ -459,7 +498,6 @@ const NewSingleLesson = (props) => {
                 />
               )}
               <LessonPart>
-                {/* <CSSTransitionGroup transitionName="example"> */}
                 <StoryEx
                   id={props.id}
                   tasks={
@@ -475,15 +513,16 @@ const NewSingleLesson = (props) => {
                   lesson={lesson}
                   next={next}
                   coursePageID={lesson.coursePage.id}
+                  coursePage={lesson.coursePage}
                   passStep={passStep}
+                  openLesson={lesson.open}
                 />
-                {/* </CSSTransitionGroup> */}
               </LessonPart>
             </Container>{" "}
-          </AreYouEnrolled>
+          </>
         )}
       </>
-    </PleaseSignIn>
+    </>
   );
 };
 

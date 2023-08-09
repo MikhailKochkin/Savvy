@@ -43,10 +43,18 @@ const Head = styled.div`
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
+  #change_page {
+    /* width: 400px;
+    text-align: right; */
+    font-size: 1.7rem;
+  }
   span {
-    font-size: 2rem;
+    /* font-size: 1.7rem; */
+    color: #fff;
   }
   .block {
+    font-size: 1.7rem;
+    margin-left: 10px;
   }
   #back {
     &:hover {

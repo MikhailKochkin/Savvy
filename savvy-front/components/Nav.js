@@ -312,7 +312,7 @@ const Nav = (props) => {
                 </Link>
               </CourseMenu>
               <UserData>
-                <Link href="/blog">
+                <Link legacyBehavior href="/blog">
                   <div className="blog">
                     <a>{t("blog")}</a>
                   </div>
@@ -321,7 +321,7 @@ const Nav = (props) => {
                   me.status &&
                   me.status !== "STUDENT" &&
                   me.status !== "LAWYER" && (
-                    <Link href="/educator">
+                    <Link legacyBehavior href="/educator">
                       <div className="my">
                         <a>{t("my_courses")}</a>
                       </div>
@@ -351,6 +351,7 @@ const Nav = (props) => {
                 </div> */}
                 {me && (
                   <Link
+                    legacyBehavior
                     href={{
                       pathname: "/account",
                       query: { id: me.id },
@@ -361,6 +362,7 @@ const Nav = (props) => {
                 )}
                 {me ? (
                   <Link
+                    legacyBehavior
                     href={{
                       pathname: "/account",
                       query: { id: me.id },
@@ -414,6 +416,7 @@ const Nav = (props) => {
               <div className="logo">
                 {me ? (
                   <Link
+                    legacyBehavior
                     href={{
                       pathname: "/account",
                       query: { id: me.id },
@@ -442,26 +445,27 @@ const Nav = (props) => {
                   &times;
                 </a>
 
-                <Link href="/">
+                <Link legacyBehavior href="/">
                   <button onClick={(e) => closeNav()}>
                     <a>BeSavvy</a>
                   </button>
                 </Link>
                 {me && me.status === "AUTHOR" && (
-                  <Link href="/educator">
+                  <Link legacyBehavior href="/educator">
                     <button onClick={(e) => closeNav()}>
                       <a>{t("my_courses")}</a>
                     </button>
                   </Link>
                 )}
                 {me && me.status === "SAVVY_AUTHOR" && (
-                  <Link href="/educator">
+                  <Link legacyBehavior href="/educator">
                     <button onClick={(e) => closeNav()}>
                       <a>{t("my_courses")}</a>
                     </button>
                   </Link>
                 )}
                 <Link
+                  legacyBehavior
                   href={{
                     pathname: "/blog",
                   }}
@@ -472,6 +476,7 @@ const Nav = (props) => {
                 </Link>
                 {me && (
                   <Link
+                    legacyBehavior
                     href={{
                       pathname: "/account",
                       query: { id: me.id },

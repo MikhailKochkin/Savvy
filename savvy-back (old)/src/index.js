@@ -6,24 +6,24 @@ const { server, prisma } = require("./createServer");
 
 // const WORKERS = process.env.WEB_CONCURRENCY || 1;
 
-// var corsOptions = {
-//   credentials: true,
-//   origin: [
-//     process.env.FRONTEND_URL,
-//     process.env.FRONTEND_URL2,
-//     process.env.FRONTEND_URL3,
-//     process.env.FRONTEND_URL4,
-//     process.env.FRONTEND_URL5,
-//     process.env.FRONTEND_URL6,
-//     process.env.FRONTEND_URL7,
-//     process.env.FRONTEND_URL8,
-//     process.env.FRONTEND_URL9,
-//     process.env.FRONTEND_URL10,
-//     process.env.FRONTEND_URL11,
-//     process.env.FRONTEND_URL12,
-//   ],
-//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
+var corsOptions = {
+  credentials: true,
+  origin: [
+    process.env.FRONTEND_URL,
+    process.env.FRONTEND_URL2,
+    process.env.FRONTEND_URL3,
+    process.env.FRONTEND_URL4,
+    process.env.FRONTEND_URL5,
+    process.env.FRONTEND_URL6,
+    process.env.FRONTEND_URL7,
+    process.env.FRONTEND_URL8,
+    process.env.FRONTEND_URL9,
+    process.env.FRONTEND_URL10,
+    process.env.FRONTEND_URL11,
+    process.env.FRONTEND_URL12,
+  ],
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 const app = express();
 
@@ -56,7 +56,7 @@ app.use(async (req, res, next) => {
 
 server.applyMiddleware({ app, cors: corsOptions });
 
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 4000;
 
 app.listen({ port: PORT }, () =>
   console.log(

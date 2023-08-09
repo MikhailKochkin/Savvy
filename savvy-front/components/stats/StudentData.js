@@ -398,7 +398,8 @@ const Person = (props) => {
         </Square>
         <ButtonBox>
           <StyledButton className="div4" onClick={(e) => setSecret(!secret)}>
-            {secret ? "Открыть" : "Закрыть"}
+            {/* {secret ? "Открыть" : "Закрыть"} */}
+            {secret ? "Open" : "Close"}
           </StyledButton>
         </ButtonBox>
         <RegDate
@@ -422,14 +423,16 @@ const Person = (props) => {
                 target="_blank"
                 href={`https://wa.me/${student.number}?text=Добрый!`}
               >
-                Написать в Wh
+                {/* Написать в Wh */}
+                WhatsApp
               </a>
             </SendButton>
           )}
           {student.number && (
             <SendButton>
               <a target="_blank" href={`https://t.me/${student.number}`}>
-                Написать в Tg
+                {/* Написать в Tg */}
+                Telegram
               </a>
             </SendButton>
           )}
@@ -454,7 +457,8 @@ const Person = (props) => {
                     }}
                     name="CV"
                   >
-                    Приветствие
+                    {/* Приветствие */}
+                    Welcome Email
                   </SendButton>
                 );
               }}
@@ -477,11 +481,13 @@ const Person = (props) => {
                   <SendButton
                     onClick={(e) => {
                       const data = sendEmailToStudent();
-                      alert("Отправлено!");
+                      // alert("Отправлено!");
+                      alert("Email has been sent!");
                     }}
                     name="CV"
                   >
-                    Проблемное
+                    {/* Проблемное */}
+                    Problem Email
                   </SendButton>
                 );
               }}
@@ -508,7 +514,8 @@ const Person = (props) => {
                     }}
                     name="CV"
                   >
-                    Мотивационнное
+                    {/* Мотивационнное */}
+                    Motivation Email
                   </SendButton>
                 );
               }}

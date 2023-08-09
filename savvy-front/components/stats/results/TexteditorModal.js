@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import Modal from "styled-react-modal";
 
@@ -86,7 +86,7 @@ const TexteditorModal = (props) => {
           }
           element.innerHTML = `${answers[0].wrong} / ${
             answers[0].correct
-          } / <b>Ответы: </b>${[...new Set(guesses_arr)].join(", ")}`;
+          } / <b>Answers: </b>${[...new Set(guesses_arr)].join(", ")}`;
         }
       });
 

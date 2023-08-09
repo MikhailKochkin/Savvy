@@ -143,7 +143,6 @@ const CURRENT_USER_QUERY = gql`
 function useUser() {
   // 1. Get user data
   const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
-
   let visits = [
     {
       date: new Date(),

@@ -1,10 +1,11 @@
 {
-  "name": "savvvy-backend",
+  "name": "upgraded-server",
   "version": "1.0.0",
-  "description": "the backend of savvy",
+  "description": "BeSavvy.app backend",
+  "main": "index.js",
   "engines": {
-    "node": "15.5.1",
-    "npm": "7.3.0"
+    "node": "16.16.0",
+    "npm": "8.11.0"
   },
   "scripts": {
     "start": "nodemon -e js,graphql -x node src/index.js",
@@ -12,58 +13,42 @@
     "test": "jest",
     "deploy": "prisma deploy --env-file variables.env"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@a2seven/yoo-checkout": "^1.1.4",
-    "@nexus/schema": "^0.19.2",
-    "@prisma/client": "2.29.0",
-    "apollo-server": "^2.19.1",
-    "apollo-server-express": "^2.19.1",
-    "axios": "^1.3.5",
+    "@apollo/server": "^4.7.5",
+    "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.1",
+    "@mercurialweb/nexus-plugin-prisma": "^5.0.0",
+    "@prisma/client": "^5.0.0",
+    "axios": "^1.4.0",
     "babel-preset-env": "^1.7.0",
-    "bcryptjs": "2.4.3",
-    "cookie-parser": "^1.4.3",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "dotenv": "6.0.0",
-    "express": "^4.18.2",
-    "generate-password": "^1.7.0",
-    "graphql": "^15.4.0",
-    "graphql-cli": "^4.1.0",
-    "graphql-scalars": "^1.7.0",
-    "graphql-tools": "^5.0.0",
-    "heroku": "^7.38.0",
-    "heroku-cli": "^7.0.9",
-    "i": "^0.3.7",
-    "jsonwebtoken": "8.3.0",
-    "nexus": "^1.0.0",
-    "nexus-plugin-prisma": "^0.30.0",
-    "nexus-prisma": "^0.32.0",
-    "node-cron": "^3.0.2",
-    "nodemailer": "^4.6.8",
-    "nodemon": "^1.19.1",
-    "npm": "^6.14.11",
-    "npm-run-all": "^4.1.5",
-    "path": "^0.12.7",
-    "postmark": "^2.2.4",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.1",
+    "graphql": "^16.6.0",
+    "http": "^0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "nexus": "^1.3.0",
+    "nodemon": "^3.0.1",
+    "postmark": "^3.0.18",
     "qrcode-terminal": "^0.12.0",
-    "ssl-root-cas": "^1.3.1",
-    "throng": "^4.0.0",
-    "util": "^0.10.4",
-    "whatsapp-web.js": "^1.21.0",
-    "yandex-checkout": "^1.0.13"
+    "util": "^0.12.5",
+    "whatsapp-web.js": "^1.21.0"
   },
-  "license": "MIT",
   "repository": {
-    "url": "mikhailkochkin.com"
+    "url": ""
   },
   "babel": {
     "presets": [
       "env"
     ]
   },
-  "main": "index.js",
-  "author": "M.Kochkin",
   "devDependencies": {
-    "prisma": "2.29.0"
+    "prisma": "^5.0.0"
   }
 }

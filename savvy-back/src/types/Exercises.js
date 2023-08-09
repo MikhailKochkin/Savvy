@@ -1,4 +1,4 @@
-const { objectType, inputObjectType } = require("@nexus/schema");
+const { objectType, inputObjectType } = require("nexus");
 
 const NewTest = objectType({
   name: "NewTest",

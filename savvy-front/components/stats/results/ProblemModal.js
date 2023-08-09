@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import Modal from "styled-react-modal";
 import moment from "moment";
@@ -235,9 +235,7 @@ class ProblemModal extends Component {
                   {t.answer.length < 200 ? (
                     <span>{parse(t.answer)}</span>
                   ) : (
-                    <span>
-                      {parse(t.answer.substring(0, 200) + "...")}
-                    </span>
+                    <span>{parse(t.answer.substring(0, 200) + "...")}</span>
                   )}
                   <Modal
                     isOpen={this.state.isOpen}
@@ -251,17 +249,18 @@ class ProblemModal extends Component {
                           .filter((t) => t.problem.id === problem.id)
                           .map((t) => <Span>{parse(t.answer)}</Span>)
                       ) : (
-                        <span>Не выполнена</span>
+                        <span>No data</span>
                       )}
                     </StyledModal>
                   </Modal>
                   <Button onClick={this.toggleModal}>
-                    <a>Развернуть</a>
+                    <a>Open</a>
                   </Button>
+                  <br />
                 </>
               ))
           ) : (
-            <span>Не выполнена</span>
+            <span>No data</span>
           )}
         </div>
       </Box>

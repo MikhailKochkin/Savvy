@@ -221,12 +221,18 @@ const LessonData = (props) => {
                 ).toFixed(2) * 100}
               %{" "}
             </div>
-            <div className="div2">Заходов: {res.visitsNumber} </div>
+            <div className="div2">
+              {/* Заходов:  */}
+              Visits:
+              {res.visitsNumber}{" "}
+            </div>
             <div className="div3">
-              Первый заход: {moment(res.createdAt).format("LLL")}
+              {/* Первый заход:  */}
+              First visit: {moment(res.createdAt).format("LLL")}
             </div>
             <div className="div4">
-              Последний заход: {moment(res.updatedAt).format("LLL")}
+              Last visit: {/* Последний заход:{" "} */}
+              {moment(res.updatedAt).format("LLL")}
               {"–"}
               {moment(res.updatedAt).fromNow()}
             </div>

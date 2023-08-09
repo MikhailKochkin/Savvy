@@ -275,6 +275,7 @@ const LessonHeader = (props) => {
           !student_list.includes(me.id) &&
           published && (
             <Link
+              legacyBehavior
               href={{
                 pathname: "/lesson",
                 query: {
@@ -303,6 +304,7 @@ const LessonHeader = (props) => {
           !student_list.includes(me.id) &&
           published && (
             <Link
+              legacyBehavior
               href={{
                 pathname: "/lesson",
                 query: {
@@ -331,6 +333,7 @@ const LessonHeader = (props) => {
           !lesson.open &&
           published && (
             <Link
+              legacyBehavior
               href={{
                 pathname: "/lesson",
                 query: {
@@ -356,6 +359,7 @@ const LessonHeader = (props) => {
           visit == undefined &&
           (me.id === author || me.permissions.includes("ADMIN")) && (
             <Link
+              legacyBehavior
               href={{
                 pathname: "/lesson",
                 query: {
@@ -380,6 +384,7 @@ const LessonHeader = (props) => {
           !lesson.published &&
           (me.id === author || me.permissions.includes("ADMIN")) && (
             <Link
+              legacyBehavior
               // author or admin or openLesson if the lesson is not published.
               href={{
                 pathname: "/lesson",

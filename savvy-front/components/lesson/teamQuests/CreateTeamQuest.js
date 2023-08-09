@@ -113,7 +113,6 @@ const CreateTeamQuest = (props) => {
     } else {
       let old_tasks = [...tasks];
       let new_tasks = old_tasks.filter((t) => t.value !== id);
-      console.log("delete new tasks", new_tasks, id);
       setTasks(new_tasks);
     }
   };

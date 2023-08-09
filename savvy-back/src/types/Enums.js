@@ -1,4 +1,4 @@
-const { enumType } = require("@nexus/schema");
+const { enumType } = require("nexus");
 
 const CourseType = enumType({
   name: "CourseType",

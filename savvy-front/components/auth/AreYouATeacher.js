@@ -17,6 +17,7 @@ const AreYouATeacher = (props) => {
         <div>
           <h1>Вы не имеете прав на просмотр содержимого данной страницы.</h1>
           <Link
+            legacyBehavior
             href={{
               pathname: "/courses",
             }}

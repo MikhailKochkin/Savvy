@@ -58,17 +58,13 @@ const Styles = styled.div`
   border-bottom: 2px solid #d6d6d6;
   padding: 20px 0;
   margin-top: 40px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* border-top: 2px solid #d6d6d6; */
-  background: #fff;
+  background: #e7eff6;
   z-index: 10;
-  /* position: fixed; */
   bottom: 0px;
-  /* height: 100px; */
   .choose {
     width: 100%;
     height: 42px;
@@ -406,55 +402,48 @@ const MobileBuy = (props) => {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
   }
 
+  let currency_symbol;
+  if (coursePage.currency == "ruble") {
+    currency_symbol = "₽";
+  } else if (coursePage.currency == "usd") {
+    currency_symbol = "$";
+  } else if (coursePage.currency == "ruble") {
+    currency_symbol = "$";
+  }
+
   return (
     <Styles id="buy_section">
-      {props.coursePage.courseType == "FORMONEY" && (
-        <>
-          {/* {installments && (
-            <PriceBox>
-              <div>
-                {installments}{" "}
-                {getNoun(installments, "платёж", "платежа", "платежей")} по
-              </div>
-              {installments && (
-                <div className="price_small">
-                  {price} {coursePage.currency == "ruble" ? "₽" : "$"}{" "}
-                </div>
-              )}
-            </PriceBox>
-          )} */}
-          {/* {!installments && <div className="price">{price} ₽</div>} */}
-          {/* {!installments && !props.coursePage.discountPrice && (
-            <div className="price">
-              {price} {coursePage.currency == "ruble" ? "₽" : "$"}
-            </div>
-          )} */}
-          {/* {!installments && props.coursePage.discountPrice && (
-            <div className="price">
-              <div>
-                {props.coursePage.discountPrice}{" "}
-                <span className="discount">{price}</span>{" "}
-                {coursePage.currency == "ruble" ? "₽" : "$"}
-              </div>
-              <div className="bubble">
-                -
-                {100 - parseInt((props.coursePage.discountPrice / price) * 100)}
-                %
-              </div>
-            </div>
-          )} */}
-        </>
-      )}
+      {/* Part 1. Header. Open course button*/}
+
       {props.coursePage.courseType == "PUBLIC" && (
-        <div className="price">{t("free")}</div>
+        <>
+          <div className="price">{t("free")}</div>
+          <ButtonOpen
+            id="coursePage_to_demolesson"
+            onClick={async (e) => {
+              e.preventDefault();
+              let enroll = await enrollOnCourse({
+                variables: {
+                  id: me.id,
+                  coursePageId: coursePage.id,
+                },
+              });
+              Router.push({
+                pathname: "/course",
+                query: {
+                  id: coursePage.id,
+                },
+              });
+            }}
+          >
+            {enroll_loading ? "..." : t("enroll")}
+          </ButtonOpen>
+        </>
       )}
       {props.coursePage.courseType == "FORMONEY" && (
         <>
           <ButtonOpen
             id="coursePage_to_demolesson"
-            // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
-            // target="_blank"
-
             onClick={(e) => {
               e.preventDefault();
               Router.push({
@@ -470,28 +459,7 @@ const MobileBuy = (props) => {
           </ButtonOpen>
         </>
       )}
-      {props.coursePage.courseType == "PUBLIC" && (
-        <ButtonOpen
-          id="coursePage_to_demolesson"
-          onClick={async (e) => {
-            e.preventDefault();
-            let enroll = await enrollOnCourse({
-              variables: {
-                id: me.id,
-                coursePageId: coursePage.id,
-              },
-            });
-            Router.push({
-              pathname: "/course",
-              query: {
-                id: coursePage.id,
-              },
-            });
-          }}
-        >
-          {enroll_loading ? "..." : t("enroll")}
-        </ButtonOpen>
-      )}
+      {/* Part 2. Course Info */}
 
       <Info>
         {props.coursePage.courseType !== "PUBLIC" && (
@@ -523,86 +491,94 @@ const MobileBuy = (props) => {
               </select>
             </div>
           )}
-        <ButtonBuy
-          id="mobile_coursePage_buy_button"
-          onClick={async (e) => {
-            e.preventDefault();
-            if (!me) {
-              alert(`Set up an account on BeSavvy`);
-              toggleModal();
-            } else {
-              const res = await createOrder({
-                variables: {
-                  coursePageId: coursePage.id,
-                  price: props.coursePage.discountPrice
-                    ? props.coursePage.discountPrice
-                    : price,
-                  userId: me.id,
-                  promocode: promo,
-                },
-              });
-              location.href = res.data.createOrder.url;
-            }
-          }}
-        >
-          {installments && (loading_data ? `...` : t("buy_installments"))}
-          {!installments && (loading_data ? `...` : t("buy"))}
-        </ButtonBuy>
-        <ButtonBuySmall
-          id="coursePage_buy_button"
-          onClick={(e) => getInstallments()}
-        >
-          Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
-        </ButtonBuySmall>
-
-        {props.coursePage.courseType !== "PUBLIC" && (
-          <div className="open">
-            <div className="">{t("after")}</div>
-            <OpenCourse
-              id="coursePage_open_course_button"
+        {props.coursePage.currency == "ruble" && (
+          <>
+            <ButtonBuy
+              id="mobile_coursePage_buy_button"
               onClick={async (e) => {
                 e.preventDefault();
-                let results = [];
-                let checked_orders = await Promise.all(
-                  my_orders.map(async (o) => {
-                    let updated_res = await updateOrderAuto({
-                      variables: {
-                        userId: me.id,
-                        id: o.id,
-                      },
-                    });
-                    return updated_res;
-                  })
-                );
-
-                const checked_orders2 = checked_orders.filter(
-                  (c) =>
-                    c.data.updateOrderAuto !== null &&
-                    c.data.updateOrderAuto.isPaid == true
-                );
-
-                if (checked_orders2.length > 0) {
-                  let enroll = await enrollOnCourse({
-                    variables: {
-                      id: me.id,
-                      coursePageId: coursePage.id,
-                    },
-                  });
-                  Router.push({
-                    pathname: "/course",
-                    query: {
-                      id: coursePage.id,
-                    },
-                  });
+                if (!me) {
+                  alert(`Set up an account on BeSavvy`);
+                  toggleModal();
                 } else {
-                  alert("Payment not found.");
+                  const res = await createOrder({
+                    variables: {
+                      coursePageId: coursePage.id,
+                      price: props.coursePage.discountPrice
+                        ? props.coursePage.discountPrice
+                        : price,
+                      userId: me.id,
+                      promocode: promo,
+                    },
+                  });
+                  location.href = res.data.createOrder.url;
                 }
               }}
             >
-              {updated_loading || enroll_loading ? t("check") : t("open_acess")}
-            </OpenCourse>
-          </div>
+              {installments && (loading_data ? `...` : t("buy_installments"))}
+              {!installments && (loading_data ? `...` : t("buy"))}
+            </ButtonBuy>
+            <ButtonBuySmall
+              id="coursePage_buy_button"
+              onClick={(e) => getInstallments()}
+            >
+              Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
+            </ButtonBuySmall>
+          </>
         )}
+        {/* Part 3. Get access */}
+
+        {props.coursePage.currency == "ruble" &&
+          props.coursePage.courseType !== "PUBLIC" && (
+            <div className="open">
+              <div className="">{t("after")}</div>
+              <OpenCourse
+                id="coursePage_open_course_button"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  let results = [];
+                  let checked_orders = await Promise.all(
+                    my_orders.map(async (o) => {
+                      let updated_res = await updateOrderAuto({
+                        variables: {
+                          userId: me.id,
+                          id: o.id,
+                        },
+                      });
+                      return updated_res;
+                    })
+                  );
+
+                  const checked_orders2 = checked_orders.filter(
+                    (c) =>
+                      c.data.updateOrderAuto !== null &&
+                      c.data.updateOrderAuto.isPaid == true
+                  );
+
+                  if (checked_orders2.length > 0) {
+                    let enroll = await enrollOnCourse({
+                      variables: {
+                        id: me.id,
+                        coursePageId: coursePage.id,
+                      },
+                    });
+                    Router.push({
+                      pathname: "/course",
+                      query: {
+                        id: coursePage.id,
+                      },
+                    });
+                  } else {
+                    alert("Payment not found.");
+                  }
+                }}
+              >
+                {updated_loading || enroll_loading
+                  ? t("check")
+                  : t("open_acess")}
+              </OpenCourse>
+            </div>
+          )}
       </Info>
       <StyledModal
         isOpen={isOpen}
