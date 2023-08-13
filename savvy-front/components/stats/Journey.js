@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Bar } from "react-chartjs-2";
+import { Chart, registerables } from "chart.js";
 
 const Styles = styled.div`
   padding: 2%;
@@ -13,6 +14,8 @@ const Styles = styled.div`
 `;
 
 const Journey = (props) => {
+  Chart.register(...registerables);
+
   let data_labels = props.maxes.map(function (item) {
     return {
       progress: item.progress,

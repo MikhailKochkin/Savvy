@@ -78,6 +78,13 @@ input BoolNullableListFilter {
   isEmpty: Boolean
 }
 
+input Borders {
+  bottom: String
+  left: String
+  right: String
+  top: String
+}
+
 type BotDialogue {
   createdAt: DateTime!
   id: String!
@@ -1264,9 +1271,11 @@ input DocumentWhereUniqueInput {
 }
 
 input Element {
+  borders: Borders
   inDoc: Boolean
   isTest: Boolean
   place: Int
+  rows: Int
   size: Int
   text: String
   type: String

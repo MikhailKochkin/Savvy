@@ -557,7 +557,7 @@ const Message = styled.div`
 // }));
 
 const Feed = (props) => {
-  const { me, coursePageId, coursePage, lesson_structure } = props;
+  const { me, coursePageId, coursePage, lesson_structure, lessonId } = props;
   let lessonElements;
   let next_lesson = false;
 
@@ -578,6 +578,7 @@ const Feed = (props) => {
         me={me}
         coursePage={coursePage}
         lesson_structure={lesson_structure}
+        lessonId={lessonId}
       />,
     ];
     next_lesson = false;
@@ -585,7 +586,6 @@ const Feed = (props) => {
     lessonElements = props.components;
     next_lesson = true;
   }
-  console.log("lesson coursePage", coursePage);
 
   const [num, setNum] = useState(0);
   const [result, setResult] = useState(
@@ -711,20 +711,6 @@ const Feed = (props) => {
       }
     }
   }, [props.my_result]);
-  // let color;
-  // if (lessonElements[num].props.complexity == 1) {
-  //   color = "#55a630";
-  // } else if (lessonElements[num].props.complexity == 2) {
-  //   color = "#3a86ff";
-  // } else if (lessonElements[num].props.complexity == 3) {
-  //   color = "#f4d35e";
-  // } else if (lessonElements[num].props.complexity == 4) {
-  //   color = "#f95738";
-  // } else if (lessonElements[num].props.complexity == 5) {
-  //   color = "#201C35";
-  // } else {
-  //   color = "#55a630";
-  // }
   return (
     <>
       <Styles>
@@ -1035,12 +1021,8 @@ const CustomProgressBar = ({ myResult, lessonItems }) => {
     ? (((myResult + 1) * time_coef) / lesson_length) * 100
     : 0;
 
-  console.log(myResult * time_coef, lesson_length);
   let time_left = parseInt(lesson_length - (myResult + 1) * time_coef);
   let time_passed = parseInt(myResult * time_coef);
-  console.log("time_left", parseInt(time_left));
-  console.log("time_passed", parseInt(myResult * time_coef));
-  console.log("total time", lesson_length);
 
   const router = useRouter();
   const { t } = useTranslation("lesson");

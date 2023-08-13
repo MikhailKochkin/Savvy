@@ -202,8 +202,20 @@ const Element = inputObjectType({
     t.string("text");
     t.int("place");
     t.int("size");
+    t.int("rows");
     t.boolean("inDoc");
     t.boolean("isTest");
+    t.field("borders", { type: "Borders" });
+  },
+});
+
+const Borders = inputObjectType({
+  name: "Borders",
+  definition(t) {
+    t.string("top");
+    t.string("right");
+    t.string("bottom");
+    t.string("left");
   },
 });
 
@@ -345,4 +357,5 @@ module.exports = {
   ProgramModule,
   ReviewsList,
   Review,
+  Borders,
 };

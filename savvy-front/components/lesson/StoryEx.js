@@ -474,6 +474,7 @@ const StoryEx = (props) => {
           showArrow={showArrow}
           my_result={my_result}
           passStep={passStep}
+          lessonId={props.id}
         />
       )}
     </Container>

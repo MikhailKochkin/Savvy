@@ -72,6 +72,12 @@ export interface NexusGenInputs {
     hasSome?: boolean[] | null; // [Boolean!]
     isEmpty?: boolean | null; // Boolean
   }
+  Borders: { // input type
+    bottom?: string | null; // String
+    left?: string | null; // String
+    right?: string | null; // String
+    top?: string | null; // String
+  }
   BotDialogueOrderByWithRelationInput: { // input type
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -940,9 +946,11 @@ export interface NexusGenInputs {
     userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
   }
   Element: { // input type
+    borders?: NexusGenInputs['Borders'] | null; // Borders
     inDoc?: boolean | null; // Boolean
     isTest?: boolean | null; // Boolean
     place?: number | null; // Int
+    rows?: number | null; // Int
     size?: number | null; // Int
     text?: string | null; // String
     type?: string | null; // String

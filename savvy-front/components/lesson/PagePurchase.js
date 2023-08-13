@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import moment from "moment";
-import parse from "html-react-parser";
+import Router from "next/router";
 import calculateSum from "../../functions.js";
+import { CURRENT_USER_QUERY } from "../User";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -66,6 +66,23 @@ const CREATE_CLIENT = gql`
       number: $number
       coursePageId: $coursePageId
     ) {
+      id
+    }
+  }
+`;
+
+const UPDATE_ORDER = gql`
+  mutation UPDATE_ORDER($id: String!, $userId: String!) {
+    updateOrderAuto(id: $id, userId: $userId) {
+      id
+      isPaid
+    }
+  }
+`;
+
+const ENROLL_COURSE_MUTATION = gql`
+  mutation ENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
+    enrollOnCourse(id: $id, coursePageId: $coursePageId) {
       id
     }
   }
@@ -179,6 +196,19 @@ const Button = styled.button`
   }
 `;
 
+const GetAccess = styled.div`
+  margin-top: 25px;
+  font-size: 1.8rem;
+  width: 30%;
+  text-align: center;
+  line-height: 1.4;
+  font-weight: 600;
+  span {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
 const Button2 = styled.button`
   font-size: 2rem;
   background: none;
@@ -203,7 +233,8 @@ const Button2 = styled.button`
 `;
 
 const PagePurchase = (props) => {
-  const { me, offer, coursePageId, coursePage, lesson_structure } = props;
+  const { me, offer, coursePageId, coursePage, lesson_structure, lessonId } =
+    props;
   // Add a ref for the component
   const bannerRef = useRef(null);
   // State for tracking visibility
@@ -218,15 +249,35 @@ const PagePurchase = (props) => {
     useMutation(CREATE_CLIENT);
 
   const [
+    updateOrderAuto,
+    { data: updated_data, loading: updated_loading, error: updated_error },
+  ] = useMutation(UPDATE_ORDER);
+
+  const [
     createOrder,
     { data: order_data, loading: loading_data, error: error_data },
   ] = useMutation(CREATE_ORDER_MUTATION);
+
+  const [
+    enrollOnCourse,
+    { data: enroll_data, loading: enroll_loading, error: enroll_error },
+  ] = useMutation(ENROLL_COURSE_MUTATION, {
+    refetchQueries: [
+      CURRENT_USER_QUERY, // DocumentNode object parsed with gql
+      "me", // Query name
+    ],
+  });
+
+  let my_orders = [];
+  if (me) {
+    my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
+  }
 
   const handleButtonClick1 = async () => {
     const res = await createOrder({
       variables: {
         coursePageId: coursePageId,
-        price: coursePage.price,
+        price: 1,
         userId: me.id,
       },
     });
@@ -275,6 +326,52 @@ const PagePurchase = (props) => {
           </Right>
         </Block>
       </BiggerBlock>
+      <GetAccess>
+        Чтобы открыть доступ к курсу после оплаты,{" "}
+        <span
+          onClick={async (e) => {
+            e.preventDefault();
+            let checked_orders = await Promise.all(
+              my_orders.map(async (o) => {
+                let updated_res = await updateOrderAuto({
+                  variables: {
+                    userId: me.id,
+                    id: o.id,
+                  },
+                });
+                return updated_res;
+              })
+            );
+
+            const checked_orders2 = checked_orders.filter(
+              (c) =>
+                c.data.updateOrderAuto !== null &&
+                c.data.updateOrderAuto.isPaid == true
+            );
+
+            if (checked_orders2.length > 0) {
+              let enroll = await enrollOnCourse({
+                variables: {
+                  id: me.id,
+                  coursePageId: coursePageId,
+                },
+              });
+              Router.push({
+                pathname: "/lesson",
+                query: {
+                  id: lessonId,
+                  type: "story",
+                },
+              });
+            } else {
+              alert("Payment not found.");
+            }
+          }}
+        >
+          нажмите сюда
+          {updated_loading || enroll_loading ? ". Проверем платеж..." : ""}
+        </span>
+      </GetAccess>
     </Styles>
   );
 };

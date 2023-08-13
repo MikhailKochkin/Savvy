@@ -2499,6 +2499,7 @@ const Mutation = mutationType({
             answer: {
               set: [...answer],
             },
+            lessonID: lessonId,
             ...args,
           },
         });
@@ -3415,7 +3416,6 @@ const Mutation = mutationType({
         // 1.
 
         // const result = await yandex.createPayment({
-        console.log("args", args);
         const user = await ctx.prisma.user.findUnique({
           where: { id: args.userId },
         });

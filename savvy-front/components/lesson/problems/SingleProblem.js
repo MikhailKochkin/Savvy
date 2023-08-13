@@ -341,10 +341,6 @@ const SingleProblem = (props) => {
               onFinish={onFinish}
             />
           )}
-          {console.log(
-            "problem.steps.problemItems",
-            problem.steps.problemItems
-          )}
           {problem.steps && problem.steps.problemItems.length >= 1 && (
             <NewInteractive
               lesson={lesson}

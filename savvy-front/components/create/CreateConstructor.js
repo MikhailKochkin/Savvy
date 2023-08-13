@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
@@ -72,39 +72,6 @@ const ButtonTwo = styled.button`
   }
 `;
 
-const TextBox = styled.div`
-  font-size: 1.6rem;
-  width: 90%;
-  border: 1px solid #c4c4c4;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  outline: 0;
-  padding: 2%;
-  font-size: 1.6rem;
-  margin-top: 3%;
-  .header {
-    border-bottom: 1px solid #c4c4c4;
-    width: 100%;
-  }
-  @media (max-width: 800px) {
-    width: 350px;
-  }
-`;
-
-const Advice = styled.p`
-  font-size: 1.5rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2%;
-  margin: 30px 0;
-  width: 80%;
-  div {
-    margin-bottom: 1.5%;
-  }
-`;
-
 const Explainer = styled.div`
   width: 700px;
   margin-bottom: 20px;
@@ -135,8 +102,6 @@ const Block = styled.div`
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
-  /* box-shadow: 0px 0px 3px 0px rgb(199 199 199); */
-  /* padding: 10px 5%; */
   grid-template-columns: ${(props) => {
     return `repeat(${props.columns}, 1fr)`;
   }};
@@ -148,20 +113,98 @@ const Element = styled.div`
   width: 100%;
   height: 100%;
   border: 1px dashed #c4c4c4;
-  /* padding: 3% 5%; */
-  grid-column: ${(props) => {
-    return `1/${props.size}`;
+  border-top: ${(props) =>
+    `1px ${props.borders.top !== "none" ? "solid" : "dashed"} ${
+      props.borders.top !== "none" ? "#98A0A6" : "#c4c4c4"
+    }`};
+  border-right: ${(props) =>
+    `1px ${props.borders.right !== "none" ? "solid" : "dashed"} ${
+      props.borders.right !== "none" ? "#98A0A6" : "#c4c4c4"
+    }`};
+  border-bottom: ${(props) =>
+    `1px ${props.borders.bottom !== "none" ? "solid" : "dashed"} ${
+      props.borders.bottom !== "none" ? "#98A0A6" : "#c4c4c4"
+    }`};
+  border-left: ${(props) =>
+    `1px ${props.borders.left !== "none" ? "solid" : "dashed"} ${
+      props.borders.left !== "none" ? "#98A0A6" : "#c4c4c4"
+    }`};
+
+  grid-column-start: ${(props) => {
+    return props.startColumn;
   }};
+  grid-column-end: span ${(props) => props.size};
+  grid-row-end: span ${(props) => props.rows};
+  img {
+    width: 100%;
+    height: auto;
+  }
+  .border-dropdown {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+  .border-dropdown button.active {
+    background-color: #ddd; /* Gray background to indicate "pressed" */
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); /* Inner shadow for depth */
+  }
+  .box-container {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .box {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+    text-align: center;
+    line-height: 50px;
+    font-size: 10px;
+  }
+
+  .up {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .left {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .right {
+    grid-row: 2;
+    grid-column: 3;
+  }
+
+  .down {
+    grid-row: 3;
+    grid-column: 2;
+  }
+
   .button {
     border: none;
     background: none;
     /* width: 30px; */
     height: 30px;
-  font-size: 1.2rem;
+    font-size: 1.2rem;
     display: flex;
     cursor: pointer;
     flex-direction: row;
-    align-items; center;
+    align-items: center;
     justify-content: center;
     transition: ease 0.3s;
   }
@@ -237,9 +280,20 @@ const CreateConstructor = (props) => {
   // const [hasText, setHasText] = useState(false);
   // const [type, setType] = useState("equal");
   const [columnsNum, setColumns] = useState(3);
+  const [startingColumns, setStartingColumns] = useState([]);
 
   const { t } = useTranslation("lesson");
   const router = useRouter();
+
+  useEffect(() => {
+    let columns = 0;
+    const newStartingColumns = elements.map((el) => {
+      const start = columns + 1;
+      columns += el.size;
+      return start;
+    });
+    setStartingColumns(newStartingColumns);
+  }, [elements]);
 
   const [elements, setElements] = useState([
     {
@@ -247,27 +301,48 @@ const CreateConstructor = (props) => {
       inDoc: true,
       isTest: false,
       size: 0,
+      rows: 1, // This means the element will span 1 row by default.
       text: "<p></p>",
       type: "",
       value: "",
+      borders: {
+        top: "none",
+        right: "none",
+        bottom: "none",
+        left: "none",
+      },
     },
     {
       place: 1,
       inDoc: true,
       isTest: false,
       size: 0,
+      rows: 1, // This means the element will span 1 row by default.
       text: "<p></p>",
       type: "",
       value: "",
+      borders: {
+        top: "none",
+        right: "none",
+        bottom: "none",
+        left: "none",
+      },
     },
     {
       place: 2,
       inDoc: true,
       isTest: false,
       size: 0,
+      rows: 1, // This means the element will span 1 row by default.
       text: "<p></p>",
       type: "",
       value: "",
+      borders: {
+        top: "none",
+        right: "none",
+        bottom: "none",
+        left: "none",
+      },
     },
   ]);
 
@@ -276,9 +351,16 @@ const CreateConstructor = (props) => {
     inDoc: true,
     isTest: false,
     size: 0,
+    rows: 1, // This means the element will span 1 row by default.
     text: "<p></p>",
     type: "",
     value: "",
+    borders: {
+      top: "none",
+      right: "none",
+      bottom: "none",
+      left: "none",
+    },
   };
 
   const myCallback2 = (dataFromChild, name) => {
@@ -394,6 +476,7 @@ const CreateConstructor = (props) => {
           return (
             <ConElement
               el={el}
+              startColumn={startingColumns[i]}
               className={"header" + i}
               id={i + 1}
               i={i}
@@ -450,6 +533,15 @@ export default CreateConstructor;
 
 const ConElement = (props) => {
   const [el, setEl] = useState(props.el);
+  const [borders, setBorders] = useState({
+    top: "none",
+    right: "none",
+    bottom: "none",
+    left: "none",
+  });
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
   const myCallback = (dataFromChild, index) => {
     let new_el = { ...el };
@@ -459,7 +551,7 @@ const ConElement = (props) => {
   };
 
   return (
-    <Element size={el.size}>
+    <Element size={el.size} rows={el.rows} borders={borders}>
       <Settings>
         <div className="box">
           <input
@@ -488,24 +580,149 @@ const ConElement = (props) => {
           />
           <label for="vehicle3">⛔️</label>
         </div>
+        <div className="box-container">
+          <div
+            className="box up"
+            onClick={(e) => {
+              let new_el = { ...el };
+              let new_rows = new_el.rows;
+              if (el.rows == 1) {
+                new_rows = 1;
+              } else {
+                new_rows = new_rows - 1;
+              }
+              new_el.rows = new_rows;
 
-        <div
-          className="box"
-          onClick={(e) => {
-            let new_el = { ...el };
-            let new_size = new_el.size;
-            if (el.size == 0) {
-              new_size = 3;
-            } else {
-              new_size = new_size + 1;
-            }
-            new_el.size = new_size;
+              setEl(new_el);
+              props.getData(new_el, props.i);
+            }}
+          >
+            <div> ⬆️ </div>
+          </div>
+          <div
+            className="box left"
+            onClick={(e) => {
+              let new_el = { ...el };
+              let new_size = new_el.size;
+              if (el.size == 0) {
+                new_size = 0;
+              } else {
+                new_size = new_size - 1;
+              }
+              new_el.size = new_size;
 
-            setEl(new_el);
-            props.getData(new_el, props.i);
-          }}
-        >
-          <div> ➡️ </div>
+              setEl(new_el);
+              props.getData(new_el, props.i);
+            }}
+          >
+            <div> ⬅️ </div>
+          </div>
+          <div
+            className="box right"
+            onClick={(e) => {
+              let new_el = { ...el };
+              let new_size = new_el.size;
+              if (el.size == 0) {
+                new_size = 2;
+              } else {
+                new_size = new_size + 1;
+              }
+              new_el.size = new_size;
+
+              setEl(new_el);
+              props.getData(new_el, props.i);
+            }}
+          >
+            <div> ➡️ </div>
+          </div>
+
+          <div
+            className="box down"
+            onClick={(e) => {
+              let new_el = { ...el };
+              let new_rows = new_el.rows + 1;
+              new_el.rows = new_rows;
+
+              setEl(new_el);
+              props.getData(new_el, props.i);
+            }}
+          >
+            <div> ⬇️ </div>
+          </div>
+        </div>
+        <div>
+          <button onClick={toggleDropdown}>Set Borders</button>
+          {dropdownOpen && (
+            <div className="border-dropdown">
+              <button
+                onClick={() => {
+                  const updatedEl = {
+                    ...borders,
+                    top: borders.top === "none" ? "1px solid #98A0A6" : "none",
+                  };
+                  setBorders(updatedEl);
+                  let new_el = { ...el };
+                  new_el.borders = updatedEl;
+                  setEl(new_el);
+                  props.getData(new_el, props.i);
+                }}
+                className={borders.top !== "none" ? "active" : ""}
+              >
+                Top Border
+              </button>
+              <button
+                onClick={() => {
+                  const updatedEl = {
+                    ...borders,
+                    right:
+                      borders.right === "none" ? "1px solid #98A0A6" : "none",
+                  };
+                  setBorders(updatedEl);
+                  let new_el = { ...el };
+                  new_el.borders = updatedEl;
+                  setEl(new_el);
+                  props.getData(new_el, props.i);
+                }}
+                className={borders.right !== "none" ? "active" : ""}
+              >
+                Right Border
+              </button>
+              <button
+                onClick={() => {
+                  const updatedEl = {
+                    ...borders,
+                    bottom:
+                      borders.bottom === "none" ? "1px solid #98A0A6" : "none",
+                  };
+                  setBorders(updatedEl);
+                  let new_el = { ...el };
+                  new_el.borders = updatedEl;
+                  setEl(new_el);
+                  props.getData(new_el, props.i);
+                }}
+                className={borders.bottom !== "none" ? "active" : ""}
+              >
+                Bottom Border
+              </button>
+              <button
+                onClick={() => {
+                  const updatedEl = {
+                    ...borders,
+                    left:
+                      borders.left === "none" ? "1px solid #98A0A6" : "none",
+                  };
+                  setBorders(updatedEl);
+                  let new_el = { ...el };
+                  new_el.borders = updatedEl;
+                  setEl(new_el);
+                  props.getData(new_el, props.i);
+                }}
+                className={borders.left !== "none" ? "active" : ""}
+              >
+                Left Border
+              </button>
+            </div>
+          )}
         </div>
       </Settings>
       <DynamicLoadedEditor

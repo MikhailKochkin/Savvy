@@ -137,7 +137,9 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
   const [updatedSteps, setUpdatedSteps] = useState(
-    props.steps.problemItems.length > 0 ? props.steps.problemItems : []
+    props.steps && props.steps.problemItems.length > 0
+      ? props.steps.problemItems
+      : []
   );
 
   // const [nodeID, setNodeID] = useState(props.nodeID);
@@ -168,7 +170,7 @@ const UpdateProblem = (props) => {
     notes,
     nodeID,
     me,
-    nodeTyp,
+    nodeType,
     steps,
     lesson,
     problem,
@@ -204,30 +206,41 @@ const UpdateProblem = (props) => {
         />
         {/* <h3>Выберите задания для формата "Экзамен" и "Задача":</h3> */}
         {nodeID && nodeType && (
-          <ProblemBuilder
-            elements={[...newTests, ...quizes, ...notes]}
-            quizes={quizes}
-            newTests={newTests}
-            notes={notes}
-            nodeType={nodeType}
-            nodeID={nodeID}
-            lessonID={lessonID}
-            // lesson={lesson}
-            getNode={handleChange}
-          />
+          <>
+            <div>
+              Please keep in mind that this is the old architecture of problems.
+              If you want to update it, the best solution is to recreate the
+              problem using the new tools. You will not have to create
+              everything from scratch. Just set up a new chain of existing
+              questions.
+            </div>
+            <ProblemBuilder
+              elements={[...newTests, ...quizes, ...notes]}
+              quizes={quizes}
+              newTests={newTests}
+              notes={notes}
+              nodeType={nodeType}
+              nodeID={nodeID}
+              lessonID={lessonID}
+              // lesson={lesson}
+              getNode={handleChange}
+            />
+          </>
         )}
       </div>
-      <div className="canvas_container">
-        <DndProvider backend={HTML5Backend}>
-          <CanvasProblemBuilder
-            lesson={props.lesson}
-            me={props.me}
-            lessonID={lesson.id}
-            getSteps={getSteps}
-            items={steps.problemItems}
-          />
-        </DndProvider>
-      </div>
+      {!nodeID && !nodeType && (
+        <div className="canvas_container">
+          <DndProvider backend={HTML5Backend}>
+            <CanvasProblemBuilder
+              lesson={props.lesson}
+              me={props.me}
+              lessonID={lesson.id}
+              getSteps={getSteps}
+              items={steps.problemItems}
+            />
+          </DndProvider>
+        </div>
+      )}
       <Mutation
         mutation={UPDATE_PROBLEM_MUTATION}
         variables={{

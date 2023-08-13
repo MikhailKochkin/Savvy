@@ -108,6 +108,11 @@ const Block = styled.div`
     return `repeat(${props.columns}, 1fr)`;
   }};
   grid-template-rows: auto;
+  img {
+    width: 100px;
+    height: 100px;
+  }
+  grid-template-rows: auto;
   margin: 30px 0;
   @media (max-width: 800px) {
     width: 95%;
@@ -117,15 +122,36 @@ const Block = styled.div`
 const Element = styled.div`
   display: ${(props) => (props.display ? "block" : "none")};
   font-size: 1.4rem;
-  min-height: 100px;
+  min-height: 150px;
   width: 100%;
   height: 100%;
-  border: ${(props) =>
-    !props.isTest ? "1px solid #fff" : "1px dashed #c4c4c4"};
+  border-top: ${(props) =>
+    `1px ${
+      props.borders && props.borders.top !== "none" ? "solid" : "dashed"
+    } ${props.borders && props.borders.top !== "none" ? "#98A0A6" : "#fff"}`};
+  border-right: ${(props) =>
+    `1px ${
+      props.borders && props.borders.right !== "none" ? "solid" : "dashed"
+    } ${props.borders && props.borders.right !== "none" ? "#98A0A6" : "#fff"}`};
+  border-bottom: ${(props) =>
+    `1px ${
+      props.borders && props.borders.bottom !== "none" ? "solid" : "dashed"
+    } ${
+      props.borders && props.borders.bottom !== "none" ? "#98A0A6" : "#fff"
+    }`};
+  border-left: ${(props) =>
+    `1px ${
+      props.borders && props.borders.left !== "none" ? "solid" : "dashed"
+    } ${props.borders && props.borders.left !== "none" ? "#98A0A6" : "#fff"}`};
   padding: 15px;
-  grid-column: ${(props) => {
-    return `1/${props.size}`;
-  }};
+  grid-column-start: ${(props) => props.startColumn};
+  grid-column-end: span ${(props) => props.size};
+  grid-row-end: span ${(props) => props.rows};
+  img {
+    width: 100%;
+    height: auto;
+  }
+
   /* Start the shake animation and make the animation last for 0.5 seconds */
   animation: ${(props) => (props.shiver ? "shake 1s" : "none")};
   @keyframes shake {
@@ -192,6 +218,7 @@ const Variants = styled.div`
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
   let elements = construction.elements.elements;
+  console.log("elements", elements);
   const [check, setCheck] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
@@ -200,7 +227,7 @@ const NewConstructor = (props) => {
   const [answersCheck, setAnswersCheck] = useState(
     elements.map((t) => (t.isTest ? false : true))
   );
-
+  const [startingColumns, setStartingColumns] = useState([]);
   const [currentConfig, setCurrentConfig] = useState([]);
   const [shiverList, setShiverList] = useState([]);
   const [used, setUsed] = useState(
@@ -211,6 +238,16 @@ const NewConstructor = (props) => {
   );
 
   const { t } = useTranslation("lesson");
+
+  useEffect(() => {
+    let columns = 0;
+    const newStartingColumns = elements.map((el) => {
+      const start = columns + 1;
+      columns += el.size;
+      return start;
+    });
+    setStartingColumns(newStartingColumns);
+  }, [elements]);
 
   const shuffle = (array) => {
     let m = array.length,
@@ -289,6 +326,8 @@ const NewConstructor = (props) => {
         </BlueButton>
       )}
       <Styles>
+        {console.log("element", elements)}
+
         {!update && (
           <>
             <Block columns={construction.columnsNum}>
@@ -296,10 +335,13 @@ const NewConstructor = (props) => {
                 <ConElement
                   text={t.text}
                   size={t.size}
+                  rows={t.rows}
+                  borders={t.borders}
                   isTest={t.isTest}
                   className={"header" + i}
                   id={i + 1}
                   i={i}
+                  startColumn={startingColumns[i]}
                   place={t.place}
                   variants={variants}
                   elems={elements}
@@ -358,7 +400,6 @@ const Number_Input = styled.input`
 
 const ConElement = (props) => {
   const [size, setSize] = useState(props.size);
-  console.log("size", size);
   const [value, setValue] = useState();
   const [correct, setCorrect] = useState(null);
   const {
@@ -366,6 +407,9 @@ const ConElement = (props) => {
     isTest,
     text,
     i,
+    startColumn,
+    borders,
+    rows,
     check,
     isShown,
     variants,
@@ -387,7 +431,7 @@ const ConElement = (props) => {
       props.getAnswer(false, i, parseInt(e.target.value));
     }
   };
-
+  console.log("borders", borders);
   return (
     <Element
       shiver={shiver}
@@ -395,7 +439,10 @@ const ConElement = (props) => {
       correct={correct}
       check={check}
       size={size}
+      rows={rows}
       display={display}
+      borders={borders}
+      // startColumn={startColumn}
       colored={text !== "<p></p>"}
     >
       {isTest && (
