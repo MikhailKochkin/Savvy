@@ -139,20 +139,28 @@ const Element = styled.div`
   height: 100%;
   border: 1px dashed #c4c4c4;
   border-top: ${(props) =>
-    `1px ${props.borders.top !== "none" ? "solid" : "dashed"} ${
-      props.borders.top !== "none" ? "#98A0A6" : "#c4c4c4"
+    `1px ${
+      props.borders && props.borders.top !== "none" ? "solid" : "dashed"
+    } ${
+      props.borders && props.borders.top !== "none" ? "#98A0A6" : "#c4c4c4"
     }`};
   border-right: ${(props) =>
-    `1px ${props.borders.right !== "none" ? "solid" : "dashed"} ${
-      props.borders.right !== "none" ? "#98A0A6" : "#c4c4c4"
+    `1px ${
+      props.borders && props.borders.right !== "none" ? "solid" : "dashed"
+    } ${
+      props.borders && props.borders.right !== "none" ? "#98A0A6" : "#c4c4c4"
     }`};
   border-bottom: ${(props) =>
-    `1px ${props.borders.bottom !== "none" ? "solid" : "dashed"} ${
-      props.borders.bottom !== "none" ? "#98A0A6" : "#c4c4c4"
+    `1px ${
+      props.borders && props.borders.bottom !== "none" ? "solid" : "dashed"
+    } ${
+      props.borders && props.borders.bottom !== "none" ? "#98A0A6" : "#c4c4c4"
     }`};
   border-left: ${(props) =>
-    `1px ${props.borders.left !== "none" ? "solid" : "dashed"} ${
-      props.borders.left !== "none" ? "#98A0A6" : "#c4c4c4"
+    `1px ${
+      props.borders && props.borders.left !== "none" ? "solid" : "dashed"
+    } ${
+      props.borders && props.borders.left !== "none" ? "#98A0A6" : "#c4c4c4"
     }`};
   grid-column-start: ${(props) => props.startColumn};
   grid-column-end: span ${(props) => props.size};
@@ -239,6 +247,7 @@ const Settings = styled.div`
   align-items: center;
   justify-content: space-between;
   font-size: 1.2rem;
+
   .box {
     display: flex;
     flex-direction: row;
@@ -329,7 +338,6 @@ const UpdateNewConstructor = (props) => {
   };
 
   const getData = (val, i) => {
-    console.log("val", val);
     const new_elements = [...elements];
     new_elements[i] = val;
 
@@ -606,17 +614,16 @@ const ConElement = (props) => {
             <div className="border-dropdown">
               <button
                 onClick={() => {
-                  const updatedEl = {
-                    ...borders,
-                    top: borders.top === "none" ? "1px solid #98A0A6" : "none",
-                  };
+                  let updatedEl = { ...el.borders };
+                  updatedEl.top =
+                    updatedEl.top === "none" ? "1px solid #98A0A6" : "none";
                   setBorders(updatedEl);
                   let new_el = { ...el };
                   new_el.borders = updatedEl;
                   setEl(new_el);
                   props.getData(new_el, props.i);
                 }}
-                className={borders.top !== "none" ? "active" : ""}
+                className={borders && borders.top !== "none" ? "active" : ""}
               >
                 Top Border
               </button>
@@ -624,25 +631,10 @@ const ConElement = (props) => {
                 onClick={() => {
                   const updatedEl = {
                     ...borders,
-                    right:
-                      borders.right === "none" ? "1px solid #98A0A6" : "none",
-                  };
-                  setBorders(updatedEl);
-                  let new_el = { ...el };
-                  new_el.borders = updatedEl;
-                  setEl(new_el);
-                  props.getData(new_el, props.i);
-                }}
-                className={borders.right !== "none" ? "active" : ""}
-              >
-                Right Border
-              </button>
-              <button
-                onClick={() => {
-                  const updatedEl = {
-                    ...borders,
                     bottom:
-                      borders.bottom === "none" ? "1px solid #98A0A6" : "none",
+                      borders && borders.bottom === "none"
+                        ? "1px solid #98A0A6"
+                        : "none",
                   };
                   setBorders(updatedEl);
                   let new_el = { ...el };
@@ -650,7 +642,7 @@ const ConElement = (props) => {
                   setEl(new_el);
                   props.getData(new_el, props.i);
                 }}
-                className={borders.bottom !== "none" ? "active" : ""}
+                className={borders && borders.bottom !== "none" ? "active" : ""}
               >
                 Bottom Border
               </button>
@@ -658,8 +650,10 @@ const ConElement = (props) => {
                 onClick={() => {
                   const updatedEl = {
                     ...borders,
-                    left:
-                      borders.left === "none" ? "1px solid #98A0A6" : "none",
+                    right:
+                      borders && borders.right === "none"
+                        ? "1px solid #98A0A6"
+                        : "none",
                   };
                   setBorders(updatedEl);
                   let new_el = { ...el };
@@ -667,7 +661,26 @@ const ConElement = (props) => {
                   setEl(new_el);
                   props.getData(new_el, props.i);
                 }}
-                className={borders.left !== "none" ? "active" : ""}
+                className={borders && borders.right !== "none" ? "active" : ""}
+              >
+                Right Border
+              </button>
+              <button
+                onClick={() => {
+                  const updatedEl = {
+                    ...borders,
+                    left:
+                      borders && borders.left === "none"
+                        ? "1px solid #98A0A6"
+                        : "none",
+                  };
+                  setBorders(updatedEl);
+                  let new_el = { ...el };
+                  new_el.borders = updatedEl;
+                  setEl(new_el);
+                  props.getData(new_el, props.i);
+                }}
+                className={borders && borders.left !== "none" ? "active" : ""}
               >
                 Left Border
               </button>

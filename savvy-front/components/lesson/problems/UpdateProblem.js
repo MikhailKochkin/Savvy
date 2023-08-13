@@ -157,8 +157,6 @@ const UpdateProblem = (props) => {
   };
 
   const getSteps = (val) => {
-    console.log("note 4", val);
-
     setUpdatedSteps([...val]);
   };
 

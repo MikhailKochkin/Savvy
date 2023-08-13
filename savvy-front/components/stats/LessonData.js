@@ -269,7 +269,6 @@ const LessonData = (props) => {
           No data
         </div>
       )}
-      {console.log("show", show, data)}
       {show && data !== undefined && (
         <>
           {lesson.structure.lessonItems.map((l) => {

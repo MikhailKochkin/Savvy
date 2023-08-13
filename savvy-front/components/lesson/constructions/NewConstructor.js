@@ -218,7 +218,6 @@ const Variants = styled.div`
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
   let elements = construction.elements.elements;
-  console.log("elements", elements);
   const [check, setCheck] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
@@ -326,8 +325,6 @@ const NewConstructor = (props) => {
         </BlueButton>
       )}
       <Styles>
-        {console.log("element", elements)}
-
         {!update && (
           <>
             <Block columns={construction.columnsNum}>
@@ -431,7 +428,6 @@ const ConElement = (props) => {
       props.getAnswer(false, i, parseInt(e.target.value));
     }
   };
-  console.log("borders", borders);
   return (
     <Element
       shiver={shiver}

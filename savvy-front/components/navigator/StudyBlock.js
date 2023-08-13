@@ -177,7 +177,6 @@ const StudyBlock = (props) => {
   };
 
   const passStep = (val) => {
-    console.log("val", val);
     props.getLessonProgress(val.toString());
   };
 

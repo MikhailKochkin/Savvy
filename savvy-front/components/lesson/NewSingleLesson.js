@@ -443,7 +443,6 @@ const NewSingleLesson = (props) => {
   let next = lesson.coursePage.lessons.find(
     (l) => l.number === lesson.number + 1
   );
-  console.log("loadedMe", loadedMe);
   if (loadedMe) {
     me = loadedMe;
   }

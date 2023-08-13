@@ -112,8 +112,6 @@ const Money = (props) => {
     // );
   }, 0);
 
-  console.log("money_to_authors", money_to_authors * 0.9);
-
   return (
     <Styles>
       <div>Выплаты от {moment(prev_date).format("LLL")}</div>

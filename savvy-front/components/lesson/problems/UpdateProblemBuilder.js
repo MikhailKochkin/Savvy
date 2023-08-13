@@ -35,7 +35,6 @@ const UpdateProblemBuilder = (props) => {
   }
 
   const getData = (id, type, index) => {
-    console.log("note 2", id, type, index);
     if (values.find((v) => v.id == id)) {
       console.log("found");
     } else {

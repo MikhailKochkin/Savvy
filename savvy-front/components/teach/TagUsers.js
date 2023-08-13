@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import UserRow from "./UserRow";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import dynamic from "next/dynamic";
 
@@ -195,7 +195,6 @@ const TagUsers = () => {
               </a>
             </button>
           )}
-          {console.log("f.messages", f.messages)}
           <Messages>
             {f.messages.map((m) => {
               return (

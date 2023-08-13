@@ -259,7 +259,6 @@ const Simulator = (props) => {
     new_data.datasets[0].data = arr3;
     setData(new_data);
     setAvailableFeedback(arr4);
-    console.log(val, goal);
     if (val >= goal) {
       props.getData(true, props.index);
     }

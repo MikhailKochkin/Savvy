@@ -235,7 +235,6 @@ const Interactive = (props) => {
           let isRevealed =
             me.id == numbered_users.filter((nu) => nu.number == i)[0].id ||
             testResults.length > 0;
-          console.log("isRevealed", isRevealed, testResults.length > 0);
           return (
             <Concealed isRevealed={isRevealed}>
               <div className="task">

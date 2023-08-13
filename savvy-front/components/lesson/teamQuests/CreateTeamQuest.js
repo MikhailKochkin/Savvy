@@ -105,7 +105,6 @@ const CreateTeamQuest = (props) => {
       type: type,
       number: tasks.length,
     };
-    console.log("id", id);
     if (tasks.filter((t) => t.value == id).length == 0) {
       let old_tasks = [...tasks];
       let new_tasks = [...old_tasks, new_el];
@@ -184,7 +183,6 @@ const CreateTeamQuest = (props) => {
                 lessonId: props.lessonId,
               },
             });
-            console.log("res", res);
             props.getResult(res);
           }}
         >

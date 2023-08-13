@@ -99,7 +99,6 @@ const AnswerOption = (props) => {
   };
 
   const changeCourse = (e) => {
-    console.log("props.lastBlock", props.lastBlock);
     if (!choose && !props.hidden) {
       props.onAnswerSelected(
         props.number,
@@ -134,7 +133,6 @@ const AnswerOption = (props) => {
             number={props.number}
             choose={choose}
             onClick={(e) => {
-              console.log(222);
               sendMessage({
                 variables: {
                   userId: props.me.id,

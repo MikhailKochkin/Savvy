@@ -186,7 +186,6 @@ const UpdateNote = (props) => {
 
     checks.forEach((check) => {
       if (!check.regex.test(html)) {
-        console.log(check.msg);
         allChecksPassed = false;
       }
     });
