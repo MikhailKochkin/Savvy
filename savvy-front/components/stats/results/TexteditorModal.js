@@ -26,28 +26,30 @@ const TextBox = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0;
+  width: 60%;
   #id {
-    color: #001f4e;
+    background: #ffe2e1;
+    color: #3e3e3e;
+    padding: 3px;
   }
   .editor_note {
-    color: #81b29a;
+    background: #d2fde1;
+    color: #3e3e3e;
+    padding: 3px;
   }
   .editor_error {
-    color: #e07a5f !important;
+    background: #ffe2e1;
+    color: #fff2c8;
+    padding: 3px;
   }
   .editor_quiz {
-    color: #f2cc8f;
+    background: #f2cc8f;
+    padding: 3px;
   }
-`;
-
-const Block = styled.div`
-  padding-bottom: 2%;
-  margin-bottom: 3%;
-  border-bottom: 1px solid #edefed;
 `;
 
 const Text = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.6rem;
 `;
 
 const TexteditorModal = (props) => {
@@ -60,15 +62,13 @@ const TexteditorModal = (props) => {
       res = results.filter((t) => t.textEditor.id === texteditor.id);
       const error_elements = document
         .getElementById(texteditor.id)
-        .querySelectorAll(".editor_error");
+        .querySelectorAll("[error_data]");
       const note_elements = document
         .getElementById(texteditor.id)
         .querySelectorAll(".editor_note");
-
       const quiz_elements = document
         .getElementById(texteditor.id)
         .querySelectorAll(".editor_quiz");
-
       error_elements.forEach((element) => {
         if (
           res.filter((r) => r.correct == element.getAttribute("error_data"))
@@ -78,15 +78,19 @@ const TexteditorModal = (props) => {
             (r) => r.correct == element.getAttribute("error_data")
           );
           var guesses_arr = answers.map(function (obj) {
-            return obj.guess;
+            return { guess: obj.guess, result: obj.result };
           });
 
           if (guesses_arr.length == 0) {
             guesses_arr = ["––"];
           }
-          element.innerHTML = `${answers[0].wrong} / ${
+          element.innerHTML = `${answers[0].wrong} (Target: ${
             answers[0].correct
-          } / <b>Answers: </b>${[...new Set(guesses_arr)].join(", ")}`;
+          } / Answers: ${[
+            ...new Set(
+              guesses_arr.map((g) => `${g.result ? "✅" : "❌"} ${g.guess}`)
+            ),
+          ].join(", ")})`;
         }
       });
 
@@ -98,18 +102,11 @@ const TexteditorModal = (props) => {
         var guesses_arr = answers.map(function (obj) {
           return obj.guess;
         });
-        element.innerHTML = `${element.innerHTML} / ${
-          guesses_arr.length > 0
-            ? "<b>Элемент открыт</b>"
-            : "<b>Элемент не открыт</b>"
-        }`;
+        element.innerHTML = `${element.innerHTML} (${
+          guesses_arr.length > 0 ? "<b>Opened</b>" : "<b>Not opened</b>"
+        })`;
       });
       quiz_elements.forEach((element) => {
-        // if (
-        //   res.filter((r) => r.correct == element.getAttribute("quiz_data"))
-        //     .length > 0
-        // ) {
-
         let answers = res.filter(
           (r) => r.correct == element.getAttribute("answer")
         );
@@ -121,7 +118,7 @@ const TexteditorModal = (props) => {
         if (guesses_arr.length == 0) {
           guesses_arr = ["––"];
         }
-        element.innerHTML = `${element.innerHTML}. <b>Ответы:</b> ${[
+        element.innerHTML = `${element.innerHTML}. <b>Answers:</b> ${[
           ...new Set(guesses_arr),
         ].join(", ")}`;
         // }
@@ -132,24 +129,10 @@ const TexteditorModal = (props) => {
     <Box>
       <TextBox id={texteditor.id}>
         <Text>
-          <b>Редактор: </b>
+          <h2>Doc Editor </h2>
           {parse(texteditor.text)}
         </Text>
       </TextBox>
-      <div className="column">
-        {/* {results && results.length > 0
-          ? results
-              .filter((t) => t.textEditor.id === texteditor.id)
-              .map((t) => (
-                <Block>
-                  <div>⛔️: {t.wrong} </div>
-                  <div>✅: {t.correct} </div>
-                  <div>❓: {t.guess} </div>
-                  <div>Попытка {t.attempts} </div>
-                </Block>
-              ))
-          : null} */}
-      </div>
     </Box>
   );
 };

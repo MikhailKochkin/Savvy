@@ -382,9 +382,11 @@ const ClientData = (props) => {
         emailGroups.find((el) => el.name === emailType),
         last_email?.subject
       );
+
       if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
-        num = num + 1;
         console.log("next_email", next_email);
+
+        num = num + 1;
         const res = sendMessage({
           variables: {
             userId: c.id,

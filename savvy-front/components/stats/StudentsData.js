@@ -62,14 +62,29 @@ const LESSONS_QUERY = gql`
       text
       name
       open
+      type
       assignment
       number
+      user {
+        id
+        name
+        surname
+      }
       structure
       coursePage {
         id
       }
       forum {
         id
+      }
+      shots {
+        id
+        title
+        parts
+        comments
+        user {
+          id
+        }
       }
       #   lessonResults {
       #     id
@@ -93,12 +108,14 @@ const LESSONS_QUERY = gql`
         answers
         correct
         next
+        type
       }
       quizes {
         id
         question
         answer
         next
+        type
       }
       forum {
         rating {
@@ -130,11 +147,21 @@ const LESSONS_QUERY = gql`
       notes {
         id
         text
+        type
         next
+      }
+      chats {
+        id
+        name
+        messages
+        user {
+          id
+        }
       }
       problems {
         id
         text
+        steps
         nodeID
         nodeType
       }
@@ -147,6 +174,8 @@ const LESSONS_QUERY = gql`
         id
         name
         variants
+        elements
+        columnsNum
         answer
       }
       documents {
@@ -179,9 +208,9 @@ const StudentsData = (props) => {
     variables: { id: props.id },
   });
 
-  if (loading) return <p>Загружаем информацию о курсе...</p>;
-  if (loading1) return <p>Загружаем информацию о студентах...</p>;
-  if (loading2) return <p>Загружаем информацию об уроках...</p>;
+  if (loading) return <p>Loading course data...</p>;
+  if (loading1) return <p>Loading students data...</p>;
+  if (loading2) return <p>Loading lessons data...</p>;
 
   let coursePage = data.coursePage;
   let students = data1.users;

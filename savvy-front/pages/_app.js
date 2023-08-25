@@ -35,7 +35,7 @@ function MyApp({ Component, apollo, pageProps }) {
       s.async = 1;
       d.getElementsByTagName("head")[0].appendChild(s);
     })();
-  });
+  }, [0]);
 
   return (
     <ApolloProvider client={apollo}>

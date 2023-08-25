@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Mutation } from "@apollo/client/react/components";
-import { gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import _ from "lodash";
-// import Button from "@material-ui/core/Button";
-// import { withStyles } from "@material-ui/core/styles";
 import parse from "html-react-parser";
-
 import { useTranslation } from "next-i18next";
 
 import AnswerOption from "./AnswerOption";
@@ -15,15 +11,23 @@ import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import { CURRENT_USER_QUERY } from "../../User";
 import Chat from "../questions/Chat";
 
-// const StyledButton = withStyles({
-//   root: {
-//     width: "15%",
-//     height: "45px",
-//     marginRight: "2%",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//   },
-// })(Button);
+const CREATE_TESTRESULT_MUTATION = gql`
+  mutation CREATE_TESTRESULT_MUTATION(
+    $answer: String
+    $answerArray: [String]
+    $testID: String
+    $lessonID: String
+  ) {
+    createTestResult(
+      answer: $answer
+      testID: $testID
+      lessonID: $lessonID
+      answerArray: $answerArray
+    ) {
+      id
+    }
+  }
+`;
 
 const IconBlock = styled.div`
   display: flex;
@@ -73,18 +77,6 @@ const IconBlock = styled.div`
     color: #8f93a3;
     max-width: 80px;
     margin: 0 7px;
-  }
-`;
-
-const CREATE_TESTRESULT_MUTATION = gql`
-  mutation CREATE_TESTRESULT_MUTATION(
-    $answer: String
-    $testID: String
-    $lessonID: String
-  ) {
-    createTestResult(answer: $answer, testID: $testID, lessonID: $lessonID) {
-      id
-    }
   }
 `;
 
@@ -315,6 +307,8 @@ const Option = styled.div`
 `;
 
 const SingleTest = (props) => {
+  const { exam, story, ifWrong, ifRight, me, comments, miniforum, author } =
+    props;
   const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
   const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
   const [answer, setAnswer] = useState([]); // what is the answer?
@@ -331,6 +325,10 @@ const SingleTest = (props) => {
   const [isExperienced, setIsExperienced] = useState(false);
 
   const { t } = useTranslation("lesson");
+
+  const [createTestResult, { data, loading, error }] = useMutation(
+    CREATE_TESTRESULT_MUTATION
+  );
 
   const getTestData = (number, answer) => {
     handleAnswerSelected(number, answer);
@@ -409,6 +407,14 @@ const SingleTest = (props) => {
 
     setCommentsList(comments_arr);
     const res2 = await res();
+    createTestResult({
+      variables: {
+        testID: props.id,
+        lessonID: props.lessonID,
+        answer: answer.join(", "),
+        answerArray: answer,
+      },
+    });
   };
 
   const onCheck = async () => {
@@ -483,10 +489,15 @@ const SingleTest = (props) => {
     const res1 = await setAttempts(attempts + 1);
 
     setSent(true);
+    createTestResult({
+      variables: {
+        testID: props.id,
+        lessonID: props.lessonID,
+        answer: answer.join(", "),
+        answerArray: answer,
+      },
+    });
   };
-
-  const { exam, story, ifWrong, ifRight, me, comments, miniforum, author } =
-    props;
 
   const switchUpdate = () => {
     setUpdate(!update);
@@ -545,7 +556,6 @@ const SingleTest = (props) => {
           </div>
           <div className="answer">
             <IconBlock>
-              {/* <img className="icon" src="../../static/flash.svg" /> */}
               <div className="icon2">
                 {me.surname
                   ? `${me.name[0]}${me.surname[0]}`
@@ -588,42 +598,28 @@ const SingleTest = (props) => {
           {/* 3. Кнопка ответа  */}
 
           <Group>
-            <Mutation
-              mutation={CREATE_TESTRESULT_MUTATION}
-              variables={{
-                testID: props.id,
-                lessonID: props.lessonID,
-                answer: answer.join(", "),
+            <MiniButton
+              className="button"
+              id="but1"
+              onClick={async (e) => {
+                // Stop the form from submitting
+                e.preventDefault();
+                // call the mutation
+                if (answer.length < 1) {
+                  setZero(true);
+                } else {
+                  if (props.type === "FORM") {
+                    console.log(0);
+                    const res1 = await onSend();
+                  } else {
+                    console.log(1);
+                    const res = await onCheck();
+                  }
+                }
               }}
-              refetchQueries={[{ query: CURRENT_USER_QUERY }]}
             >
-              {(createTestResult, { loading, error }) => (
-                <MiniButton
-                  // block={block}
-                  className="button"
-                  id="but1"
-                  onClick={async (e) => {
-                    // Stop the form from submitting
-                    e.preventDefault();
-                    // call the mutation
-                    if (answer.length < 1) {
-                      setZero(true);
-                    } else {
-                      if (props.type === "FORM") {
-                        console.log(0);
-                        const res1 = await onSend();
-                      } else {
-                        console.log(1);
-                        const res = await onCheck();
-                      }
-                      const res0 = await createTestResult();
-                    }
-                  }}
-                >
-                  {t("check")}
-                </MiniButton>
-              )}
-            </Mutation>
+              {t("check")}
+            </MiniButton>
           </Group>
 
           {/* 4. Верный ответ. Поздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}

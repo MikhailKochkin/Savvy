@@ -481,7 +481,6 @@ const Analyzer = (props) => {
           if (type === "chat" && i == 0) {
             communicationElements.push(el);
             communicationLevel += typeLevels.communication[type];
-            console.log(1);
           } else if (type === "chat" && i !== 0) {
             theoryElements.push(el);
             theoryLevel += typeLevels.theory[type];
@@ -494,15 +493,9 @@ const Analyzer = (props) => {
                 .find((nt) => nt.id === el.id)
                 ?.type?.toLowerCase() == "form")
           ) {
-            console.log(
-              2,
-              lesson.newTests.find((nt) => nt.id === el.id)
-            );
-
             communicationElements.push(el);
             communicationLevel += typeLevels.communication[type];
           } else if (lessonType === "communication") {
-            console.log(3);
             communicationElements.push(el);
             communicationLevel += typeLevels.communication[type];
           } else if (lessonType === "theory") {
@@ -514,8 +507,6 @@ const Analyzer = (props) => {
           }
         }
       });
-
-    console.log("total_number", communicationLevel, theoryLevel, practiceLevel);
 
     // get the numbers
     const total_number = communicationLevel + theoryLevel + practiceLevel;
@@ -543,8 +534,6 @@ const Analyzer = (props) => {
       problem: 5,
     },
   };
-
-  console.log(elements);
 
   const getRecommendations = (elements) => {
     const recommendations = [];

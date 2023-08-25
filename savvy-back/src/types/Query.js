@@ -101,6 +101,10 @@ const Query = queryType({
           orderBy: { createdAt: "desc" },
           where: { lessonId, student: { id: { equals: userId } } },
         });
+        const shotResults = await ctx.prisma.shotResult.findMany({
+          orderBy: { createdAt: "desc" },
+          where: { lessonId, student: { id: { equals: userId } } },
+        });
         const constructionResults =
           await ctx.prisma.constructionResult.findMany({
             orderBy: { createdAt: "desc" },
@@ -116,6 +120,7 @@ const Query = queryType({
         });
         return {
           testResults,
+          shotResults,
           quizResults,
           textEditorResults,
           problemResults,

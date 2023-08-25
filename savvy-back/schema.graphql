@@ -2,6 +2,13 @@
 ### Do not make changes to this file directly
 
 
+input AnswerItem {
+  correctAnswer: String
+  id: String
+  res: String
+  studentAnswer: String
+}
+
 type Application {
   applicantId: String!
   createdAt: DateTime!
@@ -624,6 +631,10 @@ type Construction {
   variants: [String!]!
 }
 
+input ConstructionAnswers {
+  answers: [AnswerItem]
+}
+
 input ConstructionListRelationFilter {
   every: ConstructionWhereInput
   none: ConstructionWhereInput
@@ -636,11 +647,13 @@ input ConstructionOrderByRelationAggregateInput {
 
 type ConstructionResult {
   answer: String
+  answers: Json
   attempts: Int
   construction: Construction
   constructionID: String
   constructionId: String
   createdAt: DateTime!
+  elements: Json
   id: String!
   inputs: [String!]!
   lesson: Lesson
@@ -666,11 +679,13 @@ input ConstructionResultWhereInput {
   NOT: [ConstructionResultWhereInput!]
   OR: [ConstructionResultWhereInput!]
   answer: StringNullableFilter
+  answers: JsonNullableFilter
   attempts: IntNullableFilter
   construction: ConstructionWhereInput
   constructionID: StringNullableFilter
   constructionId: StringNullableFilter
   createdAt: DateTimeFilter
+  elements: JsonNullableFilter
   id: StringFilter
   inputs: StringNullableListFilter
   lesson: LessonWhereInput
@@ -686,11 +701,13 @@ input ConstructionResultWhereUniqueInput {
   NOT: [ConstructionResultWhereInput!]
   OR: [ConstructionResultWhereInput!]
   answer: StringNullableFilter
+  answers: JsonNullableFilter
   attempts: IntNullableFilter
   construction: ConstructionWhereInput
   constructionID: StringNullableFilter
   constructionId: StringNullableFilter
   createdAt: DateTimeFilter
+  elements: JsonNullableFilter
   id: String
   inputs: StringNullableListFilter
   lesson: LessonWhereInput
@@ -2421,7 +2438,7 @@ type Mutation {
   createCommunityMember(email: String, name: String, number: String, subscription: String, surname: String): PaymentInfo2
   createConfUser(conf_number: Int, email: String): ConfUser
   createConstruction(answer: [String], columnsNum: Int, elements: ElementsList, hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
-  createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
+  createConstructionResult(answer: String, answers: ConstructionAnswers, attempts: Int, constructionId: String, elements: ElementsList, lessonId: String): ConstructionResult
   createCoursePage(audience: String, courseType: String, description: String, image: String, published: Boolean, result: String, title: String): CoursePage
   createCourseVisit(coursePageId: String, studentId: String, visitsNumber: Int): CourseVisit
   createDocument(lessonId: String, title: String): Document
@@ -2446,7 +2463,7 @@ type Mutation {
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createProgram(audience: String, description: String, goals: [String], header: [String], image: String, methods: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String): Program
   createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
-  createQuizResult(answer: String, correct: Boolean, lessonId: String, quiz: String): QuizResult
+  createQuizResult(answer: String, comment: String, correct: Boolean, lessonId: String, quiz: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
@@ -2456,7 +2473,7 @@ type Mutation {
   createTeamQuestResult(answer: String, lessonId: String, teamQuestId: String): TeamQuestResult
   createTestPractice(failureText: String, intro: String, lessonId: String, successText: String, tasks: [String], tasksNum: Int, text: String): TestPractice
   createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
-  createTestResult(answer: String, lessonID: String, testID: String): TestResult
+  createTestResult(answer: String, answerArray: [String], lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, type: String, wrong: String): TextEditorResult
   createUseful(buttonText: String, header: String, image: String, link: String, name: String, tags: [String]): Useful
@@ -2520,7 +2537,7 @@ type Mutation {
   updateProblem(complexity: Int, id: String, isSecret: Boolean, steps: ProblemStructure, text: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
+  updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateScore(id: String, score: Int): User
   updateShot(comments: [String], id: String, parts: [String], title: String): Shot
@@ -3281,6 +3298,7 @@ input ProblemOrderByWithRelationInput {
 type ProblemResult {
   answer: String
   createdAt: DateTime!
+  depth: Int!
   id: String!
   lesson: Lesson
   lessonID: String
@@ -3307,6 +3325,7 @@ input ProblemResultOrderByRelationAggregateInput {
 input ProblemResultOrderByWithRelationInput {
   answer: SortOrderInput
   createdAt: SortOrder
+  depth: SortOrder
   id: SortOrder
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
@@ -3326,6 +3345,7 @@ input ProblemResultWhereInput {
   OR: [ProblemResultWhereInput!]
   answer: StringNullableFilter
   createdAt: DateTimeFilter
+  depth: IntFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -3345,6 +3365,7 @@ input ProblemResultWhereUniqueInput {
   OR: [ProblemResultWhereInput!]
   answer: StringNullableFilter
   createdAt: DateTimeFilter
+  depth: IntFilter
   id: String
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -3715,6 +3736,7 @@ input QuizOrderByWithRelationInput {
 type QuizResult {
   answer: String
   attempts: Int
+  comment: String
   correct: Boolean
   createdAt: DateTime!
   id: String!
@@ -3741,6 +3763,7 @@ input QuizResultOrderByRelationAggregateInput {
 input QuizResultOrderByWithRelationInput {
   answer: SortOrderInput
   attempts: SortOrderInput
+  comment: SortOrderInput
   correct: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
@@ -3760,6 +3783,7 @@ input QuizResultWhereInput {
   OR: [QuizResultWhereInput!]
   answer: StringNullableFilter
   attempts: IntNullableFilter
+  comment: StringNullableFilter
   correct: BoolNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
@@ -3779,6 +3803,7 @@ input QuizResultWhereUniqueInput {
   OR: [QuizResultWhereInput!]
   answer: StringNullableFilter
   attempts: IntNullableFilter
+  comment: StringNullableFilter
   correct: BoolNullableFilter
   createdAt: DateTimeFilter
   id: String
@@ -4028,6 +4053,7 @@ input ShotOrderByRelationAggregateInput {
 type ShotResult {
   answer: String!
   createdAt: DateTime!
+  depth: Int!
   id: String!
   lesson: Lesson
   lessonId: String
@@ -4054,6 +4080,7 @@ input ShotResultWhereInput {
   OR: [ShotResultWhereInput!]
   answer: StringFilter
   createdAt: DateTimeFilter
+  depth: IntFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -4072,6 +4099,7 @@ input ShotResultWhereUniqueInput {
   OR: [ShotResultWhereInput!]
   answer: StringFilter
   createdAt: DateTimeFilter
+  depth: IntFilter
   id: String
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -4199,6 +4227,7 @@ type Stats {
   feedbacks: [Feedback]
   problemResults: [ProblemResult]
   quizResults: [QuizResult]
+  shotResults: [ShotResult]
   testResults: [TestResult]
   textEditorResults: [TextEditorResult]
 }
@@ -4544,6 +4573,7 @@ input TestPracticeWhereUniqueInput {
 
 type TestResult {
   answer: String
+  answerArray: [String!]!
   attempts: Int
   createdAt: DateTime!
   id: String!
@@ -4570,6 +4600,7 @@ input TestResultOrderByRelationAggregateInput {
 
 input TestResultOrderByWithRelationInput {
   answer: SortOrderInput
+  answerArray: SortOrder
   attempts: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
@@ -4589,6 +4620,7 @@ input TestResultWhereInput {
   NOT: [TestResultWhereInput!]
   OR: [TestResultWhereInput!]
   answer: StringNullableFilter
+  answerArray: StringNullableListFilter
   attempts: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
@@ -4608,6 +4640,7 @@ input TestResultWhereUniqueInput {
   NOT: [TestResultWhereInput!]
   OR: [TestResultWhereInput!]
   answer: StringNullableFilter
+  answerArray: StringNullableListFilter
   attempts: IntNullableFilter
   createdAt: DateTimeFilter
   id: String

@@ -277,7 +277,9 @@ const Client = (props) => {
   };
 
   let number;
-  if (props.number.startsWith("8")) {
+  if (!props.number) {
+    number = "No number";
+  } else if (props.number?.startsWith("8")) {
     number = props.number.replace("8", "+7");
   } else if (
     props.number.startsWith("1") ||

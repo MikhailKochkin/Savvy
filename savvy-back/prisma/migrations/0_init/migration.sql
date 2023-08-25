@@ -24,12 +24,12 @@ CREATE TYPE "Type" AS ENUM ('STORY', 'REGULAR', 'CHALLENGE', 'HIDDEN');
 
 -- CreateTable
 CREATE TABLE "Application" (
-    "id" VARCHAR(30) NOT NULL,
+    "id" TEXT NOT NULL,
     "applicantId" VARCHAR(25) NOT NULL,
     "applicantName" TEXT NOT NULL,
     "message" TEXT,
     "coursePageID" VARCHAR(25) NOT NULL,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "coursePageId" VARCHAR(30) NOT NULL,
     "promocode" TEXT,
@@ -42,7 +42,7 @@ CREATE TABLE "BotDialogue" (
     "id" TEXT NOT NULL,
     "journey" TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "rating" INTEGER,
     "source" TEXT,
 
@@ -51,10 +51,10 @@ CREATE TABLE "BotDialogue" (
 
 -- CreateTable
 CREATE TABLE "BusinessClient" (
-    "id" VARCHAR(30) NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" TEXT,
     "number" TEXT,
     "communication_medium" TEXT,
@@ -634,6 +634,7 @@ CREATE TABLE "PointA" (
     "coursePageID" VARCHAR(25),
     "userId" VARCHAR(30) NOT NULL,
     "coursePageId" VARCHAR(30) NOT NULL,
+    "text" TEXT,
 
     CONSTRAINT "PointA_pkey" PRIMARY KEY ("id")
 );
@@ -715,6 +716,7 @@ CREATE TABLE "ProblemResult" (
     "studentId" VARCHAR(30) NOT NULL,
     "lessonId" VARCHAR(30),
     "problemId" VARCHAR(30),
+    "depth" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "ProblemResult_pkey" PRIMARY KEY ("id")
 );
@@ -871,6 +873,7 @@ CREATE TABLE "ShotResult" (
     "studentId" VARCHAR(30) NOT NULL,
     "lessonId" VARCHAR(30),
     "shotId" VARCHAR(30),
+    "depth" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "ShotResult_pkey" PRIMARY KEY ("id")
 );
@@ -993,6 +996,7 @@ CREATE TABLE "TestResult" (
     "studentId" VARCHAR(30) NOT NULL,
     "lessonId" VARCHAR(30),
     "testId" VARCHAR(30),
+    "answerAray" TEXT[],
 
     CONSTRAINT "TestResult_pkey" PRIMARY KEY ("id")
 );
@@ -1132,43 +1136,26 @@ CREATE TABLE "_CoursePageForCareer" (
 
 -- CreateTable
 CREATE TABLE "_CoursePageToProgram" (
-    "A" TEXT NOT NULL,
+    "A" VARCHAR(30) NOT NULL,
     "B" TEXT NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_ExamAnswerToLegalPortfolio" (
-    "A" VARCHAR(25) NOT NULL,
-    "B" VARCHAR(25) NOT NULL
+    "A" VARCHAR(30) NOT NULL,
+    "B" VARCHAR(30) NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_GrowthAreaToUserLevel" (
     "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "_Migration" (
-    "revision" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "datamodel" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "applied" INTEGER NOT NULL,
-    "rolled_back" INTEGER NOT NULL,
-    "datamodel_steps" TEXT NOT NULL,
-    "database_migration" TEXT NOT NULL,
-    "errors" TEXT NOT NULL,
-    "started_at" TIMESTAMP(3) NOT NULL,
-    "finished_at" TIMESTAMP(3),
-
-    CONSTRAINT "_Migration_pkey" PRIMARY KEY ("revision")
+    "B" VARCHAR(30) NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_PointATests" (
-    "A" VARCHAR(25) NOT NULL,
-    "B" VARCHAR(25) NOT NULL
+    "A" VARCHAR(30) NOT NULL,
+    "B" VARCHAR(30) NOT NULL
 );
 
 -- CreateTable
@@ -1180,7 +1167,7 @@ CREATE TABLE "_UserSubjects" (
 -- CreateTable
 CREATE TABLE "_joinedTeams" (
     "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "B" VARCHAR(30) NOT NULL
 );
 
 -- CreateIndex
@@ -1260,9 +1247,6 @@ ALTER TABLE "Application" ADD CONSTRAINT "Application_coursePageId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "BusinessClient" ADD CONSTRAINT "BusinessClient_coursePageId_fkey" FOREIGN KEY ("coursePageId") REFERENCES "CoursePage"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "CareerTrackUnit" ADD CONSTRAINT "CareerTrackUnit_careerTrackId_fkey" FOREIGN KEY ("careerTrackId") REFERENCES "CareerTrack"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "Certificate" ADD CONSTRAINT "Certificate_coursePageId_fkey" FOREIGN KEY ("coursePageId") REFERENCES "CoursePage"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1616,56 +1600,11 @@ ALTER TABLE "User" ADD CONSTRAINT "User_levelId_fkey" FOREIGN KEY ("levelId") RE
 ALTER TABLE "User" ADD CONSTRAINT "User_uniId_fkey" FOREIGN KEY ("uniId") REFERENCES "Uni"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "_AuthorsCoursePage" ADD CONSTRAINT "_AuthorsCoursePage_A_fkey" FOREIGN KEY ("A") REFERENCES "CoursePage"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_AuthorsCoursePage" ADD CONSTRAINT "_AuthorsCoursePage_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_CareerTrackUnitToCoursePage" ADD CONSTRAINT "_CareerTrackUnitToCoursePage_A_fkey" FOREIGN KEY ("A") REFERENCES "CareerTrackUnit"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_CareerTrackUnitToCoursePage" ADD CONSTRAINT "_CareerTrackUnitToCoursePage_B_fkey" FOREIGN KEY ("B") REFERENCES "CoursePage"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_CoursePageForCareer" ADD CONSTRAINT "_CoursePageForCareer_A_fkey" FOREIGN KEY ("A") REFERENCES "CareerTrack"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_CoursePageForCareer" ADD CONSTRAINT "_CoursePageForCareer_B_fkey" FOREIGN KEY ("B") REFERENCES "CoursePage"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_CoursePageToProgram" ADD CONSTRAINT "_CoursePageToProgram_A_fkey" FOREIGN KEY ("A") REFERENCES "CoursePage"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "_CoursePageToProgram" ADD CONSTRAINT "_CoursePageToProgram_B_fkey" FOREIGN KEY ("B") REFERENCES "Program"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ExamAnswerToLegalPortfolio" ADD CONSTRAINT "_ExamAnswerToLegalPortfolio_A_fkey" FOREIGN KEY ("A") REFERENCES "ExamAnswer"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_ExamAnswerToLegalPortfolio" ADD CONSTRAINT "_ExamAnswerToLegalPortfolio_B_fkey" FOREIGN KEY ("B") REFERENCES "LegalPortfolio"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "_GrowthAreaToUserLevel" ADD CONSTRAINT "_GrowthAreaToUserLevel_A_fkey" FOREIGN KEY ("A") REFERENCES "GrowthArea"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_GrowthAreaToUserLevel" ADD CONSTRAINT "_GrowthAreaToUserLevel_B_fkey" FOREIGN KEY ("B") REFERENCES "UserLevel"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_PointATests" ADD CONSTRAINT "_PointATests_A_fkey" FOREIGN KEY ("A") REFERENCES "PointA"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_PointATests" ADD CONSTRAINT "_PointATests_B_fkey" FOREIGN KEY ("B") REFERENCES "PointATest"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_UserSubjects" ADD CONSTRAINT "_UserSubjects_A_fkey" FOREIGN KEY ("A") REFERENCES "CoursePage"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "_UserSubjects" ADD CONSTRAINT "_UserSubjects_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
 ALTER TABLE "_joinedTeams" ADD CONSTRAINT "_joinedTeams_A_fkey" FOREIGN KEY ("A") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_joinedTeams" ADD CONSTRAINT "_joinedTeams_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 

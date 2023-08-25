@@ -125,6 +125,9 @@ const Styles = styled.div`
   .step {
     font-weight: 600;
   }
+  img {
+    width: 100%;
+  }
   @media (max-width: 800px) {
     width: 90%;
     .bar {

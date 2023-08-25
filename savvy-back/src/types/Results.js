@@ -1,10 +1,11 @@
-const { objectType } = require("nexus");
+const { objectType, inputObjectType } = require("nexus");
 
 const TestResult = objectType({
   name: "TestResult",
   definition(t) {
     t.model.id();
     t.model.answer();
+    t.model.answerArray();
     t.model.attempts();
     t.model.lessonID();
     t.model.testID();
@@ -24,6 +25,7 @@ const QuizResult = objectType({
   definition(t) {
     t.model.id();
     t.model.answer();
+    t.model.comment();
     t.model.attempts();
     t.model.correct();
     t.model.lessonID();
@@ -77,6 +79,8 @@ const ConstructionResult = objectType({
     t.model.construction();
     t.model.createdAt();
     t.model.updatedAt();
+    t.model.answers();
+    t.model.elements();
   },
 });
 
@@ -86,6 +90,7 @@ const ProblemResult = objectType({
     t.model.id();
     t.model.answer();
     t.model.revealed();
+    t.model.depth();
     t.model.problemID();
     t.model.lessonID();
     t.model.lessonId();
@@ -110,6 +115,7 @@ const ShotResult = objectType({
     t.model.lesson();
     t.model.student();
     t.model.shot();
+    t.model.depth();
     t.model.createdAt();
     t.model.updatedAt();
   },

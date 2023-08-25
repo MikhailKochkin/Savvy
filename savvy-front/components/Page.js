@@ -91,6 +91,7 @@ const Page = ({ children }) => {
               <Inner>{children}</Inner>
               {router.pathname !== "/lesson" &&
                 router.pathname !== "/conf" &&
+                router.pathname !== "/demo" &&
                 router.pathname !== "/embeddedPage" &&
                 router.pathname !== "/recommend" &&
                 router.pathname !== "/english" && <Footer />}

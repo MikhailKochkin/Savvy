@@ -151,12 +151,8 @@ const UpdateProblem = (props) => {
 
   const { t } = useTranslation("lesson");
 
-  const handleChange = (type, id) => {
-    setNodeID(id);
-    setNodeType(type);
-  };
-
   const getSteps = (val) => {
+    console.log("val", val);
     setUpdatedSteps([...val]);
   };
 

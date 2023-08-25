@@ -2,7 +2,7 @@ import DemoFeed from "./DemoFeed";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
-// import CircularProgress from "@material-ui/core/CircularProgress";
+import { TailSpin } from "react-loader-spinner";
 
 import Note from "../lesson/notes/Note";
 // import Offer from "../lesson/Offer";
@@ -14,7 +14,7 @@ import SingleProblem from "../lesson/problems/SingleProblem";
 import SingleTextEditor from "../lesson/textEditors/SingleTextEditor";
 import SingleConstructor from "../lesson/constructions/SingleConstructor";
 import NewConstructor from "../lesson/constructions/NewConstructor";
-
+import DemoSignUp from "./DemoSignUp";
 import Forum from "../lesson/forum/Forum";
 import Document from "../lesson/documents/Document";
 import Exam from "../lesson/exams/Exam";
@@ -102,7 +102,21 @@ const StoryEx = (props) => {
     }
   }, [me]);
   if (stats_error) return <p>{stats_error}</p>;
-  if (stats_loading) return <Progress>Loading...</Progress>;
+  if (stats_loading)
+    return (
+      <Progress>
+        <TailSpin
+          height="80"
+          width="80"
+          color="#2E80EC"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      </Progress>
+    );
 
   let my_result =
     stats_data && stats_data.lessonResults.length > 0
@@ -359,7 +373,7 @@ const StoryEx = (props) => {
     <Container>
       {me && (
         <DemoFeed
-          components={components}
+          components={[...components, <DemoSignUp />]}
           experience={experience}
           total={total}
           next={next}
@@ -367,6 +381,7 @@ const StoryEx = (props) => {
           coursePageID={coursePageID}
           me={me}
           hasSecret={lesson.hasSecret}
+          lesson_structure={lesson.structure.lessonItems}
           lesson_number={lesson.number}
           lesson_name={lesson.name}
           lessonID={lesson.id}

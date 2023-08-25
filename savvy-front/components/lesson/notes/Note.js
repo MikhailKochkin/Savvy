@@ -536,7 +536,7 @@ const Note = (props) => {
   if (props.problem) {
     width = "100%";
   } else if (props.story) {
-    width = "100vw";
+    width = "100%";
   } else {
     width = "90%";
   }

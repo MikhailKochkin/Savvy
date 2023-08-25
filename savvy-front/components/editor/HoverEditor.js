@@ -18,7 +18,6 @@ import {
   useSelected,
 } from "slate-react";
 import isEqual from "lodash/isEqual";
-
 import {
   Editor,
   Transforms,
@@ -38,6 +37,7 @@ import {
   BiImageAdd,
   BiStrikethrough,
   BiHeading,
+  BiCommentAdd,
 } from "react-icons/bi";
 import { css } from "emotion";
 import styled from "styled-components";
@@ -45,22 +45,12 @@ import isUrl from "is-url";
 import { withHistory } from "slate-history";
 import escapeHtml from "escape-html";
 import { jsx } from "slate-hyperscript";
-// import Icon from "react-icons-kit";
-// import { bold } from "react-icons-kit/fa/bold";
-// import { italic } from "react-icons-kit/fa/italic";
-// import { link } from "react-icons-kit/fa/link";
-// import { strikethrough } from "react-icons-kit/fa/strikethrough";
-// import { underline } from "react-icons-kit/fa/underline";
-// import { image } from "react-icons-kit/fa/image";
-// import { commentO } from "react-icons-kit/fa/commentO";
-// import { ic_announcement } from "react-icons-kit/md/ic_announcement";
 import { Button, IconBlock, Menu, Portal } from "./components";
 import { Range } from "slate";
 
 const AppStyles = {
   color: "rgb(17, 17, 17)",
   padding: "0 5px",
-  maxWidth: "840px",
   width: "100%",
   fontSize: "1.5rem",
 };
@@ -75,6 +65,10 @@ const Link = styled.a`
     color: #fff;
     padding: 2px 0; */
   }
+`;
+
+const Comment = styled.span`
+  color: #81b29a;
 `;
 
 const Label = styled.label`
@@ -136,6 +130,9 @@ const serialize = (node) => {
       if (styles.includes("header")) {
         text = `<h2>${text}</h2>`;
       }
+      if (styles.includes("comment")) {
+        text = `<span className="comment" type="comment" comment="${node.comment}">${text}</span>`;
+      }
       if (styles.includes("insert")) {
         text = `<ins>${text}</ins>`;
       }
@@ -180,8 +177,8 @@ const serialize = (node) => {
       return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
     case "error":
       return `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${children}</span>`;
-    case "note":
-      return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
+    case "comment":
+      return `<span className="comment" type="comment" comment="${node.comment}">${children}</span>`;
     case "video":
       return `<div className="video"><iframe src="${escapeHtml(
         node.src
@@ -229,6 +226,17 @@ const deserialize = (el) => {
         ],
       },
     ];
+  }
+
+  if (el.getAttribute("type") == "comment") {
+    return jsx(
+      "element",
+      {
+        type: "comment",
+        comment: el.getAttribute("comment"),
+      },
+      children.length > 0 ? children : [{ text: "" }]
+    );
   }
 
   switch (el.nodeName) {
@@ -286,16 +294,6 @@ const HoveringMenu = (props) => {
     []
   );
 
-  // useEffect(() => {
-  //   let html;
-  //   props.value ? (html = props.value) : (html = `<p></p>`);
-  //   const document = new DOMParser().parseFromString(html, "text/html");
-  //   const newContent = deserialize(document.body);
-  //   if (!isEqual(newContent, editor.children)) {
-  //     editor.children = newContent;
-  //   }
-  // }, [props.value, editor]);
-
   // 4.1 Element renderer
 
   const renderElement = useCallback((props) => {
@@ -318,6 +316,8 @@ const HoveringMenu = (props) => {
         return <VideoElement {...props} />;
       case "image":
         return <ImageElement {...props} />;
+      case "comment":
+        return <CommentElement {...props} />;
       case "link":
         return (
           <LinkElement {...props.attributes} href={props.element.url}>
@@ -360,7 +360,7 @@ const HoveringMenu = (props) => {
         props.getEditorText(arr.join(""), props.name, props.index);
       }}
     >
-      <HoveringToolbar />
+      <HoveringToolbar type={props.type} />
       <Editable
         style={AppStyles}
         renderLeaf={renderLeaf}
@@ -415,9 +415,6 @@ const uploadFile = async (e, editor) => {
   const file = await res.json();
   let link = file.secure_url;
 
-  // editor.selection.anchor.path == [0, 0] &&
-  //   editor.selection.anchor.offset == 0 &&
-  //   editor.insertBreak();
   editor.insertNode({
     type: "image",
     src: link,
@@ -457,9 +454,8 @@ const addVideoElement = (editor) => {
 const withLinks = (editor) => {
   const { insertData, insertText, isInline } = editor;
 
-  editor.isInline = (element) => {
-    return element.type === "link" ? true : isInline(element);
-  };
+  editor.isInline = (element) =>
+    ["link", "comment"].includes(element.type) || isInline(element);
 
   editor.insertText = (text) => {
     if (text && isUrl(text)) {
@@ -485,6 +481,33 @@ const withLinks = (editor) => {
 const insertLink = (editor, url) => {
   if (editor.selection) {
     wrapLink(editor, url);
+  }
+};
+
+const insertComment = (editor, comment) => {
+  if (editor.selection) {
+    wrapComment(editor, comment);
+  }
+};
+
+const wrapComment = (editor, comment) => {
+  const { selection } = editor;
+  const isCollapsed = selection && Range.isCollapsed(selection);
+
+  // Create the inline comment node
+  const com = {
+    type: "comment",
+    comment: comment,
+    children: isCollapsed ? [{ text: "" }] : [],
+  };
+
+  if (isCollapsed) {
+    // If the selection is collapsed, insert the comment node
+    Transforms.insertNodes(editor, com);
+  } else {
+    // If there's a range, wrap the selected text with the comment node
+    Transforms.wrapNodes(editor, com, { split: true });
+    Transforms.collapse(editor, { edge: "end" });
   }
 };
 
@@ -541,10 +564,6 @@ const Leaf = ({ attributes, children, leaf }) => {
     children = <em>{children}</em>;
   }
 
-  // if (leaf.underline) {
-  //   children = <u>{children}</u>;
-  // }
-
   if (leaf.delete) {
     children = <del>{children}</del>;
   }
@@ -560,7 +579,7 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-const HoveringToolbar = () => {
+const HoveringToolbar = (props) => {
   const ref = useRef();
   const editor = useSlate();
 
@@ -615,10 +634,12 @@ const HoveringToolbar = () => {
           <FormatButton format="delete" icon={"strikethrough"} />
           <FormatButton format="insert" icon={"underline"} />
           <FormatButton format="header" icon={"header"} />
-          {/* <FormatButton2 format="image" icon={"image"} /> */}
           <ImageButton format="image" icon={"image"} />
           <VideoButton format="video" icon={"video"} />
           <LinkButton format="image" icon={"link"} />
+          {props.type == "DocBuilder" && (
+            <AddButton format="add" icon={"add"} />
+          )}
         </Menu>
       </IconContext.Provider>
     </Portal>
@@ -647,6 +668,26 @@ const FormatButton = ({ format, icon }) => {
         {icon == "underline" && (
           <BiUnderline value={{ className: "react-icons" }} />
         )}
+        {icon == "add" && <BiCommentAdd value={{ className: "react-icons" }} />}
+      </IconBlock>
+    </Button>
+  );
+};
+
+const AddButton = ({ format, icon }) => {
+  const editor = useSlate();
+  return (
+    <Button
+      reversed
+      onMouseDown={(event) => {
+        event.preventDefault();
+        const comment = window.prompt("Enter text ");
+        if (!comment) return;
+        insertComment(editor, comment);
+      }}
+    >
+      <IconBlock>
+        <BiCommentAdd value={{ className: "react-icons" }} />
       </IconBlock>
     </Button>
   );
@@ -744,8 +785,8 @@ const LinkElement = (props) => {
   return <Link {...props.attributes}>{props.children}</Link>;
 };
 
-const QuizElement = (props) => {
-  return <Quiz {...props.attributes}>{props.children}</Quiz>;
+const CommentElement = (props) => {
+  return <Comment {...props.attributes}>{props.children}</Comment>;
 };
 
 const DefaultElement = (props) => {
@@ -831,7 +872,7 @@ const ImageElement = ({ attributes, children, element }) => {
           className={css`
             display: block;
             max-width: 100%;
-            max-height: 20em;
+            /* max-height: 20em; */
             box-shadow: ${selected && focused ? "0 0 0 3px #B4D5FF" : "none"};
           `}
         />

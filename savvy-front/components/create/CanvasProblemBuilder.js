@@ -355,7 +355,6 @@ const CanvasProblemBuilder = (props) => {
                 type: "Note", // Added type as Note here
               },
             ];
-            console.log("New Messages:", newMessages);
             setMessages(newMessages);
             setNewMessage("");
           }}
@@ -378,7 +377,6 @@ const CanvasProblemBuilder = (props) => {
                 type: "NewTest", // Added type as Note here
               },
             ];
-            console.log("New Messages:", newMessages);
             setMessages(newMessages);
             setNewMessage("");
           }}
@@ -401,7 +399,6 @@ const CanvasProblemBuilder = (props) => {
                 type: "Quiz", // Added type as Note here
               },
             ];
-            console.log("New Messages:", newMessages);
             setMessages(newMessages);
             setNewMessage("");
           }}
@@ -409,7 +406,6 @@ const CanvasProblemBuilder = (props) => {
           {t("add_quiz")}
         </SimpleButton>
       </div>
-      {console.log("messages", messages)}
       <div
         className="canvasArea"
         ref={dropCanvas}

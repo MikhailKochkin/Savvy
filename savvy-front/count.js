@@ -1,21 +1,18 @@
 let ratings = [
   {
-    rating: 9,
+    rating: 10,
   },
   {
-    rating: 6,
+    rating: 10,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 10,
   },
   {
     rating: 8,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
   },
   {
     rating: 10,

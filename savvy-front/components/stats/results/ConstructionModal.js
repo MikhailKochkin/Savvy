@@ -1,22 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
 
 import Modal from "styled-react-modal";
+import Construction from "./Construction";
 
 const Box = styled.div`
   display: flex;
-  justify-content: row;
-  margin-bottom: 1%;
-  li {
-    flex: 50%;
-  }
-  div {
-    flex: 50%;
-    &.column {
-      padding-left: 2%;
-      border-left: 1px solid #edefed;
-    }
+  flex-direction: column;
+
+  width: 70%;
+  margin: 75px 0;
+  h2 {
+    margin: 0;
   }
 `;
 
@@ -34,11 +29,6 @@ const Button = styled.button`
   a {
     color: #112a62;
   }
-`;
-
-const Block = styled.div`
-  padding: 3% 0;
-  border-bottom: 1px solid #c4c4c4;
 `;
 
 const StyledModal = Modal.styled`
@@ -63,41 +53,60 @@ const StyledModal = Modal.styled`
 `;
 
 const ConstructionModal = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { student, construction, results } = props;
+  const { construction, results } = props;
+  const [variants, setVariants] = useState([]);
   let student_results;
   results.filter((r) => r.construction.id === construction.id).length > 0
     ? (student_results = results.filter(
         (r) => r.construction.id === construction.id
       ))
     : null;
+
+  const shuffle = (array) => {
+    let m = array.length,
+      t,
+      i;
+    while (m) {
+      i = Math.floor(Math.random() * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+    return array;
+  };
+  useEffect(() => {
+    const vars = shuffle([
+      ...props.construction.elements.elements.filter((t) => t.isTest),
+    ]);
+    setVariants(vars);
+  }, []);
+
   return (
-    <Box>
-      <div>{parse("<b>Конструктор</b> " + construction.name)}</div>
+    <Box id={construction.id}>
+      <h2>Doc Builder</h2>
+      <div></div>
       <div className="column">
         {student_results && student_results.length > 0 ? (
-          student_results.map((t) => <li>Количество попыток: {t.attempts}</li>)
+          <div>
+            {student_results.map((s, i) => {
+              if (s.elements && s.elements.elements.length > 0) {
+                return (
+                  <Construction
+                    resultId={s.id}
+                    id={"conresult" + i}
+                    key={i}
+                    s={s}
+                    student_results={student_results}
+                    elems={s.elements.elements}
+                    construction={construction}
+                  />
+                );
+              }
+            })}
+          </div>
         ) : (
-          <span>Не составлен</span>
+          <div>Ответов нет</div>
         )}
-      </div>
-      <div className="column">
-        <Button onClick={(e) => setIsOpen(true)}>
-          <a>Развернуть</a>
-        </Button>
-        <StyledModal
-          isOpen={isOpen}
-          onBackgroundClick={(e) => setIsOpen(false)}
-          onEscapeKeydown={(e) => setIsOpen(false)}
-        >
-          {student_results && student_results.length > 0 ? (
-            student_results.map((t) => (
-              <Block>{t.inputs.map((input) => parse(input))}</Block>
-            ))
-          ) : (
-            <span>Ответов нет</span>
-          )}
-        </StyledModal>
       </div>
     </Box>
   );

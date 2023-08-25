@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
@@ -19,6 +19,7 @@ const CREATE_FEEDBACK_MUTATION = gql`
 
 const Styles = styled.div`
   margin-top: 1%;
+  width: 70%;
 `;
 
 const TextBox = styled.div`
@@ -58,52 +59,46 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   ssr: false,
 });
 
-class CreateFeedback extends Component {
-  state = {
-    text: "",
+const CreateFeedback = (props) => {
+  const [text, setText] = useState("");
+
+  const myCallback = (dataFromChild) => {
+    setText(dataFromChild);
   };
 
-  myCallback = (dataFromChild) => {
-    this.setState({
-      text: dataFromChild,
-    });
-  };
-
-  render() {
-    const { lesson, student } = this.props;
-    return (
-      <Styles>
-        <TextBox>
-          <DynamicLoadedEditor getEditorText={this.myCallback} name="text" />
-        </TextBox>
-        <Mutation
-          mutation={CREATE_FEEDBACK_MUTATION}
-          variables={{
-            lessonId: lesson,
-            studentId: student,
-            text: this.state.text,
-          }}
-          refetchQueries={() => [
-            {
-              query: GET_RESULTS,
-              variables: { lessonId: lesson, userId: student },
-            },
-          ]}
-        >
-          {(createFeedback, { loading, error }) => (
-            <Button
-              onClick={async (e) => {
-                e.preventDefault();
-                const res = await createFeedback();
-              }}
-            >
-              {loading ? "..." : "Send"}
-            </Button>
-          )}
-        </Mutation>
-      </Styles>
-    );
-  }
-}
+  const { lesson, student } = props;
+  return (
+    <Styles>
+      <TextBox>
+        <DynamicLoadedEditor getEditorText={myCallback} name="text" />
+      </TextBox>
+      <Mutation
+        mutation={CREATE_FEEDBACK_MUTATION}
+        variables={{
+          lessonId: lesson,
+          studentId: student,
+          text: text,
+        }}
+        refetchQueries={() => [
+          {
+            query: GET_RESULTS,
+            variables: { lessonId: lesson, userId: student },
+          },
+        ]}
+      >
+        {(createFeedback, { loading, error }) => (
+          <Button
+            onClick={async (e) => {
+              e.preventDefault();
+              const res = await createFeedback();
+            }}
+          >
+            {loading ? "..." : "Send"}
+          </Button>
+        )}
+      </Mutation>
+    </Styles>
+  );
+};
 
 export default CreateFeedback;

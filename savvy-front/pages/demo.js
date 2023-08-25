@@ -23,7 +23,6 @@ const DynamicNewSingleLesson = dynamic(
 );
 
 const demo = (props) => {
-  console.log(props.query.lang);
   return (
     <div>
       {props.query.lang == "eng" ? (

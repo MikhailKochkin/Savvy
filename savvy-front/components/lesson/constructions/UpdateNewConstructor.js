@@ -62,39 +62,6 @@ const ButtonTwo = styled.button`
   }
 `;
 
-const TextBox = styled.div`
-  font-size: 1.6rem;
-  width: 90%;
-  border: 1px solid #c4c4c4;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  outline: 0;
-  padding: 2%;
-  font-size: 1.6rem;
-  margin-top: 3%;
-  .header {
-    border-bottom: 1px solid #c4c4c4;
-    width: 100%;
-  }
-  @media (max-width: 800px) {
-    width: 350px;
-  }
-`;
-
-const Advice = styled.p`
-  font-size: 1.5rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2%;
-  margin: 30px 0;
-  width: 80%;
-  div {
-    margin-bottom: 1.5%;
-  }
-`;
-
 const Explainer = styled.div`
   width: 700px;
   margin-bottom: 20px;
@@ -125,8 +92,10 @@ const Block = styled.div`
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
-  /* box-shadow: 0px 0px 3px 0px rgb(199 199 199); */
-  /* padding: 10px 5%; */
+  img {
+    width: 100px;
+    height: 100px;
+  }
   grid-template-columns: ${(props) => {
     return `repeat(${props.columns}, 1fr)`;
   }};
@@ -303,10 +272,6 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const UpdateNewConstructor = (props) => {
   const { construction, lesson } = props;
-  const [name, setName] = useState("");
-  const [variants, setVariants] = useState(["c"]);
-  const [answer, setAnswer] = useState("");
-  const [answersNumber, setAnswersNumber] = useState("");
   const [hint, setHint] = useState(construction.hint);
   const [columnsNum, setColumns] = useState(construction.columnsNum);
   const [elements, setElements] = useState(construction.elements.elements);
@@ -502,6 +467,7 @@ const ConElement = (props) => {
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
   const myCallback = (dataFromChild, index) => {
+    console.log("dataFromChild", dataFromChild);
     let new_el = { ...el };
     new_el.text = dataFromChild;
     setEl(new_el);
@@ -688,13 +654,11 @@ const ConElement = (props) => {
           )}
         </div>
       </Settings>
-      {/* {el.text} */}
       <DynamicLoadedEditor
-        // index={i}
-        // name={i}
         onChange={(e) => updateEl(e.target.value)}
         getEditorText={myCallback}
         value={el.text}
+        type="DocBuilder"
       />
     </Element>
   );

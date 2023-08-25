@@ -52,7 +52,7 @@ const Styles = styled.div`
 `;
 
 const TextBar = styled.div`
-  width: 98%;
+  width: 100%;
   font-size: 1.6rem;
   border-radius: 5px;
   @media (max-width: 800px) {
@@ -107,7 +107,7 @@ const TextBar = styled.div`
     }
   }
   .edit {
-    width: 100%;
+    width: 90px;
     font-size: 1.6rem;
     line-height: 1.8;
     font-family: Montserrat;
@@ -176,12 +176,21 @@ const Window = styled.div`
   margin-bottom: 20px;
   min-height: 80px;
   border-radius: 10px;
-  width: 280px;
+  /* width: 280px; */
   line-height: 1.4;
   background: rgb(255, 255, 255);
   -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  opacity: 0; // Initial opacity
+  visibility: hidden; // Initial visibility
+  transition: opacity 0.3s ease-in-out; // Transition effect
+  ${(props) =>
+    props.active &&
+    `
+    opacity: 1;  // Active opacity
+    visibility: visible;  // Active visibility
+  `}
   .answerBox {
     border-top: 1px solid #dadce0;
     padding: 10px 15px;
@@ -408,6 +417,7 @@ const SingleTextEditor = (props) => {
           !e.target.nextSibling ||
           (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
         ) {
+          console.log("button 1");
           let button2 = document.createElement("button");
           button2.innerHTML = "Show";
           button2.className = "show_button";
@@ -417,8 +427,9 @@ const SingleTextEditor = (props) => {
         if (parseFloat(res.res) > 69) {
           setResult(true);
           props.getResults(1);
+          console.log("el", el);
           el.style.background = "#D9EAD3";
-          e.target.innerHTML = "Check";
+          e.target.style.display = "none";
           return true;
         } else {
           setResult(false);
@@ -582,31 +593,6 @@ const SingleTextEditor = (props) => {
           <div>
             <TextBar id={textEditor.id}>
               <EditText story={story}>
-                {/* <Mutation
-                  mutation={CREATE_TEXTEDITORRESULT_MUTATION}
-                  variables={{
-                    lessonId: props.lessonID,
-                    textEditorId: props.textEditor.id,
-                    attempts: props.attempts,
-                    correct: props.correct_option,
-                    wrong: props.wrong_option,
-                    type: type,
-                    guess: htmlToText(props.answer, {
-                      wordwrap: false,
-                    }),
-                    result: props.result,
-                  }}
-                  refetchQueries={() => [
-                    {
-                      query: SINGLE_LESSON_QUERY,
-                      variables: { id: props.lessonID },
-                    },
-                    {
-                      query: CURRENT_USER_QUERY,
-                    },
-                  ]}
-                >
-                  {(createTextEditorResult, { loading, error }) => ( */}
                 <div
                   onClick={async (e) => {
                     // update the number of attempts made by the student
@@ -614,7 +600,6 @@ const SingleTextEditor = (props) => {
                     if (e.target.getAttribute("class") == "mini_button") {
                       const ch = await check(e);
                       setTimeout(() => {
-                        // console.log("res", ch);
                         const res2 = createTextEditorResult({
                           variables: {
                             lessonId: props.lessonID,
@@ -638,7 +623,9 @@ const SingleTextEditor = (props) => {
                         e.target.getAttribute("type") === "note"
                           ? e.target.getAttribute("text")
                           : e.target.parentElement.getAttribute("text");
-                      e.target.className = "edit";
+                      if (e.target.tagName !== "BUTTON") {
+                        e.target.className = "edit";
+                      }
                       setShowNote(true);
                       setNote(val);
                       setType("note");
@@ -664,9 +651,9 @@ const SingleTextEditor = (props) => {
                       e.target.parentElement.getAttribute("type") === "error"
                     ) {
                       if (total > 0) {
-                        const res2 = await onMouseClick(e);
+                        const res2 = onMouseClick(e);
                       } else if (props.total == 0 || props.total == null) {
-                        const res3 = await onReveal(e);
+                        const res3 = onReveal(e);
                       }
                       setType("error");
                     }
@@ -707,8 +694,6 @@ const SingleTextEditor = (props) => {
                 >
                   {parse(text)}
                 </div>
-                {/* )}
-                </Mutation> */}
               </EditText>
             </TextBar>
             <Buttons>
@@ -718,9 +703,10 @@ const SingleTextEditor = (props) => {
             </Buttons>
           </div>
         )}
-        <WindowColumn>
-          {showNote && (
-            <Window>
+        {(showQuiz || showNote) && (
+          <WindowColumn>
+            {/* {showNote && ( */}
+            <Window active={showNote}>
               <div className="questionBox">
                 <IconBlock>
                   <div className="nameBlock">
@@ -739,9 +725,9 @@ const SingleTextEditor = (props) => {
                 <Comment>{note}</Comment>
               </div>
             </Window>
-          )}
-          {showQuiz && (
-            <Window>
+            {/* )} */}
+            {/* {showQuiz && ( */}
+            <Window active={showQuiz}>
               <div className="questionBox">
                 <IconBlock>
                   <div className="nameBlock">
@@ -755,7 +741,7 @@ const SingleTextEditor = (props) => {
                     <img className="cancel" src="../../static/cancel.svg" />
                   </div>
                 </IconBlock>
-                <div>{quiz.question}</div>
+                <div>{quiz && quiz.question}</div>
               </div>
               <div className="answerBox">
                 <Input
@@ -789,8 +775,9 @@ const SingleTextEditor = (props) => {
                 {quizResult === true && <Comment>{quiz.ifRight}</Comment>}
               </div>
             </Window>
-          )}
-        </WindowColumn>
+            {/* )} */}
+          </WindowColumn>
+        )}
       </Styles>
       {update && (
         <UpdateTextEditor

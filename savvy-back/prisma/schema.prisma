@@ -14,7 +14,7 @@ model Application {
   applicantName String
   message       String?
   coursePageID  String     @db.VarChar(25)
-  updatedAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   createdAt     DateTime   @default(now())
   coursePageId  String     @db.VarChar(30)
   promocode     String?
@@ -22,19 +22,19 @@ model Application {
 }
 
 model BotDialogue {
-  id        String   @id @default(cuid())
-  journey   String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  rating    Int?
-  source    String?
+  id            String   @id @default(cuid())
+  journey       String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime   @updatedAt
+  rating        Int?
+  source        String?
 }
 
 model BusinessClient {
   id                    String      @id @default(cuid())
   email                 String
   createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @default(now())
+  updatedAt             DateTime   @updatedAt
   name                  String?
   number                String?
   communication_medium  String?
@@ -53,7 +53,7 @@ model BusinessClient {
 model CareerTrack {
   id              String            @id @default(cuid())
   name            String
-  updatedAt       DateTime          @default(now())
+  updatedAt     DateTime   @updatedAt
   createdAt       DateTime          @default(now())
   img             String?
   careerTrackUnit CareerTrackUnit[]
@@ -65,7 +65,7 @@ model CareerTrackUnit {
   id            String       @id @default(cuid())
   title         String
   number        Int?
-  updatedAt     DateTime     @default(now())
+  updatedAt     DateTime   @updatedAt
   createdAt     DateTime     @default(now())
   img           String?
   topics        String[]
@@ -75,10 +75,11 @@ model CareerTrackUnit {
   coursePage    CoursePage[] @relation("CareerTrackUnitToCoursePage")
 }
 
+
 model Certificate {
   id           String     @id @default(cuid())
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   studentId    String
   coursePageId String
   coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: Cascade)
@@ -86,12 +87,12 @@ model Certificate {
 }
 
 model ChallengeResult {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @db.VarChar(30)
   correct   Int?
   wrong     Int?
   time      Int?
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   studentId String   @db.VarChar(30)
   lessonId  String   @db.VarChar(30)
   lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -102,7 +103,7 @@ model Chat {
   id          String   @id @default(cuid())
   name        String?
   messages    Json?
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
   userId      String
   lessonId    String
@@ -114,12 +115,12 @@ model Chat {
 }
 
 model Clause {
-  id         String   @id @default(cuid())
+  id         String   @id @default(cuid()) @db.VarChar(30)
   number     Int
   commentary String
   sample     String?
   createdAt  DateTime @default(now())
-  updatedAt  DateTime     @default(now())
+  updatedAt  DateTime @updatedAt
   keywords   String[]
   userId     String   @db.VarChar(30)
   documentId String   @db.VarChar(30)
@@ -131,7 +132,7 @@ model CommunityMember {
   id           String   @id @default(cuid())
   email        String
   createdAt    DateTime @default(now())
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime @updatedAt
   name         String
   surname      String?
   number       String?
@@ -140,10 +141,10 @@ model CommunityMember {
 }
 
 model Company {
-  id         String       @id @default(cuid())
+  id         String       @id @default(cuid()) @db.VarChar(30)
   name       String
   paidMonths Int?         @default(0)
-  updatedAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
   createdAt  DateTime     @default(now())
   coursePage CoursePage[]
   user       User[]
@@ -155,16 +156,16 @@ model ConfUser {
   name        String?
   surname     String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   conf_number Int?
 }
 
 model Construction {
-  id                  String               @id @default(cuid())
+  id                  String               @id @default(cuid()) @db.VarChar(30)
   name                String
   lessonID            String               @db.VarChar(30)
   createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
   hint                String?
   type                String
   variants            String[]
@@ -182,14 +183,16 @@ model Construction {
 }
 
 model ConstructionResult {
-  id             String        @id @default(cuid())
+  id             String        @id @default(cuid()) @db.VarChar(30)
   answer         String?
   attempts       Int?
   constructionID String?       @db.VarChar(30)
   lessonID       String?       @db.VarChar(30)
-  updatedAt      DateTime    @default(now())
+  updatedAt      DateTime      @updatedAt
   createdAt      DateTime      @default(now())
   inputs         String[]
+  elements       Json?
+  answers        Json?
   studentId      String        @db.VarChar(30)
   lessonId       String?       @db.VarChar(30)
   constructionId String?       @db.VarChar(30)
@@ -199,46 +202,47 @@ model ConstructionResult {
 }
 
 model CoursePage {
-  id                String            @id @default(cuid())
+  id                String           @id @default(cuid()) @db.VarChar(30)
   title             String
   description       String
   image             String
   courseType        CourseType?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @default(now())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
   price             Int?
   discountPrice     Int?
   numInCareerTrack  Int?
-  published         Boolean?          @default(false)
-  uniID             String?           @db.VarChar(30)
-  news              String?           @default("Добро пожаловать на курс! Проходите уроки, выполняйте задания и выполняйте финальное задание!")
+  published         Boolean?         @default(false)
+  uniID             String?          @db.VarChar(30)
+  news              String?          @default("Добро пожаловать на курс! Проходите уроки, выполняйте задания и выполняйте финальное задание!")
   audience          String?
   result            String?
   tariffs           String?
   methods           String?
-  openLesson        String?           @db.VarChar(25)
+  openLesson        String?          @db.VarChar(25)
   video             String?
-  companyId         String?           @db.VarChar(30)
+  companyId         String?          @db.VarChar(30)
   banner            String?
   batch             String?
   reviews           Json?
   weeks             Int?
   subscriptionPrice Int?
-  subscription      Boolean?          @default(false)
+  subscription      Boolean?         @default(false)
   tags              String[]
   students          String[]
-  userId            String            @db.VarChar(30)
-  uniId             String?           @db.VarChar(30)
-  examQuestionId    String?           @unique(map: "CoursePage.examQuestionId_unique") @db.VarChar(30)
+  new_students      User[]           @relation("UserSubjects")
+  userId            String           @db.VarChar(30)
+  uniId             String?          @db.VarChar(30)
+  examQuestionId    String?          @unique(map: "CoursePage.examQuestionId_unique") @db.VarChar(30)
   promocode         Json?
   header            String[]
   subheader         String[]
   nextStart         DateTime?
   uptodateAt        DateTime?
   goals             String[]
-  currency          String?           @default("ruble")
+  currency          String?          @default("ruble")
   installments      Int?
-  view              PageView          @default(COURSE)
+  view              PageView         @default(COURSE)
   countries         String[]
   prices            Json?
   modules           Json?
@@ -246,10 +250,10 @@ model CoursePage {
   applications      Application[]
   businessClients   BusinessClient[]
   certificates      Certificate[]
-  company           Company?          @relation(fields: [companyId], references: [id], onUpdate: NoAction, map: "CoursePage_company_fkey")
-  examQuestion      ExamQuestion?     @relation(fields: [examQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  uni               Uni?              @relation(fields: [uniId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user              User              @relation("CoursePage_userIdToUser", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  company           Company?         @relation(fields: [companyId], references: [id], onUpdate: NoAction, map: "CoursePage_company_fkey")
+  examQuestion      ExamQuestion?    @relation(fields: [examQuestionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  uni               Uni?             @relation(fields: [uniId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user              User             @relation("CoursePage_userIdToUser", fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   courseVisits      CourseVisit[]
   emailReminder     EmailReminder[]
   lawrdles          Lawrdle[]
@@ -258,18 +262,17 @@ model CoursePage {
   pointA            PointA[]
   pointATest        PointATest[]
   posts             Post[]
+  programs          Program[]         @relation("CoursePageToProgram")
   authors           User[]            @relation("AuthorsCoursePage")
   careerTrackUnit   CareerTrackUnit[] @relation("CareerTrackUnitToCoursePage")
   careerTrack       CareerTrack[]     @relation("CoursePageForCareer")
-  programs          Program[]         @relation("CoursePageToProgram")
-  new_students      User[]            @relation("UserSubjects")
 }
 
 model CourseVisit {
-  id           String     @id @default(cuid())
+  id           String     @id @default(cuid()) @db.VarChar(30)
   visitsNumber Int?       @default(0)
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   finish       DateTime?
   reminders    DateTime[] @db.Timestamp
   studentId    String     @db.VarChar(30)
@@ -281,10 +284,10 @@ model CourseVisit {
 }
 
 model Document {
-  id              String           @id @default(cuid())
+  id              String           @id @default(cuid()) @db.VarChar(30)
   title           String
   createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   userId          String           @db.VarChar(30)
   lessonId        String           @db.VarChar(30)
   complexity      Int?             @default(1)
@@ -295,9 +298,9 @@ model Document {
 }
 
 model DocumentResult {
-  id         String    @id @default(cuid())
-  updatedAt  DateTime     @default(now())
-  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid()) @db.VarChar(30)
+  updatedAt  DateTime
+  createdAt  DateTime  @updatedAt
   answers    String[]
   drafts     String[]
   userId     String?   @db.VarChar(30)
@@ -313,7 +316,7 @@ model EmailCampaign {
   content        String
   emails         Json?
   createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   name           String?
   emailReminders EmailReminder[]
   lawrdle        Lawrdle[]
@@ -327,7 +330,7 @@ model EmailReminder {
   sendAt          DateTime?
   link            String?
   createdAt       DateTime       @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt       DateTime       @updatedAt
   emailsSent      String[]
   status          Int?
   emailCampaignId String?
@@ -338,12 +341,12 @@ model EmailReminder {
 }
 
 model Exam {
-  id         String       @id @default(cuid())
+  id         String       @id @default(cuid()) @db.VarChar(30)
   nodeType   String?
   nodeID     String?      @db.VarChar(25)
   question   String?
   createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
   name       String?
   userId     String       @db.VarChar(30)
   lessonId   String       @db.VarChar(30)
@@ -356,7 +359,7 @@ model ExamAnswer {
   id             String           @id @default(cuid())
   answer         String
   examQuestionID String           @db.VarChar(25)
-  updatedAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
   createdAt      DateTime         @default(now())
   studentId      String           @db.VarChar(30)
   examQuestionId String           @db.VarChar(30)
@@ -366,18 +369,18 @@ model ExamAnswer {
 }
 
 model ExamQuestion {
-  id           String       @id @default(cuid())
+  id           String       @id @default(cuid()) @db.VarChar(30)
   coursePageID String       @db.VarChar(25)
   question     String
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime     @updatedAt
   createdAt    DateTime     @default(now())
   coursePage   CoursePage?
   examAnswer   ExamAnswer[]
 }
 
 model ExamResult {
-  id        String   @id @default(cuid())
-  updatedAt DateTime @default(now())
+  id        String   @id @default(cuid()) @db.VarChar(30)
+  updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
   answers   String[]
   userId    String?  @db.VarChar(30)
@@ -389,10 +392,10 @@ model ExamResult {
 }
 
 model Feedback {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @db.VarChar(30)
   text      String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   teacherId String   @db.VarChar(30)
   studentId String   @db.VarChar(30)
   lessonId  String?  @db.VarChar(30)
@@ -402,10 +405,10 @@ model Feedback {
 }
 
 model Forum {
-  id         String      @id @default(cuid())
+  id         String      @id @default(cuid()) @db.VarChar(30)
   text       String?
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime     @default(now())
+  updatedAt  DateTime    @updatedAt
   userId     String?     @db.VarChar(30)
   user       User?       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   lesson     Lesson?
@@ -414,13 +417,14 @@ model Forum {
 }
 
 model GrowthArea {
-  id          String      @id @default(cuid())
-  name        String
-  maxProgress Int?
-  marks       Json?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime @default(now())
+  id                    String                  @id @default(cuid())
+  name                  String
+  maxProgress           Int?
+  marks                 Json?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
   userLevels  UserLevel[] @relation("GrowthAreaToUserLevel")
+
 }
 
 model Lawrdle {
@@ -430,7 +434,7 @@ model Lawrdle {
   authorId        String
   active          Boolean
   createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   pros            String[]
   tags            String[]
   coursePageId    String?
@@ -449,7 +453,7 @@ model LegalPortfolio {
   cv           String?
   resume       String?
   open         Boolean      @default(false)
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime     @updatedAt
   createdAt    DateTime     @default(now())
   portfolioIDs String[]
   user         User?
@@ -457,11 +461,11 @@ model LegalPortfolio {
 }
 
 model Lesson {
-  id                  String               @id @default(cuid())
+  id                  String               @id @default(cuid()) @db.VarChar(30)
   text                String
   coursePageID        String               @db.VarChar(30)
   createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
   name                String
   number              Int?
   published           Boolean?             @default(false)
@@ -514,11 +518,11 @@ model Lesson {
 }
 
 model LessonResult {
-  id           String   @id @default(cuid())
+  id           String   @id @default(cuid()) @db.VarChar(30)
   visitsNumber Int?     @default(1)
   lessonID     String?  @db.VarChar(30)
   createdAt    DateTime @default(now())
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime @updatedAt
   progress     Int?     @default(0)
   studentId    String   @db.VarChar(30)
   lessonId     String   @db.VarChar(30)
@@ -531,7 +535,7 @@ model Message {
   id           String   @id @default(cuid())
   text         String?
   createdAt    DateTime @default(now())
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime @updatedAt
   userId       String?
   subject      String?
   comment      String?
@@ -544,7 +548,7 @@ model MiniForum {
   id         String      @id @default(cuid())
   text       String?
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime     @default(now())
+  updatedAt  DateTime    @updatedAt
   lessonId   String?
   userId     String?
   type       String?
@@ -555,10 +559,10 @@ model MiniForum {
 }
 
 model NewTest {
-  id          String       @id @default(cuid())
+  id          String       @id @default(cuid()) @db.VarChar(30)
   lessonID    String?      @db.VarChar(30)
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime     @updatedAt
   type        String?      @default("TEST")
   next        Json?
   ifRight     String?
@@ -576,10 +580,10 @@ model NewTest {
 }
 
 model Note {
-  id          String   @id @default(cuid())
+  id          String   @id @default(cuid()) @db.VarChar(30)
   text        String
   lessonID    String?  @db.VarChar(30)
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
   next        Json?
   userId      String?  @db.VarChar(30)
@@ -601,7 +605,7 @@ model Offer {
   courseId      String?
   price         Int?
   discountPrice Int?
-  updatedAt     DateTime     @default(now())
+  updatedAt     DateTime @updatedAt
   createdAt     DateTime @default(now())
   userId        String?
   lessonId      String?
@@ -612,10 +616,10 @@ model Offer {
 }
 
 model Order {
-  id           String     @id @default(cuid())
+  id           String     @id @default(cuid()) @db.VarChar(30)
   price        Int?
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   paymentID    String?
   promocode    String?
   isPaid       Boolean?
@@ -632,21 +636,22 @@ model Order {
 }
 
 model PointA {
-  id           String       @id @default(cuid())
-  text         String?
+  id           String     @id @default(cuid()) @db.VarChar(30)
   description  String?
-  updatedAt    DateTime   @default(now())
-  createdAt    DateTime     @default(now())
-  coursePageID String?      @db.VarChar(25)
-  userId       String       @db.VarChar(30)
-  coursePageId String       @db.VarChar(30)
-  coursePage   CoursePage   @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user         User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime   @default(now())
+  coursePageID String?    @db.VarChar(25)
+  userId       String     @db.VarChar(30)
+  coursePageId String     @db.VarChar(30)
+  text         String?
+  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user         User       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   pointATest   PointATest[] @relation("PointATests")
+
 }
 
 model PointATest {
-  id             String      @id @default(cuid())
+  id             String      @id @default(cuid()) @db.VarChar(30)
   question       String
   answer1        String
   answer1Correct String
@@ -658,7 +663,7 @@ model PointATest {
   answer4Correct String?
   coursePageID   String?     @db.VarChar(25)
   createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
   userId         String      @db.VarChar(30)
   coursePageId   String?     @db.VarChar(30)
   coursePage     CoursePage? @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -667,11 +672,11 @@ model PointATest {
 }
 
 model Post {
-  id              String         @id @default(cuid())
+  id              String         @id @default(cuid()) @db.VarChar(30)
   title           String?
   text            String?
   createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   likes           Int?           @default(1)
   tags            String[]
   userId          String         @db.VarChar(30)
@@ -688,13 +693,13 @@ model Post {
 }
 
 model Problem {
-  id             String          @id @default(cuid())
+  id             String          @id @default(cuid()) @db.VarChar(30)
   text           String
   hints          String?
   solution       String?
   answer         String?
   createdAt      DateTime        @default(now())
-  updatedAt      DateTime         @default(now())
+  updatedAt      DateTime        @updatedAt
   lessonID       String          @db.VarChar(30)
   nodeType       String?
   nodeID         String?         @db.VarChar(30)
@@ -711,63 +716,65 @@ model Problem {
 }
 
 model ProblemResult {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @db.VarChar(30)
   answer    String?
   lessonID  String?  @db.VarChar(30)
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
   problemID String?  @db.VarChar(30)
   revealed  String[]
   studentId String   @db.VarChar(30)
   lessonId  String?  @db.VarChar(30)
   problemId String?  @db.VarChar(30)
+  depth     Int      @default(0)
   lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   problem   Problem? @relation(fields: [problemId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student   User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Program {
-  id            String       @id @default(cuid())
-  title         String
-  description   String
-  image         String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now())
-  price         Int?
-  currency      String?      @default("ruble")
-  discountPrice Int?
-  published     Boolean?     @default(false)
-  news          String?
-  audience      String?
-  result        String?
-  tariffs       String?
-  methods       String?
-  video         String?
-  batch         String?
-  header        String[]
-  subheader     String[]
-  nextStart     DateTime?
-  uptodateAt    DateTime?
-  goals         String[]
-  reviews       Json?
-  installments  Int?
-  tags          String[]
-  promocode     Json?
-  promotionId   String?
-  syllabus      Json?
-  months        Int?
-  offers        Offer[]
-  orders        Order[]
+  id                  String                @id @default(cuid())
+  title               String
+  description         String
+  image               String
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  price               Int?
+  currency            String?               @default("ruble")
+  discountPrice       Int?
+  published           Boolean?              @default(false)
+  news                String?
+  audience            String?
+  result              String?
+  tariffs             String?
+  methods             String?
+  video               String?
+  batch               String?
+  header              String[]
+  subheader           String[]
+  nextStart           DateTime?
+  uptodateAt          DateTime?
+  goals               String[]
+  reviews             Json?
+  installments        Int?
+  tags                String[]
+  promocode           Json?
+  promotionId         String?
+  syllabus            Json?
+  months              Int?
+  offers              Offer[]
+  orders              Order[]
   coursePages   CoursePage[] @relation("CoursePageToProgram")
+
 }
 
 model Quiz {
-  id          String       @id @default(cuid())
+  id          String       @id @default(cuid()) @db.VarChar(30)
   question    String
   answer      String
   lessonID    String?      @db.VarChar(30)
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime     @updatedAt
   type        String?      @default("TEST")
   next        Json?
   ifRight     String?
@@ -782,11 +789,12 @@ model Quiz {
 }
 
 model QuizResult {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @db.VarChar(30)
   answer    String?
   attempts  Int?
+  comment   String?
   lessonID  String?  @db.VarChar(30)
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
   correct   Boolean?
   studentId String   @db.VarChar(30)
@@ -798,10 +806,10 @@ model QuizResult {
 }
 
 model Rating {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @db.VarChar(30)
   rating    Int?
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   userId    String?  @db.VarChar(30)
   forumId   String?  @db.VarChar(30)
   forum     Forum?   @relation(fields: [forumId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -809,12 +817,12 @@ model Rating {
 }
 
 model Sandbox {
-  id            String      @id @default(cuid())
+  id            String      @id @default(cuid()) @db.VarChar(30)
   text          String
   video         String?
   sandboxPageID String      @db.VarChar(25)
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime     @default(now())
+  updatedAt     DateTime    @updatedAt
   likes         Int?        @default(0)
   link          String?
   sandboxPageId String      @db.VarChar(30)
@@ -822,12 +830,12 @@ model Sandbox {
 }
 
 model SandboxPage {
-  id              String            @id @default(cuid())
+  id              String            @id @default(cuid()) @db.VarChar(30)
   title           String
   description     String
   image           String
   createdAt       DateTime          @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt       DateTime          @updatedAt
   students        String[]
   userId          String            @db.VarChar(30)
   sandbox         Sandbox[]
@@ -836,12 +844,12 @@ model SandboxPage {
 }
 
 model SandboxPageGoal {
-  id            String       @id @default(cuid())
+  id            String       @id @default(cuid()) @db.VarChar(30)
   goal          String
   completed     Boolean      @default(false)
   sandboxPageID String       @db.VarChar(25)
   createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   userId        String       @db.VarChar(30)
   sandboxPageId String?      @db.VarChar(30)
   sandboxPage   SandboxPage? @relation(fields: [sandboxPageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -849,11 +857,11 @@ model SandboxPageGoal {
 }
 
 model Shot {
-  id          String       @id @default(cuid())
+  id          String       @id @default(cuid()) @db.VarChar(30)
   title       String
   lessonID    String?      @db.VarChar(30)
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime     @updatedAt
   parts       String[]
   comments    String[]
   userId      String       @db.VarChar(30)
@@ -864,25 +872,26 @@ model Shot {
 }
 
 model ShotResult {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @db.VarChar(30)
   answer    String
   lessonID  String?  @db.VarChar(30)
   shotID    String?  @db.VarChar(30)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   studentId String   @db.VarChar(30)
   lessonId  String?  @db.VarChar(30)
   shotId    String?  @db.VarChar(30)
+  depth     Int      @default(1)
   lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   shot      Shot?    @relation(fields: [shotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student   User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Statement {
-  id          String     @id @default(cuid())
+  id          String     @id @default(cuid()) @db.VarChar(30)
   text        String?
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime   @updatedAt
   userId      String?    @db.VarChar(30)
   forumId     String?    @db.VarChar(30)
   comments    String[]
@@ -894,15 +903,15 @@ model Statement {
 }
 
 model Team {
-  id        String   @id @default(cuid())
-  name      String
-  image     String?
-  updatedAt DateTime @default(now())
-  createdAt DateTime @default(now())
-  founderId String
-  orders    Order[]
-  founder   User     @relation("Team_founderIdToUser", fields: [founderId], references: [id], onDelete: Cascade)
-  users     User[]   @relation("joinedTeams")
+  id          String        @id @default(cuid())
+  name        String
+  image       String?
+  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime      @default(now())
+  founderId   String
+  orders      Order[]
+  founder     User          @relation("Team_founderIdToUser", fields: [founderId], references: [id], onDelete: Cascade)
+  users     User[]          @relation("joinedTeams")
 }
 
 model TeamQuest {
@@ -912,7 +921,7 @@ model TeamQuest {
   tasks            Json
   userId           String
   lessonId         String
-  updatedAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   createdAt        DateTime          @default(now())
   lesson           Lesson            @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -922,7 +931,7 @@ model TeamQuest {
 model TeamQuestResult {
   id          String     @id @default(cuid())
   answer      String?
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime   @updatedAt
   createdAt   DateTime   @default(now())
   studentId   String
   lessonId    String?
@@ -933,7 +942,7 @@ model TeamQuestResult {
 }
 
 model Test {
-  id             String   @id @default(cuid())
+  id             String   @id @default(cuid()) @db.VarChar(30)
   question       String
   answer1        String
   answer1Correct String
@@ -944,7 +953,7 @@ model Test {
   answer4        String?
   answer4Correct String?
   createdAt      DateTime @default(now())
-  updatedAt      DateTime    @default(now())
+  updatedAt      DateTime @updatedAt
   lessonID       String?  @db.VarChar(25)
   userId         String   @db.VarChar(30)
   lessonId       String?  @db.VarChar(30)
@@ -959,7 +968,7 @@ model TestPractice {
   tasks              String[]
   userId             String?
   lessonId           String?
-  updatedAt  DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   createdAt          DateTime             @default(now())
   intro              String?
   successText        String?
@@ -973,7 +982,7 @@ model TestPracticeResult {
   id             String        @id @default(cuid())
   tasks          String[]
   correct        Int
-  updatedAt      DateTime    @default(now())
+  updatedAt      DateTime      @updatedAt
   createdAt      DateTime      @default(now())
   studentId      String
   lessonId       String?
@@ -984,28 +993,29 @@ model TestPracticeResult {
 }
 
 model TestResult {
-  id        String   @id @default(cuid())
-  answer    String?
-  attempts  Int?
-  updatedAt DateTime @default(now())
-  createdAt DateTime @default(now())
-  lessonID  String?  @db.VarChar(30)
-  testID    String?  @db.VarChar(30)
-  studentId String   @db.VarChar(30)
-  lessonId  String?  @db.VarChar(30)
-  testId    String?  @db.VarChar(30)
-  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student   User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  test      NewTest? @relation(fields: [testId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id         String   @id @default(cuid()) @db.VarChar(30)
+  answer     String?
+  attempts   Int?
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  lessonID   String?  @db.VarChar(30)
+  testID     String?  @db.VarChar(30)
+  studentId  String   @db.VarChar(30)
+  lessonId   String?  @db.VarChar(30)
+  testId     String?  @db.VarChar(30)
+  answerArray String[]
+  lesson     Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student    User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  test       NewTest? @relation(fields: [testId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model TextEditor {
-  id                String             @id @default(cuid())
+  id                String             @id @default(cuid()) @db.VarChar(30)
   name              String
   text              String
   lessonID          String             @db.VarChar(30)
   createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   totalMistakes     Int?
   userId            String             @db.VarChar(30)
   lessonId          String             @db.VarChar(30)
@@ -1016,13 +1026,13 @@ model TextEditor {
 }
 
 model TextEditorResult {
-  id           String      @id @default(cuid())
+  id           String      @id @default(cuid()) @db.VarChar(30)
   attempts     Int?
   wrong        String?
   correct      String?
   guess        String
   createdAt    DateTime    @default(now())
-  updatedAt    DateTime   @default(now())
+  updatedAt    DateTime    @updatedAt
   result       Boolean?
   studentId    String      @db.VarChar(30)
   lessonId     String?     @db.VarChar(30)
@@ -1034,10 +1044,10 @@ model TextEditorResult {
 }
 
 model Uni {
-  id         String       @id @default(cuid())
+  id         String       @id @default(cuid()) @db.VarChar(30)
   title      String
   capacity   Int?         @default(2)
-  updatedAt  DateTime     @default(now())
+  updatedAt  DateTime
   createdAt  DateTime     @default(now())
   paidMonths Int?         @default(0)
   coursePage CoursePage[]
@@ -1050,14 +1060,14 @@ model Useful {
   buttonText String
   link       String
   createdAt  DateTime @default(now())
-  updatedAt  DateTime     @default(now())
+  updatedAt  DateTime @updatedAt
   tags       String[]
   image      String
   name       String?
 }
 
 model User {
-  id                 String               @id @default(cuid())
+  id                 String               @id @default(cuid()) @db.VarChar(30)
   name               String
   email              String               @unique(map: "User.email_unique")
   password           String
@@ -1065,7 +1075,7 @@ model User {
   resetTokenExpiry   Decimal?
   isFamiliar         Boolean              @default(false)
   createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   careerTrackID      String?              @db.VarChar(30)
   status             String?              @default("STUDENT")
   uniID              String?              @db.VarChar(30)
@@ -1113,6 +1123,7 @@ model User {
   lessonResults      LessonResult[]
   messages           Message[]
   miniforums         MiniForum[]
+  new_subjects       CoursePage[]         @relation("UserSubjects")
   newTests           NewTest[]
   notes              Note[]
   offers             Offer[]
@@ -1131,6 +1142,7 @@ model User {
   shotResult         ShotResult[]
   statement          Statement[]
   teams              Team[]               @relation("Team_founderIdToUser")
+  myTeams            Team[]               @relation("joinedTeams")
   teamQuests         TeamQuest[]
   teamQuestResults   TeamQuestResult[]
   test               Test[]
@@ -1139,28 +1151,110 @@ model User {
   testResults        TestResult[]
   textEditors        TextEditor[]
   textEditorResults  TextEditorResult[]
-  careerTrack        CareerTrack?         @relation(fields: [careerTrackId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  careerTrack        CareerTrack?         @relation(fields: [careerTrackId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   company            Company?             @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  legalPortfolio     LegalPortfolio?      @relation(fields: [legalPortfolioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  legalPortfolio     LegalPortfolio?      @relation(fields: [legalPortfolioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   level              UserLevel?           @relation(fields: [levelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  uni                Uni?                 @relation(fields: [uniId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  uni                Uni?                 @relation(fields: [uniId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   co_coursePages     CoursePage[]         @relation("AuthorsCoursePage")
-  new_subjects       CoursePage[]         @relation("UserSubjects")
-  myTeams            Team[]               @relation("joinedTeams")
 }
 
 model UserLevel {
-  id               String       @id @default(cuid())
-  level            Decimal?     @default(1)
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @default(now())
+  id               String     @id @default(cuid()) @db.VarChar(30)
+  level            Decimal?   @default(1)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
   consumedContent  Json?
   myProgress       Json?
-  isProgressPublic Boolean?     @default(false)
+  isProgressPublic Boolean?   @default(false)
   learningStreak   DateTime[]
   user             User?
   growthAreas      GrowthArea[] @relation("GrowthAreaToUserLevel")
 }
+
+// model AuthorsCoursePage {
+//   A String @db.VarChar(30)
+//   B String @db.VarChar(30)
+
+//   @@unique([A, B], map: "_AuthorsCoursePage_AB_unique")
+//   @@index([B], map: "_AuthorsCoursePage_B_index")
+//   @@map("_AuthorsCoursePage")
+// }
+
+// model CareerTrackUnitToCoursePage {
+//   A String @db.VarChar(30)
+//   B String @db.VarChar(30)
+
+//   @@unique([A, B], map: "_CareerTrackUnitToCoursePage_AB_unique")
+//   @@index([B], map: "_CareerTrackUnitToCoursePage_B_index")
+//   @@map("_CareerTrackUnitToCoursePage")
+// }
+
+// model CoursePageForCareer {
+//   A String @db.VarChar(30)
+//   B String @db.VarChar(30)
+
+//   @@unique([A, B], map: "_CoursePageForCareer_AB_unique")
+//   @@index([B], map: "_CoursePageForCareer_B_index")
+//   @@map("_CoursePageForCareer")
+// }
+
+// model CoursePageToProgram {
+//   A       String  @db.VarChar(30)
+//   B       String
+//   Program Program @relation(fields: [B], references: [id], onDelete: Cascade)
+
+//   @@unique([A, B], map: "_CoursePageToProgram_AB_unique")
+//   @@index([B], map: "_CoursePageToProgram_B_index")
+//   @@map("_CoursePageToProgram")
+// }
+
+// model ExamAnswerToLegalPortfolio {
+//   A String @db.VarChar(30)
+//   B String @db.VarChar(30)
+
+//   @@unique([A, B], map: "_ExamAnswerToLegalPortfolio_AB_unique")
+//   @@index([B], map: "_ExamAnswerToLegalPortfolio_B_index")
+//   @@map("_ExamAnswerToLegalPortfolio")
+// }
+
+// model GrowthAreaToUserLevel {
+//   A          String
+//   B          String     @db.VarChar(30)
+//   GrowthArea GrowthArea @relation(fields: [A], references: [id], onDelete: Cascade)
+
+//   @@unique([A, B], map: "_GrowthAreaToUserLevel_AB_unique")
+//   @@index([B], map: "_GrowthAreaToUserLevel_B_index")
+//   @@map("_GrowthAreaToUserLevel")
+// }
+
+// model PointATests {
+//   A String @db.VarChar(30)
+//   B String @db.VarChar(30)
+
+//   @@unique([A, B], map: "_PointATests_AB_unique")
+//   @@index([B], map: "_PointATests_B_index")
+//   @@map("_PointATests")
+// }
+
+// model joinedTeams {
+//   A    String
+//   B    String @db.VarChar(30)
+//   Team Team   @relation(fields: [A], references: [id], onDelete: Cascade)
+
+//   @@unique([A, B], map: "_joinedTeams_AB_unique")
+//   @@index([B], map: "_joinedTeams_B_index")
+//   @@map("_joinedTeams")
+// }
+
+// model UserSubjects {
+//   A String @db.VarChar(30)
+//   B String @db.VarChar(30)
+
+//   @@unique([A, B], map: "_UserSubjects_AB_unique")
+//   @@index([B], map: "_UserSubjects_B_index")
+//   @@map("_UserSubjects")
+// }
 
 enum CheckType {
   WORD

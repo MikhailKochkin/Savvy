@@ -8,11 +8,7 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const Index = () => {
-  return (
-    <>
-      <Courses />
-    </>
-  );
+  return <Courses />;
 };
 
 export default Index;

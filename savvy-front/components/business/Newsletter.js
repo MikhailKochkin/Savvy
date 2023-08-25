@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient($email: String!) {
@@ -180,9 +181,10 @@ const Container = styled.div`
     }
     .input {
       width: 100%;
-      height: 80%;
+      min-height: 80%;
       margin: 30px 0;
       flex-basis: 40%;
+
       #input {
         flex-direction: column;
         height: auto;
@@ -221,11 +223,15 @@ const Container = styled.div`
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 60%;
-        margin: 20px 0;
+        width: 90%;
+        margin: 120px 0;
         .bullet {
           width: 100%;
           font-size: 1.6rem;
+          div {
+            width: 80%;
+            text-align: left;
+          }
         }
       }
     }
@@ -235,86 +241,83 @@ const Container = styled.div`
 const Newsletter = (props) => {
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");
-  return test;
-  // <Mutation mutation={CREATE_CLIENT} variables={{ email }}>
-  //   {(createBusinessClient, { error, loading }) => (
-  //     <Styles>
-  //       <Container>
-  //         <div className="message">
-  //           <div id="header">{props.t("newsletter_header")}</div>
-  //           <div id="C2A">{props.t("newsletter_С2A")}</div>
-  //           <div className="SM">
-  //             <span>
-  //               <a target="_blank" href="https://www.facebook.com/besavvyapp">
-  //                 <Icon size={40} icon={facebookSquare} />
-  //               </a>
-  //             </span>
-  //             <span>
-  //               <a
-  //                 target="_blank"
-  //                 href="https://www.linkedin.com/company/besavvyapp"
-  //               >
-  //                 <Icon size={40} icon={linkedinSquare} />
-  //               </a>
-  //             </span>
-  //             <span>
-  //               <a
-  //                 target="_blank"
-  //                 href="https://www.instagram.com/besavvylawyer/"
-  //               >
-  //                 <Icon size={40} icon={instagram} />
-  //               </a>
-  //             </span>
-  //           </div>
-  //         </div>
-  //         <div className="input">
-  //           <div id="input">
-  //             <div id="text">
-  //               <input
-  //                 type="email"
-  //                 onChange={(e) => setEmail(e.target.value)}
-  //                 placeholder="Mikhail@besavvy.app"
-  //               />
-  //             </div>
-  //             <button
-  //               onClick={(e) => {
-  //                 if (EmailValidator.validate(email)) {
-  //                   createBusinessClient();
-  //                   setComment("We will be in touch!");
-  //                 } else {
-  //                   setComment("This is not a correct email");
-  //                 }
-  //               }}
-  //             >
-  //               Sign Up
-  //             </button>
-  //           </div>
-  //           <Comment>{comment}</Comment>
-  //           <div id="advantages">
-  //             <div className="bullet">
-  //               <span>
-  //                 <Icon size={25} icon={check} />
-  //               </span>
-  //               <div>{props.t("for_lawyers")}</div>
-  //             </div>
-  //             <div className="bullet">
-  //               <span>
-  //                 <Icon size={25} icon={check} />
-  //               </span>
-  //               <div>{props.t("for_accountants")}</div>
-  //             </div>
-  //             <div className="bullet">
-  //               <span>
-  //                 <Icon size={25} icon={check} />
-  //               </span>
-  //               <div>{props.t("for_consultants")}</div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </Container>
-  //     </Styles>
-  //   )}
-  // </Mutation>
+  const { t } = useTranslation("lesson");
+
+  return (
+    <Mutation mutation={CREATE_CLIENT} variables={{ email }}>
+      {(createBusinessClient, { error, loading }) => (
+        <Styles>
+          <Container>
+            <div className="message">
+              <div id="header">{t("newsletter_header")}</div>
+              <div id="C2A">{t("newsletter_С2A")}</div>
+              <div className="SM">
+                <span>
+                  <a target="_blank" href="https://www.facebook.com/besavvyapp">
+                    {/* <Icon size={40} icon={facebookSquare} /> */}
+                  </a>
+                </span>
+                <span>
+                  <a
+                    target="_blank"
+                    href="https://www.linkedin.com/company/besavvyapp"
+                  >
+                    {/* <Icon size={40} icon={linkedinSquare} /> */}
+                  </a>
+                </span>
+                <span>
+                  <a
+                    target="_blank"
+                    href="https://www.instagram.com/besavvylawyer/"
+                  >
+                    {/* <Icon size={40} icon={instagram} /> */}
+                  </a>
+                </span>
+              </div>
+            </div>
+            <div className="input">
+              <div id="input">
+                <div id="text">
+                  <input
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Mikhail@besavvy.app"
+                  />
+                </div>
+                <button
+                  onClick={(e) => {
+                    if (EmailValidator.validate(email)) {
+                      createBusinessClient();
+                      setComment("We will be in touch!");
+                    } else {
+                      setComment("This is not a correct email");
+                    }
+                  }}
+                >
+                  Sign Up
+                </button>
+              </div>
+              <Comment>{comment}</Comment>
+              <div id="advantages">
+                <div className="bullet">
+                  <span>{/* <Icon size={25} icon={check} /> */}</span>
+                  <div>{t("for_lawyers")}</div>
+                </div>
+                <div className="bullet">
+                  <span>{/* <Icon size={25} icon={check} /> */}</span>
+                  <div>{t("for_accountants")}</div>
+                </div>
+                <div className="bullet">
+                  <span>{/* <Icon size={25} icon={check} /> */}</span>
+                  <div>{t("for_consultants")}</div>
+                </div>
+              </div>
+            </div>
+          </Container>
+        </Styles>
+      )}
+    </Mutation>
+  );
 };
 
 // export default withTranslation("business")(Newsletter);

@@ -6,6 +6,7 @@ import Phone from "./Phone";
 import NewNav from "./NewNav";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import MainImage from "./MainImage";
 
 const Styles = styled.div`
@@ -144,9 +145,12 @@ const Buttons = styled.div`
     font-family: Montserrat;
     font-size: 1.8rem;
     transition: 0.3s;
+
     &:hover {
       background: #7000ff;
-      color: #fff;
+      a {
+        color: #fff;
+      }
     }
 
     div {
@@ -166,6 +170,7 @@ const Landing = (props) => {
   // const [width, setWidth] = useState(0);
   const [h, setH] = useState(0);
   const { t } = useTranslation("landing");
+  const router = useRouter();
 
   const onResize = (width, height) => {
     // setWidth(width);
@@ -200,25 +205,22 @@ const Landing = (props) => {
         <div className="container">
           <div className="text">
             <h1>{t("h1")}</h1>
-            <div>
-              {t("h2")}
-              {/* 
-              Больше 20 интерактивных курсов от экспертов из Алруд, DLA Piper,
-              Birch Legal и Никольская Консалтинг */}
-            </div>
+            <div>{t("h2")}</div>
             <Buttons>
-              <button id="main_page_button" onClick={(e) => slide()}>
-                {t("c2a")}
-              </button>
+              {router.locale == "ru" ? (
+                <button id="main_page_button" onClick={(e) => slide()}>
+                  {t("c2a")}
+                </button>
+              ) : (
+                <button>
+                  <Link href="/demo?lang=eng">{t("c2a")}</Link>
+                </button>
+              )}
             </Buttons>
           </div>
           <div className="video_box">
-            {/* <video loop="loop" autoplay="autoplay" playsinline muted>
-              <source src="static/v4.webm" type="video/webm" />
-            </video> */}
             <MainImage />
           </div>
-          {/* <Phone /> */}
         </div>
       </Info>
       <Block></Block>

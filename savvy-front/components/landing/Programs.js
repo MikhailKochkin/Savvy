@@ -231,19 +231,19 @@ const Programs = () => {
         )}
         {router.locale == "en" && (
           <>
-            <div id="want">😏 I want to ...</div>
+            <div id="want">😏 Or you can try ...</div>
             <Tags>
               <Option
                 active={tag == "english_eng"}
                 onClick={(e) => move("english")}
               >
-                Master Legal English
+                Mastering Legal English
               </Option>
-              <Option id="create">
+              {/* <Option id="create">
                 <a href="https://t.me/MikKochkin" target="_blank">
                   Create my own course
                 </a>
-              </Option>
+              </Option> */}
             </Tags>
           </>
         )}

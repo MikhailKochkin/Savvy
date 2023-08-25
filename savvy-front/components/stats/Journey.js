@@ -7,7 +7,7 @@ const Styles = styled.div`
   padding: 2%;
   border-bottom: 1px solid #edefed;
   width: 100%;
-  margin-bottom: 3%;
+  margin: 30px 0px;
   position: relative;
   height: 300px;
   border: 1px dashed #edefed;

@@ -81,16 +81,45 @@ const NewInteractive = (props) => {
 
   const { problem, lesson, me, author } = props;
 
+  const findUnconnectedItems = (arr) => {
+    // Step 1: Create a set of all item IDs
+    const ids = new Set(arr.map((item) => item.id));
+
+    // Step 2: Iterate over the array and remove connected IDs from the set
+    arr.forEach((item) => {
+      if (item.next.true && item.next.true.value) {
+        ids.delete(item.next.true.value);
+      }
+      if (item.next.false && item.next.false.value) {
+        ids.delete(item.next.false.value);
+      }
+    });
+
+    // Step 3: Return the items with no connection from other items
+    return arr.filter((item) => ids.has(item.id));
+  };
+
   useEffect(() => {
     if (problem.steps.problemItems.length > 0) {
-      setComponentList([problem.steps.problemItems[0]]);
+      setComponentList([findUnconnectedItems(problem.steps.problemItems)[0]]);
     }
   }, [0]);
 
   const updateArray = (data) => {
-    let next_el = problem.steps.problemItems.find(
-      (el) => el.id == componentList.at(-1).next.true.value
-    );
+    // Use optional chaining to safely access properties
+    let nextTrueValue = componentList.at(-1)?.next?.true?.value;
+    let nextFalseValue = componentList.at(-1)?.next?.false?.value;
+    // Set nextValue based on the value of data
+    let nextValue = data[0] ? nextTrueValue : nextFalseValue;
+
+    // If nextValue is undefined or null, then exit early
+    if (!nextValue) {
+      props.onFinish(true, "new");
+      return;
+    }
+
+    let next_el = problem.steps.problemItems.find((el) => el.id == nextValue);
+
     if (next_el) {
       setComponentList([...componentList, next_el]);
     } else {

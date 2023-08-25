@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import DemoStoryEx from "./DemoStoryEx";
 import { useUser } from "../User";
+import { TailSpin } from "react-loader-spinner";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -260,17 +261,21 @@ const Head = styled.div`
   color: white;
   cursor: pointer;
   min-height: 10vh;
-  background: #1a2980; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #26d0ce,
-    #1a2980
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #26d0ce, #1a2980);
+  background-image: url("/static/pattern.svg");
+  background-size: cover;
+  color: #dfe1ec;
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
+  #change_page {
+    font-size: 1.7rem;
+  }
+  span {
+    color: #fff;
+  }
   .block {
+    font-size: 1.7rem;
+    margin-left: 10px;
   }
   #back {
     &:hover {
@@ -423,8 +428,16 @@ const NewSingleLesson = (props) => {
   if (loading)
     return (
       <Progress>
-        Loading...
-        {/* <CircularProgress /> */}
+        <TailSpin
+          height="80"
+          width="80"
+          color="#2E80EC"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
       </Progress>
     );
 

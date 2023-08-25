@@ -53,7 +53,7 @@ const UPDATE_USER_MUTATION = gql`
 `;
 
 const Name = styled.div`
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -96,12 +96,69 @@ const Open = styled.div`
   display: ${(props) => (props.secret ? "none" : "block")};
 `;
 
+const SimpleButton = styled.button`
+  width: 100px;
+  height: 35px;
+  background: none;
+  padding: 5px 0;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  margin-right: 15px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
+
+const SendEmailButton = styled.button`
+  width: 140px;
+  height: 35px;
+  background: #f4f4f4;
+  padding: 5px 0;
+  border: 2px solid #f4f4f4;
+  border-radius: 5px;
+  margin-right: 15px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
+
+const EmailBlock = styled.div`
+  margin-top: 20px;
+  border: 3px solid #f2f6f9;
+  border-radius: 20px;
+  padding: 20px;
+  h2 {
+    margin: 20px 0;
+  }
+`;
+
+const Block = styled.div`
+  margin-top: 20px;
+  border: 3px solid #f2f6f9;
+  border-radius: 20px;
+  h2 {
+    margin: 20px;
+  }
+`;
+
 const Header = styled.div`
   width: 100%;
-  height: 50px;
+  min-height: 50px;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
-  grid-template-rows: 40px;
+  /* grid-template-rows: 40px; */
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   .div1 {
@@ -122,9 +179,9 @@ const Header = styled.div`
 
 const Styles = styled.div`
   margin-bottom: 0;
-  padding: 0.5% 2%;
+  padding: 15px 25px;
+  border-bottom: 3px solid #f2f6f9;
   img {
-    max-width: 200px;
   }
 `;
 
@@ -133,10 +190,13 @@ const Buttons = styled.div`
   flex-direction: row;
   margin: 2% 0;
   margin-bottom: 3%;
+  h3 {
+    margin: 10px 0;
+  }
 `;
 
 const RegDate = styled.div`
-  background: ${(props) => (props.date ? "#ade8f4" : null)};
+  /* background: ${(props) => (props.date ? "#ade8f4" : null)}; */
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -173,6 +233,7 @@ const SendButton = styled.div`
 const Tags = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   flex-wrap: wrap;
   width: 100%;
   form {
@@ -193,7 +254,7 @@ const Tag = styled.div`
   background: #f8eed7;
   padding: 2px 6px;
   margin: 2px;
-  height: 22px;
+  min-height: 15px;
   border-radius: 5px;
 
   display: flex;
@@ -202,6 +263,63 @@ const Tag = styled.div`
   align-items: center;
 `;
 
+const Box = styled.div`
+  border-bottom: 3px solid #f2f6f9;
+  border-top: 3px solid #f2f6f9;
+  background: #f2f6f9;
+  min-height: 45px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+  div {
+    padding: 0 5px;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  .div1 {
+    width: 30%;
+  }
+  .div2 {
+    width: 9%;
+  }
+  .div3 {
+    width: 9%;
+  }
+  .div4 {
+    width: 9%;
+  }
+  .div5 {
+    width: 17%;
+  }
+  .div6 {
+    width: 17%;
+  }
+  .div7 {
+    width: 9%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 850px) {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+    div {
+      padding: 8px 15px;
+    }
+    .div2 {
+      border-left: 1px solid white;
+      border-top: 1px solid #edefed;
+    }
+    .div3 {
+      border-left: 1px solid white;
+      border-top: 1px solid #edefed;
+    }
+  }
+`;
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -240,11 +358,24 @@ const Person = (props) => {
   const [page, setPage] = useState("results");
   const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
     useMutation(SEND_MESSAGE_MUTATION);
+  const [updateUser, { updated_data2 }] = useMutation(UPDATE_USER_MUTATION);
+
   const { student, lessons, courseVisit, coursePageID, coursePage, results } =
     props;
 
   moment.locale("ru");
   let mail = `mailto:${student.email}`;
+
+  const handleDoubleClick = (val) => {
+    let newTags = [...tags];
+    setTags(newTags.filter((nt) => nt !== val));
+    let updated_client = updateUser({
+      variables: {
+        id: student.id,
+        tags: newTags.filter((nt) => nt !== val),
+      },
+    });
+  };
 
   // let feedback_num = student.studentFeedback.filter(
   //   (f) => f.lesson.coursePage.id == coursePageID
@@ -323,11 +454,21 @@ const Person = (props) => {
     }
   });
 
-  if (total / lessons.length <= 0.2) {
+  let active_lessons = [];
+  lessons.map((l) => {
+    if (l.type !== "HIDDEN") {
+      active_lessons.push(l);
+    }
+  });
+
+  if (total / active_lessons.length <= 0.2) {
     color = "#e97573";
-  } else if (total / lessons.length > 0.2 && total / lessons.length < 0.85) {
+  } else if (
+    total / active_lessons.length > 0.2 &&
+    total / active_lessons.length < 0.85
+  ) {
     color = "#FDF3C8";
-  } else if (total / lessons.length >= 0.85) {
+  } else if (total / active_lessons.length >= 0.85) {
     color = "#84BC9C";
   }
 
@@ -351,14 +492,13 @@ const Person = (props) => {
             {student.surname
               ? `${student.name} ${student.surname}`
               : student.name}{" "}
-            {/* – <span> {feedback_num}</span> */}
           </div>
           <div className="email">{student.email}</div>
         </Name>
         <Tags className="div2">
           {" "}
           {tags.slice(0, 3).map((t) => (
-            <Tag>{t}</Tag>
+            <Tag onDoubleClick={(e) => handleDoubleClick(t)}>{t}</Tag>
           ))}
           <Mutation
             mutation={UPDATE_USER_MUTATION}
@@ -393,13 +533,13 @@ const Person = (props) => {
         </Tags>
         <Square className="div3" inputColor={color}>
           <div>
-            {total}/{lessons.length}
+            {total}/{active_lessons.length}
           </div>
         </Square>
         <ButtonBox>
-          <button className="div4" onClick={(e) => setSecret(!secret)}>
+          <SimpleButton className="div4" onClick={(e) => setSecret(!secret)}>
             {secret ? "Open" : "Close"}
-          </button>
+          </SimpleButton>
         </ButtonBox>
         <RegDate
           className="div5"
@@ -415,155 +555,179 @@ const Person = (props) => {
         </RegDate>
       </Header>
       <Open secret={secret}>
-        <Buttons>
-          {student.number && (
-            <SendButton>
-              <a
-                target="_blank"
-                href={`https://wa.me/${student.number}?text=Добрый!`}
+        <EmailBlock>
+          <h2>Connect</h2>
+          <Editor className="editor">
+            <DynamicLoadedEditor
+              getEditorText={myCallback}
+              value={""}
+              name="text"
+            />
+          </Editor>
+          <SendEmailButton
+            onClick={async (e) => {
+              const res = await sendMessage({
+                variables: {
+                  userId: student.id,
+                  text: message,
+                },
+              });
+            }}
+          >
+            {loading1 ? "Sending..." : "Send Email"}
+          </SendEmailButton>
+          <Buttons>
+            {student.number && (
+              <SendButton>
+                <a
+                  target="_blank"
+                  href={`https://wa.me/${student.number}?text=Добрый!`}
+                >
+                  {/* Написать в Wh */}
+                  WhatsApp
+                </a>
+              </SendButton>
+            )}
+            {student.number && (
+              <SendButton>
+                <a target="_blank" href={`https://t.me/${student.number}`}>
+                  {/* Написать в Tg */}
+                  Telegram
+                </a>
+              </SendButton>
+            )}
+            {courseVisit && (
+              <Mutation
+                mutation={UPDATE_COURSE_VISIT_MUTATION}
+                variables={{
+                  id: courseVisit.id,
+                  reminders: courseVisit.reminders
+                    ? [...courseVisit.reminders, new Date()]
+                    : [new Date()],
+                  comment: "hello",
+                  info: emailInfo,
+                }}
               >
-                {/* Написать в Wh */}
-                WhatsApp
-              </a>
-            </SendButton>
-          )}
-          {student.number && (
-            <SendButton>
-              <a target="_blank" href={`https://t.me/${student.number}`}>
-                {/* Написать в Tg */}
-                Telegram
-              </a>
-            </SendButton>
-          )}
-          {courseVisit && (
-            <Mutation
-              mutation={UPDATE_COURSE_VISIT_MUTATION}
-              variables={{
-                id: courseVisit.id,
-                reminders: courseVisit.reminders
-                  ? [...courseVisit.reminders, new Date()]
-                  : [new Date()],
-                comment: "hello",
-                info: emailInfo,
-              }}
-            >
-              {(sendEmailToStudent, { loading, error }) => {
-                return (
-                  <SendButton
-                    onClick={(e) => {
-                      const data = sendEmailToStudent();
-                      alert("Отправлено!");
-                    }}
-                    name="CV"
-                  >
-                    {/* Приветствие */}
-                    Welcome Email
-                  </SendButton>
-                );
-              }}
-            </Mutation>
-          )}
-          {courseVisit && (
-            <Mutation
-              mutation={UPDATE_COURSE_VISIT_MUTATION}
-              variables={{
-                id: courseVisit.id,
-                reminders: courseVisit.reminders
-                  ? [...courseVisit.reminders, new Date()]
-                  : [new Date()],
-                comment: "problem",
-                info: emailInfo,
-              }}
-            >
-              {(sendEmailToStudent, { loading, error }) => {
-                return (
-                  <SendButton
-                    onClick={(e) => {
-                      const data = sendEmailToStudent();
-                      // alert("Отправлено!");
-                      alert("Email has been sent!");
-                    }}
-                    name="CV"
-                  >
-                    {/* Проблемное */}
-                    Problem Email
-                  </SendButton>
-                );
-              }}
-            </Mutation>
-          )}
-          {courseVisit && (
-            <Mutation
-              mutation={UPDATE_COURSE_VISIT_MUTATION}
-              variables={{
-                id: courseVisit.id,
-                reminders: courseVisit.reminders
-                  ? [...courseVisit.reminders, new Date()]
-                  : [new Date()],
-                comment: "motivation",
-                info: emailInfo,
-              }}
-            >
-              {(sendEmailToStudent, { loading, error }) => {
-                return (
-                  <SendButton
-                    onClick={(e) => {
-                      const data = sendEmailToStudent();
-                      alert("Отправлено!");
-                    }}
-                    name="CV"
-                  >
-                    {/* Мотивационнное */}
-                    Motivation Email
-                  </SendButton>
-                );
-              }}
-            </Mutation>
-          )}
-        </Buttons>
-        <Editor className="editor">
-          <DynamicLoadedEditor
-            getEditorText={myCallback}
-            value={""}
-            name="text"
+                {(sendEmailToStudent, { loading, error }) => {
+                  return (
+                    <SendButton
+                      onClick={(e) => {
+                        const data = sendEmailToStudent();
+                        alert("Отправлено!");
+                      }}
+                      name="CV"
+                    >
+                      {/* Приветствие */}
+                      Welcome Email
+                    </SendButton>
+                  );
+                }}
+              </Mutation>
+            )}
+            {courseVisit && (
+              <Mutation
+                mutation={UPDATE_COURSE_VISIT_MUTATION}
+                variables={{
+                  id: courseVisit.id,
+                  reminders: courseVisit.reminders
+                    ? [...courseVisit.reminders, new Date()]
+                    : [new Date()],
+                  comment: "problem",
+                  info: emailInfo,
+                }}
+              >
+                {(sendEmailToStudent, { loading, error }) => {
+                  return (
+                    <SendButton
+                      onClick={(e) => {
+                        const data = sendEmailToStudent();
+                        // alert("Отправлено!");
+                        alert("Email has been sent!");
+                      }}
+                      name="CV"
+                    >
+                      {/* Проблемное */}
+                      Problem Email
+                    </SendButton>
+                  );
+                }}
+              </Mutation>
+            )}
+            {courseVisit && (
+              <Mutation
+                mutation={UPDATE_COURSE_VISIT_MUTATION}
+                variables={{
+                  id: courseVisit.id,
+                  reminders: courseVisit.reminders
+                    ? [...courseVisit.reminders, new Date()]
+                    : [new Date()],
+                  comment: "motivation",
+                  info: emailInfo,
+                }}
+              >
+                {(sendEmailToStudent, { loading, error }) => {
+                  return (
+                    <SendButton
+                      onClick={(e) => {
+                        const data = sendEmailToStudent();
+                        alert("Отправлено!");
+                      }}
+                      name="CV"
+                    >
+                      {/* Мотивационнное */}
+                      Motivation Email
+                    </SendButton>
+                  );
+                }}
+              </Mutation>
+            )}
+          </Buttons>
+          {courseVisit &&
+            courseVisit.reminders &&
+            courseVisit.reminders.map((r) => (
+              <li>{moment(r).format("LLL")}</li>
+            ))}
+        </EmailBlock>
+        <Block>
+          <h2>Lesson stats</h2>
+
+          <Journey
+            student={student}
+            maxes={maxes}
+            results={results}
+            lessons={lessons}
           />
-        </Editor>
-        <button
-          onClick={async (e) => {
-            const res = await sendMessage({
-              variables: {
-                userId: student.id,
-                text: message,
-              },
-            });
-          }}
-        >
-          {loading1 ? "Sending..." : "Send"}
-        </button>
-        <Journey
-          student={student}
-          maxes={maxes}
-          results={results}
-          lessons={lessons}
-        />
-        {courseVisit &&
-          courseVisit.reminders &&
-          courseVisit.reminders.map((r) => <li>{moment(r).format("LLL")}</li>)}
-        {page === "results" &&
-          [...lessons]
-            .sort((a, b) => (a.number > b.number ? 1 : -1))
-            .map((lesson, index) => {
-              let res = maxes.filter((r) => r.lesson.id === lesson.id);
-              return (
-                <LessonData
-                  lesson={lesson}
-                  index={index}
-                  coursePageID={coursePageID}
-                  student={student}
-                  res={res}
-                />
-              );
-            })}
+          {page === "results" && (
+            <>
+              <>
+                <Box>
+                  <div className="div1">Name</div>
+                  <div className="div2">Progress</div>
+                  <div className="div3">Result</div>
+                  <div className="div4">Visits</div>
+                  <div className="div5">First visit</div>
+                  <div className="div6">Last visit</div>
+                  <div className="div7"></div>
+                </Box>
+              </>
+              {[...lessons]
+                .filter((l) => l.type !== "HIDDEN")
+                .sort((a, b) => (a.number > b.number ? 1 : -1))
+                .map((lesson, index) => {
+                  let res = maxes.filter((r) => r.lesson.id === lesson.id);
+                  return (
+                    <LessonData
+                      lesson={lesson}
+                      index={index}
+                      coursePageID={coursePageID}
+                      student={student}
+                      res={res}
+                    />
+                  );
+                })}
+            </>
+          )}
+        </Block>
       </Open>
     </Styles>
   );

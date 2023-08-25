@@ -10,6 +10,11 @@ const Stats = objectType({
       ordering: true,
     });
     t.list.field("problemResults", { type: "ProblemResult", ordering: true });
+    t.list.field("shotResults", {
+      type: "ShotResult",
+      ordering: true,
+    });
+
     t.list.field("constructionResults", {
       type: "ConstructionResult",
       ordering: true,

@@ -319,6 +319,23 @@ const ReviewsList = inputObjectType({
   },
 });
 
+const ConstructionAnswers = inputObjectType({
+  name: "ConstructionAnswers",
+  definition(t) {
+    t.list.field("answers", { type: "AnswerItem" });
+  },
+});
+
+const AnswerItem = inputObjectType({
+  name: "AnswerItem",
+  definition(t) {
+    t.string("id");
+    t.string("studentAnswer");
+    t.string("correctAnswer");
+    t.string("res");
+  },
+});
+
 module.exports = {
   NextType,
   NextTrueType,
@@ -358,4 +375,6 @@ module.exports = {
   ReviewsList,
   Review,
   Borders,
+  ConstructionAnswers,
+  AnswerItem,
 };

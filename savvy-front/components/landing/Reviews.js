@@ -219,7 +219,10 @@ const Reviews = () => {
     <Styles>
       <div class="parent">
         {reviews.map((r, i) => (
-          <div class={(i + 1) % 2 == 0 ? "div1" : "div2"}>
+          <div
+            key={"review" + i}
+            className={(i + 1) % 2 == 0 ? "div1" : "div2"}
+          >
             <Review>
               <div className="author">
                 <img src={r.author_image} />

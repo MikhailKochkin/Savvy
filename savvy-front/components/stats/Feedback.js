@@ -1,7 +1,6 @@
-
 import styled from "styled-components";
 import moment from "moment";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const AllStyles = styled.div`
   margin-bottom: 3%;
@@ -25,8 +24,8 @@ const Feedback = (props) => {
   const { feedback, lesson } = props;
   return (
     <AllStyles>
-      <div className="header">Отправленная обратная связь:</div>
-      {feedback.length === 0 ? <div>Нет обратной связи</div> : null}
+      <div className="header">Feedback:</div>
+      {feedback.length === 0 ? <div>Not sent</div> : null}
       {feedback.length > 0
         ? feedback.map((m) => (
             <Styles>

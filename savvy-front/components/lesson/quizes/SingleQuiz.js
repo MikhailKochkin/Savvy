@@ -1,14 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { Mutation } from "@apollo/client/react/components";
-import { gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-// import Button from "@material-ui/core/Button";
-// import { withStyles } from "@material-ui/core/styles";
-// import CircularProgress from "@material-ui/core/CircularProgress";
-import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
 import parse from "html-react-parser";
+import { InfinitySpin } from "react-loader-spinner";
+import { useTranslation } from "next-i18next";
 
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
@@ -22,12 +19,14 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $quiz: String
     $lessonId: String
     $correct: Boolean
+    $comment: String
   ) {
     createQuizResult(
       answer: $answer
       quiz: $quiz
       lessonId: $lessonId
       correct: $correct
+      comment: $comment
     ) {
       id
     }
@@ -154,7 +153,7 @@ const Question = styled.div`
     background: #ffffff;
     flex-direction: row;
     justify-content: flex-end;
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
   .question_name {
     margin-left: 5px;
@@ -254,7 +253,6 @@ const Group = styled.div`
   pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
   display: ${(props) => (props.correct === "true" ? "none" : "flex")};
   padding: 0.5% 0;
-  margin-bottom: 3%;
   div {
     padding: 0.5% 0;
     cursor: pointer;
@@ -283,7 +281,7 @@ const Progress = styled.div`
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  margin: 0 0 2% 0;
+  margin-bottom: 10px;
 `;
 
 const Buttons = styled.div`
@@ -308,15 +306,6 @@ const Circle = styled.div`
   }
 `;
 
-// const StyledButton = withStyles({
-//   root: {
-//     margin: "4% 0",
-//     marginRight: "2%",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//   },
-// })(Button);
-
 const Block = styled.div`
   display: ${(props) => (props.display === "true" ? "block" : "none")};
   #comment {
@@ -328,6 +317,7 @@ const SingleQuiz = (props) => {
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [correct, setCorrect] = useState(""); // is the answer by the student correct?
   const [update, setUpdate] = useState(false);
+  const [comment, setComment] = useState();
   const [sent, setSent] = useState(false);
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
   const [hint, setHint] = useState(null); // give the hint to the student
@@ -338,6 +328,10 @@ const SingleQuiz = (props) => {
   const [message, setMessage] = useState("");
   const [recognition, setRecognition] = useState(null);
   const [startSpeech, setStartSpeech] = useState(false);
+
+  const [createQuizResult, { data, loading, error }] = useMutation(
+    CREATE_QUIZRESULT_MUTATION
+  );
 
   const { t } = useTranslation("lesson");
   const router = useRouter();
@@ -393,14 +387,42 @@ const SingleQuiz = (props) => {
         .then((res) => {
           console.log(res);
           if (parseFloat(res.res) > 65) {
-            if (!isExperienced) {
-              props.getResults(2);
-              setIsExperienced(true);
-            }
-            console.log(res);
             setCorrect("true");
-            setInputColor("rgba(50, 172, 102, 0.25)");
             onMove("true");
+            setInputColor("rgba(50, 172, 102, 0.25)");
+            createQuizResult({
+              variables: {
+                quiz: props.quizID,
+                lessonId: props.lessonID,
+                answer: answer,
+                correct: true,
+                comment: `Result: ${parseFloat(res.res)}%`,
+              },
+            });
+          } else if (parseFloat(res.res) > 55 && parseFloat(res.res) <= 65) {
+            setCorrect("looks_true");
+            setInputColor("#ffd166");
+            onMove("true");
+            if (typeof res.comment === "string") {
+              if (router.locale == "ru") {
+                setHint(res.comment);
+              } else {
+                if (res.comment == "Дайте более развернутый ответ") {
+                  setHint("Try giving a more detailed answer.");
+                } else {
+                  setHint("Try giving a shorter answer.");
+                }
+              }
+            }
+            createQuizResult({
+              variables: {
+                quiz: props.quizID,
+                lessonId: props.lessonID,
+                answer: answer,
+                correct: true,
+                comment: `Looks true: ${parseFloat(res.res)}%`,
+              },
+            });
           } else {
             setCorrect("false");
             setInputColor("rgba(222, 107, 72, 0.5)");
@@ -409,12 +431,21 @@ const SingleQuiz = (props) => {
                 setHint(res.comment);
               } else {
                 if (res.comment == "Дайте более развернутый ответ") {
-                  setHint("Give a more detailed answer.");
+                  setHint("Try giving a more detailed answer.");
                 } else {
-                  setHint("Give a shorter answer.");
+                  setHint("Try giving a shorter answer.");
                 }
               }
             }
+            createQuizResult({
+              variables: {
+                quiz: props.quizID,
+                lessonId: props.lessonID,
+                answer: answer,
+                correct: false,
+                comment: `Result: ${parseFloat(res.res)}%`,
+              },
+            });
             onMove("false");
           }
         })
@@ -450,26 +481,56 @@ const SingleQuiz = (props) => {
       )
         .then((response) => response.json())
         .then((res) => {
-          console.log(res);
-          if (parseFloat(res.res) > 65) {
-            console.log(res);
+          console.log(parseFloat(res.res));
+          if (parseFloat(res.res) > 70) {
             setCorrect("true");
             onMove("true");
-          } else {
-            setCorrect("false");
-
+          } else if (parseFloat(res.res) > 60 && parseFloat(res.res) <= 70) {
+            setCorrect("looks_true");
+            onMove("true");
             if (typeof res.comment === "string") {
               if (router.locale == "ru") {
                 setHint(res.comment);
               } else {
                 if (res.comment == "Дайте более развернутый ответ") {
-                  setHint("Give a more detailed answer.");
+                  setHint("Try giving a more detailed answer.");
                 } else {
-                  setHint("Give a shorter answer.");
+                  setHint("Try giving a shorter answer.");
+                }
+              }
+            }
+            createQuizResult({
+              variables: {
+                quiz: props.quizID,
+                lessonId: props.lessonID,
+                answer: answer,
+                correct: true,
+                comment: ``,
+              },
+            });
+          } else {
+            setCorrect("false");
+            if (typeof res.comment === "string") {
+              if (router.locale == "ru") {
+                setHint(res.comment);
+              } else {
+                if (res.comment == "Дайте более развернутый ответ") {
+                  setHint("Try giving a more detailed answer.");
+                } else {
+                  setHint("Try giving a shorter answer.");
                 }
               }
             }
             onMove("false");
+            createQuizResult({
+              variables: {
+                quiz: props.quizID,
+                lessonId: props.lessonID,
+                answer: answer,
+                correct: false,
+                comment: ``,
+              },
+            });
           }
         })
         .catch((err) => console.log(err));
@@ -574,37 +635,107 @@ const SingleQuiz = (props) => {
     width = "100%";
   }
   return (
-    <Mutation
-      mutation={CREATE_QUIZRESULT_MUTATION}
-      variables={{
-        quiz: props.quizID,
-        lessonId: props.lessonID,
-        answer: answer,
-        correct: correct === "true",
-      }}
-      refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-    >
-      {(createQuizResult, { loading, error }) => (
-        <Styles width={width}>
-          <Buttons>
-            {!exam && !story && (
-              <button onClick={(e) => setUpdate(!update)}>
-                {!update ? t("update") : t("back")}
-              </button>
-            )}
-            {me && !props.exam && !props.story ? (
-              <DeleteSingleQuiz
-                id={me.id}
-                quizID={props.quizID}
-                lessonID={props.lessonID}
+    <Styles width={width}>
+      <Buttons>
+        {!exam && !story && (
+          <button onClick={(e) => setUpdate(!update)}>
+            {!update ? t("update") : t("back")}
+          </button>
+        )}
+        {me && !props.exam && !props.story ? (
+          <DeleteSingleQuiz
+            id={me.id}
+            quizID={props.quizID}
+            lessonID={props.lessonID}
+          />
+        ) : null}
+      </Buttons>
+      {!update && (
+        <>
+          <Question story={story}>
+            <div className="question_box">
+              <div className="question_text">{parse(props.question)}</div>
+              <IconBlock>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
+              </IconBlock>{" "}
+            </div>
+            <div className="answer">
+              <IconBlock>
+                <div className="icon2">
+                  {me.surname
+                    ? `${me.name[0]}${me.surname[0]}`
+                    : `${me.name[0]}${me.name[1]}`}
+                </div>{" "}
+                <div className="name">{me.name}</div>
+              </IconBlock>{" "}
+              <Answer_text
+                type="text"
+                required
+                inputColor={inputColor}
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                placeholder="..."
               />
-            ) : null}
-          </Buttons>
-          {!update && (
-            <>
-              <Question story={story}>
+            </div>
+            <Group>{startSpeech && <p>📣 {t("start_speaking")}..</p>}</Group>
+            <Progress display={progress}>
+              <InfinitySpin width="200" color="#2E80EC" />
+            </Progress>
+            <Group progress={progress} correct={correct}>
+              <Button1
+                inputColor={inputColor}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (props.type === "FORM") {
+                    const res1 = await onSend();
+                  } else {
+                    const res = await onAnswer();
+                  }
+                  setProgress("false");
+                }}
+                correct={correct}
+              >
+                {t("check")}
+              </Button1>
+              <Circle onClick={startListening}>
+                <BiMicrophone
+                  className="icon"
+                  value={{ className: "react-icons" }}
+                />
+              </Circle>
+              <Circle onClick={stopListening} disabled={!recognition}>
+                <BiMicrophoneOff
+                  className="icon"
+                  value={{ className: "react-icons" }}
+                />
+              </Circle>
+              {/* <button onClick={startListening}>Start listening</button> */}
+            </Group>
+            {(correct === "true" || correct === "looks_true") && (
+              <>
                 <div className="question_box">
-                  <div className="question_text">{parse(props.question)}</div>
+                  <div className="question_text">
+                    {!props.type != "FORM" &&
+                      correct === "true" &&
+                      "🎉 " + t("correct") + "!"}
+                    {!props.type != "FORM" &&
+                      correct === "looks_true" &&
+                      hint !== null &&
+                      hint !== 0 &&
+                      props.type != "FORM" && <p>{hint}</p>}
+                    {!props.type != "FORM" &&
+                      correct === "looks_true" &&
+                      "👋 " + t("looks_true")}
+                    {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
+                  </div>
+
                   <IconBlock>
                     {author && author.image != null ? (
                       <img className="icon" src={author.image} />
@@ -614,8 +745,70 @@ const SingleQuiz = (props) => {
                     <div className="name">
                       {author && author.name ? author.name : "BeSavvy"}
                     </div>
-                  </IconBlock>{" "}
+                  </IconBlock>
                 </div>
+                {!props.challenge && !props.type != "FORM" && (
+                  <div className="question_box">
+                    <div className="question_text">{t("show_correct")}</div>
+
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
+                  </div>
+                )}
+              </>
+            )}
+
+            {correct === "false" && (
+              <>
+                <div className="question_box">
+                  <div className="question_text">
+                    {props.type != "FORM" && "🔎  " + t("wrong") + "..."}
+                    <p>
+                      {hint !== null &&
+                        hint !== 0 &&
+                        props.type != "FORM" &&
+                        hint}
+                    </p>
+                    <p>{ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)} </p>
+                  </div>
+                  <IconBlock>
+                    {author && author.image != null ? (
+                      <img className="icon" src={author.image} />
+                    ) : (
+                      <img className="icon" src="../../static/hipster.svg" />
+                    )}{" "}
+                    <div className="name">
+                      {author && author.name ? author.name : "BeSavvy"}
+                    </div>
+                  </IconBlock>
+                </div>
+                {!props.challenge && props.type != "FORM" && (
+                  <div className="question_box">
+                    <div className="question_text">{t("show_correct")}</div>
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
+                  </div>
+                )}
+              </>
+            )}
+            {!props.challenge && correct !== "" && props.type != "FORM" && (
+              <>
                 <div className="answer">
                   <IconBlock>
                     <div className="icon2">
@@ -625,161 +818,53 @@ const SingleQuiz = (props) => {
                     </div>{" "}
                     <div className="name">{me.name}</div>
                   </IconBlock>{" "}
-                  <Answer_text
-                    type="text"
-                    required
-                    inputColor={inputColor}
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                    placeholder="..."
-                  />
+                  <Options>
+                    <Option onClick={(e) => setHidden(false)}>
+                      {t("yes")}
+                    </Option>
+                  </Options>
                 </div>
-                <Group>
-                  {startSpeech && <p>📣 {t("start_speaking")}..</p>}
-                </Group>
-                <Progress display={progress}>
-                  {/* <CircularProgress /> */}
-                  Loading...
-                </Progress>
-                <Group progress={progress} correct={correct}>
-                  <Button1
-                    inputColor={inputColor}
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      if (props.type === "FORM") {
-                        const res1 = await onSend();
-                      } else {
-                        const res = await onAnswer();
-                      }
-                      setProgress("false");
-                      const res0 = await createQuizResult();
-                    }}
-                    correct={correct}
-                  >
-                    {t("check")}
-                  </Button1>
-                  <Circle onClick={startListening}>
-                    <BiMicrophone
-                      className="icon"
-                      value={{ className: "react-icons" }}
-                    />
-                  </Circle>
-                  <Circle onClick={stopListening} disabled={!recognition}>
-                    <BiMicrophoneOff
-                      className="icon"
-                      value={{ className: "react-icons" }}
-                    />
-                  </Circle>
-                  {/* <button onClick={startListening}>Start listening</button> */}
-                </Group>
-
-                {correct === "true" && (
-                  <div className="question_box">
-                    <div className="question_text">
-                      {!props.type != "FORM" && "🎉 " + t("correct")}!{" "}
-                      {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
-                      {!props.challenge &&
-                        !props.type != "FORM" &&
-                        t("show_correct")}
-                    </div>
-                    <IconBlock>
-                      {author && author.image != null ? (
-                        <img className="icon" src={author.image} />
-                      ) : (
-                        <img className="icon" src="../../static/hipster.svg" />
-                      )}{" "}
-                      <div className="name">
-                        {author && author.name ? author.name : "BeSavvy"}
-                      </div>
-                    </IconBlock>
+              </>
+            )}
+            {!hidden && (
+              <div className="question_box">
+                <div className="question_text">
+                  {t("correct_answer")}: {parse(props.answer)}
+                </div>
+                <IconBlock>
+                  {author && author.image != null ? (
+                    <img className="icon" src={author.image} />
+                  ) : (
+                    <img className="icon" src="../../static/hipster.svg" />
+                  )}{" "}
+                  <div className="name">
+                    {author && author.name ? author.name : "BeSavvy"}
                   </div>
-                )}
-                {correct === "false" && (
-                  <div className="question_box">
-                    <div className="question_text">
-                      {props.type != "FORM" && "🔎  " + t("wrong") + "..."}
-                      <br />
-                      {ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)}{" "}
-                      {hint !== null &&
-                        hint !== 0 &&
-                        props.type != "FORM" &&
-                        hint}
-                      <br />
-                      {!props.challenge &&
-                        props.type != "FORM" &&
-                        t("show_correct")}
-                    </div>
-                    <IconBlock>
-                      {author && author.image != null ? (
-                        <img className="icon" src={author.image} />
-                      ) : (
-                        <img className="icon" src="../../static/hipster.svg" />
-                      )}{" "}
-                      <div className="name">
-                        {author && author.name ? author.name : "BeSavvy"}
-                      </div>
-                    </IconBlock>
-                  </div>
-                )}
-                {!props.challenge && correct !== "" && props.type != "FORM" && (
-                  <>
-                    <div className="answer">
-                      <IconBlock>
-                        <div className="icon2">
-                          {me.surname
-                            ? `${me.name[0]}${me.surname[0]}`
-                            : `${me.name[0]}${me.name[1]}`}
-                        </div>{" "}
-                        <div className="name">{me.name}</div>
-                      </IconBlock>{" "}
-                      <Options>
-                        <Option onClick={(e) => setHidden(false)}>
-                          {t("yes")}
-                        </Option>
-                      </Options>
-                    </div>
-                  </>
-                )}
-                {!hidden && (
-                  <div className="question_box">
-                    <div className="question_text">
-                      {t("correct_answer")}: {parse(props.answer)}
-                    </div>
-                    <IconBlock>
-                      {author && author.image != null ? (
-                        <img className="icon" src={author.image} />
-                      ) : (
-                        <img className="icon" src="../../static/hipster.svg" />
-                      )}{" "}
-                      <div className="name">
-                        {author && author.name ? author.name : "BeSavvy"}
-                      </div>
-                    </IconBlock>{" "}
-                  </div>
-                )}
-              </Question>
-            </>
-          )}
-          {miniforum && <Chat me={me} miniforum={miniforum} />}
-          {update && (
-            <UpdateQuiz
-              quizId={props.id}
-              lessonID={props.lessonID}
-              answer={props.answer}
-              question={props.question}
-              complexity={complexity}
-              ifRight={ifRight}
-              ifWrong={ifWrong}
-              next={props.next}
-              check={check}
-              getResult={getResult}
-              switchUpdate={switchUpdate}
-              passUpdated={passUpdated}
-            />
-          )}
-        </Styles>
+                </IconBlock>{" "}
+              </div>
+            )}
+          </Question>
+        </>
       )}
-    </Mutation>
+      {miniforum && <Chat me={me} miniforum={miniforum} />}
+      {update && (
+        <UpdateQuiz
+          quizId={props.id}
+          lessonID={props.lessonID}
+          answer={props.answer}
+          question={props.question}
+          type={props.type}
+          complexity={complexity}
+          ifRight={ifRight}
+          ifWrong={ifWrong}
+          next={props.next}
+          check={check}
+          getResult={getResult}
+          switchUpdate={switchUpdate}
+          passUpdated={passUpdated}
+        />
+      )}
+    </Styles>
   );
 };
 

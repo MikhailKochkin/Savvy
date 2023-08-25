@@ -36,8 +36,7 @@ const LESSON_RESULTS_QUERY = gql`
 `;
 
 const Styles = styled.div`
-  border: 2px solid #edefed;
-  margin: 3% 0;
+  border: 2px solid #f2f6f9;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
 `;
@@ -50,7 +49,7 @@ const Header = styled.p`
   margin: 0;
   margin-top: -2px;
   margin-bottom: 5px;
-  border-bottom: 2px solid #edefed;
+  border-bottom: 3px solid #f2f6f9;
 `;
 
 const UserAnalytics = (props) => {
@@ -82,15 +81,13 @@ const UserAnalytics = (props) => {
       student_arr: student_arr.slice(0, number),
     },
   });
-  if (loading) return <p>Загружаем информацию о результатах студентов...</p>;
+  if (loading) return <p>Loading students results data...</p>;
 
   const results = data.lessonResults;
 
   return (
     <Styles>
-      <Header>
-        {/* Всего пользователей:  */}# Users: {students.length}{" "}
-      </Header>
+      <Header># Users: {students.length} </Header>
       {sorted.slice(0, number).map((student) => {
         let student_results = results.filter((r) => r.student.id == student.id);
         return (

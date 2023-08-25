@@ -14,14 +14,12 @@ const CREATE_CLIENT = gql`
     $name: String!
     $number: String!
     $type: String!
-    $communication_medium: String!
   ) {
     createBusinessClient(
       email: $email
       name: $name
       number: $number
       type: $type
-      communication_medium: $communication_medium
     ) {
       id
     }
@@ -366,22 +364,8 @@ const Action = (props) => {
             </div>
             <div id="details2">
               <div>{t("arg1")}</div>
-              <div>{t("arg2")}</div>
+              {/* <div>{t("arg2")}</div> */}
             </div>
-
-            {/* <div id="details">
-              <div id="prices">
-                <div className="full">
-                  Скидка 50% до 19 ноября
-                  <br />
-                  <span> 104 000</span>
-                </div>
-                <div className="parts">
-                  Скидка 50% до 19 ноября
-                  <br /> <span> 52 000</span>
-                </div>
-              </div>
-            </div> */}
           </Description>
           <Contact>
             <div id="form_container">
@@ -393,13 +377,6 @@ const Action = (props) => {
                   placeholder={t("name")}
                   onChange={(e) => setName(e.target.value)}
                 />
-                {/* <PhoneInput
-                placeholder="Enter phone number"
-                defaultCountry="RU"
-                // value={value}
-                // onChange={(e) => setNumber(e.target.value)}
-                onChange={setNumber}
-              /> */}
                 <input
                   id="tel"
                   className="data"
@@ -436,11 +413,10 @@ const Action = (props) => {
                       });
                       const res = await createBusinessClient({
                         variables: {
-                          type: asPath ? asPath : "English",
+                          type: asPath ? asPath : "main_page",
                           email,
                           name,
                           number,
-                          communication_medium: "Blog page " + program,
                         },
                       });
                     }
@@ -449,20 +425,6 @@ const Action = (props) => {
                   {t("c2a_button")}
                 </button>
               </form>
-              {/* <div id="legal">
-                Нажимая кнопку, принимаю условия{" "}
-                <a
-                  href="https://besavvy.app/legal?name=privacy"
-                  target="_blank"
-                >
-                  политики
-                </a>{" "}
-                и{" "}
-                <a href="https://besavvy.app/legal?name=offer" target="_blank">
-                  оферты
-                </a>
-                .
-              </div> */}
             </div>
           </Contact>
         </Form>

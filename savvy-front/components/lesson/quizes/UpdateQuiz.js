@@ -14,6 +14,7 @@ const UPDATE_QUIZ_MUTATION = gql`
     $answer: String
     $check: String
     $complexity: Int
+    $type: String
     $ifRight: String
     $ifWrong: String
   ) {
@@ -23,6 +24,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       answer: $answer
       check: $check
       complexity: $complexity
+      type: $type
       ifRight: $ifRight
       ifWrong: $ifWrong
     ) {
@@ -153,6 +155,8 @@ const UpdateQuiz = (props) => {
   const [question, setQuestion] = useState(props.question);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
+  const [type, setType] = useState(props.type);
+
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -173,6 +177,17 @@ const UpdateQuiz = (props) => {
         <option value={"WORD"}>Дословно</option>
         <option value={"IDEA"}>По смыслу</option>
       </select>
+      <label for="types">{t("type")}</label>
+      <select
+        name="types"
+        id="types"
+        defaultValue={type}
+        onChange={(e) => setType(e.target.value)}
+      >
+        <option value="TEST">Question</option>
+        <option value="FORM">Form</option>
+      </select>
+
       <Complexity>
         <select
           value={complexity}

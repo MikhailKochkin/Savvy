@@ -2563,7 +2563,9 @@ const Mutation = mutationType({
         attempts: intArg(),
         constructionId: stringArg(),
         lessonId: stringArg(),
-        inputs: list(stringArg()),
+        inputs: arg({
+          type: "ElementsList",
+        }),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;

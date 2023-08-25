@@ -5,7 +5,7 @@ import TexteditorModal from "./TexteditorModal";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 70%;
   p {
     margin: 0.5% 0;
   }
@@ -15,22 +15,20 @@ const Container = styled.div`
   }
 `;
 
-class TexteditorResult extends Component {
-  render() {
-    const { texteditors, student, results } = this.props;
-    return (
-      <Container>
-        {texteditors.length > 0 &&
-          texteditors.map((texteditor) => (
-            <TexteditorModal
-              texteditor={texteditor}
-              student={student}
-              results={results}
-            />
-          ))}
-      </Container>
-    );
-  }
-}
+const TexteditorResult = (props) => {
+  const { texteditors, student, results } = props;
+  return (
+    <Container>
+      {texteditors.length > 0 &&
+        texteditors.map((texteditor) => (
+          <TexteditorModal
+            texteditor={texteditor}
+            student={student}
+            results={results}
+          />
+        ))}
+    </Container>
+  );
+};
 
 export default TexteditorResult;

@@ -33,23 +33,13 @@ const Head = styled.div`
   background-image: url("/static/pattern.svg");
   background-size: cover;
   color: #dfe1ec;
-  /* background: #1a2980;
-  background: -webkit-linear-gradient(
-    to right,
-    #26d0ce,
-    #1a2980
-  ); 
-  background: linear-gradient(to right, #26d0ce, #1a2980); */
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
   #change_page {
-    /* width: 400px;
-    text-align: right; */
     font-size: 1.7rem;
   }
   span {
-    /* font-size: 1.7rem; */
     color: #fff;
   }
   .block {

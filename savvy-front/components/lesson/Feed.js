@@ -476,7 +476,6 @@ const ProgressBar = styled.div`
   height: 100%;
   background: #3f51b5;
   width: ${(props) => props.progress};
-  /* max-width: 350px; */
   transition: all 0.5s;
   border-radius: 4px;
 `;
@@ -524,37 +523,6 @@ const Message = styled.div`
     }
   }
 `;
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     width: 450,
-//     [theme.breakpoints.down("sm")]: {
-//       width: 315,
-//     },
-//     transform: "rotate(90deg)",
-//     background: "white",
-//     margin: "2% 0",
-//   },
-//   progress: {
-//     width: "100%",
-//   },
-//   button: {
-//     padding: "2%",
-//     width: "100%",
-//     fontSize: "1.4rem",
-//     fontFamily: "Montserrat",
-//     textTransform: "none",
-//     textDecoration: "none",
-//   },
-//   textSizeSmall: {
-//     fontSize: "1.7rem",
-//     [theme.breakpoints.down("sm")]: {
-//       fontSize: "1.5rem",
-//     },
-//     textTransform: "none",
-//     fontFamily: "Montserrat",
-//   },
-// }));
 
 const Feed = (props) => {
   const { me, coursePageId, coursePage, lesson_structure, lessonId } = props;

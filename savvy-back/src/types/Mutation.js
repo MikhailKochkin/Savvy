@@ -1847,6 +1847,7 @@ const Mutation = mutationType({
         answer: stringArg(),
         testID: stringArg(),
         lessonID: stringArg(),
+        answerArray: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {
         const TestResult = await ctx.prisma.testResult.create({
@@ -1863,6 +1864,9 @@ const Mutation = mutationType({
             },
             lesson: {
               connect: { id: args.lessonID },
+            },
+            answerArray: {
+              set: [...args.answerArray],
             },
             ...args,
           },
@@ -2037,6 +2041,7 @@ const Mutation = mutationType({
           type: "NextType", // name should match the name you provided
         }),
         ifRight: stringArg(),
+        type: stringArg(),
         ifWrong: stringArg(),
         check: stringArg(),
       },
@@ -2078,6 +2083,7 @@ const Mutation = mutationType({
         correct: booleanArg(),
         quiz: stringArg(),
         lessonId: stringArg(),
+        comment: stringArg(),
       },
 
       resolve: async (_, args, ctx) => {
@@ -2448,9 +2454,10 @@ const Mutation = mutationType({
             },
             `{ id, level {id, level} }`
           );
+
           const updateUserLevel = await ctx.prisma.userLevel.update({
             data: {
-              level: user.level.level + 0.25,
+              level: parseFloat(user.level.level) + 0.25,
             },
             where: {
               id: user.level.id,
@@ -2568,10 +2575,15 @@ const Mutation = mutationType({
       type: "ConstructionResult",
       args: {
         answer: stringArg(),
+        answers: arg({
+          type: "ConstructionAnswers",
+        }),
         attempts: intArg(),
         constructionId: stringArg(),
         lessonId: stringArg(),
-        inputs: list(stringArg()),
+        elements: arg({
+          type: "ElementsList",
+        }),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
@@ -2594,9 +2606,6 @@ const Mutation = mutationType({
             },
             lesson: {
               connect: { id: lessonId },
-            },
-            inputs: {
-              set: [...inputs],
             },
             ...args,
           },

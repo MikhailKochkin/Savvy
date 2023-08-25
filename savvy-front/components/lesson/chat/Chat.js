@@ -98,7 +98,7 @@ const Next = styled.div`
   align-items: center;
   justify-content: center;
   button {
-    width: 200px;
+    width: 100px;
     border: 1px solid #cacaca;
     background: none;
     padding: 8px 15px;

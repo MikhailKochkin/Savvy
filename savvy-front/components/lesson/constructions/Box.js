@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
-
+import parse from "html-react-parser";
 
 const Styles = styled.div`
   border: 1px solid #c4c4c4;
@@ -12,7 +11,7 @@ const Styles = styled.div`
   max-width: 350px;
   line-height: 1.8;
   font-weight: 500;
-  background: #F6EC9A;
+  background: #f6ec9a;
   padding: 4% 6%;
   box-shadow: 0px 4px 4px rgba(182, 182, 182, 0.25);
   transform: ${(props) =>
@@ -46,7 +45,6 @@ const Styles = styled.div`
   }
   .number {
     width: 100%;
-    displa
     padding: 0 15px;
     margin-bottom: 3%;
     .circle {
@@ -59,9 +57,19 @@ const Styles = styled.div`
       border-radius: 100px;
     }
     .pin {
-      background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, red 50%, black 100%);
-    background-image: -webkit-radial-gradient(45px 45px, circle cover, red, black);
-    background-image: radial-gradient(red 50%, black 100%);
+      background-image: -moz-radial-gradient(
+        45px 45px 45deg,
+        circle cover,
+        red 50%,
+        black 100%
+      );
+      background-image: -webkit-radial-gradient(
+        45px 45px,
+        circle cover,
+        red,
+        black
+      );
+      background-image: radial-gradient(red 50%, black 100%);
       width: 30px;
       height: 30px;
       border-radius: 50px;

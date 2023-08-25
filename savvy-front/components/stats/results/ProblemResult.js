@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 import ProblemModal from "./ProblemModal";
 
@@ -17,38 +17,36 @@ const Container = styled.div`
   }
 `;
 
-class ProblemResults extends Component {
-  render() {
-    const {
-      problems,
-      student,
-      results,
-      newTests,
-      quizes,
-      notes,
-      testResults,
-      quizResults,
-    } = this.props;
-    return (
-      <>
-        <Container>
-          {problems.length > 0 &&
-            problems.map((problem) => (
-              <ProblemModal
-                problem={problem}
-                student={student}
-                results={results}
-                newTests={newTests}
-                testResults={testResults}
-                quizes={quizes}
-                quizResults={quizResults}
-                notes={notes}
-              />
-            ))}
-        </Container>
-      </>
-    );
-  }
-}
+const ProblemResults = (props) => {
+  const {
+    problems,
+    student,
+    results,
+    newTests,
+    quizes,
+    notes,
+    testResults,
+    quizResults,
+  } = props;
+  return (
+    <>
+      <Container>
+        {problems.length > 0 &&
+          problems.map((problem) => (
+            <ProblemModal
+              problem={problem}
+              student={student}
+              results={results}
+              newTests={newTests}
+              testResults={testResults}
+              quizes={quizes}
+              quizResults={quizResults}
+              notes={notes}
+            />
+          ))}
+      </Container>
+    </>
+  );
+};
 
 export default ProblemResults;

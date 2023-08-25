@@ -46,7 +46,6 @@ const NewBlock = (props) => {
   const [saved, setSaved] = useState(false);
   // const getData = (d) => props.getData(d);
   const { t } = useTranslation("lesson");
-  console.log("new block data", data);
   const add = () => {
     props.add(props.obj.id, props.obj.index);
   };
@@ -56,7 +55,6 @@ const NewBlock = (props) => {
   };
 
   useEffect(() => {
-    console.log("use effect", props.data);
     setData(props.data);
     setSaved(props.data ? true : false);
   }, [props.data]);
@@ -64,8 +62,6 @@ const NewBlock = (props) => {
   const { lesson, me } = props;
 
   const getResult = async (res) => {
-    console.log("1");
-
     setSaved(true);
 
     let newData = null;
@@ -77,7 +73,6 @@ const NewBlock = (props) => {
       setType("Note");
       newData = res.data.updateNote;
     } else if (res.data.createNewTest) {
-      console.log("inside New Test");
       setType("NewTest");
       newData = res.data.createNewTest;
     } else if (res.data.updateNewTest) {
@@ -90,8 +85,6 @@ const NewBlock = (props) => {
       setType("Quiz");
       newData = res.data.updateQuiz;
     }
-    console.log("newData", newData);
-
     setData((prevData) => {
       return newData;
     });
@@ -101,7 +94,6 @@ const NewBlock = (props) => {
       props.getData(newData.id, newData.__typename);
     }
   };
-  console.log("type", type);
 
   return (
     <Block>

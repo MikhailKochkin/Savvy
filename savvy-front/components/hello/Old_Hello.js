@@ -169,7 +169,7 @@ const hello = (props) => {
           <button>
             <a
               target="_blank"
-              href={`https://calendly.com/mikhail-from-besavvy/15-min-intro?name=${props.name}&email=${props.email}&a1=${props.number}`}
+              href={`https://calendly.com/mikhail-from-besavvy/call-with-mike-kochkin?name=${props.name}&email=${props.email}&a1=${props.number}`}
             >
               {t("choose_time")}
             </a>

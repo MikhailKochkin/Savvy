@@ -18,8 +18,13 @@ const Styles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+
   .editor_container {
     width: 660px;
+  }
+  .canvas_container {
+    width: 100%;
   }
 `;
 
@@ -106,11 +111,8 @@ const CreateProblem = (props) => {
   const router = useRouter();
 
   const getSteps = (val) => {
-    console.log("val", val);
     setSteps([...val]);
   };
-
-  console.log("text", text);
 
   const { lessonID, lesson } = props;
   const rus_placeholder = `<h2><p>План задачи</p></h2><p>1. Заголовок: название задачи. Сделайте его заголовком, нажав на кнопку <b>H</b>.</p><p>2. Опишите условия кейса</p><p>3. Запишите вопрос к задаче. Визуально выделите его, нажав на кнопку с двумя точками.</p><p>4. Ответ к задаче. Его нужно будет скрыть от студента, нажав на кнопку с минусом по центру диалогового окна. В появившемся окне напишите слово "Ответ". Ответ станет доступен только после решения задачи студентом.</p>`;
@@ -124,16 +126,17 @@ const CreateProblem = (props) => {
           value={router.locale == "ru" ? rus_placeholder : eng_placeholder}
         />
       </div>
-      {console.log("lesson", lesson)}
-      <DndProvider backend={HTML5Backend}>
-        <CanvasProblemBuilder
-          lesson={props.lesson}
-          me={props.me}
-          lessonID={lesson.id}
-          getSteps={getSteps}
-          items={[]}
-        />
-      </DndProvider>
+      <div className="canvas_container">
+        <DndProvider backend={HTML5Backend}>
+          <CanvasProblemBuilder
+            lesson={props.lesson}
+            me={props.me}
+            lessonID={lesson.id}
+            getSteps={getSteps}
+            items={[]}
+          />
+        </DndProvider>
+      </div>
       <Mutation
         mutation={CREATE_PROBLEM_MUTATION}
         variables={{

@@ -3,15 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
-// import Button from "@material-ui/core/Button";
-// import { makeStyles } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-
-// import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
-// import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
-// import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
-import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+import ReactTooltip from "react-tooltip";
+import calculateSum from "../../functions.js";
 
 const Buttons = styled.div`
   display: flex;
@@ -95,9 +91,6 @@ const Styles = styled.div`
           text-indent: 0.01px;
           text-overflow: "";
           cursor: pointer;
-          /* &:hover {
-            color: #1a2980;
-          } */
         }
         option {
           color: #c2c2c2;
@@ -120,8 +113,6 @@ const Styles = styled.div`
   .third {
     max-width: 1vw;
     display: flex;
-    /* flex-direction: column;
-    justify-content: center; */
     align-items: center;
     transition: 0.5s;
     top: 10px;
@@ -454,7 +445,75 @@ const Message = styled.div`
     }
   }
 `;
+
+const ProgressBarContainer = styled.div`
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 45px;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  .box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    .timeLeft {
+      min-width: 160px;
+      text-align: center;
+    }
+    .container {
+      width: 500px;
+      height: 14px;
+      border-radius: 8px;
+      padding: 2px;
+      border: 1px solid #e5e5e5;
+      margin-right: 15px;
+    }
+  }
+  @media (max-width: 800px) {
+    height: 70px;
+
+    .box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 80%;
+      .timeLeft {
+        margin-top: 5px;
+      }
+      .container {
+        width: 100%;
+        height: 14px;
+        border-radius: 8px;
+        padding: 2px;
+        border: 1px solid #e5e5e5;
+        margin-right: 15px;
+      }
+    }
+  }
+`;
+
+const ProgressBar = styled.div`
+  height: 100%;
+  background: #3f51b5;
+  width: ${(props) => props.progress};
+  transition: all 0.5s;
+  border-radius: 4px;
+`;
+
 const Feed = (props) => {
+  const { me, coursePageId, coursePage, lesson_structure, lessonId } = props;
+
   const [open, setOpen] = useState(false);
   const [num, setNum] = useState(
     props.my_result &&
@@ -464,8 +523,11 @@ const Feed = (props) => {
       ? props.my_result.progress - 1
       : 0
   );
+  const [isDimmed, setIsDimmed] = useState(false); // For dimming the background
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
+  const [currentTooltip, setCurrentTooltip] = useState(0);
+
   // const classes = useStyles();
   const { t } = useTranslation("lesson");
   const getResults = (el) => {
@@ -538,48 +600,20 @@ const Feed = (props) => {
     visited = [];
   }
 
-  useEffect(() => {
-    if (
-      props.components.length > num + 1 &&
-      props.my_result &&
-      props.my_result.progress / props.number_of_tasks < 0.9
-    ) {
-      if (props.components.length > num + 2) {
-        var my_element =
-          document.getElementsByClassName("final")[0].previousSibling;
-        my_element &&
-          my_element.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-            inline: "nearest",
-          });
-      } else if (props.components.length === num + 2) {
-        var my_element =
-          document.getElementsByClassName("no")[
-            document.getElementsByClassName("no").length - 1
-          ];
-        my_element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest",
-        });
-      }
-    }
-  }, [0]);
-  let color;
-  if (props.components[num].props.complexity == 1) {
-    color = "#55a630";
-  } else if (props.components[num].props.complexity == 2) {
-    color = "#3a86ff";
-  } else if (props.components[num].props.complexity == 3) {
-    color = "#f4d35e";
-  } else if (props.components[num].props.complexity == 4) {
-    color = "#f95738";
-  } else if (props.components[num].props.complexity == 5) {
-    color = "#201C35";
-  } else {
-    color = "#55a630";
-  }
+  // let color;
+  // if (props.components[num].props.complexity == 1) {
+  //   color = "#55a630";
+  // } else if (props.components[num].props.complexity == 2) {
+  //   color = "#3a86ff";
+  // } else if (props.components[num].props.complexity == 3) {
+  //   color = "#f4d35e";
+  // } else if (props.components[num].props.complexity == 4) {
+  //   color = "#f95738";
+  // } else if (props.components[num].props.complexity == 5) {
+  //   color = "#201C35";
+  // } else {
+  //   color = "#55a630";
+  // }
   return (
     <>
       <Styles>
@@ -588,6 +622,7 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
+          <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
           <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
@@ -604,12 +639,17 @@ const Feed = (props) => {
             </div>
           )}
           <div
+            id="tooltip2"
+            data-tip={!props.me ? "This button enables the menu" : undefined}
             className="arrowmenu"
             onClick={(e) => {
               setOpen(!open);
             }}
           >
             <img className="arrow" src="../../static/burger_menu.svg" />
+            {!props.me && (
+              <ReactTooltip place="top" type="dark" effect="float" />
+            )}
           </div>
           {props.components.slice(0, num + 2).map((c, i) => (
             <Block
@@ -622,7 +662,9 @@ const Feed = (props) => {
                 {props.components.length > num + 1 && i === num && (
                   <>
                     <div
+                      id="tooltip1"
                       className="arrow_box"
+                      data-tip="This button enables you to move through the lesson"
                       onClick={(e) => {
                         // if (props.my_result.progress < num + 2) {
                         //   let res = updateLessonResult();
@@ -634,6 +676,9 @@ const Feed = (props) => {
                         className="arrow"
                         src="../../static/down-arrow.svg"
                       />
+                      {!props.me && (
+                        <ReactTooltip place="top" type="dark" effect="float" />
+                      )}
                     </div>
                   </>
                 )}
@@ -688,3 +733,35 @@ const Feed = (props) => {
 };
 
 export default Feed;
+
+const CustomProgressBar = ({ myResult, lessonItems }) => {
+  let lesson_length = calculateSum(lessonItems);
+  let time_coef = lesson_length / lessonItems.length;
+
+  const progress = myResult
+    ? (((myResult + 1) * time_coef) / lesson_length) * 100
+    : 0;
+
+  let time_left = parseInt(lesson_length - (myResult + 1) * time_coef);
+  let time_passed = parseInt(myResult * time_coef);
+
+  const router = useRouter();
+  const { t } = useTranslation("lesson");
+
+  return (
+    <ProgressBarContainer>
+      <div className="box">
+        <div className="container">
+          <ProgressBar progress={progress + "%"} />
+        </div>
+        <div className="timeLeft">
+          {time_left > 0
+            ? router.locale == "ru"
+              ? `Осталось ${time_left} мин.`
+              : `${time_left} mins left`
+            : t("lesson_is_done")}
+        </div>
+      </div>
+    </ProgressBarContainer>
+  );
+};
