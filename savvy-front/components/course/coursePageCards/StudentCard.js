@@ -292,8 +292,28 @@ class StudentCard extends Component {
     //   result.filter((result) => result.student.id === me.id)
     // );
     // 2. See how many lessons the currents user has attended
-    let status = 0;
-    lessonResults.map((res) => (res.progress > 1 ? status++ : status));
+    function countUniqueLessonsWithProgressAbove(stats_data, threshold) {
+      const uniqueLessonIDs = new Set();
+      let count = 0;
+
+      stats_data.forEach((item) => {
+        if (
+          item.progress >= threshold &&
+          !uniqueLessonIDs.has(item.lesson.id)
+        ) {
+          uniqueLessonIDs.add(item.lesson.id);
+          count++;
+        }
+      });
+
+      return count;
+    }
+    const threshold = 5; // Replace with the progress value you are interested in
+    let status = countUniqueLessonsWithProgressAbove(lessonResults, threshold);
+
+    {
+      console.log("lessonResults", lessonResults);
+    }
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio =
@@ -309,12 +329,6 @@ class StudentCard extends Component {
     );
     return (
       <Payment>
-        {/* <div className="news">
-          <div>
-            <span>Новости курса</span>
-          </div>
-          <div>{coursePage.news}</div>
-        </div> */}
         <div className="results">
           <h2>Results</h2>
           <div className="bar">

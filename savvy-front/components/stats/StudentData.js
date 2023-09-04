@@ -435,6 +435,7 @@ const Person = (props) => {
     };
     lesResults.push(new_obj);
   });
+  maxes = maxes.filter((m) => m.lesson.type !== "HIDDEN");
 
   let color;
   let total = 0;
@@ -470,6 +471,28 @@ const Person = (props) => {
     color = "#FDF3C8";
   } else if (total / active_lessons.length >= 0.85) {
     color = "#84BC9C";
+  }
+
+  function checkPhoneNumber(phoneNumber) {
+    // Remove any non-numeric characters, brackets, and blank spaces
+    phoneNumber = phoneNumber.replace(/[\D\s\-\(\)]/g, "");
+
+    // Check if the phone number has less than 9 digits
+    if (phoneNumber.length < 9) {
+      alert("Error: Phone number must have at least 9 digits");
+      return;
+    }
+
+    // Normalize the phone number to the +7 format
+    if (phoneNumber.startsWith("8")) {
+      phoneNumber = "+7" + phoneNumber.substring(1);
+    } else if (phoneNumber.startsWith("7")) {
+      phoneNumber = "+" + phoneNumber;
+    } else if (!phoneNumber.startsWith("+")) {
+      phoneNumber = "+7" + phoneNumber;
+    }
+
+    return phoneNumber;
   }
 
   let emailInfo = {
@@ -557,6 +580,7 @@ const Person = (props) => {
       <Open secret={secret}>
         <EmailBlock>
           <h2>Connect</h2>
+          <div>{student.number}</div>
           <Editor className="editor">
             <DynamicLoadedEditor
               getEditorText={myCallback}
@@ -581,16 +605,22 @@ const Person = (props) => {
               <SendButton>
                 <a
                   target="_blank"
-                  href={`https://wa.me/${student.number}?text=Добрый!`}
+                  href={`https://wa.me/${checkPhoneNumber(
+                    student.number
+                  )}?text=Добрый!`}
                 >
                   {/* Написать в Wh */}
                   WhatsApp
                 </a>
               </SendButton>
             )}
+            {console.log("student.number", student.number)}
             {student.number && (
               <SendButton>
-                <a target="_blank" href={`https://t.me/${student.number}`}>
+                <a
+                  target="_blank"
+                  href={`https://t.me/${checkPhoneNumber(student.number)}`}
+                >
                   {/* Написать в Tg */}
                   Telegram
                 </a>
@@ -690,7 +720,6 @@ const Person = (props) => {
         </EmailBlock>
         <Block>
           <h2>Lesson stats</h2>
-
           <Journey
             student={student}
             maxes={maxes}

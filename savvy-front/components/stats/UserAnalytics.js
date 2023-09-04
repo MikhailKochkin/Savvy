@@ -87,6 +87,7 @@ const UserAnalytics = (props) => {
 
   return (
     <Styles>
+      <Header>{coursePage}</Header>
       <Header># Users: {students.length} </Header>
       {sorted.slice(0, number).map((student) => {
         let student_results = results.filter((r) => r.student.id == student.id);

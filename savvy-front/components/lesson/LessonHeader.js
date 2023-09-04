@@ -31,6 +31,10 @@ const CREATE_LESSONRESULT_MUTATION = gql`
   mutation CREATE_LESSONRESULT_MUTATION($visitsNumber: Int, $lessonID: String) {
     createLessonResult(visitsNumber: $visitsNumber, lessonID: $lessonID) {
       id
+      visitsNumber
+      progress
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -322,15 +326,15 @@ const LessonHeader = (props) => {
     name,
     author,
     lessonResult,
+    coursePage,
+    lessonLength,
     coursePageId,
-    statements,
     me,
     i_am_author,
   } = props;
   let color;
   let progress;
   let visit;
-
   if (me) {
     visit = lessonResult;
     if (visit && lesson.structure && lesson.structure.lessonItems) {
@@ -380,15 +384,145 @@ const LessonHeader = (props) => {
       },
     });
   };
+  const handleButtonClick = async () => {
+    const isRegisteredUser =
+      me &&
+      lesson &&
+      me.id !== lesson.user.id &&
+      !lesson.authors?.includes(me.id);
+    const isAdmin = me.permissions.includes("ADMIN");
+    const isFirstVisit = visit === undefined;
+    const isSubscribedToCourse =
+      me.new_subjects.filter((s) => s.id === coursePageId).length > 0;
+    const isAuthorOrAdmin = me.id && (isAdmin || i_am_author);
+    const isLessonFinished =
+      visit?.progress == lessonLength && lessonLength !== undefined && visit
+        ? true
+        : false;
+
+    console.log("isRegisteredUser", isRegisteredUser);
+    console.log("isFirstVisit", isFirstVisit);
+    console.log("isSubscribedToCourse", isSubscribedToCourse);
+    console.log("isAuthorOrAdmin", isAuthorOrAdmin);
+    console.log("isLessonFinished", isLessonFinished);
+    console.log("results", visit?.progress, lessonLength);
+
+    const createVisit = () => {
+      createLessonResult({
+        variables: {
+          lessonID: lesson.id,
+          visitsNumber: 1,
+        },
+      });
+    };
+
+    const updateVisit = () => {
+      updateLessonResult({
+        variables: {
+          id: visit.id,
+          visitsNumber: visit.visitsNumber + 1,
+        },
+      });
+    };
+
+    // A student is visiting the lesson for the first time
+    if (published) {
+      if (
+        isRegisteredUser &&
+        isFirstVisit &&
+        isSubscribedToCourse &&
+        !isAuthorOrAdmin &&
+        !isLessonFinished
+        //&& !lesson.open
+      ) {
+        createVisit();
+        console.log(1);
+      }
+
+      // A student continues the unfinished lesson
+
+      if (
+        isRegisteredUser &&
+        !isFirstVisit &&
+        isSubscribedToCourse &&
+        !isLessonFinished &&
+        !isAuthorOrAdmin
+      ) {
+        updateVisit();
+        console.log(2);
+      }
+
+      // A student is revisiting the finished lesson
+
+      if (
+        isRegisteredUser &&
+        !isFirstVisit &&
+        isSubscribedToCourse &&
+        isLessonFinished &&
+        !isAuthorOrAdmin
+      ) {
+        createVisit();
+        console.log(3);
+      }
+
+      // An author visits the lesson for the first time
+
+      if (isFirstVisit && isAuthorOrAdmin) {
+        createVisit();
+        console.log(4);
+      }
+
+      // An author visits the lesson for second or more time
+
+      if (!isFirstVisit && isAuthorOrAdmin) {
+        updateVisit();
+        console.log(5);
+      }
+
+      // An unsubscribed  student is visiting an open lesson for the first time
+
+      if (
+        lesson.open &&
+        isFirstVisit &&
+        !isAuthorOrAdmin &&
+        !isLessonFinished &&
+        !isSubscribedToCourse
+      ) {
+        createVisit();
+        console.log(6);
+      }
+
+      // An unsubscribed student continues the open lesson
+
+      if (
+        lesson.open &&
+        !isFirstVisit &&
+        !isAuthorOrAdmin &&
+        !isLessonFinished &&
+        !isSubscribedToCourse
+      ) {
+        updateVisit();
+        console.log(7);
+      }
+
+      // An unsubscribed student revisits the open lesson that they have already finished
+
+      if (
+        lesson.open &&
+        !isFirstVisit &&
+        !isAuthorOrAdmin &&
+        isLessonFinished &&
+        !isSubscribedToCourse
+      ) {
+        createVisit();
+        console.log(8);
+      }
+    }
+  };
 
   return (
     <>
       <TextBar color={color}>
-        {/* {lesson && lesson.open && (
-          <div className="open">
-            <img src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/60/000000/external-free-sales-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png" />
-          </div>
-        )} */}
         <div>
           <Text>
             <div className="lesson_name">
@@ -462,12 +596,6 @@ const LessonHeader = (props) => {
                             id: lesson.id,
                             published: !published,
                           },
-                          // refetchQueries: [
-                          //   {
-                          //     query: SINGLE_COURSEPAGE_QUERY,
-                          //     variables: { id: coursePageId },
-                          //   },
-                          // ],
                         });
                         setPublished(
                           e.target.type === "checkbox"
@@ -522,138 +650,7 @@ const LessonHeader = (props) => {
                 >
                   <A>
                     <Button
-                      onClick={async (e) => {
-                        // 0. admin / open lesson / lesson author visit open lesson for the first time
-                        // if (
-                        //   me &&
-                        //   lesson &&
-                        //   visit == undefined &&
-                        //   (me.id === author ||
-                        //     me.permissions.includes("ADMIN") ||
-                        //     lesson.open)
-                        // ) {
-                        //   createLessonResult({
-                        //     variables: {
-                        //       lessonID: lesson.id,
-                        //       visitsNumber: 1,
-                        //     },
-                        //   });
-                        //   console.log(0);
-                        // }
-                        // 1. registered user visits the lesson for the first time
-                        if (
-                          me &&
-                          lesson &&
-                          visit == undefined &&
-                          me.id !== lesson.user.id &&
-                          me.new_subjects.filter((s) => s.id == coursePageId)
-                            .length > 0 &&
-                          !me.permissions.includes("ADMIN") &&
-                          !lesson.open &&
-                          published
-                        ) {
-                          createLessonResult({
-                            variables: {
-                              lessonID: lesson.id,
-                              visitsNumber: 1,
-                            },
-                          });
-                          console.log(1);
-                        }
-
-                        // 2. registered user visits the lesson one more time
-                        if (
-                          me &&
-                          lesson &&
-                          visit !== undefined &&
-                          me.id !== lesson.user.id &&
-                          !me.permissions.includes("ADMIN") &&
-                          me.new_subjects.filter((s) => s.id == coursePageId)
-                            .length > 0 &&
-                          published
-                        ) {
-                          updateLessonResult({
-                            variables: {
-                              id: visit.id,
-                              visitsNumber: visit.visitsNumber + 1,
-                            },
-                          });
-                          console.log(2);
-                        }
-
-                        // 3. author or admin visits the lesson for the first time
-                        if (
-                          me &&
-                          lesson &&
-                          visit == undefined &&
-                          (me.id === author ||
-                            me.permissions.includes("ADMIN") ||
-                            i_am_author)
-                        ) {
-                          createLessonResult({
-                            variables: {
-                              lessonID: lesson.id,
-                              visitsNumber: 1,
-                            },
-                          });
-                          console.log(3);
-                        }
-
-                        // 4. author or admin visits the lesson one more time
-                        if (
-                          me &&
-                          lesson &&
-                          visit !== undefined &&
-                          (me.id === author ||
-                            me.permissions.includes("ADMIN") ||
-                            i_am_author)
-                        ) {
-                          updateLessonResult({
-                            variables: {
-                              id: visit.id,
-                              visitsNumber: visit.visitsNumber + 1,
-                            },
-                          });
-                          console.log(4);
-                        }
-
-                        // 5. unregistered user visits the open lesson for the first time
-                        if (
-                          lesson &&
-                          lesson.open &&
-                          visit == undefined &&
-                          me.id !== lesson.user.id &&
-                          !me.permissions.includes("ADMIN") &&
-                          !me.new_subjects.includes(coursePageId) &&
-                          published
-                        ) {
-                          createLessonResult({
-                            variables: {
-                              lessonID: lesson.id,
-                              visitsNumber: 1,
-                            },
-                          });
-                          console.log(5);
-                        }
-                        // 6. unregistered user visits the open lesson one more time
-                        if (
-                          lesson &&
-                          lesson.open &&
-                          me.id !== lesson.user.id &&
-                          visit !== undefined &&
-                          !me.permissions.includes("ADMIN") &&
-                          !me.new_subjects.includes(coursePageId) &&
-                          published
-                        ) {
-                          updateLessonResult({
-                            variables: {
-                              id: visit.id,
-                              visitsNumber: visit.visitsNumber + 1,
-                            },
-                          });
-                          console.log(6);
-                        }
-                      }}
+                    // onClick={handleButtonClick}
                     >
                       {t("open")}
                     </Button>

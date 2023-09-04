@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Mutation } from "@apollo/client/react/components";
+import { useMutation, useQuery, gql } from "@apollo/client";
 import _ from "lodash";
-// import Button from "@material-ui/core/Button";
-// import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import Auth from "../auth/Auth.js";
+
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
@@ -526,6 +525,14 @@ const Message = styled.div`
 
 const Feed = (props) => {
   const { me, coursePageId, coursePage, lesson_structure, lessonId } = props;
+  const { t } = useTranslation("lesson");
+  const [createLessonResult, { create_data }] = useMutation(
+    CREATE_LESSONRESULT_MUTATION
+  );
+
+  const [updateLessonResult, { update_data }] = useMutation(
+    UPDATE_LESSONRESULT_MUTATION
+  );
   let lessonElements;
   let next_lesson = false;
 
@@ -557,16 +564,20 @@ const Feed = (props) => {
 
   const [num, setNum] = useState(0);
   const [result, setResult] = useState(
-    props.my_result ? props.my_result.id : null
+    props.my_result ? props.my_result : null
   );
   const [secondRound, setSecondRound] = useState(false);
   const [progress, setProgress] = useState();
   const [open, setOpen] = useState(false);
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
-  // const classes = useStyles();
 
-  const { t } = useTranslation("lesson");
+  let hasLessonBeenFinished =
+    result?.progress == lesson_structure.length &&
+    lesson_structure &&
+    result?.progress
+      ? true
+      : false;
 
   const move = async (e) => {
     if (lessonElements.length > num + 1) {
@@ -638,10 +649,7 @@ const Feed = (props) => {
   }
 
   useEffect(() => {
-    // setResult(props.my_result ? props.my_result.id : null);
-  }, [0]);
-  useEffect(() => {
-    setResult(props.my_result ? props.my_result.id : null);
+    setResult(props.my_result ? props.my_result : null);
     setNum(
       num > 0
         ? num
@@ -679,6 +687,7 @@ const Feed = (props) => {
       }
     }
   }, [props.my_result]);
+
   return (
     <>
       <Styles>
@@ -713,8 +722,11 @@ const Feed = (props) => {
           >
             <img className="arrow" src="../../static/burger_menu.svg" />
           </div>
-          {result ? (
+          {/* First we check if the iser have ever visited the lesson */}
+          {result && !hasLessonBeenFinished ? (
             <>
+              {/*  We have lesson result */}
+
               {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block"}
@@ -722,63 +734,46 @@ const Feed = (props) => {
                   show={i === num + 1 ? "final" : "no"}
                   className={i === num + 1 ? "final" : "no"}
                 >
-                  {/* {props.move_statuses[i] ? "Show" : "No show"} */}
-                  {/* {props.move_statuses[i] ? "Show" : "No show"} */}
-
                   {c}
                   {props.move_statuses[i] && props.showArrow && (
-                    <Mutation
-                      mutation={UPDATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        id: result,
-                        lessonID: props.lessonID,
-                        progress: num + 2,
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: NEW_SINGLE_LESSON_QUERY,
-                          variables: { id: props.lessonID },
-                        },
-                      ]}
-                    >
-                      {(updateLessonResult, { loading, error }) => {
-                        return (
-                          <Buttons>
-                            {/* Show move button if it is not the last block in the lesson */}
-                            {lessonElements.length > num + 1 && i === num && (
-                              <>
-                                <div
-                                  id="arrow_box"
-                                  className="arrow_box"
-                                  onClick={async (e) => {
-                                    if (
-                                      lessonElements.length - (num + 2) ==
-                                      2
-                                    ) {
-                                      setSecondRound(true);
-                                    }
-                                    let res2 = move();
-                                    let res = await updateLessonResult();
-                                    // }
-                                  }}
-                                >
-                                  <img
-                                    className="arrow"
-                                    src="../../static/down-arrow.svg"
-                                  />
-                                </div>
-                              </>
-                            )}
-                          </Buttons>
-                        );
-                      }}
-                    </Mutation>
+                    <Buttons>
+                      {/* Show move button if it is not the last block in the lesson */}
+                      {lessonElements.length > num + 1 && i === num && (
+                        <>
+                          <div
+                            id="arrow_box"
+                            className="arrow_box"
+                            onClick={async (e) => {
+                              if (lessonElements.length - (num + 2) == 2) {
+                                setSecondRound(true);
+                              }
+                              let res2 = move();
+                              let res = await updateLessonResult({
+                                variables: {
+                                  id: result.id,
+                                  lessonID: props.lessonID,
+                                  progress: num + 2,
+                                },
+                              });
+                              // }
+                            }}
+                          >
+                            <img
+                              className="arrow"
+                              src="../../static/down-arrow.svg"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </Buttons>
                   )}
                 </Block>
               ))}
             </>
           ) : (
             <>
+              {/*  We don't have lesson result */}
+
               {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block2"}
@@ -787,52 +782,36 @@ const Feed = (props) => {
                   className={i === num + 1 ? "final" : "no"}
                 >
                   {c}
-                  <div>{result}</div>
                   {props.showArrow && (
-                    <Mutation
-                      mutation={CREATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        lessonID: props.lessonID,
-                        progress: num + 2,
-                      }}
-                      refetchQueries={[
-                        {
-                          query: NEW_SINGLE_LESSON_QUERY,
-                          variables: { id: props.lessonID },
-                        },
-                      ]}
-                    >
-                      {(createLessonResult, { loading, error }) => {
-                        return (
-                          <Buttons>
-                            {lessonElements.length > num + 1 && i === num && (
-                              <>
-                                <div
-                                  id="arrow"
-                                  className="arrow_box"
-                                  onClick={async (e) => {
-                                    let res2 = move();
-                                    if (
-                                      props.me.id !==
-                                      "clkvdew14837181f13vcbbcw0x"
-                                    ) {
-                                      let res = await createLessonResult();
-
-                                      setResult(res.data.createLessonResult.id);
-                                    }
-                                  }}
-                                >
-                                  <img
-                                    className="arrow"
-                                    src="../../static/down-arrow.svg"
-                                  />
-                                </div>
-                              </>
-                            )}
-                          </Buttons>
-                        );
-                      }}
-                    </Mutation>
+                    <Buttons>
+                      {lessonElements.length > num + 1 && i === num && (
+                        <>
+                          <div
+                            id="arrow"
+                            className="arrow_box"
+                            onClick={async (e) => {
+                              let res2 = move();
+                              if (
+                                props.me.id !== "clkvdew14837181f13vcbbcw0x"
+                              ) {
+                                let res = await createLessonResult({
+                                  variables: {
+                                    lessonID: props.lessonID,
+                                    progress: num + 2,
+                                  },
+                                });
+                                setResult(res.data.createLessonResult);
+                              }
+                            }}
+                          >
+                            <img
+                              className="arrow"
+                              src="../../static/down-arrow.svg"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </Buttons>
                   )}
                 </Block>
               ))}
@@ -848,85 +827,36 @@ const Feed = (props) => {
                 props.next.published && (
                   <>
                     {visited.length === 0 ? (
-                      <Mutation
-                        mutation={CREATE_LESSONRESULT_MUTATION}
-                        variables={{
-                          lessonID: props.next.id,
-                          visitsNumber: 1,
-                        }}
-                        refetchQueries={() => [
-                          {
-                            query: SINGLE_COURSEPAGE_QUERY,
-                            variables: { id: props.coursePageID },
+                      <Link
+                        legacyBehavior
+                        href={{
+                          pathname: "/lesson",
+                          query: {
+                            id: props.next.id,
+                            type: props.next.type.toLowerCase(),
                           },
-                        ]}
-                      >
-                        {(createLessonResult, { loading, error }) => {
-                          return (
-                            <Link
-                              legacyBehavior
-                              // The user HAS not yet visited the next lesson page
-                              href={{
-                                pathname: "/lesson",
-                                query: {
-                                  id: props.next.id,
-                                  type: props.next.type.toLowerCase(),
-                                },
-                              }}
-                            >
-                              <a>
-                                <button
-                                  onClick={() => {
-                                    createLessonResult();
-                                  }}
-                                >
-                                  Следующий урок
-                                </button>
-                              </a>
-                            </Link>
-                          );
                         }}
-                      </Mutation>
+                      >
+                        <a>
+                          <button>Следующий урок</button>
+                        </a>
+                      </Link>
                     ) : (
-                      <Mutation
-                        mutation={UPDATE_LESSONRESULT_MUTATION}
-                        variables={{
-                          id: visited[0].id,
-                          visitsNumber: visited[0].visitsNumber + 1,
-                        }}
-                        refetchQueries={() => [
-                          {
-                            query: SINGLE_COURSEPAGE_QUERY,
-                            variables: { id: props.coursePageID },
+                      <Link
+                        legacyBehavior
+                        // The user HAS visited the next lesson page and we update it now
+                        href={{
+                          pathname: "/lesson",
+                          query: {
+                            id: props.next.id,
+                            type: props.next.type.toLowerCase(),
                           },
-                        ]}
-                      >
-                        {(updateLessonResult, { loading, error }) => {
-                          return (
-                            <Link
-                              legacyBehavior
-                              // The user HAS visited the next lesson page and we update it now
-                              href={{
-                                pathname: "/lesson",
-                                query: {
-                                  id: props.next.id,
-                                  type: props.next.type.toLowerCase(),
-                                },
-                              }}
-                            >
-                              <a>
-                                <button
-                                  onClick={() => {
-                                    updateLessonResult();
-                                  }}
-                                >
-                                  Следующий урок
-                                </button>
-                              </a>
-                            </Link>
-                          );
                         }}
-                      </Mutation>
+                      >
+                        <a>
+                          <button>Следующий урок</button>
+                        </a>
+                      </Link>
                     )}
                   </>
                 )}

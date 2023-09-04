@@ -75,10 +75,15 @@ const ConstructionModal = (props) => {
     return array;
   };
   useEffect(() => {
-    const vars = shuffle([
-      ...props.construction.elements.elements.filter((t) => t.isTest),
-    ]);
-    setVariants(vars);
+    let vars;
+    if (props.construction?.elements?.elements) {
+      vars = shuffle([
+        ...props.construction.elements.elements.filter((t) => t.isTest),
+      ]);
+    } else {
+      vars = props.construction.variants;
+    }
+    setVariants([...vars]);
   }, []);
 
   return (

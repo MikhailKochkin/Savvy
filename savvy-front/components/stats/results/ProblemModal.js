@@ -235,23 +235,9 @@ const ProblemModal = (props) => {
             .filter((t) => t.problem.id === problem.id)
             .map((t) => (
               <>
-                {moment(t.createdAt).format("LLL")}
-                {t.answer.length < 200 ? (
-                  <span>{parse(t.answer)}</span>
-                ) : (
-                  <span>{parse(t.answer.substring(0, 200) + "...")}</span>
-                )}
-                <div>
-                  {results.filter((t) => t.problem.id === problem.id).length >
-                  0 ? (
-                    results
-                      .filter((t) => t.problem.id === problem.id)
-                      .map((t) => <Span>{parse(t.answer)}</Span>)
-                  ) : (
-                    <span>No data</span>
-                  )}
-                </div>
-                <br />
+                <Span>
+                  {parse(t.answer)} {moment(t.createdAt).format("LLL")}
+                </Span>
               </>
             ))
         ) : (

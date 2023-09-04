@@ -16,6 +16,8 @@ const Styles = styled.div`
 const Journey = (props) => {
   Chart.register(...registerables);
 
+  console.log("maxes", props.maxes);
+
   let data_labels = props.maxes.map(function (item) {
     return {
       progress: item.progress,

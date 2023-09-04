@@ -347,7 +347,11 @@ const LessonsData = (props) => {
   }
 
   let i_am_author = false;
-  if (me && coursePage.authors.filter((auth) => auth.id == me.id).length > 0) {
+  if (
+    me &&
+    (coursePage.authors.filter((auth) => auth.id == me.id).length > 0 ||
+      coursePage.user.id == me.id)
+  ) {
     i_am_author = true;
 
     //   let have_cert = false;
@@ -475,10 +479,8 @@ const LessonsData = (props) => {
                               lessonResult={maxes.find(
                                 (m) => m.lesson.id == les.id
                               )}
+                              lessonLength={les.structure}
                               i_am_author={i_am_author}
-                              // statements={
-                              //   lesson.forum ? lesson.forum.statements : null
-                              // }
                               coursePage={props.id}
                               author={coursePage.user.id}
                               open={index + 1 === 1}
@@ -511,6 +513,11 @@ const LessonsData = (props) => {
                           lessonResult={maxes.find(
                             (m) => m.lesson.id == lesson.id
                           )}
+                          lessonLength={
+                            lesson.structure && lesson.structure.lessonItems
+                              ? lesson.structure.lessonItems.length
+                              : 0
+                          }
                           i_am_author={i_am_author}
                           statements={
                             lesson.forum ? lesson.forum.statements : null
@@ -543,7 +550,7 @@ const LessonsData = (props) => {
                       lessonResult={maxes.find((m) => m.lesson.id == lesson.id)}
                       i_am_author={i_am_author}
                       statements={lesson.forum ? lesson.forum.statements : null}
-                      coursePage={props.id}
+                      coursePage={coursePage}
                       author={coursePage.user.id}
                       open={index + 1 === 1}
                       index={index + 1}

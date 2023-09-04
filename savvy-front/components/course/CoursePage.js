@@ -1,14 +1,6 @@
-import { useState, useEffect } from "react";
-// import { gql, useQuery, useLazyQuery } from "@apollo/client";
-import { useTranslation } from "next-i18next";
 import styled from "styled-components";
-import parse from "html-react-parser";
 import { gql } from "@apollo/client";
-
 import { useUser } from "../User";
-// import Loading from "../Loading";
-// import Feedback from "./Feedback";
-// import Certificate from "./Certificate";
 import CourseData from "./courseBlocks/CourseData";
 import ToolsBox from "./courseBlocks/ToolsBox";
 import LessonsData from "./courseBlocks/LessonsData";

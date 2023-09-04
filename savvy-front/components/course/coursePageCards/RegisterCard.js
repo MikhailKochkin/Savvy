@@ -176,26 +176,7 @@ const RegisterCard = (props) => {
                     },
                   }}
                 >
-                  <StartLesson
-                    onClick={(e) => {
-                      if (props.lessonResults.length == 0) {
-                        createLessonResult({
-                          variables: {
-                            lessonID: props.first_lesson.id,
-                            visitsNumber: 1,
-                          },
-                        });
-                      } else {
-                        updateLessonResult({
-                          variables: {
-                            id: props.lessonResults[0].id,
-                            visitsNumber:
-                              props.lessonResults[0].visitsNumber + 1,
-                          },
-                        });
-                      }
-                    }}
-                  >
+                  <StartLesson>
                     <a target="_blank">{t("start_lesson1")}</a>
                   </StartLesson>
                 </Link>

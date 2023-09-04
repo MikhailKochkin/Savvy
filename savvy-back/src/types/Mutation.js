@@ -63,7 +63,7 @@ async function getMessageOpens(serverToken, messageID) {
   }
 }
 
-// const { exists } = require("fs");
+const { exists } = require("fs");
 
 // const { Client } = require("whatsapp-web.js");
 // const wa_client = new Client();
@@ -79,8 +79,6 @@ async function getMessageOpens(serverToken, messageID) {
 // });
 
 // wa_client.initialize();
-
-// console.log(12);
 
 const makeANiceEmail = (text) => `
   <div className="email" style="
@@ -904,8 +902,8 @@ const Mutation = mutationType({
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: user.email,
-          Subject: `${user.name}, ${
-            args.subject ? args.subject : "информация от BeSavvy 👋🏻"
+          Subject: `${
+            args.subject ? args.subject : "Информация от BeSavvy 👋🏻"
           }`,
           HtmlBody: GenericEmail.GenericEmail(args.text),
           Tag: "communication_email",

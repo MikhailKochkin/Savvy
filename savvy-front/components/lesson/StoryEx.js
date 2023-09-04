@@ -35,6 +35,8 @@ const LESSON_RESULTS_QUERY = gql`
       visitsNumber
       progress
       lessonID
+      createdAt
+      updatedAt
       student {
         id
       }
@@ -121,12 +123,31 @@ const StoryEx = (props) => {
         {/* <CircularProgress /> */}
       </Progress>
     );
-  let my_result =
-    stats_data && stats_data.lessonResults.length > 0
-      ? stats_data.lessonResults.reduce((prev, current) =>
-          prev.progress > current.progress ? prev : current
-        )
-      : null;
+
+  let my_result = null;
+
+  if (stats_data && stats_data.lessonResults.length > 0) {
+    // Special case: if there's only one item, return it
+    if (stats_data.lessonResults.length === 1) {
+      my_result = stats_data.lessonResults[0];
+    } else {
+      const filteredResults = stats_data.lessonResults.filter(
+        (result) => result.progress < lesson.structure.lessonItems.length
+      );
+      console.log("filteredResults", filteredResults);
+
+      // If any items are left, find the one with the maximum progress
+      if (filteredResults.length > 0) {
+        my_result = filteredResults.reduce((prev, current) => {
+          return prev.progress > current.progress ? prev : current;
+        });
+      }
+    }
+  }
+
+  // Now, my_result should contain the item with the highest progress value that is not equal to maxProgress, or null if no such item exists.
+
+  console.log("my_result", my_result, stats_data?.lessonResults);
   let components = [];
   let move_statuses = [];
   tasks.map((task) => {
