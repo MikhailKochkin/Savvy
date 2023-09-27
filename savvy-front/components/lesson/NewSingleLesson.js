@@ -19,6 +19,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
     lesson(where: { id: $id }) {
       id
       text
+      openSize
       name
       number
       type
@@ -409,7 +410,7 @@ const NewSingleLesson = (props) => {
       level: 1,
     },
     image:
-      "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1691081083/Screenshot_2023-08-03_at_20.44.30.png",
+      "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1695807197/Screenshot_2023-09-27_at_13.32.54.png",
     name: "New User",
     new_subjects: [],
     orders: [],

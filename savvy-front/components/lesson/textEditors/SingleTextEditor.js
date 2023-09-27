@@ -46,7 +46,7 @@ const Styles = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background: #f8f9fa;
   padding: 2% 0;
 `;
@@ -176,7 +176,7 @@ const Window = styled.div`
   margin-bottom: 20px;
   min-height: 80px;
   border-radius: 10px;
-  /* width: 280px; */
+  width: 320px;
   line-height: 1.4;
   background: rgb(255, 255, 255);
   -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
@@ -357,6 +357,25 @@ const BlueButton = styled.button`
 //   },
 // })(Button);
 
+function containsOnlyNumbers(str) {
+  const regex = /^[0-9]+$/;
+  return regex.test(str);
+}
+
+function compareStrings(str1, str2) {
+  if (str1.length !== str2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < str1.length; i++) {
+    if (str1[i] !== str2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 const SingleTextEditor = (props) => {
   // const [text, setText] = useState(props.textEditor.text);
   const [attempts, setAttempts] = useState(0);
@@ -401,50 +420,87 @@ const SingleTextEditor = (props) => {
       answer1: answer1,
       answer2: answer2,
     };
+    console.log(
+      "answers",
+      containsOnlyNumbers(answer1),
+      containsOnlyNumbers(answer2)
+    );
 
     let el = document.getElementById(chosenElement);
     e.target.innerHTML = "Checking...";
-    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        if (
-          !e.target.nextSibling ||
-          (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
-        ) {
-          console.log("button 1");
-          let button2 = document.createElement("button");
-          button2.innerHTML = "Show";
-          button2.className = "show_button";
-          button2.addEventListener("click", show);
-          e.target.after(button2);
-        }
-        if (parseFloat(res.res) > 69) {
-          setResult(true);
-          props.getResults(1);
-          console.log("el", el);
-          el.style.background = "#D9EAD3";
-          e.target.style.display = "none";
-          return true;
-        } else {
-          setResult(false);
-          el.style.background = "#FCE5CD";
-          e.target.innerHTML = "Check";
-          e.target.className = "mini_button";
-          if (res.comment) {
-            alert(res.comment);
-          }
-          setTimeout(() => (el.style.background = "#bef1ed"), 3000);
-          return false;
-        }
+    let r;
+    if (containsOnlyNumbers(answer1) && containsOnlyNumbers(answer2)) {
+      r = compareStrings(answer1, answer2);
+      if (
+        !e.target.nextSibling ||
+        (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
+      ) {
+        console.log("button 1");
+        let button2 = document.createElement("button");
+        button2.innerHTML = "Show";
+        button2.className = "show_button";
+        button2.addEventListener("click", show);
+        e.target.after(button2);
+      }
+      if (r) {
+        setResult(true);
+        props.getResults(1);
+        el.style.background = "#D9EAD3";
+        e.target.style.display = "none";
+        return true;
+      } else {
+        setResult(false);
+        el.style.background = "#FCE5CD";
+        e.target.innerHTML = "Check";
+        e.target.className = "mini_button";
+        setTimeout(() => (el.style.background = "#bef1ed"), 3000);
+        return false;
+      }
+    } else {
+      r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       })
-      .catch((err) => console.log(err));
+        .then((response) => response.json())
+        .then((res) => {
+          if (
+            !e.target.nextSibling ||
+            (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
+          ) {
+            console.log("button 1");
+            let button2 = document.createElement("button");
+            button2.innerHTML = "Show";
+            button2.className = "show_button";
+            button2.addEventListener("click", show);
+            e.target.after(button2);
+          }
+          if (parseFloat(res.res) > 69) {
+            setResult(true);
+            props.getResults(1);
+            console.log("el", el);
+            el.style.background = "#D9EAD3";
+            e.target.style.display = "none";
+            return true;
+          } else {
+            setResult(false);
+            el.style.background = "#FCE5CD";
+            e.target.innerHTML = "Check";
+            e.target.className = "mini_button";
+            if (res.comment) {
+              alert(res.comment);
+            }
+            setTimeout(() => (el.style.background = "#bef1ed"), 3000);
+            return false;
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+
     setShown(false);
+    console.log("r2", r);
     return r;
   };
 

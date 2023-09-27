@@ -27,6 +27,26 @@ const SEND_MESSAGE_MUTATION = gql`
   }
 `;
 
+const SEND_MESSAGE2_MUTATION = gql`
+  mutation SEND_MESSAGE2_MUTATION(
+    $subject: String
+    $name: String
+    $email: String
+    $connection: String
+    $type: String
+  ) {
+    sendClientEmail(
+      subject: $subject
+      name: $name
+      email: $email
+      connection: $connection
+      type: $type
+    ) {
+      name
+    }
+  }
+`;
+
 const UPDATE_USER_MUTATION2 = gql`
   mutation UPDATE_USER_MUTATION2(
     $id: String!
@@ -201,7 +221,6 @@ const UserCard = memo((props) => {
   const [message, setMessage] = useState("");
   const [wa_message, setWa_message] = useState("");
 
-  const [subject, setSubject] = useState("");
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
   const [showTraffic, setShowTraffic] = useState(false);
@@ -212,23 +231,14 @@ const UserCard = memo((props) => {
   const [selectedMessageGroup, setSelectedMessageGroup] = useState(null);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [messageSubject, setMessageSubject] = useState(null);
+  const [subject, setSubject] = useState(
+    `${props.name}, начните изучать право на симуляторах сегодня`
+  );
 
   const [editorText, setEditorText] = useState(null);
 
-  const handleGroupChange = (groupName) => {
-    const group = emailGroups.find((group) => group.name === groupName);
-    setSelectedGroup(group);
-    setSelectedEmail(null); // Reset selected email when group changes
-  };
-
-  const handleEmailChange = (subject) => {
-    const email = selectedGroup?.emails.find(
-      (email) => email.subject === subject
-    );
-    setSelectedEmail(email);
-    setSubject(email.subject);
-    setMessage(email.text);
-  };
+  const [sendClientEmail, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(SEND_MESSAGE2_MUTATION);
 
   const handleMessageGroupChange = (groupName) => {
     const group = wa_messages.find((group) => group.name === groupName);
@@ -508,8 +518,10 @@ const UserCard = memo((props) => {
         <button onClick={(e) => wa_send()}>Send WA</button>
         <br />
         <h4>Имейл</h4>
+        <input value={subject} onChange={(e) => setSubject(e.target.value)} />
+
         {/* Dropdown for email groups */}
-        <select onChange={(e) => handleGroupChange(e.target.value)}>
+        {/* <select onChange={(e) => handleGroupChange(e.target.value)}>
           <option value="">Select email group</option>
           {emailGroups.map((group) => (
             <option key={group.name} value={group.name}>
@@ -517,10 +529,10 @@ const UserCard = memo((props) => {
             </option>
           ))}
         </select>
-        <br />
+        <br /> */}
 
         {/* Dropdown for emails */}
-        {selectedGroup && (
+        {/* {selectedGroup && (
           <select onChange={(e) => handleEmailChange(e.target.value)}>
             <option value="">Select email</option>
             {selectedGroup.emails.map((email) => (
@@ -537,9 +549,8 @@ const UserCard = memo((props) => {
             onChange={(e) => setSubject(e.target.value)}
             value={subject}
           />
-        )}
-        <br />
-        {selectedGroup &&
+        )} */}
+        {/* {selectedGroup &&
           selectedGroup.emails.map((s) => (
             <Editor
               show={
@@ -552,23 +563,41 @@ const UserCard = memo((props) => {
                 name="text"
               />
             </Editor>
-          ))}
+          ))} */}
         {/* DynamicLoadedEditor with loaded text */}
-        {/* <div className="editor">
+        <p>{props.name}, здравствуйте!</p>
+        <p>
+          Я Михаил, создатель BeSavvy. Это не рассылка, а прямое письмо от меня.
+          Я пишу, потому что мы сделали очень полезные симуляторы по ключевым
+          правовым темам, и я хочу, чтобы вы попробовали пройти их.
+        </p>
+        <div className="editor">
           <DynamicLoadedEditor
             getEditorText={myCallback2}
-            value={editorText}
+            value={message}
             name="text"
           />
-        </div> */}
+        </div>
+        <p>
+          И последнее. Возможно, вы сейчас не нуждаетесь в обучении. Это
+          нормально. Напишите мне об этом. Я не продавец. Мне просто будет
+          приятно узнать, что ваша карьера развивается в правильном напрвлении.
+          А если у вас есть вопросы, задавайте, я буду рад помочь.
+        </p>
+        <p>
+          В любом случае спасибо, что уделили внимание непростому и важному для
+          меня проекту, над которым я работаю каждый день последние 5 лет.{" "}
+        </p>
+        <p>Надеюсь, у вас сегодня отличный день,</p>
         <button
           onClick={async (e) => {
-            const res = await sendMessage({
+            const res = await sendClientEmail({
               variables: {
-                userId: props.id,
-                text: message,
+                name: props.name,
+                email: props.email,
+                connection: message,
                 subject: subject,
-                comment: "funnel",
+                type: "client_rus",
               },
             });
           }}

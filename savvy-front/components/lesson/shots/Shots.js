@@ -24,12 +24,15 @@ const CREATE_SHOTRESULT_MUTATION = gql`
 `;
 
 const Commentary = styled.div`
-  padding: 1% 2%;
+  padding: 10px 15px;
   margin-bottom: 40px;
+  border: 3px solid #f3f3f3;
+  border-radius: 25px;
 `;
 
 const Text = styled.div`
   margin-top: 20px;
+  font-size: 1.6rem;
   p {
     padding: 1% 2%;
     margin: 1% 0;
@@ -114,6 +117,7 @@ const Styles = styled.div`
   // background: #fff;
   font-weight: 500;
   padding: 15px;
+  font-size: 1.6rem;
   min-height: 50vh;
   width: ${(props) => props.width};
   .bar {
@@ -220,6 +224,11 @@ const Shots = (props) => {
                 <div key={num - 1}>{parse(parts[num - 1])}</div>
               </Text>
             )}
+            {comments.length > 0 && (
+              <Commentary>
+                <>{parse(comments[num - 1])}</>
+              </Commentary>
+            )}
             <Buttons>
               <Mutation
                 mutation={CREATE_SHOTRESULT_MUTATION}
@@ -280,11 +289,6 @@ const Shots = (props) => {
                 )}
               </Mutation>
             </Buttons>
-            {comments.length > 0 && (
-              <Commentary>
-                <>{parse(comments[num - 1])}</>
-              </Commentary>
-            )}
           </>
           {/* <Buttons>
             <Mutation

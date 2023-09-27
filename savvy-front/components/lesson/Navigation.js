@@ -232,7 +232,7 @@ const Navigation = (props) => {
       )}
       {width > 800 && (
         <Right>
-          {me.myTeams.length == 0 && (
+          {me.id !== "clkvdew14837181f13vcbbcw0x" && me.myTeams.length == 0 && (
             <button>
               <a
                 target="_blank"
@@ -242,7 +242,7 @@ const Navigation = (props) => {
               </a>
             </button>
           )}
-          {me.myTeams.length > 0 && (
+          {me && me.myTeams.length > 0 && (
             <button>
               <a
                 target="_blank"

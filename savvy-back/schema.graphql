@@ -1289,6 +1289,7 @@ input DocumentWhereUniqueInput {
 
 input Element {
   borders: Borders
+  comment: String
   inDoc: Boolean
   isTest: Boolean
   place: Int
@@ -1979,6 +1980,7 @@ type Lesson {
   number: Int
   offers(after: OfferWhereUniqueInput, before: OfferWhereUniqueInput, first: Int, last: Int): [Offer!]!
   open: Boolean
+  openSize: Int
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
   problems(after: ProblemWhereUniqueInput, before: ProblemWhereUniqueInput, first: Int, last: Int): [Problem!]!
   published: Boolean
@@ -2053,6 +2055,7 @@ input LessonOrderByWithRelationInput {
   number: SortOrderInput
   offers: OfferOrderByRelationAggregateInput
   open: SortOrderInput
+  openSize: SortOrderInput
   problemResults: ProblemResultOrderByRelationAggregateInput
   problems: ProblemOrderByRelationAggregateInput
   published: SortOrderInput
@@ -2187,6 +2190,7 @@ input LessonWhereInput {
   number: IntNullableFilter
   offers: OfferListRelationFilter
   open: BoolNullableFilter
+  openSize: IntNullableFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
   published: BoolNullableFilter
@@ -2247,6 +2251,7 @@ input LessonWhereUniqueInput {
   number: IntNullableFilter
   offers: OfferListRelationFilter
   open: BoolNullableFilter
+  openSize: IntNullableFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
   published: BoolNullableFilter
@@ -2505,6 +2510,8 @@ type Mutation {
   requestReset(email: String): AuthMessage
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(communication_history: ClientMessages, id: String): BusinessClient
+  sendBusinessEmail(connection: String, email: String, firm: String, name: String, personalTouch: String, subject: String, type: String): User
+  sendClientEmail(connection: String, email: String, firm: String, name: String, personalTouch: String, subject: String, type: String): User
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
   sendMessage(comment: String, coursePageId: String, link: String, subject: String, text: String, userId: String): Message
   signin(email: String, password: String, traffic_sources: Visits): AuthPayload

@@ -26,6 +26,7 @@ const IconBlock = styled.div`
     color: #8f93a3;
     max-width: 80px;
     margin: 0 7px;
+    line-height: 1.4;
   }
 `;
 
@@ -54,20 +55,38 @@ const Styles = styled.div`
   margin-bottom: 20px;
 
   /* Add slide-in animation */
-  opacity: ${({ className }) => (className === "author" ? 0 : 1)};
+  opacity: 0;
   transform: ${({ className }) =>
-    className === "author" ? "translateX(50px)" : "none"};
+    className === "author" ? "translateX(50px)" : "translateX(-50px)"};
 
   animation: ${({ className }) =>
-    className === "author" ? "animate-slide-in 0.8s forwards" : "none"};
+    className === "author"
+      ? "animate-slide-in-from-right 0.8s forwards"
+      : "animate-slide-in-from-left 0.8s forwards"};
 
-  @keyframes animate-slide-in {
+  /* Animation from the right */
+  @keyframes animate-slide-in-from-right {
     0% {
       opacity: 0;
       transform: translateX(70px);
     }
     50% {
       transform: translateX(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Animation from the left */
+  @keyframes animate-slide-in-from-left {
+    0% {
+      opacity: 0;
+      transform: translateX(-70px);
+    }
+    50% {
+      transform: translateX(30px);
     }
     100% {
       opacity: 1;
@@ -101,7 +120,7 @@ const Styles = styled.div`
       margin: 10px 0;
       &.button_box {
         margin: 30px 0;
-        displlay: flex;
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -148,7 +167,7 @@ const Styles = styled.div`
       margin: 10px 0;
       &.button_box {
         margin: 30px 0;
-        displlay: flex;
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -217,32 +236,6 @@ const Styles = styled.div`
   }
 `;
 
-const typewriterEffect = (element, index = 0, speed = 50) => {
-  if (element.childNodes && index < element.childNodes.length) {
-    const child = element.childNodes[index];
-    if (child.nodeType === Node.TEXT_NODE) {
-      const text = child.textContent;
-      child.textContent = "";
-      let textIndex = 0;
-
-      const typeText = () => {
-        if (textIndex < text.length) {
-          child.textContent += text[textIndex];
-          textIndex++;
-          setTimeout(typeText, speed);
-        } else {
-          typewriterEffect(element, index + 1, speed);
-        }
-      };
-
-      typeText();
-    } else {
-      typewriterEffect(child, 0, speed);
-      typewriterEffect(element, index + 1, speed);
-    }
-  }
-};
-
 const Message = ({
   id,
   key,
@@ -255,16 +248,6 @@ const Message = ({
   author,
 }) => {
   const studentTextRef = useRef(null);
-
-  useEffect(() => {
-    if (studentTextRef.current) {
-      if (className === "student") {
-        typewriterEffect(studentTextRef.current, 0);
-      } else {
-        studentTextRef.current.innerHTML = m.text;
-      }
-    }
-  }, [className, m.text]);
 
   return (
     <Styles id={id} key={key} className={className}>
@@ -307,9 +290,7 @@ const Message = ({
               {m.name && m.name !== "student" ? m.name : me.name}
             </div>
           </IconBlock>
-          <div className="student_text" ref={studentTextRef}>
-            {parse(m.text)}
-          </div>
+          <div className="student_text">{parse(m.text)}</div>
         </>
       )}
     </Styles>

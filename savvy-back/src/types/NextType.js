@@ -200,6 +200,7 @@ const Element = inputObjectType({
     t.string("type");
     t.string("value");
     t.string("text");
+    t.string("comment");
     t.int("place");
     t.int("size");
     t.int("rows");

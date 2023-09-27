@@ -204,7 +204,7 @@ const CreateQuiz = (props) => {
   const [ifWrong, setIfWrong] = useState("");
   const [type, setType] = useState("TEST");
   const [input, setInput] = useState("");
-  const [dataLoaded, setDataLoaded] = useState(false); // new state for managing JSON data loading status
+  const [dataLoaded, setDataLoaded] = useState(true); // new state for managing JSON data loading status
   const [generating, setGenerating] = useState(false);
 
   const { t } = useTranslation("lesson");
@@ -282,7 +282,7 @@ All text must be in Russian.`,
         {(createQuiz, { loading, error }) => (
           <Form>
             <fieldset>
-              <Generate>
+              {/* <Generate>
                 <textarea
                   onChange={handleInputChange}
                   placeholder="Enter the question context (no the answer or the question itself) data here"
@@ -308,7 +308,7 @@ All text must be in Russian.`,
                 {generating && (
                   <div>Generating... It can take up to 30 seconds.</div>
                 )}
-              </Generate>
+              </Generate> */}
               {dataLoaded && (
                 <Answers>
                   <label for="types">{t("type")}</label>

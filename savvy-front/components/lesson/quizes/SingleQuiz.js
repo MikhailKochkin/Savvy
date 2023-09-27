@@ -669,9 +669,13 @@ const SingleQuiz = (props) => {
             <div className="answer">
               <IconBlock>
                 <div className="icon2">
-                  {me.surname
-                    ? `${me.name[0]}${me.surname[0]}`
-                    : `${me.name[0]}${me.name[1]}`}
+                  {me && me.image ? (
+                    <img className="icon" src={me.image} />
+                  ) : me.surname ? (
+                    `${me.name[0]}${me.surname[0]}`
+                  ) : (
+                    `${me.name[0]}${me.name[1]}`
+                  )}
                 </div>{" "}
                 <div className="name">{me.name}</div>
               </IconBlock>{" "}
@@ -812,9 +816,13 @@ const SingleQuiz = (props) => {
                 <div className="answer">
                   <IconBlock>
                     <div className="icon2">
-                      {me.surname
-                        ? `${me.name[0]}${me.surname[0]}`
-                        : `${me.name[0]}${me.name[1]}`}
+                      {me && me.image ? (
+                        <img className="icon" src={me.image} />
+                      ) : me.surname ? (
+                        `${me.name[0]}${me.surname[0]}`
+                      ) : (
+                        `${me.name[0]}${me.name[1]}`
+                      )}
                     </div>{" "}
                     <div className="name">{me.name}</div>
                   </IconBlock>{" "}

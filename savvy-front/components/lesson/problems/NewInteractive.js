@@ -100,6 +100,9 @@ const NewInteractive = (props) => {
   };
 
   useEffect(() => {
+    console.log("problem.steps.problemItems", problem.steps.problemItems, [
+      findUnconnectedItems(problem.steps.problemItems),
+    ]);
     if (problem.steps.problemItems.length > 0) {
       setComponentList([findUnconnectedItems(problem.steps.problemItems)[0]]);
     }
@@ -138,85 +141,88 @@ const NewInteractive = (props) => {
       </div>
       {isShown && (
         <Questions>
-          {[...componentList].map((com) => {
-            let item;
-            let el;
-            if (com.type.toLowerCase() === "quiz") {
-              el = lesson.quizes.find((quiz) => quiz.id === com.id);
-              return (
-                <SingleQuiz
-                  id={el.id}
-                  index={1}
-                  key={el.id}
-                  type={el.type}
-                  check={el.check}
-                  question={el.question}
-                  answer={el.answer}
-                  ifRight={el.ifRight}
-                  ifWrong={el.ifWrong}
-                  me={me}
-                  hidden={true}
-                  userData={[]}
-                  lessonID={lesson.id}
-                  quizID={el.id}
-                  user={el.user.id}
-                  user_name={el.user}
-                  next={el.next}
-                  getData={updateArray}
-                  exam={true}
-                  story={true}
-                  author={author}
-                  getResults={getResults}
-                />
-              );
-            } else if (com.type.toLowerCase() === "newtest") {
-              el = lesson.newTests.find((test) => test.id === com.id);
-              return (
-                <SingleTest
-                  key={el.id}
-                  id={el.id}
-                  testID={el.id}
-                  question={el.question}
-                  answers={el.answers}
-                  true={el.correct}
-                  ifRight={el.ifRight}
-                  ifWrong={el.ifWrong}
-                  user={el.user.id}
-                  user_name={el.user}
-                  type={el.type}
-                  me={me}
-                  lessonID={lesson.id}
-                  length={Array(el.correct.length).fill(false)}
-                  userData={[]}
-                  getData={updateArray}
-                  next={el.next}
-                  story={true}
-                  exam={true}
-                  author={author}
-                  getResults={getResults}
-                />
-              );
-            } else if (com.type.toLowerCase() === "note") {
-              let el = lesson.notes.filter((q) => q.id === com.id)[0];
-              return (
-                <Note
-                  id={el.id}
-                  clicks={el.link_clicks}
-                  //   index={this.state.componentList.length + 1}
-                  key={el.id}
-                  text={el.text}
-                  me={me}
-                  teacher={el.user.id}
-                  note={el.id}
-                  next={el.next}
-                  getData={updateArray}
-                  exam={true}
-                  problem={true}
-                  author={author}
-                />
-              );
-            }
-          })}
+          {console.log("componentList", componentList)}
+          {componentList[0] !== undefined &&
+            [...componentList].map((com) => {
+              let item;
+              let el;
+              console.log("com", com);
+              if (com.type.toLowerCase() === "quiz") {
+                el = lesson.quizes.find((quiz) => quiz.id === com.id);
+                return (
+                  <SingleQuiz
+                    id={el.id}
+                    index={1}
+                    key={el.id}
+                    type={el.type}
+                    check={el.check}
+                    question={el.question}
+                    answer={el.answer}
+                    ifRight={el.ifRight}
+                    ifWrong={el.ifWrong}
+                    me={me}
+                    hidden={true}
+                    userData={[]}
+                    lessonID={lesson.id}
+                    quizID={el.id}
+                    user={el.user.id}
+                    user_name={el.user}
+                    next={el.next}
+                    getData={updateArray}
+                    exam={true}
+                    story={true}
+                    author={author}
+                    getResults={getResults}
+                  />
+                );
+              } else if (com.type.toLowerCase() === "newtest") {
+                el = lesson.newTests.find((test) => test.id === com.id);
+                return (
+                  <SingleTest
+                    key={el.id}
+                    id={el.id}
+                    testID={el.id}
+                    question={el.question}
+                    answers={el.answers}
+                    true={el.correct}
+                    ifRight={el.ifRight}
+                    ifWrong={el.ifWrong}
+                    user={el.user.id}
+                    user_name={el.user}
+                    type={el.type}
+                    me={me}
+                    lessonID={lesson.id}
+                    length={Array(el.correct.length).fill(false)}
+                    userData={[]}
+                    getData={updateArray}
+                    next={el.next}
+                    story={true}
+                    exam={true}
+                    author={author}
+                    getResults={getResults}
+                  />
+                );
+              } else if (com.type.toLowerCase() === "note") {
+                let el = lesson.notes.filter((q) => q.id === com.id)[0];
+                return (
+                  <Note
+                    id={el.id}
+                    clicks={el.link_clicks}
+                    //   index={this.state.componentList.length + 1}
+                    key={el.id}
+                    text={el.text}
+                    me={me}
+                    teacher={el.user.id}
+                    note={el.id}
+                    next={el.next}
+                    getData={updateArray}
+                    exam={true}
+                    problem={true}
+                    author={author}
+                  />
+                );
+              }
+            })}
         </Questions>
       )}
     </Styles>

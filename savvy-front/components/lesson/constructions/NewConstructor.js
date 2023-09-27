@@ -42,7 +42,7 @@ const Styles = styled.div`
   font-size: 1.4rem;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   @media (max-width: 800px) {
     font-size: 1.4rem;
     width: 100%;
@@ -51,6 +51,14 @@ const Styles = styled.div`
     display: block;
     height: auto;
   }
+`;
+
+const OuterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  /* align-items: stretch; // Stretch to match tallest child */
 `;
 
 const BlueButton = styled.button`
@@ -99,7 +107,7 @@ const ButtonTwo = styled.button`
 
 const Block = styled.div`
   overflow: auto; // Add this line
-  width: 1200px;
+  width: 950px;
   height: auto;
   display: grid;
   background: #fff;
@@ -110,13 +118,13 @@ const Block = styled.div`
   grid-template-columns: ${(props) => {
     return `repeat(${props.columns}, 1fr)`;
   }};
+
   grid-template-rows: auto;
   img {
     width: 100px;
     height: 100px;
   }
   grid-template-rows: auto;
-  margin: 30px 0;
   @media (max-width: 800px) {
     width: 95%;
   }
@@ -128,10 +136,17 @@ const Element = styled.div`
   height: 100%;
   border: 1px dashed #c4c4c4;
   display: ${(props) => (props.display ? "flex" : "none")};
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
+  /* justify-content: flex-start;
+  align-items: flex-start; */
   font-size: 1.6rem;
+  .comment_yellow {
+    border: 2px solid #f3cf95;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    width: 90%;
+  }
   .tick {
     margin-left: 30px;
   }
@@ -271,16 +286,68 @@ const Element = styled.div`
 const Variants = styled.div`
   display: flex;
   flex-direction: column;
-  flex-basis: 30%;
-  margin-top: 55px;
-  overflow: auto;
-  max-height: 200vh;
-  padding: 1%;
+  height: 100%;
+  overflow-y: auto; // Handle overflow
+  padding: 10px;
   @media (max-width: 800px) {
     max-height: 100%;
     padding: 3%;
   }
 `;
+
+const VarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-basis: 30%;
+  padding: 10px;
+  height: ${(props) => {
+    return `${props.height}px`;
+  }};
+`;
+
+function removeAndReplaceIsTest(arr) {
+  return arr.map((obj) => {
+    if (obj.isTest && obj.inDoc) {
+      // Replace with an object where text is empty
+      return { ...obj, text: "" };
+    }
+    return obj;
+  });
+}
+
+function compareArrays(arr1, arr2) {
+  // Check if both arrays have the same length
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  // Loop through the arrays to compare the 'text' property
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] && arr2[i]) {
+      if (arr1[i].text !== arr2[i].text) {
+        return false;
+      }
+    } else if (!arr1[i] && !arr2[i]) {
+      continue;
+    } else {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function transformArray(arr) {
+  return arr.map((item) => {
+    if (item.isTest === false) {
+      return true;
+    }
+    if (item.inDoc === false) {
+      return true;
+    }
+    return false;
+  });
+}
 
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
@@ -288,7 +355,8 @@ const NewConstructor = (props) => {
   const [check, setCheck] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [answers, setAnswers] = useState([]);
-  const [input, setInput] = useState(Array(elements.length).fill(""));
+  const [input, setInput] = useState(removeAndReplaceIsTest(elements));
+  const [allChecked, setAllChecked] = useState(false);
 
   const [update, setUpdate] = useState(false);
   const [variants, setVariants] = useState([]);
@@ -296,16 +364,31 @@ const NewConstructor = (props) => {
     elements.map((t) => (t.isTest ? false : true))
   );
   const [startingColumns, setStartingColumns] = useState([]);
-  const [currentConfig, setCurrentConfig] = useState([]);
+  const [currentConfig, setCurrentConfig] = useState(transformArray(elements));
   const [shiverList, setShiverList] = useState([]);
   const [used, setUsed] = useState(
     Array(elements.filter((t) => t.isTest == true).length).fill("")
   );
+  const [heightInPixels, setHeightInPixels] = useState(200); // Initialize state
+
   const [createConstructionResult, { data, loading, error }] = useMutation(
     CREATE_CONSTRUCTIONRESULT_MUTATION
   );
-
   const { t } = useTranslation("lesson");
+
+  useEffect(() => {
+    const el = document.getElementById("con_block");
+    if (el) {
+      const height = el.clientHeight;
+      setHeightInPixels(height); // Set state
+    }
+  }, []);
+
+  useEffect(() => {
+    const vars = shuffle([...props.elements.filter((t) => t.isTest)]);
+    setVariants(vars);
+  }, []);
+
   useEffect(() => {
     let columns = 0;
     const newStartingColumns = elements.map((el) => {
@@ -328,11 +411,6 @@ const NewConstructor = (props) => {
     }
     return array;
   };
-
-  useEffect(() => {
-    const vars = shuffle([...props.elements.filter((t) => t.isTest)]);
-    setVariants(vars);
-  }, []);
 
   const getAnswer = (val, i, answer) => {
     let new_arr = [...used];
@@ -364,44 +442,36 @@ const NewConstructor = (props) => {
   const getInput = (val, index) => {
     let new_input = [...input];
     new_input[index] = val;
-    console.log("new_input", new_input);
     setInput(new_input);
   };
 
   const onCheck = (val, i) => {
-    setCurrentConfig([...answersCheck]);
+    let newConfig = [...currentConfig];
     setShiverList(
-      [...answersCheck].map((el) => {
-        if (el == false) {
-          return (el = true);
-        } else {
+      [...elements].map((el, i) => {
+        if (el.text == input[i].text) {
+          newConfig[i] == true;
           return (el = false);
+        } else {
+          return (el = true);
         }
       })
     );
-    setCheck(true);
-    console.log("answers", answers);
-    console.log("input", input);
-    // if (!answersCheck.includes(false)) {
-    props.getResults(2);
-    createConstructionResult({
-      variables: {
-        answer: "correct",
-        attempts: attempts,
-        lessonId: lessonID,
-        constructionId: construction.id,
-        answers: {
-          answers,
-        },
-        elements: { elements: input },
-      },
+    const result = newConfig.map((el, i) => {
+      return elements[i].text === input[i].text;
     });
-
+    if (compareArrays(elements, input)) {
+      setAllChecked(true);
+    }
+    setCurrentConfig(result);
+    setCheck(true);
+    props.getResults(2);
     setTimeout(() => {
       setShiverList(Array(answersCheck.length).fill(false));
     }, 1000);
     setAttempts(attempts + 1);
   };
+
   return (
     <>
       {story !== true && (
@@ -411,8 +481,8 @@ const NewConstructor = (props) => {
       )}
       <Styles>
         {!update && (
-          <>
-            <Block columns={construction.columnsNum}>
+          <OuterContainer>
+            <Block id="con_block" columns={construction.columnsNum}>
               {elements.map((t, i) => (
                 <ConElement
                   passResult={passResult}
@@ -431,25 +501,29 @@ const NewConstructor = (props) => {
                   isShown={check}
                   getAnswer={getAnswer}
                   check={check}
-                  status={currentConfig[i]}
+                  status={elements[i]?.text == input[i]?.text}
                   shiver={shiverList[i]}
                   display={t.inDoc}
+                  allCorrect={compareArrays(elements, input)}
+                  checked={currentConfig[i]}
                 />
               ))}
               <ButtonTwo onClick={(e) => onCheck()}>Check</ButtonTwo>
             </Block>
-            <Variants>
-              {variants.map((option, index) => {
-                return (
-                  <Box
-                    used={used.includes(index + 1)}
-                    index={index}
-                    option={option.text}
-                  />
-                );
-              })}
-            </Variants>
-          </>
+            <VarContainer height={heightInPixels ? heightInPixels : 500}>
+              <Variants>
+                {variants.map((option, index) => {
+                  return (
+                    <Box
+                      used={used.includes(index + 1)}
+                      index={index}
+                      option={option.text}
+                    />
+                  );
+                })}
+              </Variants>
+            </VarContainer>
+          </OuterContainer>
         )}
         {update && (
           <UpdateNewConstructor
@@ -493,7 +567,7 @@ const ConElement = (props) => {
   const [chosenElement, setChosenElement] = useState();
   const [result, setResult] = useState(false);
   const [answers, setAnswers] = useState([]);
-
+  const [reveal, setReveal] = useState(false);
   const {
     elems,
     isTest,
@@ -511,20 +585,18 @@ const ConElement = (props) => {
     display,
     passResult,
     getInput,
+    allCorrect,
+    checked,
   } = props;
+  useEffect(() => {
+    if (shiver) {
+      setReveal(true);
+    }
+  }, [shiver]);
   const onCheck = (e) => {
     getInput(variants[e.target.value - 1], i);
     setValue(parseInt(e.target.value));
-    // if (
-    //   variants[e.target.value - 1] &&
-    //   place == variants[e.target.value - 1].place
-    // ) {
-    //   setCorrect(true);
-    //   props.getAnswer(true, i, parseInt(e.target.value));
-    // } else {
-    //   setCorrect(false);
-    //   props.getAnswer(false, i, parseInt(e.target.value));
-    // }
+    setReveal(false);
   };
 
   const checkAnswer = async (e) => {
@@ -598,7 +670,11 @@ const ConElement = (props) => {
           e.target.innerHTML = "Check";
           e.target.className = "mini_button";
           if (res.comment) {
-            alert(res.comment);
+            if (res.comment == "Дайте более развернутый ответ") {
+              setHint("Try giving a more detailed answer.");
+            } else {
+              setHint("Try giving a shorter answer.");
+            }
           }
           let new_res = {
             correctAnswer: correctAnswer,
@@ -649,7 +725,7 @@ const ConElement = (props) => {
 
   const show = (e) => {
     e.preventDefault();
-    console.log("show e.target", e.target.previousSibling.previousSibling);
+    // console.log("show e.target", e.target.previousSibling.previousSibling);
     e.target.previousSibling.previousSibling.innerHTML =
       e.target.previousSibling.previousSibling.getAttribute("data-initial");
     e.target.style.pointerEvents = "none";
@@ -671,7 +747,7 @@ const ConElement = (props) => {
       borders={borders}
       colored={text !== "<p></p>"}
     >
-      {isTest && (
+      {isTest && (!allCorrect || !checked) && (
         <Number_Input
           type="number"
           value={value}
@@ -679,25 +755,39 @@ const ConElement = (props) => {
         />
       )}
       {isTest && (
-        <div
-          onClick={(e) => {
-            if (e.target.getAttribute("class") == "mini_button") {
-              const ch = checkAnswer(e);
-            }
-            if (e.target.getAttribute("type") === "comment") {
-              onMouseClick(e);
-            }
-          }}
-        >
-          {variants[value - 1]
-            ? parse(variants[value - 1].text)
-            : parse("<p></p>")}
-        </div>
+        <>
+          <div
+            onClick={(e) => {
+              if (!allCorrect) {
+                alert("First build the structure of the document");
+              } else {
+                if (e.target.getAttribute("class") == "mini_button") {
+                  const ch = checkAnswer(e);
+                }
+                if (e.target.getAttribute("type") === "comment") {
+                  onMouseClick(e);
+                }
+              }
+            }}
+          >
+            {variants[value - 1]
+              ? parse(variants[value - 1].text)
+              : parse("<p></p>")}
+          </div>
+          <div>
+            {reveal && variants[value - 1] && variants[value - 1].comment ? (
+              <div className="comment_yellow">
+                {parse(variants[value - 1].comment)}
+              </div>
+            ) : (
+              parse("<p></p>")
+            )}
+          </div>
+        </>
       )}
       {!isTest && <div>{parse(text)}</div>}
-      {status == true && correct == true && isShown && (
-        <span className="tick">✅</span>
-      )}
+
+      {status == true && isTest && checked && <span className="tick">✅</span>}
     </Element>
   );
 };

@@ -45,6 +45,7 @@ const Buttons = styled.div`
 const Styles = styled.div`
   display: flex;
   flex-direction: row;
+  padding-top: 60px;
   .firstColumn {
     width: 4vw;
     transition: 0.5s;
@@ -116,7 +117,6 @@ const Styles = styled.div`
       align-items: center;
       transition: 0.5s;
       top: 10px;
-      border: 1px solid red;
     }
   }
   .third {
@@ -269,6 +269,8 @@ const MenuColumn = styled.div`
   }
 `;
 
+const Border = styled.div``;
+
 const Complexity = styled.div`
   margin-bottom: 10px;
   width: 45px;
@@ -292,8 +294,9 @@ const Block = styled.div`
   min-height: 50vh;
   display: ${(props) => (props.show === "final" ? "none" : "flex")};
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+
   width: ${(props) => (props.open ? "70vw" : "100vw")};
   @media (max-width: 800px) {
     /* width: ${(props) => (props.open ? "0vw" : "95vw")}; */
@@ -524,7 +527,8 @@ const Message = styled.div`
 `;
 
 const Feed = (props) => {
-  const { me, coursePageId, coursePage, lesson_structure, lessonId } = props;
+  const { me, coursePageId, coursePage, lesson_structure, lessonId, openSize } =
+    props;
   const { t } = useTranslation("lesson");
   const [createLessonResult, { create_data }] = useMutation(
     CREATE_LESSONRESULT_MUTATION
@@ -537,7 +541,7 @@ const Feed = (props) => {
   let next_lesson = false;
 
   if (props.me.id == "clkvdew14837181f13vcbbcw0x") {
-    lessonElements = [props.components.slice(0, 2), <Auth />];
+    lessonElements = [props.components.slice(0, openSize), <Auth />];
     next_lesson = false;
   } else if (
     !props.openLesson &&
@@ -696,12 +700,12 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
-          <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
-          <Message visible={visible}>
+          {/* <CustomProgressBar myResult={num} lessonItems={lesson_structure} /> */}
+          {/* <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
             </div>
-          </Message>
+          </Message> */}
           {props.hasSecret && (
             <div
               className="arrowmenu2"
@@ -724,7 +728,7 @@ const Feed = (props) => {
           </div>
           {/* First we check if the iser have ever visited the lesson */}
           {result && !hasLessonBeenFinished ? (
-            <>
+            <Border>
               {/*  We have lesson result */}
 
               {lessonElements.slice(0, num + 2).map((c, i) => (
@@ -769,9 +773,9 @@ const Feed = (props) => {
                   )}
                 </Block>
               ))}
-            </>
+            </Border>
           ) : (
-            <>
+            <Border>
               {/*  We don't have lesson result */}
 
               {lessonElements.slice(0, num + 2).map((c, i) => (
@@ -815,7 +819,7 @@ const Feed = (props) => {
                   )}
                 </Block>
               ))}
-            </>
+            </Border>
           )}
           {props.me.id !== "clkvdew14837181f13vcbbcw0x" && (
             <Stepper>

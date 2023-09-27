@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
-// import CircularProgress from "@material-ui/core/CircularProgress";
+import { TailSpin } from "react-loader-spinner";
 
 import Note from "./notes/Note";
 import BannerOffer from "./offers/BannerOffer";
@@ -21,7 +21,6 @@ import Exam from "./exams/Exam";
 import Feed from "./Feed";
 import LessonHeader from "./LessonHeader";
 import TestPractice from "./testblocks/TB";
-import { FaRegCaretSquareDown } from "react-icons/fa";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
@@ -119,8 +118,16 @@ const StoryEx = (props) => {
   if (stats_loading)
     return (
       <Progress>
-        Loading...
-        {/* <CircularProgress /> */}
+        <TailSpin
+          height="80"
+          width="80"
+          color="#2E80EC"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />{" "}
       </Progress>
     );
 
@@ -134,7 +141,6 @@ const StoryEx = (props) => {
       const filteredResults = stats_data.lessonResults.filter(
         (result) => result.progress < lesson.structure.lessonItems.length
       );
-      console.log("filteredResults", filteredResults);
 
       // If any items are left, find the one with the maximum progress
       if (filteredResults.length > 0) {
@@ -147,7 +153,6 @@ const StoryEx = (props) => {
 
   // Now, my_result should contain the item with the highest progress value that is not equal to maxProgress, or null if no such item exists.
 
-  console.log("my_result", my_result, stats_data?.lessonResults);
   let components = [];
   let move_statuses = [];
   tasks.map((task) => {
@@ -496,6 +501,7 @@ const StoryEx = (props) => {
           my_result={my_result}
           passStep={passStep}
           lessonId={props.id}
+          openSize={lesson.openSize}
         />
       )}
     </Container>

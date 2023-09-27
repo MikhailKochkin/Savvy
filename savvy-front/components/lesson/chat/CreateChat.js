@@ -120,7 +120,7 @@ const CreateChat = (props) => {
   const [generating, setGenerating] = useState(false);
 
   const [messages, setMessages] = useState([]);
-  const [isGenerated, setIsGenerated] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(true);
   const [createChat, { data, loading, error }] =
     useMutation(CREATE_CHAT_MUTATION);
   const { t } = useTranslation("lesson");
@@ -206,8 +206,8 @@ const CreateChat = (props) => {
         onChange={(e) => setName(e.target.value)}
       />
       <br /> */}
-      <div>Do you want to generate this block with AI?</div>
-      <Buttons>
+      {/* <div>Do you want to generate this block with AI?</div> */}
+      {/* <Buttons>
         <div className="number">
           <button onClick={(e) => onGenerate(e)}>Use AI 🤖</button>
         </div>
@@ -219,7 +219,7 @@ const CreateChat = (props) => {
       </Buttons>
       {generating && (
         <div>Generating the chat... It can take up to one minute.</div>
-      )}
+      )} */}
       {isGenerated && (
         <>
           {messages.map((m, i) => (

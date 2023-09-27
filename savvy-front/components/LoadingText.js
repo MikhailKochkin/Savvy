@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { TailSpin } from "react-loader-spinner";
 
 const Block = styled.div`
   display: flex;
@@ -64,9 +65,20 @@ const Loading = () => {
         <p className="header">
           <b>Do you know?</b>
         </p>
-        <p> {phrase}</p>
+        <p>{phrase}</p>
       </Phrase>
-      <Block>...</Block>
+      <Block>
+        <TailSpin
+          height="80"
+          width="80"
+          color="#2E80EC"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      </Block>
     </Frame>
   );
 };

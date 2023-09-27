@@ -960,6 +960,7 @@ export interface NexusGenInputs {
   }
   Element: { // input type
     borders?: NexusGenInputs['Borders'] | null; // Borders
+    comment?: string | null; // String
     inDoc?: boolean | null; // Boolean
     isTest?: boolean | null; // Boolean
     place?: number | null; // Int
@@ -1533,6 +1534,7 @@ export interface NexusGenInputs {
     number?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     offers?: NexusGenInputs['OfferOrderByRelationAggregateInput'] | null; // OfferOrderByRelationAggregateInput
     open?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    openSize?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     problemResults?: NexusGenInputs['ProblemResultOrderByRelationAggregateInput'] | null; // ProblemResultOrderByRelationAggregateInput
     problems?: NexusGenInputs['ProblemOrderByRelationAggregateInput'] | null; // ProblemOrderByRelationAggregateInput
     published?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -1648,6 +1650,7 @@ export interface NexusGenInputs {
     number?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     offers?: NexusGenInputs['OfferListRelationFilter'] | null; // OfferListRelationFilter
     open?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    openSize?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
     problems?: NexusGenInputs['ProblemListRelationFilter'] | null; // ProblemListRelationFilter
     published?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
@@ -1707,6 +1710,7 @@ export interface NexusGenInputs {
     number?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     offers?: NexusGenInputs['OfferListRelationFilter'] | null; // OfferListRelationFilter
     open?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    openSize?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
     problems?: NexusGenInputs['ProblemListRelationFilter'] | null; // ProblemListRelationFilter
     published?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
@@ -4195,6 +4199,7 @@ export interface NexusGenObjects {
     name: string; // String!
     number?: number | null; // Int
     open?: boolean | null; // Boolean
+    openSize?: number | null; // Int
     published?: boolean | null; // Boolean
     short_structure?: NexusGenScalars['Json'] | null; // Json
     structure?: NexusGenScalars['Json'] | null; // Json
@@ -4946,6 +4951,7 @@ export interface NexusGenFieldTypes {
     number: number | null; // Int
     offers: NexusGenRootTypes['Offer'][]; // [Offer!]!
     open: boolean | null; // Boolean
+    openSize: number | null; // Int
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
     problems: NexusGenRootTypes['Problem'][]; // [Problem!]!
     published: boolean | null; // Boolean
@@ -5086,6 +5092,8 @@ export interface NexusGenFieldTypes {
     requestReset: NexusGenRootTypes['AuthMessage'] | null; // AuthMessage
     resetPassword: NexusGenRootTypes['User'] | null; // User
     sendBusinessClientEmail: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    sendBusinessEmail: NexusGenRootTypes['User'] | null; // User
+    sendClientEmail: NexusGenRootTypes['User'] | null; // User
     sendEmailToStudent: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     sendMessage: NexusGenRootTypes['Message'] | null; // Message
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -5969,6 +5977,7 @@ export interface NexusGenFieldTypeNames {
     number: 'Int'
     offers: 'Offer'
     open: 'Boolean'
+    openSize: 'Int'
     problemResults: 'ProblemResult'
     problems: 'Problem'
     published: 'Boolean'
@@ -6109,6 +6118,8 @@ export interface NexusGenFieldTypeNames {
     requestReset: 'AuthMessage'
     resetPassword: 'User'
     sendBusinessClientEmail: 'BusinessClient'
+    sendBusinessEmail: 'User'
+    sendClientEmail: 'User'
     sendEmailToStudent: 'CourseVisit'
     sendMessage: 'Message'
     signin: 'AuthPayload'
@@ -7322,6 +7333,24 @@ export interface NexusGenArgTypes {
     sendBusinessClientEmail: { // args
       communication_history?: NexusGenInputs['ClientMessages'] | null; // ClientMessages
       id?: string | null; // String
+    }
+    sendBusinessEmail: { // args
+      connection?: string | null; // String
+      email?: string | null; // String
+      firm?: string | null; // String
+      name?: string | null; // String
+      personalTouch?: string | null; // String
+      subject?: string | null; // String
+      type?: string | null; // String
+    }
+    sendClientEmail: { // args
+      connection?: string | null; // String
+      email?: string | null; // String
+      firm?: string | null; // String
+      name?: string | null; // String
+      personalTouch?: string | null; // String
+      subject?: string | null; // String
+      type?: string | null; // String
     }
     sendEmailToStudent: { // args
       comment?: string | null; // String

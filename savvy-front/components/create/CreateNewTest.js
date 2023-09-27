@@ -268,7 +268,7 @@ const CreateNewTest = (props) => {
   const [generating, setGenerating] = useState(false);
 
   const [input, setInput] = useState("");
-  const [dataLoaded, setDataLoaded] = useState(false); // new state for managing JSON data loading status
+  const [dataLoaded, setDataLoaded] = useState(true); // new state for managing JSON data loading status
 
   const { t } = useTranslation("lesson");
 
@@ -384,7 +384,7 @@ All text should be given in Russian.
       >
         {(createNewTest, { loading, error }) => (
           <div className="styles">
-            <Generate>
+            {/* <Generate>
               <textarea
                 onChange={handleInputChange}
                 placeholder="Enter the quiz context here. Not the question  or the answer. For example: A contract is an agreement giving rise to obligations which are enforced or recognised by law. In common law, there are 3 basic essentials to the creation of a contract: (i) agreement; (ii) contractual intention; and (iii) consideration."
@@ -410,7 +410,7 @@ All text should be given in Russian.
               {generating && (
                 <div>Generating... It can take up to 30 seconds.</div>
               )}
-            </Generate>
+            </Generate> */}
             {dataLoaded && (
               <>
                 <label for="types">{t("type")}</label>

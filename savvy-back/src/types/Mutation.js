@@ -22,7 +22,7 @@ const community_checkout = new YooCheckout({
   secretKey: process.env.SHOP_KEY_IP,
 });
 
-const ClientReminder = require("../emails/ClientReminder");
+const ClientEmail = require("../emails/ClientEmail");
 const WelcomeEmail = require("../emails/Welcome");
 const WelcomeEmailEng = require("../emails/WelcomeEng");
 
@@ -30,6 +30,8 @@ const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
 const GenericEmail = require("../emails/Generic");
 const Template = require("../emails/Template");
+const FollowUpEmailOne = require("../emails/FollowUpEmailOne");
+const BusinessEmail2 = require("../emails/BusinessEmailTop");
 
 const NextWeekEmail = require("../emails/nextWeek");
 const CommentEmail = require("../emails/Comment");
@@ -891,14 +893,7 @@ const Mutation = mutationType({
         const user = await ctx.prisma.user.findUnique({
           where: { id: userId },
         });
-        // const coursePage = await ctx.prisma.coursePage.findUnique({
-        //   where: { id: args.coursePageId },
-        // });
 
-        // const user = await ctx.prisma.user.findUnique(
-        //   { where: { id: userId } },
-        //   `{ id, user { id } }`
-        // );
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: user.email,
@@ -4072,6 +4067,88 @@ const Mutation = mutationType({
         // });
 
         return my_client;
+      },
+    });
+    t.field("sendBusinessEmail", {
+      type: "User",
+      args: {
+        name: stringArg(),
+        email: stringArg(),
+        firm: stringArg(),
+        subject: stringArg(),
+        personalTouch: stringArg(),
+        connection: stringArg(),
+        type: stringArg(),
+      },
+      resolve: async (
+        _,
+        { name, email, firm, subject, personalTouch, connection, type },
+        ctx
+      ) => {
+        console.log("data", type);
+        if (type == "follow_up_1") {
+          const newEmail2 = await client.sendEmail({
+            From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
+            To: email,
+            Subject: subject,
+            HtmlBody: FollowUpEmailOne.FollowUpEmailOne(name, connection),
+            MessageStream: "international-law-firms",
+          });
+        } else {
+          const newEmail3 = await client.sendEmail({
+            From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
+            To: email,
+            Subject: subject,
+            HtmlBody: BusinessEmail2.BusinessEmail2(name, connection, firm),
+            MessageStream: "international-law-firms",
+          });
+        }
+        return { name: name };
+      },
+    });
+    t.field("sendClientEmail", {
+      type: "User",
+      args: {
+        name: stringArg(),
+        email: stringArg(),
+        firm: stringArg(),
+        subject: stringArg(),
+        personalTouch: stringArg(),
+        connection: stringArg(),
+        type: stringArg(),
+      },
+      resolve: async (
+        _,
+        { name, email, firm, subject, personalTouch, connection, type },
+        ctx
+      ) => {
+        console.log("connection", connection);
+        // if (type == "follow_up_1") {
+        //   const newEmail2 = await client.sendEmail({
+        //     From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
+        //     To: email,
+        //     Subject: subject,
+        //     HtmlBody: FollowUpEmailOne.FollowUpEmailOne(name, connection),
+        //     MessageStream: "international-law-firms",
+        //   });
+        // } else if (type == "client_rus") {
+        const newEmail2 = await client.sendEmail({
+          From: '"Михаил Кочкин из BeSavvy" <Mikhail@besavvy.app>',
+          To: email,
+          Subject: subject,
+          HtmlBody: ClientEmail.ClientEmail(name, connection),
+          MessageStream: "broadcast",
+        });
+        // } else {
+        //   const newEmail3 = await client.sendEmail({
+        //     From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
+        //     To: email,
+        //     Subject: subject,
+        //     HtmlBody: BusinessEmail2.BusinessEmail2(name, connection, firm),
+        //     MessageStream: "international-law-firms",
+        //   });
+        // }
+        return { name: name };
       },
     });
     t.field("sendBusinessClientEmail", {

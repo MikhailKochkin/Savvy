@@ -172,7 +172,9 @@ const Element = styled.div`
     line-height: 50px;
     font-size: 10px;
   }
-
+  .comment {
+    border-top: 1px dashed #c4c4c4;
+  }
   .up {
     grid-row: 1;
     grid-column: 2;
@@ -474,6 +476,14 @@ const ConElement = (props) => {
     props.getData(new_el, props.i);
   };
 
+  const myCallback2 = (dataFromChild, index) => {
+    console.log("dataFromChild", dataFromChild);
+    let new_el = { ...el };
+    new_el.comment = dataFromChild;
+    setEl(new_el);
+    props.getData(new_el, props.i);
+  };
+
   return (
     <Element size={el.size} rows={el.rows} borders={el.borders}>
       <Settings>
@@ -660,6 +670,13 @@ const ConElement = (props) => {
         value={el.text}
         type="DocBuilder"
       />
+      <div className="comment">
+        <DynamicLoadedEditor
+          getEditorText={myCallback2}
+          value={el.comment}
+          type="DocBuilder"
+        />
+      </div>
     </Element>
   );
 };

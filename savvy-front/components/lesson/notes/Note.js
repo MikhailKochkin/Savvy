@@ -25,7 +25,7 @@ const Body = styled.div``;
 const Container = styled.div`
   width: ${(props) => props.width};
   font-size: 1.6rem;
-  margin: 20px 0;
+  /* margin: 20px 0; */
   .animated {
     /* text-transform: uppercase; */
     background-image: linear-gradient(
@@ -94,8 +94,30 @@ const Container = styled.div`
   a {
     width: 30%;
   }
+  .black_back_square {
+    background-image: url("/static/pattern.svg");
+    width: 100vw;
+    padding: 10% 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    img {
+      display: block;
+      width: 70%;
+      max-width: 700px;
+      object-fit: cover;
+      max-height: 50em;
+      box-shadow: "0 0 0 2px blue;";
+      /* width: 50vw; */
+    }
+    iframe {
+      width: 50%;
+      height: 400px;
+    }
+  }
   .black_back {
-    background: #000000;
+    background-image: url("/static/pattern.svg");
     width: 100vw;
     padding: 10% 0;
     display: flex;
@@ -155,6 +177,20 @@ const Container = styled.div`
     flex-direction: row;
     width: 100%;
     font-size: 1.6rem;
+    .black_back {
+      padding: 20px 0;
+      img {
+        width: 360px;
+      }
+    }
+    .black_back_square {
+      padding: 20px 0;
+      img {
+        width: 360px;
+        height: 360px;
+        /* width: 50vw; */
+      }
+    }
   }
 `;
 
@@ -481,6 +517,18 @@ const Note = (props) => {
 
   const todaysDate = getFormattedToday();
   useEffect(() => {
+    let el3 = document.getElementById("wide_square");
+    if (el3 && props.story) {
+      let img_div = document.createElement("div");
+      let new_img = document.createElement("img");
+      new_img.src = el3.src;
+      img_div.className = "black_back_square";
+      img_div.appendChild(new_img);
+      el3.remove();
+      const box = document.getElementById(props.id);
+      box.prepend(img_div);
+    }
+
     let el = document.getElementById("wide");
     if (el && props.story) {
       let img_div = document.createElement("div");
@@ -554,16 +602,18 @@ const Note = (props) => {
   };
   return (
     <>
-      <Buttons>
-        {!exam && !story && (
-          <button onClick={(e) => setUpdate(!update)}>
-            {!update ? t("update") : t("back")}
-          </button>
-        )}
-        {me && !props.story && !props.exam && (
-          <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
-        )}
-      </Buttons>
+      {!story && (
+        <Buttons>
+          {!exam && !story && (
+            <button onClick={(e) => setUpdate(!update)}>
+              {!update ? t("update") : t("back")}
+            </button>
+          )}
+          {me && !props.story && !props.exam && (
+            <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
+          )}
+        </Buttons>
+      )}
       {!update &&
         (note.type == "email" ? (
           <EmailContainer>
@@ -649,7 +699,7 @@ const Note = (props) => {
             {/* <NoteStyles>{parse(text)}</NoteStyles> */}
           </Container>
         ))}
-      {miniforum && <Chat me={me} miniforum={miniforum} />}
+      {/* {miniforum && <Chat me={me} miniforum={miniforum} />} */}
       {update && !story && !exam && (
         <UpdateNote
           text={text}
