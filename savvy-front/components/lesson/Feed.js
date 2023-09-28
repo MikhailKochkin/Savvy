@@ -541,7 +541,7 @@ const Feed = (props) => {
   let next_lesson = false;
 
   if (props.me.id == "clkvdew14837181f13vcbbcw0x") {
-    lessonElements = [props.components.slice(0, openSize), <Auth />];
+    lessonElements = [...props.components.slice(0, openSize), <Auth />];
     next_lesson = false;
   } else if (
     !props.openLesson &&

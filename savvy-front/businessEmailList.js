@@ -1848,7 +1848,7 @@ const emailList = [
     comment: "Senior Partner",
     firm: "Allen & Overy",
     connection:
-      "you are the Senior Partner at Allen & Overy, overseeing the firm's strategic direction and growth. Your role likely involves educational and training initiatives for the firm's lawyers.",
+      "you are the Senior Partner at Allen & Overy, overseeing the firm's strategic direction and growth. your role likely involves educational and training initiatives for the firm's lawyers.",
     sentEmailsTime: ["September 13", "September 25"],
   },
   {
@@ -1858,7 +1858,7 @@ const emailList = [
     comment: "Managing Partner, Abu Dhabi",
     firm: "Allen & Overy",
     connection:
-      "you are the Global Managing Partner for Allen & Overy, based in Abu Dhabi. Your role likely involves overseeing educational and training programs for the firm's lawyers in the region.",
+      "you are the Global Managing Partner for Allen & Overy, based in Abu Dhabi. your role likely involves overseeing educational and training programs for the firm's lawyers in the region.",
     sentEmailsTime: ["September 13", "September 25"],
   },
   {
@@ -1868,7 +1868,7 @@ const emailList = [
     comment: "Managing Partner, Paris",
     firm: "Allen & Overy",
     connection:
-      "You specialize in financial services regulation and have been an expert in the capital markets field for over 20 years. Your role likely involves educational and training aspects for lawyers in your firm.",
+      "you specialize in financial services regulation and have been an expert in the capital markets field for over 20 years. your role likely involves educational and training aspects for lawyers in your firm.",
     sentEmailsTime: ["September 13", "September 25"],
   },
   {
@@ -1888,7 +1888,7 @@ const emailList = [
     comment: "Managing Partner, Hong Kong",
     firm: "Allen & Overy",
     connection:
-      "you are the Managing Partner of Allen & Overy's Hong Kong office and Co-Head of the Global Banking Practice. Your role likely involves overseeing educational and training programs for the firm's lawyers in Hong Kong.",
+      "you are the Managing Partner of Allen & Overy's Hong Kong office and Co-Head of the Global Banking Practice. your role likely involves overseeing educational and training programs for the firm's lawyers in Hong Kong.",
     sentEmailsTime: ["September 13", "September 25"],
   },
   {
@@ -2372,7 +2372,7 @@ const emailList = [
     comment: "Attracting the best talent",
     firm: "Baker McKenzie",
     connection:
-      "You focus on attracting the best talent for Baker McKenzie, ensuring the firm has the highest caliber of professionals.",
+      "you focus on attracting the best talent for Baker McKenzie, ensuring the firm has the highest caliber of professionals.",
     sentEmailsTime: ["September 13", "September 25"],
   },
   {
@@ -2493,7 +2493,7 @@ const emailList = [
     comment: "Solicitor",
     firm: "Brabners",
     connection:
-      "you are a Solicitor at Brabners, specializing in employment law. You regularly organize and deliver practical and interactive training to clients on employment law-related issues and also write articles and legal updates.",
+      "you are a Solicitor at Brabners, specializing in employment law. you regularly organize and deliver practical and interactive training to clients on employment law-related issues and also write articles and legal updates.",
     sentEmailsTime: ["September 13"],
   },
   {
@@ -2504,7 +2504,7 @@ const emailList = [
       "Partner, Head of Intellectual Property, Head of Technology Sector",
     firm: "Brabners",
     connection:
-      "you are the Partner and Head of Intellectual Property and Technology Sector at Brabners. Your role likely involves educational initiatives within the technology and IP sectors.",
+      "you are the Partner and Head of Intellectual Property and Technology Sector at Brabners. your role likely involves educational initiatives within the technology and IP sectors.",
     sentEmailsTime: ["September 13"],
   },
   {
@@ -2534,7 +2534,7 @@ const emailList = [
     comment: "Legal Director",
     firm: "Brabners",
     connection:
-      "you are a Legal Director in the Employment and Pensions team at Brabners. You regularly provide training to businesses on key issues ranging from disciplinaries and grievances to anti-bullying and harassment.",
+      "you are a Legal Director in the Employment and Pensions team at Brabners. you regularly provide training to businesses on key issues ranging from disciplinaries and grievances to anti-bullying and harassment.",
     sentEmailsTime: ["September 13"],
   },
   {
@@ -2544,7 +2544,7 @@ const emailList = [
     comment: "Partner",
     firm: "Brabners",
     connection:
-      "you are a Partner in the Employment team at Brabners. You guest blog for Personnel Today and have developed innovative training for businesses on people-related matters. you are also a freelance lecturer for BPP Professional Development.",
+      "you are a Partner in the Employment team at Brabners. you guest blog for Personnel Today and have developed innovative training for businesses on people-related matters. you are also a freelance lecturer for BPP Professional Development.",
     sentEmailsTime: ["September 13"],
   },
   {
@@ -2644,7 +2644,7 @@ const emailList = [
     comment: "Partner",
     firm: "Charles Russell Speechlys LLP",
     connection:
-      "you are a Partner at Charles Russell Speechlys LLP with extensive experience in family law. You have been actively involved with Resolution and were a member of the National Committee and chair of the Training Group.",
+      "you are a Partner at Charles Russell Speechlys LLP with extensive experience in family law. you have been actively involved with Resolution and were a member of the National Committee and chair of the Training Group.",
     sentEmailsTime: ["September 14"],
   },
   {
@@ -2674,7 +2674,7 @@ const emailList = [
     comment: "Partner",
     firm: "Charles Russell Speechlys LLP",
     connection:
-      "you are a Partner who advises on construction, energy, and civil engineering matters. You have delivered training on FIDIC and the IChemE international contracts.",
+      "you are a Partner who advises on construction, energy, and civil engineering matters. you have delivered training on FIDIC and the IChemE international contracts.",
     sentEmailsTime: ["September 14"],
   },
   {
@@ -2696,6 +2696,7 @@ const emailList = [
     connection:
       "you are the Training Principal at Clyde & Co, responsible for graduate recruitment and ensuring that trainees are given all the opportunities they need to reach their full potential.",
     sentEmailsTime: ["September 14"],
+    result: "Hard Bounce",
   },
   {
     name: "Susie",
@@ -2845,7 +2846,7 @@ const emailList = [
     comment: "Associate, Business Litigation",
     firm: "Cooley LLP",
     connection:
-      "you are an Associate at Cooley LLP, specializing in Business Litigation. Your role likely involves staying updated with legal education and training.",
+      "you are an Associate at Cooley LLP, specializing in Business Litigation. your role likely involves staying updated with legal education and training.",
     sentEmailsTime: ["September 14"],
   },
   {
@@ -2986,7 +2987,7 @@ const emailList = [
     comment: "Knowledge Management | Legal Innovation | Thought Leadership",
     firm: "Cleary Gottlieb Steen & Hamilton LLP",
     connection:
-      "You work in Knowledge Management at Cleary Gottlieb Steen & Hamilton LLP, focusing on legal innovation and thought leadership, which involves educational projects and training.",
+      "you work in Knowledge Management at Cleary Gottlieb Steen & Hamilton LLP, focusing on legal innovation and thought leadership, which involves educational projects and training.",
     sentEmailsTime: ["September 14"],
   },
   {
@@ -3298,7 +3299,7 @@ const emailList = [
     comment: "International Counsel",
     firm: "Debevoise & Plimpton",
     connection:
-      "You have delivered cybersecurity training and have been featured in various publications, indicating your involvement in educational initiatives.",
+      "you have delivered cybersecurity training and have been featured in various publications, indicating your involvement in educational initiatives.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3308,7 +3309,7 @@ const emailList = [
     comment: "Of Counsel",
     firm: "Debevoise & Plimpton",
     connection:
-      "You have been involved in speaking engagements related to legal training, particularly in the area of warranties and indemnities.",
+      "you have been involved in speaking engagements related to legal training, particularly in the area of warranties and indemnities.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3359,7 +3360,7 @@ const emailList = [
     comment: "Chief Talent and Human Resources Officer",
     firm: "Dechert LLP",
     connection:
-      "You oversee all aspects of the firm’s talent program at Dechert LLP, including recruiting, professional development, and diversity and inclusion.",
+      "you oversee all aspects of the firm’s talent program at Dechert LLP, including recruiting, professional development, and diversity and inclusion.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3411,7 +3412,7 @@ const emailList = [
     comment: "Digital Learning Manager (Assoc CIPD L&D)",
     firm: "Express Solicitors",
     connection:
-      "You have over 10 years of experience in a learning and development setting. Your role likely involves overseeing various educational and training programs.",
+      "you have over 10 years of experience in a learning and development setting. your role likely involves overseeing various educational and training programs.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3421,7 +3422,7 @@ const emailList = [
     comment: "Managing partner / Director",
     firm: "Express Solicitors Ltd and Ontime Reports Ltd",
     connection:
-      "You are the Managing Partner at Express Solicitors, and your role likely involves overseeing the educational and training programs for the firm's lawyers.",
+      "you are the Managing Partner at Express Solicitors, and your role likely involves overseeing the educational and training programs for the firm's lawyers.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3431,7 +3432,7 @@ const emailList = [
     comment: "Partner - Head of Operations",
     firm: "Express Solicitors",
     connection:
-      "You are the Head of Operations at Express Solicitors. Your role likely involves operational aspects that include educational and training programs for the firm's lawyers.",
+      "you are the Head of Operations at Express Solicitors. your role likely involves operational aspects that include educational and training programs for the firm's lawyers.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3441,7 +3442,7 @@ const emailList = [
     comment: "Partner - Head of HR",
     firm: "Express Solicitors",
     connection:
-      "You are the Head of HR at Express Solicitors, responsible for the full employee remit including recruitment, planning, induction, training, assessment, and talent management.",
+      "you are the Head of HR at Express Solicitors, responsible for the full employee remit including recruitment, planning, induction, training, assessment, and talent management.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3451,7 +3452,7 @@ const emailList = [
     comment: "Human Resources Manager (Chartered MCIPD)",
     firm: "Express Solicitors",
     connection:
-      "You are a Human Resources Manager with a Chartered MCIPD certification. Your role likely involves overseeing educational and training programs.",
+      "you are a Human Resources Manager with a Chartered MCIPD certification. your role likely involves overseeing educational and training programs.",
     sentEmailsTime: ["September 15"],
   },
   {
@@ -3461,8 +3462,8 @@ const emailList = [
     comment: "Co-Chief Executive Officer",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Co-Chief Executive Officer at Eversheds Sutherland, responsible for overseeing all aspects of the firm, including educational and training programs.",
-    sentEmailsTime: [],
+      "you are the Co-Chief Executive Officer at Eversheds Sutherland, responsible for overseeing all aspects of the firm, including educational and training programs.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Keith",
@@ -3471,8 +3472,8 @@ const emailList = [
     comment: "Managing Partner (International)",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Managing Partner for International affairs at Eversheds Sutherland, likely overseeing educational and training programs for international branches.",
-    sentEmailsTime: [],
+      "you are the Managing Partner for International affairs at Eversheds Sutherland, likely overseeing educational and training programs for international branches.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Ian",
@@ -3481,8 +3482,8 @@ const emailList = [
     comment: "Executive Partner (International)",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Executive Partner for International affairs at Eversheds Sutherland, likely involved in educational and training programs for international branches.",
-    sentEmailsTime: [],
+      "you are the Executive Partner for International affairs at Eversheds Sutherland, likely involved in educational and training programs for international branches.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Alison",
@@ -3491,8 +3492,8 @@ const emailList = [
     comment: "Head of Knowledge",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Head of Knowledge at Eversheds Sutherland, responsible for overseeing the firm's knowledge management, which likely includes educational and training programs.",
-    sentEmailsTime: [],
+      "you are the Head of Knowledge at Eversheds Sutherland, responsible for overseeing the firm's knowledge management, which likely includes educational and training programs.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Louise",
@@ -3501,8 +3502,8 @@ const emailList = [
     comment: "Knowledge Operations Manager",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Knowledge Operations Manager at Eversheds Sutherland, likely involved in managing educational and training programs.",
-    sentEmailsTime: [],
+      "you are the Knowledge Operations Manager at Eversheds Sutherland, likely involved in managing educational and training programs.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Kristy",
@@ -3511,8 +3512,8 @@ const emailList = [
     comment: "Professional Development Partner",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Professional Development Partner at Eversheds Sutherland, responsible for overseeing the firm's comprehensive in-house training program.",
-    sentEmailsTime: [],
+      "you are the Professional Development Partner at Eversheds Sutherland, responsible for overseeing the firm's comprehensive in-house training program.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Nathan",
@@ -3522,8 +3523,8 @@ const emailList = [
       "Principal Associate | Education | Corporate | Commercial | International | M&A",
     firm: "Eversheds Sutherland",
     connection:
-      "You are a Principal Associate in the Corporate Education Team at Eversheds Sutherland, involved in educational projects and initiatives.",
-    sentEmailsTime: [],
+      "you are a Principal Associate in the Corporate Education Team at Eversheds Sutherland, involved in educational projects and initiatives.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Dorita",
@@ -3532,8 +3533,8 @@ const emailList = [
     comment: "Head of Learning and Development",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Head of Learning and Development at Eversheds Sutherland, responsible for all educational and training programs.",
-    sentEmailsTime: [],
+      "you are the Head of Learning and Development at Eversheds Sutherland, responsible for all educational and training programs.",
+    sentEmailsTime: ["September 25"],
     result: "Hard Bounce",
   },
   {
@@ -3543,8 +3544,8 @@ const emailList = [
     comment: "Learning & Development Manager",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Learning & Development Manager at Eversheds Sutherland, responsible for translating the organization's overall strategy into effective and sustainable learning initiatives.",
-    sentEmailsTime: [],
+      "you are the Learning & Development Manager at Eversheds Sutherland, responsible for translating the organization's overall strategy into effective and sustainable learning initiatives.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Lorraine",
@@ -3553,8 +3554,8 @@ const emailList = [
     comment: "Chief People Officer",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Chief People Officer at Eversheds Sutherland, overseeing human resources which likely includes educational and training programs.",
-    sentEmailsTime: [],
+      "you are the Chief People Officer at Eversheds Sutherland, overseeing human resources which likely includes educational and training programs.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Abigail",
@@ -3563,8 +3564,8 @@ const emailList = [
     comment: "HR Director",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the HR Director at Eversheds Sutherland, likely involved in educational and training programs for employees.",
-    sentEmailsTime: [],
+      "you are the HR Director at Eversheds Sutherland, likely involved in educational and training programs for employees.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Dianna",
@@ -3573,8 +3574,8 @@ const emailList = [
     comment: "Director of Human Resources",
     firm: "Eversheds Sutherland",
     connection:
-      "You are the Director of Human Resources at Eversheds Sutherland, likely overseeing educational and training programs for employees.",
-    sentEmailsTime: [],
+      "you are the Director of Human Resources at Eversheds Sutherland, likely overseeing educational and training programs for employees.",
+    sentEmailsTime: ["September 25"],
   },
   {
     name: "Sarah",
@@ -3583,7 +3584,7 @@ const emailList = [
     comment: "Graduate Recruitment & Development Manager",
     firm: "Fieldfisher",
     connection:
-      "You are responsible for the attraction, selection, and development of Solicitor Apprentices and Trainee Solicitors across various offices. You also manage the firm's insight schemes and university relationships.",
+      "you are responsible for the attraction, selection, and development of Solicitor Apprentices and Trainee Solicitors across various offices. you also manage the firm's insight schemes and university relationships.",
     sentEmailsTime: [],
   },
   {
@@ -3593,7 +3594,7 @@ const emailList = [
     comment: "Supports Sarah in recruitment and development",
     firm: "Fieldfisher",
     connection:
-      "You support Sarah in the attraction, selection, and development of Solicitor Apprentices and Trainee Solicitors in the UK offices.",
+      "you support Sarah in the attraction, selection, and development of Solicitor Apprentices and Trainee Solicitors in the UK offices.",
     sentEmailsTime: [],
   },
   {
@@ -3603,7 +3604,7 @@ const emailList = [
     comment: "Head of HR",
     firm: "Fieldfisher",
     connection:
-      "You are the Head of HR at Fieldfisher, overseeing human resources which likely includes educational and training programs.",
+      "you are the Head of HR at Fieldfisher, overseeing human resources which likely includes educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3613,7 +3614,7 @@ const emailList = [
     comment: "HR Director Chartered CIPD",
     firm: "Fieldfisher",
     connection:
-      "You are the HR Director at Fieldfisher, likely responsible for overseeing educational and training programs.",
+      "you are the HR Director at Fieldfisher, likely responsible for overseeing educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3623,7 +3624,7 @@ const emailList = [
     comment: "Head of Recruitment",
     firm: "Fieldfisher",
     connection:
-      "You are the Head of Recruitment at Fieldfisher, responsible for talent acquisition which likely includes educational and training programs.",
+      "you are the Head of Recruitment at Fieldfisher, responsible for talent acquisition which likely includes educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3633,7 +3634,7 @@ const emailList = [
     comment: "Talent Acquisition Advisor",
     firm: "Fieldfisher",
     connection:
-      "You are responsible for all of the Apprentice and Graduate programs across Fieldfisher's Business Services and Legal Support Services areas.",
+      "you are responsible for all of the Apprentice and Graduate programs across Fieldfisher's Business Services and Legal Support Services areas.",
     sentEmailsTime: [],
   },
   {
@@ -3643,7 +3644,7 @@ const emailList = [
     comment: "Birmingham Office Leader, Head of EPIC",
     firm: "Fieldfisher",
     connection:
-      "You are the Birmingham Office Leader and the UK Head of EPIC at Fieldfisher, likely involved in educational and training programs.",
+      "you are the Birmingham Office Leader and the UK Head of EPIC at Fieldfisher, likely involved in educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3653,7 +3654,7 @@ const emailList = [
     comment: "Managing Partner",
     firm: "Fieldfisher",
     connection:
-      "You are the Managing Partner of Fieldfisher, responsible for the management of the firm with a special focus on innovation in law.",
+      "you are the Managing Partner of Fieldfisher, responsible for the management of the firm with a special focus on innovation in law.",
     sentEmailsTime: [],
   },
   {
@@ -3663,7 +3664,7 @@ const emailList = [
     comment: "Executive Director - Learning and Development",
     firm: "Foot Anstey LLP",
     connection:
-      "You are the Executive Director of Learning and Development at Foot Anstey LLP, responsible for overseeing all educational and training programs within the firm.",
+      "you are the Executive Director of Learning and Development at Foot Anstey LLP, responsible for overseeing all educational and training programs within the firm.",
     sentEmailsTime: [],
   },
   {
@@ -3673,7 +3674,7 @@ const emailList = [
     comment: "Operations Director (HR)",
     firm: "Foot Anstey LLP",
     connection:
-      "You are the Operations Director (HR & Resourcing) at Foot Anstey LLP, working closely with the HR Director and Group Leaders on all aspects of resourcing, leadership, and HR management.",
+      "you are the Operations Director (HR & Resourcing) at Foot Anstey LLP, working closely with the HR Director and Group Leaders on all aspects of resourcing, leadership, and HR management.",
     sentEmailsTime: [],
   },
   {
@@ -3683,7 +3684,7 @@ const emailList = [
     comment: "People and Reward Manager",
     firm: "Foot Anstey LLP",
     connection:
-      "You are the People and Reward Manager at Foot Anstey LLP, likely involved in educational and training programs.",
+      "you are the People and Reward Manager at Foot Anstey LLP, likely involved in educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3693,7 +3694,7 @@ const emailList = [
     comment: "Early Careers Manager",
     firm: "Foot Anstey LLP",
     connection:
-      "You focus on early careers recruitment and development at Foot Anstey LLP, supporting people in starting their careers and progressing.",
+      "you focus on early careers recruitment and development at Foot Anstey LLP, supporting people in starting their careers and progressing.",
     sentEmailsTime: [],
   },
   {
@@ -3703,7 +3704,7 @@ const emailList = [
     comment: "Early Careers Advisor",
     firm: "Foot Anstey LLP",
     connection:
-      "You specialize in early careers at Foot Anstey LLP, helping individuals progress and develop in their roles.",
+      "you specialize in early careers at Foot Anstey LLP, helping individuals progress and develop in their roles.",
     sentEmailsTime: [],
   },
   {
@@ -3713,7 +3714,7 @@ const emailList = [
     comment: "Managing Partner",
     firm: "Foot Anstey LLP",
     connection:
-      "You are the Managing Partner at Foot Anstey LLP, responsible for the management of the firm and likely involved in educational and training programs.",
+      "you are the Managing Partner at Foot Anstey LLP, responsible for the management of the firm and likely involved in educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3723,7 +3724,7 @@ const emailList = [
     comment: "Group HR Director",
     firm: "Foot Anstey LLP",
     connection:
-      "You are the Group HR Director at Foot Anstey LLP, overseeing the HR function responsible for delivering the people elements of the firm’s strategy.",
+      "you are the Group HR Director at Foot Anstey LLP, overseeing the HR function responsible for delivering the people elements of the firm’s strategy.",
     sentEmailsTime: [],
   },
   {
@@ -3733,7 +3734,7 @@ const emailList = [
     comment: "Senior Human Resources Business Partner",
     firm: "Foot Anstey LLP",
     connection:
-      "You provide proactive, commercially-driven HR advice and support at Foot Anstey LLP, likely involved in educational and training programs.",
+      "you provide proactive, commercially-driven HR advice and support at Foot Anstey LLP, likely involved in educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3743,7 +3744,7 @@ const emailList = [
     comment: "Senior Human Resources Business Partner",
     firm: "Foot Anstey LLP",
     connection:
-      "You are a Senior Human Resources Business Partner at Foot Anstey LLP, likely involved in educational and training programs.",
+      "you are a Senior Human Resources Business Partner at Foot Anstey LLP, likely involved in educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3753,7 +3754,7 @@ const emailList = [
     comment: "Director level professional with extensive experience",
     firm: "Foot Anstey LLP",
     connection:
-      "You have 30 years of experience in the legal industry and specialize in service delivery models, legal service pricing, and profitability at Foot Anstey LLP.",
+      "you have 30 years of experience in the legal industry and specialize in service delivery models, legal service pricing, and profitability at Foot Anstey LLP.",
     sentEmailsTime: [],
   },
   {
@@ -3764,7 +3765,7 @@ const emailList = [
     comment: "Training Principal and Partner in Corporate Practice",
     firm: "Fried Frank",
     connection:
-      "You are the Training Principal at Fried Frank, responsible for overseeing the educational and training programs for new associates and trainees.",
+      "you are the Training Principal at Fried Frank, responsible for overseeing the educational and training programs for new associates and trainees.",
     sentEmailsTime: [],
   },
   {
@@ -3775,7 +3776,7 @@ const emailList = [
     comment: "Global Director of Knowledge Management",
     firm: "Fried Frank",
     connection:
-      "You are the Global Director of Knowledge Management at Fried Frank, responsible for managing and disseminating knowledge resources across the firm.",
+      "you are the Global Director of Knowledge Management at Fried Frank, responsible for managing and disseminating knowledge resources across the firm.",
     sentEmailsTime: [],
   },
   {
@@ -3785,7 +3786,7 @@ const emailList = [
     comment: "Knowledge Management & Innovation Attorney",
     firm: "Fried Frank",
     connection:
-      "You are a Knowledge Management & Innovation Attorney at Fried Frank, involved in the management of knowledge resources and innovation initiatives.",
+      "you are a Knowledge Management & Innovation Attorney at Fried Frank, involved in the management of knowledge resources and innovation initiatives.",
     sentEmailsTime: [],
   },
   {
@@ -3795,7 +3796,7 @@ const emailList = [
     comment: "Chief Operating Officer",
     firm: "Fried Frank",
     connection:
-      "You are the Chief Operating Officer at Fried Frank, overseeing the operational aspects of the firm, including educational and training programs.",
+      "you are the Chief Operating Officer at Fried Frank, overseeing the operational aspects of the firm, including educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3806,7 +3807,7 @@ const emailList = [
     comment: "Chief Human Resources Officer",
     firm: "Fried Frank",
     connection:
-      "You are the Chief Human Resources Officer at Fried Frank, responsible for human resources, including training and development programs.",
+      "you are the Chief Human Resources Officer at Fried Frank, responsible for human resources, including training and development programs.",
     sentEmailsTime: [],
   },
   {
@@ -3816,7 +3817,7 @@ const emailList = [
     comment: "Chief Operating Officer - Europe",
     firm: "Fried Frank",
     connection:
-      "You are the Chief Operating Officer for Europe at Fried Frank, overseeing the operational aspects of the firm in Europe, including educational and training programs.",
+      "you are the Chief Operating Officer for Europe at Fried Frank, overseeing the operational aspects of the firm in Europe, including educational and training programs.",
     sentEmailsTime: [],
   },
   {
@@ -3826,7 +3827,7 @@ const emailList = [
     comment: "Chief Information Officer",
     firm: "Fried Frank",
     connection:
-      "You are the Chief Information Officer at Fried Frank, responsible for the firm's information technology, which may include educational technology.",
+      "you are the Chief Information Officer at Fried Frank, responsible for the firm's information technology, which may include educational technology.",
     sentEmailsTime: [],
   },
   {
@@ -3836,7 +3837,7 @@ const emailList = [
     comment: "Head of HR Business Services",
     firm: "Fried Frank",
     connection:
-      "You are the Head of HR Business Services at Fried Frank, likely involved in educational and training programs for business services.",
+      "you are the Head of HR Business Services at Fried Frank, likely involved in educational and training programs for business services.",
     sentEmailsTime: [],
   },
   {
@@ -3848,7 +3849,7 @@ const emailList = [
     comment: "Partner PSL, leads the team of professional support lawyers",
     firm: "Gateley Plc",
     connection:
-      "You lead the team of professional support lawyers at Gateley Plc and manage the firm’s Information Resources team. You are also involved in training and keeping lawyers and clients updated on new laws.",
+      "you lead the team of professional support lawyers at Gateley Plc and manage the firm’s Information Resources team. you are also involved in training and keeping lawyers and clients updated on new laws.",
     sentEmailsTime: [],
   },
   {
@@ -3859,7 +3860,7 @@ const emailList = [
     comment: "MANAGING PARTNER",
     firm: "Kiddy & Partners",
     connection:
-      "You focus on assessment and work with leaders for their better positioning for success. You lead on both assessments for recruitment and for development/succession planning.",
+      "you focus on assessment and work with leaders for their better positioning for success. you lead on both assessments for recruitment and for development/succession planning.",
     sentEmailsTime: [],
   },
   {
@@ -3870,7 +3871,7 @@ const emailList = [
     comment: "PROJECT MANAGER",
     firm: "Kiddy & Partners",
     connection:
-      "You support the planning and organization of client projects, delivering discrete project management activities through occupational psychology training and development of leaders and managers.",
+      "you support the planning and organization of client projects, delivering discrete project management activities through occupational psychology training and development of leaders and managers.",
     sentEmailsTime: [],
   },
   {
@@ -3881,7 +3882,7 @@ const emailList = [
     comment: "PRINCIPAL CONSULTANT",
     firm: "Kiddy & Partners",
     connection:
-      "You focus on executive assessment, leadership development, and coaching. You bring subject matter expertise along with strong commercial judgment to support clients with appointing and developing their leaders.",
+      "you focus on executive assessment, leadership development, and coaching. you bring subject matter expertise along with strong commercial judgment to support clients with appointing and developing their leaders.",
     sentEmailsTime: [],
   },
   {
@@ -3892,7 +3893,7 @@ const emailList = [
     comment: "OPERATIONS TEAM LEAD",
     firm: "Kiddy & Partners",
     connection:
-      "You are responsible for ensuring the successful delivery of large-scale programs at Kiddy. You have extensive experience in executing complex, global programs.",
+      "you are responsible for ensuring the successful delivery of large-scale programs at Kiddy. you have extensive experience in executing complex, global programs.",
     sentEmailsTime: [],
   },
   {
@@ -3903,7 +3904,7 @@ const emailList = [
     comment: "SENIOR CONSULTANT",
     firm: "Kiddy & Partners",
     connection:
-      "Your experience spans the design and delivery of processes focusing on inclusive leadership development, high potential identification, and manager/leader development using psychometrics and 360-degree feedback.",
+      "your experience spans the design and delivery of processes focusing on inclusive leadership development, high potential identification, and manager/leader development using psychometrics and 360-degree feedback.",
     sentEmailsTime: [],
   },
   {
@@ -3914,7 +3915,7 @@ const emailList = [
     comment: "Client Director, Chartered Occupational Psychologist",
     firm: "Kiddy & Partners",
     connection:
-      "You specialize in the assessment and development of leaders and high-potential employees, working across various sectors.",
+      "you specialize in the assessment and development of leaders and high-potential employees, working across various sectors.",
     sentEmailsTime: [],
   },
   {
@@ -3925,7 +3926,7 @@ const emailList = [
     comment: "Client Director/Cluster Lead",
     firm: "t-three",
     connection:
-      "You design and deliver leadership development and management training programs. You consult with organizations to advise on learning programs and performance improvement.",
+      "you design and deliver leadership development and management training programs. you consult with organizations to advise on learning programs and performance improvement.",
     sentEmailsTime: [],
   },
   {
@@ -3936,7 +3937,7 @@ const emailList = [
     comment: "Director",
     firm: "t-three",
     connection:
-      "You focus on defining the leadership and culture organizations need for growth. You are involved in profiling and assessing to find the right people for organizational goals.",
+      "you focus on defining the leadership and culture organizations need for growth. you are involved in profiling and assessing to find the right people for organizational goals.",
     sentEmailsTime: [],
   },
   {
@@ -3948,7 +3949,7 @@ const emailList = [
     comment: "Learning & Development Administrator",
     firm: "Gateley",
     connection:
-      "You work with the Learning & Development team at Gateley to help create and deploy training, as well as supporting the PSLs to use the LMS effectively.",
+      "you work with the Learning & Development team at Gateley to help create and deploy training, as well as supporting the PSLs to use the LMS effectively.",
     sentEmailsTime: [],
   },
   {
@@ -3959,7 +3960,7 @@ const emailList = [
     comment: "Talent Development Director and Head of Thrive",
     firm: "Gateley",
     connection:
-      "You shape the learning and development of people at Gateley to maximize potential and support the delivery of organizational strategic goals. You are also responsible for the health and wellbeing agenda at Gateley.",
+      "you shape the learning and development of people at Gateley to maximize potential and support the delivery of organizational strategic goals. you are also responsible for the health and wellbeing agenda at Gateley.",
     sentEmailsTime: [],
   },
   {
@@ -3971,7 +3972,7 @@ const emailList = [
       "Chief Talent Officer and Assistant General Counsel for Employment",
     firm: "Goodwin",
     connection:
-      "You are the Chief Talent Officer and Assistant General Counsel for Employment at Goodwin. You oversee all professional development, diversity, equity + inclusion, leadership, recruiting, training, and human resources functions.",
+      "you are the Chief Talent Officer and Assistant General Counsel for Employment at Goodwin. you oversee all professional development, diversity, equity + inclusion, leadership, recruiting, training, and human resources functions.",
     sentEmailsTime: [],
   },
   {
@@ -3982,7 +3983,7 @@ const emailList = [
     comment: "Director, Learning & Professional Development",
     firm: "Goodwin",
     connection:
-      "You work to enhance the knowledge and skills of Goodwin’s attorneys and professional staff for their personal and professional growth.",
+      "you work to enhance the knowledge and skills of Goodwin’s attorneys and professional staff for their personal and professional growth.",
     sentEmailsTime: [],
   },
   {
@@ -3994,7 +3995,7 @@ const emailList = [
       "Managing Director, Knowledge Management | Legal Technology | KM Strategy | Data Strategy | Innovation",
     firm: "Goodwin",
     connection:
-      "You are the Managing Director of Knowledge Management at Goodwin, focusing on legal technology, KM strategy, data strategy, and innovation.",
+      "you are the Managing Director of Knowledge Management at Goodwin, focusing on legal technology, KM strategy, data strategy, and innovation.",
     sentEmailsTime: [],
   },
   {
@@ -4005,7 +4006,7 @@ const emailList = [
     comment: "Director, Knowledge Management (Litigation)",
     firm: "Goodwin",
     connection:
-      "You are the Director of Knowledge Management for Litigation at Goodwin, responsible for managing and disseminating litigation-related knowledge within the firm.",
+      "you are the Director of Knowledge Management for Litigation at Goodwin, responsible for managing and disseminating litigation-related knowledge within the firm.",
     sentEmailsTime: [],
   },
   {
@@ -4016,7 +4017,7 @@ const emailList = [
     comment: "Director, Professional Staff Learning",
     firm: "Goodwin",
     connection:
-      "You are the Director of Professional Staff Learning at Goodwin, responsible for the educational and training programs for the professional staff.",
+      "you are the Director of Professional Staff Learning at Goodwin, responsible for the educational and training programs for the professional staff.",
     sentEmailsTime: [],
   },
   {
@@ -4028,7 +4029,7 @@ const emailList = [
     comment: "Managing Director, Talent (Europe & Asia) and Operations (UK)",
     firm: "Goodwin",
     connection:
-      "You are the Managing Director of Talent for Europe & Asia and Operations for the UK at Goodwin, overseeing talent management activities in these regions.",
+      "you are the Managing Director of Talent for Europe & Asia and Operations for the UK at Goodwin, overseeing talent management activities in these regions.",
     sentEmailsTime: [],
   },
   {
@@ -4040,7 +4041,7 @@ const emailList = [
     comment: "Senior Human Resources Manager",
     firm: "Goodwin",
     connection:
-      "You are the Senior Human Resources Manager at Goodwin, involved in various HR functions including talent management.",
+      "you are the Senior Human Resources Manager at Goodwin, involved in various HR functions including talent management.",
     sentEmailsTime: [],
   },
   {
@@ -4051,7 +4052,7 @@ const emailList = [
     comment: "Managing Director, Human Resources - US",
     firm: "Goodwin",
     connection:
-      "You are the firm’s Managing Director, Human Resources for the U.S. at Goodwin. Your focus includes oversight of performance and talent management, as well as compensation for the firm’s professional staff and attorneys.",
+      "you are the firm’s Managing Director, Human Resources for the U.S. at Goodwin. your focus includes oversight of performance and talent management, as well as compensation for the firm’s professional staff and attorneys.",
     sentEmailsTime: [],
   },
   {
@@ -4062,7 +4063,7 @@ const emailList = [
     comment: "Director, Innovation and Knowledge Programs",
     firm: "Gowling WLG",
     connection:
-      "You are the Director of Innovation and Knowledge Programs at Gowling WLG, responsible for leading the firm's innovation, knowledge management, learning and development, legal project management, client and practice solutions, and process re-engineering strategy and initiatives.",
+      "you are the Director of Innovation and Knowledge Programs at Gowling WLG, responsible for leading the firm's innovation, knowledge management, learning and development, legal project management, client and practice solutions, and process re-engineering strategy and initiatives.",
     sentEmailsTime: [],
   },
   {
@@ -4073,7 +4074,7 @@ const emailList = [
     comment: "Legal Knowledge Management, Operations and Legal Tech Specialist",
     firm: "Gowling WLG",
     connection:
-      "You specialize in Legal Knowledge Management, Operations, and Legal Tech at Gowling WLG, focusing on the implementation and management of legal technologies and knowledge resources.",
+      "you specialize in Legal Knowledge Management, Operations, and Legal Tech at Gowling WLG, focusing on the implementation and management of legal technologies and knowledge resources.",
     sentEmailsTime: [],
   },
   {
@@ -4084,7 +4085,7 @@ const emailList = [
     comment: "Head of Learning & Development",
     firm: "Gowling WLG",
     connection:
-      "You are the Head of Learning & Development at Gowling WLG, responsible for creating a culture that supports development, high performance, and innovation.",
+      "you are the Head of Learning & Development at Gowling WLG, responsible for creating a culture that supports development, high performance, and innovation.",
     sentEmailsTime: [],
   },
   {
@@ -4095,7 +4096,7 @@ const emailList = [
     comment: "Learning and Development Manager",
     firm: "Gowling WLG",
     connection:
-      "You are the Learning and Development Manager at Gowling WLG UK, responsible for managing and implementing learning and development programs.",
+      "you are the Learning and Development Manager at Gowling WLG UK, responsible for managing and implementing learning and development programs.",
     sentEmailsTime: [],
   },
   {
@@ -4107,7 +4108,7 @@ const emailList = [
     comment: "Director, Human Resources",
     firm: "Gowling WLG",
     connection:
-      "You are the Director of Human Resources at Gowling WLG, overseeing the firm's human resources strategies and policies.",
+      "you are the Director of Human Resources at Gowling WLG, overseeing the firm's human resources strategies and policies.",
     sentEmailsTime: [],
   },
   {
@@ -4119,7 +4120,7 @@ const emailList = [
     comment: "HR Director",
     firm: "Gowling WLG",
     connection:
-      "You are the HR Director at Gowling WLG, responsible for overseeing human resources functions and strategies.",
+      "you are the HR Director at Gowling WLG, responsible for overseeing human resources functions and strategies.",
     sentEmailsTime: [],
   },
   {
@@ -4131,7 +4132,7 @@ const emailList = [
     comment: "Partner and Training Principal",
     firm: "Gowling WLG",
     connection:
-      "You are working as Training Principal at Gowling WLG, and are responsible for overseeing the educational and training programs for new associates and trainees.",
+      "you are working as Training Principal at Gowling WLG, and are responsible for overseeing the educational and training programs for new associates and trainees.",
     sentEmailsTime: [],
   },
   {
@@ -4143,7 +4144,7 @@ const emailList = [
     comment: "Partner, Training Principal",
     firm: "Harbottle & Lewis LLP",
     connection:
-      "You are working as Training Principal at Harbottle & Lewis LLP, and are responsible for creating a wide-ranging training programme for lawyers.",
+      "you are working as Training Principal at Harbottle & Lewis LLP, and are responsible for creating a wide-ranging training programme for lawyers.",
     sentEmailsTime: [],
   },
   {
@@ -4154,7 +4155,7 @@ const emailList = [
     comment: "Learning & Development Manager",
     firm: "Harbottle & Lewis LLP",
     connection:
-      "You are working as Learning & Development Manager at Harbottle & Lewis LLP, focusing on the end-to-end production of online learning content for legal professionals.",
+      "you are working as Learning & Development Manager at Harbottle & Lewis LLP, focusing on the end-to-end production of online learning content for legal professionals.",
     sentEmailsTime: [],
   },
   {
@@ -4166,7 +4167,7 @@ const emailList = [
     comment: "Partner, Training Principal",
     firm: "Harbottle & Lewis LLP",
     connection:
-      "You are working as Training Principal at Harbottle & Lewis LLP, and are responsible for overseeing the educational and training programs for new associates and trainees.",
+      "you are working as Training Principal at Harbottle & Lewis LLP, and are responsible for overseeing the educational and training programs for new associates and trainees.",
     sentEmailsTime: [],
   },
   {
@@ -4177,7 +4178,7 @@ const emailList = [
     comment: "Trainee Supervisor",
     firm: "Harbottle & Lewis LLP",
     connection:
-      "You are working as Trainee Supervisor at Harbottle & Lewis LLP, and must be involved in the educational and training aspects for trainees.",
+      "you are working as Trainee Supervisor at Harbottle & Lewis LLP, and must be involved in the educational and training aspects for trainees.",
     sentEmailsTime: [],
   },
   {
@@ -4189,7 +4190,7 @@ const emailList = [
     comment: "Director of Human Resources",
     firm: "Harbottle & Lewis LLP",
     connection:
-      "You are working as Director of Human Resources at Harbottle & Lewis LLP, and are likely involved in the educational and training initiatives for the firm's staff.",
+      "you are working as Director of Human Resources at Harbottle & Lewis LLP, and are likely involved in the educational and training initiatives for the firm's staff.",
     sentEmailsTime: [],
   },
   {
@@ -4201,7 +4202,7 @@ const emailList = [
     comment: "Director of Human Resources",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are responsible for the firm’s human resource management, talent, development, and engagement activity. Your role focuses on developing and implementing the firm’s HR and people strategy.",
+      "you are responsible for the firm’s human resource management, talent, development, and engagement activity. your role focuses on developing and implementing the firm’s HR and people strategy.",
     sentEmailsTime: [],
   },
   {
@@ -4213,7 +4214,7 @@ const emailList = [
     comment: "Head of HR & Development",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are the Head of HR & Development at Hill Dickinson LLP, focusing on human resources in the professional services sector.",
+      "you are the Head of HR & Development at Hill Dickinson LLP, focusing on human resources in the professional services sector.",
     sentEmailsTime: [],
   },
   {
@@ -4225,7 +4226,7 @@ const emailList = [
     comment: "Head of Information Services",
     firm: "Hill Dickinson LLP",
     connection:
-      "You specialize in legal information resources, knowledge management, and records management at Hill Dickinson LLP.",
+      "you specialize in legal information resources, knowledge management, and records management at Hill Dickinson LLP.",
     sentEmailsTime: [],
   },
   {
@@ -4236,7 +4237,7 @@ const emailList = [
     comment: "Training Principal",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are working as Training Principal at Hill Dickinson LLP, specializing in banking transactions. You are responsible for overseeing the educational and training programs for new associates and trainees.",
+      "you are working as Training Principal at Hill Dickinson LLP, specializing in banking transactions. you are responsible for overseeing the educational and training programs for new associates and trainees.",
     sentEmailsTime: [],
   },
   {
@@ -4247,7 +4248,7 @@ const emailList = [
     comment: "Professional Support Lawyer",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are a professional support lawyer at Hill Dickinson LLP, responsible for developing and maintaining precedents for the corporate team and delivering training sessions.",
+      "you are a professional support lawyer at Hill Dickinson LLP, responsible for developing and maintaining precedents for the corporate team and delivering training sessions.",
     sentEmailsTime: [],
   },
   {
@@ -4258,7 +4259,7 @@ const emailList = [
     comment: "Deputy Head of London (City) Office (Partner)",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are a partner in the Shipping team based in the London office of Hill Dickinson LLP.",
+      "you are a partner in the Shipping team based in the London office of Hill Dickinson LLP.",
     sentEmailsTime: [],
   },
   {
@@ -4269,7 +4270,7 @@ const emailList = [
     comment: "Head of Schools",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are the national head of schools within Hill Dickinson LLP, focusing on employment and education work, particularly in the schools sector.",
+      "you are the national head of schools within Hill Dickinson LLP, focusing on employment and education work, particularly in the schools sector.",
     sentEmailsTime: [],
   },
   {
@@ -4280,7 +4281,7 @@ const emailList = [
     comment: "Talent and Development Manager",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are a talent and development manager based in the Liverpool office within the talent and development team at Hill Dickinson LLP.",
+      "you are a talent and development manager based in the Liverpool office within the talent and development team at Hill Dickinson LLP.",
     sentEmailsTime: [],
   },
   {
@@ -4291,7 +4292,7 @@ const emailList = [
     comment: "COO",
     firm: "Hill Dickinson LLP",
     connection:
-      "You are the Chief Operating Officer for Hill Dickinson LLP, responsible for the day-to-day running of the firm and focused on driving profitable growth.",
+      "you are the Chief Operating Officer for Hill Dickinson LLP, responsible for the day-to-day running of the firm and focused on driving profitable growth.",
     sentEmailsTime: [],
   },
   {
@@ -4303,7 +4304,7 @@ const emailList = [
     comment: "Partner and Training Principal",
     firm: "Irwin Mitchell LLP",
     connection:
-      "You are working as Training Principal at Irwin Mitchell LLP, specializing in medical law and patients' rights, particularly in birth injury cases.",
+      "you are working as Training Principal at Irwin Mitchell LLP, specializing in medical law and patients' rights, particularly in birth injury cases.",
     sentEmailsTime: [],
   },
   {
@@ -4315,7 +4316,7 @@ const emailList = [
     comment: "Organisational Development Specialist",
     firm: "Irwin Mitchell LLP",
     connection:
-      "You are an Organisational Development Specialist at Irwin Mitchell, focusing on the delivery of learning solutions in various formats such as podcasts, videos, and e-learning.",
+      "you are an Organisational Development Specialist at Irwin Mitchell, focusing on the delivery of learning solutions in various formats such as podcasts, videos, and e-learning.",
     sentEmailsTime: [],
   },
   {
@@ -4327,7 +4328,7 @@ const emailList = [
     comment: "Partner, Director of Knowledge Management",
     firm: "Irwin Mitchell LLP",
     connection:
-      "You are the Partner and Director of Knowledge Management at Irwin Mitchell LLP, responsible for overseeing the firm's knowledge resources.",
+      "you are the Partner and Director of Knowledge Management at Irwin Mitchell LLP, responsible for overseeing the firm's knowledge resources.",
     sentEmailsTime: [],
   },
   {
@@ -4338,7 +4339,7 @@ const emailList = [
     comment: "Knowledge Management Specialist",
     firm: "Irwin Mitchell LLP",
     connection:
-      "You are a Knowledge Management Specialist at Irwin Mitchell LLP, with experience in intranet management, knowledge sharing, and legal technical training.",
+      "you are a Knowledge Management Specialist at Irwin Mitchell LLP, with experience in intranet management, knowledge sharing, and legal technical training.",
     sentEmailsTime: [],
   },
   {
@@ -4360,7 +4361,7 @@ const emailList = [
     comment: "Managing Partner",
     firm: "Kingsley Napley",
     connection:
-      "You are the Managing Partner at Kingsley Napley, responsible for overseeing the overall management and strategic direction of the firm.",
+      "you are the Managing Partner at Kingsley Napley, responsible for overseeing the overall management and strategic direction of the firm.",
     sentEmailsTime: [],
   },
   {
@@ -4371,7 +4372,7 @@ const emailList = [
     comment: "HR Director",
     firm: "Kingsley Napley",
     connection:
-      "You are the HR Director at Kingsley Napley, responsible for human resources and talent management within the firm.",
+      "you are the HR Director at Kingsley Napley, responsible for human resources and talent management within the firm.",
     sentEmailsTime: [],
   },
   {
@@ -4382,7 +4383,7 @@ const emailList = [
     comment: "Partner and Training Principal",
     firm: "Kingsley Napley",
     connection:
-      "You are working as Training Principal at Kingsley Napley, with overall responsibility for the trainees and their educational programs.",
+      "you are working as Training Principal at Kingsley Napley, with overall responsibility for the trainees and their educational programs.",
     sentEmailsTime: [],
   },
   {
@@ -4393,7 +4394,7 @@ const emailList = [
     comment: "Head of Knowledge & Information Services",
     firm: "Kingsley Napley",
     connection:
-      "You are the Head of Knowledge & Information Services at Kingsley Napley, managing and developing the firm's research resources and other information services such as training and knowledge sharing.",
+      "you are the Head of Knowledge & Information Services at Kingsley Napley, managing and developing the firm's research resources and other information services such as training and knowledge sharing.",
     sentEmailsTime: [],
   },
   {
@@ -4404,7 +4405,7 @@ const emailList = [
     comment: "HR Director",
     firm: "Michelmores",
     connection:
-      "You are the HR Director at Michelmores, responsible for the overall design and implementation of the firm's people strategy, including talent development.",
+      "you are the HR Director at Michelmores, responsible for the overall design and implementation of the firm's people strategy, including talent development.",
     sentEmailsTime: [],
   },
   {
@@ -4415,7 +4416,7 @@ const emailList = [
     comment: "Learning & Talent Development Specialist",
     firm: "Michelmores",
     connection:
-      "You are a Learning & Talent Development Specialist at Michelmores, focusing on the educational and training needs of the firm's employees.",
+      "you are a Learning & Talent Development Specialist at Michelmores, focusing on the educational and training needs of the firm's employees.",
     sentEmailsTime: [],
   },
   {
@@ -4426,7 +4427,7 @@ const emailList = [
     comment: "Deputy HR Director",
     firm: "Michelmores",
     connection:
-      "You are the Deputy HR Director at Michelmores, responsible for shaping and implementing all aspects of the firm’s talent agenda, including Talent Development.",
+      "you are the Deputy HR Director at Michelmores, responsible for shaping and implementing all aspects of the firm’s talent agenda, including Talent Development.",
     sentEmailsTime: [],
   },
   {
@@ -4438,7 +4439,7 @@ const emailList = [
     comment: "Training Principal and Partner, Corporate",
     firm: "Michelmores",
     connection:
-      "You are working as Training Principal at Michelmores, responsible for overseeing the educational and training programs for new associates and trainees.",
+      "you are working as Training Principal at Michelmores, responsible for overseeing the educational and training programs for new associates and trainees.",
     sentEmailsTime: [],
   },
   {
@@ -4449,7 +4450,7 @@ const emailList = [
     comment: "Knowledge & Information Manager",
     firm: "Michelmores",
     connection:
-      "You are the Knowledge & Information Manager at Michelmores, responsible for managing the firm's knowledge resources and information services.",
+      "you are the Knowledge & Information Manager at Michelmores, responsible for managing the firm's knowledge resources and information services.",
     sentEmailsTime: [],
   },
   {
@@ -4460,7 +4461,7 @@ const emailList = [
     comment: "Recruitment Business Partner",
     firm: "Michelmores",
     connection:
-      "You are the Recruitment Business Partner at Michelmores, responsible for talent acquisition and recruitment activities within the firm.",
+      "you are the Recruitment Business Partner at Michelmores, responsible for talent acquisition and recruitment activities within the firm.",
     sentEmailsTime: [],
   },
 ];

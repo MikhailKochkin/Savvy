@@ -411,7 +411,7 @@ const NewSingleLesson = (props) => {
     },
     image:
       "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1695807197/Screenshot_2023-09-27_at_13.32.54.png",
-    name: "New User",
+    name: "Demo User",
     new_subjects: [],
     orders: [],
     permissions: ["USER"],
