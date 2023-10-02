@@ -29,16 +29,9 @@ const NewProblemBuilder = (props) => {
   ]);
 
   const getData = (id, type, index) => {
-    console.log("note 2", id, type, index);
-
     let new_values = values;
     new_values.find((el) => el.index == index).id = id;
     new_values.find((el) => el.index == index).type = type;
-    console.log(
-      "values",
-      values,
-      new_values.find((el) => el.index == index)
-    );
 
     // set next id
     if (index - 1 >= 0) {

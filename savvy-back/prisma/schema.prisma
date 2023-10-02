@@ -790,20 +790,23 @@ model Quiz {
 }
 
 model QuizResult {
-  id        String   @id @default(cuid()) @db.VarChar(30)
-  answer    String?
-  attempts  Int?
-  comment   String?
-  lessonID  String?  @db.VarChar(30)
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
-  correct   Boolean?
-  studentId String   @db.VarChar(30)
-  lessonId  String?  @db.VarChar(30)
-  quizId    String?  @db.VarChar(30)
-  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  quiz      Quiz?    @relation(fields: [quizId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student   User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          String   @id @default(cuid()) @db.VarChar(30)
+  answer      String?
+  attempts    Int?
+  hint        String?
+  explanation String?
+  comment     String?
+  improvement String?
+  lessonID    String?  @db.VarChar(30)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  correct     Boolean?
+  studentId   String   @db.VarChar(30)
+  lessonId    String?  @db.VarChar(30)
+  quizId      String?  @db.VarChar(30)
+  lesson      Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  quiz        Quiz?    @relation(fields: [quizId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student     User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Rating {

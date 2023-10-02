@@ -469,7 +469,6 @@ const ConElement = (props) => {
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
   const myCallback = (dataFromChild, index) => {
-    console.log("dataFromChild", dataFromChild);
     let new_el = { ...el };
     new_el.text = dataFromChild;
     setEl(new_el);
@@ -477,7 +476,6 @@ const ConElement = (props) => {
   };
 
   const myCallback2 = (dataFromChild, index) => {
-    console.log("dataFromChild", dataFromChild);
     let new_el = { ...el };
     new_el.comment = dataFromChild;
     setEl(new_el);

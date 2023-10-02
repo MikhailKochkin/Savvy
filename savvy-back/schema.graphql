@@ -2468,7 +2468,7 @@ type Mutation {
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createProgram(audience: String, description: String, goals: [String], header: [String], image: String, methods: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String): Program
   createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
-  createQuizResult(answer: String, comment: String, correct: Boolean, lessonId: String, quiz: String): QuizResult
+  createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, hint: String, improvement: String, lessonId: String, quiz: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
@@ -3746,7 +3746,10 @@ type QuizResult {
   comment: String
   correct: Boolean
   createdAt: DateTime!
+  explanation: String
+  hint: String
   id: String!
+  improvement: String
   lesson: Lesson
   lessonID: String
   lessonId: String
@@ -3773,7 +3776,10 @@ input QuizResultOrderByWithRelationInput {
   comment: SortOrderInput
   correct: SortOrderInput
   createdAt: SortOrder
+  explanation: SortOrderInput
+  hint: SortOrderInput
   id: SortOrder
+  improvement: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
@@ -3793,7 +3799,10 @@ input QuizResultWhereInput {
   comment: StringNullableFilter
   correct: BoolNullableFilter
   createdAt: DateTimeFilter
+  explanation: StringNullableFilter
+  hint: StringNullableFilter
   id: StringFilter
+  improvement: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -3813,7 +3822,10 @@ input QuizResultWhereUniqueInput {
   comment: StringNullableFilter
   correct: BoolNullableFilter
   createdAt: DateTimeFilter
+  explanation: StringNullableFilter
+  hint: StringNullableFilter
   id: String
+  improvement: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter

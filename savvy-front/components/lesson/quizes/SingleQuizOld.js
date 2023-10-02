@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
 import parse from "html-react-parser";
-import { InfinitySpin, TailSpin } from "react-loader-spinner";
+import { InfinitySpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
-import smoothscroll from "smoothscroll-polyfill";
 
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
+
 import { CURRENT_USER_QUERY } from "../../User";
 import Chat from "../questions/Chat";
 
@@ -20,9 +20,6 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $lessonId: String
     $correct: Boolean
     $comment: String
-    $hint: String
-    $explanation: String
-    $improvement: String
   ) {
     createQuizResult(
       answer: $answer
@@ -30,9 +27,6 @@ const CREATE_QUIZRESULT_MUTATION = gql`
       lessonId: $lessonId
       correct: $correct
       comment: $comment
-      hint: $hint
-      explanation: $explanation
-      improvement: $improvement
     ) {
       id
     }
@@ -58,14 +52,10 @@ const Styles = styled.div`
 const Options = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
-  /* min-width: 60%;
-  max-width: 80%; */
-  width: 100%;
+  min-width: 60%;
+  max-width: 80%;
   margin-bottom: 20px;
-  /* border: 1px solid blue; */
 `;
 
 const Option = styled.div`
@@ -163,28 +153,7 @@ const Question = styled.div`
     background: #ffffff;
     flex-direction: row;
     justify-content: flex-end;
-    margin-bottom: 20px;
-
-    /* Add slide-in animation from bottom */
-    opacity: 0;
-    transform: translateY(30px); /* Start below */
-
-    animation: animate-slide-in-from-bottom 0.8s forwards;
-
-    /* Animation from the bottom */
-    @keyframes animate-slide-in-from-bottom {
-      0% {
-        opacity: 0;
-        transform: translateY(50px); /* Start below */
-      }
-      50% {
-        transform: translateY(-10px); /* Move up */
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0); /* Rest position */
-      }
-    }
+    margin: 20px 0;
   }
   .question_name {
     margin-left: 5px;
@@ -261,7 +230,7 @@ const Question = styled.div`
 `;
 
 const Answer_text = styled.textarea`
-  height: 120px;
+  height: 140px;
   min-width: 60%;
   max-width: 70%;
   border: 2px solid;
@@ -284,53 +253,26 @@ const Group = styled.div`
   pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
   display: ${(props) => (props.correct === "true" ? "none" : "flex")};
   padding: 0.5% 0;
-  margin-bottom: 20px;
-`;
-
-const Group2 = styled.div`
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  background: ${(props) => props.inputColor};
-  width: 90%;
-  pointer-events: auto;
-  display: flex;
-  padding: 0.5% 0;
-  margin-bottom: 20px;
+  div {
+    padding: 0.5% 0;
+    cursor: pointer;
+  }
 `;
 
 const Button1 = styled.div`
-  min-width: 200px;
-  line-height: 1.6;
-  margin-right: 20px;
-  text-align: left;
+  width: 60%;
+  text-align: center;
   background: #d2edfd;
   border-radius: 5px;
-  padding: 10px 30px;
-  margin-bottom: 15px;
-  /* height: 45px; */
   cursor: pointer;
   color: #000a60;
   border: none;
-  white-space: nowrap;
   font-size: 1.6rem;
   transition: all 0.3s ease;
-  display: ${(props) => (props.correct === "true" ? "none" : "flex")};
+  display: ${(props) => (props.correct === "true" ? "none" : "block")};
   pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
   &:hover {
     background: #a5dcfe;
-  }
-  @media (max-width: 800px) {
-    min-width: 100px;
-    margin-right: 10px;
-    padding: 10px 15px;
-    height: auto;
-
-    white-space: normal;
-    text-align: left;
   }
 `;
 
@@ -342,18 +284,9 @@ const Progress = styled.div`
   margin-bottom: 10px;
 `;
 
-const Progress2 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  margin: 10px;
-`;
-
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
-  margin-bottom: 30px;
 `;
 
 const Circle = styled.div`
@@ -370,10 +303,6 @@ const Circle = styled.div`
   transition: ease-in 0.4s;
   &:hover {
     border: 1px solid blue;
-  }
-  @media (max-width: 800px) {
-    margin-left: 5px;
-    display: none;
   }
 `;
 
@@ -399,16 +328,6 @@ const SingleQuiz = (props) => {
   const [message, setMessage] = useState("");
   const [recognition, setRecognition] = useState(null);
   const [startSpeech, setStartSpeech] = useState(false);
-  const [generating, setGenerating] = useState(false);
-  const [generatingExplanation, setGeneratingExplanation] = useState(false);
-  const [generatingImprovement, setGeneratingImprovement] = useState(null); // give the hint to the student
-  const [AIhint, setAIHint] = useState(""); // give the hint to the student
-  const [AIExplanation, setAIExplanation] = useState("");
-  const [AIImprovement, setAIImprovement] = useState("");
-  useEffect(() => {
-    // kick off the polyfill!
-    smoothscroll.polyfill();
-  });
 
   const [createQuizResult, { data, loading, error }] = useMutation(
     CREATE_QUIZRESULT_MUTATION
@@ -416,15 +335,6 @@ const SingleQuiz = (props) => {
 
   const { t } = useTranslation("lesson");
   const router = useRouter();
-
-  const slide = () => {
-    var my_element = document.getElementById(`ideal_answer_${props.id}`);
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
 
   function guessAlphabet(str) {
     // Removing <p> at the beginning of the string if it exists
@@ -441,136 +351,6 @@ const SingleQuiz = (props) => {
 
     return "Unknown";
   }
-
-  const getHint = async (event) => {
-    event.preventDefault();
-    // setGenerating(true);
-    setGenerating(true);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-          You are a mentor and a teacher. You ask your student the question: ${
-            props.question
-          }
-          The mentor's comment is: ${props.ifWrong}
-          The correct answer is:  ${props.answer}
-          Give a hint to the student  in a Socratic manner to help them answer the question. Do not use the words from the correct answer.
-          Answer in ${
-            router.locale == "ru" ? "Russian" : "English"
-          }. Answer in second person. Make the answer at least 3 sentences long.`,
-        }),
-      });
-
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      const data = await response.json();
-      if (data.result.content) {
-        setAIHint(data.result.content);
-      } else {
-        setAIHint("Sorry, you are on your own");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-    setGenerating(false);
-  };
-
-  const getExplanation = async (event) => {
-    event.preventDefault();
-    setGeneratingExplanation(true);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-          You are a mentor and a teacher. You ask your student the question: ${
-            props.question
-          }
-          The correct answer is:  ${props.answer}. 
-          The mentor's comment is: ${props.ifWrong}
-          Your student's answer is: ${answer}
-          Explain in 3 sentences why this answer is incorrect in comparison to the correct answer. Write in second person. Adress the student as "you". Do not use the words from the correct answer.
-          Answer in ${
-            router.locale == "ru" ? "Russian" : "English"
-          }Make the answer at least 2 sentences long.`,
-        }),
-      });
-
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      const data = await response.json();
-      if (data.result.content) {
-        setAIExplanation(data.result.content);
-      } else {
-        setAIExplanation("Sorry, you are on your own");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-    setGeneratingExplanation(false);
-  };
-
-  const getImprovements = async (event) => {
-    event.preventDefault();
-    setGeneratingImprovement(true);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-          You are a mentor and a teacher. You ask your student the question: ${
-            props.question
-          }
-          The correct answer is:  ${props.answer}. 
-          The mentor's comment is: ${props.ifWrong}
-          Your student's answer is: ${answer}
-          Explain in 3 sentences how this answer can be improved using the correct answer as the foundation. 
-          Write in second person. Adress the student as "you". Do not use the words from the correct answer.
-          Answer in ${
-            router.locale == "ru" ? "Russian" : "English"
-          }Make the answer at least 3 sentences long.`,
-        }),
-      });
-
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      const data = await response.json();
-      if (data.result.content) {
-        setAIImprovement(data.result.content);
-      } else {
-        setAIImprovement("Sorry, we are disconnected.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-    setGeneratingImprovement(false);
-  };
 
   const onAnswer = async (e) => {
     setProgress("true");
@@ -605,6 +385,7 @@ const SingleQuiz = (props) => {
       )
         .then((response) => response.json())
         .then((res) => {
+          console.log(res);
           if (parseFloat(res.res) > 65) {
             setCorrect("true");
             onMove("true");
@@ -615,9 +396,6 @@ const SingleQuiz = (props) => {
                 lessonId: props.lessonID,
                 answer: answer,
                 correct: true,
-                hint: AIhint,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
                 comment: `Result: ${parseFloat(res.res)}%`,
               },
             });
@@ -642,9 +420,6 @@ const SingleQuiz = (props) => {
                 lessonId: props.lessonID,
                 answer: answer,
                 correct: true,
-                hint: AIhint,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
                 comment: `Looks true: ${parseFloat(res.res)}%`,
               },
             });
@@ -668,9 +443,6 @@ const SingleQuiz = (props) => {
                 lessonId: props.lessonID,
                 answer: answer,
                 correct: false,
-                hint: AIhint,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
                 comment: `Result: ${parseFloat(res.res)}%`,
               },
             });
@@ -709,6 +481,7 @@ const SingleQuiz = (props) => {
       )
         .then((response) => response.json())
         .then((res) => {
+          console.log(parseFloat(res.res));
           if (parseFloat(res.res) > 70) {
             setCorrect("true");
             onMove("true");
@@ -732,9 +505,6 @@ const SingleQuiz = (props) => {
                 lessonId: props.lessonID,
                 answer: answer,
                 correct: true,
-                hint: AIhint,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
                 comment: ``,
               },
             });
@@ -758,9 +528,6 @@ const SingleQuiz = (props) => {
                 lessonId: props.lessonID,
                 answer: answer,
                 correct: false,
-                hint: AIhint,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
                 comment: ``,
               },
             });
@@ -796,11 +563,6 @@ const SingleQuiz = (props) => {
       }
       setSent(true);
     }
-  };
-
-  const autoResizeTextarea = (event) => {
-    event.target.style.height = "auto";
-    event.target.style.height = event.target.scrollHeight + "px";
   };
 
   const startListening = () => {
@@ -874,7 +636,6 @@ const SingleQuiz = (props) => {
   }
   return (
     <Styles width={width}>
-      {/* 1. Settings part */}
       <Buttons>
         {!exam && !story && (
           <button onClick={(e) => setUpdate(!update)}>
@@ -892,7 +653,6 @@ const SingleQuiz = (props) => {
       {!update && (
         <>
           <Question story={story}>
-            {/* 2.1 Question part */}
             <div className="question_box">
               <div className="question_text">{parse(props.question)}</div>
               <IconBlock>
@@ -906,31 +666,6 @@ const SingleQuiz = (props) => {
                 </div>
               </IconBlock>{" "}
             </div>
-            {generating && (
-              <Progress2>
-                <TailSpin width="50" color="#2E80EC" />
-              </Progress2>
-            )}
-            {/* 2.2 If AI hint */}
-            {AIhint && (
-              <div className="question_box">
-                <div className="question_text">
-                  <p>{AIhint}</p>
-                </div>
-                <IconBlock>
-                  {author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}{" "}
-                  <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
-                  </div>
-                </IconBlock>
-              </div>
-            )}
-
-            {/* 3. Answer bubble part */}
             <div className="answer">
               <IconBlock>
                 <div className="icon2">
@@ -949,19 +684,14 @@ const SingleQuiz = (props) => {
                 required
                 inputColor={inputColor}
                 value={answer}
-                onChange={(e) => {
-                  setAnswer(e.target.value);
-                  autoResizeTextarea(e);
-                }}
-                onInput={autoResizeTextarea}
+                onChange={(e) => setAnswer(e.target.value)}
                 placeholder="..."
               />
             </div>
-            {startSpeech && <Group>{<p>📣 {t("start_speaking")}..</p>}</Group>}
+            <Group>{startSpeech && <p>📣 {t("start_speaking")}..</p>}</Group>
             <Progress display={progress}>
               <InfinitySpin width="200" color="#2E80EC" />
             </Progress>
-            {/* 4. Answer buttons */}
             <Group progress={progress} correct={correct}>
               <Button1
                 inputColor={inputColor}
@@ -978,18 +708,6 @@ const SingleQuiz = (props) => {
               >
                 {t("check")}
               </Button1>
-              <Button1
-                inputColor={inputColor}
-                onClick={async (e) => {
-                  e.preventDefault();
-                  getHint(e);
-                }}
-                correct={correct}
-              >
-                {AIhint && AIhint.length > 0
-                  ? t("i_need_another_hint")
-                  : t("i_need_a_hint")}
-              </Button1>
               <Circle onClick={startListening}>
                 <BiMicrophone
                   className="icon"
@@ -1004,8 +722,6 @@ const SingleQuiz = (props) => {
               </Circle>
               {/* <button onClick={startListening}>Start listening</button> */}
             </Group>
-            {/* 4. Reaction to answer part */}
-            {/* 4.1 If true / looks true */}
             {(correct === "true" || correct === "looks_true") && (
               <>
                 <div className="question_box">
@@ -1021,7 +737,9 @@ const SingleQuiz = (props) => {
                     {!props.type != "FORM" &&
                       correct === "looks_true" &&
                       "👋 " + t("looks_true")}
+                    {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
                   </div>
+
                   <IconBlock>
                     {author && author.image != null ? (
                       <img className="icon" src={author.image} />
@@ -1033,8 +751,7 @@ const SingleQuiz = (props) => {
                     </div>
                   </IconBlock>
                 </div>
-
-                {/* {!props.challenge && !props.type != "FORM" && (
+                {!props.challenge && !props.type != "FORM" && (
                   <div className="question_box">
                     <div className="question_text">{t("show_correct")}</div>
 
@@ -1049,10 +766,10 @@ const SingleQuiz = (props) => {
                       </div>
                     </IconBlock>
                   </div>
-                )} */}
+                )}
               </>
             )}
-            {/* 4.2 If false */}
+
             {correct === "false" && (
               <>
                 <div className="question_box">
@@ -1064,7 +781,7 @@ const SingleQuiz = (props) => {
                         props.type != "FORM" &&
                         hint}
                     </p>
-                    {/* <p>{ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)} </p> */}
+                    <p>{ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)} </p>
                   </div>
                   <IconBlock>
                     {author && author.image != null ? (
@@ -1077,11 +794,23 @@ const SingleQuiz = (props) => {
                     </div>
                   </IconBlock>
                 </div>
+                {!props.challenge && props.type != "FORM" && (
+                  <div className="question_box">
+                    <div className="question_text">{t("show_correct")}</div>
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
+                  </div>
+                )}
               </>
             )}
-
-            {/* 5. Show correct answer button */}
-
             {!props.challenge && correct !== "" && props.type != "FORM" && (
               <>
                 <div className="answer">
@@ -1097,99 +826,18 @@ const SingleQuiz = (props) => {
                     </div>{" "}
                     <div className="name">{me.name}</div>
                   </IconBlock>{" "}
-                  {/* {correct == "false" && ( */}
                   <Options>
-                    <Group2 progress={progress} correct={correct}>
-                      {correct == "false" && (
-                        <Button1
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            setAIExplanation("...");
-                            getExplanation(e);
-                          }}
-                        >
-                          {t("explain_what_is_wrong_with_my_answer")}
-                        </Button1>
-                      )}
-                      {correct == "looks_true" && (
-                        <Button1
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            getImprovements(e);
-                          }}
-                        >
-                          {t("what_can_i_improve")}
-                        </Button1>
-                      )}
-                      <Button1
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          setHidden(false);
-                          slide();
-                        }}
-                      >
-                        {t("show_an_ideal_answer")}
-                      </Button1>
-                    </Group2>
+                    <Option onClick={(e) => setHidden(false)}>
+                      {t("yes")}
+                    </Option>
                   </Options>
                 </div>
-                {generatingExplanation && (
-                  <Progress2>
-                    <TailSpin width="50" color="#2E80EC" />
-                  </Progress2>
-                )}
-                {AIExplanation && correct !== "true" && (
-                  <div className="question_box">
-                    <div className="question_text">
-                      <p>{AIExplanation}</p>
-                    </div>
-                    <IconBlock>
-                      {author && author.image != null ? (
-                        <img className="icon" src={author.image} />
-                      ) : (
-                        <img className="icon" src="../../static/hipster.svg" />
-                      )}{" "}
-                      <div className="name">
-                        {author && author.name ? author.name : "BeSavvy"}
-                      </div>
-                    </IconBlock>
-                  </div>
-                )}
-                {generatingImprovement && (
-                  <Progress2>
-                    <TailSpin width="50" color="#2E80EC" />
-                  </Progress2>
-                )}
-                {AIImprovement &&
-                  (correct == "true" || correct == "looks_true") && (
-                    <div className="question_box">
-                      <div className="question_text">
-                        <p>{AIImprovement}</p>
-                      </div>
-                      <IconBlock>
-                        {author && author.image != null ? (
-                          <img className="icon" src={author.image} />
-                        ) : (
-                          <img
-                            className="icon"
-                            src="../../static/hipster.svg"
-                          />
-                        )}{" "}
-                        <div className="name">
-                          {author && author.name ? author.name : "BeSavvy"}
-                        </div>
-                      </IconBlock>
-                    </div>
-                  )}
               </>
             )}
-            {/* 6. Show correct answer bubble */}
-            <div id={`ideal_answer_${props.id}`}></div>
             {!hidden && (
-              <div className="question_box" id={`ideal_answer_${props.id}`}>
+              <div className="question_box">
                 <div className="question_text">
-                  <b>{t("correct_answer")}:</b> {parse(props.answer)}
-                  {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
+                  {t("correct_answer")}: {parse(props.answer)}
                 </div>
                 <IconBlock>
                   {author && author.image != null ? (
@@ -1206,7 +854,7 @@ const SingleQuiz = (props) => {
           </Question>
         </>
       )}
-      {/* {miniforum && <Chat me={me} miniforum={miniforum} />} */}
+      {miniforum && <Chat me={me} miniforum={miniforum} />}
       {update && (
         <UpdateQuiz
           quizId={props.id}

@@ -420,11 +420,11 @@ const SingleTextEditor = (props) => {
       answer1: answer1,
       answer2: answer2,
     };
-    console.log(
-      "answers",
-      containsOnlyNumbers(answer1),
-      containsOnlyNumbers(answer2)
-    );
+    // console.log(
+    //   "answers",
+    //   containsOnlyNumbers(answer1),
+    //   containsOnlyNumbers(answer2)
+    // );
 
     let el = document.getElementById(chosenElement);
     e.target.innerHTML = "Checking...";
@@ -435,7 +435,6 @@ const SingleTextEditor = (props) => {
         !e.target.nextSibling ||
         (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
       ) {
-        console.log("button 1");
         let button2 = document.createElement("button");
         button2.innerHTML = "Show";
         button2.className = "show_button";
@@ -470,7 +469,6 @@ const SingleTextEditor = (props) => {
             !e.target.nextSibling ||
             (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
           ) {
-            console.log("button 1");
             let button2 = document.createElement("button");
             button2.innerHTML = "Show";
             button2.className = "show_button";
@@ -480,7 +478,6 @@ const SingleTextEditor = (props) => {
           if (parseFloat(res.res) > 69) {
             setResult(true);
             props.getResults(1);
-            console.log("el", el);
             el.style.background = "#D9EAD3";
             e.target.style.display = "none";
             return true;
@@ -500,7 +497,6 @@ const SingleTextEditor = (props) => {
     }
 
     setShown(false);
-    console.log("r2", r);
     return r;
   };
 

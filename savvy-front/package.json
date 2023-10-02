@@ -50,7 +50,7 @@
     "next-optimized-images": "^2.6.2",
     "next-with-apollo": "^5.2.1",
     "nprogress": "^0.2.0",
-    "openai": "^3.3.0",
+    "openai": "^4.11.0",
     "postmark": "^3.0.15",
     "prop-types": "^15.7.2",
     "react": "^18.2.0",

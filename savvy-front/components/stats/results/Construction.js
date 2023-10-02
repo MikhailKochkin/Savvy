@@ -188,12 +188,10 @@ const Construction = (props) => {
     const comment_elements = document
       .getElementById(id)
       .querySelectorAll("[comment]");
-    console.log("comment_elements", comment_elements, id);
 
     let all_answers = student_results
       .filter((sr) => sr.id == resultId)
       .flatMap((sr) => sr.answers.answers);
-    console.log("all_answers", all_answers);
     comment_elements.forEach((element) => {
       if (
         all_answers.filter(
@@ -227,7 +225,6 @@ const Construction = (props) => {
         ].join(", ")})`;
       }
     });
-    console.log("all_answers", all_answers, resultId);
   }, [0]);
   return (
     <>

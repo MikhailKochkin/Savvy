@@ -1,4 +1,4 @@
-const BusinessEmail2 = (name, connection, firm) => `
+const GeneralEmail = (name, text) => `
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -458,19 +458,15 @@ const BusinessEmail2 = (name, connection, firm) => `
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                       <p>Dear ${name},</p>
-                       <p>${connection}</p>
-                       <p>What are training simulations? They're online environments where lawyers can practice real-world tasks like Due Diligence or M&A projects, receive personalized feedback, and improve rapidly.</p>
-                       <p><b>Our team prepared a report on how simulators can increase Employee Skill Advancement rate by 59% and triple Training ROI in your firm.</b></p><p>If you are interested, please reply to this email and I will send you a copy. 
-                       I am sure it has some fresh ideas that you have not encountered yet.</p>
-                       <p>Best regards,</p>
-                        ___________
+                       ${text}
+                       ___________
                         <br/>
                         <p>Mike Kochkin</p>
                         <p>CEO of BeSavvy</p>
                         <p>
                         We build AI-powered training simulators for lawyers
                         </p>
+                        <!-- Sub copy -->
                       </div>
                     </td>
                   </tr>
@@ -483,4 +479,4 @@ const BusinessEmail2 = (name, connection, firm) => `
     </table>
   </body>
 </html>`;
-exports.BusinessEmail2 = BusinessEmail2;
+exports.GeneralEmail = GeneralEmail;

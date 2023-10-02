@@ -1,11 +1,10 @@
-import { Configuration, OpenAIApi } from "openai";
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+import OpenAI from "openai";
 
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, // defaults to process.env["OPENAI_API_KEY"]
+});
 export default async function (req, res) {
-  if (!configuration.apiKey) {
+  if (!process.env.OPENAI_API_KEY) {
     res.status(500).json({
       error: {
         message:
@@ -24,17 +23,16 @@ export default async function (req, res) {
     });
     return;
   }
-  console.log("req", req.body.prompt);
-
   try {
-    const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+    const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
+      model: "gpt-3.5-turbo",
       max_tokens: 2048,
       temperature: 0.5,
     });
+    // console.log("completion", completion.choices[0].message);
 
-    res.status(200).json({ result: completion.data.choices[0].message });
+    res.status(200).json({ result: completion.choices[0].message });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {

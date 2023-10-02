@@ -1,5 +1,5 @@
 import React from "react";
-import BusinessEmails from "../components/BusinessEmails";
+import BusinessEmails from "../components/emails/BusinessEmails";
 
 const businessEmails = () => {
   return <BusinessEmails />;

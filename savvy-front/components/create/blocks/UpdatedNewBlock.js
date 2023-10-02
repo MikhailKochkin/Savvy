@@ -51,11 +51,9 @@ const UpdatedNewBlock = (props) => {
   };
   const remove = () => {
     props.remove(props.obj.id);
-    console.log("remove 1", props.obj.id);
   };
 
   useEffect(() => {
-    console.log("use effect", props.data);
     setData(props.data);
     setSaved(props.data ? true : false);
   }, [props.data]);
@@ -67,8 +65,6 @@ const UpdatedNewBlock = (props) => {
   const { lesson, me } = props;
 
   const getResult = async (res) => {
-    console.log("1");
-
     setSaved(true);
 
     let newData = null;
@@ -80,7 +76,6 @@ const UpdatedNewBlock = (props) => {
       setType("Note");
       newData = res.data.updateNote;
     } else if (res.data.createNewTest) {
-      console.log("inside New Test");
       setSaved(true);
       setType("NewTest");
       newData = res.data.createNewTest;
@@ -94,7 +89,6 @@ const UpdatedNewBlock = (props) => {
       setType("Quiz");
       newData = res.data.updateQuiz;
     }
-    console.log("newData", newData);
 
     setData((prevData) => {
       // ... Your logic here
@@ -156,7 +150,6 @@ const UpdatedNewBlock = (props) => {
       {!saved && type == "Quiz" && (
         <CreateQuiz lessonID={lesson.id} getResult={getResult} />
       )}
-      {type == "Quiz" && console.log("data", data)}
       {saved && type == "Quiz" && data && (
         <SingleQuiz
           key={data.id}

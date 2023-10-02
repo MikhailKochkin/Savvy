@@ -614,7 +614,6 @@ const Person = (props) => {
                 </a>
               </SendButton>
             )}
-            {console.log("student.number", student.number)}
             {student.number && (
               <SendButton>
                 <a

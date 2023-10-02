@@ -2,7 +2,7 @@ const emailList = [
   {
     name: "Mikhail",
     surname: "Kochkin",
-    email: "Mi.Kochkin@ya.ru",
+    email: "test-ccv69mj10@srv1.mail-tester.com",
     comment: "CEO",
     firm: "BeSavvy",
     personalTouch: "Just a great guy",
@@ -4124,8 +4124,8 @@ const emailList = [
     sentEmailsTime: [],
   },
   {
-    name: "SAMANTHA",
-    surname: "HOLLAND",
+    name: "Samantha",
+    surname: "Holland",
     email: "samantha.holland@gowlingwlg.com",
     linkedin:
       "https://www.linkedin.com/in/samantha-holland-72587726/?originalSubdomain=uk",
@@ -4463,6 +4463,16 @@ const emailList = [
     connection:
       "you are the Recruitment Business Partner at Michelmores, responsible for talent acquisition and recruitment activities within the firm.",
     sentEmailsTime: [],
+  },
+  {
+    name: "Patrick",
+    surname: "Mccann",
+    email: "patrick.mccann@linklaters.com",
+    linkedin: "https://www.linkedin.com/in/patrick-mccann-066017207/",
+    comment: "Director Learning",
+    firm: "Linklaters",
+    connection: "",
+    sentEmailsTime: ["September 28"],
   },
 ];
 

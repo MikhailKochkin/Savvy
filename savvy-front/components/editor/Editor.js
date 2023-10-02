@@ -809,8 +809,6 @@ const insertError = (editor, data, setModalData) => {
 };
 
 const updateError = (editor, modalData, setModalOpen, notePath) => {
-  console.log("notePath", notePath);
-
   Transforms.setNodes(
     editor,
     { error_data: modalData, error_text: modalData },
@@ -846,14 +844,11 @@ const insertQuiz = (editor, q, a, ifr, ifw, setModalData, setModalOpen) => {
 };
 
 const updateQuiz = (editor, q, a, ifr, ifw, notePath) => {
-  console.log("q, a, ifr, ifw", q, a, ifr, ifw);
-  console.log("notePath", notePath);
   Transforms.setNodes(
     editor,
     { question: q, answer: a, ifRight: ifr, ifWrong: ifw },
     { at: notePath }
   );
-  console.log(JSON.stringify("editor.children", editor.children, null, 2));
 };
 
 const wrapQuiz = (editor, q, a, ifr, ifw) => {
@@ -949,7 +944,6 @@ const App = (props) => {
   };
 
   const handleSubmitModal = (type) => {
-    console.log(1, type);
     if (type == "note") {
       updateComment(editor, modalData, setModalOpen, notePath);
     } else if (type == "createNote") {
@@ -968,7 +962,6 @@ const App = (props) => {
         notePath
       );
     } else if (type == "updateQuestion") {
-      console.log("2 note path", notePath);
       updateQuiz(
         editor,
         modalData,
@@ -1468,14 +1461,12 @@ const QuizElement = ({
       {...props.attributes}
       onMouseDown={(event) => {
         event.preventDefault(); // prevent Slate's default mouse down handling
-        console.log("props.element", props.element);
         setModalData(props.element.question);
         setModalQuestionAnswerData(props.element.answer);
         setModalIfRightData(props.element.ifRight);
         setModalIfWrongData(props.element.ifWrong);
         setModalOpen(true);
         const path = ReactEditor.findPath(editor, props.element);
-        console.log("the path", path);
         setNotePath(path); // store the path
         setType("updateQuestion");
       }}

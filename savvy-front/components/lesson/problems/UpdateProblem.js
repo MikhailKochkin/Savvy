@@ -151,8 +151,8 @@ const UpdateProblem = (props) => {
 
   const { t } = useTranslation("lesson");
 
+  const handleChange = () => {};
   const getSteps = (val) => {
-    console.log("val", val);
     setUpdatedSteps([...val]);
   };
 

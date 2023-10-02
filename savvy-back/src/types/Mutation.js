@@ -27,7 +27,7 @@ const WelcomeEmail = require("../emails/Welcome");
 const WelcomeEmailEng = require("../emails/WelcomeEng");
 
 const PurchaseEmail = require("../emails/Purchase");
-const ReminderEmail = require("../emails/Reminder");
+const GeneralEmail = require("../emails/GeneralEmail");
 const GenericEmail = require("../emails/Generic");
 const Template = require("../emails/Template");
 const FollowUpEmailOne = require("../emails/FollowUpEmailOne");
@@ -1544,7 +1544,6 @@ const Mutation = mutationType({
         lessonID: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log("lessonResult args", args, ctx.res.req.userId);
         const LessonResult = await ctx.prisma.lessonResult.create({
           data: {
             student: {
@@ -1723,7 +1722,7 @@ const Mutation = mutationType({
             connect: {
               id: ctx.res.req.userId
                 ? ctx.res.req.userId
-                : "ckmddnbfy180981gwpn2ir82c9",
+                : "clkvdew14837181f13vcbbcw0x",
             },
           },
           lesson: {
@@ -1785,7 +1784,7 @@ const Mutation = mutationType({
             connect: {
               id: ctx.res.req.userId
                 ? ctx.res.req.userId
-                : "ckmddnbfy180981gwpn2ir82c9",
+                : "clkvdew14837181f13vcbbcw0x",
             },
           },
           lesson: {
@@ -1820,7 +1819,7 @@ const Mutation = mutationType({
             connect: {
               id: ctx.res.req.userId
                 ? ctx.res.req.userId
-                : "ckmddnbfy180981gwpn2ir82c9",
+                : "clkvdew14837181f13vcbbcw0x",
             },
           },
           lesson: {
@@ -1849,7 +1848,7 @@ const Mutation = mutationType({
               connect: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
             },
             test: {
@@ -1882,7 +1881,7 @@ const Mutation = mutationType({
               where: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
               include: {
                 level: true,
@@ -1918,7 +1917,7 @@ const Mutation = mutationType({
               connect: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
             },
             testPractice: {
@@ -2077,6 +2076,9 @@ const Mutation = mutationType({
         quiz: stringArg(),
         lessonId: stringArg(),
         comment: stringArg(),
+        hint: stringArg(),
+        explanation: stringArg(),
+        improvement: stringArg(),
       },
 
       resolve: async (_, args, ctx) => {
@@ -2090,9 +2092,12 @@ const Mutation = mutationType({
               connect: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
             },
+            hint: args.hint ? args.hint : "",
+            explanation: args.explanation ? args.explanation : "",
+            improvement: args.improvement ? args.improvement : "",
             quiz: {
               connect: { id: quiz },
             },
@@ -2109,7 +2114,7 @@ const Mutation = mutationType({
               where: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
               include: {
                 level: true,
@@ -2293,7 +2298,6 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
         delete args.lessonId;
-        console.log("args", args, lessonId);
         const Chat = await ctx.prisma.chat.create({
           data: {
             user: {
@@ -2420,7 +2424,7 @@ const Mutation = mutationType({
               connect: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
             },
             textEditor: {
@@ -2439,7 +2443,7 @@ const Mutation = mutationType({
               where: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
               include: {
                 level: true,
@@ -2591,7 +2595,7 @@ const Mutation = mutationType({
               connect: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
             },
             construction: {
@@ -2610,7 +2614,7 @@ const Mutation = mutationType({
               where: {
                 id: ctx.res.req.userId
                   ? ctx.res.req.userId
-                  : "ckmddnbfy180981gwpn2ir82c9",
+                  : "clkvdew14837181f13vcbbcw0x",
               },
               include: {
                 level: true,
@@ -2674,7 +2678,6 @@ const Mutation = mutationType({
         const updates = { ...args };
         //remove the ID from updates
         delete updates.id;
-        console.log("updates", updates.steps.problemItems);
         //run the update method
         return ctx.prisma.problem.update({
           data: updates,
@@ -2722,7 +2725,11 @@ const Mutation = mutationType({
         const ProblemResult = await ctx.prisma.problemResult.create({
           data: {
             student: {
-              connect: { id: ctx.res.req.userId },
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "clkvdew14837181f13vcbbcw0x",
+              },
             },
             problem: {
               connect: { id: problemID },
@@ -3233,7 +3240,11 @@ const Mutation = mutationType({
         const ShotResult = await ctx.prisma.shotResult.create({
           data: {
             student: {
-              connect: { id: ctx.res.req.userId },
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "clkvdew14837181f13vcbbcw0x",
+              },
             },
             lesson: {
               connect: { id: lessonId },
@@ -3460,7 +3471,6 @@ const Mutation = mutationType({
         const payment = await community_checkout.createPayment(createPayload);
 
         const url = payment.confirmation.confirmation_url;
-        console.log("url", url);
 
         const order = await ctx.prisma.order.create({
           data: {
@@ -4085,13 +4095,21 @@ const Mutation = mutationType({
         { name, email, firm, subject, personalTouch, connection, type },
         ctx
       ) => {
-        console.log("data", type);
+        // console.log("data", type);
         if (type == "follow_up_1") {
           const newEmail2 = await client.sendEmail({
             From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
             To: email,
             Subject: subject,
             HtmlBody: FollowUpEmailOne.FollowUpEmailOne(name, connection),
+            MessageStream: "international-law-firms",
+          });
+        } else if (type == "general") {
+          const newEmail1 = await client.sendEmail({
+            From: '"Mike Kochkin" <Mike@besavvy.app>',
+            To: email,
+            Subject: subject,
+            HtmlBody: GeneralEmail.GeneralEmail(name, connection),
             MessageStream: "international-law-firms",
           });
         } else {

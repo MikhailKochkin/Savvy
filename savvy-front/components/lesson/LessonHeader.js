@@ -400,13 +400,6 @@ const LessonHeader = (props) => {
         ? true
         : false;
 
-    console.log("isRegisteredUser", isRegisteredUser);
-    console.log("isFirstVisit", isFirstVisit);
-    console.log("isSubscribedToCourse", isSubscribedToCourse);
-    console.log("isAuthorOrAdmin", isAuthorOrAdmin);
-    console.log("isLessonFinished", isLessonFinished);
-    console.log("results", visit?.progress, lessonLength);
-
     const createVisit = () => {
       createLessonResult({
         variables: {
@@ -436,7 +429,7 @@ const LessonHeader = (props) => {
         //&& !lesson.open
       ) {
         createVisit();
-        console.log(1);
+        // console.log(1);
       }
 
       // A student continues the unfinished lesson
@@ -449,7 +442,7 @@ const LessonHeader = (props) => {
         !isAuthorOrAdmin
       ) {
         updateVisit();
-        console.log(2);
+        // console.log(2);
       }
 
       // A student is revisiting the finished lesson
@@ -462,21 +455,21 @@ const LessonHeader = (props) => {
         !isAuthorOrAdmin
       ) {
         createVisit();
-        console.log(3);
+        // console.log(3);
       }
 
       // An author visits the lesson for the first time
 
       if (isFirstVisit && isAuthorOrAdmin) {
         createVisit();
-        console.log(4);
+        // console.log(4);
       }
 
       // An author visits the lesson for second or more time
 
       if (!isFirstVisit && isAuthorOrAdmin) {
         updateVisit();
-        console.log(5);
+        // console.log(5);
       }
 
       // An unsubscribed  student is visiting an open lesson for the first time
@@ -489,7 +482,7 @@ const LessonHeader = (props) => {
         !isSubscribedToCourse
       ) {
         createVisit();
-        console.log(6);
+        // console.log(6);
       }
 
       // An unsubscribed student continues the open lesson
@@ -502,7 +495,7 @@ const LessonHeader = (props) => {
         !isSubscribedToCourse
       ) {
         updateVisit();
-        console.log(7);
+        // console.log(7);
       }
 
       // An unsubscribed student revisits the open lesson that they have already finished
@@ -515,7 +508,7 @@ const LessonHeader = (props) => {
         !isSubscribedToCourse
       ) {
         createVisit();
-        console.log(8);
+        // console.log(8);
       }
     }
   };

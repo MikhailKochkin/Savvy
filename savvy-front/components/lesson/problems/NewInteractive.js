@@ -100,9 +100,6 @@ const NewInteractive = (props) => {
   };
 
   useEffect(() => {
-    console.log("problem.steps.problemItems", problem.steps.problemItems, [
-      findUnconnectedItems(problem.steps.problemItems),
-    ]);
     if (problem.steps.problemItems.length > 0) {
       setComponentList([findUnconnectedItems(problem.steps.problemItems)[0]]);
     }
@@ -141,12 +138,10 @@ const NewInteractive = (props) => {
       </div>
       {isShown && (
         <Questions>
-          {console.log("componentList", componentList)}
           {componentList[0] !== undefined &&
             [...componentList].map((com) => {
               let item;
               let el;
-              console.log("com", com);
               if (com.type.toLowerCase() === "quiz") {
                 el = lesson.quizes.find((quiz) => quiz.id === com.id);
                 return (

@@ -533,7 +533,6 @@ All text should be given in Russian.
                     arr.length = answers.filter((an) => an !== "").length;
                     const res2 = await setCorrect(arr);
                     const res3 = await createNewTest();
-                    console.log("get test data", res3);
                     props.getResult(res3);
                   }}
                 >

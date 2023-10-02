@@ -20,3 +20,4 @@ server.js
 .env.local
 .wwebjs_cache
 businessEmailList.js
+SQEEmailList.js

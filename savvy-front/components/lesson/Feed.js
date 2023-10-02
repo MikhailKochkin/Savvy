@@ -842,7 +842,7 @@ const Feed = (props) => {
                         }}
                       >
                         <a>
-                          <button>Следующий урок</button>
+                          <button>Next lesson</button>
                         </a>
                       </Link>
                     ) : (
@@ -858,7 +858,7 @@ const Feed = (props) => {
                         }}
                       >
                         <a>
-                          <button>Следующий урок</button>
+                          <button>Next lesson</button>
                         </a>
                       </Link>
                     )}

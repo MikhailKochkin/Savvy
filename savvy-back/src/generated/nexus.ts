@@ -2688,7 +2688,10 @@ export interface NexusGenInputs {
     comment?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     correct?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    explanation?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    hint?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    improvement?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -2707,7 +2710,10 @@ export interface NexusGenInputs {
     comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     correct?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    explanation?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    hint?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    improvement?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2726,7 +2732,10 @@ export interface NexusGenInputs {
     comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     correct?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    explanation?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    hint?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: string | null; // String
+    improvement?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -4407,7 +4416,10 @@ export interface NexusGenObjects {
     comment?: string | null; // String
     correct?: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    explanation?: string | null; // String
+    hint?: string | null; // String
     id: string; // String!
+    improvement?: string | null; // String
     lessonID?: string | null; // String
     lessonId?: string | null; // String
     quizId?: string | null; // String
@@ -5385,7 +5397,10 @@ export interface NexusGenFieldTypes {
     comment: string | null; // String
     correct: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    explanation: string | null; // String
+    hint: string | null; // String
     id: string; // String!
+    improvement: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
@@ -6411,7 +6426,10 @@ export interface NexusGenFieldTypeNames {
     comment: 'String'
     correct: 'Boolean'
     createdAt: 'DateTime'
+    explanation: 'String'
+    hint: 'String'
     id: 'String'
+    improvement: 'String'
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
@@ -7158,6 +7176,9 @@ export interface NexusGenArgTypes {
       answer?: string | null; // String
       comment?: string | null; // String
       correct?: boolean | null; // Boolean
+      explanation?: string | null; // String
+      hint?: string | null; // String
+      improvement?: string | null; // String
       lessonId?: string | null; // String
       quiz?: string | null; // String
     }

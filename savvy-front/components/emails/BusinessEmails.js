@@ -4,9 +4,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import UserCard from "./UserCard";
-import emailGroups from "../emailGroups";
-import emailList from "../businessEmailList";
+import emailList from "../../businessEmailList";
 import BusinessEmailCard from "./BusinessEmailCard";
 
 const Styles = styled.div`

@@ -310,10 +310,6 @@ class StudentCard extends Component {
     }
     const threshold = 5; // Replace with the progress value you are interested in
     let status = countUniqueLessonsWithProgressAbove(lessonResults, threshold);
-
-    {
-      console.log("lessonResults", lessonResults);
-    }
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio =

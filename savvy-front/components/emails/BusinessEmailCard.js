@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import BusinessEmail from "./BusinessEmail";
 import FollowUpEmail from "./FollowUpEmail";
+import GeneralEmail from "./GeneralEmail";
 
 const Row = styled.div`
   display: flex;
@@ -111,7 +112,7 @@ const Row = styled.div`
 const UserCard = memo((props) => {
   const [firstOpen, setFirstOpen] = useState(false);
   const [followUp1Open, setFollowUp1Open] = useState(false);
-  const [followUp2Open, setFollowUp2Open] = useState(false);
+  const [generalOpen, setGeneralOpen] = useState(false);
   const [followUp3Open, setFollowUp3Open] = useState(false);
 
   return (
@@ -150,6 +151,18 @@ const UserCard = memo((props) => {
         </button>
         {followUp1Open && (
           <FollowUpEmail
+            email={props.email}
+            name={props.name}
+            firm={props.firm}
+            connection={props.connection}
+          />
+        )}
+        <h3>General Email</h3>
+        <button onClick={(e) => setGeneralOpen(!generalOpen)}>
+          Open General Email
+        </button>
+        {generalOpen && (
+          <GeneralEmail
             email={props.email}
             name={props.name}
             firm={props.firm}

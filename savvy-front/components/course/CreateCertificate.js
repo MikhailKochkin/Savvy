@@ -126,7 +126,6 @@ const CreateCertificate = (props) => {
             studentId: props.studentId,
           },
         });
-        console.log("res", res);
 
         Router.push({
           pathname: "/certificate",

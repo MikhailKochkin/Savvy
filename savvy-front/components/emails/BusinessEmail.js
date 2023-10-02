@@ -81,23 +81,18 @@ const BusinessEmail = (props) => {
         />
       </Editor>
       <p>
-        What are training simulations? They're online environments where lawyers
+        What are training simulators? They're online environments where lawyers
         can practice real-world tasks like Due Diligence or M&A projects,
-        receive personalized feedback, and improve rapidly. And the talent team
-        can get actionable data on the performance of every student.
+        receive personalized feedback, and improve rapidly.
       </p>
       <p>
-        I'm Mike, the CEO of BeSavvy. Our team, comprised of data scientists,
-        programmers, and lawyers with experience from International Law Firms,
-        has developed training simulators for law firms, law schools and
-        training centers across the UK, USA, Cyprus, Kazakhstan, and Canada.
+        <b>
+          Our team prepared a report on how simulators can increase Employee
+          Skill Advancement rate by 59% and triple Training ROI in your firm.
+        </b>{" "}
+        Please reply to this message and I will send you the link.
       </p>
-      <p>
-        We’ve designed a short M&A deal simulator specifically for {props.firm}.
-        It teaches how to structure a deal, analyze a term sheet and communicate
-        with a client. Please reply to this message and I will send you a link.
-        I will be happy to get your feedback.
-      </p>
+
       <button
         onClick={async (e) => {
           const res = await sendBusinessEmail({

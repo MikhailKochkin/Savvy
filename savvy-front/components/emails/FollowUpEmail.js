@@ -47,7 +47,7 @@ const Editor = styled.div`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
@@ -58,7 +58,6 @@ const FollowUpEmail = (props) => {
     // `<p>I also wanted to add, in case you are [какой-то тригер], I’d suggest [что вы «забыли» упомянуть в первом письме]. Could this be relevant to you?</p>`
     `<p>I sent you an email on September, 13 telling you about BeSavvy. It is a platform that empowers law firms to create their own training simulations to help trainees and apprentices develop practical skills (proofreading, drafting, etc.). Simulations speed up onboarding and training and save time for associates and partners.</p><p>I also wanted to add, that we have developed <b>a short M&A deal simulator specifically for ${props.firm}</b>. It teaches how to structure a deal, analyze a term sheet, and communicate with a client.</p><p>Please reply to this message, and I'll send you a link. I'd appreciate your feedback on whether our technology could enhance skill adoption among trainees and associates at ${props.firm}.</p>`
   );
-  console.log("trigger", trigger);
   const [subject, setSubject] = useState(
     // `Re: ${props.firm} x BeSavvy | simulation training platform`
     "Re: Fresh view: best lawyers get trained with simulation tech"

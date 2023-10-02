@@ -125,7 +125,7 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
-  width: 570px
+  width: 570px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -174,8 +174,7 @@ const Container = styled.div`
   @media (max-width: 800px) {
     width: 95%;
     font-size: 1.6rem;
-      margin-top: 40px;
-
+    margin-top: 40px;
   }
 `;
 
@@ -707,7 +706,6 @@ const Navigator = (props) => {
 
     setUserDescription(newUserDescription);
     if (new_block) setJourney(arr);
-    console.log("newUserDescription", newUserDescription);
     if (props.me) {
       updateUser({
         variables: {

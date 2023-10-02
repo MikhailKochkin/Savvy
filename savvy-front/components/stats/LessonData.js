@@ -439,12 +439,10 @@ const LessonData = (props) => {
 
         const computeVal = (mergedData) => {
           const totalItems = mergedData.length;
-          console.log("totalItems", totalItems);
           // Filter out exercises that have at least one result with a 'correct' value of true
           const correctItems = mergedData.filter((exercise) => {
             return exercise.results.some((result) => result.correct === true);
           }).length;
-          console.log("correctItems", correctItems);
 
           // If no exercises have results
           if (correctItems === 0) {
@@ -455,7 +453,6 @@ const LessonData = (props) => {
           const val = 4 * (correctItems / totalItems);
           return val;
         };
-        console.log("problemResults.length", problemResults.length);
 
         let val = 0;
         if (!problem.steps && problemResults.length > 0) {
@@ -463,11 +460,9 @@ const LessonData = (props) => {
         }
         if (problem.steps && problemResults.length == 0) {
           val = computeVal(mergedData);
-          console.log("val 2", val);
         }
         if (problem.steps && problemResults.length > 0) {
           val = computeVal(mergedData) + 1;
-          console.log("val 3", val);
         }
         lesson_results.push(val);
       }

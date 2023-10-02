@@ -588,7 +588,6 @@ const Ticket = (props) => {
   const uploadFile = async (e) => {
     const files = e.target.files;
     const data = new FormData();
-    console.log(files[0], data);
     setImage(URL.createObjectURL(e.target.files[0]));
 
     // data.append("file", files[0]);

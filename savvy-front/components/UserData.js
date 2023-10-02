@@ -318,7 +318,6 @@ const ClientData = (props) => {
       const hasLesson = client.lessonResults.some(
         (lessonResult) => lessonResult.lesson.coursePage.id === coursePageId
       );
-      console.log("hasLesson", hasLesson);
       // const newTags = ["Английский", "IQL"];
       // console.log("email", client.email, client.tags);
       // updateUser({
