@@ -275,7 +275,7 @@ const Progress = styled.div`
   height: 5px;
   background: #3f51b5;
   width: ${(props) => props.progress};
-  border-height: 15px;
+  /* border-height: 15px; */
   transition: all 0.5s;
 `;
 
