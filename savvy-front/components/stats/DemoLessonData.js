@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 import moment from "moment";
+import { TailSpin } from "react-loader-spinner";
 import Loading from "../Loading";
 import { useLazyQuery, gql, useMutation } from "@apollo/client";
 import CreateFeedback from "./CreateFeedback";
@@ -177,8 +178,10 @@ const Name = styled.div`
 `;
 
 const Box = styled.div`
-  border-bottom: 3px solid #f2f6f9;
+  border: 3px solid #f2f6f9;
+  border-top: none;
   display: flex;
+  background-color: #fff;
   flex-direction: row;
   align-items: center;
 
@@ -187,28 +190,38 @@ const Box = styled.div`
 
   div {
     padding: 0 5px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
   .div1 {
-    width: 30%;
+    width: 20%;
+    border-right: 3px solid #f2f6f9;
   }
   .div2 {
     width: 9%;
+    border-right: 3px solid #f2f6f9;
   }
   .div3 {
     width: 9%;
+    border-right: 3px solid #f2f6f9;
   }
   .div4 {
     width: 9%;
+    border-right: 3px solid #f2f6f9;
   }
   .div5 {
-    width: 17%;
+    width: 20%;
+    border-right: 3px solid #f2f6f9;
   }
   .div6 {
-    width: 17%;
+    width: 20%;
+    border-right: 3px solid #f2f6f9;
   }
   .div7 {
-    width: 9%;
+    width: 13%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -241,7 +254,7 @@ const SimpleButton = styled.button`
   border: 2px solid #69696a;
   border-radius: 5px;
   font-family: Montserrat;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 500;
   color: #323334;
   cursor: pointer;
@@ -252,7 +265,11 @@ const SimpleButton = styled.button`
 `;
 
 const Report = styled.div`
-  width: 50%;
+  width: 100%;
+  border: 2px solid #f2f6f9;
+  border-radius: 20px;
+  padding: 15px;
+  background: #fff;
 `;
 
 const SimpleButton2 = styled.button`
@@ -264,7 +281,7 @@ const SimpleButton2 = styled.button`
   border-radius: 5px;
   /* margin-right: 15px; */
   font-family: Montserrat;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 500;
   color: #323334;
   cursor: pointer;
@@ -274,12 +291,120 @@ const SimpleButton2 = styled.button`
   }
 `;
 
+const TopBox = styled.div`
+  border-bottom: 3px solid #f2f6f9;
+  border-top: 3px solid #f2f6f9;
+  background: #f2f6f9;
+  min-height: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+  div {
+    padding: 0 5px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .div1 {
+    width: 20%;
+  }
+  .div2 {
+    width: 9%;
+  }
+  .div3 {
+    width: 9%;
+  }
+  .div4 {
+    width: 9%;
+  }
+  .div5 {
+    width: 20%;
+  }
+  .div6 {
+    width: 20%;
+  }
+  .div7 {
+    width: 13%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 850px) {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+    div {
+      padding: 8px 15px;
+    }
+    .div2 {
+      border-left: 1px solid white;
+      border-top: 1px solid #edefed;
+    }
+    .div3 {
+      border-left: 1px solid white;
+      border-top: 1px solid #edefed;
+    }
+  }
+`;
+
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  margin: 0 0 2% 0;
+`;
+
+const IntroData = styled.div`
+  width: 60%;
+  margin: 30px 0;
+  font-size: 1.6rem;
+  h4 {
+    font-size: 2rem;
+    margin: 20px 0;
+  }
+  button {
+    width: 200px;
+    height: 35px;
+    background: none;
+    padding: 5px 0;
+    margin: 30px 0;
+
+    border: 2px solid #69696a;
+    border-radius: 5px;
+    font-family: Montserrat;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #323334;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background: #f4f4f4;
+    }
+  }
+`;
+
 const LessonContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0 30px;
+  h2 {
+    font-size: 2.8rem;
+  }
+`;
+
+const Bottom = styled.div`
+  margin-bottom: 150px;
 `;
 
 const LessonData = (props) => {
@@ -541,98 +666,77 @@ const LessonData = (props) => {
   const generateReport = async (event) => {
     event.preventDefault();
     setGenerating(true);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-          You are mentor of a law student. 
-          They have completed tasks helping them learn about Due Diligence in M&A deals.
-          Now you have received the results that look like this:
-          results = [
-            { type: "problem", res: 4, max_val: 5, goal: "Learn to structure the deal" },
+    setTimeout(() => {
+      setGenerating(false);
 
-            {
-              type: "problem",
-              res: 4,
-              max_val: 5,
-              goal: "Learn to distinguish between a share deal and an asset deal",
-            },
+      setReport(`
+                <p>The student completed the simulator with a total score of <b>62 out of 100</b>. This indicates that while the student has mastered some skills related to Due Diligence in M&amp;A, there are still areas that require improvement.</p>
+    <p>We would like to focus your attention on the following points:</p>
+    <ul>
+      <li>
+        <p><strong>Learning goal: Learn to find errors / typos / risks in a term sheet</strong></p>
+        <p>The student achieved a result of 0.65, which is below the success threshold. This suggests that the student requires further assistance in learning how to find errors in a term sheet. We recommend either assigning more similar tasks to the student or seeking guidance from a senior lawyer.</p>
+      </li>
+      <li>
+        <p><strong>Learning goal: Learn to draft an email to a client explaining the details of the legal problem</strong></p>
+        <p>The student achieved a result of 0, indicating that the task was not completed at all. It is important to remind the student to complete this task.</p>
+      </li>
+    </ul>
+    <p>The student's overall score is 62% out of 100. While they have successfully completed several tasks, <b>there are areas where further assistance is needed</b>. Specifically, the student should focus on improving their skills in finding errors in a term sheet and drafting emails to clients. It might be a good idea to get help from a senior lawyer.</p>
+    <p>Taking into account the simulator's goal—to prepare the student for work on due diligence in M&amp;A projects—we believe that <b>additional training is needed before the student is ready for client work.</b></p>
+  
+  `);
+    }, 4000);
+    // try {
+    //   const response = await fetch("/api/generate", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       prompt: `
+    //       Return
+    //      `,
+    //     }),
+    //   });
 
-            {
-              type: "newtest",
-              res: 1,
-              max_val: 1,
-              goal: "Learn about the difference between allotment of shares and means of shares transfer",
-            },
-
-            {
-              type: "newtest",
-              res: 0.8,
-              max_val: 1,
-              goal: "Learn about the FDA approval procedure",
-            },
-
-            {
-              type: "texteditor",
-              res: 4,
-              max_val: 4,
-              goal: "Learn find errors in a term sheet",
-            },
-             {
-              type: "construction",
-              res: 0,
-              max_val: 4,
-              goal: "Draft an email to a client",
-            },
-          ];
-          The total result is 69% out of 100. 
-          Write a short report  on whether the student has successfully completeed the simulator (the result is more than 70%).
-          Identify only the learning goals that have not been achieved (they scored less than 60%) and need to be resolved with a mentor. 
-          Return in HTML form. Include only p, ul and li tags.
-          If the result is more than 70%, provide a recommendation on whether the student can work with due diligence in M&A.`,
-        }),
-      });
-
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      const data = await response.json();
-      if (data.result.content) {
-        setReport(data.result.content);
-      } else {
-        setReport("Sorry, we are disconnected.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-    setGenerating(false);
+    //   if (response.status !== 200) {
+    //     throw (
+    //       (await response.json()).error ||
+    //       new Error(`Request failed with status ${response.status}`)
+    //     );
+    //   }
+    //   const data = await response.json();
+    //   if (data.result.content) {
+    //     ;
+    //   } else {
+    //     setReport("Sorry, we are disconnected.");
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   alert(error.message);
+    // }
   };
 
   return (
     <>
+      <>
+        <TopBox>
+          <div className="div1">Simulator Name</div>
+          <div className="div2">Progress</div>
+          <div className="div3">Result</div>
+          <div className="div4">Visits</div>
+          <div className="div5">First action</div>
+          <div className="div6">Last action</div>
+          <div className="div7"></div>
+        </TopBox>
+      </>
       {res.length > 0 && res[0].lesson.structure ? (
         <Box>
           <div className="div1">
             {index + 1}. {lesson.name}{" "}
           </div>
-          <div className="div2">
-            {res[0].lesson.structure &&
-              res[0].lesson.structure.lessonItems &&
-              parseInt(
-                (
-                  res[0].progress / res[0].lesson.structure.lessonItems.length
-                ).toFixed(2) * 100
-              )}
-            %{" "}
-          </div>
+          <div className="div2">100% </div>
           <div className="div3">
             {studentResults ? (
               `${parseInt(
@@ -692,10 +796,43 @@ const LessonData = (props) => {
       )}
       {show && data !== undefined && (
         <LessonContent>
-          <button onClick={(e) => generateReport(e)}>Generate</button>
-          {generating ? "loading" : ""}
-          <Report>{parse(report)}</Report>
-
+          <IntroData>
+            <h4>How to use the analytics page?</h4>
+            <div>
+              At analytics page you can:
+              <ul>
+                <li>
+                  get recommendations based on the simulator goals and student
+                  results (press the "Generate report" button for that)
+                </li>
+                <li>
+                  take a look at how the student was going through the
+                  simulator. (scroll down to the "Lesson Results" section){" "}
+                </li>
+              </ul>
+            </div>
+            <button onClick={(e) => generateReport(e)}>Generate report</button>
+            {generating ? (
+              <Progress>
+                <TailSpin
+                  height="60"
+                  width="60"
+                  color="#2E80EC"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              </Progress>
+            ) : (
+              ""
+            )}
+            {report && report.length > 0 && <Report>{parse(report)}</Report>}
+          </IntroData>
+          <div>
+            <h2>Lesson results</h2>
+          </div>
           {lesson?.structure?.lessonItems.map((l) => {
             if (l.type.toLowerCase() == "shot") {
               let shot = lesson.shots.filter((n) => n.id === l.id)[0];
@@ -815,41 +952,10 @@ const LessonData = (props) => {
           />
         </LessonContent>
       )}
+      <Bottom></Bottom>
     </>
   );
 };
 
 export default LessonData;
 export { GET_RESULTS };
-
-// const results = [
-//   { type: "problem", res: 4, max_val: 5, goal: "Learn to structure the deal" },
-
-//   {
-//     type: "problem",
-//     res: 4,
-//     max_val: 5,
-//     goal: "Learn to distinguish between a share deal and an asset deal",
-//   },
-
-//   {
-//     type: "newtest",
-//     res: 1,
-//     max_val: 1,
-//     goal: "Learn about the difference between allotment of shares and means of shares transfer",
-//   },
-
-//   {
-//     type: "newtest",
-//     res: 0.8,
-//     max_val: 1,
-//     goal: "Learn about the FDA approval procedure",
-//   },
-
-//   {
-//     type: "texteditor",
-//     res: 4,
-//     max_val: 4,
-//     goal: "Learn find errors in a term sheet",
-//   },
-// ];

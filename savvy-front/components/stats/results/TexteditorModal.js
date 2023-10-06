@@ -61,13 +61,13 @@ const TexteditorModal = (props) => {
     if (results.filter((t) => t.textEditor.id === texteditor.id).length > 0) {
       res = results.filter((t) => t.textEditor.id === texteditor.id);
       const error_elements = document
-        .getElementById(texteditor.id)
+        .getElementById("check_" + texteditor.id)
         .querySelectorAll("[error_data]");
       const note_elements = document
-        .getElementById(texteditor.id)
+        .getElementById("check_" + texteditor.id)
         .querySelectorAll(".editor_note");
       const quiz_elements = document
-        .getElementById(texteditor.id)
+        .getElementById("check_" + texteditor.id)
         .querySelectorAll(".editor_quiz");
       error_elements.forEach((element) => {
         if (
@@ -84,9 +84,9 @@ const TexteditorModal = (props) => {
           if (guesses_arr.length == 0) {
             guesses_arr = ["––"];
           }
-          element.innerHTML = `${answers[0].wrong} (Target: ${
+          element.innerHTML = `${answers[0].wrong} (Target answer: ${
             answers[0].correct
-          } / Answers: ${[
+          } / <b>Student Answers</b>: ${[
             ...new Set(
               guesses_arr.map((g) => `${g.result ? "✅" : "❌"} ${g.guess}`)
             ),
@@ -118,7 +118,7 @@ const TexteditorModal = (props) => {
         if (guesses_arr.length == 0) {
           guesses_arr = ["––"];
         }
-        element.innerHTML = `${element.innerHTML}. <b>Answers:</b> ${[
+        element.innerHTML = `${element.innerHTML}. <b>Student Answers:</b> ${[
           ...new Set(guesses_arr),
         ].join(", ")}`;
         // }
@@ -127,7 +127,7 @@ const TexteditorModal = (props) => {
   }, [0]);
   return (
     <Box>
-      <TextBox id={texteditor.id}>
+      <TextBox id={"check_" + texteditor.id}>
         <Text>
           <h2>Doc Editor </h2>
           {parse(texteditor.text)}

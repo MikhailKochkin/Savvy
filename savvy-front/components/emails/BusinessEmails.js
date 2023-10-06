@@ -4,7 +4,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import emailList from "../../businessEmailList";
+import emailList from "../../businessEmailList.js";
 import BusinessEmailCard from "./BusinessEmailCard";
 
 const Styles = styled.div`
@@ -37,10 +37,9 @@ const Styles = styled.div`
 
 const ClientData = (props) => {
   const [clients, setClients] = useState(emailList ? emailList : []);
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
-
+  console.log("emailList", emailList);
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };

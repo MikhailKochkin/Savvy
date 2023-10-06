@@ -2393,7 +2393,7 @@ const emailList = [
     firm: "Bevan Brittan LLP",
     connection:
       "you are the Senior Recruitment Business Partner at Bevan Brittan LLP, responsible for experienced hires as well as trainee and apprenticeship programs.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Annie",
@@ -2403,7 +2403,7 @@ const emailList = [
     firm: "Bevan Brittan LLP",
     connection:
       "you are the Senior Early Talent Advisor at Bevan Brittan LLP, focusing on the recruitment and development of early-career professionals.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Kathryn",
@@ -2413,7 +2413,7 @@ const emailList = [
     firm: "Bevan Brittan",
     connection:
       "you are the Director of Human Resources at Bevan Brittan, overseeing the entire Human Resources function.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Laura",
@@ -2423,7 +2423,7 @@ const emailList = [
     firm: "Bevan Brittan LLP",
     connection:
       "you are an HR Business Partner at Bevan Brittan LLP, collaborating with various departments to align human resources strategy with business goals.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Ian",
@@ -2433,7 +2433,7 @@ const emailList = [
     firm: "Bird & Bird",
     connection:
       "you are working as Training Principal at Bird & Bird, and are also a partner in the tech transactions team.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Angela",
@@ -2443,7 +2443,7 @@ const emailList = [
     firm: "Bird & Bird",
     connection:
       "you are the Talent Acquisition Manager at Bird & Bird, responsible for recruiting top talent into the firm.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Aylie",
@@ -2453,7 +2453,7 @@ const emailList = [
     firm: "Bird & Bird",
     connection:
       "you are the Chief People Officer at Bird & Bird, overseeing the firm's human resources and talent management.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Paula",
@@ -2463,7 +2463,7 @@ const emailList = [
     firm: "Bird & Bird",
     connection:
       "you are the Head Of Learning at Bird & Bird, responsible for educational and training programs within the firm.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Leonora",
@@ -2473,7 +2473,7 @@ const emailList = [
     firm: "Bird & Bird",
     connection:
       "you are a Learning Partner at Bird & Bird, with experience in teaching, HR, and marketing. you are also the Chair of Bird & Bird’s neurodiversity network.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
     result: "Soft Bounce",
   },
   {
@@ -2484,7 +2484,7 @@ const emailList = [
     firm: "Bird & Bird",
     connection:
       "you are a Partner at Bird & Bird, heading the firm's International Commercial Group and established the cyber-security team in 2010.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Susan",
@@ -2494,7 +2494,7 @@ const emailList = [
     firm: "Brabners",
     connection:
       "you are a Solicitor at Brabners, specializing in employment law. you regularly organize and deliver practical and interactive training to clients on employment law-related issues and also write articles and legal updates.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Colin",
@@ -2505,7 +2505,7 @@ const emailList = [
     firm: "Brabners",
     connection:
       "you are the Partner and Head of Intellectual Property and Technology Sector at Brabners. your role likely involves educational initiatives within the technology and IP sectors.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Natalie",
@@ -2515,7 +2515,7 @@ const emailList = [
     firm: "Brabners",
     connection:
       "you are a Talent Acquisition Advisor at Brabners, responsible for recruiting and onboarding new talent, which involves educational and training programs.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Lisa",
@@ -2525,7 +2525,7 @@ const emailList = [
     firm: "Brabners",
     connection:
       "you are the Head of People at Brabners, overseeing people operations and enabling functions, which likely includes educational and training initiatives.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Christine",
@@ -2535,7 +2535,7 @@ const emailList = [
     firm: "Brabners",
     connection:
       "you are a Legal Director in the Employment and Pensions team at Brabners. you regularly provide training to businesses on key issues ranging from disciplinaries and grievances to anti-bullying and harassment.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Lee",
@@ -2545,7 +2545,7 @@ const emailList = [
     firm: "Brabners",
     connection:
       "you are a Partner in the Employment team at Brabners. you guest blog for Personnel Today and have developed innovative training for businesses on people-related matters. you are also a freelance lecturer for BPP Professional Development.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Nik",
@@ -2555,7 +2555,7 @@ const emailList = [
     firm: "Brabners",
     connection:
       "you are the Managing Partner at Brabners, responsible for overseeing the firm's operations and strategy, which likely includes educational and training initiatives for the team.",
-    sentEmailsTime: ["September 13"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Harriet",
@@ -2565,7 +2565,7 @@ const emailList = [
     firm: "Bristows Law Firm",
     connection:
       "you are the HR Manager for Graduate Talent at Bristows Law Firm, responsible for the recruitment and development of graduate talent, which includes educational and training programs.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Morwenna",
@@ -2575,7 +2575,7 @@ const emailList = [
     firm: "Bristows LLP",
     connection:
       "you are the Head of HR at Bristows LLP, overseeing all human resources functions, which likely includes educational and training initiatives for the team.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Stephanie",
@@ -2585,7 +2585,7 @@ const emailList = [
     firm: "Bristows",
     connection:
       "you are the Training & Development Manager at Bristows, responsible for introducing support platforms for successful completion of professional qualifications and implementing efficient systems for training.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 13", "September 27"],
   },
   {
     name: "Jessica",
@@ -2595,7 +2595,7 @@ const emailList = [
     firm: "Bristows",
     connection:
       "you are a Senior Associate at Bristows, representing a diverse range of clients including educational institutions, which suggests a strong understanding of educational issues in the legal context.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Paul",
@@ -2605,7 +2605,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are the Head of Learning and Development at Charles Russell Speechlys LLP, responsible for overseeing the educational and training programs for the team.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Karen",
@@ -2615,7 +2615,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are the Director of HR at Charles Russell Speechlys LLP, providing executive oversight and direction to the firm’s people professionals, which likely includes educational and training initiatives.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Joanna",
@@ -2625,7 +2625,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are an Early Talent Manager and Coach in training at Charles Russell Speechlys LLP, focusing on the development and coaching of early-career professionals.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Milli",
@@ -2635,7 +2635,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are a Senior Talent Acquisition Advisor at Charles Russell Speechlys LLP, managing Business Services roles and part of the wider HR team, which likely involves educational and training programs.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Shona",
@@ -2645,7 +2645,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are a Partner at Charles Russell Speechlys LLP with extensive experience in family law. you have been actively involved with Resolution and were a member of the National Committee and chair of the Training Group.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Rose",
@@ -2655,7 +2655,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are a Partner specializing in business immigration and provide bespoke in-house training on compliance and right to work issues.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Emma",
@@ -2665,7 +2665,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are a Partner and the former Chair of the Training and Education Committee of The Property Litigation Association, focusing on contentious property issues.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "David",
@@ -2675,7 +2675,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are a Partner who advises on construction, energy, and civil engineering matters. you have delivered training on FIDIC and the IChemE international contracts.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Kerry",
@@ -2685,7 +2685,7 @@ const emailList = [
     firm: "Charles Russell Speechlys LLP",
     connection:
       "you are a Partner and Director of Responsible Business and Pro Bono, leading efforts in disability benefits appeals work and training lawyers across the firm.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "September 27"],
   },
   {
     name: "Matt",
@@ -2707,6 +2707,7 @@ const emailList = [
     connection:
       "you are a Senior Manager focused on Early Careers Recruitment and Employer Branding at Clyde & Co, which involves educational and training programs for early-career professionals.",
     sentEmailsTime: ["September 14"],
+    result: "Hard Bounce",
   },
   {
     name: "Karen",
@@ -2726,7 +2727,7 @@ const emailList = [
     firm: "Clyde & Co",
     connection:
       "you are the Head of HR for the UK at Clyde & Co, overseeing human resources functions, which likely includes educational and training programs.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "October 5"],
   },
   {
     name: "Nicola",
@@ -2756,7 +2757,7 @@ const emailList = [
     firm: "Clyde & Co",
     connection:
       "you are an L&D Advisor at Clyde & Co, focusing on learning and development initiatives within the firm.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "October 5"],
   },
   {
     name: "Jill",
@@ -2766,7 +2767,7 @@ const emailList = [
     firm: "Clyde & Co",
     connection:
       "you are the Global Head of Learning & Development at Clyde & Co, responsible for overseeing the educational and training programs for the firm globally.",
-    sentEmailsTime: ["September 14"],
+    sentEmailsTime: ["September 14", "October 5"],
   },
   {
     name: "Ben",
@@ -3068,7 +3069,7 @@ const emailList = [
     firm: "DWF",
     connection:
       "you are the Head Of Recruitment at DWF, responsible for recruiting talent, which likely involves educational and training programs.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Kate",
@@ -3078,7 +3079,7 @@ const emailList = [
     firm: "DWF",
     connection:
       "you are the Early Careers Manager at DWF, overseeing the development and training of individuals in the early stages of their legal careers.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Darren",
@@ -3088,7 +3089,7 @@ const emailList = [
     firm: "DWF",
     connection:
       "you are a Partner at DWF, and while your specific involvement in education is not mentioned, you likely have a role in mentoring and training junior staff.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Darren",
@@ -3098,7 +3099,7 @@ const emailList = [
     firm: "DWF",
     connection:
       "you are a Partner at DWF, and your role likely involves overseeing or contributing to the educational and training programs within the firm.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "JP",
@@ -3108,7 +3109,7 @@ const emailList = [
     firm: "DWF",
     connection:
       "you are a Partner and Regional Data Protection & Cyber Security Leader at DWF, and your expertise in data protection likely involves training and educating staff on compliance.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Ben",
@@ -3118,7 +3119,7 @@ const emailList = [
     firm: "DWF",
     connection:
       "you are a Partner at DWF, and your role likely involves some level of educational or training responsibilities within the firm.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Ben",
@@ -3128,7 +3129,7 @@ const emailList = [
     firm: "DWF",
     connection:
       "you are a Partner at DWF, and it's likely that you have some involvement in the educational and training aspects of your firm.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Sophie",
@@ -3138,7 +3139,7 @@ const emailList = [
     firm: "Davis Polk",
     connection:
       "you are an Associate at Davis Polk, and your role likely involves some level of educational or training responsibilities within the firm.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Dan",
@@ -3148,7 +3149,7 @@ const emailList = [
     firm: "Davis Polk",
     connection:
       "you are the Training Partner at Davis Polk, responsible for supporting trainees throughout their journey to qualifying as a solicitor.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Connie I.",
@@ -3158,7 +3159,7 @@ const emailList = [
     firm: "Davis Polk",
     connection:
       "you are a Partner at Davis Polk, and you have been offered helpful guidance along your career path, indicating a culture of mentorship and training.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Nick",
@@ -3168,7 +3169,7 @@ const emailList = [
     firm: "Davis Polk",
     connection:
       "you are a Partner at Davis Polk, and you strongly encourage people to get involved in pro bono work, which offers a wider variety of experience early in their careers.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Lindsay",
@@ -3178,7 +3179,7 @@ const emailList = [
     firm: "Davis Polk",
     connection:
       "you are the Chief Professional Development Officer at Davis Polk, overseeing the professional growth and training of the firm's staff.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Lees",
@@ -3189,7 +3190,7 @@ const emailList = [
     firm: "Davis Polk",
     connection:
       "you are involved in Talent Acquisition and Professional Development at Davis Polk, making you integral to the educational and training aspects of the firm.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Rebecca",
@@ -3199,7 +3200,7 @@ const emailList = [
     firm: "Davis Polk",
     connection:
       "you are the Director of Knowledge Management at Davis Polk, responsible for the capture and dissemination of legal knowledge, which is a form of internal education.",
-    sentEmailsTime: ["September 15"],
+    sentEmailsTime: ["September 15", "October 5"],
   },
   {
     name: "Lara Samet",
@@ -3585,7 +3586,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you are responsible for the attraction, selection, and development of Solicitor Apprentices and Trainee Solicitors across various offices. you also manage the firm's insight schemes and university relationships.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Alison",
@@ -3595,7 +3596,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you support Sarah in the attraction, selection, and development of Solicitor Apprentices and Trainee Solicitors in the UK offices.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Tom",
@@ -3605,7 +3606,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you are the Head of HR at Fieldfisher, overseeing human resources which likely includes educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Karen",
@@ -3615,7 +3616,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you are the HR Director at Fieldfisher, likely responsible for overseeing educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Amelia",
@@ -3625,7 +3626,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you are the Head of Recruitment at Fieldfisher, responsible for talent acquisition which likely includes educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Ellie",
@@ -3635,7 +3636,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you are responsible for all of the Apprentice and Graduate programs across Fieldfisher's Business Services and Legal Support Services areas.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Ranjit",
@@ -3645,7 +3646,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you are the Birmingham Office Leader and the UK Head of EPIC at Fieldfisher, likely involved in educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Robert",
@@ -3655,7 +3656,7 @@ const emailList = [
     firm: "Fieldfisher",
     connection:
       "you are the Managing Partner of Fieldfisher, responsible for the management of the firm with a special focus on innovation in law.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27"],
   },
   {
     name: "Susie",
@@ -3665,7 +3666,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you are the Executive Director of Learning and Development at Foot Anstey LLP, responsible for overseeing all educational and training programs within the firm.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Ina",
@@ -3675,7 +3676,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you are the Operations Director (HR & Resourcing) at Foot Anstey LLP, working closely with the HR Director and Group Leaders on all aspects of resourcing, leadership, and HR management.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Kerri",
@@ -3685,7 +3686,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you are the People and Reward Manager at Foot Anstey LLP, likely involved in educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Jess",
@@ -3695,7 +3696,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you focus on early careers recruitment and development at Foot Anstey LLP, supporting people in starting their careers and progressing.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Chloe",
@@ -3705,7 +3706,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you specialize in early careers at Foot Anstey LLP, helping individuals progress and develop in their roles.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Martin",
@@ -3715,7 +3716,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you are the Managing Partner at Foot Anstey LLP, responsible for the management of the firm and likely involved in educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Felix",
@@ -3725,7 +3726,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you are the Group HR Director at Foot Anstey LLP, overseeing the HR function responsible for delivering the people elements of the firm’s strategy.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Helena",
@@ -3735,7 +3736,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you provide proactive, commercially-driven HR advice and support at Foot Anstey LLP, likely involved in educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Clare",
@@ -3745,7 +3746,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you are a Senior Human Resources Business Partner at Foot Anstey LLP, likely involved in educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 27", "October 5"],
   },
   {
     name: "Jeff",
@@ -3755,7 +3756,7 @@ const emailList = [
     firm: "Foot Anstey LLP",
     connection:
       "you have 30 years of experience in the legal industry and specialize in service delivery models, legal service pricing, and profitability at Foot Anstey LLP.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 14"],
   },
   {
     name: "Jons",
@@ -3766,7 +3767,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are the Training Principal at Fried Frank, responsible for overseeing the educational and training programs for new associates and trainees.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Andrew",
@@ -3777,7 +3778,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are the Global Director of Knowledge Management at Fried Frank, responsible for managing and disseminating knowledge resources across the firm.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Lindsay",
@@ -3787,7 +3788,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are a Knowledge Management & Innovation Attorney at Fried Frank, involved in the management of knowledge resources and innovation initiatives.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Victor",
@@ -3797,7 +3798,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are the Chief Operating Officer at Fried Frank, overseeing the operational aspects of the firm, including educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Annemarie",
@@ -3808,7 +3809,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are the Chief Human Resources Officer at Fried Frank, responsible for human resources, including training and development programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Ed",
@@ -3818,7 +3819,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are the Chief Operating Officer for Europe at Fried Frank, overseeing the operational aspects of the firm in Europe, including educational and training programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Evette",
@@ -3828,7 +3829,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are the Chief Information Officer at Fried Frank, responsible for the firm's information technology, which may include educational technology.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Lori Ann",
@@ -3838,7 +3839,7 @@ const emailList = [
     firm: "Fried Frank",
     connection:
       "you are the Head of HR Business Services at Fried Frank, likely involved in educational and training programs for business services.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Sophie",
@@ -3850,7 +3851,7 @@ const emailList = [
     firm: "Gateley Plc",
     connection:
       "you lead the team of professional support lawyers at Gateley Plc and manage the firm’s Information Resources team. you are also involved in training and keeping lawyers and clients updated on new laws.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Simon",
@@ -3861,7 +3862,7 @@ const emailList = [
     firm: "Kiddy & Partners",
     connection:
       "you focus on assessment and work with leaders for their better positioning for success. you lead on both assessments for recruitment and for development/succession planning.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Charlie",
@@ -3872,7 +3873,7 @@ const emailList = [
     firm: "Kiddy & Partners",
     connection:
       "you support the planning and organization of client projects, delivering discrete project management activities through occupational psychology training and development of leaders and managers.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Lisa",
@@ -3883,7 +3884,7 @@ const emailList = [
     firm: "Kiddy & Partners",
     connection:
       "you focus on executive assessment, leadership development, and coaching. you bring subject matter expertise along with strong commercial judgment to support clients with appointing and developing their leaders.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Melanie",
@@ -3894,7 +3895,7 @@ const emailList = [
     firm: "Kiddy & Partners",
     connection:
       "you are responsible for ensuring the successful delivery of large-scale programs at Kiddy. you have extensive experience in executing complex, global programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Charlotte",
@@ -3905,7 +3906,7 @@ const emailList = [
     firm: "Kiddy & Partners",
     connection:
       "your experience spans the design and delivery of processes focusing on inclusive leadership development, high potential identification, and manager/leader development using psychometrics and 360-degree feedback.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Lauren",
@@ -3916,7 +3917,7 @@ const emailList = [
     firm: "Kiddy & Partners",
     connection:
       "you specialize in the assessment and development of leaders and high-potential employees, working across various sectors.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Laura",
@@ -3927,7 +3928,7 @@ const emailList = [
     firm: "t-three",
     connection:
       "you design and deliver leadership development and management training programs. you consult with organizations to advise on learning programs and performance improvement.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Anthony",
@@ -3938,7 +3939,7 @@ const emailList = [
     firm: "t-three",
     connection:
       "you focus on defining the leadership and culture organizations need for growth. you are involved in profiling and assessing to find the right people for organizational goals.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Rae",
@@ -3950,7 +3951,7 @@ const emailList = [
     firm: "Gateley",
     connection:
       "you work with the Learning & Development team at Gateley to help create and deploy training, as well as supporting the PSLs to use the LMS effectively.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Ruth",
@@ -3961,7 +3962,7 @@ const emailList = [
     firm: "Gateley",
     connection:
       "you shape the learning and development of people at Gateley to maximize potential and support the delivery of organizational strategic goals. you are also responsible for the health and wellbeing agenda at Gateley.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Heidi",
@@ -3973,7 +3974,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you are the Chief Talent Officer and Assistant General Counsel for Employment at Goodwin. you oversee all professional development, diversity, equity + inclusion, leadership, recruiting, training, and human resources functions.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Caitlin",
@@ -3984,7 +3985,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you work to enhance the knowledge and skills of Goodwin’s attorneys and professional staff for their personal and professional growth.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Anne",
@@ -3996,7 +3997,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you are the Managing Director of Knowledge Management at Goodwin, focusing on legal technology, KM strategy, data strategy, and innovation.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "David",
@@ -4007,7 +4008,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you are the Director of Knowledge Management for Litigation at Goodwin, responsible for managing and disseminating litigation-related knowledge within the firm.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Karen",
@@ -4018,7 +4019,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you are the Director of Professional Staff Learning at Goodwin, responsible for the educational and training programs for the professional staff.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Katie",
@@ -4030,7 +4031,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you are the Managing Director of Talent for Europe & Asia and Operations for the UK at Goodwin, overseeing talent management activities in these regions.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "Svetlana",
@@ -4042,7 +4043,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you are the Senior Human Resources Manager at Goodwin, involved in various HR functions including talent management.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Karen",
@@ -4053,7 +4054,7 @@ const emailList = [
     firm: "Goodwin",
     connection:
       "you are the firm’s Managing Director, Human Resources for the U.S. at Goodwin. your focus includes oversight of performance and talent management, as well as compensation for the firm’s professional staff and attorneys.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28", "October 5"],
   },
   {
     name: "GINEVRA",
@@ -4064,7 +4065,7 @@ const emailList = [
     firm: "Gowling WLG",
     connection:
       "you are the Director of Innovation and Knowledge Programs at Gowling WLG, responsible for leading the firm's innovation, knowledge management, learning and development, legal project management, client and practice solutions, and process re-engineering strategy and initiatives.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "amanda",
@@ -4075,7 +4076,7 @@ const emailList = [
     firm: "Gowling WLG",
     connection:
       "you specialize in Legal Knowledge Management, Operations, and Legal Tech at Gowling WLG, focusing on the implementation and management of legal technologies and knowledge resources.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Jay",
@@ -4086,7 +4087,7 @@ const emailList = [
     firm: "Gowling WLG",
     connection:
       "you are the Head of Learning & Development at Gowling WLG, responsible for creating a culture that supports development, high performance, and innovation.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Cora",
@@ -4097,7 +4098,7 @@ const emailList = [
     firm: "Gowling WLG",
     connection:
       "you are the Learning and Development Manager at Gowling WLG UK, responsible for managing and implementing learning and development programs.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Marva",
@@ -4109,7 +4110,7 @@ const emailList = [
     firm: "Gowling WLG",
     connection:
       "you are the Director of Human Resources at Gowling WLG, overseeing the firm's human resources strategies and policies.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Chris",
@@ -4121,7 +4122,7 @@ const emailList = [
     firm: "Gowling WLG",
     connection:
       "you are the HR Director at Gowling WLG, responsible for overseeing human resources functions and strategies.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Samantha",
@@ -4133,7 +4134,7 @@ const emailList = [
     firm: "Gowling WLG",
     connection:
       "you are working as Training Principal at Gowling WLG, and are responsible for overseeing the educational and training programs for new associates and trainees.",
-    sentEmailsTime: [],
+    sentEmailsTime: ["September 28"],
   },
   {
     name: "Anita",
@@ -4473,6 +4474,317 @@ const emailList = [
     firm: "Linklaters",
     connection: "",
     sentEmailsTime: ["September 28"],
+  },
+  {
+    name: "Sandy",
+    surname: "Boyle",
+    email: "Sandy.Boyle@mills-reeve.com",
+    linkedin:
+      "https://www.linkedin.com/in/sandy-boyle-3751725/?originalSubdomain=uk",
+    comment: "Director of Human Resources",
+    firm: "Mills & Reeve",
+    connection:
+      "You are working as Director of Human Resources at Mills & Reeve, overseeing personnel-related matters, potentially including the organization and implementation of educational and training programs for the staff.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Deborah",
+    surname: "Swarts",
+    email: "Deborah.Swarts@mills-reeve.com",
+    linkedin:
+      "https://www.linkedin.com/in/deborah-swarts-65134b21?originalSubdomain=uk",
+    comment: "Head of Knowledge Management & Digital",
+    firm: "",
+    connection:
+      "You are working as the Head of Knowledge Management & Digital, a role that possibly entails developing and overseeing digital educational resources and knowledge management systems to support the continuous learning and development of staff.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Annie",
+    surname: "Wilton",
+    email: "Annie.Wilton@mills-reeve.com",
+    linkedin: "",
+    comment: "L&D Manager",
+    firm: "Mills & Reeve",
+    connection:
+      "You are working as L&D Manager at Mills & Reeve, where your primary responsibilities likely include designing, coordinating, and implementing educational and training programs to foster the development of the firm's personnel.",
+    sentEmailsTime: [],
+  },
+
+  {
+    name: "Katherine",
+    surname: "Rathbone",
+    email: "Katherine.Rathbone@charitytrustee.com",
+    linkedin:
+      "https://www.linkedin.com/in/katherine-rathbone-801951a/?originalSubdomain=uk",
+    comment: "Head of HR / Charity Trustee",
+    firm: "",
+    connection:
+      "You are working as Head of HR and a Charity Trustee, potentially overseeing HR policies and also engaging in charitable educational projects. Your role might involve aligning educational initiatives with organizational goals, ensuring staff and beneficiaries are well-informed and educated.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Niki",
+    surname: "Lawson",
+    email: "niki.lawson@addleshawgoddard.com",
+    linkedin:
+      "https://www.linkedin.com/in/niki-lawson-2274b134/?originalSubdomain=uk",
+    comment: "Chief People Officer",
+    firm: "Addleshaw Goddard",
+    connection:
+      "You are working as Chief People Officer at Addleshaw Goddard with a vast experience in talent development, employee engagement, and other HR realms, which necessitate a deep understanding and implementation of educational and training programs to foster talent growth and employee satisfaction.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Ian",
+    surname: "Bradford",
+    email: "Ian.Bradford@addleshawgoddard.com",
+    linkedin: "",
+    comment: "Learning & Development Manager",
+    firm: "Addleshaw Goddard",
+    connection:
+      "You are working as Learning & Development Manager at Addleshaw Goddard, overseeing and creating educational and training programs to enhance the skills and knowledge of the firm's personnel, contributing to their professional growth.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Sophie Rose",
+    surname: "Manson",
+    email: "Sophie.Manson@addleshawgoddard.com",
+    linkedin:
+      "https://www.linkedin.com/in/sophie-rose-manson-chartered-fcipd-9a989a28/",
+    comment: "Head of Learning and Development",
+    firm: "",
+    connection:
+      "You are working as Head of Learning and Development with a history of building learning functions from the ground up. Your role is pivotal in aiding organizations to create robust educational frameworks that support the continuous professional growth of their personnel.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Elliot",
+    surname: "White",
+    email: "Elliot.White@addleshawgoddard.com",
+    linkedin: "https://www.linkedin.com/in/elliotwhite/",
+    comment: "Head of Innovation & Legal Tech Operations",
+    firm: "Addleshaw Goddard",
+    connection:
+      "You are working as Head of Innovation & Legal Tech Operations at Addleshaw Goddard, mainly in the legal technology and SaaS space. Your role may involve the implementation of educational programs related to legal tech, helping the firm and its personnel to stay updated with the latest technological advancements.",
+    sentEmailsTime: [],
+  },
+
+  {
+    name: "Samantha",
+    surname: "Lee",
+    email: "sam.lee@wbd-uk.com",
+    linkedin: "",
+    comment: "Head Of Recruitment",
+    firm: "WBD UK",
+    connection:
+      "You are working as Head Of Recruitment at WBD UK, overseeing the recruitment strategy, including early careers programmes, and ensuring best practices in the recruitment process. Your role involves supporting and training the next generation of hiring managers, aligning closely with educational and mentoring initiatives within the firm.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Paul",
+    surname: "Stewart",
+    email: "paul.stewart@wbd-uk.com",
+    linkedin: "",
+    comment: "Managing Partner, UK",
+    firm: "WBD UK",
+    connection:
+      "You are working as Managing Partner at WBD UK, overseeing the firm's operations and possibly engaging with educational initiatives to ensure continuous professional development and adherence to legal standards within the firm.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Nick",
+    surname: "Barwood",
+    email: "nick.barwood@wbd-uk.com",
+    linkedin: "",
+    comment: "UK Chair, UK",
+    firm: "WBD UK",
+    connection:
+      "You are working as UK Chair at WBD UK, likely involved in steering the firm's strategic directions, which may include educational and training programs to ensure the firm's personnel are well-equipped with the necessary knowledge and skills.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Krishna",
+    surname: "Anand",
+    email: "krishna.anand@wbd-uk.com",
+    linkedin: "",
+    comment: "Head of Learning and Development, UK",
+    firm: "WBD UK",
+    connection:
+      "You are working as Head of Learning and Development at WBD UK, playing a crucial role in creating and implementing educational and training programs to foster continuous professional growth within the firm.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Paul",
+    surname: "Harvey",
+    email: "paul.harvey@wbd-uk.com",
+    linkedin: "",
+    comment: "Head of Knowledge and Legal Training, UK",
+    firm: "WBD UK",
+    connection:
+      "You are working as Head of Knowledge and Legal Training at WBD UK, overseeing the educational and training programs that ensure the firm's personnel are updated with the latest legal knowledge and best practices.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Helen",
+    surname: "Marr",
+    email: "helen.marr@wbd-uk.com",
+    linkedin: "",
+    comment: "Early Talent Development Manager, UK",
+    firm: "WBD UK",
+    connection:
+      "You are working as Early Talent Development Manager at WBD UK, focusing on the educational and developmental programs aimed at nurturing the talents of early-career professionals within the firm.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Charlotte",
+    surname: "Hall",
+    email: "charlotte.hall@wbd-uk.com",
+    linkedin: "",
+    comment: "Senior Recruitment Advisor, UK",
+    firm: "WBD UK",
+    connection:
+      "You are working as Senior Recruitment Advisor at WBD UK, being part of the recruitment process which may involve educational initiatives to assess and enhance the knowledge and skills of potential recruits and existing personnel.",
+    sentEmailsTime: [],
+  },
+
+  {
+    name: "Natalie",
+    surname: "King",
+    email: "nking@wedlakebell.com",
+    linkedin:
+      "https://www.linkedin.com/in/natalie-king-85203b12?originalSubdomain=uk",
+    comment: "Head of HR at Wedlake Bell",
+    firm: "Wedlake Bell",
+    connection:
+      "You are working as Head of HR at Wedlake Bell, overseeing the human resources department, which likely involves coordinating educational and training programs to ensure the professional development of the firm's personnel.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Prudence",
+    surname: "H.",
+    email: "ph@wedlakebell.com",
+    linkedin: "https://www.linkedin.com/in/prudence-h-644380139/",
+    comment: "Learning and Development Manager",
+    firm: "Unknown Firm",
+    connection:
+      "You are working as Learning and Development Manager, focusing on creating and implementing educational programs to enhance the skills and knowledge of the employees within your organization. Your expertise in education and training is essential for fostering a culture of continuous learning and development.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Martin",
+    surname: "Arnold",
+    email: "marnold@wedlakebell.com",
+    linkedin: "https://www.linkedin.com/in/martin-arnold-0b80308/",
+    comment: "Managing Partner",
+    firm: "Wedlake Bell",
+    connection:
+      "You are working as Managing Partner at Wedlake Bell, overseeing the firm's operations and possibly engaging with educational initiatives to ensure continuous professional development and adherence to legal standards within the firm.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Lynsey",
+    surname: "McIntyre",
+    email: "lynseymcintyre@bdbpitmans.com",
+    linkedin: "https://www.linkedin.com/in/lynseymcintyre/",
+    comment: "Professional Support Lawyer",
+    firm: "BDB Pitmans",
+    connection:
+      "You are working as a Professional Support Lawyer at BDB Pitmans, where you might be involved in the creation and maintenance of educational resources or training programs for the firm’s lawyers.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Danielle",
+    surname: "Hughes",
+    email: "daniellehughes@bdbpitmans.com",
+    linkedin: "https://www.linkedin.com/in/danielle-hughes-ba4b1416b/",
+    comment: "Graduate Recruitment and Development",
+    firm: "BDB Pitmans",
+    connection:
+      "You are working as a Graduate Recruitment and Development Manager at BDB Pitmans, where you might be involved in the creation and maintenance of educational resources or training programs for the firm’s lawyers.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Andrew",
+    surname: "Smith",
+    email: "andrewsmith@bdbpitmans.com",
+    linkedin: "https://www.linkedin.com/in/andrew-smith-355b1512/",
+    comment: "Managing Partner",
+    firm: "BDB Pitmans",
+    connection:
+      "You are working as Managing Partner at BDB Pitmans, where you might oversee or engage with the firm's educational initiatives to ensure continuous professional development and adherence to legal standards within the firm.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Sara",
+    surname: "Hodges",
+    email: "sarahodges@bdbpitmans.com",
+    linkedin:
+      "https://www.linkedin.com/in/sara-hodges-8a9747106/?originalSubdomain=uk",
+    comment: "Knowledge Management",
+    firm: "Unknown Firm",
+    connection:
+      "You are working in Knowledge Management, focusing on Intranets, KM systems, Content Management, and Information Management, which likely involves overseeing or contributing to educational and training initiatives to ensure optimal knowledge sharing and learning within your organization.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Jessica",
+    surname: "Booker",
+    email: "jessicabooker@bdbpitmans.com",
+    linkedin:
+      "https://www.linkedin.com/in/starpotentialuk/?originalSubdomain=uk",
+    comment: "Talent Professional",
+    firm: "Unknown Firm",
+    connection:
+      "You are working as a Talent Professional, covering recruitment, development, E&DI and CSR. Your role likely involves creating or overseeing educational and training programs to foster talent development within your organization.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Nicholas",
+    surname: "Le Riche",
+    email: "nicholasleriche@bdbpitmans.com",
+    linkedin:
+      "https://www.linkedin.com/in/nicholas-le-riche-5089053a/?originalSubdomain=uk",
+    comment: "Partner, Training Principal",
+    firm: "BDB Pitmans",
+    connection:
+      "You are working as Training Principal at BDB Pitmans, and are responsible for overseeing the educational and training programs for new associates and trainees.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Matthew",
+    surname: "Cormack",
+    email: "matthew.cormack@wardhadaway.com",
+    linkedin:
+      "https://www.linkedin.com/in/mattcormacklawyer/?originalSubdomain=uk",
+    comment: "Partner, Training Principal",
+    firm: "Ward Hadaway",
+    connection:
+      "You are working as Training Principal at Ward Hadaway, and are responsible for the recruitment and training of trainee solicitors in the firm.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Anna",
+    surname: "Brown",
+    email: "anna.brown@wardhadaway.com",
+    linkedin:
+      "https://www.linkedin.com/in/anna-brown-93037933/?originalSubdomain=uk",
+    comment: "Director of People",
+    firm: "Ward Hadaway",
+    connection:
+      "You are working as Director of People at Ward Hadaway, where your role likely involves overseeing or liaising with the educational and training departments to ensure the firm’s talent development aligns with its goals.",
+    sentEmailsTime: [],
+  },
+  {
+    name: "Martin",
+    surname: "Hulls",
+    email: "martin.hulls@wardhadaway.com",
+    linkedin: "",
+    comment: "Managing Partner",
+    firm: "Ward Hadaway",
+    connection:
+      "You are working as Managing Partner at Ward Hadaway, where your focus on internal engagement likely involves ensuring effective educational and training programs to promote excellent client service and team cohesion.",
+    sentEmailsTime: [],
   },
 ];
 

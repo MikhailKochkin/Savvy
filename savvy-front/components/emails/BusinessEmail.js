@@ -54,7 +54,7 @@ const BusinessEmail = (props) => {
   const [connection, setConnection] = useState(
     `I noticed ` +
       props.connection +
-      ` At BeSavvy, we empower law firms to develop their own training simulations that have proven to increase Employee Skill Advancement by 59% and triple Training ROI. That's why I've decided to write you.`
+      ` At BeSavvy, we use simulation training to build digital portraits of lawyers' skill sets. That's why I've decided to write you.`
   );
   console.log("props", props.name);
   const [subject, setSubject] = useState(

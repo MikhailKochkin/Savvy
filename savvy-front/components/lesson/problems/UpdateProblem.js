@@ -230,7 +230,7 @@ const UpdateProblem = (props) => {
               me={props.me}
               lessonID={lesson.id}
               getSteps={getSteps}
-              items={steps.problemItems}
+              items={steps ? steps.problemItems : []}
             />
           </DndProvider>
         </div>

@@ -55,12 +55,11 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 const FollowUpEmail = (props) => {
   const [personalTouch, setPersonalTouch] = useState(props.personalTouch);
   const [trigger, setTrigger] = useState(
-    // `<p>I also wanted to add, in case you are [какой-то тригер], I’d suggest [что вы «забыли» упомянуть в первом письме]. Could this be relevant to you?</p>`
-    `<p>I sent you an email on September, 13 telling you about BeSavvy. It is a platform that empowers law firms to create their own training simulations to help trainees and apprentices develop practical skills (proofreading, drafting, etc.). Simulations speed up onboarding and training and save time for associates and partners.</p><p>I also wanted to add, that we have developed <b>a short M&A deal simulator specifically for ${props.firm}</b>. It teaches how to structure a deal, analyze a term sheet, and communicate with a client.</p><p>Please reply to this message, and I'll send you a link. I'd appreciate your feedback on whether our technology could enhance skill adoption among trainees and associates at ${props.firm}.</p>`
+    `<p>I sent you an email on September, 28 telling you about BeSavvy. BeSavvy is a platform that teaches with simulators and creates digital portraits of lawyers' skill sets. These portraits can serve as a data-backed foundation for making more cost-efficient and accurate training decisions within law firms.</p><p>I also wanted to add, that we have developed <b>a short M&A deal simulator specifically for ${props.firm}</b>. It can show how you can help trainees master practical skills and accelerate their journey to billable work.</p><p>Please reply to this message, and I'll send you a link. I'd appreciate your feedback on whether our technology could enhance skill adoption and training ROI at ${props.firm}.</p>`
   );
   const [subject, setSubject] = useState(
     // `Re: ${props.firm} x BeSavvy | simulation training platform`
-    "Re: Fresh view: best lawyers get trained with simulation tech"
+    "Re: Report: Enhance law firm training with simulation tech"
   );
 
   const myCallback2 = (dataFromChild) => {

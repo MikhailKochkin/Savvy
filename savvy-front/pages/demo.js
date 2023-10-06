@@ -26,7 +26,7 @@ const demo = (props) => {
   return (
     <div>
       {props.query.lang == "eng" ? (
-        <DynamicNewSingleLesson id="ck8a84ar900e4070177xa0d6p" />
+        <DynamicNewSingleLesson id="clmz0cqak00720t0xpltjg7wf" />
       ) : (
         <DynamicNewSingleLesson id="ckfc5hguf03ou0702y6fmm4wq" />
       )}

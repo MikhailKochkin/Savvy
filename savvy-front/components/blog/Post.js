@@ -78,7 +78,6 @@ const Styles = styled.div`
   img {
     display: block;
     width: 100%;
-    max-height: 50em;
     box-shadow: "0 0 0 2px blue;";
   }
   h1 {

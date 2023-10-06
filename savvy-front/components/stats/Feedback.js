@@ -24,8 +24,8 @@ const Feedback = (props) => {
   const { feedback, lesson } = props;
   return (
     <AllStyles>
-      <div className="header">Feedback:</div>
-      {feedback.length === 0 ? <div>Not sent</div> : null}
+      <div className="header">Give feedback to the student:</div>
+      {feedback.length === 0 ? <div>No feedback sent yet</div> : null}
       {feedback.length > 0
         ? feedback.map((m) => (
             <Styles>

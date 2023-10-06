@@ -736,14 +736,21 @@ export default Feed;
 
 const CustomProgressBar = ({ myResult, lessonItems }) => {
   let lesson_length = calculateSum(lessonItems);
+  console.log("lesson_length", lesson_length);
   let time_coef = lesson_length / lessonItems.length;
 
   const progress = myResult
-    ? (((myResult + 1) * time_coef) / lesson_length) * 100
+    ? (((myResult + 1) * time_coef) / lesson_length) * 100 > 100
+      ? 100
+      : (((myResult + 1) * time_coef) / lesson_length) * 100
     : 0;
 
-  let time_left = parseInt(lesson_length - (myResult + 1) * time_coef);
-  let time_passed = parseInt(myResult * time_coef);
+  let time_left =
+    parseInt(lesson_length - (myResult + 1) * time_coef) < 0
+      ? 0
+      : parseInt(lesson_length - (myResult + 1) * time_coef);
+  console.log("progress", progress);
+  console.log("time_left", time_left);
 
   const router = useRouter();
   const { t } = useTranslation("lesson");

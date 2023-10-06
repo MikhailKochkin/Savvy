@@ -19,6 +19,7 @@ import Forum from "../lesson/forum/Forum";
 import Document from "../lesson/documents/Document";
 import Exam from "../lesson/exams/Exam";
 import TestPractice from "../lesson/testblocks/TB";
+import LessonData from "../stats/DemoLessonData";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
@@ -68,6 +69,114 @@ const Progress = styled.div`
   height: 70vh;
   margin: 0 0 2% 0;
 `;
+
+const StatsColumn = styled.div`
+  width: 60%;
+  min-width: 1100px;
+`;
+
+const emily = {
+  id: "clndce1s4005wyn0xgb40p0vm",
+  email: "emily@besavvy.app",
+  name: "Emily",
+  surname: "Thompson",
+  permissions: ["USER"],
+  tags: [],
+  image: null,
+  work: null,
+  score: 0,
+  description: null,
+  teams: [],
+  myTeams: [],
+  certificates: [],
+  courseVisits: [
+    {
+      id: "clndcefez005yyn0xt69au466",
+      reminders: [],
+      coursePage: {
+        id: "ck77iltf301370755hjoa4fnp",
+      },
+    },
+    {
+      id: "clne86oe7000oxs04m2kps78v",
+      reminders: [],
+      coursePage: {
+        id: "clmusi4wx0000xsg122vc7a9c",
+      },
+    },
+  ],
+  teacherFeedback: [],
+  level: {
+    id: "clndce21m005xyn0x7gys2h8l",
+    level: "2.27212222211",
+  },
+  studentFeedback: [],
+  new_subjects: [
+    {
+      id: "ck77iltf301370755hjoa4fnp",
+    },
+    {
+      id: "clmusi4wx0000xsg122vc7a9c",
+    },
+  ],
+  company: null,
+  status: "LAWYER",
+  lessonResults: [
+    {
+      id: "clndcfh5v005zyn0xb0e5jjhg",
+    },
+    {
+      id: "clne7hhh60028tp0x2ixidb1h",
+    },
+  ],
+  orders: [],
+  uni: null,
+  coursePages: [],
+  co_coursePages: [],
+  lessons: [],
+};
+
+const result = [
+  {
+    checked: false,
+    createdAt: "2023-10-06T06:08:59.322Z",
+    id: "clne7hhh60028tp0x2ixidb1h",
+    lesson: {
+      id: "clmz0cqak00720t0xpltjg7wf",
+      name: "M&A simulator",
+      number: 1,
+      structure: {
+        lessonItems: [
+          { id: "clne76o010026tp0xos4hpgd1", type: "Chat" },
+          { id: "clne77p2u0027tp0xp667wcvm", type: "Chat" },
+          { id: "clmz0uedy00740t0xlu0gtclo", type: "Chat" },
+          { id: "clmz1af5k00750t0x32wyqctk", type: "Note" },
+          { id: "clmz4bzw200770t0xuu0b1d8q", type: "Chat" },
+          { id: "clmz4ocl2007e0t0xoyuiz0kd", type: "Problem" },
+          { id: "clmz6ai8j00820t0xrodv0jsh", type: "Problem" },
+          { id: "cln0n3i6q000qxs4p2fbpcvpy", type: "NewTest" },
+          { id: "cln0n5f25000sxs4pikeu0wiy", type: "NewTest" },
+          { id: "clmz6eai600830t0xe1nboluw", type: "Chat" },
+          { id: "clmz78elv00840t0x30tybjs9", type: "TextEditor" },
+          { id: "clmz7g57k008c0t0xu06q74z4", type: "Chat" },
+          { id: "clmz7tf41008w0t0xmn7fluav", type: "Construction" },
+          { id: "clmz81sh1009i0t0xx4hjxfpf", type: "Forum" },
+        ],
+      },
+      type: "STORY",
+      __typename: "Lesson",
+    },
+    progress: 14,
+    student: {
+      email: "emily@besavvy.app",
+      id: "clndce1s4005wyn0xgb40p0vm",
+      __typename: "User",
+    },
+    updatedAt: "2023-10-06T06:26:14.243Z",
+    visitsNumber: 1,
+    __typename: "LessonResult",
+  },
+];
 
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID } = props;
@@ -373,7 +482,19 @@ const StoryEx = (props) => {
     <Container>
       {me && (
         <DemoFeed
-          components={[...components, <DemoSignUp />]}
+          components={[
+            ...components,
+            <StatsColumn>
+              <LessonData
+                index={1}
+                lesson={lesson}
+                student={emily}
+                coursePageID={coursePageID}
+                res={result}
+              />
+            </StatsColumn>,
+            <DemoSignUp />,
+          ]}
           experience={experience}
           total={total}
           next={next}

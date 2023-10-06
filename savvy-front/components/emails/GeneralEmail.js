@@ -54,7 +54,9 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 
 const GeneralEmail = (props) => {
   const [trigger, setTrigger] = useState(`<p>Dear ${props.name},</p><p></p>`);
-  const [subject, setSubject] = useState("Re:");
+  const [subject, setSubject] = useState(
+    "Boost billing hours with simulation tech"
+  );
 
   const myCallback2 = (dataFromChild) => {
     setTrigger(dataFromChild);

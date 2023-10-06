@@ -733,8 +733,8 @@ const Person = (props) => {
                   <div className="div2">Progress</div>
                   <div className="div3">Result</div>
                   <div className="div4">Visits</div>
-                  <div className="div5">First visit</div>
-                  <div className="div6">Last visit</div>
+                  <div className="div5">First action</div>
+                  <div className="div6">Last action</div>
                   <div className="div7"></div>
                 </Box>
               </>
@@ -743,6 +743,7 @@ const Person = (props) => {
                 .sort((a, b) => (a.number > b.number ? 1 : -1))
                 .map((lesson, index) => {
                   let res = maxes.filter((r) => r.lesson.id === lesson.id);
+                  console.log("res", res);
                   return (
                     <LessonData
                       lesson={lesson}

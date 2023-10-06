@@ -225,7 +225,7 @@ const ProblemModal = (props) => {
   return (
     <Box key={problem.id}>
       <div className="columnOne">
-        <b>Problem: </b>
+        <b>Case Study: </b>
         {parse(`${problem.text}`)}
         <div className="final_answer">
           <b>Final answer</b>
@@ -315,9 +315,17 @@ const ProblemModal = (props) => {
                                 ? "✅ Marked as correct"
                                 : "❌ Marked as wrong"}
                             </div>
+                            <b>Student answer: </b>
                             {t.answer}
                             <div className="standard">
-                              <b>Comment:</b> {t.comment}
+                              <b>Comment: </b> {t.comment}
+                              <br />
+                              <b>Hint:</b> {t.hint}
+                              <br />
+                              <b>Explanation:</b> {t.explanation}
+                              <br />
+                              <b>Improvement:</b> {t.improvement}
+                              {/* {console.log("t", t)} */}
                             </div>
                             <div className="time">
                               {moment(t.createdAt).format("LLL")}{" "}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { TailSpin } from "react-loader-spinner";
 
 const Block = styled.div`
   display: flex;
@@ -57,7 +58,20 @@ const Loading = () => {
     const randomIndex = Math.floor(Math.random() * phrases.length);
     setPhrase(phrases[randomIndex]);
   }, []);
-  return <Block>{/* <CircularProgress /> */}...</Block>;
+  return (
+    <Block>
+      <TailSpin
+        height="80"
+        width="80"
+        color="#2E80EC"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+    </Block>
+  );
 };
 
 export default Loading;

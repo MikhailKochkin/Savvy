@@ -78,9 +78,12 @@ const QuizResult = (props) => {
                               ? "✅ Marked as correct"
                               : "❌ Marked as wrong")}
                         </div>
-                        {t.answer}
+                        <b>Student answer:</b> {t.answer}
                         <div className="standard">
                           <b>Comment:</b> {t.comment}
+                        </div>
+                        <div className="standard">
+                          <b>Hint:</b> {t.hint}
                         </div>
                         <div className="time">
                           {moment(t.createdAt).format("LLL")}{" "}

@@ -110,7 +110,7 @@ const ConstructionModal = (props) => {
             })}
           </div>
         ) : (
-          <div>Ответов нет</div>
+          <div>No answers provided</div>
         )}
       </div>
     </Box>
