@@ -111,7 +111,7 @@ const ExitIntentPopup = (props) => {
             href={
               router.locale == "ru"
                 ? "https://t.me/besavvylawyer"
-                : "https://www.instagram.com/besavvy_world/"
+                : "https://www.linkedin.com/company/68516659"
             }
             target="_blank"
           >

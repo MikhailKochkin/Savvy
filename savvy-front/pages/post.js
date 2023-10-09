@@ -1,13 +1,18 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import styled from "styled-components";
-
 import Post from "../components/blog/Post";
 import Navigator from "../components/navigator/Navigator";
+import { useRouter } from "next/router";
 
 import { useUser } from "../components/User";
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["nav", "blog", "landing"])),
+    ...(await serverSideTranslations(locale, [
+      "nav",
+      "blog",
+      "landing",
+      "navigator",
+    ])),
   },
 });
 
@@ -32,12 +37,13 @@ const Container = styled.div`
 
 const PostPage = (props) => {
   const me = useUser();
+  const router = useRouter();
 
   return (
     <Styles>
       <Container>
         <Post id={props.query.id} me={me} page={"post"} />
-        <Navigator level={"more_next_steps"} />
+        {router.locale == "ru" && <Navigator level={"more_next_steps"} />}
       </Container>
     </Styles>
   );
