@@ -19,5 +19,5 @@ server.js
 .env
 .env.local
 .wwebjs_cache
-businessEmailList.js
 sqeList.js
+businessEmailList.js

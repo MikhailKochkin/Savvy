@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import emailList from "../../businessEmailList.js";
-import emailSQEList from "../../sqeList.js";
+// import emailSQEList from "../../sqeList.js";
 
 import BusinessEmailCard from "./BusinessEmailCard";
 
@@ -71,9 +71,9 @@ const ClientData = (props) => {
           ))}
         </div>
         <button onClick={(e) => setClients(emailList)}>Law Firms</button>
-        <button onClick={(e) => setClients(emailSQEList)}>
+        {/* <button onClick={(e) => setClients(emailSQEList)}>
           Training Companies
-        </button>
+        </button> */}
       </div>
       {currentItems.map((c, i) => {
         const globalIndex = indexOfFirstItem + i;
