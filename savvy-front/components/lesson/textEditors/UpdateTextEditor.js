@@ -21,6 +21,7 @@ const UPDATE_TEXTEDITOR_MUTATION = gql`
     $text: String
     $totalMistakes: Int
     $complexity: Int
+    $goal: String
   ) {
     updateTextEditor(
       id: $id
@@ -28,11 +29,13 @@ const UPDATE_TEXTEDITOR_MUTATION = gql`
       text: $text
       totalMistakes: $totalMistakes
       complexity: $complexity
+      goal: $goal
     ) {
       id
       name
       complexity
       text
+      goal
       totalMistakes
       user {
         id
@@ -54,12 +57,17 @@ const Container = styled.div`
   p > a:hover {
     /* text-decoration: underline; */
   }
+  h3 {
+    margin: 15px 0;
+  }
   textarea {
     height: 200px;
-    margin: 40px 0;
     width: 90%;
-    font-family: "Courier New", Courier, monospace;
     padding: 1%;
+    padding: 10px;
+    font-size: 1.6rem;
+    font-family: Montserrat;
+    line-height: 1.4;
   }
   /* button {
     width: 100px;
@@ -107,7 +115,7 @@ const ButtonTwo = styled.button`
   font-weight: 500;
   color: #323334;
   cursor: pointer;
-  margin-top: 20px;
+  margin: 20px 0;
   width: 120px;
   margin-right: 10px;
   transition: 0.3s;
@@ -176,6 +184,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 const UpdateTextEditor = (props) => {
   const [text, setText] = useState(props.text);
   const [open, setOpen] = useState(false);
+  const [goal, setGoal] = useState(props.goal);
 
   const [mistakes, setMistakes] = useState(props.totalMistakes);
   const [complexity, setComplexity] = useState(
@@ -239,6 +248,11 @@ const UpdateTextEditor = (props) => {
             случай правильного и неправильного ответов.
           </p>
         </Explainer>
+        <h3>Goal</h3>
+        <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
+        <h3>Doc Editor</h3>
+
+        <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
         <ButtonTwo onClick={(e) => setOpen(!open)}>
           {open ? "Закрыть" : "Открыть"}
         </ButtonTwo>
@@ -249,7 +263,6 @@ const UpdateTextEditor = (props) => {
             complex={true}
           />
         )}
-        <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
         {/* <Complexity>
           <select
             value={complexity}
@@ -277,6 +290,7 @@ const UpdateTextEditor = (props) => {
             id: id,
             text: text,
             complexity,
+            goal,
             totalMistakes: parseInt(mistakes),
           }}
           refetchQueries={() => [

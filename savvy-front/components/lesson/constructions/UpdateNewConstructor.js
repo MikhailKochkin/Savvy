@@ -15,15 +15,18 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
     $hint: String
     $columnsNum: Int
     $elements: ElementsList
+    $goal: String
   ) {
     updateConstruction(
       id: $id
       hint: $hint
       columnsNum: $columnsNum
       elements: $elements
+      goal: $goal
     ) {
       id
       name
+      goal
       lessonID
       variants
       answer
@@ -39,6 +42,14 @@ const Center = styled.div`
   flex-direction: column;
   background: white;
   padding: 2%;
+  textarea {
+    padding: 10px;
+    font-size: 1.6rem;
+    font-family: Montserrat;
+    line-height: 1.4;
+    width: 600px;
+    margin-bottom: 40px;
+  }
 `;
 
 const ButtonTwo = styled.button`
@@ -275,6 +286,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 const UpdateNewConstructor = (props) => {
   const { construction, lesson } = props;
   const [hint, setHint] = useState(construction.hint);
+  const [goal, setGoal] = useState(construction.goal);
   const [columnsNum, setColumns] = useState(construction.columnsNum);
   const [elements, setElements] = useState(construction.elements.elements);
   const router = useRouter();
@@ -382,6 +394,8 @@ const UpdateNewConstructor = (props) => {
           </>
         )}
       </Explainer>
+      <h3>Goal</h3>
+      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
       <Number>
         <div className="name">Число блоков: </div>
         <Buttons>
@@ -445,6 +459,7 @@ const UpdateNewConstructor = (props) => {
               id: props.id,
               hint,
               columnsNum,
+              goal,
               elements: { elements },
             },
           });

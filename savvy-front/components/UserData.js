@@ -146,6 +146,37 @@ const Row = styled.div`
   }
 `;
 
+const Editor = styled.div`
+  display: block;
+  font-size: 1.6rem;
+  width: 95%;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  outline: 0;
+  padding: 0.5%;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  background: #fff;
+  @media (max-width: 800px) {
+    width: 350px;
+  }
+`;
+
+const EmailBox = styled.div`
+  width: 660px;
+  input {
+    padding: 3px 10px;
+    margin: 10px 0;
+    width: 360px;
+  }
+`;
+
+const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
 const ClientData = (props) => {
   const [clients, setClients] = useState(props.initial_clients);
   const [email, setEmail] = useState("");
@@ -158,7 +189,8 @@ const ClientData = (props) => {
   const [campaignName, setCampaignName] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-
+  const [message, setMessage] = useState("<p></p>");
+  const [subject, setSubject] = useState(``);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
 
@@ -197,6 +229,10 @@ const ClientData = (props) => {
       (c) => c.email == val.toLowerCase()
     );
     setClients(filtered_clients);
+  };
+
+  const myCallback2 = (dataFromChild) => {
+    setMessage(dataFromChild);
   };
 
   const search3 = (val) => {
@@ -370,32 +406,42 @@ const ClientData = (props) => {
   }
 
   const send = () => {
-    if (emailType == "") {
-      alert("Выберите тему писем");
-      return;
-    }
-    let num = 0;
+    // if (emailType == "") {
+    //   alert("Выберите тему писем");
+    //   return;
+    // }
+    // let num = 0;
+    // clients.map((c) => {
+    //   let last_email = findNewestItem(c.messages);
+    //   let next_email = getNextEmailItem(
+    //     emailGroups.find((el) => el.name === emailType),
+    //     last_email?.subject
+    //   );
+
+    //   if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
+    //     console.log("next_email", next_email);
+
+    //     num = num + 1;
+    //     const res = sendMessage({
+    //       variables: {
+    //         userId: c.id,
+    //         text: next_email.text,
+    //         subject: next_email.subject,
+    //       },
+    //     });
+    //   }
+    // });
     clients.map((c) => {
-      let last_email = findNewestItem(c.messages);
-      let next_email = getNextEmailItem(
-        emailGroups.find((el) => el.name === emailType),
-        last_email?.subject
-      );
-
-      if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
-        console.log("next_email", next_email);
-
-        num = num + 1;
-        const res = sendMessage({
-          variables: {
-            userId: c.id,
-            text: next_email.text,
-            subject: next_email.subject,
-          },
-        });
-      }
+      console.log("c", c);
+      const res = sendMessage({
+        variables: {
+          userId: c.id,
+          text: message,
+          subject: subject,
+        },
+      });
     });
-    console.log("Число отправленных писем: ", num);
+    console.log("Число отправленных писем: ", clients.length);
   };
 
   const sortByOrders = () => {
@@ -497,15 +543,29 @@ const ClientData = (props) => {
             Искать по курсу (EmailReminder)
           </button>
           <br />
+          <EmailBox>
+            <input
+              type="text"
+              onChange={(e) => setSubject(e.target.value)}
+              value={subject}
+            />
+            <Editor>
+              <DynamicLoadedEditor
+                getEditorText={myCallback2}
+                value={message}
+                name="text"
+              />
+            </Editor>
+          </EmailBox>
           <button onClick={(e) => send()}>Отправить имейлы</button>
-          <select
+          {/* <select
             value={emailType}
             onChange={(e) => setEmailType(e.target.value)}
           >
             {emailGroups.map((g) => (
               <option value={g.name}>{g.name}</option>
             ))}
-          </select>
+          </select> */}
           <div>Всего: {clients.length}</div>
           {/* Page Buttons */}
           <div className="pagination">
@@ -521,6 +581,7 @@ const ClientData = (props) => {
           </div>
         </div>
       </div>
+
       {currentItems
         // .filter((user) => user.email !== "mi.kochkin@ya.ru")
         .map((c, i) => (

@@ -1229,6 +1229,7 @@ const Mutation = mutationType({
         text: stringArg(),
         description: stringArg(),
         coursePageID: stringArg(),
+        goal: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const Lesson = await ctx.prisma.lesson.create({
@@ -1672,6 +1673,7 @@ const Mutation = mutationType({
         totalPoints: intArg(),
         hasSecret: booleanArg(),
         open: booleanArg(),
+        goal: stringArg(),
         structure: arg({
           type: "LessonStructure",
         }),
@@ -1699,6 +1701,7 @@ const Mutation = mutationType({
         correct: list(booleanArg()),
         comments: list(stringArg()),
         question: list(stringArg()),
+        goal: stringArg(),
         type: stringArg(),
         ifRight: stringArg(),
         ifWrong: stringArg(),
@@ -1714,6 +1717,7 @@ const Mutation = mutationType({
           ifRight,
           ifWrong,
           type,
+          goal,
         },
         ctx
       ) => {
@@ -1744,6 +1748,7 @@ const Mutation = mutationType({
           ifRight,
           ifWrong,
           type,
+          goal,
         };
 
         const newTest = await ctx.prisma.newTest.create({ data: new_data });
@@ -1773,10 +1778,20 @@ const Mutation = mutationType({
         failureText: stringArg(),
         tasks: list(stringArg()),
         lessonId: stringArg(),
+        goal: stringArg(),
       },
       resolve: async (
         _,
-        { lessonId, tasks, tasksNum, text, intro, successText, failureText },
+        {
+          lessonId,
+          tasks,
+          tasksNum,
+          text,
+          intro,
+          successText,
+          failureText,
+          goal,
+        },
         ctx
       ) => {
         const new_data = {
@@ -1798,6 +1813,7 @@ const Mutation = mutationType({
           successText: successText,
           failureText: failureText,
           intro: intro,
+          goal: goal,
         };
         const newTP = await ctx.prisma.testPractice.create({ data: new_data });
         return newTP;
@@ -1947,6 +1963,7 @@ const Mutation = mutationType({
         ifRight: stringArg(),
         ifWrong: stringArg(),
         complexity: intArg(),
+        goal: stringArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
@@ -2036,6 +2053,7 @@ const Mutation = mutationType({
         type: stringArg(),
         ifWrong: stringArg(),
         check: stringArg(),
+        goal: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -2079,6 +2097,7 @@ const Mutation = mutationType({
         hint: stringArg(),
         explanation: stringArg(),
         improvement: stringArg(),
+        goal: stringArg(),
       },
 
       resolve: async (_, args, ctx) => {
@@ -2344,6 +2363,7 @@ const Mutation = mutationType({
         text: stringArg(),
         name: stringArg(),
         totalMistakes: intArg(),
+        goal: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
@@ -2371,6 +2391,7 @@ const Mutation = mutationType({
         name: stringArg(),
         totalMistakes: intArg(),
         complexity: intArg(),
+        goal: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -2521,6 +2542,7 @@ const Mutation = mutationType({
         answer: list(stringArg()),
         complexity: intArg(),
         columnsNum: intArg(),
+        goal: stringArg(),
         elements: arg({
           type: "ElementsList",
         }),
@@ -2534,12 +2556,6 @@ const Mutation = mutationType({
         const answer = args.answer;
         return ctx.prisma.construction.update({
           data: {
-            // variants: {
-            //   set: [...variants],
-            // },
-            // answer: {
-            //   set: [...answer],
-            // },
             ...updates,
           },
           where: {
@@ -2578,6 +2594,7 @@ const Mutation = mutationType({
         attempts: intArg(),
         constructionId: stringArg(),
         lessonId: stringArg(),
+        goal: stringArg(),
         elements: arg({
           type: "ElementsList",
         }),
@@ -2639,11 +2656,10 @@ const Mutation = mutationType({
       args: {
         lessonId: stringArg(),
         text: stringArg(),
+        goal: stringArg(),
         steps: arg({
           type: "ProblemStructure",
         }),
-        // nodeID: stringArg(),
-        // nodeType: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
@@ -2673,6 +2689,7 @@ const Mutation = mutationType({
         }),
         complexity: intArg(),
         isSecret: booleanArg(),
+        goal: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -3263,6 +3280,7 @@ const Mutation = mutationType({
       args: {
         lessonId: stringArg(),
         title: stringArg(),
+        goal: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;

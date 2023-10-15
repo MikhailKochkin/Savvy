@@ -388,11 +388,7 @@ const Client = (props) => {
           </a>
         </button>
         <button>
-          <a
-            target="_blank"
-            // href={`https://api.whatsapp.com/send?phone=${number}?text=Hello!`}
-            href={`https://wa.me/${number}`}
-          >
+          <a target="_blank" href={`https://wa.me/${number}`}>
             Написать в whatsApp
           </a>
         </button>
@@ -418,11 +414,11 @@ const Client = (props) => {
       <div className="comment">
         <h4>Комментарий</h4>
         <div className="editor">
-          <DynamicLoadedEditor
+          {/* <DynamicLoadedEditor
             getEditorText={myCallback}
             value={props.comment}
             name="text"
-          />
+          /> */}
         </div>
         <h4>Имейл</h4>
         {props.communication_history &&
@@ -478,11 +474,11 @@ const Client = (props) => {
                 selectedEmail !== null && s.subject === selectedEmail.subject
               }
             >
-              <DynamicLoadedEditor
+              {/* <DynamicLoadedEditor
                 getEditorText={myCallback2}
                 value={s.text}
                 name="text"
-              />
+              /> */}
             </Editor>
           ))}
         <button

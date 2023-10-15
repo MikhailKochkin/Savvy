@@ -453,8 +453,6 @@ const NewSingleLesson = (props) => {
       {lesson && (
         <Container>
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-
-          <Head></Head>
           <LessonPart>
             {/* <h1>Demo lesson</h1> */}
             <DemoStoryEx

@@ -431,7 +431,10 @@ const Action = (props) => {
   };
 
   const total_lessons_number = program.coursePages.reduce(function (acc, obj) {
-    return acc + obj.lessons.length;
+    return (
+      acc +
+      obj.lessons.filter((les) => les.type.toLowerCase() !== "hidden").length
+    );
   }, 0);
   return (
     <Styles id="c2a">

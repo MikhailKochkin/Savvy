@@ -66,14 +66,25 @@ const Input = styled.input`
   }
 `;
 
-// const useStyles = makeStyles({
-//   button: {
-//     // width: "40%",
-//     margin: "4% 0",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//   },
-// });
+const BlueButton = styled.button`
+  width: 180px;
+  background: #3b5bb3;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 25px 0;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
+`;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
@@ -98,7 +109,7 @@ const UpdateClause = (props) => {
   const { index } = props;
   return (
     <>
-      <div id="title">Условия документа:</div>
+      {/* <div id="title">Условия документа:</div> */}
       <Styles>
         <Mutation
           mutation={UPDATE_CLAUSE_MUTATION}
@@ -141,7 +152,7 @@ const UpdateClause = (props) => {
                   onChange={(e) => setKeywords(e.target.value.split(", "))}
                 />
               </div> */}
-              <button
+              <BlueButton
                 variant="contained"
                 color="primary"
                 onClick={async (e) => {
@@ -151,7 +162,7 @@ const UpdateClause = (props) => {
                 }}
               >
                 {loading ? t("saving") : t("save")}
-              </button>
+              </BlueButton>
             </form>
           )}
         </Mutation>

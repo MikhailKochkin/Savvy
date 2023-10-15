@@ -2,7 +2,7 @@ const emailList = [
   {
     name: "Mikhail",
     surname: "Kochkin",
-    email: "test-ccv69mj10@srv1.mail-tester.com",
+    email: "test-ybsv7ge4o@srv1.mail-tester.com",
     comment: "CEO",
     firm: "BeSavvy",
     personalTouch: "Just a great guy",
@@ -18,6 +18,7 @@ const emailList = [
     personalTouch:
       "Bates Wells' non-hierarchical culture and your emphasis on mentorship and employee development",
     sentEmailsTime: ["September 4", "September 19"],
+    result: "Not read",
   },
   {
     name: "William",
@@ -28,6 +29,7 @@ const emailList = [
     personalTouch:
       "Bates Wells' non-hierarchical culture and your emphasis on mentorship and employee development",
     sentEmailsTime: ["September 5", "September 19"],
+    result: "Not read",
   },
   {
     name: "Paul",
@@ -110,6 +112,57 @@ const emailList = [
     sentEmailsTime: ["September 5", "September 19"],
   },
   {
+    name: "Hannah",
+    surname: "Lyons",
+    email: "h.lyons@bateswells.co.uk",
+    comment: "Partner",
+    firm: "Bates Wells",
+    personalTouch:
+      "A part of Trainee Team. I advise charities and not for profit organisations on a range of charity law issues, including governance, grants, contracts and mergers and incorporations.",
+    sentEmailsTime: ["October 11"],
+  },
+  {
+    name: "Daisy",
+    surname: "Mortimer",
+    email: "d.mortimer@bateswells.co.uk",
+    comment: "Emerging Talent & Recruitment Manager",
+    firm: "Bates Wells",
+    personalTouch: "A part of Trainee Team",
+    sentEmailsTime: ["October 11"],
+  },
+  {
+    name: "Charlie",
+    surname: "Miller",
+    email: "c.miller@bateswells.co.uk",
+    comment: "Senior Associate",
+    firm: "Bates Wells",
+    personalTouch:
+      "A part of Trainee Team. I’m a Senior Associate in Dispute Resolution & Litigation.",
+    sentEmailsTime: ["October 11"],
+  },
+  {
+    name: "Damian",
+    surname: "Ward",
+    email: "d.ward@bateswells.co.uk",
+    comment: "Senior Associate",
+    firm: "Bates Wells",
+    personalTouch:
+      "A part of Trainee Team. I am a Senior Associate in the Employment team.",
+    sentEmailsTime: ["October 11"],
+  },
+  {
+    name: "Scott",
+    surname: "Sullivan",
+    email: "s.sullivan@bateswells.co.uk",
+    comment: "Human Resources Director ",
+    linkedin:
+      "https://www.linkedin.com/in/scottjacksullivan/?originalSubdomain=uk",
+    firm: "Bates Wells",
+    personalTouch:
+      "I lead the HR team at Bates Wells, a truly purpose and values driven B-Corp supporting clients in the impact economy.",
+    sentEmailsTime: ["October 11"],
+  },
+  {
     name: "Amy",
     surname: "Meyer",
     email: "amy-meyer@birketts.co.uk",
@@ -127,7 +180,7 @@ const emailList = [
     firm: "Birketts",
     personalTouch:
       "how your trainees confess that they not only receive high levels of responsibility but also find the work intellectually stimulating. It resonates with my own belief that challenging and meaningful work is crucial for professional development",
-    sentEmailsTime: ["September 5", "September 19"],
+    sentEmailsTime: ["September 5", "September 19", "October 11"],
   },
   {
     name: "Stefan",
@@ -137,7 +190,7 @@ const emailList = [
     firm: "Birketts",
     personalTouch:
       "how your trainees confess that they not only receive high levels of responsibility but also find the work intellectually stimulating. It resonates with my own belief that challenging and meaningful work is crucial for professional development",
-    sentEmailsTime: ["September 5", "September 19"],
+    sentEmailsTime: ["September 5", "September 19", "October 11"],
   },
   {
     name: "Tom",
@@ -147,7 +200,7 @@ const emailList = [
     firm: "Birketts",
     personalTouch:
       "how your trainees confess that they not only receive high levels of responsibility but also find the work intellectually stimulating. It resonates with my own belief that challenging and meaningful work is crucial for professional development",
-    sentEmailsTime: ["September 5", "September 19"],
+    sentEmailsTime: ["September 5", "September 19", "October 11"],
   },
   {
     name: "Sonya",
@@ -242,6 +295,36 @@ const emailList = [
     result: ["Spam"],
   },
   {
+    name: "Nicol",
+    surname: "Blakeney",
+    email: "nicol-blakeney@birketts.co.uk",
+    comment: "Head of Learning and Development",
+    linkedin:
+      "https://www.linkedin.com/in/nicol-blakeney-5777789a/?originalSubdomain=uk",
+    firm: "Birketts",
+    personalTouch:
+      "I work collaboratively across the firm providing the lead on the L&D strategy and provision in line with business plans. Working with senior stakeholders to anticipate and respond to the needs of a growing and evolving law firm. Sourcing and implementing the firms first Learning Management System. Providing a central point for tracking data, learning interaction and instantly available internally created or externally sourced digital collateral, along with self-enrolment onto further learning opportunities, supporting development paths.",
+    sentEmailsTime: ["October 11"],
+  },
+  {
+    name: "Matthew",
+    surname: "Newnham",
+    email: "matthew-newnham@birketts.co.uk",
+    comment: "Training Principal",
+    firm: "Birketts",
+    personalTouch: "",
+    sentEmailsTime: ["October 11"],
+  },
+  {
+    name: "Fiona",
+    surname: "Wellstead",
+    email: "fiona-wellstead@birketts.co.uk",
+    comment: "Head Of Human Resources",
+    firm: "Birketts",
+    personalTouch: "",
+    sentEmailsTime: ["October 11"],
+  },
+  {
     name: "Isabel",
     surname: "Elsey",
     email: "Isabel.Elsey@bclplaw.com",
@@ -249,7 +332,7 @@ const emailList = [
     firm: "BCLP",
     personalTouch:
       "the fact that BCLP has a special Emerging Talent Team dedicated to helping lawyers grow",
-    sentEmailsTime: ["September 5", "September 21"],
+    sentEmailsTime: ["September 5", "September 21", " October 11"],
   },
   {
     name: "Carol",
@@ -260,7 +343,7 @@ const emailList = [
     firm: "BCLP",
     personalTouch:
       "the fact that BCLP has a special Emerging Talent Team dedicated to helping lawyers grow",
-    sentEmailsTime: ["September 5", "September 21"],
+    sentEmailsTime: ["September 5", "September 21", " October 11"],
   },
   {
     name: "Chloe",
@@ -270,7 +353,7 @@ const emailList = [
     firm: "BCLP",
     personalTouch:
       "the fact that BCLP has a special Emerging Talent Team dedicated to helping lawyers grow",
-    sentEmailsTime: ["September 5", "September 21"],
+    sentEmailsTime: ["September 5", "September 21", " October 11"],
   },
   {
     name: "John",
@@ -612,6 +695,41 @@ const emailList = [
     personalTouch:
       "by Forsters' training approach. Trainees not only manage their own files but also have direct client interactions. That's so important!",
     sentEmailsTime: ["September 5", "September, 21"],
+    result: "Contact",
+  },
+  {
+    name: "Sharon",
+    surname: "Tattan",
+    email: "Sharon.Tattan@forsters.co.uk",
+    comment: "Head of Learning and Development",
+    firm: "Forsters",
+    linkedin:
+      "https://www.linkedin.com/in/sharon-tattan-56687237/?originalSubdomain=uk",
+    personalTouch: "",
+    sentEmailsTime: ["October 11"],
+    result: "",
+  },
+  {
+    name: "Sindy",
+    surname: "Suntharesh",
+    email: "sindy.suntharesh@forsters.co.uk",
+    comment: "Learning and Development Advisor",
+    firm: "Forsters",
+    personalTouch: "",
+    sentEmailsTime: ["October 11"],
+    result: "",
+  },
+  {
+    name: "Helen",
+    surname: "Marsh",
+    email: "helen.marsh@forsters.co.uk",
+    comment: "Talent Principal",
+    linkedin:
+      "https://www.linkedin.com/in/helen-marsh-b3a52165?originalSubdomain=uk",
+    firm: "Forsters",
+    personalTouch: "",
+    sentEmailsTime: ["October 11"],
+    result: "",
   },
   {
     name: "Emma",
@@ -644,6 +762,28 @@ const emailList = [
     sentEmailsTime: ["September 5", "September, 21"],
   },
   {
+    name: "Katie",
+    surname: "Hunt",
+    email: "katie.hunt@macfarlanes.com",
+    comment: "Head of Learning & Development",
+    linkedin:
+      "https://www.linkedin.com/in/katie-hunt-b123ab9a/?originalSubdomain=uk",
+    firm: "Macfarlanes",
+    personalTouch: "",
+    sentEmailsTime: ["October 11"],
+  },
+  {
+    name: "Jat",
+    surname: "Bains",
+    email: "jat.bains@macfarlanes.com",
+    comment: "Partner, Chair of the firm's Trainee Solicitor Committee",
+    linkedin: "https://www.linkedin.com/in/jatbains/",
+    firm: "Macfarlanes",
+    personalTouch:
+      "Jat is chair of the firm's Trainee Solicitor Committee, and so he has oversight in relation to all matters related to the recruitment and development of our lawyers of the future, and is a partner champion of our REACH (race, ethnicity and cultural heritage) staff network, a forum for networking and peer support between ethnic minority staff and allies.",
+    sentEmailsTime: ["October 11"],
+  },
+  {
     name: "Klaudija",
     surname: "Brami",
     email: "klaudija.brami@macfarlanes.com",
@@ -651,7 +791,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Adam",
@@ -661,7 +801,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Thomas",
@@ -671,7 +811,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Charlie",
@@ -681,7 +821,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Oliver",
@@ -691,7 +831,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Drew Honeywell",
@@ -712,7 +852,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Joanna",
@@ -722,7 +862,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "James",
@@ -732,7 +872,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Laura",
@@ -742,7 +882,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Christopher",
@@ -752,7 +892,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Alison",
@@ -762,7 +902,7 @@ const emailList = [
     firm: "Macfarlanes",
     personalTouch:
       "the fact that the company has a separate lawtech practice dedicated to developing and integrating legal technologies",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 11"],
   },
   {
     name: "Faisal",
@@ -791,6 +931,7 @@ const emailList = [
     email: "iona.sinclair@mayerbrown.com",
     comment: "Head of Learning and Development",
     firm: "Mayer Brown",
+    linkedin: "https://www.linkedin.com/in/ionasinclaircard/",
     personalTouch:
       "the fact that Mayer Brown's newly qualified associates are so well-prepared that they become targets for recruitment by rival US and Magic Circle firms. It speaks volumes about the level of training here.",
     sentEmailsTime: ["September 5"],
@@ -805,7 +946,7 @@ const emailList = [
     firm: "Mayer Brown",
     personalTouch:
       "the fact that Mayer Brown's newly qualified associates are so well-prepared that they become targets for recruitment by rival US and Magic Circle firms. It speaks volumes about the level of training here.",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 12"],
   },
   {
     name: "Grace",
@@ -815,7 +956,7 @@ const emailList = [
     firm: "Mayer Brown",
     personalTouch:
       "the fact that Mayer Brown's newly qualified associates are so well-prepared that they become targets for recruitment by rival US and Magic Circle firms. It speaks volumes about the level of training here.",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 12"],
   },
   {
     name: "Dana",
@@ -825,7 +966,7 @@ const emailList = [
     firm: "Mayer Brown",
     personalTouch:
       "the fact that Mayer Brown's newly qualified associates are so well-prepared that they become targets for recruitment by rival US and Magic Circle firms. It speaks volumes about the level of training here.",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 12"],
   },
   {
     name: "Dimitri",
@@ -835,7 +976,7 @@ const emailList = [
     firm: "Osborne Clarke",
     personalTouch:
       "the fact that the firm is taking steps to bolster its educational resources by partnering with BPP as its SQE legal education provider",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 12"],
   },
   {
     name: "Alexandra",
@@ -845,7 +986,7 @@ const emailList = [
     firm: "Osborne Clarke",
     personalTouch:
       "the fact that the firm is taking steps to bolster its educational resources by partnering with BPP as its SQE legal education provider",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 12"],
   },
   {
     name: "Helen",
@@ -862,10 +1003,12 @@ const emailList = [
     surname: "Boldero",
     email: "sheona.boldero@penningtonslaw.com",
     comment: "Head of Learning & Development",
+    linkedin:
+      "https://www.linkedin.com/in/sheona-boldero-58176920/?originalSubdomain=uk",
     firm: "Penningtons Manches Cooper LLP",
     personalTouch:
       "the firm's proactive approach to technology; not only are you developing AI and automation tools, but you also offer a six-session 'Legal Tech' course for trainees. Fascinating",
-    sentEmailsTime: ["September 5", "September, 21"],
+    sentEmailsTime: ["September 5", "September, 21", "October 12"],
   },
   {
     name: "Hazar",
@@ -1012,7 +1155,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Jill",
@@ -1022,7 +1165,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Jonathan",
@@ -1032,7 +1175,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Emily",
@@ -1042,7 +1185,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Deepika",
@@ -1052,7 +1195,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Ellie",
@@ -1062,7 +1205,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 22"],
+    sentEmailsTime: ["September 22", "October 12"],
   },
   {
     name: "Louisa",
@@ -1072,7 +1215,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Evy",
@@ -1082,7 +1225,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Amy",
@@ -1092,7 +1235,7 @@ const emailList = [
     firm: "Slaughter and May",
     personalTouch:
       "the fact that trainees at your firm have both partner-delivered training sessions and 1:1 training sessions with associates",
-    sentEmailsTime: ["September 5", "September 22"],
+    sentEmailsTime: ["September 5", "September 22", "October 12"],
   },
   {
     name: "Claire",
@@ -1112,7 +1255,7 @@ const emailList = [
     firm: "Squire Patton Boggs",
     connection:
       "you are working as Co-head of Knowledge Management at Squire Patton Boggs and are responsible for managing and disseminating legal knowledge and educational resources within the firm.",
-    sentEmailsTime: ["September 11", "September 22"],
+    sentEmailsTime: ["September 11", "September 22", "October 12"],
   },
   {
     name: "Giles",
@@ -1122,7 +1265,7 @@ const emailList = [
     firm: "Squire Patton Boggs",
     connection:
       "you are working as Training Principal at Squire Patton Boggs and are responsible for overseeing the educational and training programs for new associates and trainees.",
-    sentEmailsTime: ["September 11", "September 22"],
+    sentEmailsTime: ["September 11", "September 22", "October 12"],
   },
   {
     name: "Julie Arvo",
@@ -1203,6 +1346,18 @@ const emailList = [
     connection:
       "you are working as Partner at Squire Patton Boggs, focusing on financings for healthcare and higher education projects.",
     sentEmailsTime: ["September 11", "September 22"],
+  },
+  {
+    name: "Rachel",
+    surname: "Wevill",
+    email: "rachel.wevill@traverssmith.com",
+    comment: "Head of People Development Travers Smith LLP",
+    linkedin:
+      "https://www.linkedin.com/in/rachel-wevill-75118618/?originalSubdomain=uk",
+    firm: "Travers Smith",
+    connection:
+      "Responsible for the design, delivery and management of Milestone Development Programmes, legal skills programmes, Business Services development programmes and related L&D projects within the firm. ",
+    sentEmailsTime: ["October 12"],
   },
   {
     name: "Nicole",

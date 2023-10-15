@@ -63,6 +63,7 @@ const LESSONS_QUERY = gql`
       name
       open
       type
+      goal
       assignment
       number
       user {
@@ -109,6 +110,7 @@ const LESSONS_QUERY = gql`
         correct
         next
         type
+        goal
       }
       quizes {
         id
@@ -116,6 +118,7 @@ const LESSONS_QUERY = gql`
         answer
         next
         type
+        goal
       }
       forum {
         rating {
@@ -164,11 +167,13 @@ const LESSONS_QUERY = gql`
         steps
         nodeID
         nodeType
+        goal
       }
       texteditors {
         id
         text
         totalMistakes
+        goal
       }
       constructions {
         id
@@ -177,10 +182,12 @@ const LESSONS_QUERY = gql`
         elements
         columnsNum
         answer
+        goal
       }
       documents {
         id
         title
+        goal
       }
       # user {
       #   id

@@ -277,7 +277,7 @@ const PagePurchase = (props) => {
     const res = await createOrder({
       variables: {
         coursePageId: coursePageId,
-        price: 1,
+        price: coursePage.price,
         userId: me.id,
       },
     });

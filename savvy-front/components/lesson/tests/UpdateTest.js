@@ -14,6 +14,7 @@ const UPDATE_TEST_MUTATION = gql`
     $answers: [String!]
     $correct: [Boolean!]
     $comments: [String!]
+    $goal: String
     $complexity: Int
     $type: String
     $ifRight: String
@@ -25,6 +26,7 @@ const UPDATE_TEST_MUTATION = gql`
       answers: $answers
       correct: $correct
       comments: $comments
+      goal: $goal
       complexity: $complexity
       ifRight: $ifRight
       ifWrong: $ifWrong
@@ -34,6 +36,7 @@ const UPDATE_TEST_MUTATION = gql`
       answers
       correct
       type
+      goal
       comments
       complexity
       ifRight
@@ -50,6 +53,15 @@ const UPDATE_TEST_MUTATION = gql`
 
 const Styles = styled.div`
   margin: 20px 0;
+  textarea {
+    padding: 10px;
+    font-size: 1.6rem;
+    font-family: Montserrat;
+    line-height: 1.4;
+    width: 80%;
+    border: 1px solid #c4c4c4;
+    border-radius: 5px;
+  }
 `;
 
 const Answers = styled.div`
@@ -203,6 +215,7 @@ const UpdateTest = (props) => {
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
+  const [goal, setGoal] = useState(props.goal);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
@@ -243,7 +256,7 @@ const UpdateTest = (props) => {
   // console.log("options", options, answers, comments);
   return (
     <Styles>
-      <label for="types">{t("type")}</label>{" "}
+      <h3>Type</h3>
       <select
         name="types"
         id="types"
@@ -253,6 +266,8 @@ const UpdateTest = (props) => {
         <option value="TEST">{t("test")}</option>
         <option value="FORM">{t("form")}</option>
       </select>
+      <h3>Goal</h3>
+      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
       <Comment>
         <DynamicLoadedEditor
           id="question"
@@ -374,6 +389,7 @@ const UpdateTest = (props) => {
           comments: comments,
           complexity,
           type,
+          goal,
           ifRight: ifRight,
           ifWrong: ifWrong,
         }}

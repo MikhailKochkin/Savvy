@@ -53,9 +53,11 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 });
 
 const GeneralEmail = (props) => {
-  const [trigger, setTrigger] = useState(`<p>Dear ${props.name},</p><p></p>`);
+  const [trigger, setTrigger] =
+    useState(`<p>Hello ${props.name},</p><p>I'm Mike, the CEO of BeSavvy Lawyer.</p><p>We specialize in:</p><ul><li>Cutting law firms' training costs by 25%;</li><li>Accelerating the time it takes for trainee lawyers / associates <b>to start billable work by 67%</b>.</li></ul><p>How do we do it?</p><ul><li>We empower law firms to provide AI-powered simulation training that collects comprehensive data on how your lawyers develop practical skills.</li><li>Your Learning and Development team can use this data to accurately determine when your lawyers can be given billable work (and what kind of billable work).</li></ul><p>Check out our demo to see how it works: <a href="https://besavvy.app/demo?lang=eng" target="_blank">BeSavvy Demo</a>.</p><p>If this aligns with your goals, I'd love to discuss how we can specifically help your firm in a brief call with your L&D team.</p><p>Best regards,</p>
+`);
   const [subject, setSubject] = useState(
-    "Boost billing hours with simulation tech"
+    "Enhance law firm training with simulation tech"
   );
 
   const myCallback2 = (dataFromChild) => {

@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-// import Button from "@material-ui/core/Button";
-
-// import { withStyles } from "@material-ui/core/styles";
-// import CircularProgress from "@material-ui/core/CircularProgress";
 import UpdateClause from "./UpdateClause";
 import parse from "html-react-parser";
+import { useRouter } from "next/router";
+import { InfinitySpin, TailSpin } from "react-loader-spinner";
 
 const Styles = styled.div`
   margin-top: 2%;
@@ -34,24 +32,25 @@ const BlueButton = styled.button`
 `;
 
 const Frame = styled.div`
-  border: 1px solid #c4c4c4;
+  border: 2px solid;
+  border-color: ${(props) => props.inputColor};
   border-radius: 10px;
+  background: #fff;
   padding: 0 2%;
-  margin: 2% 0;
+  margin: 15px 0;
   .com {
-    border-top: 1px solid #c4c4c4;
+    border-top: 1px solid #f3f3f3;
   }
 `;
 
 const Comments = styled.div`
-  display: ${(props) => (props.display ? "block" : "none")};
-  border: 1px solid #c4c4c4;
+  display: block;
+  border: 2px solid #f3f3f3;
   border-radius: 10px;
   margin-bottom: 3%;
   padding: 2% 4%;
   p {
-    font-size: 1.8rem;
-    font-weight: bold;
+    font-size: 1.6rem;
   }
   .comment {
     margin: 2% 0;
@@ -63,6 +62,7 @@ const Comments = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   div {
     margin: 1% 0;
     font-size: 1.6rem;
@@ -73,21 +73,32 @@ const Buttons = styled.div`
 `;
 
 const Progress = styled.div`
-  display: ${(props) => (props.display ? "flex" : "none")};
+  display: flex;
   flex-direction: row;
   justify-content: center;
   width: 100%;
   margin: 2% 0 2% 0;
 `;
 
-// const StyledButton = withStyles({
-//   root: {
-//     margin: "1% 0",
-//     marginRight: "2%",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//   },
-// })(Button);
+const SimpleButton = styled.button`
+  /* width: 230px; */
+  height: 40px;
+  background: none;
+  padding: 5px 30px;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
@@ -99,8 +110,14 @@ const Clause = (props) => {
   const [text, setText] = useState("");
   const [show, setShow] = useState(false);
   const [comments, setComments] = useState();
+  const [result, setResult] = useState();
   const [checked, setChecked] = useState(false);
   const [progress, setProgress] = useState(false);
+  const [inputColor, setInputColor] = useState("#f3f3f3");
+  const [correct, setCorrect] = useState(""); // is the answer by the student correct?
+  const [AIImprovement, setAIImprovement] = useState("");
+  const [generatingImprovement, setGeneratingImprovement] = useState(null); // give the hint to the student
+  const router = useRouter();
 
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
@@ -108,34 +125,80 @@ const Clause = (props) => {
   };
 
   const checkAnswer = async (e) => {
-    if (!checked) {
-      setProgress(true);
-      props.getDraft(text, props.index);
-      setShow(true);
-      let data = {
-        answer: text,
-        model: props.sample,
-        keywords: props.keywords,
-      };
-      // http://localhost:5000/
-      // https://dry-plains-91452.herokuapp.com/
-      const r = await fetch("https://dry-plains-91452.herokuapp.com/text", {
-        method: "POST", // or 'PUT'
+    setChecked(true);
+    setProgress(true);
+    props.getDraft(text, props.index);
+    setShow(true);
+    let data1 = {
+      answer1: text,
+      answer2: props.sample,
+    };
+
+    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data1),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (parseFloat(res.res) > 65) {
+          setCorrect("true");
+          setInputColor("rgba(50, 172, 102, 0.25)");
+        } else if (parseFloat(res.res) > 55 && parseFloat(res.res) <= 65) {
+          setCorrect("looks_true");
+          setInputColor("#ffd166");
+        } else {
+          setCorrect("false");
+          setInputColor("rgba(222, 107, 72, 0.5)");
+          // if (typeof res.comment === "string") {
+
+          // }
+        }
+      })
+      .catch((err) => console.log(err));
+    setProgress(false);
+  };
+
+  const getImprovement = async (event) => {
+    event.preventDefault();
+    setGeneratingImprovement(true);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          setComments(res);
-          setProgress(false);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      alert("Вы уже проверили этот пункт!");
+        body: JSON.stringify({
+          prompt: `
+          You are a mentor and a teacher. You ask your student to write a text on the following topic: ${commentary}
+          The correct answer is:  ${props.sample}. 
+          Your student's text is: ${text}
+          Explain in 3 sentences what the student's answer is missing in comparison to the correct answer.
+          Answer in ${
+            router.locale == "ru" ? "Russian" : "English"
+          }Make the answer at least 2 sentences long.`,
+        }),
+      });
+
+      if (response.status !== 200) {
+        throw (
+          (await response.json()).error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
+      }
+      const data = await response.json();
+      if (data.result.content) {
+        setAIImprovement(data.result.content);
+      } else {
+        setAIImprovement("Sorry, you are on your own");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
-    setChecked(true);
+    setGeneratingImprovement(false);
   };
 
   const {
@@ -151,118 +214,48 @@ const Clause = (props) => {
   } = props;
   return (
     <Styles size={story}>
+      {props.me.id === props.userID && (
+        <button onClick={(e) => setType(type === "update" ? "test" : "update")}>
+          Update section
+        </button>
+      )}
       {type === "test" && (
         <>
-          <div>
+          {/* <div>
             {" "}
             Section {index}.{parse(commentary)}
-          </div>
-          <Frame>
+          </div> */}
+          <div>{parse(commentary)}</div>
+          <Frame inputColor={inputColor}>
             <DynamicLoadedEditor getEditorText={myCallback} />
           </Frame>
-          <Comments display={show}>
-            <p>Comments:</p>
-            <Progress display={progress}>
-              {/* <CircularProgress /> */}
-              Loading...
+          {(progress || generatingImprovement) && (
+            <Progress>
+              <InfinitySpin width="200" color="#2E80EC" />
             </Progress>
-            {comments &&
-              (comments > 0.65 ? (
-                <>
-                  <div>
-                    Класс, нам кажется, у вас получилось отлично! Двигаемся
-                    дальше. Составьте все части документа, чтобы увидеть
-                    вариант, составленный автором курса.
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div>
-                    Этот текст еще можно доработать. Опирайтесь на следующие
-                    слова / идеи:
-                  </div>
-                  <div>
-                    {keywords.map((el) => (
-                      <li>{el}</li>
-                    ))}
-                  </div>
-                  <div>
-                    Составьте все части документа, чтобы увидеть вариант автора
-                    курса.
-                  </div>
-                </>
-              ))}
-            {/* {comments.map(com => {
-          if (Object.keys(com)[0] === "spellcheck") {
-            return Object.values(com)[0].length > 0 ? (
-              <>
-                <div className="comment">
-                  Возможно, вы допустили ошибки в следующих словах:{" "}
-                  {Object.values(com)[0].map(el => (
-                    <li>{el}</li>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="comment">Мы не нашли ошибок в словах.</div>
-            );
-          } else if (Object.keys(com)[0] === "enough_keywords") {
-            return Object.values(com)[0] === false ? (
-              <>
-                <div className="comment">
-                  Используйте больше специальных выражений:{" "}
-                  {keywords.map(el => (
-                    <li>{el}</li>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="comment">
-                Вы используете юридическую лекссику! Молодец!
-              </div>
-            );
-          } else if (Object.keys(com)[0] === "style") {
-            return Object.values(com)[0].length > 0 ? (
-              <>
-                <div className="comment">
-                  Обратите внимание на следующие стилистические недостатки:{" "}
-                  {Object.values(com)[0].map(el => (
-                    <li>{el.reason}</li>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="comment">Мы не нашли стилистических проблем.</div>
-            );
-          } else if (Object.keys(com)[0] === "paragraph") {
-            return Object.values(com)[0].length > 0 ? (
-              <>
-                <div>
-                  Обратите внимание на следующие структурные недостатки:{" "}
-                  {Object.values(com)[0].map(el => (
-                    <li>
-                      {el.comment} Sentence number: {el.sentence_number}
-                    </li>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div>Мы не нашли структурных проблем.</div>
-            );
-          }
-        })} */}
-          </Comments>
+          )}
+          {checked && AIImprovement && <Comments>{AIImprovement}</Comments>}
           <Buttons>
-            {/* {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>} */}
-            {props.me.id === props.userID && (
-              <button onClick={(e) => setType("update")}>Change</button>
+            <SimpleButton onClick={(e) => checkAnswer(e)}>
+              Check section
+            </SimpleButton>
+            {checked && (
+              <SimpleButton onClick={(e) => getImprovement(e)}>
+                How can I improve my answer?
+              </SimpleButton>
+            )}
+            {checked && (
+              <SimpleButton onClick={(e) => getImprovement(e)}>
+                What am I missing?
+              </SimpleButton>
             )}
             {index !== total ? (
               <BlueButton onClick={(e) => getNumber(index + 1)}>
-                Next
+                Next section
               </BlueButton>
             ) : (
-              <div>The end</div>
+              // <div>The end</div>
+              <div></div>
             )}
           </Buttons>
         </>
@@ -276,7 +269,6 @@ const Clause = (props) => {
             commentary={commentary}
             keywords={keywords}
           />
-          {<button onClick={(e) => setType("test")}>Update</button>}
         </>
       )}
     </Styles>

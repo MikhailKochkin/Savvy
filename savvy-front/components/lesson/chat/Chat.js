@@ -322,6 +322,7 @@ const Chat = (props) => {
                         <Reaction
                           reactions={m.reactions}
                           me={me}
+                          m={m}
                           author={author}
                           initialQuestion={m.text}
                         />
@@ -387,6 +388,7 @@ const Chat = (props) => {
                       reactions={m.reactions}
                       me={me}
                       author={author}
+                      m={m}
                       author_image={m.image}
                       author_name={m.name}
                       initialQuestion={m.text}

@@ -33,23 +33,6 @@ const LessonsInfo = styled.div`
   }
 `;
 
-const Button = styled.button`
-  width: 292px;
-  height: 48px;
-  /* padding: 2%; */
-  font-family: Montserrat;
-  border: 1px solid #252f3f;
-  background: none;
-  margin-bottom: 10px;
-  outline: 0;
-  cursor: pointer;
-  font-size: 1.8rem;
-  transition: ease-in 0.2s;
-  &:hover {
-    background-color: #e3e4ec;
-  }
-`;
-
 const ProgramSyllabus = (props) => {
   const [page, setPage] = useState("lessons");
   const [open, setOpen] = useState(6);
@@ -67,9 +50,17 @@ const ProgramSyllabus = (props) => {
             <LessonsInfo>
               <h2>{t("what_u_will_learn")}</h2>
               <div>
-                {coursePages.map((c, i) => (
-                  <Course c={c} i={i} />
-                ))}
+                {console.log(
+                  "course",
+                  coursePages.sort(
+                    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+                  )
+                )}
+                {coursePages
+                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                  .map((c, i) => (
+                    <Course c={c} i={i} />
+                  ))}
               </div>
               {/* {page === "lessons" && (
                 <>

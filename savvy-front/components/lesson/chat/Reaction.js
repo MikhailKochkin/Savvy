@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import { initial } from "lodash";
 import { useTranslation } from "next-i18next";
@@ -113,11 +113,15 @@ const IconBlock = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+
   .icon {
     margin: 5px;
     border-radius: 50%;
     height: 55px;
     width: 55px;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
     object-fit: cover;
     display: flex;
     flex-direction: row;
@@ -180,13 +184,29 @@ const StyledButton = styled.div`
   }
 `;
 
+const Icon = styled.div`
+  margin: 5px;
+  border-radius: 50%;
+  background: #2f80ed; /* fallback for old browsers */
+
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  height: 55px;
+  width: 55px;
+  object-fit: cover;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Reaction = (props) => {
   const [usedReactions, setUsedReactions] = useState([]);
   const [reaction, setReaction] = useState(undefined);
   const [leftReactions, setLeftReactions] = useState(props.reactions);
-  const { me, author, initialQuestion } = props;
+  const { me, author, m } = props;
   const { t } = useTranslation("lesson");
-
   return (
     <Styles>
       <>
@@ -194,13 +214,17 @@ const Reaction = (props) => {
           <div className="used">
             <Message key={i} time={i} className="student">
               <IconBlock>
-                {me && me.image ? (
-                  <img className="icon" src={me.image} />
-                ) : me.surname ? (
-                  `${me.name[0]}${me.surname[0]}`
-                ) : (
-                  `${me.name[0]}${me.name[1]}`
-                )}
+                <Icon className="icon2" background={m.author}>
+                  {m.image && <img className="icon" src={m.image} />}
+                  {!m.image &&
+                    (me && me.image ? (
+                      <img className="icon" src={me.image} />
+                    ) : me.surname ? (
+                      `${me.name[0]}${me.surname[0]}`
+                    ) : (
+                      `${me.name[0]}${me.name[1]}`
+                    ))}
+                </Icon>
                 <div className="name">{me.name}</div>
               </IconBlock>
               <div className="student_text">{parse(lr.reaction)}</div>
@@ -246,13 +270,17 @@ const Reaction = (props) => {
             <br />
             <Message className="student">
               <IconBlock>
-                {me && me.image ? (
-                  <img className="icon" src={me.image} />
-                ) : me.surname ? (
-                  `${me.name[0]}${me.surname[0]}`
-                ) : (
-                  `${me.name[0]}${me.name[1]}`
-                )}
+                <Icon className="icon2" background={m.author}>
+                  {m.image && <img className="icon" src={m.image} />}
+                  {!m.image &&
+                    (me && me.image ? (
+                      <img className="icon" src={me.image} />
+                    ) : me.surname ? (
+                      `${me.name[0]}${me.surname[0]}`
+                    ) : (
+                      `${me.name[0]}${me.name[1]}`
+                    ))}
+                </Icon>
                 {/* <img className="icon" src="../../static/flash.svg" /> */}
                 <div className="name">{me.name}</div>
               </IconBlock>
@@ -284,13 +312,17 @@ const Reaction = (props) => {
         {leftReactions.length > 0 && (
           <Message className="student">
             <IconBlock>
-              {me && me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              )}
+              <Icon className="icon2" background={m.author}>
+                {m.image && <img className="icon" src={m.image} />}
+                {!m.image &&
+                  (me && me.image ? (
+                    <img className="icon" src={me.image} />
+                  ) : me.surname ? (
+                    `${me.name[0]}${me.surname[0]}`
+                  ) : (
+                    `${me.name[0]}${me.name[1]}`
+                  ))}
+              </Icon>
               <div className="name">{me.name}</div>
             </IconBlock>
             <WaitingButton>

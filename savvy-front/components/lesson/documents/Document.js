@@ -30,7 +30,7 @@ const CREATE_DOCUMENTRESULT_MUTATION = gql`
 
 const Styles = styled.div`
   margin: 80px 0;
-  width: ${(props) => (props.story ? "50%" : "100%")};
+  width: ${(props) => (props.story ? "640px" : "100%")};
   font-size: 1.6rem;
 `;
 
@@ -54,7 +54,7 @@ const Advice = styled.div`
 `;
 
 const Buttons = styled.div`
-  margin-top: 3%;
+  margin-top: 60px;
 `;
 
 const BlueButton = styled.button`
@@ -77,14 +77,23 @@ const BlueButton = styled.button`
   }
 `;
 
-// const StyledButton = withStyles({
-//   root: {
-//     margin: "1% 0",
-//     marginRight: "2%",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//   },
-// })(Button);
+const SimpleButton = styled.button`
+  width: 230px;
+  height: 40px;
+  background: none;
+  padding: 5px 0;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
 
 const Document = (props) => {
   const [clausesTotal, setClauses] = useState(1);
@@ -164,6 +173,13 @@ const Document = (props) => {
       >
         {(createDocumentResult, { loading, error }) => (
           <>
+            {me && me.id === user ? (
+              <DeleteDocument
+                id={me.id}
+                documentID={documentID}
+                lessonID={lessonID}
+              />
+            ) : null}
             {/* <Advice size={story}>
               Каждый пункт должен состоять <b>только из 1 абзаца. </b>
               Пункты проверяются в 2 этапа: сначала нажмите на кнопку
@@ -204,7 +220,7 @@ const Document = (props) => {
                   alert("We saved your work. You can move on.");
                 }}
               >
-                Save
+                Save document
               </BlueButton>
               {/* <StyledButton
                 variant="contained"
@@ -216,14 +232,6 @@ const Document = (props) => {
               >
                 Print
               </StyledButton> */}
-
-              {me && me.id === user ? (
-                <DeleteDocument
-                  id={me.id}
-                  documentID={documentID}
-                  lessonID={lessonID}
-                />
-              ) : null}
             </Buttons>
             {reveal && <div>{clauses.map((cl) => parse(cl.sample))}</div>}
           </>

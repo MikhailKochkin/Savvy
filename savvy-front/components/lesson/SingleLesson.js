@@ -20,6 +20,7 @@ const SINGLE_LESSON_QUERY = gql`
       number
       description
       open
+      goal
       type
       totalPoints
       hasSecret
@@ -49,6 +50,7 @@ const SINGLE_LESSON_QUERY = gql`
       testPractices {
         id
         tasks
+        goal
         tasksNum
         intro
         successText
@@ -107,6 +109,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         question
         type
+        goal
         complexity
         check
         ifRight
@@ -123,6 +126,7 @@ const SINGLE_LESSON_QUERY = gql`
       documents {
         id
         title
+        goal
         complexity
         user {
           id
@@ -208,6 +212,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         answers
         correct
+        goal
         type
         comments
         complexity
@@ -223,6 +228,7 @@ const SINGLE_LESSON_QUERY = gql`
       problems {
         id
         text
+        goal
         nodeID
         complexity
         steps
@@ -236,6 +242,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
+        goal
         complexity
         elements
         columnsNum
@@ -251,6 +258,7 @@ const SINGLE_LESSON_QUERY = gql`
       texteditors {
         id
         name
+        goal
         complexity
         text
         totalMistakes

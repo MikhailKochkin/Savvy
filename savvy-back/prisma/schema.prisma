@@ -163,6 +163,7 @@ model ConfUser {
 model Construction {
   id                  String               @id @default(cuid()) @db.VarChar(30)
   name                String
+  goal                String?
   lessonID            String               @db.VarChar(30)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
@@ -286,6 +287,7 @@ model CourseVisit {
 model Document {
   id              String           @id @default(cuid()) @db.VarChar(30)
   title           String
+  goal            String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   userId          String           @db.VarChar(30)
@@ -463,6 +465,7 @@ model LegalPortfolio {
 model Lesson {
   id                  String               @id @default(cuid()) @db.VarChar(30)
   text                String
+  goal                String?
   openSize            Int?                 @default(2)
   coursePageID        String               @db.VarChar(30)
   createdAt           DateTime             @default(now())
@@ -566,6 +569,7 @@ model NewTest {
   updatedAt   DateTime     @updatedAt
   type        String?      @default("TEST")
   next        Json?
+  goal        String?
   ifRight     String?
   ifWrong     String?
   question    String[]
@@ -699,6 +703,7 @@ model Problem {
   hints          String?
   solution       String?
   answer         String?
+  goal           String?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   lessonID       String          @db.VarChar(30)
@@ -773,6 +778,7 @@ model Quiz {
   id          String       @id @default(cuid()) @db.VarChar(30)
   question    String
   answer      String
+  goal        String?
   lessonID    String?      @db.VarChar(30)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -969,6 +975,7 @@ model TestPractice {
   id                 String               @id @default(cuid())
   text               String?
   tasksNum           Int
+  goal               String?
   tasks              String[]
   userId             String?
   lessonId           String?
@@ -1017,6 +1024,7 @@ model TextEditor {
   id                String             @id @default(cuid()) @db.VarChar(30)
   name              String
   text              String
+  goal              String?
   lessonID          String             @db.VarChar(30)
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -1175,90 +1183,6 @@ model UserLevel {
   user             User?
   growthAreas      GrowthArea[] @relation("GrowthAreaToUserLevel")
 }
-
-// model AuthorsCoursePage {
-//   A String @db.VarChar(30)
-//   B String @db.VarChar(30)
-
-//   @@unique([A, B], map: "_AuthorsCoursePage_AB_unique")
-//   @@index([B], map: "_AuthorsCoursePage_B_index")
-//   @@map("_AuthorsCoursePage")
-// }
-
-// model CareerTrackUnitToCoursePage {
-//   A String @db.VarChar(30)
-//   B String @db.VarChar(30)
-
-//   @@unique([A, B], map: "_CareerTrackUnitToCoursePage_AB_unique")
-//   @@index([B], map: "_CareerTrackUnitToCoursePage_B_index")
-//   @@map("_CareerTrackUnitToCoursePage")
-// }
-
-// model CoursePageForCareer {
-//   A String @db.VarChar(30)
-//   B String @db.VarChar(30)
-
-//   @@unique([A, B], map: "_CoursePageForCareer_AB_unique")
-//   @@index([B], map: "_CoursePageForCareer_B_index")
-//   @@map("_CoursePageForCareer")
-// }
-
-// model CoursePageToProgram {
-//   A       String  @db.VarChar(30)
-//   B       String
-//   Program Program @relation(fields: [B], references: [id], onDelete: Cascade)
-
-//   @@unique([A, B], map: "_CoursePageToProgram_AB_unique")
-//   @@index([B], map: "_CoursePageToProgram_B_index")
-//   @@map("_CoursePageToProgram")
-// }
-
-// model ExamAnswerToLegalPortfolio {
-//   A String @db.VarChar(30)
-//   B String @db.VarChar(30)
-
-//   @@unique([A, B], map: "_ExamAnswerToLegalPortfolio_AB_unique")
-//   @@index([B], map: "_ExamAnswerToLegalPortfolio_B_index")
-//   @@map("_ExamAnswerToLegalPortfolio")
-// }
-
-// model GrowthAreaToUserLevel {
-//   A          String
-//   B          String     @db.VarChar(30)
-//   GrowthArea GrowthArea @relation(fields: [A], references: [id], onDelete: Cascade)
-
-//   @@unique([A, B], map: "_GrowthAreaToUserLevel_AB_unique")
-//   @@index([B], map: "_GrowthAreaToUserLevel_B_index")
-//   @@map("_GrowthAreaToUserLevel")
-// }
-
-// model PointATests {
-//   A String @db.VarChar(30)
-//   B String @db.VarChar(30)
-
-//   @@unique([A, B], map: "_PointATests_AB_unique")
-//   @@index([B], map: "_PointATests_B_index")
-//   @@map("_PointATests")
-// }
-
-// model joinedTeams {
-//   A    String
-//   B    String @db.VarChar(30)
-//   Team Team   @relation(fields: [A], references: [id], onDelete: Cascade)
-
-//   @@unique([A, B], map: "_joinedTeams_AB_unique")
-//   @@index([B], map: "_joinedTeams_B_index")
-//   @@map("_joinedTeams")
-// }
-
-// model UserSubjects {
-//   A String @db.VarChar(30)
-//   B String @db.VarChar(30)
-
-//   @@unique([A, B], map: "_UserSubjects_AB_unique")
-//   @@index([B], map: "_UserSubjects_B_index")
-//   @@map("_UserSubjects")
-// }
 
 enum CheckType {
   WORD

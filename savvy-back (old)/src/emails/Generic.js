@@ -469,9 +469,9 @@ const GenericEmail = (text) => `
                     <td class="content-cell">
                       <div class="f-fallback">
                           ${text}
-                        <p><br />Misha from BeSavvy</p>
+                        <p><br />Миша из BeSavvy</p>
                         <p>
-                          <strong>P.S.</strong> Feel free to respond to this letter. I will be happy to help any way possible.
+                          <strong>P.S.</strong> Если хотите отменить рассылку, просто пришлите в ответ слово "отписаться".
                         </p>
                         <!-- Sub copy -->
                       </div>

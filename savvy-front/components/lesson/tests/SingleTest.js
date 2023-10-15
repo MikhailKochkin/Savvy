@@ -814,6 +814,7 @@ const SingleTest = (props) => {
           mes={mes}
           type={props.type}
           next={props.next}
+          goal={props.goal}
           ifRight={ifRight}
           ifWrong={ifWrong}
           notes={props.notes}

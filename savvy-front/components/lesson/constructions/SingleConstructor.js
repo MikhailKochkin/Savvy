@@ -391,6 +391,7 @@ const SingleConstructor = (props) => {
           hint={construction.hint}
           name={construction.name}
           type={construction.type}
+          goal={construction.goal}
           variants={construction.variants}
           answer={construction.answer}
           complexity={complexity}

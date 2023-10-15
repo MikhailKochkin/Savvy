@@ -230,6 +230,68 @@ const SendButton = styled.div`
   }
 `;
 
+const TopBox = styled.div`
+  border-bottom: 3px solid #f2f6f9;
+  border-top: 3px solid #f2f6f9;
+  background: #f2f6f9;
+  min-height: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+  div {
+    padding: 0 5px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .div1 {
+    width: 20%;
+  }
+  .div2 {
+    width: 9%;
+  }
+  .div3 {
+    width: 9%;
+  }
+  .div4 {
+    width: 9%;
+  }
+  .div5 {
+    width: 20%;
+  }
+  .div6 {
+    width: 20%;
+  }
+  .div7 {
+    width: 13%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 850px) {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+    div {
+      padding: 8px 15px;
+    }
+    .div2 {
+      border-left: 1px solid white;
+      border-top: 1px solid #edefed;
+    }
+    .div3 {
+      border-left: 1px solid white;
+      border-top: 1px solid #edefed;
+    }
+  }
+`;
+
 const Tags = styled.div`
   display: flex;
   flex-direction: row;
@@ -728,22 +790,21 @@ const Person = (props) => {
           {page === "results" && (
             <>
               <>
-                <Box>
-                  <div className="div1">Name</div>
+                <TopBox>
+                  <div className="div1">Simulator Name</div>
                   <div className="div2">Progress</div>
                   <div className="div3">Result</div>
                   <div className="div4">Visits</div>
                   <div className="div5">First action</div>
                   <div className="div6">Last action</div>
                   <div className="div7"></div>
-                </Box>
+                </TopBox>
               </>
               {[...lessons]
                 .filter((l) => l.type !== "HIDDEN")
                 .sort((a, b) => (a.number > b.number ? 1 : -1))
                 .map((lesson, index) => {
                   let res = maxes.filter((r) => r.lesson.id === lesson.id);
-                  console.log("res", res);
                   return (
                     <LessonData
                       lesson={lesson}

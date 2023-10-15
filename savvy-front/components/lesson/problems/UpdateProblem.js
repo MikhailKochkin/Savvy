@@ -19,17 +19,20 @@ const UPDATE_PROBLEM_MUTATION = gql`
     $text: String
     $complexity: Int
     $steps: ProblemStructure
+    $goal: String
   ) {
     updateProblem(
       id: $id
       text: $text
       steps: $steps
       complexity: $complexity
+      goal: $goal
     ) {
       id
       text
       nodeID
       steps
+      goal
       complexity
       nodeType
       user {
@@ -87,6 +90,12 @@ const Styles = styled.div`
   }
   .editor_container {
     width: 660px;
+    textarea {
+      padding: 10px;
+      font-size: 1.6rem;
+      font-family: Montserrat;
+      line-height: 1.4;
+    }
   }
   .canvas_container {
     width: 100%;
@@ -136,6 +145,8 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 
 const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
+  const [goal, setGoal] = useState(props.goal);
+
   const [updatedSteps, setUpdatedSteps] = useState(
     props.steps && props.steps.problemItems.length > 0
       ? props.steps.problemItems
@@ -189,10 +200,10 @@ const UpdateProblem = (props) => {
           </select>
         </Complexity> */}
         <h3>HTML Editor</h3>
-
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
+        <h3>Problem Goal</h3>
+        <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
         <h3>Text Editor</h3>
-
         <DynamicLoadedEditor
           getEditorText={getText}
           value={text}
@@ -241,6 +252,7 @@ const UpdateProblem = (props) => {
           id,
           text,
           complexity,
+          goal,
           steps: {
             problemItems: [...updatedSteps].map(
               ({ position, content, ...keepAttrs }) => keepAttrs

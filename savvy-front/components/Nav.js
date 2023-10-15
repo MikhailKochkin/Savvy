@@ -307,7 +307,7 @@ const Nav = (props) => {
               <CourseMenu>
                 <Link href="/">
                   <div className="logo">
-                    <img src="static/long_logo.svg" />
+                    <img src="/static/long_logo.svg" />
                   </div>
                 </Link>
               </CourseMenu>
@@ -411,7 +411,7 @@ const Nav = (props) => {
                 {/* <div>BeSavvy</div> */}
                 <div className="mini_logo">
                   {/* BeSavvy Lawyer */}
-                  <img src="static/long_logo.svg" />
+                  <img src="/static/long_logo.svg" />
                 </div>
               </Span>
               <div className="logo">

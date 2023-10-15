@@ -450,9 +450,16 @@ const Action = (props) => {
 
   let total_lessons_number = 0;
   if (program) {
-    total_lessons_number = program.coursePages.reduce(function (acc, obj) {
-      return acc + obj.lessons.length;
-    }, 0);
+    const total_lessons_number = program.coursePages.reduce(function (
+      acc,
+      obj
+    ) {
+      return (
+        acc +
+        obj.lessons.filter((les) => les.type.toLowerCase() !== "hidden").length
+      );
+    },
+    0);
   }
 
   let currency_symbol;

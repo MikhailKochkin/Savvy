@@ -17,6 +17,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $number: Int
     $name: String
     $text: String
+    $goal: String
     $description: String
     $type: String
     $change: String
@@ -31,6 +32,7 @@ const UPDATE_LESSON_MUTATION = gql`
       number: $number
       name: $name
       text: $text
+      goal: $goal
       description: $description
       type: $type
       change: $change
@@ -263,6 +265,7 @@ const UpdateLesson = (props) => {
   const [type, setType] = useState(props.lesson.type);
   const [assignment, setAssignment] = useState(props.lesson.assignment);
   const [text, setText] = useState(props.lesson.text);
+  const [goal, setGoal] = useState(props.lesson.goal);
   const [description, setDescription] = useState(props.lesson.description);
   const [hasSecret, setHasSecret] = useState(props.lesson.hasSecret);
   const [totalPoints, setTotalPoints] = useState(props.lesson.totalPoints);
@@ -339,6 +342,18 @@ const UpdateLesson = (props) => {
               name="number"
               defaultValue={number}
               onChange={(e) => setNumber(parseInt(e.target.value))}
+            />
+          </div>
+        </Row>
+        <Row>
+          <div className="description">{t("set_goal")}</div>
+          <div className="input">
+            <input
+              type="text"
+              id="goal"
+              name="goal"
+              defaultValue={goal}
+              onChange={(e) => setGoal(e.target.value)}
             />
           </div>
         </Row>
@@ -485,6 +500,7 @@ const UpdateLesson = (props) => {
             description,
             type,
             change,
+            goal,
             assignment,
             challenge_num: parseInt(challenge_num),
             open,

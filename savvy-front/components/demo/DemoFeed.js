@@ -749,8 +749,6 @@ const CustomProgressBar = ({ myResult, lessonItems }) => {
     parseInt(lesson_length - (myResult + 1) * time_coef) < 0
       ? 0
       : parseInt(lesson_length - (myResult + 1) * time_coef);
-  console.log("progress", progress);
-  console.log("time_left", time_left);
 
   const router = useRouter();
   const { t } = useTranslation("lesson");

@@ -8,6 +8,7 @@ const Lesson = objectType({
     t.model.number();
     t.model.text();
     t.model.type();
+    t.model.goal();
     t.model.description();
     t.model.open();
     t.model.hasSecret();

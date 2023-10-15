@@ -835,6 +835,7 @@ const SingleTextEditor = (props) => {
         <UpdateTextEditor
           lessonID={lessonID}
           id={props.textEditor.id}
+          goal={props.textEditor.goal}
           text={text}
           complexity={complexity}
           totalMistakes={total}

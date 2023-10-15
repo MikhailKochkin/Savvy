@@ -42,6 +42,7 @@ const SINGLE_PROGRAM_QUERY = gql`
       coursePages {
         id
         title
+        createdAt
         numInCareerTrack
         user {
           id

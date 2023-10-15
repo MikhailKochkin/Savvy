@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 import moment from "moment";
-import Loading from "../Loading";
 import { useLazyQuery, gql, useMutation } from "@apollo/client";
+import { TailSpin } from "react-loader-spinner";
+
+import Loading from "../Loading";
 import CreateFeedback from "./CreateFeedback";
 import TestResult from "./results/TestResult";
 import Note from "../lesson/notes/Note";
-
 import Chat from "../lesson/chat/Chat";
 import Shots from "../lesson/shots/Shots";
-
 import TexteditorResult from "./results/TexteditorResult";
 import QuizResult from "./results/QuizResult";
 import ProblemResult from "./results/ProblemResult";
@@ -28,6 +28,7 @@ const GET_RESULTS = gql`
         test {
           id
           question
+          goal
         }
         student {
           id
@@ -68,6 +69,7 @@ const GET_RESULTS = gql`
         quiz {
           id
           type
+          goal
         }
         answer
         createdAt
@@ -84,6 +86,7 @@ const GET_RESULTS = gql`
         }
         textEditor {
           id
+          goal
         }
         createdAt
       }
@@ -96,6 +99,7 @@ const GET_RESULTS = gql`
         }
         problem {
           id
+          goal
         }
         student {
           id
@@ -123,6 +127,7 @@ const GET_RESULTS = gql`
         }
         construction {
           id
+          goal
         }
       }
       documentResults {
@@ -132,6 +137,7 @@ const GET_RESULTS = gql`
         }
         document {
           id
+          goal
         }
         answers
         drafts
@@ -187,34 +193,43 @@ const Box = styled.div`
 
   div {
     padding: 0 5px;
-    font-size: 1.4rem;
-  }
-  .div1 {
-    width: 30%;
-  }
-  .div2 {
-    width: 9%;
-  }
-  .div3 {
-    width: 9%;
-  }
-  .div4 {
-    width: 9%;
-  }
-  .div5 {
-    width: 17%;
-  }
-  .div6 {
-    width: 17%;
-  }
-  .div7 {
-    width: 9%;
+    font-size: 1.6rem;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
   }
-
+  .div1 {
+    width: 20%;
+    border-right: 3px solid #f2f6f9;
+  }
+  .div2 {
+    width: 9%;
+    border-right: 3px solid #f2f6f9;
+  }
+  .div3 {
+    width: 9%;
+    border-right: 3px solid #f2f6f9;
+  }
+  .div4 {
+    width: 9%;
+    border-right: 3px solid #f2f6f9;
+  }
+  .div5 {
+    width: 20%;
+    border-right: 3px solid #f2f6f9;
+  }
+  .div6 {
+    width: 20%;
+    border-right: 3px solid #f2f6f9;
+  }
+  .div7 {
+    width: 13%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
   @media (max-width: 850px) {
     display: flex;
     flex-direction: column;
@@ -252,7 +267,50 @@ const SimpleButton = styled.button`
 `;
 
 const Report = styled.div`
-  width: 50%;
+  width: 100%;
+  border: 2px solid #f2f6f9;
+  border-radius: 20px;
+  padding: 15px;
+  background: #fff;
+`;
+
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  margin: 0 0 2% 0;
+`;
+
+const IntroData = styled.div`
+  width: 60%;
+  margin: 30px 0;
+  font-size: 1.6rem;
+  h4 {
+    font-size: 2rem;
+    margin: 20px 0;
+  }
+  button {
+    width: 200px;
+    height: 35px;
+    background: none;
+    padding: 5px 0;
+    margin: 30px 0;
+
+    border: 2px solid #69696a;
+    border-radius: 5px;
+    font-family: Montserrat;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #323334;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background: #f4f4f4;
+    }
+  }
 `;
 
 const SimpleButton2 = styled.button`
@@ -289,11 +347,12 @@ const LessonData = (props) => {
   const [reportData, setReportData] = useState();
   const [report, setReport] = useState("");
   const [generating, setGenerating] = useState(false);
-
   const { index, lesson, student, coursePageID, res } = props;
   moment.locale("ru");
+
   const [getData, { loading, error, data }] = useLazyQuery(GET_RESULTS);
   const [checkAssignment, { data: data1 }] = useMutation(CHECK_MUTATION);
+
   useEffect(() => {
     let total = lesson.structure
       ? lesson.structure.lessonItems.reduce((total, item) => {
@@ -346,6 +405,10 @@ const LessonData = (props) => {
           type: "newtest",
           res: val,
           max_val: typeDifficultyMap[l.type.toLowerCase()],
+          result:
+            parseInt((val / typeDifficultyMap[l.type.toLowerCase()]) * 100) +
+            "%",
+          goal: test.goal,
         });
         lesson_results.push(val * typeDifficultyMap[l.type.toLowerCase()]);
       } else if (l.type.toLowerCase() == "quiz") {
@@ -373,6 +436,10 @@ const LessonData = (props) => {
           type: "quiz",
           res: val,
           max_val: typeDifficultyMap[l.type.toLowerCase()],
+          result:
+            parseInt((val / typeDifficultyMap[l.type.toLowerCase()]) * 100) +
+            "%",
+          goal: question.goal,
         });
         lesson_results.push(val * typeDifficultyMap[l.type.toLowerCase()]);
       } else if (l.type.toLowerCase() == "shot") {
@@ -426,6 +493,13 @@ const LessonData = (props) => {
           type: "texteditor",
           res: val * typeDifficultyMap[l.type.toLowerCase()],
           max_val: typeDifficultyMap[l.type.toLowerCase()],
+          goal: textEditor.goal,
+          result:
+            parseInt(
+              ((val * typeDifficultyMap[l.type.toLowerCase()]) /
+                typeDifficultyMap[l.type.toLowerCase()]) *
+                100
+            ) + "%",
         });
         lesson_results.push(val * typeDifficultyMap[l.type.toLowerCase()]);
       } else if (l.type.toLowerCase() == "problem") {
@@ -499,6 +573,10 @@ const LessonData = (props) => {
           type: "problem",
           res: val,
           max_val: typeDifficultyMap[l.type.toLowerCase()],
+          result:
+            parseInt((val / typeDifficultyMap[l.type.toLowerCase()]) * 100) +
+            "%",
+          goal: problem.goal,
         });
         lesson_results.push(val);
       }
@@ -538,9 +616,10 @@ const LessonData = (props) => {
     return indexes;
   };
 
-  const generateReport = async (event) => {
+  const generateReport = async (event, reportData) => {
     event.preventDefault();
     setGenerating(true);
+    console.log("reportData", reportData);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -551,49 +630,26 @@ const LessonData = (props) => {
           prompt: `
           You are mentor of a law student. 
           They have completed tasks helping them learn about Due Diligence in M&A deals.
-          Now you have received the results that look like this:
-          results = [
-            { type: "problem", res: 4, max_val: 5, goal: "Learn to structure the deal" },
-
-            {
-              type: "problem",
-              res: 4,
-              max_val: 5,
-              goal: "Learn to distinguish between a share deal and an asset deal",
-            },
-
-            {
-              type: "newtest",
-              res: 1,
-              max_val: 1,
-              goal: "Learn about the difference between allotment of shares and means of shares transfer",
-            },
-
-            {
-              type: "newtest",
-              res: 0.8,
-              max_val: 1,
-              goal: "Learn about the FDA approval procedure",
-            },
-
-            {
-              type: "texteditor",
-              res: 4,
-              max_val: 4,
-              goal: "Learn find errors in a term sheet",
-            },
-             {
-              type: "construction",
-              res: 0,
-              max_val: 4,
-              goal: "Draft an email to a client",
-            },
-          ];
-          The total result is 69% out of 100. 
-          Write a short report  on whether the student has successfully completeed the simulator (the result is more than 70%).
-          Identify only the learning goals that have not been achieved (they scored less than 60%) and need to be resolved with a mentor. 
-          Return in HTML form. Include only p, ul and li tags.
-          If the result is more than 70%, provide a recommendation on whether the student can work with due diligence in M&A.`,
+           The total result is ${
+             studentResults && totalDifficulty
+               ? parseInt((studentResults / totalDifficulty).toFixed(2) * 100)
+               : 0
+           } out of 100. 
+          Now you have received the result for every task that look like this: ${reportData}. 
+          Take this report as an example and prepare a new report using the data above. Return the report in HTML form. Include only p, ul and li tags.
+          Example: <p>The student completed the simulator with a total score of <b>62 out of 100</b>. This indicates that while the student has mastered some skills related to Due Diligence in M&amp;A, there are still areas that require improvement.</p>
+    <p>We would like to focus your attention on the following points:</p>
+    <ul>
+      <li>
+        <p><strong>Learning goal: (describe the goal)</strong></p>
+        <p>The student result is (give the result) , which is above / below the success threshold. This suggests that (make a conclusion) </p>
+      </li>
+    </ul>
+    <p>Our general recommendation is (explain if the goal of the lesson: ${
+      lesson.goal
+    } has been achieved)</p>
+    <p></p>
+  `,
         }),
       });
 
@@ -606,6 +662,7 @@ const LessonData = (props) => {
       const data = await response.json();
       if (data.result.content) {
         setReport(data.result.content);
+        console.log("data.result.content", data.result.content);
       } else {
         setReport("Sorry, we are disconnected.");
       }
@@ -692,9 +749,45 @@ const LessonData = (props) => {
       )}
       {show && data !== undefined && (
         <LessonContent>
-          <button onClick={(e) => generateReport(e)}>Generate</button>
-          {generating ? "loading" : ""}
-          <Report>{parse(report)}</Report>
+          <IntroData>
+            <h4>How to use the analytics page?</h4>
+            <div>
+              At analytics page you can:
+              <ul>
+                <li>
+                  get recommendations based on the simulator goals and student
+                  results (press the "Generate report" button for that)
+                </li>
+                <li>
+                  take a look at how the student was going through the
+                  simulator. (scroll down to the "Lesson Results" section){" "}
+                </li>
+              </ul>
+            </div>
+            <button onClick={(e) => generateReport(e, reportData)}>
+              Generate report
+            </button>
+            {generating ? (
+              <Progress>
+                <TailSpin
+                  height="60"
+                  width="60"
+                  color="#2E80EC"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              </Progress>
+            ) : (
+              ""
+            )}
+            {report && report.length > 0 && <Report>{parse(report)}</Report>}
+          </IntroData>
+          <div>
+            <h2>Lesson results</h2>
+          </div>
 
           {lesson?.structure?.lessonItems.map((l) => {
             if (l.type.toLowerCase() == "shot") {

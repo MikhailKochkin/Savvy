@@ -429,6 +429,7 @@ const SingleProblem = (props) => {
             quizes={lesson.quizes}
             newTests={lesson.newTests}
             notes={lesson.notes}
+            goal={problem.goal}
             getResult={getResult}
             switchUpdate={switchUpdate}
             passUpdated={passUpdated}

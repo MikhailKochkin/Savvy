@@ -582,6 +582,7 @@ const LessonBlock = (props) => {
                 answers={data.answers}
                 comments={data.comments}
                 true={data.correct}
+                goal={data.goal}
                 user={data.user.id}
                 user_name={data.user}
                 type={data.type}

@@ -7,6 +7,7 @@ const NewTest = objectType({
     t.model.ifRight();
     t.model.ifWrong();
     t.model.type();
+    t.model.goal();
     t.model.complexity();
     t.model.lessonID();
     t.model.next();
@@ -32,6 +33,7 @@ const Quiz = objectType({
     t.model.question();
     t.model.answer();
     t.model.type();
+    t.model.goal();
     t.model.next();
     t.model.complexity();
     t.model.ifRight();
@@ -56,6 +58,7 @@ const TestPractice = objectType({
     t.model.tasks();
     t.model.text();
     t.model.intro();
+    t.model.goal();
     t.model.successText();
     t.model.failureText();
     t.model.tasksNum();
@@ -113,6 +116,7 @@ const TextEditor = objectType({
     t.model.text();
     t.model.name();
     t.model.complexity();
+    t.model.goal();
     t.model.userId();
     t.model.lessonId();
     t.model.lesson();
@@ -133,6 +137,7 @@ const Construction = objectType({
     t.model.name();
     t.model.type();
     t.model.text();
+    t.model.goal();
     t.model.columnsNum();
     t.model.elements();
     t.model.hasText();
@@ -158,6 +163,7 @@ const Problem = objectType({
     t.model.nodeType();
     t.model.complexity();
     t.model.isSecret();
+    t.model.goal();
     t.model.nodeID();
     t.model.userId();
     t.model.lessonId();
@@ -260,6 +266,7 @@ const Document = objectType({
     t.model.userId();
     t.model.complexity();
     t.model.lessonId();
+    t.model.goal();
     t.model.user();
     t.model.lesson();
     t.model.documentResults();
