@@ -173,7 +173,7 @@ const Document = (props) => {
       >
         {(createDocumentResult, { loading, error }) => (
           <>
-            {me && me.id === user ? (
+            {!story && me && me.id === user ? (
               <DeleteDocument
                 id={me.id}
                 documentID={documentID}

@@ -32,6 +32,7 @@ const BlueButton = styled.button`
 `;
 
 const Frame = styled.div`
+  position: relative;
   border: 2px solid;
   border-color: ${(props) => props.inputColor};
   border-radius: 10px;
@@ -41,6 +42,23 @@ const Frame = styled.div`
   .com {
     border-top: 1px solid #f3f3f3;
   }
+`;
+
+const Circle = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  right: 0;
+  font-size: 1.4rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid;
+  border-color: ${(props) => props.inputColor};
+  margin: 10px; // Adjust margin to position the circle as desired
 `;
 
 const Comments = styled.div`
@@ -81,9 +99,8 @@ const Progress = styled.div`
 `;
 
 const SimpleButton = styled.button`
-  /* width: 230px; */
+  background: #fff;
   height: 40px;
-  background: none;
   padding: 5px 30px;
   border: 2px solid #69696a;
   border-radius: 5px;
@@ -113,9 +130,12 @@ const Clause = (props) => {
   const [result, setResult] = useState();
   const [checked, setChecked] = useState(false);
   const [progress, setProgress] = useState(false);
+  const [showCorrect, setShowCorrect] = useState(false);
+
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [correct, setCorrect] = useState(""); // is the answer by the student correct?
   const [AIImprovement, setAIImprovement] = useState("");
+  const [AIMissing, setAIMissing] = useState("");
   const [generatingImprovement, setGeneratingImprovement] = useState(null); // give the hint to the student
   const router = useRouter();
 
@@ -143,6 +163,8 @@ const Clause = (props) => {
     })
       .then((response) => response.json())
       .then((res) => {
+        console.log("res.res", res.res);
+        setResult(parseInt(res.res));
         if (parseFloat(res.res) > 65) {
           setCorrect("true");
           setInputColor("rgba(50, 172, 102, 0.25)");
@@ -173,12 +195,12 @@ const Clause = (props) => {
         body: JSON.stringify({
           prompt: `
           You are a mentor and a teacher. You ask your student to write a text on the following topic: ${commentary}
-          The correct answer is:  ${props.sample}. 
+          The correct version of the text is:  ${props.sample}. 
           Your student's text is: ${text}
           Explain in 3 sentences what the student's answer is missing in comparison to the correct answer.
           Answer in ${
             router.locale == "ru" ? "Russian" : "English"
-          }Make the answer at least 2 sentences long.`,
+          } Make the answer at least 2 sentences long.`,
         }),
       });
 
@@ -201,6 +223,46 @@ const Clause = (props) => {
     setGeneratingImprovement(false);
   };
 
+  const getMissingInfo = async (event) => {
+    event.preventDefault();
+    setGeneratingImprovement(true);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `
+          You are a mentor and a teacher. You ask your student to write a text on the following topic: ${commentary}
+          The correct answer is:  ${props.sample}. 
+          Your student's text is: ${text}
+          Explain in 3 sentences what the student needs to add to their answer.
+          Answer in ${
+            router.locale == "ru" ? "Russian" : "English"
+          }Make the answer at least 2 sentences long.`,
+        }),
+      });
+
+      if (response.status !== 200) {
+        throw (
+          (await response.json()).error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
+      }
+      const data = await response.json();
+      if (data.result.content) {
+        setAIMissing(data.result.content);
+      } else {
+        setAIMissing("Sorry, you are on your own");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+    setGeneratingImprovement(false);
+  };
+
   const {
     id,
     index,
@@ -214,7 +276,7 @@ const Clause = (props) => {
   } = props;
   return (
     <Styles size={story}>
-      {props.me.id === props.userID && (
+      {!story && props.me.id === props.userID && (
         <button onClick={(e) => setType(type === "update" ? "test" : "update")}>
           Update section
         </button>
@@ -228,13 +290,31 @@ const Clause = (props) => {
           <div>{parse(commentary)}</div>
           <Frame inputColor={inputColor}>
             <DynamicLoadedEditor getEditorText={myCallback} />
+            {result && <Circle inputColor={inputColor}>{result}</Circle>}
           </Frame>
           {(progress || generatingImprovement) && (
             <Progress>
               <InfinitySpin width="200" color="#2E80EC" />
             </Progress>
           )}
-          {checked && AIImprovement && <Comments>{AIImprovement}</Comments>}
+          {checked && AIImprovement && (
+            <Comments>
+              <p>
+                <b>Recommendations:</b>
+              </p>
+              {AIImprovement}
+            </Comments>
+          )}
+          {checked && showCorrect && (
+            <Comments>
+              {
+                <div>
+                  <b>Sample Answer</b>
+                </div>
+              }
+              {parse(props.sample)}
+            </Comments>
+          )}
           <Buttons>
             <SimpleButton onClick={(e) => checkAnswer(e)}>
               Check section
@@ -245,8 +325,8 @@ const Clause = (props) => {
               </SimpleButton>
             )}
             {checked && (
-              <SimpleButton onClick={(e) => getImprovement(e)}>
-                What am I missing?
+              <SimpleButton onClick={(e) => setShowCorrect(true)}>
+                Show correct answer
               </SimpleButton>
             )}
             {index !== total ? (
