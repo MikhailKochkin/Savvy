@@ -344,7 +344,7 @@ const Legal = (props) => {
           ) : (
             <TextBar>
               <h1>Privacy Policy</h1>
-              <p>Last updated: March 11, 2022</p>
+              <p>Last updated: March 11, 2023</p>
               <p>
                 This Privacy Policy describes Our policies and procedures on the
                 collection, use and disclosure of Your information when You use
@@ -379,15 +379,6 @@ const Legal = (props) => {
                   <p>
                     <strong>Account</strong> means a unique account created for
                     You to access our Service or parts of our Service.
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    <strong>Company</strong> (referred to as either "the
-                    Company", "We", "Us" or "Our" in this Agreement) refers to
-                    Individual Entrepreneur Mike Kochkin, tax number:
-                    771771639796, registration number: 318774600589944, 129626,
-                    Moscow, Pavel Korchagin str., 11, sq. 137
                   </p>
                 </li>
                 <li>
@@ -438,7 +429,7 @@ const Legal = (props) => {
                   <p>
                     <strong>Website</strong> refers to BeSavvy, accessible from{" "}
                     <a
-                      href="https://besavvy.app/"
+                      href="https://besavvy.app/en"
                       rel="external nofollow noopener"
                       target="_blank"
                     >

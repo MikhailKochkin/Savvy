@@ -2,6 +2,13 @@
 ### Do not make changes to this file directly
 
 
+input AnswerElement {
+  answer: String
+  index: Int
+  next_id: String
+  next_type: String
+}
+
 input AnswerItem {
   correctAnswer: String
   id: String
@@ -597,6 +604,10 @@ input CompanyWhereInput {
   paidMonths: IntNullableFilter
   updatedAt: DateTimeFilter
   user: UserListRelationFilter
+}
+
+input ComplexAnswer {
+  answerElements: [AnswerElement]
 }
 
 type ConfUser {
@@ -2477,8 +2488,8 @@ type Mutation {
   createProblem(goal: String, lessonId: String, steps: ProblemStructure, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createProgram(audience: String, description: String, goals: [String], header: [String], image: String, methods: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String): Program
-  createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
-  createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, improvement: String, lessonId: String, quiz: String): QuizResult
+  createQuiz(answer: String, answers: ComplexAnswer, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
+  createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeas, improvement: String, lessonId: String, quiz: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
@@ -2545,7 +2556,7 @@ type Mutation {
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
-  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
+  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
   updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String, type: String): Note
   updateOffer(courseId: String, discountPrice: Int, header: String, id: String, price: Int, text: String, type: String): Offer
   updateOrder(id: String, isPaid: Boolean): Order
@@ -2554,7 +2565,7 @@ type Mutation {
   updateProblem(complexity: Int, goal: String, id: String, isSecret: Boolean, steps: ProblemStructure, text: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, check: String, complexity: Int, goal: String, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String, type: String): Quiz
+  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateScore(id: String, score: Int): User
   updateShot(comments: [String], id: String, parts: [String], title: String): Shot
@@ -2695,6 +2706,7 @@ type NewTest {
   correct: [Boolean!]!
   createdAt: DateTime!
   goal: String
+  goalType: String
   id: String!
   ifRight: String
   ifWrong: String
@@ -2727,6 +2739,7 @@ input NewTestOrderByWithRelationInput {
   correct: SortOrder
   createdAt: SortOrder
   goal: SortOrderInput
+  goalType: SortOrderInput
   id: SortOrder
   ifRight: SortOrderInput
   ifWrong: SortOrderInput
@@ -2752,6 +2765,7 @@ input NewTestWhereInput {
   correct: BoolNullableListFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
+  goalType: StringNullableFilter
   id: StringFilter
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
@@ -2777,6 +2791,7 @@ input NewTestWhereUniqueInput {
   correct: BoolNullableListFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
+  goalType: StringNullableFilter
   id: String
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
@@ -3710,10 +3725,12 @@ type QuestResults {
 
 type Quiz {
   answer: String!
+  answers: Json
   check: String
   complexity: Int
   createdAt: DateTime!
   goal: String
+  goalType: String
   id: String!
   ifRight: String
   ifWrong: String
@@ -3729,6 +3746,17 @@ type Quiz {
   userId: String!
 }
 
+input QuizIdea {
+  idea: String
+  next_id: String
+  next_type: String
+  result: String
+}
+
+input QuizIdeas {
+  quizIdeas: [QuizIdea]
+}
+
 input QuizListRelationFilter {
   every: QuizWhereInput
   none: QuizWhereInput
@@ -3741,10 +3769,12 @@ input QuizOrderByRelationAggregateInput {
 
 input QuizOrderByWithRelationInput {
   answer: SortOrder
+  answers: SortOrderInput
   check: SortOrderInput
   complexity: SortOrderInput
   createdAt: SortOrder
   goal: SortOrderInput
+  goalType: SortOrderInput
   id: SortOrder
   ifRight: SortOrderInput
   ifWrong: SortOrderInput
@@ -3769,6 +3799,8 @@ type QuizResult {
   explanation: String
   hint: String
   id: String!
+  ideas: [String!]!
+  ideasList: Json
   improvement: String
   lesson: Lesson
   lessonID: String
@@ -3799,6 +3831,8 @@ input QuizResultOrderByWithRelationInput {
   explanation: SortOrderInput
   hint: SortOrderInput
   id: SortOrder
+  ideas: SortOrder
+  ideasList: SortOrderInput
   improvement: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
@@ -3822,6 +3856,8 @@ input QuizResultWhereInput {
   explanation: StringNullableFilter
   hint: StringNullableFilter
   id: StringFilter
+  ideas: StringNullableListFilter
+  ideasList: JsonNullableFilter
   improvement: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -3845,6 +3881,8 @@ input QuizResultWhereUniqueInput {
   explanation: StringNullableFilter
   hint: StringNullableFilter
   id: String
+  ideas: StringNullableListFilter
+  ideasList: JsonNullableFilter
   improvement: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -3861,10 +3899,12 @@ input QuizWhereInput {
   NOT: [QuizWhereInput!]
   OR: [QuizWhereInput!]
   answer: StringFilter
+  answers: JsonNullableFilter
   check: StringNullableFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
+  goalType: StringNullableFilter
   id: StringFilter
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
@@ -3885,10 +3925,12 @@ input QuizWhereUniqueInput {
   NOT: [QuizWhereInput!]
   OR: [QuizWhereInput!]
   answer: StringFilter
+  answers: JsonNullableFilter
   check: StringNullableFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
+  goalType: StringNullableFilter
   id: String
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter

@@ -164,5 +164,7 @@
   "i_need_another_hint": "I need another hint",
   "explain_what_is_wrong_with_my_answer": "Explain what is wrong with my answer",
   "show_an_ideal_answer": "Show an ideal answer",
-  "what_can_i_improve": "What can I improve in my answer?"
+  "what_can_i_improve": "What can I improve in my answer?",
+  "evaluate_ideas": "Evaluate ideas",
+  "ideas_result": "Now that you have come up with some ideas, it's time to develop them."
 }

@@ -110,11 +110,13 @@ const SINGLE_LESSON_QUERY = gql`
         question
         type
         goal
+        goalType
         complexity
         check
         ifRight
         ifWrong
         answer
+        answers
         next
         createdAt
         user {
@@ -213,6 +215,7 @@ const SINGLE_LESSON_QUERY = gql`
         answers
         correct
         goal
+        goalType
         type
         comments
         complexity

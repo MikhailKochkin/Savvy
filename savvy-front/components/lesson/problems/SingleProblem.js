@@ -244,6 +244,7 @@ const SingleProblem = (props) => {
   };
 
   const onFinish = (status, type) => {
+    props.updateArray ? props.updateArray(true) : null;
     if (type == "old") {
       setIsOldFinished(true);
     } else if (type == "new") {
@@ -328,6 +329,7 @@ const SingleProblem = (props) => {
           <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />
         ) : null}
       </Buttons>
+      {/* <div>{problem.id}</div> */}
       {!update && (
         <TextBar id={problem.id} story={story}>
           <div id="text">{parse(problem.text)}</div>

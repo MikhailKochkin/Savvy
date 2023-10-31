@@ -1354,9 +1354,12 @@ const Mutation = mutationType({
               data: {
                 question: quiz.question,
                 answer: quiz.answer,
+                answers: quiz.answers,
                 ifWrong: quiz.ifWrong,
                 ifRight: quiz.ifRight,
+                goal: quiz.goal,
                 type: quiz.type,
+                goalType: quiz.goalType,
                 user: {
                   connect: { id: userId },
                 },
@@ -1371,6 +1374,20 @@ const Mutation = mutationType({
 
         await Promise.all(
           originalLesson.problems.map(async (problem) => {
+            let newSteps = problem.steps.problemItems.map((step) => {
+              return {
+                ...step,
+
+                // Update id reference
+                id: newIdMapping[step.id] || step.id,
+
+                // Update next value
+                next: {
+                  true: newIdMapping[step.next.true] || step.next.true,
+                  false: newIdMapping[step.next.false] || step.next.false,
+                },
+              };
+            });
             const createdProblem = await ctx.prisma.problem.create({
               data: {
                 text: problem.text,
@@ -1381,6 +1398,7 @@ const Mutation = mutationType({
                 lesson: {
                   connect: { id: newLesson.id },
                 },
+                steps: { problemItems: newSteps },
               },
             });
             newIdMapping[problem.id] = createdProblem.id;
@@ -1964,6 +1982,7 @@ const Mutation = mutationType({
         ifWrong: stringArg(),
         complexity: intArg(),
         goal: stringArg(),
+        goalType: stringArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
@@ -2008,6 +2027,9 @@ const Mutation = mutationType({
         ifRight: stringArg(),
         ifWrong: stringArg(),
         type: stringArg(),
+        answers: arg({
+          type: "ComplexAnswer",
+        }),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
@@ -2054,6 +2076,10 @@ const Mutation = mutationType({
         ifWrong: stringArg(),
         check: stringArg(),
         goal: stringArg(),
+        goalType: stringArg(),
+        answers: arg({
+          type: "ComplexAnswer",
+        }),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -2098,8 +2124,10 @@ const Mutation = mutationType({
         explanation: stringArg(),
         improvement: stringArg(),
         goal: stringArg(),
+        ideasList: arg({
+          type: "QuizIdeas",
+        }),
       },
-
       resolve: async (_, args, ctx) => {
         const quiz = args.quiz;
         const lessonId = args.lessonId;

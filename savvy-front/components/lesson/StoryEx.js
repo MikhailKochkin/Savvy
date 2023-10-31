@@ -232,7 +232,6 @@ const StoryEx = (props) => {
     } else if (task.type.toLowerCase() === "quiz") {
       el = lesson.quizes.find((quiz) => quiz.id === task.id);
       if (!el) return;
-
       item = (
         <SingleQuiz
           key={el.id}
@@ -241,9 +240,12 @@ const StoryEx = (props) => {
           getResults={getResults}
           question={el.question}
           answer={el.answer}
+          answers={el.answers}
           type={el.type}
+          goalType={el.goalType}
           check={el.check}
           me={me}
+          lesson={lesson}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           hidden={true}

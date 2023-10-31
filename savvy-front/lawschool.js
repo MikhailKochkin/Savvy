@@ -1,4 +1,187 @@
-const emailList = [
+export const uniList = [
+  {
+    name: "Queen's University Belfast",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Leeds",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "York Law School",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Manchester",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Exeter",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Birmingham",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Sheffield",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Lancaster University law",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Newcastle University",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Liverpool",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of East Anglia UEA",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Aston University, Birmingham",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Sussex",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "SOAS University of London",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Leicester",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Nottingham Trent University",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Ulster University",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Northumbria Law School",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Bradford",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Reading",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Bournemouth University",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Surrey",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Swansea University",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Bangor University",
+    comment: "",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Glasgow Caledonian University",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Essex",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "School of Law and Social Sciences",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "Brunel University London",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "University of Portsmouth",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+  {
+    name: "City University, London",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "UK",
+  },
+];
+
+export const emailUniList = [
   {
     name: "Joan",
     surname: "Loughrey",
@@ -8,7 +191,8 @@ const emailList = [
     comment: "Professor Joan Loughrey",
     firm: "Queen's University Belfast",
     source: "https://www.qub.ac.uk/schools/SchoolofLaw/people/administrative/",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Colette",
@@ -18,7 +202,8 @@ const emailList = [
       "https://www.linkedin.com/in/colette-farrell-5605a0273/?originalSubdomain=uk",
     comment: "School Manager",
     firm: "Queen's University Belfast",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Michelle",
@@ -27,7 +212,8 @@ const emailList = [
     linkedin: "",
     comment: "Head of School Secretary",
     firm: "Queen's University Belfast",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Deirdre",
@@ -36,7 +222,8 @@ const emailList = [
     linkedin: "",
     comment: "Employability & Placement Officer ",
     firm: "Queen's University Belfast",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Eóin",
@@ -45,16 +232,18 @@ const emailList = [
     linkedin: "",
     comment: "Student and Digital Support Officer",
     firm: "Queen's University Belfast",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Kathryn",
     surname: "Larmour",
     email: "K.Larmour@qub.ac.uk",
     linkedin: "",
-    comment: "Undergraduate Officer ",
+    comment: "Undergraduate Officer. Checked out my Linkedin.",
     firm: "Queen's University Belfast",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Angela",
@@ -63,7 +252,8 @@ const emailList = [
     linkedin: "",
     comment: "Postgraduate Officer ",
     firm: "Queen's University Belfast",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Deveral",
@@ -72,8 +262,9 @@ const emailList = [
     linkedin: "",
     comment:
       "Deveral is the Dean of Leeds Law School, joining Leeds Beckett in 2015.  As a legal academic he has taught on undergraduate, postgraduate and professional courses and published widely on legal education, legal skills and eCommerce law. ",
-    firm: "University of leeds",
-    sentEmailsTime: [],
+    firm: "University of Leeds",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Melissa",
@@ -82,8 +273,9 @@ const emailList = [
     linkedin: "",
     comment:
       "Melissa is Head of Law, and has overall responsibility for all of the academic Law courses at Leeds Beckett. Melissa is interested in employability for students and making sure that there are plenty of opportunities for Leeds Beckett’s Law students to make themselves attractive for future employees.",
-    firm: "University of leeds",
-    sentEmailsTime: [],
+    firm: "University of Leeds",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Louisa",
@@ -92,8 +284,9 @@ const emailList = [
     linkedin: "",
     comment:
       "Louisa is Head of Subject at Leeds Law School, overseeing the School’s postgraduate provision. Research interests: Legal Skills. Please contact me if you are a prospective research student in one of the above areas if you would like to discuss your project and supervision.",
-    firm: "University of leeds",
-    sentEmailsTime: [],
+    firm: "University of Leeds",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "TT",
@@ -102,7 +295,8 @@ const emailList = [
     linkedin: "",
     comment: "",
     firm: "York Law School",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Sara",
@@ -112,7 +306,8 @@ const emailList = [
     comment:
       "I set up the Leeds Law School Clinic, taught Property Law and worked with the Careers and Employability team.",
     firm: "York Law School",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Frank",
@@ -121,7 +316,8 @@ const emailList = [
     linkedin: "",
     comment: "Associate Lecturer (T&S) Problem Based Learning",
     firm: "York Law School",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Scott",
@@ -131,7 +327,8 @@ const emailList = [
     comment:
       "Director of Learning and Teaching. Previously, I was Vice-President (Education) and Board Member of the University of Law, and before that Professor of Curriculum Development at the law school at Nottingham Trent University.  I qualified as a solicitor with McKenna & Co (now CMS) before moving to Allen & Overy. Teaches Legal Skills and Advanced Legal Skills",
     firm: "York Law School",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   //   {
   //     name: "Aristea",
@@ -141,7 +338,7 @@ const emailList = [
   //     comment:
   //       "Professor of Labour Law and Industrial Relations & Head of Law Department",
   //     firm: "University of Manchester",
-  //     sentEmailsTime: [],
+  //     sentEmailsTime: ["October 17", "October 27"],
   //   },
   {
     name: "Javier",
@@ -150,7 +347,8 @@ const emailList = [
     linkedin: "",
     comment: "Head of Law",
     firm: "University of Manchester",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Clair",
@@ -159,7 +357,8 @@ const emailList = [
     linkedin: "",
     comment: "Professor, Head of School",
     firm: "University of Exeter",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Daniel",
@@ -168,7 +367,8 @@ const emailList = [
     linkedin: "",
     comment: "Law School Department Manager",
     firm: "University of Exeter",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Warren",
@@ -177,7 +377,8 @@ const emailList = [
     linkedin: "",
     comment: "Dean of the Law School",
     firm: "University of Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Lisa",
@@ -187,7 +388,8 @@ const emailList = [
     comment:
       "Chair in Legal Education and Research. Professor Lisa Webley’s research concerns the regulation, education and ethicality and professionalism of the legal profession, and broader access to justice and rule of law concerns. She has been the Principal Investigator on several large research projects and has undertaken funded empirical research for public bodies and organisations including the European Commission; the Ministry of Justice and the Department for Trade and Industry. She is head of research in CEPLER.",
     firm: "University of Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Linden",
@@ -197,7 +399,8 @@ const emailList = [
     comment:
       "Reader in Clinical Legal Education and Pro Bono Solicitor, Head of Education and Interim Head of CEPLER. She has a particular interest in pro bono, clinical legal education and public legal education and her teaching and scholarship focus on those areas. Her research also explores the relationship between pro bono and clinical legal education undertaken by universities and its role in enhancing the employability of law students looking to enter the legal profession.",
     firm: "University of Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Samantha",
@@ -207,7 +410,8 @@ const emailList = [
     comment:
       "Deputy Head of Education (Specialised Programmes). Samantha’s primary teaching and research interests lie in the fields of tort and professional ethics, specifically those areas which bear upon the construction of human and nonhuman health-related negligence claims.",
     firm: "University of Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Argyro",
@@ -217,7 +421,8 @@ const emailList = [
     comment:
       "Dr Karanasiou’s research focusses on the relationship between Law and Emerging Technologies and falls within three general lines of work:  1. Data Governance, 2. Legal Tech and law computability, and 3. Regulating mixed interfaces (Human-Computer Interactions). Al. Argyro’s work is contributing to the growing body of ‘law and emerging technologies’ transdisciplinary scholarship and has earned her visiting research affiliations with Yale Law School (ISP Alumna), NYU Law (ILI Alumna), Harvard Law (affiliate Faculty staff CopyX), Complutense Madrid (ITC). Her research spans a wide range of areas ranging from wearable tech and regulation of health data to Brain-Machine-Interfaces and embodiment, which all share a common underlying theme of re-conceptualisation of autonomy in an era of rapid automation.",
     firm: "University of Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Richard",
@@ -227,7 +432,8 @@ const emailList = [
     comment:
       "Head of School. I received a Teaching Excellence Award in 2015 in recognition of sustained high quality teaching, various examples of innovative teaching and best practice in the School of Law, and for my work in leading the review of our undergraduate qualifying law degrees.",
     firm: "University of Sheffield",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Graham",
@@ -236,7 +442,8 @@ const emailList = [
     linkedin: "",
     comment: "Faculty Director of Education",
     firm: "University of Sheffield",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Catherine",
@@ -246,7 +453,8 @@ const emailList = [
     comment:
       "Dr Easton also carries out research on teaching law with technology. Head of School. Professor in Information Technology Law and Intellectual Property. Dr Easton's research interests focus upon internet governance, domain name regulation, intellectual property, access to technology and human/computer interaction.",
     firm: "Lancaster University law",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Michael",
@@ -256,7 +464,8 @@ const emailList = [
     comment:
       "His current research and pedagogy focus is in the developing field of legal design - applying design thinking to legal problems and processes. He is exploring the disciplinarity of, and the cultural barriers to, bringing design thinking into law, and has applied design thinking to legal teaching and curriculum development. Associate Head of School (Student Experience)",
     firm: "Lancaster University law",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Benjamin",
@@ -267,7 +476,8 @@ const emailList = [
     comment:
       "LLB Law Programme Leader. Projects. Activities. PhD Students. Research Groups. The Law School Skills Project - Stage 1. 01/10/2022 → 31/12/2023. Research. http://www.research.lancs.ac.uk/portal/en/upmprojects/the-law-school-skills-project--stage-1(b8dadd47-dee7-4554-86ed-4ab934eadb04).html",
     firm: "Lancaster University law",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Tina",
@@ -277,7 +487,8 @@ const emailList = [
     comment:
       "Director of Skills and Widening Participation, Law School, Senior Lecturer in Law (Legal Education). Tina's scholarship interests are in skills development; widening participation; equality, diversity and inclusion; decolonising the curriculum; and legal education.",
     firm: "Lancaster University law",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Dalia",
@@ -286,7 +497,8 @@ const emailList = [
     linkedin: "",
     comment: "Student Experience/Engagement Officer",
     firm: "Newcastle University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Jonathan",
@@ -296,7 +508,8 @@ const emailList = [
     comment:
       "Head of School. Jonathan's Faculty Internationalisation remit included developing and supporting the implementation of the University Global Strategy within the HaSS Faculty, leading on the University’s (international) mobility plan, being a principal point of contact for several institutional international partners, as well as assisting in the identification of emerging student recruitment markets, supporting Brexit mobility contingency planning and on the large scale repatriation of students at the early stages of the Covid-19 pandemic. Estates strategy responsibilities included supporting capital projects management and user engagement within the Faculty, supporting estates and space strategic planning, and ensuring that our University facilities met our research and educational needs.",
     firm: "Newcastle University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Ilke",
@@ -305,7 +518,8 @@ const emailList = [
     linkedin: "",
     comment: "Senior Lecturer in Law, Innovation, and Society",
     firm: "Newcastle University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Valsamis",
@@ -315,7 +529,8 @@ const emailList = [
     comment:
       "Dean, School of Law and Social Justice & Professor of European and Global Law",
     firm: "University of Liverpool",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Helen",
@@ -325,7 +540,8 @@ const emailList = [
     comment:
       "Head of Department (Law) / Personal Chair. Helen is a founding member of the European Children's Rights Unit (ECRU). She established and continues to run the University of Liverpool's Young Person's Advisory Group, and co-ordinates research collaborations, methods and ethics exchange as Faculty theme lead for Children and Childhood.",
     firm: "University of Liverpool",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Lucy",
@@ -335,7 +551,8 @@ const emailList = [
     comment:
       "Director, Law Clinic. Lucy Yeatman is a senior lecturer in law and a practicing solicitor specialising in family law in the Liverpool Law Clinic. She is passionate about clinical legal education and has extensive experience of designing and delivering clinical legal education programmes.",
     firm: "University of Liverpool",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Paul",
@@ -345,7 +562,8 @@ const emailList = [
     comment:
       "School of Law - Professor of Information Technology Law.  His first degree was in mathematics, at Cambridge University, over 35 years ago, and he is a qualified Chartered Accountant. For over 20 years he worked as an auditor, in finance for big companies in the City, done pioneering work in the early days of the internet, including setting up and running the first online real-time education system for children to operate in the UK, and been finance director of a charity dealing with mental health and criminal justice.",
     firm: "University of East Anglia UEA",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Andreas",
@@ -354,7 +572,8 @@ const emailList = [
     linkedin: "",
     comment: "Professor of Competition Law & Head of School",
     firm: "University of East Anglia UEA",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Elias",
@@ -364,7 +583,8 @@ const emailList = [
     comment:
       "Elias Deutscher is a Lecturer in Competition Law and IP at the UEA Law School and a member of the Centre for Competition Policy (CCP). Elias holds a Postgraduate Certificate in Higher Education Practice (PGCERT) and is a Fellow of the Higher Education Academy",
     firm: "University of East Anglia UEA",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Jonathan",
@@ -374,7 +594,8 @@ const emailList = [
     comment:
       "Research interest: The Future of Law. Dean of Aston Law School. Jonathan is committed to innovation in the legal sector and for Aston law graduates to be ‘future ready’ citizens and professionals, ready to make a valued contribution to their communities. ",
     firm: "Aston University, Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Kristie",
@@ -384,7 +605,8 @@ const emailList = [
     comment:
       "Deputy Head of School. Her current research interests combine elements of law and business, reflecting her research interests in international trade, intellectual property, comparative law and business practice more generally.",
     firm: "Aston University, Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Christopher",
@@ -394,7 +616,8 @@ const emailList = [
     comment:
       "Senior Lecturer and Associate Dean - Education. Additionally, Chris is the Learning and Teaching Convenor for Aston Law School and co-chair of the organising committee for the Association of Law Teachers' 2021 Annual Conference at Aston University.",
     firm: "Aston University, Birmingham",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Jo",
@@ -404,7 +627,8 @@ const emailList = [
     comment:
       "Senior Lecturer in Commercial Law (Law). School of Law, Politics and Sociology. Jo moved to an Education and Scholarship contract in September 2020 so that she could pursue research in the field of legal education and pedagogy. Jo has since worked on a number of projects including authentic learning and optionality in assessment, and she has co-founded 'Contract Ed Talk', a national network for academics who teach contract law. ",
     firm: "University of Sussex",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Amir",
@@ -413,7 +637,8 @@ const emailList = [
     linkedin: "",
     comment: "Head of Department",
     firm: "University of Sussex",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Melanie",
@@ -422,7 +647,8 @@ const emailList = [
     linkedin: "",
     comment: "Senior Clinical Legal Education Coordinator",
     firm: "University of Sussex",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Eddie",
@@ -432,7 +658,8 @@ const emailList = [
     comment:
       "School of Law Head of School. BIO: https://www.soas.ac.uk/about/eddie-bruce-jones",
     firm: "SOAS University of London",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Sally",
@@ -442,7 +669,8 @@ const emailList = [
     comment:
       "Head of Leicester Law School. I am an expert in Criminal Law, with my main specialism being in road traffic offences. My interest in this field originates from my PhD on vehicular homicide (awarded by the University of Leicester in 2004), after which my interest broadened and I developed my knowledge to become the leading legal academic in road traffic offences in the UK. I have spent the majority of my career at Leicester, and was honoured to be appointed the first female Head of School, having been both an undergraduate and graduate student here. ",
     firm: "University of Leicester",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Anthony",
@@ -451,7 +679,8 @@ const emailList = [
     linkedin: "",
     comment: "Digital, Learning Technologies, IT, and Web Manager.",
     firm: "University of Leicester",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Natalie",
@@ -460,7 +689,8 @@ const emailList = [
     linkedin: "",
     comment: "Digital, Learning Technologies, IT, and Web ",
     firm: "University of Leicester",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Jenny",
@@ -470,7 +700,8 @@ const emailList = [
     comment:
       "Executive Dean. Jenny maintains an active research interest in the role of clinical legal education and the area of Alternative Business Structures and their place within a legal education environment.",
     firm: "Nottingham Trent University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Matthew",
@@ -480,7 +711,8 @@ const emailList = [
     comment:
       "Deputy Dean. Matthew is Deputy Dean and Associate Professor at Nottingham Law School. Matthew was awarded a National Teaching Fellowship in 2016, the most prestigious individual award for excellence in teaching in higher education. This was in recognition for his use of technology and making a real difference to the student experience. Matthew is an active member of the following research centres, societies and committees:Centre for Legal Education Innovation and Technology Law Lab Society of Legal Scholars Global Legal Skills Programme Committee Global Legal Skills Conference Committee Fusion Steering Committee 2014-2019 Association of Learning Technologists",
     firm: "Nottingham Trent University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Elyse",
@@ -490,7 +722,8 @@ const emailList = [
     comment:
       "Head of Department. Elyse Wakelin is the Head of Undergraduate Programmes for Nottingham Law School, with strategic oversight of the Undergraduate portfolio. Elyse is also an active member of the Centre for Legal Education. Elyse is an active member of the Nottingham Law School Centre for Legal Education. Her research focuses primarily on the wellbeing of students in legal education and ways to enhance the student experience. Recent projects have included analysing the role of the personal tutor in legal education. She is currently starting a project which examines wellbeing among distance learning law students.",
     firm: "Nottingham Trent University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Alexandra",
@@ -500,7 +733,8 @@ const emailList = [
     comment:
       "Alex is the Head of Postgraduate Portfolio at Nottingham Law School, encompassing the Legal Practice Course, the Barristers Training Course, the Postgraduate Diploma in Law and the Academic Masters.",
     firm: "Nottingham Trent University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
   {
     name: "Laura",
@@ -510,161 +744,379 @@ const emailList = [
     comment:
       "Head of Department. Laura is Head of the NLS Legal, a teaching law firm, based within the Chaucer building. The firm is fully regulated as an alternative business structure by the Solicitors Regulation Authority. The firm plays a vital role in inspiring the next generation of legal professionals and provides Nottingham Law School students with unique opportunities to develop their technical and practical skills. The firm also provides access to justice to those who are unable to afford or access much needed legal advice. The firm works closely with local firms, advice agencies, voluntary sector organisations and schools to offer legal support to the local community and develop pro bono opportunities for Nottingham Law School students. ",
     firm: "Nottingham Trent University",
-    sentEmailsTime: [],
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
-  //   {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     linkedin: "",
-  //     comment: "",
-  //     firm: "",
-  //     sentEmailsTime: [],
-  //   },
+  {
+    name: "Jason",
+    surname: "Elliott",
+    email: "JD.ELLIOTT@ULSTER.AC.UK",
+    linkedin: "",
+    comment:
+      "Associate Head of School of Law at Ulster University. Manages and leads on the educational provision within the School of Law, including marketing of undergraduate and postgraduate provision, curriculum design, and student support strategies.",
+    firm: "Ulster University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Esther",
+    surname: "McGuinness",
+    email: "EP.MCGUINNESS@ULSTER.AC.UK",
+    linkedin: "",
+    comment:
+      "Head of School of Law at Ulster University and Co-Director of the multi-award winning Ulster University Law Clinic. Supervises LLM Access to Justice students in providing pro-bono services in social security and employment law and family law.",
+    firm: "Ulster University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "John",
+    surname: "Kennedy",
+    email: "JRG.KENNEDY@ULSTER.AC.UK",
+    linkedin: "",
+    comment:
+      "Lecturer at Ulster University with research and teaching interests in Medical Law, Jurisprudence and Contract Law.",
+    firm: "Ulster University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Paul",
+    surname: "McKeown",
+    email: "PAUL.MCKEOWN@NORTHUMBRIA.AC.UK",
+    linkedin: "",
+    comment:
+      "Associate Professor at Northumbria Law School with research interests in clinical legal education, focusing on the development of values through clinical legal education. Awarded a PhD in 2020.",
+    firm: "Northumbria Law School",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Charlotte",
+    surname: "Ellis",
+    email: "CHARLOTTE.ELLIS@NORTHUMBRIA.AC.UK",
+    linkedin: "",
+    comment:
+      "Assistant Professor at Northumbria Law School, teaching and research focus on contract law and related aspects of the law of restitution.",
+    firm: "Northumbria Law School",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Engobo",
+    surname: "Emeseh",
+    email: "e.emeseh@bradford.ac.uk",
+    linkedin: "",
+    comment: "Head of Law School / Professor at University of Bradford.",
+    firm: "University of Bradford",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Charles",
+    surname: "Wild",
+    email: "c.wild@bradford.ac.uk",
+    linkedin: "",
+    comment:
+      "Associate Professor at School of Law, University of Bradford. A solicitor of the Senior Courts of England & Wales with over twenty five years of experience in higher education.",
+    firm: "University of Bradford",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Gerard",
+    surname: "McMeel",
+    email: "g.mcmeel@reading.ac.uk",
+    linkedin: "",
+    comment: "Areas of interest include Contract law and Commercial law.",
+    firm: "University of Reading",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Elizabeth",
+    surname: "Conaghan",
+    email: "e.t.conaghan@reading.ac.uk",
+    linkedin: "",
+    comment:
+      "Director of Academic Tutoring and Director of Mooting and Advocacy. Focuses on inclusivity and embedding employability in teaching practice.",
+    firm: "University of Reading",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "James",
+    surname: "Devenney",
+    email: "j.devenney@reading.ac.uk",
+    linkedin: "",
+    comment: "Head of School and Professor of Transnational Commercial Law.",
+    firm: "University of Reading",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Roger",
+    surname: "Brownsword",
+    email: "rbrownsword@bournemouth.ac.uk",
+    linkedin: "",
+    comment:
+      "Expert in law, regulation and technology, biolaw and bioethics, and commercial and contract law.",
+    firm: "King’s College London, Bournemouth University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Katharine",
+    surname: "Cox",
+    email: "kmcox@bournemouth.ac.uk",
+    linkedin: "",
+    comment: "Professor and Head Of Department For Humanities and Law.",
+    firm: "Bournemouth University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Sarah",
+    surname: "McKeown",
+    email: "smckeown@bournemouth.ac.uk",
+    linkedin: "",
+    comment:
+      "Deputy Head Of Department in Humanities And Law, programme leader for the LLB Law degrees. Research interest in Higher Education policy and consumer protection law.",
+    firm: "Bournemouth University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+
+  {
+    name: "Nicholas",
+    surname: "Clapham",
+    email: "nicholas.clapham@surrey.ac.uk",
+    linkedin: "",
+    comment:
+      "Senior Lecturer/Director of Student Experience. University roles and responsibilities: Director of Student Experience.",
+    firm: "University of Surrey",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Bebhinn",
+    surname: "Donnelly-Lazarov",
+    email: "b.donnelly-lazarov@surrey.ac.uk",
+    linkedin: "",
+    comment:
+      "Professor in Neuroscience, Law and Legal Philosophy. Her research has straddled a number of substantive fields including criminal law, international law, and environmental law but the focus is always a philosophical one, where the aim is to elucidate law's underlying concepts and normative rationales.",
+    firm: "University of Surrey",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Katy",
+    surname: "Peters",
+    email: "katy.peters@surrey.ac.uk",
+    linkedin: "https://www.linkedin.com/in/katy-peters-02488a2a/",
+    comment:
+      "Senior Lecturer in Law (Tort; Medical Law & Ethics); Director of Employability (Law).",
+    firm: "University of Surrey",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Mikolaj",
+    surname: "Firlej",
+    email: "m.firlej@surrey.ac.uk",
+    linkedin: "https://www.linkedin.com/in/mikolaj-firlej-508b6a65/",
+    comment:
+      "Director of the Law and Technology Hub and a Lecturer in AI and Regulation. Research focuses on providing a deeper understanding about the role of human factors in the increasingly algorithmic decision making.",
+    firm: "University of Surrey",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Elizabeth",
+    surname: "Williams",
+    email: "e.g.williams@surrey.ac.uk",
+    linkedin: "",
+    comment:
+      "Founder and Director of Teaching of the Law and Technology Hub. Research interests in employment law and access to justice; the impact of technology on the labour market.",
+    firm: "University of Surrey",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Vickie",
+    surname: "Thanapal",
+    email: "v.thanapal@surrey.ac.uk",
+    linkedin: "",
+    comment:
+      "Associate Professor, Deputy Head of School (Learning & Teaching).",
+    firm: "University of Surrey",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Ruth",
+    surname: "Atkins",
+    email: "r.d.atkins@swansea.ac.uk",
+    linkedin: "https://www.linkedin.com/in/ruth-atkins-6a34a1175",
+    comment:
+      "Senior Lecturer, Law. Joined the School of Law in 2018 as Senior Lecturer and Module Director for Contract Law.",
+    firm: "Swansea University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Elizabeth",
+    surname: "Macdonald",
+    email: "e.a.macdonald@swansea.ac.uk",
+    linkedin: "",
+    comment:
+      "Professor Emeritus, Humanities and Social Sciences - Faculty. Areas of expertise: contract law, E-commerce law.",
+    firm: "Swansea University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Thomas",
+    surname: "Perry",
+    email: "t.perry@bangor.ac.uk",
+    linkedin: "",
+    comment:
+      "Lecturer. Responsibilities include teaching on the Contract Law, Tort and Company Law modules.",
+    firm: "Bangor University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Sara",
+    surname: "Cantillon",
+    email: "sara.cantillon@gcu.ac.uk",
+    linkedin: "",
+    comment: "Director, Department of Economics and Law.",
+    firm: "Glasgow Caledonian University",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Brontie",
+    surname: "Ansell",
+    email: "brontie.ansell@essex.ac.uk",
+    linkedin: "",
+    comment:
+      "Current teaching responsibilities: Land Law (LW102), Career Development Learning Part 1 (LW111), Clinical Legal Education, Pro bono legal work in law clinics.",
+    firm: "University of Essex",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Christopher",
+    surname: "Willett",
+    email: "cwillett@essex.ac.uk",
+    linkedin: "",
+    comment:
+      "For 30 years taught, researched, published and advised in the areas of UK, EU and global consumer and contract law; commercial law.",
+    firm: "University of Essex",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Stavroula",
+    surname: "Karapapa",
+    email: "s.karapapa@essex.ac.uk",
+    linkedin: "",
+    comment:
+      "Professor of Intellectual Property and Information Law. Joined Essex in 2020. Previous roles include Chair of Intellectual Property and Information Law and Executive Directorship of the Centre of Commercial Law and Financial Regulation at the University of Reading.",
+    firm: "University of Essex",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Erin",
+    surname: "Pobjie",
+    email: "e.pobjie@essex.ac.uk",
+    linkedin: "",
+    comment:
+      "Assistant Professor of International Law. Senior Research Affiliate at the Max Planck Institute for Comparative Public Law and International Law. Deputy Director of the Human Rights Centre Clinic.",
+    firm: "University of Essex",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Andrew",
+    surname: "Kopkin",
+    email: "akopkin@brookes.ac.uk",
+    linkedin:
+      "https://www.linkedin.com/in/andrew-kopkin-06672480/?originalSubdomain=uk",
+    comment:
+      "Senior Lecturer in Legal Skills and Practice. School of Law and Social Sciences.",
+    firm: "School of Law and Social Sciences",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Diane",
+    surname: "Astin",
+    email: "",
+    linkedin: "",
+    comment:
+      "Senior Lecturer - Legal Practice. Diane joined Brunel University London in July 2018 as a Lecturer in Legal Practice. Diane is the module leader for the level 4 module, The Civil Justice System, and also teaches on the Public Law and Legal Skills modules.",
+    firm: "Brunel University London",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Colin",
+    surname: "Luoma",
+    email: "colin.luoma2@brunel.ac.uk",
+    linkedin: "",
+    comment: "Lecturer in Law. Teaching: Legal Skills and Method.",
+    firm: "Brunel University London",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Jens",
+    surname: "Krebs",
+    email: "jens.krebs@port.ac.uk",
+    linkedin: "",
+    comment:
+      "Since 2021, I am the ​ Director for Postgraduate Research in Law and a Senior Lecturer at the University of Portsmouth where I teach and research in the areas of Commercial Law, Consumer Law, Contract Law, LegalTech and Law and Technology. My research focuses on contractual issues in e-commerce and consumer law as well as contemporary issues of information technology law. The immediate focus is on the consumer’s position in e-commerce transactions, particularly where the product in question is digital content.",
+    firm: "University of Portsmouth",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Charlotte",
+    surname: "Harrison",
+    email: "Charlotte.Harrison@port.ac.uk",
+    linkedin: "",
+    comment:
+      "University Placement Lead at the University of Portsmouth. This follows 15 years in lecturing and leadership roles within Portsmouth Law School (most recently as Director of Employability), and a first career as a solicitor. Charlotte has a significant and sustained record of innovative, research-led curriculum development to support graduate employability. Her research focuses on the evaluation of embedded employability interventions, increasing confident career management and readiness for the graduate recruitment process, and, more recently, career coaching.",
+    firm: "University of Portsmouth",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Caroline",
+    surname: "Strevens",
+    email: "caroline.strevens@port.ac.uk",
+    linkedin: "https://orcid.org/0000-0001-9016-839X",
+    comment:
+      "I am currently co-leading an international research team that is gathering and analysing the perceptions of well-being of academic staff in Law Schools in order to understand more about the current social contexts in HE and ensure support for improved student well-being can be provided without this being at the expense of staff well-being. I am a member of the executive committee for the Legal Education Research Network (LERN), a Member of Advisory Board at the Centre for Professional Legal Education, Bond University, and a Visiting Fellow University of Northumbria.",
+    firm: "University of Portsmouth",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
+  {
+    name: "Nigel",
+    surname: "Duncan",
+    email: "n.j.duncan@city.ac.uk",
+    linkedin: "",
+    comment:
+      "Nigel Duncan is Professor Emeritus of Legal Education at The City Law School, City University, London. Before retiring he was Course Director of the LLM in Professional Legal Skills and his main teaching was on the Bar Course where he also co-ordinated the FRU Employment Elective which involves students in representing real clients in the employment tribunals. He also taught an LLM in Criminal Litigation and supervised student dissertations. He was Academic Lead for Assessment for City University and a University Teaching and Learning Fellow. He was a member of the Bar Standards Board Education and Training Committee.",
+    firm: "City University, London",
+    sentEmailsTime: ["October 17", "October 27"],
+    subject: "RE: Enhance legal skills with simulation training",
+  },
 ];
 
-console.log("emailList", emailList.length);
+// console.log("emailList", emailList.length);

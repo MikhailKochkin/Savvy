@@ -615,12 +615,15 @@ const LessonBlock = (props) => {
                 complexity={data.complexity}
                 question={data.question}
                 answer={data.answer}
+                answers={data.answers}
                 type={data.type}
+                goalType={data.goalType}
                 check={data.check}
                 me={me}
                 ifRight={data.ifRight}
                 ifWrong={data.ifWrong}
                 hidden={true}
+                lesson={lesson}
                 lessonID={lesson.id}
                 quizID={data.id}
                 user={data.user.id}

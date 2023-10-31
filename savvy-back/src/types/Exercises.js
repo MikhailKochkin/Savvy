@@ -8,6 +8,7 @@ const NewTest = objectType({
     t.model.ifWrong();
     t.model.type();
     t.model.goal();
+    t.model.goalType();
     t.model.complexity();
     t.model.lessonID();
     t.model.next();
@@ -32,8 +33,10 @@ const Quiz = objectType({
     t.model.id();
     t.model.question();
     t.model.answer();
+    t.model.answers();
     t.model.type();
     t.model.goal();
+    t.model.goalType();
     t.model.next();
     t.model.complexity();
     t.model.ifRight();

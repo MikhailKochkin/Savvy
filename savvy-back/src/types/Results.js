@@ -28,6 +28,8 @@ const QuizResult = objectType({
     t.model.comment();
     t.model.attempts();
     t.model.hint();
+    t.model.ideas();
+    t.model.ideasList();
     t.model.explanation();
     t.model.improvement();
     t.model.correct();

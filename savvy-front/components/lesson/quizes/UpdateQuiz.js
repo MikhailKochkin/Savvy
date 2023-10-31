@@ -15,8 +15,10 @@ const UPDATE_QUIZ_MUTATION = gql`
     $check: String
     $complexity: Int
     $type: String
+    $goalType: String
     $ifRight: String
     $ifWrong: String
+    $answers: ComplexAnswer
   ) {
     updateQuiz(
       id: $id
@@ -25,8 +27,10 @@ const UPDATE_QUIZ_MUTATION = gql`
       check: $check
       complexity: $complexity
       type: $type
+      goalType: $goalType
       ifRight: $ifRight
       ifWrong: $ifWrong
+      answers: $answers
     ) {
       id
       question
@@ -36,7 +40,9 @@ const UPDATE_QUIZ_MUTATION = gql`
       ifRight
       ifWrong
       answer
+      answers
       next
+      goalType
       createdAt
       user {
         id
@@ -145,6 +151,44 @@ const Complexity = styled.div`
   }
 `;
 
+const AnswerOption = styled.div`
+  margin: 3% 0;
+  width: 100%;
+  min-height: 60px;
+  padding: 15px;
+  font-size: 1.4rem;
+  outline: 0;
+  background: #f8f8f8;
+  border-radius: 15px;
+
+  .answerRow {
+    display: flex;
+    flex-direction: row;
+    .row1 {
+      margin-right: 10px;
+    }
+    div {
+      width: 50%;
+    }
+    select {
+      width: 100%;
+      margin-top: 10px;
+    }
+  }
+  input,
+  textarea {
+    border-radius: 5px;
+    border: 1px solid #c4c4c4;
+    min-height: 50px;
+    width: 100%;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 10px;
+    margin-bottom: 5px;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -156,7 +200,10 @@ const UpdateQuiz = (props) => {
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
-
+  const [goalType, setGoalType] = useState(props.goalType);
+  const [answers, setAnswers] = useState(
+    props.answers ? props.answers.answerElements : []
+  );
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -168,8 +215,7 @@ const UpdateQuiz = (props) => {
     props.next && props.next.false ? props.next.false : ""
   );
   const { t } = useTranslation("lesson");
-
-  const { lessonID, quizId } = props;
+  const { lessonID, quizId, lesson } = props;
   return (
     <Container>
       <select defaultValue={check} onChange={(e) => setCheck(e.target.value)}>
@@ -186,8 +232,20 @@ const UpdateQuiz = (props) => {
       >
         <option value="TEST">Question</option>
         <option value="FORM">Form</option>
+        <option value="GENERATE">Generate Ideas</option>
+      </select>
+      <label for="types">Format</label>
+      <select
+        name="types"
+        id="types"
+        defaultValue={goalType}
+        onChange={(e) => setGoalType(e.target.value)}
+      >
+        <option value="EDUCATE">Educate</option>
+        <option value="ASSESS">Assess</option>
       </select>
 
+      {/* 
       <Complexity>
         <select
           value={complexity}
@@ -200,7 +258,7 @@ const UpdateQuiz = (props) => {
           <option value={4}>4</option>
           <option value={5}>5</option>
         </select>
-      </Complexity>
+      </Complexity> */}
       <Comment>
         <DynamicLoadedEditor
           id="question"
@@ -210,13 +268,122 @@ const UpdateQuiz = (props) => {
           getEditorText={setQuestion}
         />
       </Comment>
-      <textarea
-        id="answer"
-        name="answer"
-        placeholder={"Answer"}
-        defaultValue={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-      />
+      {type !== "GENERATE" && (
+        <textarea
+          id="answer"
+          name="answer"
+          placeholder={"Answer"}
+          defaultValue={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+        />
+      )}
+      {type == "GENERATE" && (
+        <>
+          <label for="types">Ideas</label>
+          {answers.map((an, i) => (
+            <AnswerOption key={i}>
+              <label className="answerOptionLabel">Idea №{i + 1}</label>
+              <textarea
+                value={an.answer}
+                placeholder={`Answer`}
+                onChange={(e) => {
+                  const newAnswers = [...answers];
+                  newAnswers[i].answer = e.target.value;
+                  setAnswers(newAnswers);
+                }}
+              />
+              <div className="answerRow">
+                <div className="row1">
+                  <label className="answerOptionLabel">Next task type</label>
+                  <br />
+                  <select
+                    name="types"
+                    id="types"
+                    defaultValue={answers[i]?.next_type}
+                    onChange={(e) => {
+                      const newAnswers = [...answers];
+                      newAnswers[i].next_type = e.target.value;
+                      setAnswers(newAnswers);
+                    }}
+                  >
+                    <option value={null}></option>
+                    <option value="quiz">Question</option>
+                    <option value="newTest">Quiz</option>
+                    <option value="problem">Case Study</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="answerOptionLabel">Next task id</label>
+                  <br />
+                  <select
+                    name="types"
+                    id="types"
+                    defaultValue={answers[i]?.next_id}
+                    onChange={(e) => {
+                      const newAnswers = [...answers];
+                      newAnswers[i].next_id = e.target.value;
+                      setAnswers(newAnswers);
+                    }}
+                  >
+                    {answers[i].next_type.toLowerCase() == "quiz" &&
+                      lesson.quizes.map((q) => (
+                        <option value={q.id}>{q.question}</option>
+                      ))}
+                    {answers[i].next_type.toLowerCase() == "newtest" &&
+                      lesson.newTests.map((t) => (
+                        <option value={t.id}>{t.question[0]}</option>
+                      ))}
+                    {answers[i].next_type.toLowerCase() == "problem" &&
+                      lesson.problems.map((p) => (
+                        <option value={p.id}>{p.text}</option>
+                      ))}
+                  </select>
+                  {/* <input
+                    value={an.next_id}
+                    onChange={(e) => {
+                      const newAnswers = [...answers];
+                      newAnswers[i].next_id = e.target.value;
+                      setAnswers(newAnswers);
+                    }}
+                  /> */}
+                </div>
+              </div>
+            </AnswerOption>
+          ))}
+        </>
+      )}
+      {type == "GENERATE" && (
+        <>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              return setAnswers([
+                ...answers,
+                {
+                  answer: ``,
+                  next_id: "",
+                  next_type: "",
+                  index: answers.length,
+                },
+              ]);
+            }}
+          >
+            +1
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              if (answers.length > 0) {
+                // Remove the last item from the answers array
+                const newAnswers = answers.slice(0, -1);
+                setAnswers(newAnswers);
+              }
+            }}
+          >
+            -1
+          </button>
+        </>
+      )}
       <Comment>
         <DynamicLoadedEditor
           id="answer"
@@ -245,6 +412,11 @@ const UpdateQuiz = (props) => {
           ifWrong: ifWrong,
           complexity,
           check: check,
+          type: type,
+          goalType: goalType,
+          answers: {
+            answerElements: answers,
+          },
           next: {
             true: trueVal,
             false: falseVal,

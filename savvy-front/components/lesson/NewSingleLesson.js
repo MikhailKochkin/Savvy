@@ -29,13 +29,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       open
       totalPoints
       hasSecret
-      # lessonResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   progress
-      # }
       createdAt
       user {
         id
@@ -70,11 +63,13 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
+        answers
         complexity
         ifRight
         ifWrong
         check
         type
+        goalType
         next
         user {
           id
@@ -272,14 +267,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           number
           type
           published
-          # lessonResults {
-          #   id
-          #   visitsNumber
-          #   lessonID
-          #   student {
-          #     id
-          #   }
-          # }
         }
       }
     }
@@ -293,50 +280,6 @@ const Container = styled.div`
   min-height: 50vh;
   background-image: url("/static/law_pattern.svg");
   background-size: contain;
-`;
-
-const Head2 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 0;
-  background: #1a2980; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #26d0ce,
-    #1a2980
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #26d0ce, #1a2980);
-  color: white;
-  width: 100%;
-  text-align: center;
-  font-size: 1.8rem;
-  span {
-    color: #3ddc97;
-    cursor: pointer;
-    &:hover {
-      color: #139a43;
-    }
-  }
-  @media (max-width: 800px) {
-    font-size: 1.6rem;
-    justify-content: space-between;
-    padding: 2% 15px;
-    div {
-      flex: 85%;
-      text-align: right;
-    }
-  }
-`;
-
-const Progress = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 70vh;
-  margin: 0 0 2% 0;
 `;
 
 const LessonPart = styled.div`
@@ -447,11 +390,6 @@ const NewSingleLesson = (props) => {
   }
   let i_am_author = false;
   let i_am_student = false;
-
-  // const passProgress = (val) => {
-  //   props.passProgress(val);
-  // };
-
   if (
     me &&
     lesson.coursePage.authors.filter((auth) => auth.id == me.id).length > 0

@@ -16,6 +16,7 @@ const CREATE_QUIZ_MUTATION = gql`
     $ifRight: String
     $ifWrong: String
     $type: String
+    $answers: ComplexAnswer
   ) {
     createQuiz(
       question: $question
@@ -24,6 +25,7 @@ const CREATE_QUIZ_MUTATION = gql`
       ifRight: $ifRight
       ifWrong: $ifWrong
       type: $type
+      answers: $answers
     ) {
       id
       question
@@ -40,6 +42,7 @@ const CREATE_QUIZ_MUTATION = gql`
         name
         surname
       }
+      answers
     }
   }
 `;
@@ -111,7 +114,7 @@ const Advice = styled.p`
   width: 80%;
 `;
 
-const AnswerOption = styled.div`
+const AnswerBlock = styled.div`
   width: 80%;
   textarea {
     border-radius: 5px;
@@ -126,55 +129,37 @@ const AnswerOption = styled.div`
   }
 `;
 
-const Button = styled.button`
-  padding: 1.5% 3%;
-  font-size: 1.6rem;
-  width: 30%;
-  font-weight: 600;
-  color: #fffdf7;
-  background: ${(props) => props.theme.green};
-  border: solid 1px white;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-  &:active {
-    background: ${(props) => props.theme.darkGreen};
-  }
-`;
+const AnswerOption = styled.div`
+  margin: 3% 0;
+  width: 100%;
+  min-height: 60px;
+  padding: 15px;
+  font-size: 1.4rem;
+  outline: 0;
+  background: #f8f8f8;
+  border-radius: 15px;
 
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin: 15px 0;
-  padding-bottom: 20px;
-  .number {
-    cursor: pointer;
-    border: 1px solid grey;
-    border-radius: 10px;
+  .answerRow {
     display: flex;
-    font-size: 1.4rem;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    // width: 110px;
-    height: 25px;
-    margin-right: 15px;
-    padding: 0 20px;
-    button {
-      border: none;
-      cursor: pointer;
-      background: none;
-      font-size: 1.2rem;
-      font-family: Montserrat;
+    .row1 {
+      margin-right: 10px;
     }
   }
+  input,
+  textarea {
+    border-radius: 5px;
+    border: 1px solid #c4c4c4;
+    min-height: 50px;
+    width: 100%;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 10px;
+    margin-bottom: 5px;
+  }
 `;
 
-const Title = styled.div`
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin-bottom: 2%;
-`;
 const Comment = styled.div`
   margin: 3% 0;
   border-radius: 5px;
@@ -200,6 +185,14 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 const CreateQuiz = (props) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [answers, setAnswers] = useState([
+    {
+      answer: "",
+      next_id: "",
+      next_type: "",
+      index: 0,
+    },
+  ]);
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
   const [type, setType] = useState("TEST");
@@ -270,6 +263,9 @@ All text must be in Russian.`,
           ifRight: ifRight,
           ifWrong: ifWrong,
           type: type,
+          answers: {
+            answerElements: answers,
+          },
         }}
         refetchQueries={() => [
           {
@@ -320,9 +316,10 @@ All text must be in Russian.`,
                   >
                     <option value="TEST">Question</option>
                     <option value="FORM">Form</option>
+                    <option value="GENERATE">Generate Ideas </option>
                   </select>
 
-                  <AnswerOption>
+                  <AnswerBlock>
                     <Comment>
                       <DynamicLoadedEditor
                         id="question"
@@ -332,14 +329,98 @@ All text must be in Russian.`,
                         getEditorText={setQuestion}
                       />
                     </Comment>
-                    <textarea
-                      id="answer"
-                      name="answer"
-                      placeholder="Answer"
-                      value={answer}
-                      // defaultValue={answer}
-                      onChange={(e) => setAnswer(e.target.value)}
-                    />
+                    {type !== "GENERATE" && (
+                      <textarea
+                        id="answer"
+                        name="answer"
+                        placeholder="Answer"
+                        value={answer}
+                        // defaultValue={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
+                      />
+                    )}
+                    {type == "GENERATE" && (
+                      <>
+                        <label for="types">Ideas</label>
+                        {answers.map((an, i) => (
+                          <AnswerOption key={i}>
+                            <label className="answerOptionLabel">
+                              Answer Option №{i + 1}
+                            </label>
+                            <textarea
+                              value={an.answer}
+                              placeholder={`Answer`}
+                              onChange={(e) => {
+                                const newAnswers = [...answers];
+                                newAnswers[i].answer = e.target.value;
+                                setAnswers(newAnswers);
+                              }}
+                            />
+                            <div className="answerRow">
+                              <div className="row1">
+                                <label className="answerOptionLabel">
+                                  Next task id
+                                </label>
+                                <input
+                                  value={an.next_id}
+                                  onChange={(e) => {
+                                    const newAnswers = [...answers];
+                                    newAnswers[i].next_id = e.target.value;
+                                    setAnswers(newAnswers);
+                                  }}
+                                />
+                              </div>
+                              <div>
+                                <label className="answerOptionLabel">
+                                  Next task type
+                                </label>
+                                <input
+                                  value={an.next_type}
+                                  onChange={(e) => {
+                                    const newAnswers = [...answers];
+                                    newAnswers[i].next_type = e.target.value;
+                                    setAnswers(newAnswers);
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </AnswerOption>
+                        ))}
+                      </>
+                    )}
+                    {type == "GENERATE" && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (answers.length > 0) {
+                              // Remove the last item from the answers array
+                              const newAnswers = answers.slice(0, -1);
+                              setAnswers(newAnswers);
+                            }
+                          }}
+                        >
+                          -1
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            return setAnswers([
+                              ...answers,
+                              {
+                                answer: ``,
+                                next_id: "",
+                                next_type: "",
+                                index: answers.length,
+                              },
+                            ]);
+                          }}
+                        >
+                          +1
+                        </button>
+                      </>
+                    )}
+
                     <Comment id="ifRight">
                       <DynamicLoadedEditor
                         id="answer"
@@ -358,14 +439,13 @@ All text must be in Russian.`,
                         getEditorText={setIfWrong}
                       />
                     </Comment>
-                  </AnswerOption>
+                  </AnswerBlock>
 
                   <ButtonTwo
                     type="submit"
                     onClick={async (e) => {
                       e.preventDefault();
                       // document.getElementById("Message").style.display = "block";
-
                       const res = await createQuiz();
                       props.getResult(res);
                     }}

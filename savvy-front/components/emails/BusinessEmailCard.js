@@ -9,7 +9,7 @@ import GeneralEmail from "./GeneralEmail";
 
 const Row = styled.div`
   display: flex;
-  width: 70%;
+  width: 100%;
   flex-direction: row;
   justify-content: left;
   padding: 5px 0;
@@ -46,9 +46,12 @@ const Row = styled.div`
     width: 30%;
     border-right: 2px solid #eff0f1;
     padding: 10px;
-
+    div {
+      width: 100%;
+    }
     .result {
-      background-color: #f4a261;
+      width: auto;
+      background-color: #ffde01;
       color: #14213d;
       padding: 2px 10px;
       display: inline-block;
@@ -63,6 +66,7 @@ const Row = styled.div`
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      width: 100%;
     }
     input {
       width: 400px;
@@ -144,10 +148,16 @@ const UserCard = memo((props) => {
           {" "}
           {props.comment} at {props.firm}
         </div>
+        {props.linkedin && (
+          <button>
+            <a href={props.linkedin} target="_blank"></a>To Linkedin
+          </button>
+        )}
         <div className="email">
           {" "}
           <b>{props.email}</b>
         </div>
+
         <div>Personal touch: {props.personalTouch}</div>
         <div className="sent">
           {props.sentEmailsTime?.length == 0
@@ -202,6 +212,7 @@ const UserCard = memo((props) => {
             name={props.name}
             firm={props.firm}
             connection={props.connection}
+            subject={props.subject}
           />
         )}
         {allLinks && (

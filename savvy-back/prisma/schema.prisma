@@ -569,6 +569,7 @@ model NewTest {
   updatedAt   DateTime     @updatedAt
   type        String?      @default("TEST")
   next        Json?
+  goalType    String?      @default("EDUCATE")
   goal        String?
   ifRight     String?
   ifWrong     String?
@@ -778,11 +779,13 @@ model Quiz {
   id          String       @id @default(cuid()) @db.VarChar(30)
   question    String
   answer      String
+  answers     Json?
   goal        String?
   lessonID    String?      @db.VarChar(30)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   type        String?      @default("TEST")
+  goalType    String?      @default("EDUCATE")
   next        Json?
   ifRight     String?
   ifWrong     String?
@@ -799,6 +802,8 @@ model QuizResult {
   id          String   @id @default(cuid()) @db.VarChar(30)
   answer      String?
   attempts    Int?
+  ideasList   Json?
+  ideas       String[]
   hint        String?
   explanation String?
   comment     String?

@@ -149,7 +149,7 @@ const Block = styled.div`
   border: 3px solid #f2f6f9;
   border-radius: 20px;
   h2 {
-    margin: 20px;
+    margin: 20px 0;
   }
 `;
 

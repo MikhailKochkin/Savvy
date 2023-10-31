@@ -130,7 +130,6 @@ const NewInteractive = (props) => {
   const getResults = () => {
     return null;
   };
-
   return (
     <Styles>
       <div className="suggestion">
@@ -150,6 +149,7 @@ const NewInteractive = (props) => {
                     index={1}
                     key={el.id}
                     type={el.type}
+                    goalType={el.goalType}
                     check={el.check}
                     question={el.question}
                     answer={el.answer}
@@ -185,6 +185,7 @@ const NewInteractive = (props) => {
                     user={el.user.id}
                     user_name={el.user}
                     type={el.type}
+                    goalType={el.goalType}
                     me={me}
                     lessonID={lesson.id}
                     length={Array(el.correct.length).fill(false)}

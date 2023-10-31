@@ -10,6 +10,9 @@ const Box = styled.div`
   justify-content: row;
   margin-bottom: 2%;
   font-size: 1.6rem;
+  h2 {
+    margin: 15px 0;
+  }
   div {
     flex: 50%;
     .final_answer {
@@ -225,7 +228,7 @@ const ProblemModal = (props) => {
   return (
     <Box key={problem.id}>
       <div className="columnOne">
-        <b>Case Study: </b>
+        <h2>Case Study </h2>
         {parse(`${problem.text}`)}
         <div className="final_answer">
           <b>Final answer</b>

@@ -41,6 +41,40 @@ const ProblemStructure = inputObjectType({
   },
 });
 
+const QuizIdea = inputObjectType({
+  name: "QuizIdea",
+  definition(t) {
+    t.string("idea");
+    t.string("result");
+    t.string("next_id");
+    t.string("next_type");
+  },
+});
+
+const QuizIdeas = inputObjectType({
+  name: "QuizIdeas",
+  definition(t) {
+    t.list.field("quizIdeas", { type: "QuizIdea" });
+  },
+});
+
+const AnswerElement = inputObjectType({
+  name: "AnswerElement",
+  definition(t) {
+    t.string("answer");
+    t.string("next_id");
+    t.string("next_type");
+    t.int("index");
+  },
+});
+
+const ComplexAnswer = inputObjectType({
+  name: "ComplexAnswer",
+  definition(t) {
+    t.list.field("answerElements", { type: "AnswerElement" });
+  },
+});
+
 const LessonItem = inputObjectType({
   name: "LessonItem",
   definition(t) {
@@ -378,4 +412,8 @@ module.exports = {
   Borders,
   ConstructionAnswers,
   AnswerItem,
+  AnswerElement,
+  ComplexAnswer,
+  QuizIdeas,
+  QuizIdea,
 };

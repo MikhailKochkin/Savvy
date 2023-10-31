@@ -59,6 +59,7 @@ const GET_RESULTS = gql`
         correct
         comment
         hint
+        ideasList
         explanation
         improvement
         student {
@@ -749,7 +750,7 @@ const LessonData = (props) => {
       )}
       {show && data !== undefined && (
         <LessonContent>
-          <IntroData>
+          {/* <IntroData>
             <h4>How to use the analytics page?</h4>
             <div>
               At analytics page you can:
@@ -784,7 +785,7 @@ const LessonData = (props) => {
               ""
             )}
             {report && report.length > 0 && <Report>{parse(report)}</Report>}
-          </IntroData>
+          </IntroData> */}
           <div>
             <h2>Lesson results</h2>
           </div>
@@ -850,6 +851,12 @@ const LessonData = (props) => {
                   quizes={lesson.quizes.filter((t) => t.id === l.id)}
                   student={student}
                   results={data.stats.quizResults}
+                  all_quizes={lesson.quizes}
+                  all_tests={lesson.newTests}
+                  all_notes={lesson.notes}
+                  problems={lesson.problems}
+                  testResults={data.stats.testResults}
+                  problemResults={data.stats.problemResults}
                 />
               );
             }

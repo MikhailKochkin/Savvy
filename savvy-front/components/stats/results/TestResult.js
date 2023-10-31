@@ -9,10 +9,11 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   font-size: 1.6rem;
-  margin: 80px 0;
-
   p {
     margin: 5px 0;
+  }
+  h2 {
+    margin: 15px 0;
   }
   .answer {
     border-top: 2px solid #edefed;
@@ -99,7 +100,7 @@ const TestResult = (props) => {
           return (
             <Box>
               <div>
-                <b>Quiz: </b>
+                <h2>Quiz </h2>
                 {parse(test.question[0])}
                 <div>
                   <b>Type:</b> {test.type == "FORM" ? "Form" : "Quiz"}
