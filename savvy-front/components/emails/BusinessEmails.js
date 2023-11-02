@@ -39,11 +39,18 @@ const Styles = styled.div`
   padding: 50px 0;
   background: #f3f4f5;
   width: 100%;
+  .floating {
+  }
   .total {
     width: 70%;
     margin: 20px 0;
-    button {
-    }
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0%;
+    background: #f3f4f5;
+    border: 1px solid grey;
+    padding: 30px 0;
+    padding-left: 20px;
   }
   .create {
     background: #fff;
@@ -86,6 +93,13 @@ const Editor = styled.div`
   @media (max-width: 800px) {
     width: 350px;
   }
+`;
+
+const Buttons = styled.div`
+  width: 70%;
+  border-top: 1px dashed grey;
+  padding-top: 25px;
+  margin-top: 25px;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
@@ -154,23 +168,26 @@ const ClientData = (props) => {
   return (
     <Styles>
       <div className="total">
-        <div>Всего: {clients.length}</div>
-        <div>Адресаты: {addressees.length}</div>
-        <EmailBox>
-          <input
-            type="text"
-            onChange={(e) => setSubject(e.target.value)}
-            value={subject}
-          />
-          <Editor>
-            <DynamicLoadedEditor
-              getEditorText={myCallback2}
-              value={text}
-              name="text"
+        <div className="floating">
+          <div>Всего: {clients.length}</div>
+          <div>Адресаты: {addressees.length}</div>
+          <EmailBox>
+            <input
+              type="text"
+              onChange={(e) => setSubject(e.target.value)}
+              value={subject}
             />
-          </Editor>
-        </EmailBox>
-        <button onClick={(e) => send()}>Отправить имейлы</button>
+            <Editor>
+              <DynamicLoadedEditor
+                getEditorText={myCallback2}
+                value={text}
+                name="text"
+              />
+            </Editor>
+          </EmailBox>
+          <button onClick={(e) => send()}>Отправить имейлы</button>
+          <button onClick={(e) => setAddressees([])}>Обнулить</button>
+        </div>
         <br />
         {/* <div className="pagination">
           {Array.from({ length: totalPages }, (_, index) => (
@@ -207,7 +224,9 @@ const ClientData = (props) => {
       {organizations.map((c, i) => {
         return (
           <>
-            <button onClick={(e) => addOrgList(c.name)}>Add</button>
+            <Buttons>
+              <button onClick={(e) => addOrgList(c.name)}>Add</button>
+            </Buttons>
             <Company
               index={i}
               company={c}

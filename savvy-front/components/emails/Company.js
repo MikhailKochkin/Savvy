@@ -55,6 +55,11 @@ const Company = (props) => {
       <div>
         <div className="result">{company.result}</div>
       </div>
+      <div>
+        {company?.sentEmailsTime?.map((time) => (
+          <li>{time}</li>
+        ))}
+      </div>
       {open &&
         emails.map((c, i) => {
           return (

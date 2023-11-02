@@ -344,7 +344,7 @@ const Legal = (props) => {
           ) : (
             <TextBar>
               <h1>Privacy Policy</h1>
-              <p>Last updated: March 11, 2023</p>
+              <p>Last updated: November 2, 2023</p>
               <p>
                 This Privacy Policy describes Our policies and procedures on the
                 collection, use and disclosure of Your information when You use
@@ -387,6 +387,13 @@ const Legal = (props) => {
                     Your computer, mobile device or any other device by a
                     website, containing the details of Your browsing history on
                     that website among its many uses.
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <b>Data Protection Officer (DPO)</b> means the person
+                    appointed by the Company to oversee and monitor compliance
+                    with data protection laws.
                   </p>
                 </li>
                 <li>
@@ -586,7 +593,29 @@ const Legal = (props) => {
                 regarding cookies, please visit our Cookies Policy or the
                 Cookies section of our Privacy Policy.
               </p>
+              <h2>Appointment of a Data Protection Officer</h2>
+              <p>
+                The Company has appointed a Data Protection Officer to oversee
+                compliance with data protection laws including the GDPR. The DPO
+                can be contacted at Mike@besavvy.app.
+              </p>
               <h2>Use of Your Personal Data</h2>
+              <p>
+                As a data subject under the GDPR, you have the right to request
+                access to, rectification or erasure of your Personal Data. You
+                also have the right to object to or restrict processing of your
+                data.
+              </p>
+              <p>
+                The Company processes Personal Data based on the following
+                lawful bases:
+              </p>
+              <ul>
+                <li>Consent</li>
+                <li>Performance of a contract</li>
+                <li>Legal obligation</li>
+                <li>Legitimate interests</li>
+              </ul>
               <p>
                 The Company may use Personal Data for the following purposes:
               </p>
@@ -730,6 +759,12 @@ const Legal = (props) => {
                 may differ than those from Your jurisdiction.
               </p>
               <p>
+                The Company may transfer Personal Data to countries outside of
+                the EEA. We utilize adequacy decisions, standard contractual
+                clauses, binding corporate rules or other valid transfer
+                mechanisms to lawfully transfer data across borders.
+              </p>
+              <p>
                 Your consent to this Privacy Policy followed by Your submission
                 of such information represents Your agreement to that transfer.
               </p>
@@ -783,6 +818,19 @@ const Legal = (props) => {
                 method of electronic storage is 100% secure. While We strive to
                 use commercially acceptable means to protect Your Personal Data,
                 We cannot guarantee its absolute security.
+              </p>
+              <p>
+                <b>Record Keeping.</b> The Company maintains records of our data
+                processing activities as required under Article 30 of the GDPR.
+                These records are kept up-to-date and available upon request by
+                supervisory authorities.
+              </p>
+              <p>
+                If the Company experiences a data breach involving Personal
+                Data, we will notify the appropriate supervisory authority
+                within 72 hours, unless the breach is unlikely to pose a risk.
+                If the breach is likely to result in high risk to data subjects,
+                we will notify affected individuals as required.
               </p>
               <h1>Children's Privacy</h1>
               <p>
