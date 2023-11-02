@@ -4,7 +4,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { companyList, emailList } from "../../businessEmailList.js";
+// import { companyList, emailList } from "../../businessEmailList.js";
 import { uniList, emailUniList } from "../../lawschool.js";
 import Company from "./Company";
 // import emailSQEList from "../../sqeList.js";
@@ -110,7 +110,9 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 const ClientData = (props) => {
   const [clients, setClients] = useState(emailList ? emailList : []);
   const [addressees, setAddressees] = useState([emailList ? emailList : []]);
-  const [organizations, setOrganizations] = useState([...companyList]);
+  const [organizations, setOrganizations] = useState(
+    companyList ? [...companyList] : []
+  );
   const [subject, setSubject] = useState();
   const [tags, setTags] = useState(props.tags);
   const [text, setText] = useState();
