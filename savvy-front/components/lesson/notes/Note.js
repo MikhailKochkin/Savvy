@@ -630,7 +630,7 @@ const Note = (props) => {
                   <div className="sender_name">
                     {author.name} {author.surname}
                   </div>
-                  <div>Re: Новый сотрудник</div>
+                  <div>Re: Help ASAP</div>
                   <div>
                     To: {me.name} {me.surname}
                   </div>
