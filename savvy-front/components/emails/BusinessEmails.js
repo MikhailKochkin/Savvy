@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 // import { companyList, emailList } from "../../businessEmailList.js";
 import { uniList, emailUniList } from "../../lawschool.js";
 import Company from "./Company";
-// import emailSQEList from "../../sqeList.js";
+import emailSQEList from "../../sqeList.js";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -44,8 +44,8 @@ const Styles = styled.div`
   .total {
     width: 70%;
     margin: 20px 0;
-    position: -webkit-sticky;
-    position: sticky;
+    /* position: -webkit-sticky;
+    position: sticky; */
     top: 0%;
     background: #f3f4f5;
     border: 1px solid grey;
@@ -210,9 +210,22 @@ const ClientData = (props) => {
         >
           Law Firms
         </button>
-        {/* <button onClick={(e) => setClients(emailSQEList)}>
+        <button
+          onClick={(e) => {
+            setOrganizations([
+              {
+                name: "Training Center",
+                comment: "",
+                result: "",
+                country: "",
+                sentEmailsTime: ["October 22"],
+              },
+            ]);
+            setClients(emailSQEList);
+          }}
+        >
           Training Companies
-        </button> */}
+        </button>
         <button
           onClick={(e) => {
             setClients(emailUniList);

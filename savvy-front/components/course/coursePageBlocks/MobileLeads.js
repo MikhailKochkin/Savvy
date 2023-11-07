@@ -342,7 +342,7 @@ const MobileBuy = (props) => {
   const [number, setNumber] = useState("");
 
   const [price, setPrice] = useState(
-    props.coursePage.installments && props.coursePage.installments > 1
+    props.coursePage?.installments && props.coursePage.installments > 1
       ? props.coursePage.price / props.coursePage.installments
       : props.coursePage.price
   );

@@ -354,7 +354,7 @@ const MobileBuy = (props) => {
   const [number, setNumber] = useState("");
 
   const [price, setPrice] = useState(
-    props.coursePage.installments && props.coursePage.installments > 1
+    props.coursePage?.installments && props.coursePage.installments > 1
       ? props.coursePage.price / props.coursePage.installments
       : props.coursePage.price
   );
@@ -378,28 +378,18 @@ const MobileBuy = (props) => {
 
   let total_lessons_number = 0;
   if (program) {
-    const total_lessons_number = program.coursePages.reduce(function (
-      acc,
-      obj
-    ) {
+    total_lessons_number = program.coursePages.reduce(function (acc, obj) {
       return (
         acc +
         obj.lessons.filter((les) => les.type.toLowerCase() !== "hidden").length
       );
-    },
-    0);
+    }, 0);
   }
 
   return (
     <Styles id="buy_section">
       <>
-        {program && program.id == "clgp3kppu0454eku9bs6nklf8" ? (
-          <Title>Пошаговый запуск карьеры юриста</Title>
-        ) : (
-          <Title>
-            Получите сегодня скидку <span>-20%</span>
-          </Title>
-        )}
+        <Title>Получите 🎁 за покупку програмы</Title>
         <Fieldset>
           <Group>
             <input
@@ -476,8 +466,12 @@ const MobileBuy = (props) => {
           <div className="guarantee">{t("guarantee")}</div>
         )} */}
         <div className="details">
-          <div className="">◼️ Длительность: {program.months} месяцев</div>
-
+          <div className="">
+            ◼️ Длительность:{" "}
+            {program && program.months !== 3
+              ? `${program.months} месяцев`
+              : "3 месяца"}
+          </div>
           <div className="">
             ◼️{" "}
             {program

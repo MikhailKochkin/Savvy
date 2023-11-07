@@ -406,10 +406,11 @@ const LessonData = (props) => {
           type: "newtest",
           res: val,
           max_val: typeDifficultyMap[l.type.toLowerCase()],
-          result:
-            parseInt((val / typeDifficultyMap[l.type.toLowerCase()]) * 100) +
-            "%",
+          result: parseInt(
+            (val / typeDifficultyMap[l.type.toLowerCase()]) * 100
+          ),
           goal: test.goal,
+          description: test.question[0],
         });
         lesson_results.push(val * typeDifficultyMap[l.type.toLowerCase()]);
       } else if (l.type.toLowerCase() == "quiz") {
@@ -437,10 +438,11 @@ const LessonData = (props) => {
           type: "quiz",
           res: val,
           max_val: typeDifficultyMap[l.type.toLowerCase()],
-          result:
-            parseInt((val / typeDifficultyMap[l.type.toLowerCase()]) * 100) +
-            "%",
+          result: parseInt(
+            (val / typeDifficultyMap[l.type.toLowerCase()]) * 100
+          ),
           goal: question.goal,
+          description: question.question,
         });
         lesson_results.push(val * typeDifficultyMap[l.type.toLowerCase()]);
       } else if (l.type.toLowerCase() == "shot") {
@@ -495,12 +497,12 @@ const LessonData = (props) => {
           res: val * typeDifficultyMap[l.type.toLowerCase()],
           max_val: typeDifficultyMap[l.type.toLowerCase()],
           goal: textEditor.goal,
-          result:
-            parseInt(
-              ((val * typeDifficultyMap[l.type.toLowerCase()]) /
-                typeDifficultyMap[l.type.toLowerCase()]) *
-                100
-            ) + "%",
+          description: textEditor.text.substring(0, 800),
+          result: parseInt(
+            ((val * typeDifficultyMap[l.type.toLowerCase()]) /
+              typeDifficultyMap[l.type.toLowerCase()]) *
+              100
+          ),
         });
         lesson_results.push(val * typeDifficultyMap[l.type.toLowerCase()]);
       } else if (l.type.toLowerCase() == "problem") {
@@ -509,6 +511,8 @@ const LessonData = (props) => {
         let problemResults = data.stats.problemResults
           .filter((tr) => tr.student.id == student.id)
           .filter((tr) => tr.problem.id == problem.id);
+
+        let regex = /<img[^>]+>/g;
 
         const exercises =
           problem.steps && problem.steps.problemItems
@@ -574,10 +578,11 @@ const LessonData = (props) => {
           type: "problem",
           res: val,
           max_val: typeDifficultyMap[l.type.toLowerCase()],
-          result:
-            parseInt((val / typeDifficultyMap[l.type.toLowerCase()]) * 100) +
-            "%",
+          result: parseInt(
+            (val / typeDifficultyMap[l.type.toLowerCase()]) * 100
+          ),
           goal: problem.goal,
+          description: problem.text.substring(0, 800).replace(regex, ""),
         });
         lesson_results.push(val);
       }
@@ -620,7 +625,28 @@ const LessonData = (props) => {
   const generateReport = async (event, reportData) => {
     event.preventDefault();
     setGenerating(true);
-    console.log("reportData", reportData);
+    setReport("");
+    const well_done = reportData.filter((rd) => rd.result > 70);
+    const not_good_enough = reportData.filter((rd) => rd.result <= 70);
+    console.log("lesson", lesson.goal);
+    let student_result;
+
+    if (studentResults && totalDifficulty) {
+      student_result = (studentResults / totalDifficulty).toFixed(2);
+    } else {
+      student_result = 0;
+    }
+
+    let recommendation;
+    if (student_result < 0.5) {
+      recommendation = "The student needs to redo this lesson";
+    } else if (student_result >= 0.5 && student_result < 0.7) {
+      recommendation = `The student has generally understood this lesson but there are still some flaws.
+       The student needs minor help form mentor or senior colleagues`;
+    } else {
+      recommendation = `The student has learned everything and ready for work`;
+    }
+    console.log("recommendation", recommendation, student_result);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -629,28 +655,27 @@ const LessonData = (props) => {
         },
         body: JSON.stringify({
           prompt: `
-          You are mentor of a law student. 
-          They have completed tasks helping them learn about Due Diligence in M&A deals.
-           The total result is ${
-             studentResults && totalDifficulty
-               ? parseInt((studentResults / totalDifficulty).toFixed(2) * 100)
-               : 0
-           } out of 100. 
-          Now you have received the result for every task that look like this: ${reportData}. 
-          Take this report as an example and prepare a new report using the data above. Return the report in HTML form. Include only p, ul and li tags.
-          Example: <p>The student completed the simulator with a total score of <b>62 out of 100</b>. This indicates that while the student has mastered some skills related to Due Diligence in M&amp;A, there are still areas that require improvement.</p>
-    <p>We would like to focus your attention on the following points:</p>
-    <ul>
-      <li>
-        <p><strong>Learning goal: (describe the goal)</strong></p>
-        <p>The student result is (give the result) , which is above / below the success threshold. This suggests that (make a conclusion) </p>
-      </li>
-    </ul>
-    <p>Our general recommendation is (explain if the goal of the lesson: ${
-      lesson.goal
-    } has been achieved)</p>
-    <p></p>
-  `,
+            You are mentor of a law student.
+            Prepare a report describing how well the student has completed the lesson using this structure. 
+            Return the report in HTML form. Include only p, ul and li tags.
+          
+            <p>The goal of the lesson is: ${
+              lesson.goal
+            }. The student completed the simulator with a total score of ${
+            studentResults && totalDifficulty
+              ? parseInt((studentResults / totalDifficulty).toFixed(2) * 100)
+              : 0
+          } </p>
+            <p>This indicates that ${recommendation}... </p>
+            ${
+              not_good_enough.length > 0
+                ? `The student has completed these tasks with errors: ${not_good_enough.map(
+                    (mis) =>
+                      `<li>The student has not developed the skill: ${mis.goal} </li>`
+                  )}`
+                : `The student has completed all the tasks correctly.`
+            }
+            `,
         }),
       });
 
@@ -750,7 +775,7 @@ const LessonData = (props) => {
       )}
       {show && data !== undefined && (
         <LessonContent>
-          {/* <IntroData>
+          <IntroData>
             <h4>How to use the analytics page?</h4>
             <div>
               At analytics page you can:
@@ -785,7 +810,7 @@ const LessonData = (props) => {
               ""
             )}
             {report && report.length > 0 && <Report>{parse(report)}</Report>}
-          </IntroData> */}
+          </IntroData>
           <div>
             <h2>Lesson results</h2>
           </div>
