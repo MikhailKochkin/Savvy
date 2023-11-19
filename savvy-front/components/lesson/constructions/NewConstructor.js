@@ -457,6 +457,16 @@ const NewConstructor = (props) => {
         }
       })
     );
+    createConstructionResult({
+      variables: {
+        answer: "",
+        attempts: attempts,
+        lessonId: lessonID,
+        // answers: {answers: []}
+        constructionId: construction.id,
+        elements: { elements: input },
+      },
+    });
     const result = newConfig.map((el, i) => {
       return elements[i].text === input[i].text;
     });
@@ -725,7 +735,6 @@ const ConElement = (props) => {
 
   const show = (e) => {
     e.preventDefault();
-    // console.log("show e.target", e.target.previousSibling.previousSibling);
     e.target.previousSibling.previousSibling.innerHTML =
       e.target.previousSibling.previousSibling.getAttribute("data-initial");
     e.target.style.pointerEvents = "none";

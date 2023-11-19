@@ -622,12 +622,15 @@ const LessonData = (props) => {
     return indexes;
   };
 
+  const removeHTMLTags = (input) => input.replace(/<[^>]*>/g, "");
+
   const generateReport = async (event, reportData) => {
     event.preventDefault();
     setGenerating(true);
     setReport("");
     const well_done = reportData.filter((rd) => rd.result > 70);
     const not_good_enough = reportData.filter((rd) => rd.result <= 70);
+    console.log("not_good_enough", not_good_enough);
     console.log("lesson", lesson.goal);
     let student_result;
 
@@ -639,12 +642,12 @@ const LessonData = (props) => {
 
     let recommendation;
     if (student_result < 0.5) {
-      recommendation = "The student needs to redo this lesson";
+      recommendation = "The student needs to redo this lesson.";
     } else if (student_result >= 0.5 && student_result < 0.7) {
-      recommendation = `The student has generally understood this lesson but there are still some flaws.
-       The student needs minor help form mentor or senior colleagues`;
+      recommendation = `The student has generally understood this lesson but there are still some gaps in the knowledge and skillset.
+       The student needs minor help form mentor or senior colleagues.`;
     } else {
-      recommendation = `The student has learned everything and ready for work`;
+      recommendation = `The student has learned everything and ready for work.`;
     }
     console.log("recommendation", recommendation, student_result);
     try {
@@ -657,21 +660,22 @@ const LessonData = (props) => {
           prompt: `
             You are mentor of a law student.
             Prepare a report describing how well the student has completed the lesson using this structure. 
-            Return the report in HTML form. Include only p, ul and li tags.
-          
-            <p>The goal of the lesson is: ${
+            Return the report in HTML form. Include only p, ul and li tags. Use the information below as an outline.
+            <p>The goal of the lesson is: "${
               lesson.goal
-            }. The student completed the simulator with a total score of ${
+            }". The student completed the simulator with a total score of ${
             studentResults && totalDifficulty
               ? parseInt((studentResults / totalDifficulty).toFixed(2) * 100)
               : 0
-          } </p>
-            <p>This indicates that ${recommendation}... </p>
+          } out of 100.</p>
+            <p>This indicates that ${recommendation} (update recommendation text to fit into the text) </p>
+            <p>Problem points:</p>
             ${
               not_good_enough.length > 0
-                ? `The student has completed these tasks with errors: ${not_good_enough.map(
+                ? `${not_good_enough.map(
                     (mis) =>
-                      `<li>The student has not developed the skill: ${mis.goal} </li>`
+                      `<li>The student has not ${mis.goal} (update the skill text to fit into the text. Write in third person.). 
+                  </li>`
                   )}`
                 : `The student has completed all the tasks correctly.`
             }
@@ -780,19 +784,23 @@ const LessonData = (props) => {
             <div>
               At analytics page you can:
               <ul>
-                <li>
-                  get recommendations based on the simulator goals and student
-                  results (press the "Generate report" button for that)
-                </li>
+                {lesson.goal && (
+                  <li>
+                    get recommendations based on the simulator goals and student
+                    results (press the "Generate report" button for that)
+                  </li>
+                )}
                 <li>
                   take a look at how the student was going through the
                   simulator. (scroll down to the "Lesson Results" section){" "}
                 </li>
               </ul>
             </div>
-            <button onClick={(e) => generateReport(e, reportData)}>
-              Generate report
-            </button>
+            {lesson.goal && (
+              <button onClick={(e) => generateReport(e, reportData)}>
+                Generate report
+              </button>
+            )}
             {generating ? (
               <Progress>
                 <TailSpin

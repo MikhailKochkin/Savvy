@@ -1054,7 +1054,7 @@ const SingleQuiz = (props) => {
               </div>
             )}
             {/* 3. Answer bubble part */}
-            {props.type.toLowerCase() !== "generate" && (
+            {props.type?.toLowerCase() !== "generate" && (
               <>
                 <div className="answer">
                   <IconBlock>
@@ -1134,7 +1134,7 @@ const SingleQuiz = (props) => {
               </>
             )}
             {/* 3.5. Generate ideas */}
-            {props.type.toLowerCase() == "generate" && (
+            {props.type?.toLowerCase() == "generate" && (
               <>
                 <div className="answer">
                   <IconBlock>

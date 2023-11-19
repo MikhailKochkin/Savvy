@@ -7,48 +7,10 @@ import Construction from "./Construction";
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-
-  width: 70%;
+  width: 100%;
   margin: 75px 0;
   h2 {
     margin: 0;
-  }
-`;
-
-const Button = styled.button`
-  text-align: center;
-  background: #ffffff;
-  border: 1px solid #112a62;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 90%;
-  outline: 0;
-  margin: 1% 0;
-  color: #112a62;
-  font-size: 1.4rem;
-  a {
-    color: #112a62;
-  }
-`;
-
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  padding: 1% 2%;
-  width: 50%;
-  max-height: calc(100vh - 5rem);
-  overflow-y: scroll;
-  @media (max-width: 800px) {
-    width: 90%;
-  }
-  p {
-      margin: 1%;
-  }
-  #id {
-    color: #dc143c;
   }
 `;
 

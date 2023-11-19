@@ -48,7 +48,6 @@ const StyledModal = styled.div`
   overflow: scroll;
   padding: 3% 2%;
   width: 50%;
-  max-height: 600px;
   @media (max-width: 800px) {
     width: 90%;
   }
@@ -70,7 +69,6 @@ const Button = styled.button`
 `;
 
 const Span = styled.div`
-  max-height: 600px;
   margin: 3% 0;
 `;
 

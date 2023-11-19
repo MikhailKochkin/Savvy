@@ -458,13 +458,14 @@ const GeneralEmail = (name, text) => `
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                       ${text}
+                      <p>Hello ${name},</p>
+                      ${text}
                        ___________
                         <br/>
                         <p>Mike Kochkin</p>
                         <p>CEO of BeSavvy</p>
                         <p>
-                        We build AI-powered training simulators for lawyers
+                        We help lawyers acquire new skills with simulators
                         </p>
                         <!-- Sub copy -->
                       </div>

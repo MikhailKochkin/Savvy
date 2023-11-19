@@ -40,6 +40,7 @@ const ProgramSyllabus = (props) => {
   const coursePages = [...props.program.coursePages].sort(
     (a, b) => a.numInCareerTrack - b.numInCareerTrack
   );
+
   const me = useUser();
   return (
     <>
@@ -50,14 +51,8 @@ const ProgramSyllabus = (props) => {
             <LessonsInfo>
               <h2>{t("what_u_will_learn")}</h2>
               <div>
-                {console.log(
-                  "course",
-                  coursePages.sort(
-                    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-                  )
-                )}
                 {coursePages
-                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                  // .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
                   .map((c, i) => (
                     <Course c={c} i={i} />
                   ))}

@@ -218,79 +218,7 @@ const Shots = (props) => {
         <>
           {/* <Title>{title}</Title> */}
           {/* <div className="step">Step {num}</div> */}
-          <>
-            {parts[num - 1] && (
-              <Text>
-                <div key={num - 1}>{parse(parts[num - 1])}</div>
-              </Text>
-            )}
-            {comments.length > 0 && (
-              <Commentary>
-                <>{parse(comments[num - 1])}</>
-              </Commentary>
-            )}
-            <Buttons>
-              <Mutation
-                mutation={CREATE_SHOTRESULT_MUTATION}
-                variables={{
-                  lessonId: lessonID,
-                  shotId: shotID,
-                  answer: "Looked through",
-                }}
-                refetchQueries={() => [
-                  {
-                    query: SINGLE_LESSON_QUERY,
-                    variables: { id: props.lessonID },
-                  },
-                  {
-                    query: CURRENT_USER_QUERY,
-                  },
-                ]}
-              >
-                {(createShotResult, { loading, error }) => (
-                  <>
-                    {num > 1 ? (
-                      <Circle color={num < 2} onClick={(e) => setNum(num - 1)}>
-                        <span>&#8249;</span>
-                      </Circle>
-                    ) : (
-                      <Circle color={num < 2}>
-                        <span>&#8249;</span>
-                      </Circle>
-                    )}
-
-                    <div className="bar">
-                      <Progress
-                        className="progress"
-                        progress={parseInt((100 * num) / parts.length) + "%"}
-                      ></Progress>
-                    </div>
-                    {num < parts.length ? (
-                      <Circle
-                        color={num === parts.length}
-                        onClick={async (e) => {
-                          // Stop the form from submitting
-                          e.preventDefault();
-                          // call the mutation
-                          setNum(num + 1);
-                          if (num + 1 === parts.length) {
-                            const res2 = await createShotResult();
-                          }
-                        }}
-                      >
-                        <span>&#8250;</span>
-                      </Circle>
-                    ) : (
-                      <Circle color={true}>
-                        <span>&#8250;</span>
-                      </Circle>
-                    )}
-                  </>
-                )}
-              </Mutation>
-            </Buttons>
-          </>
-          {/* <Buttons>
+          <Buttons>
             <Mutation
               mutation={CREATE_SHOTRESULT_MUTATION}
               variables={{
@@ -349,7 +277,19 @@ const Shots = (props) => {
                 </>
               )}
             </Mutation>
-          </Buttons> */}
+          </Buttons>
+          <>
+            {parts[num - 1] && (
+              <Text>
+                <div key={num - 1}>{parse(parts[num - 1])}</div>
+              </Text>
+            )}
+            {comments.length > 0 && (
+              <Commentary>
+                <>{parse(comments[num - 1])}</>
+              </Commentary>
+            )}
+          </>
         </>
       )}
       {update && (

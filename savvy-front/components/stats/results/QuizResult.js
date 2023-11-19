@@ -125,7 +125,7 @@ const QuizResult = (props) => {
                 {q.type == "TEST" && "Test"}
                 {q.type == "GENERATE" && "Generate ideas"}
               </div>
-              {q.type.toLowerCase() !== "generate" && (
+              {q.type?.toLowerCase() !== "generate" && (
                 <>
                   <div className="standard">
                     <b>Sample answer:</b>
@@ -145,7 +145,7 @@ const QuizResult = (props) => {
                     .filter((r) => r.quiz.id == q.id)
                     .map((t) => (
                       <div className="block">
-                        {q.type.toLowerCase() !== "generate" && (
+                        {q.type?.toLowerCase() !== "generate" && (
                           <>
                             <div className="standard">
                               {q.type !== "FORM" &&

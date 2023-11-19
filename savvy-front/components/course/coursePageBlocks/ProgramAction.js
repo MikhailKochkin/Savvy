@@ -430,7 +430,38 @@ const Action = (props) => {
     }
   };
 
-  const total_lessons_number = program.coursePages.reduce(function (acc, obj) {
+  const getAllLessons = (coursePages) => {
+    // Initialize an empty array to store all lessons
+    let allLessons = [];
+
+    // Loop through each course page in the provided data
+    coursePages.forEach((coursePage) => {
+      // Check if the course page has lessons
+      if (coursePage.lessons && coursePage.lessons.length > 0) {
+        // Sort lessons by the .number value
+        const sortedLessons = coursePage.lessons.sort(
+          (a, b) => a.number - b.number
+        );
+
+        // Concatenate the sorted lessons to the 'allLessons' array
+        allLessons = allLessons.concat(sortedLessons);
+      }
+    });
+
+    // Return the array containing all lessons
+    return allLessons;
+  };
+
+  let sorted_courses = program.coursePages.sort(
+    (a, b) => a.numInCareerTrack - b.numInCareerTrack
+  );
+
+  let all_lessons = getAllLessons(sorted_courses);
+
+  let first_open_lesson = all_lessons.find((l) => l.open == true);
+  console.log("first_open_lesson", first_open_lesson);
+
+  const total_lessons_number = sorted_courses.reduce(function (acc, obj) {
     return (
       acc +
       obj.lessons.filter((les) => les.type.toLowerCase() !== "hidden").length
@@ -445,12 +476,10 @@ const Action = (props) => {
             onClick={(e) => {
               e.preventDefault();
               Router.push({
-                pathname: "/navigator",
+                pathname: "/lesson",
                 query: {
-                  level: "post",
-                  id: program.promotionId,
-                  source: "programPage",
-                  name: program.title,
+                  id: first_open_lesson.id,
+                  type: "story",
                 },
               });
             }}

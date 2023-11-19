@@ -4,10 +4,10 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import { companyList, emailList } from "../../businessEmailList.js";
+import { companyList, emailList } from "../../businessEmailList.js";
 import { uniList, emailUniList } from "../../lawschool.js";
 import Company from "./Company";
-// import emailSQEList from "../../sqeList.js";
+import emailSQEList from "../../sqeList.js";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -150,19 +150,19 @@ const ClientData = (props) => {
 
   const send = () => {
     addressees.map(async (c) => {
-      console.log("c", c.name, c.email, text);
-      // if (c.email) {
-      //   const res = await sendBusinessEmail({
-      //     variables: {
-      //       name: c.name,
-      //       connection: text,
-      //       subject: subject,
-      //       email: c.email,
-      //       firm: c.firm,
-      //       type: "general",
-      //     },
-      //   });
-      // }
+      // console.log("c", c.name, c.email, text);
+      if (c.email) {
+        const res = await sendBusinessEmail({
+          variables: {
+            name: c.name,
+            connection: text,
+            subject: subject,
+            email: c.email,
+            firm: c.firm,
+            type: "general",
+          },
+        });
+      }
     });
     console.log("Число отправленных писем: ", addressees.length);
   };
@@ -246,7 +246,7 @@ const ClientData = (props) => {
               index={i}
               company={c}
               emails={clients.filter(
-                (item) => item.firm.toLowerCase() == c.name.toLowerCase()
+                (item) => item.firm?.toLowerCase() == c.name.toLowerCase()
               )}
             />
           </>
