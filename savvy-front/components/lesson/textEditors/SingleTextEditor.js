@@ -383,6 +383,8 @@ const SingleTextEditor = (props) => {
   const [quiz, setQuiz] = useState();
   const [showNote, setShowNote] = useState(false);
   const [note, setNote] = useState();
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [errorFeedback, setErrorFeedback] = useState();
   const [quizResult, setQuizResult] = useState("no");
   const [quizGuess, setQuizQuess] = useState("");
   const [errorAnswer, setErrorAnswer] = useState();
@@ -536,6 +538,10 @@ const SingleTextEditor = (props) => {
 
   // start interaction with the piece of text
   const onMouseClick = (e) => {
+    console.log("feedback data", e.target.getAttribute("feedback"));
+    if (e.target.getAttribute("feedback")) {
+      setErrorFeedback(e.target.getAttribute("feedback"));
+    }
     let z = document.createElement("span");
     let id = uuidv4();
     z.contentEditable = true;
@@ -647,10 +653,25 @@ const SingleTextEditor = (props) => {
               <EditText story={story}>
                 <div
                   onClick={async (e) => {
+                    console.log("clicked");
+                    console.log(
+                      "e.target.getAttribute(class)",
+                      e.target.getAttribute("class")
+                    );
+                    console.log(
+                      "type",
+                      e.target.getAttribute("type"),
+                      e.target.parentElement.getAttribute("type")
+                    );
                     // update the number of attempts made by the student
                     setAttempts(attempts + 1);
                     if (e.target.getAttribute("class") == "mini_button") {
                       const ch = await check(e);
+                      console.log("feedback", errorFeedback);
+
+                      if (errorFeedback) {
+                        setShowFeedback(true);
+                      }
                       setTimeout(() => {
                         const res2 = createTextEditorResult({
                           variables: {
@@ -671,6 +692,7 @@ const SingleTextEditor = (props) => {
                       e.target.getAttribute("type") === "note" ||
                       e.target.parentElement.getAttribute("type") === "note"
                     ) {
+                      console.log("note", note);
                       let val =
                         e.target.getAttribute("type") === "note"
                           ? e.target.getAttribute("text")
@@ -702,14 +724,15 @@ const SingleTextEditor = (props) => {
                       e.target.getAttribute("type") === "error" ||
                       e.target.parentElement.getAttribute("type") === "error"
                     ) {
+                      console.log("error");
                       if (total > 0) {
                         const res2 = onMouseClick(e);
+                        console.log("1", 1);
                       } else if (props.total == 0 || props.total == null) {
                         const res3 = onReveal(e);
                       }
                       setType("error");
                     }
-
                     // 3. Quiz. Provide the student with data, quiz part of text
                     if (
                       e.target &&
@@ -755,7 +778,7 @@ const SingleTextEditor = (props) => {
             </Buttons>
           </div>
         )}
-        {(showQuiz || showNote) && (
+        {(showQuiz || showNote || showFeedback) && (
           <WindowColumn>
             {/* {showNote && ( */}
             <Window active={showNote}>
@@ -775,6 +798,25 @@ const SingleTextEditor = (props) => {
               </div>
               <div className="answerBox">
                 <Comment>{note}</Comment>
+              </div>
+            </Window>
+            <Window active={showFeedback}>
+              <div className="questionBox">
+                <IconBlock>
+                  <div className="nameBlock">
+                    <img className="icon" src="../../static/hipster.svg" />
+                    <div className="name">BeSavvy</div>
+                  </div>
+                  <div
+                    className="cancelBlock"
+                    onClick={(e) => setShowFeedback(false)}
+                  >
+                    <img className="cancel" src="../../static/cancel.svg" />
+                  </div>
+                </IconBlock>
+              </div>
+              <div className="answerBox">
+                <Comment>{errorFeedback}</Comment>
               </div>
             </Window>
             {/* )} */}

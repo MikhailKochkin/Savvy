@@ -171,7 +171,8 @@ const NewCoursePage = (props) => {
                     program={data.program}
                   />
                 ) : (
-                  <DynamicProgramMobileBuy program={data.program} me={me} />
+                  <p></p>
+                  // <DynamicProgramMobileBuy program={data.program} me={me} />
                 ))}
               {width < 880 && <MobileAction coursePage={data.program} />}
 

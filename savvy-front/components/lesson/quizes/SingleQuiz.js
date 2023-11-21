@@ -479,15 +479,16 @@ const SingleQuiz = (props) => {
         },
         body: JSON.stringify({
           prompt: `
-          You are a mentor and a teacher. You ask your student the question: ${
+          You are a law professor. You help your student answer this question ${
             props.question
           }
-          The mentor's comment is: ${props.ifWrong}
           The correct answer is:  ${props.answer}
-          Give a hint to the student  in a Socratic manner to help them answer the question. Do not use the words from the correct answer.
+          Give a hint to the student in a Socratic manner what is the correct answer to help them answer the question. Do not use the words from the correct answer.
           Answer in ${
             router.locale == "ru" ? "Russian" : "English"
-          }. Answer in second person. Make the answer at least 3 sentences long.`,
+          }. Answer in second person.`,
+          //  Make the answer at least 3 sentences long.
+          // The mentor's comment is: ${props.ifWrong}
         }),
       });
 
@@ -521,13 +522,14 @@ const SingleQuiz = (props) => {
         },
         body: JSON.stringify({
           prompt: `
-          You are a mentor and a teacher. You ask your student the question: ${
+          You are a law professor. You ask your student the question: ${
             props.question
           }
-          The correct answer is:  ${props.answer}. 
-          The mentor's comment is: ${props.ifWrong}
-          Your student's answer is: ${answer}
-          Explain in 3 sentences why this answer is incorrect in comparison to the correct answer. Write in second person. Adress the student as "you". Do not use the words from the correct answer.
+          Your student's answer is: ${answer}. It is not correct.
+          Use the information about the correct answer:${props.answer}
+          and information from the lesson: ${props.ifWrong} to
+          explain in 3 sentences why this answer is incorrect in comparison to the correct answer. Write in second person. Adress the student as "you". 
+          Do not use the words from the correct answer. Be very polite and careful.
           Answer in ${
             router.locale == "ru" ? "Russian" : "English"
           }Make the answer at least 2 sentences long.`,
@@ -649,7 +651,7 @@ const SingleQuiz = (props) => {
                 comment: `Result: ${parseFloat(res.res)}%`,
               },
             });
-          } else if (parseFloat(res.res) > 55 && parseFloat(res.res) <= 65) {
+          } else if (parseFloat(res.res) > 58 && parseFloat(res.res) <= 65) {
             setCorrect("looks_true");
             if (props.goalType !== "ASSESS") setInputColor("#ffd166");
             onMove("true");

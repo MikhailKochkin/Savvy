@@ -261,16 +261,6 @@ const StyledModal = Modal.styled`
 const ProgramMobileBuy = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
-  //   const [installments, setInstallments] = useState(
-  //     props.coursePage.installments
-  //   );
-  //   const [isPromo, setIsPromo] = useState(false);
-
-  //   const [price, setPrice] = useState(
-  //     props.coursePage.installments && props.coursePage.installments > 1
-  //       ? props.coursePage.price / props.coursePage.installments
-  //       : props.coursePage.price
-  //   );
   const toggleModal = (e) => setIsOpen(!isOpen);
 
   const getInstallments = () => {
@@ -357,14 +347,13 @@ const ProgramMobileBuy = (props) => {
     return allLessons;
   };
 
-  let sorted_courses = program.coursePages.sort(
-    (a, b) => a.numInCareerTrack - b.numInCareerTrack
-  );
+  // let sorted_courses = program.coursePages.sort(
+  //   (a, b) => a.numInCareerTrack - b.numInCareerTrack
+  // );
 
-  let all_lessons = getAllLessons(sorted_courses);
+  // let all_lessons = getAllLessons(sorted_courses);
 
-  let first_open_lesson = all_lessons.find((l) => l.open == true);
-  console.log("first_open_lesson", first_open_lesson);
+  // let first_open_lesson = all_lessons.find((l) => l.open == true);
 
   const total_lessons_number = program.coursePages.reduce(function (acc, obj) {
     return (
@@ -394,7 +383,7 @@ const ProgramMobileBuy = (props) => {
           Router.push({
             pathname: "/lesson",
             query: {
-              id: first_open_lesson.id,
+              // id: first_open_lesson.id,
               type: "story",
             },
           });

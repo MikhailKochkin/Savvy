@@ -439,7 +439,7 @@ const Action = (props) => {
       // Check if the course page has lessons
       if (coursePage.lessons && coursePage.lessons.length > 0) {
         // Sort lessons by the .number value
-        const sortedLessons = coursePage.lessons.sort(
+        let sortedLessons = [...coursePage.lessons].sort(
           (a, b) => a.number - b.number
         );
 
@@ -452,7 +452,7 @@ const Action = (props) => {
     return allLessons;
   };
 
-  let sorted_courses = program.coursePages.sort(
+  let sorted_courses = [...program.coursePages].sort(
     (a, b) => a.numInCareerTrack - b.numInCareerTrack
   );
 
@@ -461,12 +461,13 @@ const Action = (props) => {
   let first_open_lesson = all_lessons.find((l) => l.open == true);
   console.log("first_open_lesson", first_open_lesson);
 
-  const total_lessons_number = sorted_courses.reduce(function (acc, obj) {
+  let total_lessons_number = program.coursePages.reduce(function (acc, obj) {
     return (
       acc +
       obj.lessons.filter((les) => les.type.toLowerCase() !== "hidden").length
     );
   }, 0);
+
   return (
     <Styles id="c2a">
       <Container>

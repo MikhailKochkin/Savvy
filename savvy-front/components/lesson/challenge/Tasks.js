@@ -206,6 +206,7 @@ const Tasks = (props) => {
   };
 
   const update = (data) => {
+    console.log("data[0]", data[0]);
     if (!data[0]) {
       setWrong(wrong + 1);
       props.passStep((activeStep + 1).toString());
