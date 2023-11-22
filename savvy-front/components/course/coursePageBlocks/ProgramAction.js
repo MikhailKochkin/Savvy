@@ -459,7 +459,6 @@ const Action = (props) => {
   let all_lessons = getAllLessons(sorted_courses);
 
   let first_open_lesson = all_lessons.find((l) => l.open == true);
-  console.log("first_open_lesson", first_open_lesson);
 
   let total_lessons_number = program.coursePages.reduce(function (acc, obj) {
     return (

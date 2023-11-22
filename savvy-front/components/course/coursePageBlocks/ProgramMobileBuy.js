@@ -334,7 +334,7 @@ const ProgramMobileBuy = (props) => {
       // Check if the course page has lessons
       if (coursePage.lessons && coursePage.lessons.length > 0) {
         // Sort lessons by the .number value
-        const sortedLessons = coursePage.lessons.sort(
+        const sortedLessons = [...coursePage.lessons].sort(
           (a, b) => a.number - b.number
         );
 
@@ -347,15 +347,15 @@ const ProgramMobileBuy = (props) => {
     return allLessons;
   };
 
-  // let sorted_courses = program.coursePages.sort(
-  //   (a, b) => a.numInCareerTrack - b.numInCareerTrack
-  // );
+  let sorted_courses = [...program.coursePages].sort(
+    (a, b) => a.numInCareerTrack - b.numInCareerTrack
+  );
 
-  // let all_lessons = getAllLessons(sorted_courses);
+  let all_lessons = getAllLessons(sorted_courses);
 
-  // let first_open_lesson = all_lessons.find((l) => l.open == true);
+  let first_open_lesson = all_lessons.find((l) => l.open == true);
 
-  const total_lessons_number = program.coursePages.reduce(function (acc, obj) {
+  let total_lessons_number = program.coursePages.reduce(function (acc, obj) {
     return (
       acc +
       obj.lessons.filter((les) => les.type.toLowerCase() !== "hidden").length
@@ -383,7 +383,7 @@ const ProgramMobileBuy = (props) => {
           Router.push({
             pathname: "/lesson",
             query: {
-              // id: first_open_lesson.id,
+              id: first_open_lesson.id,
               type: "story",
             },
           });

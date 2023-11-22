@@ -179,6 +179,30 @@ export const uniList = [
     result: "No connection",
     country: "UK",
   },
+  {
+    name: "Suffolk University Law School",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "US",
+  },
+  {
+    name: "Michigan State University Law College",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "US",
+  },
+  {
+    name: "New York Law School",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "US",
+  },
+  {
+    name: "University of Ottawa",
+    comment: "No emails sent yet",
+    result: "No connection",
+    country: "US",
+  },
 ];
 
 export const emailUniList = [
@@ -2795,6 +2819,17 @@ export const emailUniList = [
     sentEmailsTime: [],
   },
   {
+    name: "Legal Innovation Lab Wales Team",
+    surname: "",
+    email: "legalinnovation@swansea.ac.uk",
+    linkedin: "",
+    comment: "",
+    firm: "Swansea University",
+    connection:
+      "Legal Innovation Lab Wales is a £5.6M initiative within the University’s Hillary Rodham Clinton School of Law. The operation is a transformative research and development facility that supports collaboration between law firms, technology companies and security organisations, encouraging innovation in LegalTech, access to justice, and counterterrorism. Do you have an idea you want to develop?Looking to create research partnerships?Supported by researchers and an in-house software development team, Legal Innovation Lab Wales encourages collaboration between academia, law firms, technology companies and other organisations.If you have an idea for a new product or service that might support access to justice, legal services or the cyber threats work, the team would love to hear from you.",
+    sentEmailsTime: [],
+  },
+  {
     name: "Daniel",
     surname: "Frost",
     email: "D.Frost@exeter.ac.uk",
@@ -3384,6 +3419,179 @@ export const emailUniList = [
     firm: "University of Liverpool",
     connection: "",
     sentEmailsTime: [],
+  },
+  {
+    name: "David",
+    surname: "Colarusso",
+    email: "dcolarusso@suffolk.edu",
+    comment:
+      "Director of the Legal Innovation and Technology Lab, Practitioner-in-Residence",
+    firm: "Suffolk University Law School",
+    linkedin: "https://www.linkedin.com/in/colarusso/",
+    personalTouch:
+      "David Colarusso is an award-winning legal hacker and the author of QnA Markup, a programming language for lawyers. Connect with him on LinkedIn to stay updated on legal innovation and technology.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Quinten",
+    surname: "Steenhuis",
+    email: "qsteenhuis@suffolk.edu",
+    comment: "Practitioner in Residence",
+    firm: "Suffolk University Law School",
+    linkedin: "https://www.linkedin.com/in/quintensteenhuis/",
+    personalTouch:
+      "Quinten Steenhuis is a dedicated professional in the intersection of law and technology. Connect with him on LinkedIn to learn more about his work in housing and eviction defense.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Bryce",
+    surname: "Willey",
+    email: "bwilley@suffolk.edu",
+    comment: "Clinical Fellow",
+    firm: "Suffolk University Law School",
+    linkedin: "https://www.linkedin.com/in/bryce-willey-2a867989/",
+    personalTouch:
+      "Bryce Willey, a Clinical Fellow at Suffolk LIT Lab, is passionate about developing usable, easy-to-make court forms. Connect with him on LinkedIn to stay informed about legal innovation and technology.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Kim",
+    surname: "McLaurin",
+    email: "kmclaurin@suffolk.edu",
+    comment:
+      "Associate Dean for Experiential Learning, Director of Clinical Programs and Clinical Professor of Law",
+    firm: "Suffolk University Law School",
+    linkedin: "https://www.linkedin.com/in/kim-mclaurin-83653823/",
+    personalTouch:
+      "Kim M. McLaurin has a rich legal background and a commitment to experiential learning. Connect with her on LinkedIn to discuss innovations in legal education and clinical programs.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Gabriel",
+    surname: "Teninbaum",
+    email: "gteninbaum@suffolk.edu",
+    comment:
+      "Assistant Dean of Innovation, Strategic Initiatives, & Distance Education and Professor of Legal Writing",
+    firm: "Suffolk University Law School",
+    linkedin: "https://www.linkedin.com/in/gabrielteninbaum/",
+    personalTouch:
+      "Gabe Teninbaum, a legal technologist and professor, is a key figure in legal innovation at Suffolk Law. Connect with him on LinkedIn to stay informed about legal technology and education.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Sarah",
+    surname: "Boonin",
+    email: "sboonin@suffolk.edu",
+    comment: "Director of Clinical Programs and Clinical Professor of Law",
+    firm: "Suffolk University Law School",
+    linkedin: "https://www.linkedin.com/in/sarah-boonin-83653823/",
+    personalTouch:
+      "Sarah Boonin specializes in mental health and disability law. Connect with her on LinkedIn to discuss her work in legal ethics, reproductive health, and clinical programs.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Dyane",
+    surname: "O'Leary",
+    email: "dloleary2@suffolk.edu",
+    comment:
+      "Associate Professor of Legal Writing, Director, Legal Innovation & Technology Concentration",
+    firm: "Suffolk University Law School",
+    linkedin: "https://www.linkedin.com/in/dyane-o-leary-b9b78024/",
+    personalTouch:
+      "Professor O’Leary focuses on integrating technology competence into the legal practice curriculum. Connect with her on LinkedIn to explore her work on AI legal research and writing tools.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Richard",
+    surname: "Buckingham",
+    email: "rbuckingham@suffolk.edu",
+    comment:
+      "Director of the Law Library and Information Resources Associate Professor of Legal Research",
+    firm: "Moakley Law Library",
+    linkedin: "",
+    personalTouch:
+      "Richard Buckingham, Director of the Law Library, is a valuable resource for legal research. Connect with him to discuss innovations in legal information resources.",
+    sentEmailsTime: [],
+    subject: "Save time on training junior lawyers with AI",
+  },
+  {
+    name: "Dennis",
+    surname: "Kennedy",
+    email: "kenne514@law.msu.edu",
+    comment: "Director of the Center for Law, Technology & Innovation",
+    firm: "Michigan State University Law College",
+    linkedin: "",
+    personalTouch: "",
+    sentEmailsTime: [],
+    subject: "Save time on training lawyers with AI",
+  },
+  {
+    name: "Daniel D.",
+    surname: "Barnhizer",
+    email: "daniel.barnhizer@law.msu.edu",
+    comment: "Professor of Law & The Bradford Stone Faculty Scholar",
+    firm: "Michigan State University Law College",
+    linkedin: "",
+    personalTouch: "",
+    sentEmailsTime: [],
+    subject: "Save time on training lawyers with AI",
+  },
+  {
+    name: "Adam",
+    surname: "Candeub",
+    email: "candeub@law.msu.edu",
+    comment:
+      "Professor of Law & Director of the Intellectual Property, Information & Communications Law Program",
+    firm: "Michigan State University Law College",
+    linkedin: "",
+    personalTouch: "",
+    sentEmailsTime: [],
+    subject: "Save time on training lawyers with AI",
+  },
+  {
+    name: "Shahrokh",
+    surname: "Falati",
+    email: "shahrokh.falati@nyls.edu",
+    comment:
+      "Professor of Law from Practice, Intellectual Property Law\nCo-Director, Innovation Center for Law and Technology\nDirector, Patent Law Clinic",
+    firm: "New York Law School",
+    linkedin: "",
+    personalTouch: "",
+    sentEmailsTime: [],
+    subject: "Save time on training lawyers with AI",
+  },
+  {
+    name: "Tomer",
+    surname: "Kenneth",
+    email: "Tomer.Kenneth@law.nyu.edu",
+    comment:
+      "Adjunct Professor\nCo-Director, Innovation Center for Law and Technology",
+    firm: "New York University School of Law",
+    linkedin: "",
+    personalTouch:
+      "Tomer Kenneth's primary research interests include evidence, law & technology, political theory, jurisprudence, and political and legal epistemology.",
+    sentEmailsTime: [],
+    subject: "Save time on training lawyers with AI",
+  },
+  {
+    name: "Wolfgang",
+    surname: "Alschner",
+    email: "wolfgang.alschner@uottawa.ca",
+    comment:
+      "Associate Professor, Common Law Section, Faculty of Law\nFaculty member, Legal Technology Lab",
+    firm: "University of Ottawa",
+    linkedin: "@w_alschner",
+    personalTouch:
+      "Dr. Wolfgang Alschner is an empirical legal scholar specialized in international economic law and the computational analysis of law. He heads the uOttawa Legal Technology Lab.",
+    sentEmailsTime: [],
+    subject: "Save time on training lawyers with AI",
   },
 ];
 

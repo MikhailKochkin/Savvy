@@ -4,9 +4,10 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Company from "./Company";
+
 // import { companyList, emailList } from "../../businessEmailList.js";
 // import { uniList, emailUniList } from "../../lawschool.js";
-import Company from "./Company";
 // import emailSQEList from "../../sqeList.js";
 
 const SEND_MESSAGE_MUTATION = gql`
