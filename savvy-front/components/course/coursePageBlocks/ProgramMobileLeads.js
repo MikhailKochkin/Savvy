@@ -144,6 +144,10 @@ const Info = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    .discount {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
     div {
       width: 90%;
     }
@@ -282,13 +286,16 @@ const Fieldset = styled.fieldset`
 `;
 
 const Title = styled.div`
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   font-weight: 700;
   line-height: 1.3;
   width: 85%;
   margin-bottom: 20px;
   span {
     border-bottom: 4px solid #175ffe;
+  }
+  .discount_underline {
+    text-decoration: underline;
   }
 `;
 
@@ -389,7 +396,19 @@ const MobileBuy = (props) => {
   return (
     <Styles id="buy_section">
       <>
-        <Title>Получите 🎁 за покупку програмы</Title>
+        <Title>
+          {program.discountPrice ? (
+            <>
+              Получите скидку{" "}
+              <span className="">
+                -{parseInt(100 - (program.price * 100) / program.discountPrice)}
+                %
+              </span>
+            </>
+          ) : (
+            "Получите 🎁 за покупку программы"
+          )}
+        </Title>
         <Fieldset>
           <Group>
             <input
@@ -454,13 +473,6 @@ const MobileBuy = (props) => {
           {loading ? "Готовим заявку..." : "Оставить заявку"}
         </ButtonOpen>
       </>
-      {program && program.id == "clgp3kppu0454eku9bs6nklf8" && (
-        <div className="student">
-          🔥 Оставьте заявку, и мы дадим вам испытание{" "}
-          <b>для получения скидки до 70%</b>
-        </div>
-      )}
-
       <Info>
         {/* {props.coursePage.courseType !== "PUBLIC" && (
           <div className="guarantee">{t("guarantee")}</div>
@@ -483,7 +495,13 @@ const MobileBuy = (props) => {
           <div className="">◼️ {t("access")}</div>
           <div className="">◼️ {t("chat")}</div>
           <div className="">◼️ {t("certificate")}</div>
-          <div className="">◼️ {program.price} ₽</div>
+          <div className="">
+            {" "}
+            ◼️ {program ? program.price : coursePage.price} ₽{" "}
+            {program.discountPrice ? (
+              <span className="discount">{program.discountPrice} ₽</span>
+            ) : null}
+          </div>
         </div>
       </Info>
     </Styles>

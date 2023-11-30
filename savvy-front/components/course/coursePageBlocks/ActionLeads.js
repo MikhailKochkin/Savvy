@@ -166,6 +166,10 @@ const Contact = styled.div`
   .details {
     margin-top: 20px;
     width: 100%;
+    .discount {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
   }
   #promo {
     /* margin-top: 10%; */
@@ -313,7 +317,7 @@ const Fieldset = styled.fieldset`
 `;
 
 const Title = styled.div`
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   margin-bottom: 15px;
   font-weight: 700;
   line-height: 1.2;
@@ -458,8 +462,6 @@ const Action = (props) => {
     }, 0);
   }
 
-  console.log("total_lessons_number", total_lessons_number);
-
   let currency_symbol;
   if (coursePage.currency == "ruble") {
     currency_symbol = "₽";
@@ -473,14 +475,22 @@ const Action = (props) => {
     <Styles id="c2a">
       <Container>
         <Contact>
-          {/* {program && program.id == "clgp3kppu0454eku9bs6nklf8" ? (
-            <Title>Пошаговый запуск карьеры юриста</Title>
-          ) : (
-            <Title>
-              Получите сегодня скидку <span>-20%</span>
-            </Title>
-          )} */}
-          <Title>Получите 🎁 за покупку програмы</Title>
+          <Title>
+            {program.discountPrice ? (
+              <>
+                Получите скидку{" "}
+                <span className="">
+                  -
+                  {parseInt(
+                    100 - (program.price * 100) / program.discountPrice
+                  )}
+                  %
+                </span>
+              </>
+            ) : (
+              "Получите 🎁 за покупку программы"
+            )}
+          </Title>
           <Fieldset>
             <Group>
               <input
@@ -583,7 +593,10 @@ const Action = (props) => {
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
             <div className="">
-              ◼️ {program ? program.price : coursePage.price} {currency_symbol}
+              ◼️ {program ? program.price : coursePage.price} ₽{" "}
+              {program.discountPrice ? (
+                <span className="discount">{program.discountPrice} ₽</span>
+              ) : null}
             </div>
           </div>
         </Contact>

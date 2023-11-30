@@ -164,6 +164,10 @@ const Contact = styled.div`
   .details {
     margin: 20px 0;
     width: 100%;
+    .discount {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
   }
   input {
     width: 100%;
@@ -372,9 +376,7 @@ const Action = (props) => {
   const [auth, setAuth] = useState("signin");
   const [promo, setPromo] = useState("");
 
-  const [price, setPrice] = useState(
-    program.discountPrice ? program.discountPrice : program.price
-  );
+  const [price, setPrice] = useState(program.price);
   const { t } = useTranslation("coursePage");
   const router = useRouter();
 
@@ -458,7 +460,9 @@ const Action = (props) => {
 
   let all_lessons = getAllLessons(sorted_courses);
 
-  let first_open_lesson = all_lessons.find((l) => l.open == true);
+  let first_open_lesson = all_lessons
+    .filter((l) => l.type !== "CHALLENGE")
+    .find((l) => l.open == true);
 
   let total_lessons_number = program.coursePages.reduce(function (acc, obj) {
     return (
@@ -493,7 +497,13 @@ const Action = (props) => {
             <div className="">◼️ {t("access")}</div>
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
-            <div className="">◼️ {price} ₽</div>
+            <div className="">
+              {" "}
+              ◼️ {program ? program.price : coursePage.price} ₽{" "}
+              {program.discountPrice ? (
+                <span className="discount">{program.discountPrice} ₽</span>
+              ) : null}
+            </div>
           </div>
           <ButtonBuy
             id="coursePage_buy_button"
@@ -589,14 +599,3 @@ const Action = (props) => {
 };
 
 export default Action;
-
-// {!program.discountPrice && <div className="price">{price} ₽</div>}
-//   <div className="price">
-//     <div>
-//       {program.discountPrice}{" "}
-//       <span className="discount">{price}</span> ₽
-//     </div>
-//     <div className="bubble">
-//       -{100 - parseInt((program.discountPrice / price) * 100)}%
-//     </div>
-//   </div>

@@ -372,7 +372,7 @@ const ProgramMobileBuy = (props) => {
             <span className="discount">{program.price}</span> ₽
           </div>
           <div className="bubble">
-            -{100 - parseInt((program.discountPrice / program.price) * 100)}%
+            {100 - parseInt((program.discountPrice / program.price) * 100)}%
           </div>
         </div>
       )}

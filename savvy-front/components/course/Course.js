@@ -202,13 +202,13 @@ const Course = (props) => {
                 }}
               >
                 <a>
-                  <button
+                  {/* <button
                     onClick={() => {
                       console.log(0);
                     }}
-                  >
-                    {t("open")}
-                  </button>
+                  > */}
+                  {t("open")}
+                  {/* </button> */}
                 </a>
               </Link>
             )}
@@ -256,14 +256,14 @@ const Course = (props) => {
                                       }}
                                     >
                                       <a>
-                                        <button
+                                        {/* <button
                                           onClick={() => {
                                             console.log(1);
                                             createCourseVisit();
                                           }}
-                                        >
-                                          {t("open")}
-                                        </button>
+                                        > */}
+                                        {t("open")}
+                                        {/* </button> */}
                                       </a>
                                     </Link>
                                   )}

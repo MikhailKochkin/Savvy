@@ -277,14 +277,13 @@ const Account = (props) => {
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
                   />
-                  <Comment>
+                  {/* <Comment>
                     Баланс: <span>{props.me.score}</span> Узнайте, как увеличить
                     баланс и покупать курсы за бесплатно{" "}
                     <a target="_blank" href="https://besavvy.app/navigator">
                       по ссылке.
                     </a>
-                  </Comment>
-
+                  </Comment> */}
                   <input
                     className="second"
                     type="text"

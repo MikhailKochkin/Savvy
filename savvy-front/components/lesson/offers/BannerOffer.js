@@ -644,7 +644,7 @@ const BannerOffer = (props) => {
                   {parseStringToArray(offer.text).map((val) => (
                     <div className="row">
                       <div className="img">
-                        <img src="static/tick_check.svg" />
+                        <img src="/static/tick_check.svg" />
                       </div>
                       <div>{val}</div>
                     </div>
@@ -659,7 +659,7 @@ const BannerOffer = (props) => {
                   onClick={(e) => setRevealSyllabus(!revealSyllabus)}
                 >
                   <div className="img">
-                    <img src="static/down-arrow2.svg" />
+                    <img src="/static/down-arrow2.svg" />
                   </div>
                   <div>Показать программу</div>
                 </div>

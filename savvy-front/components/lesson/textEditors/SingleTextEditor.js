@@ -489,7 +489,11 @@ const SingleTextEditor = (props) => {
             e.target.innerHTML = "Check";
             e.target.className = "mini_button";
             if (res.comment) {
-              alert(res.comment);
+              if (res.comment == "Дайте более развернутый ответ") {
+                alert("Try giving a more detailed answer.");
+              } else {
+                alert("Try giving a shorter answer.");
+              }
             }
             setTimeout(() => (el.style.background = "#bef1ed"), 3000);
             return false;
