@@ -39,5 +39,9 @@
   "start_lesson1": "Start first lesson",
   "full_course": "Get access to the course at a special discount",
   "buy_full": "Buy full course",
-  "in_weeks": "Weeks"
+  "in_weeks": "Weeks",
+  "search": "Search",
+  "found_these": "We found these simulators:",
+  "type_the_keyword": "Type the keyword to start the search of simulators:",
+  "find": "Find"
 }

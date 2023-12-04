@@ -515,7 +515,7 @@ const LessonHeader = (props) => {
 
   return (
     <>
-      <TextBar color={color}>
+      <TextBar color={color} id={"simulator_" + lesson.id}>
         <div>
           <Text>
             <div className="lesson_name">
