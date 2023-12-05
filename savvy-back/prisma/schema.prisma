@@ -301,7 +301,7 @@ model Document {
 
 model DocumentResult {
   id         String    @id @default(cuid()) @db.VarChar(30)
-  updatedAt  DateTime
+  updatedAt  DateTime  @updatedAt
   createdAt  DateTime  @updatedAt
   answers    String[]
   drafts     String[]

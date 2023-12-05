@@ -220,7 +220,7 @@ const Document = (props) => {
                   alert("We saved your work. You can move on.");
                 }}
               >
-                Save document
+                {loading ? "Saving..." : "Save document"}
               </BlueButton>
               {/* <StyledButton
                 variant="contained"
