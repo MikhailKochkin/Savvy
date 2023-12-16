@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import Auth from "../auth/Auth.js";
-
+import AnswerQuestions from "./AnswerQuestions";
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
@@ -140,6 +140,8 @@ const MenuColumn = styled.div`
   border-left: 1px solid #d4d4d4;
   position: -webkit-sticky;
   position: sticky;
+  overflow-y: auto; /* Enable vertical scrolling */
+
   top: 0%;
   flex-direction: column;
   justify-content: flex-start;
@@ -180,8 +182,7 @@ const MenuColumn = styled.div`
       width: 70%;
       font-weight: 500;
       line-height: 1.3;
-      margin-top: 10px;
-
+      margin: 10px 0;
       font-size: 1.6rem;
     }
     button {
@@ -309,6 +310,27 @@ const Stepper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .next_lesson_link {
+    border: none;
+  }
+`;
+
+const SimpleButton = styled.button`
+  width: 230px;
+  height: 40px;
+  background: none;
+  padding: 5px 0;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
 `;
 
 const Content = styled.div`
@@ -527,8 +549,16 @@ const Message = styled.div`
 `;
 
 const Feed = (props) => {
-  const { me, coursePageId, coursePage, lesson_structure, lessonId, openSize } =
-    props;
+  const {
+    me,
+    coursePageId,
+    coursePage,
+    lesson_structure,
+    lessonId,
+    openSize,
+    notes,
+    chats,
+  } = props;
   const { t } = useTranslation("lesson");
   const [createLessonResult, { create_data }] = useMutation(
     CREATE_LESSONRESULT_MUTATION
@@ -652,6 +682,11 @@ const Feed = (props) => {
     visited = [];
   }
 
+  const resolveQuestion = (val) => {
+    console.log("val", val);
+    console.log("notes", notes, chats);
+  };
+
   useEffect(() => {
     setResult(props.my_result ? props.my_result : null);
     setNum(
@@ -730,7 +765,6 @@ const Feed = (props) => {
           {result && !hasLessonBeenFinished ? (
             <Border>
               {/*  We have lesson result */}
-
               {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block"}
@@ -777,7 +811,6 @@ const Feed = (props) => {
           ) : (
             <Border>
               {/*  We don't have lesson result */}
-
               {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block2"}
@@ -841,8 +874,8 @@ const Feed = (props) => {
                           },
                         }}
                       >
-                        <a>
-                          <button>Next lesson</button>
+                        <a className="next_lesson_link">
+                          <SimpleButton>{t("next_lesson")}</SimpleButton>
                         </a>
                       </Link>
                     ) : (
@@ -857,8 +890,8 @@ const Feed = (props) => {
                           },
                         }}
                       >
-                        <a>
-                          <button>Next lesson</button>
+                        <a className="next_lesson_link">
+                          <SimpleButton>{t("next_lesson")}</SimpleButton>
                         </a>
                       </Link>
                     )}
@@ -873,9 +906,6 @@ const Feed = (props) => {
               {t("lesson")} {props.lesson_number}.
             </div>
             <div className="lesson_name">{props.lesson_name}</div>
-            <div className="lesson_number">
-              {t("complexity")} {complexity}
-            </div>
             <div className="bar">
               <Progress
                 className="progress"
@@ -902,6 +932,7 @@ const Feed = (props) => {
               </div>
             </div>
             <div className="questions">{t("have_questions")}</div>
+            {/* <AnswerQuestions notes={notes} chats={chats} /> */}
             <div className="go_to_chat">{t("chat_help")}</div>
             <button onClick={(e) => search(lessonElements.length - 2)}>
               {t("get_to_chat")}

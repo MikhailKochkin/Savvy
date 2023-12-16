@@ -233,6 +233,7 @@ const UpdateQuiz = (props) => {
         <option value="TEST">Question</option>
         <option value="FORM">Form</option>
         <option value="GENERATE">Generate Ideas</option>
+        <option value="PROMPT">Check with AI</option>
       </select>
       <label for="types">Format</label>
       <select

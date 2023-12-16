@@ -495,6 +495,8 @@ const StoryEx = (props) => {
           lesson_structure={lesson.structure.lessonItems}
           openLesson={props.openLesson}
           move={false}
+          notes={lesson.notes}
+          chats={lesson.chats}
           hasSecret={lesson.hasSecret}
           lesson_number={lesson.number}
           lesson_name={lesson.name}

@@ -2634,6 +2634,7 @@ const Mutation = mutationType({
         delete args.lessonId;
         delete args.constructionId;
         delete args.inputs;
+        console.log("elements", args.elements);
         const ConstructionResult = await ctx.prisma.constructionResult.create({
           data: {
             student: {
@@ -2677,6 +2678,28 @@ const Mutation = mutationType({
           });
         }
         return ConstructionResult;
+      },
+    });
+    t.field("updateConstructionResult", {
+      type: "ConstructionResult",
+      args: {
+        id: stringArg(),
+        elements: arg({
+          type: "ElementsList",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        const updates = { ...args };
+        delete updates.id;
+        const updatedConstructionResult =
+          await ctx.prisma.constructionResult.update({
+            data: updates,
+            where: {
+              id: args.id,
+            },
+          });
+
+        return updatedConstructionResult;
       },
     });
     t.field("createProblem", {

@@ -53,6 +53,8 @@ const Query = queryType({
     t.crud.problemResults({ ordering: true, filtering: true });
     t.crud.textEditorResults({ ordering: true, filtering: true });
     t.crud.textEditorResult({ ordering: true, filtering: true });
+    t.crud.constructionResults({ ordering: true, filtering: true });
+    t.crud.constructionResult({ ordering: true, filtering: true });
     t.crud.feedbacks({ ordering: true, filtering: true });
     t.crud.lessonResults({ ordering: true, filtering: true });
     t.crud.challengeResults({ ordering: true, filtering: true });

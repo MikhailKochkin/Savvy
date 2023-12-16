@@ -692,9 +692,9 @@ const Feed = (props) => {
               {t("lesson")} {props.lesson_number}.
             </div>
             <div className="lesson_name">{props.lesson_name}</div>
-            <div className="lesson_number">
+            {/* <div className="lesson_number">
               {t("complexity")} {complexity}
-            </div>
+            </div> */}
             <div className="bar">
               <Progress
                 className="progress"

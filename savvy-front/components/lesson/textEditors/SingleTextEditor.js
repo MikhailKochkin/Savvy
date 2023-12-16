@@ -657,16 +657,6 @@ const SingleTextEditor = (props) => {
               <EditText story={story}>
                 <div
                   onClick={async (e) => {
-                    console.log("clicked");
-                    console.log(
-                      "e.target.getAttribute(class)",
-                      e.target.getAttribute("class")
-                    );
-                    console.log(
-                      "type",
-                      e.target.getAttribute("type"),
-                      e.target.parentElement.getAttribute("type")
-                    );
                     // update the number of attempts made by the student
                     setAttempts(attempts + 1);
                     if (e.target.getAttribute("class") == "mini_button") {
@@ -801,7 +791,7 @@ const SingleTextEditor = (props) => {
                 </IconBlock>
               </div>
               <div className="answerBox">
-                <Comment>{note}</Comment>
+                <Comment>{note ? parse(note) : null}</Comment>
               </div>
             </Window>
             <Window active={showFeedback}>

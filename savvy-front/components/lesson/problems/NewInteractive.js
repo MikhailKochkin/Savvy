@@ -21,7 +21,8 @@ const Styles = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
+    margin-top: 40px;
   }
   span {
     cursor: pointer;
@@ -132,9 +133,13 @@ const NewInteractive = (props) => {
   };
   return (
     <Styles>
-      <div className="suggestion">
-        <Button onClick={(e) => setIsShown(true)}>{t("start_the_case")}</Button>
-      </div>
+      {!isShown && (
+        <div className="suggestion">
+          <Button onClick={(e) => setIsShown(true)}>
+            {t("start_the_case")}
+          </Button>
+        </div>
+      )}
       {isShown && (
         <Questions>
           {componentList[0] !== undefined &&

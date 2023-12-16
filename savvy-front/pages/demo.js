@@ -1,5 +1,3 @@
-// import { useState } from "react";
-
 import React from "react";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";

@@ -423,7 +423,7 @@ const Chat = (props) => {
               setNum(num + 1);
             }}
           >
-            Next
+            {t("next")}
           </button>
         </Next>
       )}

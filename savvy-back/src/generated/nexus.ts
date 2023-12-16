@@ -476,6 +476,28 @@ export interface NexusGenInputs {
   ConstructionOrderByRelationAggregateInput: { // input type
     _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
+  ConstructionOrderByWithRelationInput: { // input type
+    answer?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    columnsNum?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    constructionResults?: NexusGenInputs['ConstructionResultOrderByRelationAggregateInput'] | null; // ConstructionResultOrderByRelationAggregateInput
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    elements?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    goal?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    hasText?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    hint?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
+    lessonID?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    name?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    text?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    type?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    user?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
+    userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    variants?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
   ConstructionResultListRelationFilter: { // input type
     every?: NexusGenInputs['ConstructionResultWhereInput'] | null; // ConstructionResultWhereInput
     none?: NexusGenInputs['ConstructionResultWhereInput'] | null; // ConstructionResultWhereInput
@@ -483,6 +505,24 @@ export interface NexusGenInputs {
   }
   ConstructionResultOrderByRelationAggregateInput: { // input type
     _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  ConstructionResultOrderByWithRelationInput: { // input type
+    answer?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    answers?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    attempts?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    construction?: NexusGenInputs['ConstructionOrderByWithRelationInput'] | null; // ConstructionOrderByWithRelationInput
+    constructionID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    constructionId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    elements?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    inputs?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
+    lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    student?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
+    studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   ConstructionResultWhereInput: { // input type
     AND?: NexusGenInputs['ConstructionResultWhereInput'][] | null; // [ConstructionResultWhereInput!]
@@ -974,6 +1014,7 @@ export interface NexusGenInputs {
   Element: { // input type
     borders?: NexusGenInputs['Borders'] | null; // Borders
     comment?: string | null; // String
+    edit?: boolean | null; // Boolean
     inDoc?: boolean | null; // Boolean
     isTest?: boolean | null; // Boolean
     place?: number | null; // Int
@@ -5190,6 +5231,7 @@ export interface NexusGenFieldTypes {
     updateClause: NexusGenRootTypes['Clause'] | null; // Clause
     updateConfUser: NexusGenRootTypes['ConfUser'] | null; // ConfUser
     updateConstruction: NexusGenRootTypes['Construction'] | null; // Construction
+    updateConstructionResult: NexusGenRootTypes['ConstructionResult'] | null; // ConstructionResult
     updateCoursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     updateCourseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     updateEmailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
@@ -5393,6 +5435,8 @@ export interface NexusGenFieldTypes {
     challengeResults: NexusGenRootTypes['ChallengeResult'][]; // [ChallengeResult!]!
     chat: NexusGenRootTypes['Chat'] | null; // Chat
     chats: NexusGenRootTypes['Chat'][]; // [Chat!]!
+    constructionResult: NexusGenRootTypes['ConstructionResult'] | null; // ConstructionResult
+    constructionResults: NexusGenRootTypes['ConstructionResult'][]; // [ConstructionResult!]!
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
@@ -6232,6 +6276,7 @@ export interface NexusGenFieldTypeNames {
     updateClause: 'Clause'
     updateConfUser: 'ConfUser'
     updateConstruction: 'Construction'
+    updateConstructionResult: 'ConstructionResult'
     updateCoursePage: 'CoursePage'
     updateCourseVisit: 'CourseVisit'
     updateEmailCampaign: 'EmailCampaign'
@@ -6435,6 +6480,8 @@ export interface NexusGenFieldTypeNames {
     challengeResults: 'ChallengeResult'
     chat: 'Chat'
     chats: 'Chat'
+    constructionResult: 'ConstructionResult'
+    constructionResults: 'ConstructionResult'
     coursePage: 'CoursePage'
     coursePages: 'CoursePage'
     courseVisit: 'CourseVisit'
@@ -7567,6 +7614,10 @@ export interface NexusGenArgTypes {
       type?: string | null; // String
       variants?: Array<string | null> | null; // [String]
     }
+    updateConstructionResult: { // args
+      elements?: NexusGenInputs['ElementsList'] | null; // ElementsList
+      id?: string | null; // String
+    }
     updateCoursePage: { // args
       audience?: string | null; // String
       authors?: string | null; // String
@@ -7882,6 +7933,17 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['ChatOrderByWithRelationInput'][] | null; // [ChatOrderByWithRelationInput!]
       where?: NexusGenInputs['ChatWhereInput'] | null; // ChatWhereInput
+    }
+    constructionResult: { // args
+      where: NexusGenInputs['ConstructionResultWhereUniqueInput']; // ConstructionResultWhereUniqueInput!
+    }
+    constructionResults: { // args
+      after?: NexusGenInputs['ConstructionResultWhereUniqueInput'] | null; // ConstructionResultWhereUniqueInput
+      before?: NexusGenInputs['ConstructionResultWhereUniqueInput'] | null; // ConstructionResultWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['ConstructionResultOrderByWithRelationInput'][] | null; // [ConstructionResultOrderByWithRelationInput!]
+      where?: NexusGenInputs['ConstructionResultWhereInput'] | null; // ConstructionResultWhereInput
     }
     coursePage: { // args
       where: NexusGenInputs['CoursePageWhereUniqueInput']; // CoursePageWhereUniqueInput!

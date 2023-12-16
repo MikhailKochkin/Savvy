@@ -657,6 +657,29 @@ input ConstructionOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input ConstructionOrderByWithRelationInput {
+  answer: SortOrder
+  columnsNum: SortOrderInput
+  complexity: SortOrderInput
+  constructionResults: ConstructionResultOrderByRelationAggregateInput
+  createdAt: SortOrder
+  elements: SortOrderInput
+  goal: SortOrderInput
+  hasText: SortOrder
+  hint: SortOrderInput
+  id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrder
+  lessonId: SortOrder
+  name: SortOrder
+  text: SortOrderInput
+  type: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+  variants: SortOrder
+}
+
 type ConstructionResult {
   answer: String
   answers: Json
@@ -684,6 +707,25 @@ input ConstructionResultListRelationFilter {
 
 input ConstructionResultOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input ConstructionResultOrderByWithRelationInput {
+  answer: SortOrderInput
+  answers: SortOrderInput
+  attempts: SortOrderInput
+  construction: ConstructionOrderByWithRelationInput
+  constructionID: SortOrderInput
+  constructionId: SortOrderInput
+  createdAt: SortOrder
+  elements: SortOrderInput
+  id: SortOrder
+  inputs: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
+  lessonId: SortOrderInput
+  student: UserOrderByWithRelationInput
+  studentId: SortOrder
+  updatedAt: SortOrder
 }
 
 input ConstructionResultWhereInput {
@@ -1307,6 +1349,7 @@ input DocumentWhereUniqueInput {
 input Element {
   borders: Borders
   comment: String
+  edit: Boolean
   inDoc: Boolean
   isTest: Boolean
   place: Int
@@ -2547,6 +2590,7 @@ type Mutation {
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, goal: String, hint: String, id: String, name: String, type: String, variants: [String]): Construction
+  updateConstructionResult(elements: ElementsList, id: String): ConstructionResult
   updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, modules: Modules, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateEmailCampaign(content: String, emails: EmailsList, id: String, name: String): EmailCampaign
@@ -3654,6 +3698,8 @@ type Query {
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int, orderBy: [ChallengeResultOrderByWithRelationInput!], where: ChallengeResultWhereInput): [ChallengeResult!]!
   chat(where: ChatWhereUniqueInput!): Chat
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByWithRelationInput!], where: ChatWhereInput): [Chat!]!
+  constructionResult(where: ConstructionResultWhereUniqueInput!): ConstructionResult
+  constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int, orderBy: [ConstructionResultOrderByWithRelationInput!], where: ConstructionResultWhereInput): [ConstructionResult!]!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [CoursePageOrderByWithRelationInput!], where: CoursePageWhereInput): [CoursePage!]!
   courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit

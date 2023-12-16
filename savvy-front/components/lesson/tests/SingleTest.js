@@ -86,6 +86,9 @@ const Options = styled.div`
   flex-wrap: wrap;
   min-width: 60%;
   max-width: 80%;
+  p {
+    margin-bottom: 10px;
+  }
 `;
 
 const Styles = styled.div`

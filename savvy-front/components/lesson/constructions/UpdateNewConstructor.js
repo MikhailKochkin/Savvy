@@ -16,6 +16,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
     $columnsNum: Int
     $elements: ElementsList
     $goal: String
+    $type: String
   ) {
     updateConstruction(
       id: $id
@@ -23,6 +24,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
       columnsNum: $columnsNum
       elements: $elements
       goal: $goal
+      type: $type
     ) {
       id
       name
@@ -33,6 +35,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
       hint
       columnsNum
       elements
+      type
     }
   }
 `;
@@ -50,13 +53,36 @@ const Center = styled.div`
     width: 600px;
     margin-bottom: 40px;
   }
+  select {
+    width: 50%;
+    font-size: 1.4rem;
+    outline: none;
+    line-height: 1.3;
+    padding: 1.5% 2%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    margin-bottom: 1.5%;
+    border: 1px solid #c5c5c5;
+    border-radius: 4px;
+    background: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
+      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+  }
 `;
 
 const ButtonTwo = styled.button`
   border: none;
   background: #3f51b5;
   padding: 10px 20px;
-  width: 250px;
+  width: 160px;
   border: 2px solid #3f51b5;
   border-radius: 5px;
   font-family: Montserrat;
@@ -103,6 +129,7 @@ const Block = styled.div`
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
+  margin-top: 50px;
   img {
     width: 100px;
     height: 100px;
@@ -166,9 +193,9 @@ const Element = styled.div`
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    width: 50px;
-    height: 50px;
+    gap: 0px;
+    width: 44px;
+    height: 44px;
   }
   .box {
     display: inline-block;
@@ -289,6 +316,10 @@ const UpdateNewConstructor = (props) => {
   const [goal, setGoal] = useState(construction.goal);
   const [columnsNum, setColumns] = useState(construction.columnsNum);
   const [elements, setElements] = useState(construction.elements.elements);
+  const [type, setType] = useState(
+    construction.type ? construction.type : "DOCUMENT"
+  );
+
   const router = useRouter();
 
   const { t } = useTranslation("lesson");
@@ -303,6 +334,7 @@ const UpdateNewConstructor = (props) => {
     place: 2,
     inDoc: true,
     isTest: false,
+    edit: false,
     size: 0,
     rows: 1, // This means the element will span 1 row by default.
     text: "<p></p>",
@@ -397,7 +429,7 @@ const UpdateNewConstructor = (props) => {
       <h3>Goal</h3>
       <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
       <Number>
-        <div className="name">Число блоков: </div>
+        <div className="name"># of blocks: </div>
         <Buttons>
           <MoreButton
             onClick={(e) => {
@@ -421,7 +453,7 @@ const UpdateNewConstructor = (props) => {
         </Buttons>
       </Number>
       <Number>
-        <div className="name">Число колонок: </div>
+        <div className="name"># of columns: </div>
         <input
           type="number"
           max="30"
@@ -429,6 +461,15 @@ const UpdateNewConstructor = (props) => {
           onChange={(e) => setColumns(parseInt(e.target.value))}
         />
       </Number>
+      <select
+        name="types"
+        id="types"
+        defaultValue={type}
+        onChange={(e) => setType(e.target.value)}
+      >
+        <option value="DOCUMENT">Document</option>
+        <option value="SUMMARY">Summary</option>
+      </select>
 
       <Block columns={columnsNum}>
         {elements.map((el, i) => {
@@ -438,19 +479,12 @@ const UpdateNewConstructor = (props) => {
               className={"header" + i}
               id={i + 1}
               i={i}
+              type={type}
               getData={getData}
             />
           );
         })}
       </Block>
-      {/* <TextBox>
-        <DynamicLoadedEditor
-          name="hint"
-          getEditorText={myCallback2}
-          value={hint}
-          placeholder="Запишите подсказку или пояснение к конструктору"
-        />
-      </TextBox> */}
       <ButtonTwo
         onClick={async (e) => {
           e.preventDefault();
@@ -460,6 +494,7 @@ const UpdateNewConstructor = (props) => {
               hint,
               columnsNum,
               goal,
+              type,
               elements: { elements },
             },
           });
@@ -477,6 +512,7 @@ const UpdateNewConstructor = (props) => {
 export default UpdateNewConstructor;
 
 const ConElement = (props) => {
+  const { type } = props;
   const [el, setEl] = useState(props.el);
   const [borders, setBorders] = useState(props.el.borders);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -500,33 +536,52 @@ const ConElement = (props) => {
   return (
     <Element size={el.size} rows={el.rows} borders={el.borders}>
       <Settings>
-        <div className="box">
-          <input
-            type="checkbox"
-            checked={el.isTest}
-            onClick={(e) => {
-              let new_el = { ...el };
-              new_el.isTest = e.target.checked;
-              setEl(new_el);
-              props.getData(new_el, props.i);
-            }}
-          />
-          <label for="vehicle3">✅</label>
-        </div>
+        {type && type !== "SUMMARY" && (
+          <div className="box">
+            <input
+              type="checkbox"
+              checked={el.isTest}
+              onClick={(e) => {
+                let new_el = { ...el };
+                new_el.isTest = e.target.checked;
+                setEl(new_el);
+                props.getData(new_el, props.i);
+              }}
+            />
+            <label for="vehicle3">✅</label>
+          </div>
+        )}
 
-        <div className="box">
-          <input
-            type="checkbox"
-            checked={!el.inDoc}
-            onClick={(e) => {
-              let new_el = { ...el };
-              new_el.inDoc = !e.target.checked;
-              setEl(new_el);
-              props.getData(new_el, props.i);
-            }}
-          />
-          <label for="vehicle3">⛔️</label>
-        </div>
+        {type && type !== "SUMMARY" && (
+          <div className="box">
+            <input
+              type="checkbox"
+              checked={!el.inDoc}
+              onClick={(e) => {
+                let new_el = { ...el };
+                new_el.inDoc = !e.target.checked;
+                setEl(new_el);
+                props.getData(new_el, props.i);
+              }}
+            />
+            <label for="vehicle3">⛔️</label>
+          </div>
+        )}
+        {type && type == "SUMMARY" && (
+          <div className="box">
+            <input
+              type="checkbox"
+              checked={el.edit}
+              onClick={(e) => {
+                let new_el = { ...el };
+                new_el.edit = e.target.checked;
+                setEl(new_el);
+                props.getData(new_el, props.i);
+              }}
+            />
+            <label for="vehicle3">📝</label>
+          </div>
+        )}
         <div className="box-container">
           <div
             className="box up"
@@ -598,7 +653,7 @@ const ConElement = (props) => {
           </div>
         </div>
         <div>
-          <button onClick={toggleDropdown}>Set Borders</button>
+          <button onClick={toggleDropdown}>Borders</button>
           {dropdownOpen && (
             <div className="border-dropdown">
               <button
@@ -683,13 +738,15 @@ const ConElement = (props) => {
         value={el.text}
         type="DocBuilder"
       />
-      <div className="comment">
-        <DynamicLoadedEditor
-          getEditorText={myCallback2}
-          value={el.comment}
-          type="DocBuilder"
-        />
-      </div>
+      {type && type !== "SUMMARY" && (
+        <div className="comment">
+          <DynamicLoadedEditor
+            getEditorText={myCallback2}
+            value={el.comment}
+            type="DocBuilder"
+          />
+        </div>
+      )}
     </Element>
   );
 };

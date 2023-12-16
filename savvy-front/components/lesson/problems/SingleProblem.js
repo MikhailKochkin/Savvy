@@ -135,22 +135,39 @@ const ResponseArea = styled.div`
 `;
 
 const BlueButton = styled.button`
-  width: 180px;
-  background: #3b5bb3;
+  min-width: 200px;
+  line-height: 1.6;
+  margin-right: 20px;
+  text-align: left;
+  background: #d2edfd;
+  border-radius: 5px;
+  padding: 10px 30px;
+  margin-bottom: 15px;
+  /* height: 45px; */
+  cursor: pointer;
+  color: #000a60;
+  border: none;
+  white-space: nowrap;
   font-size: 1.6rem;
   font-weight: 500;
-  color: #fff;
-  border: 1px solid #3b5bb3;
-  font-family: Montserrat;
-  outline: 0;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 15px;
-  transition: 0.3s ease-in;
-  cursor: pointer;
+  transition: all 0.3s ease;
+  display: ${(props) => (props.correct === "true" ? "none" : "flex")};
+  pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   &:hover {
-    border: 1px solid #283d78;
-    background: #283d78;
+    background: #a5dcfe;
+  }
+  font-family: Montserrat;
+  @media (max-width: 800px) {
+    min-width: 100px;
+    margin-right: 10px;
+    padding: 10px 15px;
+    height: auto;
+
+    white-space: normal;
+    text-align: left;
   }
 `;
 
@@ -183,6 +200,7 @@ const Buttons = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  margin-top: 20px;
   /* pointer-events: ${(props) => (props.block ? "none" : "auto")}; */
   @media (max-width: 800px) {
     width: 50%;
@@ -353,70 +371,70 @@ const SingleProblem = (props) => {
               onFinish={onFinish}
             />
           )}
-          {teacherAnswer.length > 0 && (
-            <ResponseArea>
-              <h2>
-                {t("write_answer")}
-                {/* Запишите финальный ответ */}
-              </h2>
-              <Frame story={story}>
-                <DynamicHoverEditor
-                  index={1}
-                  name="answer"
-                  getEditorText={myCallback}
-                  placeholder={`Write something`}
-                />
-              </Frame>
-              <>
-                <Mutation
-                  mutation={CREATE_PROBLEMRESULT_MUTATION}
-                  variables={{
-                    lessonId: props.lessonID,
-                    answer: answer,
-                    revealed: [],
-                    problemID: props.problem.id,
-                  }}
-                >
-                  {(createProblemResult, { loading, error }) => (
-                    <Buttons story={story} block={revealAnswer}>
-                      <BlueButton
-                        variant="contained"
-                        color="primary"
-                        onClick={async (e) => {
-                          // Stop the form from submitting
-                          e.preventDefault();
-                          // call the mutation
-                          if (answer !== "") {
-                            const res = await createProblemResult();
-                            props.getResults(3);
-                            setShowAnswerButton(true);
-                            setRevealAnswer(true);
-                          } else {
-                            console.log("No");
-                          }
-                        }}
-                      >
-                        {loading ? t("checking") : t("check")}
-                      </BlueButton>
-                      {showAnswerButton && (
-                        <Button2
-                          onClick={(e) => setShowAnswerText(!showAnswerText)}
+          {teacherAnswer.length > 0 &&
+            problem.steps &&
+            problem.steps.problemItems.length >= 1 &&
+            (isNewFinished || isOldFinished) && (
+              <ResponseArea>
+                <h2>{t("write_answer")}</h2>
+                <Frame story={story}>
+                  <DynamicHoverEditor
+                    index={1}
+                    name="answer"
+                    getEditorText={myCallback}
+                    placeholder={`Write something`}
+                  />
+                </Frame>
+                <>
+                  <Mutation
+                    mutation={CREATE_PROBLEMRESULT_MUTATION}
+                    variables={{
+                      lessonId: props.lessonID,
+                      answer: answer,
+                      revealed: [],
+                      problemID: props.problem.id,
+                    }}
+                  >
+                    {(createProblemResult, { loading, error }) => (
+                      <Buttons story={story} block={revealAnswer}>
+                        <BlueButton
+                          variant="contained"
+                          color="primary"
+                          onClick={async (e) => {
+                            // Stop the form from submitting
+                            e.preventDefault();
+                            // call the mutation
+                            if (answer !== "") {
+                              const res = await createProblemResult();
+                              props.getResults(3);
+                              setShowAnswerButton(true);
+                              setRevealAnswer(true);
+                            } else {
+                              console.log("No");
+                            }
+                          }}
                         >
-                          {t("show_answer")}
-                        </Button2>
-                      )}
-                    </Buttons>
+                          {loading ? t("checking") : t("check")}
+                        </BlueButton>
+                        {showAnswerButton && (
+                          <Button2
+                            onClick={(e) => setShowAnswerText(!showAnswerText)}
+                          >
+                            {t("show_answer")}
+                          </Button2>
+                        )}
+                      </Buttons>
+                    )}
+                  </Mutation>
+                  {showAnswerText && (
+                    <div>
+                      <h2>{t("answer")}</h2>
+                      {parse(teacherAnswer)}
+                    </div>
                   )}
-                </Mutation>
-                {showAnswerText && (
-                  <div>
-                    <h2>{t("answer")}</h2>
-                    {parse(teacherAnswer)}
-                  </div>
-                )}
-              </>
-            </ResponseArea>
-          )}
+                </>
+              </ResponseArea>
+            )}
         </TextBar>
       )}
       {update && (

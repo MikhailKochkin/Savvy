@@ -240,6 +240,7 @@ const Element = inputObjectType({
     t.int("rows");
     t.boolean("inDoc");
     t.boolean("isTest");
+    t.boolean("edit");
     t.field("borders", { type: "Borders" });
   },
 });

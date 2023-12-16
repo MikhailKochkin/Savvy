@@ -204,6 +204,7 @@ const Element = inputObjectType({
     t.int("size");
     t.boolean("inDoc");
     t.boolean("isTest");
+    t.boolean("edit");
   },
 });
 

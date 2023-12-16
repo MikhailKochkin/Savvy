@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import smoothscroll from "smoothscroll-polyfill";
 
 const COURSE_MATERIALS_QUERY = gql`
   query COURSE_MATERIALS_QUERY($id: String) {
@@ -14,6 +15,10 @@ const COURSE_MATERIALS_QUERY = gql`
         notes {
           id
           text
+        }
+        chats {
+          id
+          messages
         }
       }
     }
@@ -90,9 +95,6 @@ const LessonSearch = (props) => {
 
   const { t } = useTranslation("course");
 
-  console.log("data", data);
-  console.log("searchItem", searchItem);
-
   const slide = (id) => {
     var my_element = document.getElementById("simulator_" + id);
     my_element.scrollIntoView({
@@ -103,18 +105,32 @@ const LessonSearch = (props) => {
   };
 
   useEffect(() => {
+    // kick off the polyfill!
+    smoothscroll.polyfill();
+  });
+
+  useEffect(() => {
     // Update found lessons when the search item changes
     if (data?.coursePage?.lessons && searchItem.trim() !== "") {
       const searchStrings = searchItem.split(/\s+/);
 
       const lessons = data.coursePage.lessons
-        .filter((les) => les.type.toLowerCase() == "story")
-        .filter((lesson) =>
-          lesson.notes.some((note) =>
-            searchStrings.every((str) =>
-              note.text.toLowerCase().includes(str.toLowerCase())
-            )
-          )
+        .filter((les) => les.type.toLowerCase() === "story") // Adjusted the comparison to strict equality (===)
+        .filter(
+          (lesson) =>
+            lesson?.notes?.some((note) =>
+              searchStrings.every((str) =>
+                note.text.toLowerCase().includes(str.toLowerCase())
+              )
+            ) ||
+            (lesson.chats &&
+              lesson.chats.some((chat) =>
+                chat.messages.messagesList.some((message) =>
+                  searchStrings.every((str) =>
+                    message.text.toLowerCase().includes(str.toLowerCase())
+                  )
+                )
+              ))
         )
         .map((lesson) => ({ id: lesson.id, name: lesson.name }));
 
@@ -125,7 +141,7 @@ const LessonSearch = (props) => {
     }
   }, [searchItem, data]);
 
-  return (
+  return data ? (
     <Styles>
       <h3>{t("search")}</h3>
       <div className="searchForm">
@@ -146,7 +162,7 @@ const LessonSearch = (props) => {
         </div>
       )}
     </Styles>
-  );
+  ) : null;
 };
 
 export default LessonSearch;

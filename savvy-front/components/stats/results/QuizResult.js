@@ -162,14 +162,13 @@ const QuizResult = (props) => {
                             </div>
                           </>
                         )}
-                        {q.type.toLowerCase() == "generate" && (
+                        {q.type?.toLowerCase() == "generate" && (
                           <>
                             {t.ideasList?.quizIdeas?.map((item, i) => (
                               <div>
                                 <div>
                                   {i + 1}. {item.idea} - <b>{item.result}%</b>
                                 </div>
-                                {console.log("item", item)}
                                 {item.next_id && (
                                   <SendButton
                                     onClick={(e) =>

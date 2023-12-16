@@ -25,7 +25,7 @@ const Body = styled.div``;
 const Container = styled.div`
   width: ${(props) => props.width};
   font-size: 1.6rem;
-  /* margin: 20px 0; */
+  margin-bottom: 100px;
   .animated {
     /* text-transform: uppercase; */
     background-image: linear-gradient(

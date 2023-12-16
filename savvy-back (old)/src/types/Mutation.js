@@ -2563,7 +2563,7 @@ const Mutation = mutationType({
         attempts: intArg(),
         constructionId: stringArg(),
         lessonId: stringArg(),
-        inputs: arg({
+        elements: arg({
           type: "ElementsList",
         }),
       },
@@ -2571,6 +2571,8 @@ const Mutation = mutationType({
         const lessonId = args.lessonId;
         const constructionId = args.constructionId;
         const inputs = args.inputs;
+        console.log("args", args);
+        console.log("elements", elements);
         delete args.lessonId;
         delete args.constructionId;
         delete args.inputs;
@@ -2589,6 +2591,7 @@ const Mutation = mutationType({
             lesson: {
               connect: { id: lessonId },
             },
+            elements: elements,
             inputs: {
               set: [...inputs],
             },
