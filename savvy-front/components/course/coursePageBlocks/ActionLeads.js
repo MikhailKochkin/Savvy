@@ -476,7 +476,7 @@ const Action = (props) => {
       <Container>
         <Contact>
           <Title>
-            {program.discountPrice ? (
+            {program?.discountPrice ? (
               <>
                 Получите скидку{" "}
                 <span className="">
@@ -594,7 +594,7 @@ const Action = (props) => {
             <div className="">◼️ {t("certificate")}</div>
             <div className="">
               ◼️ {program ? program.price : coursePage.price} ₽{" "}
-              {program.discountPrice ? (
+              {program?.discountPrice ? (
                 <span className="discount">{program.discountPrice} ₽</span>
               ) : null}
             </div>
