@@ -115,6 +115,7 @@ const ProblemBlock = (props) => {
                     check={el.check}
                     question={el.question}
                     answer={el.answer}
+                    answers={el.answers}
                     ifRight={el.ifRight}
                     ifWrong={el.ifWrong}
                     me={props.me}

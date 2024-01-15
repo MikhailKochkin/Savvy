@@ -203,6 +203,11 @@ const Box = styled.div`
   .div1 {
     width: 20%;
     border-right: 3px solid #f2f6f9;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    line-height: 1.4;
   }
   .div2 {
     width: 9%;
@@ -587,7 +592,7 @@ const LessonData = (props) => {
         lesson_results.push(val);
       }
     });
-    console.log("initial_report", initial_report);
+    // console.log("initial_report", initial_report);
     setReportData(initial_report);
     setStudentResults(
       lesson_results.reduce(
@@ -630,8 +635,8 @@ const LessonData = (props) => {
     setReport("");
     const well_done = reportData.filter((rd) => rd.result > 70);
     const not_good_enough = reportData.filter((rd) => rd.result <= 70);
-    console.log("not_good_enough", not_good_enough);
-    console.log("lesson", lesson.goal);
+    // console.log("not_good_enough", not_good_enough);
+    // console.log("lesson", lesson.goal);
     let student_result;
 
     if (studentResults && totalDifficulty) {
@@ -649,7 +654,7 @@ const LessonData = (props) => {
     } else {
       recommendation = `The student has learned everything and ready for work.`;
     }
-    console.log("recommendation", recommendation, student_result);
+    // console.log("recommendation", recommendation, student_result);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -692,7 +697,7 @@ const LessonData = (props) => {
       const data = await response.json();
       if (data.result.content) {
         setReport(data.result.content);
-        console.log("data.result.content", data.result.content);
+        // console.log("data.result.content", data.result.content);
       } else {
         setReport("Sorry, we are disconnected.");
       }
@@ -703,6 +708,11 @@ const LessonData = (props) => {
     setGenerating(false);
   };
 
+  let challenge_result =
+    student.challengeResults.filter((ch) => ch.lesson.id == lesson.id).length >
+    0
+      ? student.challengeResults.filter((ch) => ch.lesson.id == lesson.id)[0]
+      : null;
   return (
     <>
       {res.length > 0 && res[0].lesson.structure ? (
@@ -762,12 +772,42 @@ const LessonData = (props) => {
             </SimpleButton>
           </div>
         </Box>
+      ) : challenge_result ? (
+        <Box>
+          <div className="div1">
+            {index + 1}. {lesson.name}
+          </div>
+          <div className="div2">Data</div>
+          <div className="div3">
+            {challenge_result.correct} /
+            {challenge_result.correct + challenge_result.wrong}
+          </div>
+          <div className="div4"></div>
+          <div className="div5">
+            {moment(challenge_result.createdAt).format("DD.MM.YYYY – h:mm A")}
+          </div>
+          <div className="div6">
+            {" "}
+            {moment(challenge_result.createdAt).format("DD.MM.YYYY – h:mm A")}
+          </div>
+          <div className="div7">
+            {" "}
+            <SimpleButton
+              onClick={(e) => {
+                getData({
+                  variables: { lessonId: lesson.id, userId: student.id },
+                }),
+                  setShow(!show);
+              }}
+            >
+              {show ? "Close" : "Open"}
+            </SimpleButton>
+          </div>
+        </Box>
       ) : (
         <Box>
           <div className="div1">
-            <Name>
-              {index + 1}. {lesson.name}{" "}
-            </Name>
+            {index + 1}. {lesson.name}
           </div>
           <div className="div2">No data</div>
           <div className="div3"></div>

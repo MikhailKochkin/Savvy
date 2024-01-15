@@ -453,7 +453,6 @@ const StoryEx = (props) => {
     } else if (task.type.toLowerCase() === "forum") {
       el = lesson.forum;
       if (!el) return;
-
       item = (
         <Forum
           key={el.id}
@@ -506,6 +505,9 @@ const StoryEx = (props) => {
           passStep={passStep}
           lessonId={props.id}
           openSize={lesson.openSize}
+          lesson={lesson}
+          i_am_author={props.i_am_author}
+          width={props.width}
         />
       )}
     </Container>

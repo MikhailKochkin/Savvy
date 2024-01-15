@@ -146,8 +146,6 @@ const ClientData = (props) => {
 
     setAddressees(filteredClients);
   };
-  console.log("orgList", orgList);
-  console.log("addressees", addressees);
 
   const send = () => {
     addressees.map(async (c) => {
@@ -215,7 +213,7 @@ const ClientData = (props) => {
           onClick={(e) => {
             setOrganizations([
               {
-                name: "Training Center",
+                name: "IT meeting",
                 comment: "",
                 result: "",
                 country: "",

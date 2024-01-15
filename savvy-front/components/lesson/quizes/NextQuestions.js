@@ -17,7 +17,6 @@ const NextQuestions = (props) => {
     }
     return 0;
   });
-  console.log("components", components.slice(0, num));
   const updateArray = (data) => {
     setNum(num + 1);
   };
@@ -30,7 +29,6 @@ const NextQuestions = (props) => {
         let el;
         if (com.next_type.toLowerCase() === "quiz") {
           el = lesson.quizes.find((quiz) => quiz.id === com.next_id);
-          console.log("el", el, com);
           return (
             <SingleQuiz
               id={el.id}
@@ -40,6 +38,7 @@ const NextQuestions = (props) => {
               check={el.check}
               question={el.question}
               answer={el.answer}
+              answers={el.answers}
               ifRight={el.ifRight}
               ifWrong={el.ifWrong}
               me={me}

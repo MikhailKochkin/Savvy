@@ -542,7 +542,6 @@ const SingleTextEditor = (props) => {
 
   // start interaction with the piece of text
   const onMouseClick = (e) => {
-    console.log("feedback data", e.target.getAttribute("feedback"));
     if (e.target.getAttribute("feedback")) {
       setErrorFeedback(e.target.getAttribute("feedback"));
     }
@@ -661,7 +660,6 @@ const SingleTextEditor = (props) => {
                     setAttempts(attempts + 1);
                     if (e.target.getAttribute("class") == "mini_button") {
                       const ch = await check(e);
-                      console.log("feedback", errorFeedback);
 
                       if (errorFeedback) {
                         setShowFeedback(true);
@@ -686,7 +684,6 @@ const SingleTextEditor = (props) => {
                       e.target.getAttribute("type") === "note" ||
                       e.target.parentElement.getAttribute("type") === "note"
                     ) {
-                      console.log("note", note);
                       let val =
                         e.target.getAttribute("type") === "note"
                           ? e.target.getAttribute("text")
@@ -718,10 +715,8 @@ const SingleTextEditor = (props) => {
                       e.target.getAttribute("type") === "error" ||
                       e.target.parentElement.getAttribute("type") === "error"
                     ) {
-                      console.log("error");
                       if (total > 0) {
                         const res2 = onMouseClick(e);
-                        console.log("1", 1);
                       } else if (props.total == 0 || props.total == null) {
                         const res3 = onReveal(e);
                       }

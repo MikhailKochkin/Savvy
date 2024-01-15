@@ -3,12 +3,34 @@ import styled from "styled-components";
 import { TailSpin } from "react-loader-spinner";
 
 const Styles = styled.div`
-  margin-bottom: 50px;
+  margin-top: 10px;
+  .ask_questions {
+    margin-top: 10px;
+    font-weight: 500;
+    line-height: 1.3;
+    font-size: 1.6rem;
+    display: flex;
+    padding: 5px 5px;
+    flex-direction: row;
+    justify-content: flex-start;
+    transition: all 0.2s ease-in-out;
+    border-radius: 5px;
+    &:hover {
+      background-color: #ebebea;
+      cursor: pointer;
+    }
+  }
+  .question_block {
+    margin: 20px 0;
+  }
+  img {
+    width: 20px;
+    margin-right: 10px;
+  }
   textarea {
-    margin-top: 20px;
     height: 45px;
     width: 100%;
-    border: 1px solid #c2c2c2;
+    border: 1px solid #efefee;
     border-color: ${(props) => props.inputColor};
     outline: 0;
     resize: none;
@@ -16,14 +38,29 @@ const Styles = styled.div`
     padding: 3% 4%;
     line-height: 1.8;
     font-family: Montserrat;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+  button {
+    background-color: #3f50b5;
+    color: #fff;
+    font-family: Montserrat;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.3rem;
+    padding: 8px 20px;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background-color: #10249c;
+      cursor: pointer;
+    }
   }
   .recommendation {
-    margin-top: 20px;
+    margin-top: 10px;
+    background-color: #fff;
     width: 100%;
-    max-height: 120px; /* Set a max-height for the scrollable area */
+    max-height: 300px; /* Set a max-height for the scrollable area */
     overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #c2c2c2;
+    border: 1px solid #efefee;
     border-color: ${(props) => props.inputColor};
     outline: 0;
     resize: none;
@@ -31,7 +68,7 @@ const Styles = styled.div`
     padding: 3% 4%;
     line-height: 1.8;
     font-family: Montserrat;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 `;
 
@@ -50,6 +87,8 @@ const AnswerQuestions = (props) => {
   const [stemmedQuestion, setStemmedQuestion] = useState([]);
   const [recommendation, setRecommendation] = useState("...");
   const [generating, setGenerating] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [openAnswerBox, setOpenAnswerBox] = useState(false);
 
   let findSource = (searchItems, notes, chats) => {
     // Ensure searchItems is an array
@@ -107,6 +146,7 @@ const AnswerQuestions = (props) => {
   const answer = async (event) => {
     event.preventDefault();
     setGenerating(true);
+    setOpenAnswerBox(true);
     let info_source;
     try {
       const response = await fetch("/api/generate", {
@@ -180,7 +220,6 @@ const AnswerQuestions = (props) => {
       } else {
         console.log("error =(");
       }
-
       // Check if stemmedQuestion is empty before calling findSource
     } catch (error) {
       console.error(error);
@@ -196,23 +235,37 @@ const AnswerQuestions = (props) => {
 
   return (
     <Styles>
-      <textarea
-        onChange={(e) => {
-          setSearchItem(e.target.value);
-          autoResizeTextarea(e);
-        }}
-      />
-      <br />
-      <button onClick={(e) => answer(e)}>Ask</button>
-      <br />
-      <div className="recommendation">
-        {!generating && recommendation}
-        {generating && (
-          <Progress2>
-            <TailSpin width="25" color="#2E80EC" />
-          </Progress2>
-        )}
+      <div
+        className="ask_questions"
+        data-tooltip-id="my-tooltip"
+        data-tooltip-content="Ask questions abouth this simulator"
+        onClick={(e) => setOpen(!open)}
+      >
+        <img src="/static/question-square.svg" />
+        <div>Ask a question</div>
       </div>
+      {open && (
+        <div className="question_block">
+          <textarea
+            onChange={(e) => {
+              setSearchItem(e.target.value);
+              autoResizeTextarea(e);
+            }}
+          />
+          <br />
+          <button onClick={(e) => answer(e)}>Ask</button>
+          {openAnswerBox && (
+            <div className="recommendation">
+              {!generating && recommendation}
+              {generating && (
+                <Progress2>
+                  <TailSpin width="25" color="#2E80EC" />
+                </Progress2>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </Styles>
   );
 };

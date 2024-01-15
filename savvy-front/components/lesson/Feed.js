@@ -13,6 +13,7 @@ import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 import PagePurchase from "./PagePurchase.js";
 import calculateSum from "../../functions.js";
+import Navigation from "./Navigation";
 
 const Buttons = styled.div`
   display: flex;
@@ -45,7 +46,7 @@ const Buttons = styled.div`
 const Styles = styled.div`
   display: flex;
   flex-direction: row;
-  padding-top: 60px;
+  align-items: flex-start;
   .firstColumn {
     width: 4vw;
     transition: 0.5s;
@@ -98,9 +99,6 @@ const Styles = styled.div`
           text-indent: 0.01px;
           text-overflow: "";
           cursor: pointer;
-          /* &:hover {
-            color: #1a2980;
-          } */
         }
         option {
           color: #c2c2c2;
@@ -122,8 +120,6 @@ const Styles = styled.div`
   .third {
     max-width: 1vw;
     display: flex;
-    /* flex-direction: column;
-    justify-content: center; */
     align-items: center;
     transition: 0.5s;
     top: 10px;
@@ -133,26 +129,32 @@ const Styles = styled.div`
 `;
 
 const MenuColumn = styled.div`
-  width: ${(props) => (props.open ? "30vw" : "0px")};
+  width: ${(props) => (props.open ? "25vw" : "0px")};
   display: ${(props) => (props.open ? "flex" : "none")};
   height: 100vh;
-  background: #fff;
-  border-left: 1px solid #d4d4d4;
+  background: #fbfbfa;
+  border-right: 1px solid #efefee;
+  border-top: 1px solid #efefee;
   position: -webkit-sticky;
   position: sticky;
   overflow-y: auto; /* Enable vertical scrolling */
-
   top: 0%;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  transition: width 0.3s ease; /* Add this line for smooth transition */
   @media (max-width: 800px) {
     width: ${(props) => (props.open ? "100vw" : "0px")};
   }
   .container {
-    width: 80%;
-    max-width: 350px;
-    margin: 40px 0;
+    width: 85%;
+    position: relative;
+    transition: margin 0.3s ease; /* Add this line for smooth transition */
+    margin: 0px 0;
+    margin-top: 30px;
+    .navigate_block {
+      margin: 15px 0;
+    }
     .lesson_number {
       color: #8a8a8a;
       text-align: center;
@@ -160,14 +162,34 @@ const MenuColumn = styled.div`
       font-size: 1.8rem;
     }
     .lesson_name {
-      text-align: center;
+      text-align: left;
       font-size: 2.4rem;
       font-weight: 600;
       margin-top: 10px;
       line-height: 1.3;
     }
+    .navigate {
+      margin-top: 10px;
+      font-weight: 500;
+      line-height: 1.3;
+      font-size: 1.6rem;
+      display: flex;
+      padding: 5px 5px;
+      flex-direction: row;
+      justify-content: flex-start;
+      transition: all 0.2s ease-in-out;
+      border-radius: 5px;
+      &:hover {
+        background-color: #ebebea;
+        cursor: pointer;
+      }
+    }
+    .icon {
+      width: 20px;
+      margin-right: 10px;
+    }
     .bar {
-      margin-top: 30px;
+      margin-top: 15px;
       height: 5px;
       width: 100%;
       background: #b6bce2;
@@ -185,8 +207,29 @@ const MenuColumn = styled.div`
       margin: 10px 0;
       font-size: 1.6rem;
     }
+    .close-button {
+      position: absolute;
+      top: 15px; /* Adjust the top value as needed */
+      right: -15px; /* Adjust the right value as needed */
+      width: 25px;
+      height: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s;
+      &:hover {
+        background-color: #ebebea;
+        border-radius: 5px;
+      }
+      img {
+        width: 18px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+    }
     button {
-      border: 1px solid #c2c2c2;
+      /* border: 1px solid #c2c2c2;
       border-radius: 12px;
       padding: 3% 4%;
       cursor: pointer;
@@ -202,19 +245,19 @@ const MenuColumn = styled.div`
       text-indent: 0.01px;
       text-align-last: center;
       text-align: center;
-      transition: 0.5s;
+      transition: 0.5s; */
 
-      &:hover {
+      /* &:hover {
         border: 1px solid #1a2980;
-      }
+      } */
     }
     .nav {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
-      align-items: flex-start;
+      align-items: center;
       width: 100%;
-      margin-top: 30px;
+
       #text {
         max-width: 215px;
         font-weight: 500;
@@ -222,12 +265,12 @@ const MenuColumn = styled.div`
         font-size: 1.6rem;
       }
       #button_square {
-        margin-top: 10px;
+        /* margin-top: 10px;*/
         margin-left: 20px;
         border: 1px solid #c2c2c2;
         color: #c2c2c2;
-        width: 45px;
-        height: 45px;
+        width: 35px;
+        height: 35px;
         border-radius: 12px;
         display: flex;
         flex-direction: column;
@@ -284,11 +327,48 @@ const Complexity = styled.div`
   align-items: center;
 `;
 
-const Progress = styled.div`
-  height: 100%;
-  background: #3f51b5;
-  width: ${(props) => props.progress};
-  transition: all 0.5s;
+// const Progress = styled.div`
+//   height: 100%;
+//   background: #3f51b5;
+//   width: ${(props) => props.progress};
+//   transition: all 0.5s;
+// `;
+
+const Progress = styled.input`
+  width: 100%;
+  height: 8px;
+  margin-top: 10px;
+  background: linear-gradient(
+    to right,
+    #3f51b5,
+    #3f51b5 ${(props) => props.progress},
+    #f0f0f0 ${(props) => props.progress},
+    #f0f0f0
+  );
+  appearance: none;
+  outline: none;
+  transition: background 0.2s, box-shadow 0.2s;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #3f51b5;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #3f51b5;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
 `;
 
 const Block = styled.div`
@@ -334,7 +414,7 @@ const SimpleButton = styled.button`
 `;
 
 const Content = styled.div`
-  width: ${(props) => (props.open ? "70vw" : "100vw")};
+  width: ${(props) => (props.open ? "75vw" : "100vw")};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -436,6 +516,7 @@ const Content = styled.div`
   }
   @media (max-width: 800px) {
     width: ${(props) => (props.open ? "0vw" : "100vw")};
+    display: ${(props) => (props.open ? "none" : "flex")};
   }
 `;
 
@@ -548,6 +629,38 @@ const Message = styled.div`
   }
 `;
 
+const Section = styled.div`
+  height: 100%;
+  width: ${(props) => props.sectionWidth};
+  background: ${(props) => props.sectionColor};
+  border-right: ${(props) =>
+    props.sectionColor === "#3f51b5" ? "1px solid #fff" : "1px solid #C7C7C7"};
+  cursor: pointer;
+`;
+
+const SimulatorLinks = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-top: 5px;
+  .simulator_row_link {
+    display: flex;
+    flex-direction: row;
+    transition: width 0.3s ease; /* Add this line for smooth transition */
+    margin-top: 5px;
+    padding: 0px 5px;
+    border-radius: 5px;
+    &:hover {
+      background-color: #ebebea;
+      cursor: pointer;
+    }
+    .arrow_icon {
+      width: 12px;
+      margin-right: 10px;
+    }
+  }
+`;
+
 const Feed = (props) => {
   const {
     me,
@@ -601,10 +714,18 @@ const Feed = (props) => {
     props.my_result ? props.my_result : null
   );
   const [secondRound, setSecondRound] = useState(false);
-  const [progress, setProgress] = useState();
+  // const [progress, setProgress] = useState();
+  const totalSections = lessonElements.length;
+  const sectionWidth = 100 / totalSections + "%";
+
   const [open, setOpen] = useState(false);
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
+  const [openNavigation, setOpenNavigation] = useState(false);
+  const passMenuChange = () => {
+    setOpen(!open);
+  };
+  const [linkMenuOpen, setLinkMenuOpen] = useState(false);
 
   let hasLessonBeenFinished =
     result?.progress == lesson_structure.length &&
@@ -727,9 +848,106 @@ const Feed = (props) => {
     }
   }, [props.my_result]);
 
+  let other_simulators = props.lesson.coursePage.lessons
+    .filter(
+      (les) =>
+        les.published == true && les.type !== "REGULAR" && les.id !== lessonId
+    )
+    .sort((a, b) => a.number > b.number);
+
   return (
     <>
       <Styles>
+        <MenuColumn open={open} className="lastColumn">
+          <div className="container">
+            <div className="top_line">
+              <div className="lesson_name">
+                {props.lesson_number}. {props.lesson_name}
+              </div>
+              <div className="close-button" onClick={(e) => setOpen(false)}>
+                <img src="../static/close-lg.svg" />
+              </div>
+            </div>
+
+            <div
+              className="navigate"
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("navigate_around")}
+              onClick={(e) => setOpenNavigation(!openNavigation)}
+            >
+              <img className="icon" src="/static/navigation.svg" />
+              <div>{t("navigate")}</div>
+            </div>
+            {openNavigation && (
+              <div className="navigate_block">
+                <div className="nav">
+                  <div id="text">{t("choose_section")}</div>
+                  <div id="button_square">
+                    <select
+                      id="num"
+                      name="num"
+                      value={num - 1}
+                      onChange={(e) => search(parseInt(e.target.value))}
+                    >
+                      {lessonElements.map((el, i) => (
+                        <option key={i + "option3"} value={i - 1}>
+                          {i + 1}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="bar" style={{ display: "flex" }}>
+                  {lessonElements.map((el, i) => (
+                    <Section
+                      key={i + "section"}
+                      sectionWidth={sectionWidth}
+                      sectionColor={i <= num ? "#3f51b5" : "#f0f0f0"}
+                      onClick={() => search(i)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* <div className="questions">{t("have_questions")}</div> */}
+            {/* <AnswerQuestions notes={notes} chats={chats} /> */}
+            {/* <div className="go_to_chat">{t("chat_help")}</div>
+            <button onClick={(e) => search(lessonElements.length - 2)}>
+              {t("get_to_chat")}
+            </button> */}
+            {/* <br /> */}
+            <div
+              className="navigate"
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("find_related")}
+              onClick={(e) => setLinkMenuOpen(!linkMenuOpen)}
+            >
+              <img className="icon" src="/static/menu-blocks.svg" />
+              <div>{t("other_simulators")}</div>
+            </div>
+
+            {linkMenuOpen && (
+              <SimulatorLinks>
+                {other_simulators.map((s) => (
+                  <a
+                    href={`https://besavvy.app/ru/lesson?id=${s.id}&type=story`}
+                    target="_blank"
+                  >
+                    <div className="simulator_row_link">
+                      {" "}
+                      <img
+                        className="arrow_icon"
+                        src="/static/right-arrow.svg"
+                      />
+                      <div>{s.name}</div>
+                    </div>
+                  </a>
+                ))}
+              </SimulatorLinks>
+            )}
+          </div>
+        </MenuColumn>
         <Content
           open={open}
           className="second"
@@ -741,6 +959,13 @@ const Feed = (props) => {
               🚀 {t("level_up")} {complexity}
             </div>
           </Message> */}
+          <Navigation
+            i_am_author={props.i_am_author}
+            lesson={props.lesson}
+            me={me}
+            width={props.width}
+            passMenuChange={passMenuChange}
+          />
           {props.hasSecret && (
             <div
               className="arrowmenu2"
@@ -753,15 +978,15 @@ const Feed = (props) => {
               </div>
             </div>
           )}
-          <div
+          {/* <div
             className="arrowmenu"
             onClick={(e) => {
               setOpen(!open);
             }}
           >
             <img className="arrow" src="../../static/burger_menu.svg" />
-          </div>
-          {/* First we check if the iser have ever visited the lesson */}
+          </div> */}
+          {/* First we check if the user have ever visited the lesson */}
           {result && !hasLessonBeenFinished ? (
             <Border>
               {/*  We have lesson result */}
@@ -900,47 +1125,6 @@ const Feed = (props) => {
             </Stepper>
           )}
         </Content>
-        <MenuColumn open={open} className="lastColumn">
-          <div className="container">
-            <div className="lesson_number">
-              {t("lesson")} {props.lesson_number}.
-            </div>
-            <div className="lesson_name">{props.lesson_name}</div>
-            <div className="bar">
-              <Progress
-                className="progress"
-                progress={
-                  parseInt((100 * (num + 1)) / lessonElements.length) + "%"
-                }
-              ></Progress>
-            </div>
-            <div className="nav">
-              <div id="text">{t("choose_section")}</div>
-              <div id="button_square">
-                <select
-                  id="num"
-                  name="num"
-                  value={num - 1}
-                  onChange={(e) => search(parseInt(e.target.value))}
-                >
-                  {lessonElements.map((el, i) => (
-                    <option key={i + "option3"} value={i - 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="questions">{t("have_questions")}</div>
-            {/* <AnswerQuestions notes={notes} chats={chats} /> */}
-            <div className="go_to_chat">{t("chat_help")}</div>
-            <button onClick={(e) => search(lessonElements.length - 2)}>
-              {t("get_to_chat")}
-            </button>
-            <br />
-            <button onClick={(e) => setOpen(false)}>{t("close_menu")}</button>
-          </div>
-        </MenuColumn>
       </Styles>
     </>
   );

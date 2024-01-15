@@ -108,7 +108,7 @@ const QuizResult = (props) => {
   const openTask = (id, task) => {
     setNextId(id);
     setNextTask(task);
-    console.log(0, id, task);
+    // console.log(0, id, task);
     slide();
   };
   return (

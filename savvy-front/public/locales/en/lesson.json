@@ -39,7 +39,7 @@
   "show": "Show the answer",
   "construction_explainer": "Prepare a draft using clauses from the column on the right.",
   "show_explainer": "Show explanation?",
-  "choose_section": "Navigate to any section of the lesson:",
+  "choose_section": "Navigate to any section:",
   "have_questions": "Have any questions?",
   "get_to_chat": "Open the chat",
   "chat_help": "We will answer any question in the chat.",
@@ -168,5 +168,11 @@
   "show_an_ideal_answer": "Show an ideal answer",
   "what_can_i_improve": "What can I improve in my answer?",
   "evaluate_ideas": "Evaluate ideas",
-  "ideas_result": "Now that you have come up with some ideas, it's time to develop them."
+  "ideas_result": "Now that you have come up with some ideas, it's time to develop them.",
+  "navigate": "Navigate",
+  "navigate_around": "Navigate around the lesson",
+  "other_simulators": "Other simulators",
+  "find_related": "Find related lessons and simulators",
+  "lesson_menu": "Lesson menu",
+  "open_development_page": "Open development page"
 }

@@ -56,7 +56,6 @@ const BusinessEmail = (props) => {
       props.connection +
       ` At BeSavvy, we use simulation training to build digital portraits of lawyers' skill sets. That's why I've decided to write you.`
   );
-  console.log("props", props.name);
   const [subject, setSubject] = useState(
     `Enhance law firm training with simulation technologies`
   );

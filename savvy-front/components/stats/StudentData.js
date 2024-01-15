@@ -2,10 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useMutation, useLazyQuery, gql } from "@apollo/client";
 import { Mutation } from "@apollo/client/react/components";
-// import Button from "@material-ui/core/Button";
 import dynamic from "next/dynamic";
-
-// import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import LessonData from "./LessonData";
 import Journey from "./Journey";
@@ -149,7 +146,7 @@ const Block = styled.div`
   border: 3px solid #f2f6f9;
   border-radius: 20px;
   h2 {
-    margin: 20px 0;
+    margin: 20px 10px;
   }
 `;
 
@@ -505,6 +502,17 @@ const Person = (props) => {
     let s;
     if (l.lesson.type === "STORY") {
       s = l.progress / l.lesson.structure.lessonItems.length;
+    } else if (l.lesson.type === "CHALLENGE") {
+      if (
+        student.challengeResults.filter((cr) => cr.lesson.id === l.lesson.id)
+          .length > 0
+      ) {
+        s = 1;
+        return s;
+      } else {
+        s = 0;
+        return s;
+      }
     } else {
       s = 0;
     }

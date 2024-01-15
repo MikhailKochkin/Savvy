@@ -51,6 +51,20 @@ const STUDENTS_QUERY = gql`
         }
         createdAt
       }
+      challengeResults {
+        id
+        wrong
+        correct
+        createdAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+            title
+          }
+        }
+      }
     }
   }
 `;

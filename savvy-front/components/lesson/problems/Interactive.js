@@ -109,6 +109,7 @@ class Interactive extends Component {
           check={el.check}
           question={el.question}
           answer={el.answer}
+          answers={el.answers}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           me={this.props.me}
@@ -264,6 +265,7 @@ class Interactive extends Component {
           check={el.check}
           question={el.question}
           answer={el.answer}
+          answers={el.answers}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           me={this.props.me}

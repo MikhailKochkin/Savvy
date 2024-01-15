@@ -267,6 +267,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           number
           type
           published
+          name
         }
       }
     }
@@ -424,15 +425,16 @@ const NewSingleLesson = (props) => {
                 handleHeight
                 onResize={onResize}
               />
-              {!props.isBot && !props.embedded && (
-                <Navigation
-                  i_am_author={i_am_author}
-                  lesson={lesson}
-                  me={me}
-                  width={width}
-                />
-              )}
+
               <LessonPart>
+                {/* {!props.isBot && !props.embedded && (
+                  <Navigation
+                    i_am_author={i_am_author}
+                    lesson={lesson}
+                    me={me}
+                    width={width}
+                  />
+                )} */}
                 <StoryEx
                   id={props.id}
                   tasks={
@@ -451,6 +453,8 @@ const NewSingleLesson = (props) => {
                   coursePage={lesson.coursePage}
                   passStep={passStep}
                   openLesson={lesson.open}
+                  i_am_author={i_am_author}
+                  width={width}
                 />
               </LessonPart>
             </Container>{" "}

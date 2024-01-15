@@ -130,7 +130,7 @@ const Row = styled.div`
 const UserCard = memo((props) => {
   const [firstOpen, setFirstOpen] = useState(false);
   const [followUp1Open, setFollowUp1Open] = useState(false);
-  const [generalOpen, setGeneralOpen] = useState(false);
+  const [generalOpen, setGeneralOpen] = useState(true);
   const [followUp3Open, setFollowUp3Open] = useState(false);
   const [allLinks, setAllLinks] = useState(false);
 

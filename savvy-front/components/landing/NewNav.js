@@ -104,7 +104,7 @@ const StyledModal = Modal.styled`
 
 const Styles = styled.div`
   width: 100%;
-  height: 80px;
+  height: 75px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -241,7 +241,7 @@ const NewNav = (props) => {
       <div className="menu_bar">
         <Link href="/">
           <div className="logo">
-            <img src="static/long_logo.svg" />
+            <img src="static/logo_colored.svg" />
           </div>
         </Link>
         <MobileMenu onClick={(e) => openNav()}>

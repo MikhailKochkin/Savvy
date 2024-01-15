@@ -355,7 +355,7 @@ const Generate = (props) => {
   const getMatchingAnswers = async () => {
     let matchedAnswers = [];
     setProgress("true");
-
+    console.log("props.answers", props.answers);
     // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
 

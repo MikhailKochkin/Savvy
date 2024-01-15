@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
-import NewLanding3 from "../landing/NewLanding3";
+import NewLanding4 from "../landing/NewLanding4";
 import Reviews from "../landing/Reviews";
 import Programs from "../landing/Programs";
+import UseCases from "../landing/UseCases";
 import ContactForm from "../landing/ContactForm";
 import { useUser } from "../User";
 
@@ -14,7 +15,8 @@ const Courses = () => {
   const me = useUser();
   return (
     <>
-      <NewLanding3 />
+      <NewLanding4 />
+      <UseCases />
       <Programs me={me} />
       <Reviews />
       <ContactForm offer={offer} />

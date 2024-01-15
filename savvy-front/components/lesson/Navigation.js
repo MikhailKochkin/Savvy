@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useQuery, gql } from "@apollo/client";
 import { result } from "lodash";
+import { Tooltip } from "react-tooltip";
 
 const TEAM_RESULTS = gql`
   query questResults($lessonId: String!, $list_of_ids: [String!]) {
@@ -23,28 +24,33 @@ const TEAM_RESULTS = gql`
 `;
 
 const Head = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* You can adjust the z-index as needed */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  color: white;
+  align-items: flex-start;
   cursor: pointer;
   min-height: 10vh;
-  background-image: url("/static/pattern.svg");
-  background-size: cover;
   color: #dfe1ec;
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
+  border-top: 1px solid #efefee;
   #change_page {
     font-size: 1.7rem;
   }
   span {
-    color: #fff;
+    color: #55534e;
   }
   .block {
     font-size: 1.7rem;
     margin-left: 10px;
+    margin-top: 5px;
+    img {
+      width: 25px;
+    }
   }
   #back {
     &:hover {
@@ -129,11 +135,24 @@ const Team = styled.div`
   flex-direction: row;
 `;
 
+const Left = styled.div`
+  padding: 20px 0;
+`;
+
 const Right = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 20px 0;
+  #my-tooltip {
+    font-family: Montserrat;
+    font-size: 1.2rem;
+    color: #e4e4e4;
+    padding: 5px 10px;
+    background-color: #0f0f0f;
+    border-radius: 5px;
+  }
   button {
     margin: 0 10px;
     background: #fcc419;
@@ -207,32 +226,39 @@ const Navigation = (props) => {
   new_array_2.map((el) => filtered_results.push(el.max));
   return (
     <Head>
-      {lesson.open ? (
-        <Link
-          href={{
-            pathname: "/course",
-            query: {
-              id: lesson.coursePage.id,
-            },
-          }}
-        >
-          <span>⬅{/* {t("back_to_course")} */}</span>
-        </Link>
-      ) : (
-        <Link
-          href={{
-            pathname: "/course",
-            query: {
-              id: lesson.coursePage.id,
-            },
-          }}
-        >
-          <span>⬅</span>
-        </Link>
-      )}
-      {width > 800 && (
-        <Right>
-          {me.id !== "clkvdew14837181f13vcbbcw0x" && me.myTeams.length == 0 && (
+      <Left>
+        {lesson.open ? (
+          <Link
+            href={{
+              pathname: "/course",
+              query: {
+                id: lesson.coursePage.id,
+              },
+            }}
+          >
+            <span
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Back to course page"
+            >
+              ⬅
+            </span>
+          </Link>
+        ) : (
+          <Link
+            href={{
+              pathname: "/course",
+              query: {
+                id: lesson.coursePage.id,
+              },
+            }}
+          >
+            <span>⬅</span>
+          </Link>
+        )}
+      </Left>
+      {/* {width > 100 && ( */}
+      <Right>
+        {/* {me.id !== "clkvdew14837181f13vcbbcw0x" && me.myTeams.length == 0 && (
             <button>
               <a
                 target="_blank"
@@ -241,8 +267,8 @@ const Navigation = (props) => {
                 Create a team
               </a>
             </button>
-          )}
-          {me && me.myTeams.length > 0 && (
+          )} */}
+        {/* {me && me.myTeams.length > 0 && (
             <button>
               <a
                 target="_blank"
@@ -251,8 +277,8 @@ const Navigation = (props) => {
                 Invite to your team
               </a>
             </button>
-          )}
-          <Team>
+          )} */}
+        {/* <Team>
             {me.myTeams.length > 0 &&
               me.myTeams[0].users.map((t, i) => (
                 <Level
@@ -283,28 +309,51 @@ const Navigation = (props) => {
                   </IconBlock>
                 </Level>
               ))}
-          </Team>
-          <div className="block">
-            {me &&
-              (lesson.user.id === me.id ||
-                i_am_author ||
-                me.permissions.includes("ADMIN")) && (
-                <Link
-                  href={{
-                    pathname: "/lesson",
-                    query: {
-                      id: lesson.id,
-                      type: "regular",
-                    },
-                  }}
-                >
-                  {/* <span>{t("switch")}</span> */}
-                  <span>{t("to_development")}</span>
-                </Link>
-              )}
-          </div>
-        </Right>
-      )}
+          </Team> */}
+        <div className="block">
+          {me &&
+            (lesson.user.id === me.id ||
+              i_am_author ||
+              me.permissions.includes("ADMIN")) && (
+              <Link
+                href={{
+                  pathname: "/lesson",
+                  query: {
+                    id: lesson.id,
+                    type: "regular",
+                  },
+                }}
+              >
+                {/* <span>{t("switch")}</span> */}
+                {/* <span>{t("to_development")}</span> */}
+
+                <img
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={t("open_development_page")}
+                  src="/static/change.svg"
+                />
+              </Link>
+            )}
+        </div>
+        <div className="block">
+          {" "}
+          <img
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content={t("lesson_menu")}
+            src="/static/menu-dots.svg"
+            onClick={(e) => props.passMenuChange()}
+          />
+        </div>
+        {/* <div className="block">
+            {" "}
+            <img
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Notebook"
+              src="/static/notebook_menu.svg"
+            />
+          </div> */}
+        <Tooltip id="my-tooltip" />
+      </Right>
     </Head>
   );
 };

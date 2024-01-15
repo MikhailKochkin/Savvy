@@ -87,7 +87,6 @@ const Options = styled.div`
   min-width: 60%;
   max-width: 80%;
   p {
-    margin-bottom: 10px;
   }
 `;
 

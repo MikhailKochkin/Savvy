@@ -458,7 +458,6 @@ const GeneralEmail = (name, text) => `
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                      <p>Hello ${name},</p>
                       ${text}
                        ___________
                         <br/>

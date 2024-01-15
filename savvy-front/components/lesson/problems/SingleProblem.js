@@ -371,7 +371,6 @@ const SingleProblem = (props) => {
               onFinish={onFinish}
             />
           )}
-          {console.log("problem", !problem.steps)}
           {!problem.steps && (
             <ResponseArea>
               <h2>{t("write_answer")}</h2>

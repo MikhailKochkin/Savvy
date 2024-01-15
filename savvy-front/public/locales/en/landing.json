@@ -28,5 +28,15 @@
   "c2a_button": "Start building",
   "data_disclaimer": "",
   "cohort_start": "Cohort start",
-  "free": "Free"
+  "free": "Free",
+  "upskill_with_simulators": "Upskill lawyers with simulators",
+  "build_in_minutes": "Build simulators in minutes. Make training engaging and practice-oriented. Collect training data to make better L&D and HR decisions",
+  "writing_and_drafting": "Writing and Drafting",
+  "teach_to_draft": "Teach to draft. Edit. Find risks. Mitigate them.",
+  "problem_solving": "Problem solving",
+  "teach_to_solve": "Teach to solve legal problems. Get hints, explanations and feedback.",
+  "advocacy": "Advocacy",
+  "teach_to_communicate": "Teach to communicate, negotiate and present.",
+  "analysis": "Analysis",
+  "teach_to_spot_errors": "Teach to spot errors, find data and make conclusions."
 }

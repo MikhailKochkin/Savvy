@@ -312,6 +312,7 @@ const Element = (props) => {
         id={task.id}
         question={task.question}
         answer={task.answer}
+        answers={task.answers}
         me={props.me}
         getResults={getResults}
         type={task.type}

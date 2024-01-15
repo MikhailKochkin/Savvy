@@ -736,7 +736,6 @@ export default Feed;
 
 const CustomProgressBar = ({ myResult, lessonItems }) => {
   let lesson_length = calculateSum(lessonItems);
-  console.log("lesson_length", lesson_length);
   let time_coef = lesson_length / lessonItems.length;
 
   const progress = myResult
