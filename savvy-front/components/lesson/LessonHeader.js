@@ -567,11 +567,8 @@ const LessonHeader = (props) => {
             {time} {t("minutes")}
           </Time>
           <Buttons>
-            {!me && lesson.open && (
-              <Button id="sign_up_open_lesson" onClick={(e) => slide2()}>
-                {t("sign_up_and_open")}
-              </Button>
-            )}
+            {/* Case 2. Admin or course author publishes the course */}
+
             {me &&
             (me.id === author ||
               me.permissions.includes("ADMIN") ||
@@ -602,14 +599,15 @@ const LessonHeader = (props) => {
                 </ToggleQuestion>
               </>
             ) : null}
+
+            {/* Case 3. Admin or course opens the lesson */}
+
             {me &&
-              !lesson.published &&
               (me.id === author ||
                 me.permissions.includes("ADMIN") ||
                 i_am_author) && (
                 <Link
                   legacyBehavior
-                  // author or admin or openLesson if the lesson is not published.
                   href={{
                     pathname: "/lesson",
                     query: {
@@ -623,8 +621,89 @@ const LessonHeader = (props) => {
                   </A>
                 </Link>
               )}
+
+            {/* {lesson.type.toLowerCase()} */}
+
+            {/* Case 4. Web site user opens the lesson */}
+            {/* First check if the lesson is not under development and i am not the developer */}
+
+            {lesson.type.toLowerCase() !== "regular" &&
+            me &&
+            (me.id !== author ||
+              !me.permissions.includes("ADMIN") ||
+              !i_am_author) ? (
+              lesson.open ? (
+                <Link
+                  legacyBehavior
+                  href={{
+                    pathname: "/lesson",
+                    query: {
+                      id: lesson.id,
+                      type: lesson.type.toLowerCase(),
+                    },
+                  }}
+                >
+                  <A>
+                    <Button
+                    // onClick={handleButtonClick}
+                    >
+                      {t("open")}
+                    </Button>
+                  </A>
+                </Link>
+              ) : me.new_subjects.filter((s) => s.id == coursePageId).length >
+                0 ? (
+                <Link
+                  legacyBehavior
+                  href={{
+                    pathname: "/lesson",
+                    query: {
+                      id: lesson.id,
+                      type: lesson.type.toLowerCase(),
+                    },
+                  }}
+                >
+                  <A>
+                    <Button
+                    // onClick={handleButtonClick}
+                    >
+                      {t("open")} 2
+                    </Button>
+                  </A>
+                </Link>
+              ) : null
+            ) : null}
+
+            {/* Case 5. Open lesson */}
+
+            {!me && lesson.open && lesson.type.toLowerCase() !== "regular" && (
+              <Link
+                legacyBehavior
+                href={{
+                  pathname: "/lesson",
+                  query: {
+                    id: lesson.id,
+                    type: lesson.type.toLowerCase(),
+                  },
+                }}
+              >
+                <A>
+                  <Button
+                  // onClick={handleButtonClick}
+                  >
+                    {t("open")}
+                  </Button>
+                </A>
+              </Link>
+            )}
+
+            {/* {!me && lesson.open && (
+              <Button id="sign_up_open_lesson" onClick={(e) => slide2()}>
+                {t("sign_up_and_open")}
+              </Button>
+            )}
+
             {me &&
-              lesson.published &&
               (me.permissions.includes("ADMIN") ||
                 me.new_subjects.filter((s) => s.id == coursePageId).length >
                   0 ||
@@ -649,7 +728,7 @@ const LessonHeader = (props) => {
                     </Button>
                   </A>
                 </Link>
-              )}
+              )} */}
           </Buttons>
         </div>
       </TextBar>

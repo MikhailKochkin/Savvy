@@ -22,6 +22,7 @@ const LESSON_RESULTS_QUERY = gql`
         id
         name
         structure
+        published
         type
         number
       }

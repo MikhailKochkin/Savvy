@@ -375,37 +375,38 @@ const LessonsData = (props) => {
     }
     return res;
   }
+
   let initial_lessons = [...coursePage.lessons]
     .sort((a, b) => (a.number > b.number ? 1 : -1))
-    .filter((l) => l.type !== "HIDDEN");
+    .filter((l) => l.published);
 
   let broken_lessons = sliceIntoChunks(
     initial_lessons,
     coursePage.weeks ? coursePage.weeks : 3
   );
 
-  let hidden_lessons = [...coursePage.lessons]
+  let unpublished_lessons = [...coursePage.lessons]
     .sort((a, b) => (a.number > b.number ? 1 : -1))
-    .filter((l) => l.type == "HIDDEN");
+    .filter((l) => !l.published);
 
-  let full_modules = [];
-  if (coursePage.modules && coursePage.modules.modules.length > 0) {
-    coursePage.modules.modules.map((m, i) => {
-      let newLessons = [];
-      m.lessonsInModule.map((lim) => {
-        let les = coursePage.lessons.find((les) => les.id == lim.id);
-        if (les.type !== "HIDDEN") {
-          return newLessons.push(les);
-        }
-      });
-      let new_module = {
-        name: m.name,
-        number: m.number,
-        lessons: newLessons,
-      };
-      full_modules.push(new_module);
-    });
-  }
+  // let full_modules = [];
+  // if (coursePage.modules && coursePage.modules.modules.length > 0) {
+  //   coursePage.modules.modules.map((m, i) => {
+  //     let newLessons = [];
+  //     m.lessonsInModule.map((lim) => {
+  //       let les = coursePage.lessons.find((les) => les.id == lim.id);
+  //       if (les.type !== "HIDDEN") {
+  //         return newLessons.push(les);
+  //       }
+  //     });
+  //     let new_module = {
+  //       name: m.name,
+  //       number: m.number,
+  //       lessons: newLessons,
+  //     };
+  //     full_modules.push(new_module);
+  //   });
+  // }
 
   return (
     <LessonsInfo>
@@ -429,9 +430,8 @@ const LessonsData = (props) => {
           <Total>
             {" "}
             {t("total_lessons")}
-            <b>
-              {lessons.filter((l) => l.type !== "HIDDEN").length}
-            </b> <br /> {t("course_term")}{" "}
+            <b>{lessons.filter((l) => l.published).length}</b> <br />{" "}
+            {t("course_term")}{" "}
             <b>
               {Math.ceil(
                 lessons.length / (coursePage.weeks ? coursePage.weeks : 3)
@@ -448,17 +448,17 @@ const LessonsData = (props) => {
               >
                 {t("in_weeks")}
               </Button>
-              {full_modules.length > 0 && (
+              {/* {full_modules.length > 0 && (
                 <Button
                   primary={format === "modules"}
                   onClick={(e) => setFormat("modules")}
                 >
                   По модулям
                 </Button>
-              )}
+              )} */}
             </Buttons>
           </Total>
-          {format == "modules" && (
+          {/* {format == "modules" && (
             <Syllabus>
               {full_modules.map((m, i) => (
                 <>
@@ -494,7 +494,7 @@ const LessonsData = (props) => {
                 </>
               ))}
             </Syllabus>
-          )}
+          )} */}
           {format == "weeks" && (
             <Syllabus>
               {[...broken_lessons].map((b, i) => (
@@ -538,9 +538,9 @@ const LessonsData = (props) => {
           {/* } */}
           {me && me.permissions && me.permissions.includes("ADMIN") && (
             <Syllabus>
-              <div className="week_number">Hidden lessons</div>
+              <div className="week_number">Unpublished lessons</div>
               <Lessons>
-                {hidden_lessons.map((lesson, index) => (
+                {unpublished_lessons.map((lesson, index) => (
                   <>
                     <LessonHeader
                       me={me}

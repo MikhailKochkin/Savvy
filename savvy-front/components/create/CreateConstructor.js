@@ -285,15 +285,15 @@ const CreateConstructor = (props) => {
   const { t } = useTranslation("lesson");
   const router = useRouter();
 
-  useEffect(() => {
-    let columns = 0;
-    const newStartingColumns = elements.map((el) => {
-      const start = columns + 1;
-      columns += el.size;
-      return start;
-    });
-    setStartingColumns(newStartingColumns);
-  }, [elements]);
+  // useEffect(() => {
+  //   let columns = 0;
+  //   const newStartingColumns = elements.map((el) => {
+  //     const start = columns + 1;
+  //     columns += el.size;
+  //     return start;
+  //   });
+  //   setStartingColumns(newStartingColumns);
+  // }, [elements]);
 
   const [elements, setElements] = useState([
     {

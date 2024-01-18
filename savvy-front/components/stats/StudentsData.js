@@ -78,6 +78,7 @@ const LESSONS_QUERY = gql`
       open
       type
       goal
+      published
       assignment
       number
       user {

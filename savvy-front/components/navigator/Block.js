@@ -535,7 +535,7 @@ const Block = (props) => {
     } else if (val == "program" && my_course && my_course.lessons) {
       let uls = [];
       let sorted_lessons = my_course.lessons
-        .filter((l) => l.type.toLowerCase() !== "hidden")
+        .filter((l) => l.published)
         .sort((a, b) => a.number - b.number);
       sorted_lessons.map((s) =>
         uls.push(`

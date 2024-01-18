@@ -313,12 +313,8 @@ class StudentCard extends Component {
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio =
-      (status * 100) /
-      coursePage.lessons.filter((l) => l.type.toLowerCase() !== "hidden")
-        .length;
-    let left =
-      coursePage.lessons.filter((l) => l.type.toLowerCase() !== "hidden")
-        .length - status;
+      (status * 100) / coursePage.lessons.filter((l) => l.published).length;
+    let left = coursePage.lessons.filter((l) => l.published).length - status;
 
     let my_certificate = me.certificates.find(
       (certificate) => certificate.coursePage.id === coursePage.id
@@ -334,9 +330,7 @@ class StudentCard extends Component {
                 parseInt(
                   100 *
                     (status /
-                      coursePage.lessons.filter(
-                        (l) => l.type.toLowerCase() !== "hidden"
-                      ).length)
+                      coursePage.lessons.filter((l) => l.published).length)
                 ) + "%"
               }
             ></Progress>
@@ -348,9 +342,7 @@ class StudentCard extends Component {
                 parseInt(
                   100 *
                     (status /
-                      coursePage.lessons.filter(
-                        (l) => l.type.toLowerCase() !== "hidden"
-                      ).length)
+                      coursePage.lessons.filter((l) => l.published).length)
                 ) + "%"
               }
             >
@@ -364,20 +356,12 @@ class StudentCard extends Component {
                   100 -
                     100 *
                       (status /
-                        coursePage.lessons.filter(
-                          (l) => l.type.toLowerCase() !== "hidden"
-                        ).length)
+                        coursePage.lessons.filter((l) => l.published).length)
                 ) + "%"
               }
             >
               {" "}
-              <div>
-                {
-                  coursePage.lessons.filter(
-                    (l) => l.type.toLowerCase() !== "hidden"
-                  ).length
-                }
-              </div>
+              <div>{coursePage.lessons.filter((l) => l.published).length}</div>
             </Full>
           </div>
           {/* {ratio < 33 && (

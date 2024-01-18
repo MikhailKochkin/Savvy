@@ -155,7 +155,7 @@ const Course = (props) => {
         {open && (
           <div className="lessons">
             {c.lessons
-              .filter((l) => l.type !== "HIDDEN")
+              .filter((l) => l.published)
               .sort((a, b) => (a.number > b.number ? 1 : -1))
               .map((l, i) => (
                 <div className="lesson_row">

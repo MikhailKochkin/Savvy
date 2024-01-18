@@ -396,7 +396,6 @@ const UpdateLesson = (props) => {
               <option value="REGULAR">{t("regular")}</option>
               <option value="STORY">{t("story")}</option>
               <option value="CHALLENGE">{t("challenge")}</option>
-              <option value="HIDDEN">{t("hidden")}</option>
             </select>
             <div className="explainer">{t("status_explainer")}</div>
           </div>

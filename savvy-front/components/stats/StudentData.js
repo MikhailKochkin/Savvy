@@ -494,8 +494,10 @@ const Person = (props) => {
     };
     lesResults.push(new_obj);
   });
-  maxes = maxes.filter((m) => m.lesson.type !== "HIDDEN");
+  console.log("maxes", maxes);
 
+  maxes = maxes.filter((m) => m.lesson.published);
+  console.log("maxes", maxes);
   let color;
   let total = 0;
   maxes.map((l) => {
@@ -527,7 +529,7 @@ const Person = (props) => {
 
   let active_lessons = [];
   lessons.map((l) => {
-    if (l.type !== "HIDDEN") {
+    if (l.published) {
       active_lessons.push(l);
     }
   });
@@ -809,7 +811,7 @@ const Person = (props) => {
                 </TopBox>
               </>
               {[...lessons]
-                .filter((l) => l.type !== "HIDDEN")
+                .filter((l) => l.published)
                 .sort((a, b) => (a.number > b.number ? 1 : -1))
                 .map((lesson, index) => {
                   let res = maxes.filter((r) => r.lesson.id === lesson.id);

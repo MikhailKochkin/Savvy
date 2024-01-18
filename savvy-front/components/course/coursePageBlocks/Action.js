@@ -592,7 +592,7 @@ const Action = (props) => {
 
           <div className="details">
             <div className="">
-              ◼️ {coursePage.lessons.filter((l) => l.type !== "HIDDEN").length}{" "}
+              ◼️ {coursePage.lessons.filter((l) => l.published).length}{" "}
               {t("online_lessons")}
             </div>
             {price > 4000 && <div className="">◼️ {t("webinars")}</div>}

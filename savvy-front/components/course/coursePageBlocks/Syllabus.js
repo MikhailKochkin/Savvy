@@ -68,11 +68,11 @@ const CoursePage = (props) => {
                   <Total>
                     {" "}
                     {t("total_lessons")}{" "}
-                    {props.lessons.filter((l) => l.type !== "HIDDEN").length}
+                    {props.lessons.filter((l) => l.published).length}
                   </Total>
                   <Lessons>
                     {[...props.lessons]
-                      .filter((l) => l.type !== "HIDDEN")
+                      .filter((l) => l.published)
                       .sort((a, b) => (a.number > b.number ? 1 : -1))
                       .slice(0, open)
                       .map((lesson, index) => (
