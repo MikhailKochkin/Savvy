@@ -26,6 +26,8 @@ const Styles = styled.div`
   margin: 20px 0;
   font-weight: 500;
   margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
   /* background: #000000;
   min-height: 100vh; */
   img {
@@ -89,6 +91,32 @@ const Styles = styled.div`
       height: 356px;
       width: 200px;
     }
+  }
+`;
+
+const ArrowBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .arrow_box {
+    cursor: pointer;
+    padding: 10px 2%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    &:hover {
+      background: #dde1f8;
+    }
+  }
+  .arrow {
+    width: 25px;
   }
 `;
 
@@ -214,7 +242,7 @@ const Secret = styled.div`
 const Chat = (props) => {
   const [update, setUpdate] = useState(false);
   const [num, setNum] = useState(1);
-  const [move, setMove] = useState(false);
+  const [moved, setMoved] = useState(false);
 
   const [clicks, setClicks] = useState(props.clicks);
   const [isRevealed, setIsRevealed] = useState(!props.isSecret);
@@ -224,7 +252,7 @@ const Chat = (props) => {
   const { t } = useTranslation("lesson");
   const [updateChat, { data, loading, error }] =
     useMutation(UPDATE_CHAT_MUTATION);
-  const { name, messages, me, story, lessonId, id, author } = props;
+  const { name, messages, me, story, lessonId, id, author, getData } = props;
   const getResult = (data) => {
     props.getResult(data);
   };
@@ -235,6 +263,15 @@ const Chat = (props) => {
 
   const switchUpdate = () => {
     setUpdate(!update);
+  };
+
+  const push = () => {
+    if (moved == false) {
+      props.getData(
+        props.next ? [true, props.next.true] : [true, { type: "finish" }]
+      );
+    }
+    setMoved(true);
   };
 
   useEffect(() => {
@@ -426,6 +463,13 @@ const Chat = (props) => {
             {t("next")}
           </button>
         </Next>
+      )}
+      {getData && num == messages.messagesList.length && !moved && (
+        <ArrowBox>
+          <div className="arrow_box" onClick={(e) => push()}>
+            <img className="arrow" src="../../static/down-arrow.svg" />
+          </div>
+        </ArrowBox>
       )}
       {update && (
         <UpdateChat

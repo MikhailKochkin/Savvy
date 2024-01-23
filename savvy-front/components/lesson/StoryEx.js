@@ -89,9 +89,7 @@ const StoryEx = (props) => {
   };
 
   const getResults = (res, id) => {
-    // if (experience <= total) {
     setExperience(experience + res);
-    // }
   };
 
   const [
@@ -130,7 +128,7 @@ const StoryEx = (props) => {
         />{" "}
       </Progress>
     );
-
+  console.log("stats_data", stats_data);
   let my_result = null;
 
   if (stats_data && stats_data.lessonResults.length > 0) {
@@ -486,6 +484,7 @@ const StoryEx = (props) => {
           experience={experience}
           total={total}
           next={next}
+          step={props.step}
           number_of_tasks={tasks.length}
           coursePageID={coursePageID}
           coursePageId={coursePageID}
@@ -508,6 +507,7 @@ const StoryEx = (props) => {
           lesson={lesson}
           i_am_author={props.i_am_author}
           width={props.width}
+          stats_data={stats_data}
         />
       )}
     </Container>

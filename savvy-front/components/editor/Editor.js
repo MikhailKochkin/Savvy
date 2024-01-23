@@ -1276,11 +1276,7 @@ const App = (props) => {
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    // const data = window.prompt("Напишите комментарий:");
-                    // if (!data) return;
-                    // insertComment(editor, data, setModalData, setModalOpen);
                     setType("createNote");
-
                     setModalOpen(true);
                   }}
                 >
@@ -1289,8 +1285,6 @@ const App = (props) => {
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    // const data = window.prompt("Правильный вариант:");
-                    // if (!data) return;
                     setType("createError");
                     setModalOpen(true);
                   }}
@@ -1300,17 +1294,19 @@ const App = (props) => {
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    // CustomEditor.addQuiz(editor);
-                    // let q = window.prompt("Вопрос: ");
-                    // let a = window.prompt("Ответ: ");
-                    // let ifr = window.prompt("Если правильно: ");
-                    // let ifw = window.prompt("Если неправильно: ");
-                    // insertQuiz(editor, q, a, ifr, ifw);
                     setType("createQuestion");
                     setModalOpen(true);
                   }}
                 >
                   <BiCommentCheck value={{ className: "react-icons" }} />
+                </ButtonStyle>
+                <ButtonStyle
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    toggleElement(editor, "question");
+                  }}
+                >
+                  <BiCommentDots value={{ className: "react-icons" }} />
                 </ButtonStyle>
               </>
             )}

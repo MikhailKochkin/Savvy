@@ -2,16 +2,9 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
-import Link from "next/link";
-// import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
-import { CSSTransitionGroup } from "react-transition-group";
 import { useTranslation } from "next-i18next";
-import PleaseSignIn from "../auth/PleaseSignIn";
-import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
-// import Offer from "./Offer";
-import Navigation from "./Navigation";
 import LoadingText from "../LoadingText";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
@@ -302,7 +295,7 @@ const LessonPart = styled.div`
   }
   @media (max-width: 1000px) {
     margin: 1%;
-    width: 90%;
+    width: 100%;
     h1 {
       width: 95%;
       font-size: 2.6rem;
@@ -437,6 +430,7 @@ const NewSingleLesson = (props) => {
                 )} */}
                 <StoryEx
                   id={props.id}
+                  step={props.step}
                   tasks={
                     props.add == "offer"
                       ? [

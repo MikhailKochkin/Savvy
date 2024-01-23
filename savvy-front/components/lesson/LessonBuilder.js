@@ -633,6 +633,7 @@ const LessonBuilder = (props) => {
       <Container>
         <UpdateLesson
           lessonID={lesson.id}
+          coursePageId={lesson.coursePage.id}
           description={lesson.description}
           lesson={lesson}
           getTemplate={getTemplate}

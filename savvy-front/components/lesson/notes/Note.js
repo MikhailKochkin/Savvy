@@ -73,24 +73,7 @@ const Container = styled.div`
       transform: translateY(0%);
     }
   }
-  .arrow_box {
-    cursor: pointer;
-    padding: 10px 2%;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    transition: 0.5s;
-    &:hover {
-      background: #dde1f8;
-    }
-  }
-  .arrow {
-    width: 25px;
-  }
+
   a {
     width: 30%;
   }
@@ -109,7 +92,6 @@ const Container = styled.div`
       object-fit: cover;
       max-height: 50em;
       box-shadow: "0 0 0 2px blue;";
-      /* width: 50vw; */
     }
     iframe {
       width: 50%;
@@ -139,15 +121,15 @@ const Container = styled.div`
   }
 
   .text {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
-    /* justify-content: center; */
-    font-weight: 500;
+    align-items: center; */
+    /* border: 1px solid red; */
+    /* font-weight: 500;
     padding: 1% 2%;
     max-width: 100vw;
     min-width: 360px;
-    line-height: 1.6;
+    line-height: 1.6; */
   }
   .author {
     flex-basis: 10%;
@@ -174,7 +156,7 @@ const Container = styled.div`
     }
   }
   @media (max-width: 800px) {
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     font-size: 1.6rem;
     .black_back {
@@ -299,7 +281,7 @@ const NoteStyles = styled.div`
   }
   @media (max-width: 800px) {
     font-size: 1.6rem;
-    width: 90%;
+    width: 100%;
     order: 3;
     h2 {
       font-size: 2.2rem;
@@ -316,7 +298,6 @@ const NoteStyles = styled.div`
   }
   img {
     display: block;
-    width: 100%;
     /* max-height: 50em; */
     box-shadow: "0 0 0 2px blue;";
     object-fit: contain;
@@ -503,6 +484,33 @@ const EmailInfo = styled.div`
   }
 `;
 
+const ArrowContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .arrow_box {
+    cursor: pointer;
+    padding: 10px 2%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    &:hover {
+      background: #dde1f8;
+    }
+  }
+  .arrow {
+    width: 25px;
+    height: 25px;
+  }
+`;
+
 const Note = (props) => {
   const [update, setUpdate] = useState(false);
   const [moved, setMoved] = useState(false);
@@ -579,6 +587,7 @@ const Note = (props) => {
     miniforum,
     getData,
     lessonID,
+    isFinal,
   } = props;
   let width;
   if (props.problem) {
@@ -678,12 +687,15 @@ const Note = (props) => {
                   )}
                 </>
               )}
-              {getData && (
-                <div className="arrow_box" onClick={(e) => push()}>
-                  <img className="arrow" src="../../static/down-arrow.svg" />
-                </div>
+              {getData && !isFinal && !moved && (
+                <ArrowContainer>
+                  <div className="arrow_box" onClick={(e) => push()}>
+                    <img className="arrow" src="../../static/down-arrow.svg" />
+                  </div>
+                </ArrowContainer>
               )}
             </div>
+
             {/* <div className="author">
             <div className="author_info">
               {author && author.image != null ? (

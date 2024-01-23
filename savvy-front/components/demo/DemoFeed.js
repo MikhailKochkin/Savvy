@@ -107,7 +107,6 @@ const Styles = styled.div`
       align-items: center;
       transition: 0.5s;
       top: 10px;
-      border: 1px solid red;
     }
   }
   .third {

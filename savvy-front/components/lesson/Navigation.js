@@ -188,42 +188,42 @@ const Navigation = (props) => {
   me &&
     me.myTeams.length > 0 &&
     me.myTeams[0].users.map((u) => list_of_ids.push(u.id));
-  const { loading, error, data } = useQuery(TEAM_RESULTS, {
-    variables: { lessonId: lesson.id, list_of_ids: list_of_ids },
-  });
-  if (loading) return "";
-  let results = data.questResults.lessonResults;
+  // const { loading, error, data } = useQuery(TEAM_RESULTS, {
+  //   variables: { lessonId: lesson.id, list_of_ids: list_of_ids },
+  // });
+  // if (loading) return "";
+  // let results = data.questResults.lessonResults;
 
-  let grouped_results = [];
-  results.map((r, i) => {
-    if (grouped_results.filter((gr) => gr.id === r.student.id).length == 0) {
-      grouped_results.push({
-        id: r.student.id,
-        results: [r],
-      });
-    } else {
-      let found = grouped_results.find((obj) => obj.id == r.student.id);
-      let index = grouped_results.findIndex((object) => {
-        return object.id === r.student.id;
-      });
+  // let grouped_results = [];
+  // results.map((r, i) => {
+  //   if (grouped_results.filter((gr) => gr.id === r.student.id).length == 0) {
+  //     grouped_results.push({
+  //       id: r.student.id,
+  //       results: [r],
+  //     });
+  //   } else {
+  //     let found = grouped_results.find((obj) => obj.id == r.student.id);
+  //     let index = grouped_results.findIndex((object) => {
+  //       return object.id === r.student.id;
+  //     });
 
-      let new_el = {
-        id: r.student.id,
-        results: [...found.results, r],
-      };
-      grouped_results[index] = new_el;
-    }
-  });
+  //     let new_el = {
+  //       id: r.student.id,
+  //       results: [...found.results, r],
+  //     };
+  //     grouped_results[index] = new_el;
+  //   }
+  // });
 
-  let new_array_2 = grouped_results.map((el) => {
-    const max = el.results.reduce((prev, current) =>
-      prev.progress > current.progress ? prev : current
-    );
-    el["max"] = max;
-    return el;
-  });
-  let filtered_results = [];
-  new_array_2.map((el) => filtered_results.push(el.max));
+  // let new_array_2 = grouped_results.map((el) => {
+  //   const max = el.results.reduce((prev, current) =>
+  //     prev.progress > current.progress ? prev : current
+  //   );
+  //   el["max"] = max;
+  //   return el;
+  // });
+  // let filtered_results = [];
+  // new_array_2.map((el) => filtered_results.push(el.max));
   return (
     <Head>
       <Left>

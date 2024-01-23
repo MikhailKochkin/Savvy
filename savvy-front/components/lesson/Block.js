@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import { useTranslation } from "next-i18next";
 
@@ -56,27 +56,29 @@ const Block = (props) => {
         <div>
           <select name="task" onChange={(e) => setTask(e.target.value)}>
             <option value="---">---</option>
-            {notes.length > 0 && <option value="note">{t("Note")}</option>}
-            {chats.length > 0 && <option value="chat">{t("Chat")}</option>}
-            {shots.length > 0 && <option value="shot">{t("Shot")}</option>}
-            {tests.length > 0 && (
+            {notes?.length > 0 && <option value="note">{t("Note")}</option>}
+            {chats?.length > 0 && <option value="chat">{t("Chat")}</option>}
+            {shots?.length > 0 && <option value="shot">{t("Shot")}</option>}
+            {tests?.length > 0 && (
               <option value="newTest">{t("NewTest")}</option>
             )}
-            {quizes.length > 0 && <option value="quiz">{t("Quiz")}</option>}
-            {problems.length > 0 && (
+            {quizes?.length > 0 && <option value="quiz">{t("Quiz")}</option>}
+            {problems?.length > 0 && (
               <option value="problem">{t("Problem")}</option>
             )}
-            {testPractices.length > 0 && (
+            {testPractices?.length > 0 && (
               <option value="testPractice">{t("TestPractice")}</option>
             )}
-            {offers.length > 0 && <option value="offer">Offer</option>}
-            {texteditors.length > 0 && (
+            {offers?.length > 0 && <option value="offer">Offer</option>}
+            {texteditors?.length > 0 && (
               <option value="texteditor">{t("TextEditor")}</option>
             )}
-            {constructions.length > 0 && (
+            {constructions?.length > 0 && (
               <option value="construction">{t("Construction")}</option>
             )}
-            {documents.length > 0 && <option value="document">Document</option>}
+            {documents?.length > 0 && (
+              <option value="document">Document</option>
+            )}
             {forum && <option value="forum"> {t("Forum")}</option>}
           </select>
         </div>

@@ -609,32 +609,34 @@ const LessonBlock = (props) => {
               />
             )}
             {(isSaved || d != null) && data && data.__typename == "Quiz" && (
-              <SingleQuiz
-                key={data.id}
-                id={data.id}
-                complexity={data.complexity}
-                question={data.question}
-                answer={data.answer}
-                answers={data.answers}
-                type={data.type}
-                goalType={data.goalType}
-                check={data.check}
-                me={me}
-                ifRight={data.ifRight}
-                ifWrong={data.ifWrong}
-                hidden={true}
-                lesson={lesson}
-                lessonID={lesson.id}
-                quizID={data.id}
-                user={data.user.id}
-                story={false}
-                user_name={data.user}
-                author={lesson.user}
-                miniforum={lesson.miniforums.find((m) => m.value == el.id)}
-                getResults={getResults}
-                passUpdated={passUpdated}
-                getResult={getResult}
-              />
+              <>
+                <SingleQuiz
+                  key={data.id}
+                  id={data.id}
+                  complexity={data.complexity}
+                  question={data.question}
+                  answer={data.answer}
+                  answers={data.answers}
+                  type={data.type}
+                  goalType={data.goalType}
+                  check={data.check}
+                  me={me}
+                  ifRight={data.ifRight}
+                  ifWrong={data.ifWrong}
+                  hidden={true}
+                  lesson={lesson}
+                  lessonID={lesson.id}
+                  quizID={data.id}
+                  user={data.user.id}
+                  story={false}
+                  user_name={data.user}
+                  author={lesson.user}
+                  miniforum={lesson.miniforums.find((m) => m.value == el.id)}
+                  getResults={getResults}
+                  passUpdated={passUpdated}
+                  getResult={getResult}
+                />
+              </>
             )}
           </>
         )}

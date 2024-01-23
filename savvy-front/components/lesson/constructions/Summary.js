@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-import { v4 as uuidv4 } from "uuid";
-import { htmlToText } from "html-to-text";
+import Modal from "styled-react-modal";
 import dynamic from "next/dynamic";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
@@ -66,26 +65,22 @@ const FixedButton = styled.div`
   position: fixed;
   cursor: pointer;
   padding: 10px 2%;
-  width: 75px;
-  height: 75px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
-  border: 2px solid #dde1f8;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   transition: 0.5s;
   position: fixed;
-  margin-right: 15px;
+  margin-right: 0px;
 
-  background: #fff;
-  bottom: 80px;
+  bottom: 20px;
   right: 0;
 
   z-index: 4;
-  &:hover {
-    background: #dde1f8;
-  }
+
   .arrow {
     width: 25px;
   }
@@ -306,6 +301,12 @@ const Element = styled.div`
   }
 `;
 
+const StyledModal = Modal.styled`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -351,6 +352,7 @@ const NewConstructor = (props) => {
   const { t } = useTranslation("lesson");
   const [attempts, setAttempts] = useState(0);
   const [answers, setAnswers] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState(
     [...constructionResults?.constructionResults].length > 0
       ? [...constructionResults?.constructionResults].sort(
@@ -439,10 +441,12 @@ const NewConstructor = (props) => {
     });
   };
 
+  const toggleModal = (e) => setIsOpen(!isOpen);
+
   return (
     <>
       {props.story && (
-        <FixedButton onClick={(e) => slide(construction.id)}>
+        <FixedButton onClick={(e) => toggleModal()}>
           {" "}
           <img className="arrow" src="../../static/edit.svg" />
         </FixedButton>
@@ -480,6 +484,45 @@ const NewConstructor = (props) => {
           </Block>
         </OuterContainer>
       </Styles>
+      <StyledModal
+        isOpen={isOpen}
+        onBackgroundClick={toggleModal}
+        onEscapeKeydown={toggleModal}
+      >
+        <Styles id={"construction_" + construction.id}>
+          <OuterContainer>
+            <Block id="con_block" columns={construction.columnsNum}>
+              {input &&
+                input.map((t, i) => (
+                  <ConElement
+                    el={t}
+                    passResult={passResult}
+                    getInput={getInput}
+                    text={t.text}
+                    size={t.size}
+                    rows={t.rows}
+                    borders={t.borders}
+                    edit={t.edit}
+                    className={"header" + i}
+                    id={i + 1}
+                    i={i}
+                    type={construction.type}
+                    place={t.place}
+                    elems={elements}
+                    getAnswer={getAnswer}
+                    status={elements[i]?.text == input[i]?.text}
+                    display={t.inDoc}
+                    allCorrect={compareArrays(elements, input)}
+                    getData={getData}
+                  />
+                ))}
+              <ButtonTwo onClick={(e) => onCheck()}>
+                {update_loading || loading ? t("saving") : t("save")}
+              </ButtonTwo>
+            </Block>
+          </OuterContainer>
+        </Styles>
+      </StyledModal>
     </>
   );
 };

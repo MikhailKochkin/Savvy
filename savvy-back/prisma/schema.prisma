@@ -95,8 +95,8 @@ model ChallengeResult {
   updatedAt DateTime @updatedAt
   studentId String   @db.VarChar(30)
   lessonId  String   @db.VarChar(30)
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student   User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Chat {
@@ -178,7 +178,7 @@ model Construction {
   hasText             Boolean              @default(false)
   columnsNum          Int?
   elements            Json?
-  lesson              Lesson               @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson              Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user                User                 @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   constructionResults ConstructionResult[]
 }
@@ -197,9 +197,9 @@ model ConstructionResult {
   studentId      String        @db.VarChar(30)
   lessonId       String?       @db.VarChar(30)
   constructionId String?       @db.VarChar(30)
-  construction   Construction? @relation(fields: [constructionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  lesson         Lesson?       @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student        User          @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  construction   Construction? @relation(fields: [constructionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lesson         Lesson?       @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student        User          @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model CoursePage {
@@ -294,8 +294,8 @@ model Document {
   lessonId        String           @db.VarChar(30)
   complexity      Int?             @default(1)
   clauses         Clause[]
-  lesson          Lesson           @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user            User             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson          Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   documentResults DocumentResult[]
 }
 
@@ -308,9 +308,9 @@ model DocumentResult {
   userId     String?   @db.VarChar(30)
   lessonId   String?   @db.VarChar(30)
   documentId String?   @db.VarChar(30)
-  document   Document? @relation(fields: [documentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  lesson     Lesson?   @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user       User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  document   Document? @relation(fields: [documentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lesson     Lesson?   @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model EmailCampaign {
@@ -352,8 +352,8 @@ model Exam {
   name       String?
   userId     String       @db.VarChar(30)
   lessonId   String       @db.VarChar(30)
-  lesson     Lesson       @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user       User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson     Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   examResult ExamResult[]
 }
 
@@ -388,9 +388,9 @@ model ExamResult {
   userId    String?  @db.VarChar(30)
   lessonId  String?  @db.VarChar(30)
   examId    String?  @db.VarChar(30)
-  exam      Exam?    @relation(fields: [examId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user      User?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  exam      Exam?    @relation(fields: [examId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Feedback {
@@ -401,9 +401,9 @@ model Feedback {
   teacherId String   @db.VarChar(30)
   studentId String   @db.VarChar(30)
   lessonId  String?  @db.VarChar(30)
-  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student   User     @relation("StudentFeedback", fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  teacher   User     @relation("TeacherFeedback", fields: [teacherId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student   User     @relation("StudentFeedback", fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  teacher   User     @relation("TeacherFeedback", fields: [teacherId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Forum {
@@ -488,7 +488,7 @@ model Lesson {
   assignment          Boolean?
   totalPoints         Int?                 @default(0)
   hasSecret           Boolean?             @default(false)
-  challengeResults    ChallengeResult[]
+  challengeResults    ChallengeResult[]    
   chats               Chat[]
   constructions       Construction[]
   constructionResults ConstructionResult[]
@@ -498,12 +498,12 @@ model Lesson {
   examResults         ExamResult[]
   feedback            Feedback[]
   coursePage          CoursePage           @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  forum               Forum?               @relation(fields: [forumId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  forum               Forum?               @relation(fields: [forumId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user                User                 @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   lessonResults       LessonResult[]
   miniforums          MiniForum[]
   newTests            NewTest[]
-  notes               Note[]
+  notes               Note[]               
   offers              Offer[]
   problems            Problem[]
   problemResults      ProblemResult[]
@@ -531,8 +531,8 @@ model LessonResult {
   studentId    String   @db.VarChar(30)
   lessonId     String   @db.VarChar(30)
   checked      Boolean? @default(false)
-  lesson       Lesson   @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student      User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson       Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student      User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Message {
@@ -557,8 +557,8 @@ model MiniForum {
   userId     String?
   type       String?
   value      String?
-  lesson     Lesson?     @relation(fields: [lessonId], references: [id])
-  user       User?       @relation(fields: [userId], references: [id])
+  lesson     Lesson?     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user       User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
   statements Statement[]
 }
 
@@ -580,8 +580,8 @@ model NewTest {
   lessonId    String?      @db.VarChar(30)
   complexity  Int?         @default(1)
   comments    String[]
-  lesson      Lesson?      @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user        User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson      Lesson?      @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   testResults TestResult[]
 }
 
@@ -599,8 +599,8 @@ model Note {
   link_clicks Int?     @default(0)
   isSecret    Boolean? @default(false)
   type        String?  @default("longread")
-  lesson      Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user        User?    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson      Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Offer {
@@ -616,9 +616,9 @@ model Offer {
   userId        String?
   lessonId      String?
   programId     String?
-  lesson        Lesson?  @relation(fields: [lessonId], references: [id])
+  lesson        Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   program       Program? @relation(fields: [programId], references: [id])
-  user          User?    @relation(fields: [userId], references: [id])
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Order {
@@ -717,8 +717,8 @@ model Problem {
   complexity     Int?            @default(1)
   isSecret       Boolean?        @default(false)
   steps          Json?
-  lesson         Lesson          @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user           User            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson         Lesson          @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   problemResults ProblemResult[]
 }
 
@@ -734,9 +734,9 @@ model ProblemResult {
   lessonId  String?  @db.VarChar(30)
   problemId String?  @db.VarChar(30)
   depth     Int      @default(0)
-  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  problem   Problem? @relation(fields: [problemId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student   User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  problem   Problem? @relation(fields: [problemId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Program {
@@ -793,8 +793,8 @@ model Quiz {
   userId      String       @db.VarChar(30)
   lessonId    String?      @db.VarChar(30)
   complexity  Int?         @default(1)
-  lesson      Lesson?      @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user        User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson      Lesson?      @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   quizResults QuizResult[]
 }
 
@@ -815,9 +815,9 @@ model QuizResult {
   studentId   String   @db.VarChar(30)
   lessonId    String?  @db.VarChar(30)
   quizId      String?  @db.VarChar(30)
-  lesson      Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  quiz        Quiz?    @relation(fields: [quizId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student     User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson      Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  quiz        Quiz?    @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student     User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Rating {
@@ -881,8 +881,8 @@ model Shot {
   comments    String[]
   userId      String       @db.VarChar(30)
   lessonId    String?      @db.VarChar(30)
-  lesson      Lesson?      @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user        User         @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson      Lesson?      @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   shotResults ShotResult[]
 }
 
@@ -897,9 +897,9 @@ model ShotResult {
   lessonId  String?  @db.VarChar(30)
   shotId    String?  @db.VarChar(30)
   depth     Int      @default(1)
-  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  shot      Shot?    @relation(fields: [shotId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student   User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  shot      Shot?    @relation(fields: [shotId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Statement {
@@ -951,9 +951,9 @@ model TeamQuestResult {
   studentId   String
   lessonId    String?
   teamQuestId String?
-  lesson      Lesson?    @relation(fields: [lessonId], references: [id])
+  lesson      Lesson?    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   student     User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  teamQuest   TeamQuest? @relation(fields: [teamQuestId], references: [id])
+  teamQuest   TeamQuest? @relation(fields: [teamQuestId], references: [id], onDelete: Cascade)
 }
 
 model Test {
@@ -972,8 +972,8 @@ model Test {
   lessonID       String?  @db.VarChar(25)
   userId         String   @db.VarChar(30)
   lessonId       String?  @db.VarChar(30)
-  lesson         Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user           User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson         Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model TestPractice {
@@ -989,8 +989,8 @@ model TestPractice {
   intro              String?
   successText        String?
   failureText        String?
-  lesson             Lesson?              @relation(fields: [lessonId], references: [id])
-  user               User?                @relation(fields: [userId], references: [id])
+  lesson             Lesson?              @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user               User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   testPracticeResult TestPracticeResult[]
 }
 
@@ -1003,9 +1003,9 @@ model TestPracticeResult {
   studentId      String
   lessonId       String?
   testPracticeId String?
-  lesson         Lesson?       @relation(fields: [lessonId], references: [id])
+  lesson         Lesson?       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   student        User          @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  testPractice   TestPractice? @relation(fields: [testPracticeId], references: [id])
+  testPractice   TestPractice? @relation(fields: [testPracticeId], references: [id], onDelete: Cascade)
 }
 
 model TestResult {
@@ -1020,9 +1020,9 @@ model TestResult {
   lessonId   String?  @db.VarChar(30)
   testId     String?  @db.VarChar(30)
   answerArray String[]
-  lesson     Lesson?  @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student    User     @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  test       NewTest? @relation(fields: [testId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson     Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student    User     @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  test       NewTest? @relation(fields: [testId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model TextEditor {
@@ -1037,8 +1037,8 @@ model TextEditor {
   userId            String             @db.VarChar(30)
   lessonId          String             @db.VarChar(30)
   complexity        Int?               @default(1)
-  lesson            Lesson             @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson            Lesson             @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   textEditorResults TextEditorResult[]
 }
 
@@ -1055,9 +1055,9 @@ model TextEditorResult {
   lessonId     String?     @db.VarChar(30)
   textEditorId String?     @db.VarChar(30)
   type         String?
-  lesson       Lesson?     @relation(fields: [lessonId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student      User        @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  textEditor   TextEditor? @relation(fields: [textEditorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lesson       Lesson?     @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  student      User        @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  textEditor   TextEditor? @relation(fields: [textEditorId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Uni {

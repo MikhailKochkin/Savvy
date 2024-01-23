@@ -536,31 +536,37 @@ const LessonsData = (props) => {
             </Syllabus>
           )}
           {/* } */}
-          {me && me.permissions && me.permissions.includes("ADMIN") && (
-            <Syllabus>
-              <div className="week_number">Unpublished lessons</div>
-              <Lessons>
-                {unpublished_lessons.map((lesson, index) => (
-                  <>
-                    <LessonHeader
-                      me={me}
-                      key={lesson.id}
-                      name={lesson.name}
-                      lesson={lesson}
-                      lessonResult={maxes.find((m) => m.lesson.id == lesson.id)}
-                      i_am_author={i_am_author}
-                      statements={lesson.forum ? lesson.forum.statements : null}
-                      coursePage={coursePage}
-                      author={coursePage.user.id}
-                      open={index + 1 === 1}
-                      index={index + 1}
-                      coursePageId={coursePage.id}
-                    />
-                  </>
-                ))}
-              </Lessons>
-            </Syllabus>
-          )}
+          {me &&
+            (i_am_author ||
+              (me.permissions && me.permissions.includes("ADMIN"))) && (
+              <Syllabus>
+                <div className="week_number">Unpublished lessons</div>
+                <Lessons>
+                  {unpublished_lessons.map((lesson, index) => (
+                    <>
+                      <LessonHeader
+                        me={me}
+                        key={lesson.id}
+                        name={lesson.name}
+                        lesson={lesson}
+                        lessonResult={maxes.find(
+                          (m) => m.lesson.id == lesson.id
+                        )}
+                        i_am_author={i_am_author}
+                        statements={
+                          lesson.forum ? lesson.forum.statements : null
+                        }
+                        coursePage={coursePage}
+                        author={coursePage.user.id}
+                        open={index + 1 === 1}
+                        index={index + 1}
+                        coursePageId={coursePage.id}
+                      />
+                    </>
+                  ))}
+                </Lessons>
+              </Syllabus>
+            )}
         </>
       )}
 

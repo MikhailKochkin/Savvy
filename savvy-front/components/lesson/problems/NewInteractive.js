@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import SingleQuiz from "../quizes/SingleQuiz";
 import SingleTest from "../tests/SingleTest";
 import Note from "../notes/Note";
+import Chat from "../chat/Chat";
 
 const Styles = styled.div`
   width: ${(props) => (props.story ? "100vw" : "100%")};
@@ -133,100 +134,109 @@ const NewInteractive = (props) => {
   };
   return (
     <Styles>
-      {!isShown && (
-        <div className="suggestion">
-          <Button onClick={(e) => setIsShown(true)}>
-            {t("start_the_case")}
-          </Button>
-        </div>
-      )}
-      {isShown && (
-        <Questions>
-          {componentList[0] !== undefined &&
-            [...componentList].map((com) => {
-              let item;
-              let el;
-              if (com.type.toLowerCase() === "quiz") {
-                el = lesson.quizes.find((quiz) => quiz.id === com.id);
-                return (
-                  <SingleQuiz
-                    id={el.id}
-                    index={1}
-                    key={el.id}
-                    type={el.type}
-                    goalType={el.goalType}
-                    check={el.check}
-                    question={el.question}
-                    answer={el.answer}
-                    answers={el.answers}
-                    ifRight={el.ifRight}
-                    ifWrong={el.ifWrong}
-                    me={me}
-                    hidden={true}
-                    userData={[]}
-                    lessonID={lesson.id}
-                    quizID={el.id}
-                    user={el.user.id}
-                    user_name={el.user}
-                    next={el.next}
-                    getData={updateArray}
-                    exam={true}
-                    story={true}
-                    author={author}
-                    getResults={getResults}
-                  />
-                );
-              } else if (com.type.toLowerCase() === "newtest") {
-                el = lesson.newTests.find((test) => test.id === com.id);
-                return (
-                  <SingleTest
-                    key={el.id}
-                    id={el.id}
-                    testID={el.id}
-                    question={el.question}
-                    answers={el.answers}
-                    true={el.correct}
-                    ifRight={el.ifRight}
-                    ifWrong={el.ifWrong}
-                    user={el.user.id}
-                    user_name={el.user}
-                    type={el.type}
-                    goalType={el.goalType}
-                    me={me}
-                    lessonID={lesson.id}
-                    length={Array(el.correct.length).fill(false)}
-                    userData={[]}
-                    getData={updateArray}
-                    next={el.next}
-                    story={true}
-                    exam={true}
-                    author={author}
-                    getResults={getResults}
-                  />
-                );
-              } else if (com.type.toLowerCase() === "note") {
-                let el = lesson.notes.filter((q) => q.id === com.id)[0];
-                return (
-                  <Note
-                    id={el.id}
-                    clicks={el.link_clicks}
-                    //   index={this.state.componentList.length + 1}
-                    key={el.id}
-                    text={el.text}
-                    me={me}
-                    teacher={el.user.id}
-                    note={el.id}
-                    next={el.next}
-                    getData={updateArray}
-                    exam={true}
-                    problem={true}
-                    author={author}
-                  />
-                );
-              }
-            })}
-        </Questions>
-      )}
+      <Questions>
+        {componentList[0] !== undefined &&
+          [...componentList].map((com, i) => {
+            let item;
+            let el;
+            if (com.type.toLowerCase() === "quiz") {
+              el = lesson.quizes.find((quiz) => quiz.id === com.id);
+              return (
+                <SingleQuiz
+                  id={el.id}
+                  index={1}
+                  key={el.id}
+                  type={el.type}
+                  goalType={el.goalType}
+                  check={el.check}
+                  question={el.question}
+                  answer={el.answer}
+                  answers={el.answers}
+                  ifRight={el.ifRight}
+                  ifWrong={el.ifWrong}
+                  me={me}
+                  hidden={true}
+                  userData={[]}
+                  lessonID={lesson.id}
+                  quizID={el.id}
+                  user={el.user.id}
+                  user_name={el.user}
+                  next={el.next}
+                  getData={updateArray}
+                  exam={true}
+                  story={true}
+                  author={author}
+                  getResults={getResults}
+                />
+              );
+            } else if (com.type.toLowerCase() === "newtest") {
+              el = lesson.newTests.find((test) => test.id === com.id);
+              return (
+                <SingleTest
+                  key={el.id}
+                  id={el.id}
+                  testID={el.id}
+                  question={el.question}
+                  answers={el.answers}
+                  true={el.correct}
+                  ifRight={el.ifRight}
+                  ifWrong={el.ifWrong}
+                  user={el.user.id}
+                  user_name={el.user}
+                  type={el.type}
+                  goalType={el.goalType}
+                  me={me}
+                  lessonID={lesson.id}
+                  length={Array(el.correct.length).fill(false)}
+                  userData={[]}
+                  getData={updateArray}
+                  next={el.next}
+                  story={true}
+                  exam={true}
+                  author={author}
+                  getResults={getResults}
+                />
+              );
+            } else if (com.type.toLowerCase() === "note") {
+              let el = lesson.notes.filter((q) => q.id === com.id)[0];
+              return (
+                <Note
+                  id={el.id}
+                  clicks={el.link_clicks}
+                  key={el.id}
+                  text={el.text}
+                  me={me}
+                  teacher={el.user.id}
+                  note={el.id}
+                  next={el.next}
+                  getData={updateArray}
+                  exam={true}
+                  problem={true}
+                  author={author}
+                  isFinal={componentList.length == i}
+                />
+              );
+            } else if (com.type.toLowerCase() === "chat") {
+              let el = lesson.chats.filter((q) => q.id === com.id)[0];
+              return (
+                <Chat
+                  key={el.id}
+                  name={el.name}
+                  isSecret={el.isSecret}
+                  me={me}
+                  // getShowArrow={getShowArrow}
+                  author={author}
+                  complexity={el.complexity}
+                  messages={el.messages}
+                  id={el.id}
+                  lessonId={lesson.id}
+                  story={true}
+                  getData={updateArray}
+                />
+              );
+            }
+          })}
+      </Questions>
     </Styles>
   );
 };

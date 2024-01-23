@@ -168,6 +168,7 @@ const CanvasProblemBuilder = (props) => {
         })
       : []
   );
+  const [zoomLevel, setZoomLevel] = useState(1); // State to handle zoom level
   const [newMessage, setNewMessage] = useState("");
   const [activeId, setActiveId] = useState("");
   const [activeMessage, setActiveMessage] = useState();
@@ -302,19 +303,20 @@ const CanvasProblemBuilder = (props) => {
 
   const getData = (newId, type) => {
     let copy_messages = [...messages];
+    console.log("newId", newId);
     const updatedArray = copy_messages.map((obj) => {
       if (obj.id === activeMessage.id) {
         return { ...obj, id: newId };
       }
       return obj;
     });
+    console.log("updatedArray", updatedArray);
+
     props.getSteps([...updatedArray]);
     setMessages([...updatedArray]);
   };
 
   const squareSize = 20;
-
-  const [zoomLevel, setZoomLevel] = useState(1); // State to handle zoom level
 
   return (
     <Styles>
@@ -404,6 +406,28 @@ const CanvasProblemBuilder = (props) => {
           }}
         >
           {t("add_quiz")}
+        </SimpleButton>
+        <SimpleButton
+          onClick={() => {
+            const id = `message-${messages.length + 1}`;
+            const newMessages = [
+              ...messages,
+              {
+                id: id,
+                content: newMessage || "Chat",
+                position: { x: 100, y: (messages.length + 1) * 60 },
+                next: {
+                  true: { value: null, type: null },
+                  false: { value: null, type: null },
+                },
+                type: "Chat", // Added type as Note here
+              },
+            ];
+            setMessages(newMessages);
+            setNewMessage("");
+          }}
+        >
+          Add chat
         </SimpleButton>
       </div>
       <div
@@ -614,6 +638,13 @@ const Message = ({
           : null}
         {type.toLowerCase() == "note" && lesson.notes.find((el) => el.id == id)
           ? parse(lesson.notes.find((el) => el.id == id).text.substring(0, 120))
+          : null}
+
+        {type.toLowerCase() == "chat" && lesson.chats.find((el) => el.id == id)
+          ? parse(
+              lesson.chats.find((el) => el.id == id).messages.messagesList[0]
+                .text
+            )
           : null}
       </div>
       <button onClick={handleRemove}>X</button>

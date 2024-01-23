@@ -28,6 +28,7 @@ const LessonPage = (props) => (
         id={props.query.id}
         size={props.query.size}
         add={props.query.add}
+        step={props.query.step}
       />
     )}
     {props.query.type === "challenge" && <Challenge id={props.query.id} />}

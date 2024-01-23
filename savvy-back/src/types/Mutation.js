@@ -1256,7 +1256,6 @@ const Mutation = mutationType({
         const originalLessonId = args.id;
         const userId = ctx.res.req.userId;
         const newIdMapping = {};
-
         // Fetch the original lesson
         const originalLesson = await ctx.prisma.lesson.findUnique({
           where: { id: originalLessonId },
@@ -1373,35 +1372,20 @@ const Mutation = mutationType({
         );
 
         await Promise.all(
-          originalLesson.problems.map(async (problem) => {
-            let newSteps = problem.steps.problemItems.map((step) => {
-              return {
-                ...step,
-
-                // Update id reference
-                id: newIdMapping[step.id] || step.id,
-
-                // Update next value
-                next: {
-                  true: newIdMapping[step.next.true] || step.next.true,
-                  false: newIdMapping[step.next.false] || step.next.false,
-                },
-              };
-            });
-            const createdProblem = await ctx.prisma.problem.create({
+          originalLesson.chats.map(async (chat) => {
+            const createdChat = await ctx.prisma.chat.create({
               data: {
-                text: problem.text,
-                lessonID: newLesson.id,
+                messages: chat.messages,
+                name: chat.name,
                 user: {
                   connect: { id: userId },
                 },
                 lesson: {
                   connect: { id: newLesson.id },
                 },
-                steps: { problemItems: newSteps },
               },
             });
-            newIdMapping[problem.id] = createdProblem.id;
+            newIdMapping[chat.id] = createdChat.id;
           })
         );
 
@@ -1422,24 +1406,6 @@ const Mutation = mutationType({
               },
             });
             newIdMapping[texteditor.id] = createdEditor.id;
-          })
-        );
-
-        await Promise.all(
-          originalLesson.chats.map(async (chat) => {
-            const createdChat = await ctx.prisma.chat.create({
-              data: {
-                messages: chat.messages,
-                name: chat.name,
-                user: {
-                  connect: { id: userId },
-                },
-                lesson: {
-                  connect: { id: newLesson.id },
-                },
-              },
-            });
-            newIdMapping[chat.id] = createdChat.id;
           })
         );
 
@@ -1494,6 +1460,49 @@ const Mutation = mutationType({
           })
         );
 
+        await Promise.all(
+          originalLesson.problems.map(async (problem) => {
+            let newSteps = problem.steps.problemItems.map((step) => {
+              return {
+                ...step,
+
+                // Update id reference
+                id: newIdMapping[step.id] || step.id,
+
+                // Update next value
+                next: {
+                  true: {
+                    type: step.next.true.type,
+                    value:
+                      newIdMapping[step.next.true.value] ||
+                      step.next.true.value,
+                  },
+                  false: {
+                    type: step.next.false.type,
+                    value:
+                      newIdMapping[step.next.false.value] ||
+                      step.next.false.value,
+                  },
+                },
+              };
+            });
+            const createdProblem = await ctx.prisma.problem.create({
+              data: {
+                text: problem.text,
+                lessonID: newLesson.id,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+                steps: { problemItems: newSteps },
+              },
+            });
+            newIdMapping[problem.id] = createdProblem.id;
+          })
+        );
+
         const originalStructure = originalLesson.structure;
         const updatedStructure = originalStructure.lessonItems.map((item) => ({
           ...item,
@@ -1521,7 +1530,11 @@ const Mutation = mutationType({
           `{ id, user { id } }`
         );
         //3. Delete it
-        return ctx.prisma.lesson.delete({ where });
+        return ctx.prisma.lesson.delete({
+          where: {
+            id: args.id,
+          },
+        });
       },
     });
     t.field("updatePublished", {
@@ -2634,7 +2647,6 @@ const Mutation = mutationType({
         delete args.lessonId;
         delete args.constructionId;
         delete args.inputs;
-        console.log("elements", args.elements);
         const ConstructionResult = await ctx.prisma.constructionResult.create({
           data: {
             student: {
@@ -4209,7 +4221,6 @@ const Mutation = mutationType({
         { name, email, firm, subject, personalTouch, connection, type },
         ctx
       ) => {
-        console.log("connection", connection);
         // if (type == "follow_up_1") {
         //   const newEmail2 = await client.sendEmail({
         //     From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',

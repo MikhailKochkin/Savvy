@@ -12,7 +12,12 @@ import SingleTest from "../../lesson/tests/SingleTest";
 import CreateQuiz from "../CreateQuiz";
 import SingleQuiz from "../../lesson/quizes/SingleQuiz";
 
-const Block = styled.div`
+import CreateChat from "../../lesson/chat/CreateChat";
+import Chat from "../../lesson/chat/Chat";
+
+import Block from "../../lesson/Block";
+
+const Styles = styled.div`
   font-size: 1.5rem;
   margin: 1% 4%;
   border: 1px solid #dee2e6;
@@ -61,6 +66,30 @@ const NewBlock = (props) => {
 
   const { lesson, me } = props;
 
+  const getOldResult = (type, id) => {
+    setSaved(true);
+    let newData = null;
+    setType(type);
+    if (type.toLowerCase() == "note") {
+      newData = lesson.notes.find((n) => n.id == id);
+    } else if (type.toLowerCase() == "newtest") {
+      newData = lesson.newTests.find((n) => n.id == id);
+    } else if (type.toLowerCase() == "quiz") {
+      newData = lesson.quizes.find((q) => q.id == id);
+    } else if (type.toLowerCase() == "chat") {
+      newData = lesson.chats.find((ch) => ch.id == id);
+    }
+    setData((prevData) => {
+      return newData;
+    });
+    console.log("newData", newData);
+
+    // If you still need to pass the data to the parent component
+    if (newData) {
+      props.getData(newData.id, newData.__typename);
+    }
+  };
+
   const getResult = async (res) => {
     setSaved(true);
 
@@ -84,6 +113,12 @@ const NewBlock = (props) => {
     } else if (res.data.updateQuiz) {
       setType("Quiz");
       newData = res.data.updateQuiz;
+    } else if (res.data.createChat) {
+      setType("Chat");
+      newData = res.data.createChat;
+    } else if (res.data.updateChat) {
+      setType("Chat");
+      newData = res.data.updateChat;
     }
     setData((prevData) => {
       return newData;
@@ -96,7 +131,7 @@ const NewBlock = (props) => {
   };
 
   return (
-    <Block>
+    <Styles>
       {!saved && type == "Note" && (
         <CreateNote lessonID={lesson.id} getResult={getResult} />
       )}
@@ -114,7 +149,29 @@ const NewBlock = (props) => {
           passUpdated={passUpdated}
         />
       )}
-
+      {type == "Note" && (
+        <Block getOldResult={getOldResult} notes={lesson.notes} />
+      )}
+      {!saved && type == "Chat" && (
+        <CreateChat lessonID={lesson.id} getResult={getResult} />
+      )}
+      {saved && type == "Chat" && data && (
+        <Chat
+          messages={data.messages}
+          name={data.name}
+          me={me}
+          clicks={data.link_clicks}
+          user={lesson.user.id}
+          id={data.id}
+          complexity={data.complexity}
+          lessonId={lesson.id}
+          getResult={getResult}
+          passUpdated={passUpdated}
+        />
+      )}
+      {type == "Chat" && (
+        <Block getOldResult={getOldResult} chats={lesson.chats} />
+      )}
       {!saved && type == "NewTest" && (
         <CreateNewTest lessonID={lesson.id} getResult={getResult} />
       )}
@@ -139,7 +196,9 @@ const NewBlock = (props) => {
           passUpdated={passUpdated}
         />
       )}
-
+      {type == "NewTest" && (
+        <Block getOldResult={getOldResult} tests={lesson.newTests} />
+      )}
       {!saved && type == "Quiz" && (
         <CreateQuiz lessonID={lesson.id} getResult={getResult} />
       )}
@@ -164,21 +223,10 @@ const NewBlock = (props) => {
           passUpdated={passUpdated}
         />
       )}
-      {/* {!saved && (
-        <>
-          <ButtonTwo onClick={(e) => setType("Note")}>
-            {t("add_note")}{" "}
-          </ButtonTwo>
-          <ButtonTwo onClick={(e) => setType("NewTest")}>
-            {t("add_test")}
-          </ButtonTwo>
-          <ButtonTwo onClick={(e) => setType("Quiz")}>
-            {t("add_quiz")}
-          </ButtonTwo>
-        </>
+      {type == "Quiz" && (
+        <Block getOldResult={getOldResult} quizes={lesson.quizes} />
       )}
-      {saved && <ButtonTwo onClick={(e) => add()}>Add Block</ButtonTwo>} */}
-    </Block>
+    </Styles>
   );
 };
 

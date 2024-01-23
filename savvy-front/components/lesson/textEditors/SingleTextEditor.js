@@ -59,6 +59,15 @@ const TextBar = styled.div`
     width: 100%;
     font-size: 1.6rem;
   }
+  .question {
+    background: #f5f5f5;
+    padding: 15px 20px;
+    border-radius: 20px;
+    .line_top {
+      border-top: 1px solid #d0d0d0;
+      padding-top: 20px;
+    }
+  }
   img {
     display: block;
     max-width: 100%;
@@ -191,6 +200,7 @@ const Window = styled.div`
     opacity: 1;  // Active opacity
     visibility: visible;  // Active visibility
   `}
+
   .answerBox {
     border-top: 1px solid #dadce0;
     padding: 10px 15px;

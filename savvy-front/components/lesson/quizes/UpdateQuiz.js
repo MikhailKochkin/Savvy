@@ -224,12 +224,14 @@ const UpdateQuiz = (props) => {
         <option value={"IDEA"}>По смыслу</option>
       </select>
       <label for="types">{t("type")}</label>
+      {console.log("type", type)}
       <select
         name="types"
         id="types"
         defaultValue={type}
         onChange={(e) => setType(e.target.value)}
       >
+        <option value={null}>Undefined</option>
         <option value="TEST">Question</option>
         <option value="FORM">Form</option>
         <option value="GENERATE">Generate Ideas</option>

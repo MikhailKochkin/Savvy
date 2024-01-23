@@ -228,29 +228,6 @@ const MenuColumn = styled.div`
         transition: 0.3s;
       }
     }
-    button {
-      /* border: 1px solid #c2c2c2;
-      border-radius: 12px;
-      padding: 3% 4%;
-      cursor: pointer;
-      margin-top: 10px;
-      background: none;
-      outline: 0;
-      font-family: Montserrat;
-      font-size: 1.6rem;
-      font-weight: 500;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      appearance: none;
-      text-indent: 0.01px;
-      text-align-last: center;
-      text-align: center;
-      transition: 0.5s; */
-
-      /* &:hover {
-        border: 1px solid #1a2980;
-      } */
-    }
     .nav {
       display: flex;
       flex-direction: row;
@@ -326,13 +303,6 @@ const Complexity = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-// const Progress = styled.div`
-//   height: 100%;
-//   background: #3f51b5;
-//   width: ${(props) => props.progress};
-//   transition: all 0.5s;
-// `;
 
 const Progress = styled.input`
   width: 100%;
@@ -585,50 +555,6 @@ const ProgressBar = styled.div`
   border-radius: 4px;
 `;
 
-const Message = styled.div`
-  width: 100vw;
-  height: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 2.5%;
-  font-size: 1.8rem;
-  #message_text {
-    background: #8a2387; /* fallback for old browsers */
-    width: 32%;
-    background: -webkit-linear-gradient(
-      to right,
-      #f27121,
-      #e94057,
-      #8a2387
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      to right,
-      #f27121,
-      #e94057,
-      #8a2387
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: white;
-    border-radius: 10px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    visibility: ${(props) => (props.visible ? "visible" : "hidden")};
-    opacity: ${(props) => (props.visible ? 1 : 0)};
-    transition: visibility 0.5s linear, opacity 0.5s linear;
-  }
-  @media (max-width: 800px) {
-    #message_text {
-      width: 90%;
-    }
-  }
-`;
-
 const Section = styled.div`
   height: 100%;
   width: ${(props) => props.sectionWidth};
@@ -671,6 +597,7 @@ const Feed = (props) => {
     openSize,
     notes,
     chats,
+    step,
   } = props;
   const { t } = useTranslation("lesson");
   const [createLessonResult, { create_data }] = useMutation(
@@ -709,15 +636,13 @@ const Feed = (props) => {
     next_lesson = true;
   }
 
-  const [num, setNum] = useState(0);
+  const [num, setNum] = useState(step ? parseInt(step) - 1 : 0);
   const [result, setResult] = useState(
     props.my_result ? props.my_result : null
   );
   const [secondRound, setSecondRound] = useState(false);
-  // const [progress, setProgress] = useState();
   const totalSections = lessonElements.length;
   const sectionWidth = 100 / totalSections + "%";
-
   const [open, setOpen] = useState(false);
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
@@ -771,7 +696,7 @@ const Feed = (props) => {
 
   const search = async (num) => {
     if (lessonElements.length > num + 1) {
-      const data = await setNum(num + 1);
+      const data = setNum(num + 1);
       if (lessonElements.length > num + 2) {
         var my_element =
           document.getElementsByClassName("final")[0].previousSibling;
@@ -803,50 +728,60 @@ const Feed = (props) => {
     visited = [];
   }
 
-  const resolveQuestion = (val) => {
-    console.log("val", val);
-    console.log("notes", notes, chats);
-  };
-
   useEffect(() => {
-    setResult(props.my_result ? props.my_result : null);
-    setNum(
-      num > 0
-        ? num
-        : props.my_result &&
-          props.my_result.progress !== null &&
-          props.my_result.progress !== 0 &&
-          props.my_result.progress / props.number_of_tasks < 0.9
-        ? props.my_result.progress - 1
-        : 0
-    );
-    setSecondRound(true);
-    if (
-      lessonElements.length > num + 1 &&
-      props.my_result &&
-      props.my_result.progress / props.number_of_tasks < 0.9
-    ) {
-      if (lessonElements.length > num + 2) {
-        var my_element = document.getElementsByClassName("final")[0];
-        my_element &&
+    if (step == 0) {
+      setResult(props.my_result ? props.my_result : null);
+
+      setNum(
+        num > 0
+          ? num
+          : props.my_result &&
+            props.my_result.progress !== null &&
+            props.my_result.progress !== 0 &&
+            props.my_result.progress / props.number_of_tasks < 0.9
+          ? props.my_result.progress - 1
+          : 0
+      );
+      setSecondRound(true);
+      if (
+        lessonElements.length > num + 1 &&
+        props.my_result &&
+        props.my_result.progress / props.number_of_tasks < 0.9
+      ) {
+        if (lessonElements.length > num + 2) {
+          var my_element = document.getElementsByClassName("final")[0];
+          my_element &&
+            my_element.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+              inline: "nearest",
+            });
+        } else if (lessonElements.length === num + 2) {
+          var my_element =
+            document.getElementsByClassName("no")[
+              document.getElementsByClassName("no").length - 1
+            ];
           my_element.scrollIntoView({
             behavior: "smooth",
             block: "start",
             inline: "nearest",
           });
-      } else if (lessonElements.length === num + 2) {
-        var my_element =
-          document.getElementsByClassName("no")[
-            document.getElementsByClassName("no").length - 1
-          ];
-        my_element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest",
-        });
+        }
       }
     }
   }, [props.my_result]);
+
+  useEffect(() => {
+    var my_element =
+      document.getElementsByClassName("no")[
+        document.getElementsByClassName("no").length - 1
+      ];
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  }, [props.step, props.stats_data]);
 
   let other_simulators = props.lesson.coursePage.lessons
     .filter(
@@ -959,6 +894,7 @@ const Feed = (props) => {
               🚀 {t("level_up")} {complexity}
             </div>
           </Message> */}
+
           <Navigation
             i_am_author={props.i_am_author}
             lesson={props.lesson}
@@ -978,15 +914,6 @@ const Feed = (props) => {
               </div>
             </div>
           )}
-          {/* <div
-            className="arrowmenu"
-            onClick={(e) => {
-              setOpen(!open);
-            }}
-          >
-            <img className="arrow" src="../../static/burger_menu.svg" />
-          </div> */}
-          {/* First we check if the user have ever visited the lesson */}
           {result && !hasLessonBeenFinished ? (
             <Border>
               {/*  We have lesson result */}

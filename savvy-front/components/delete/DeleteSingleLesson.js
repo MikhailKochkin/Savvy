@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Mutation } from "@apollo/client/react/components";
-import { gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import Router from "next/router";
 
@@ -14,16 +13,11 @@ const DELETE_LESSON_MUTATION = gql`
 
 const Button = styled.button`
   font-size: 1.5rem;
-  padding: 1%;
   width: 100%;
-  border: none;
-  border-left: 1px solid white;
-  padding-left: 8%;
+  text-align: center;
   outline: none;
   background: none;
-  text-align: left;
-  padding-top: 1.4rem;
-  padding-bottom: 1.4rem;
+
   cursor: pointer;
   &:hover {
     border-left: 1px solid white;
@@ -39,42 +33,45 @@ const Button = styled.button`
 
 const Delete = styled.div`
   background: none;
+  width: 100%;
 `;
 
-class DeleteSingleLesson extends Component {
-  render() {
-    return (
-      <Mutation
-        mutation={DELETE_LESSON_MUTATION}
-        variables={{ id: this.props.id }}
-        update={this.update}
-        // refetchQueries={() => [
-        //   {
-        //     query: PAGE_LESSONS_QUERY,
-        //     variables: { id: this.props.coursePageID }
-        //   }
-        // ]}
-      >
-        {(DeleteSandbox, { error }) => (
-          <Button
-            onClick={() => {
-              if (confirm("Sure?")) {
-                DeleteSandbox().catch((error) => {
-                  alert(error.message);
-                });
-                Router.push({
-                  pathname: "/course",
-                  query: { id: this.props.coursePageID },
-                });
-              }
-            }}
-          >
-            <Delete id="remove">Delete Lesson</Delete>
-          </Button>
-        )}
-      </Mutation>
-    );
-  }
-}
+const DeleteSingleLesson = (props) => {
+  const [deleteLesson, { data, loading, error }] = useMutation(
+    DELETE_LESSON_MUTATION
+  );
+
+  return (
+    // <Mutation
+    //   mutation={DELETE_LESSON_MUTATION}
+    //   variables={{ id: props.id }}
+    //   update={update}
+    // >
+    //   {(DeleteSandbox, { error }) => (
+    <Button
+      onClick={() => {
+        if (confirm("Sure?")) {
+          deleteLesson({
+            variables: {
+              id: props.lessonId,
+            },
+          }).catch((error) => {
+            alert(error.message);
+          });
+          Router.push({
+            pathname: "/course",
+            query: { id: props.coursePageId },
+          });
+        }
+      }}
+    >
+      {/* <Delete id="remove"> */}
+      Delete Lesson
+      {/* </Delete> */}
+    </Button>
+    //   )}
+    // </Mutation>
+  );
+};
 
 export default DeleteSingleLesson;

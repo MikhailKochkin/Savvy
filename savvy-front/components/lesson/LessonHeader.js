@@ -617,7 +617,7 @@ const LessonHeader = (props) => {
                   }}
                 >
                   <A>
-                    <Button>{t("open")}</Button>
+                    <Button>{t("open")} </Button>
                   </A>
                 </Link>
               )}
@@ -629,9 +629,9 @@ const LessonHeader = (props) => {
 
             {lesson.type.toLowerCase() !== "regular" &&
             me &&
-            (me.id !== author ||
-              !me.permissions.includes("ADMIN") ||
-              !i_am_author) ? (
+            me.id !== author &&
+            !me.permissions.includes("ADMIN") &&
+            !i_am_author ? (
               lesson.open ? (
                 <Link
                   legacyBehavior
@@ -667,7 +667,7 @@ const LessonHeader = (props) => {
                     <Button
                     // onClick={handleButtonClick}
                     >
-                      {t("open")} 2
+                      {t("open")}
                     </Button>
                   </A>
                 </Link>

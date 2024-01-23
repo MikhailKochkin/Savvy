@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import { useTranslation } from "next-i18next";
 
+import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import StoryUpdate from "./StoryUpdate";
@@ -269,7 +270,7 @@ const UpdateLesson = (props) => {
   const [description, setDescription] = useState(props.lesson.description);
   const [hasSecret, setHasSecret] = useState(props.lesson.hasSecret);
   const [totalPoints, setTotalPoints] = useState(props.lesson.totalPoints);
-  const [coursePageId, setCoursePageId] = useState(props.lesson.totalPoints);
+  const [coursePageId, setCoursePageId] = useState(props.coursePageId);
   const [copyLesson, { data: copyData }] = useMutation(COPY_LESSON_MUTATION);
 
   const { t } = useTranslation("lesson");
@@ -329,6 +330,7 @@ const UpdateLesson = (props) => {
           <div className="input">
             <input
               placeholder="target coursePage Id"
+              defaultValue={coursePageId}
               onChange={(e) => setCoursePageId(e.target.value)}
             />
           </div>
@@ -487,6 +489,17 @@ const UpdateLesson = (props) => {
             <Frame>
               <DynamicHoverEditor value={text} getEditorText={myCallback} />
             </Frame>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">
+            <DeleteSingleLesson
+              lessonId={lessonID}
+              coursePageId={props.coursePageId}
+            />
+          </div>
+          <div className="input">
+            Danger zone. Avoid deleting the simulator unless you are 100% sure.
           </div>
         </Row>
         <Mutation
