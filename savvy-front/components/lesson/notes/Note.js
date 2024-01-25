@@ -26,6 +26,9 @@ const Container = styled.div`
   width: ${(props) => props.width};
   font-size: 1.6rem;
   margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   .animated {
     /* text-transform: uppercase; */
     background-image: linear-gradient(
@@ -157,7 +160,7 @@ const Container = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
-    width: 100%;
+    width: 95%;
     font-size: 1.6rem;
     .black_back {
       padding: 20px 0;
@@ -294,13 +297,17 @@ const NoteStyles = styled.div`
   h2 {
     font-size: 3.2rem;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.2;
   }
   img {
     display: block;
+    max-width: 600px;
     /* max-height: 50em; */
     box-shadow: "0 0 0 2px blue;";
     object-fit: contain;
+    @media (max-width: 800px) {
+      width: 100%;
+    }
   }
   p {
     margin: 20px 0;
