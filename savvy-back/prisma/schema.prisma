@@ -472,6 +472,7 @@ model Lesson {
   updatedAt           DateTime             @updatedAt
   name                String
   number              Int?
+  tags                String[]
   published           Boolean?             @default(false)
   open                Boolean?             @default(false)
   type                String?              @default("REGULAR")

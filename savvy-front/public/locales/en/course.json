@@ -43,5 +43,10 @@
   "search": "Search",
   "found_these": "We found these simulators:",
   "type_the_keyword": "Type the keyword to start the search of simulators:",
-  "find": "Find"
+  "find": "Find",
+  "gallery": "Gallery",
+  "table": "Table",
+  "name": "Name",
+  "description": "Description",
+  "tags": "Tags"
 }

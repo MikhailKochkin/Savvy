@@ -1599,6 +1599,7 @@ export interface NexusGenInputs {
     shotResults?: NexusGenInputs['ShotResultOrderByRelationAggregateInput'] | null; // ShotResultOrderByRelationAggregateInput
     shots?: NexusGenInputs['ShotOrderByRelationAggregateInput'] | null; // ShotOrderByRelationAggregateInput
     structure?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
     teamQuestResults?: NexusGenInputs['TeamQuestResultOrderByRelationAggregateInput'] | null; // TeamQuestResultOrderByRelationAggregateInput
     teamQuests?: NexusGenInputs['TeamQuestOrderByRelationAggregateInput'] | null; // TeamQuestOrderByRelationAggregateInput
     test?: NexusGenInputs['TestOrderByRelationAggregateInput'] | null; // TestOrderByRelationAggregateInput
@@ -1716,6 +1717,7 @@ export interface NexusGenInputs {
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     shots?: NexusGenInputs['ShotListRelationFilter'] | null; // ShotListRelationFilter
     structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teamQuestResults?: NexusGenInputs['TeamQuestResultListRelationFilter'] | null; // TeamQuestResultListRelationFilter
     teamQuests?: NexusGenInputs['TeamQuestListRelationFilter'] | null; // TeamQuestListRelationFilter
     test?: NexusGenInputs['TestListRelationFilter'] | null; // TestListRelationFilter
@@ -1777,6 +1779,7 @@ export interface NexusGenInputs {
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     shots?: NexusGenInputs['ShotListRelationFilter'] | null; // ShotListRelationFilter
     structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teamQuestResults?: NexusGenInputs['TeamQuestResultListRelationFilter'] | null; // TeamQuestResultListRelationFilter
     teamQuests?: NexusGenInputs['TeamQuestListRelationFilter'] | null; // TeamQuestListRelationFilter
     test?: NexusGenInputs['TestListRelationFilter'] | null; // TestListRelationFilter
@@ -4310,6 +4313,7 @@ export interface NexusGenObjects {
     published?: boolean | null; // Boolean
     short_structure?: NexusGenScalars['Json'] | null; // Json
     structure?: NexusGenScalars['Json'] | null; // Json
+    tags: string[]; // [String!]!
     text: string; // String!
     totalPoints?: number | null; // Int
     type?: string | null; // String
@@ -5084,6 +5088,7 @@ export interface NexusGenFieldTypes {
     shotResults: NexusGenRootTypes['ShotResult'][]; // [ShotResult!]!
     shots: NexusGenRootTypes['Shot'][]; // [Shot!]!
     structure: NexusGenScalars['Json'] | null; // Json
+    tags: string[]; // [String!]!
     teamQuestResults: NexusGenRootTypes['TeamQuestResult'][]; // [TeamQuestResult!]!
     teamQuests: NexusGenRootTypes['TeamQuest'][]; // [TeamQuest!]!
     testPractices: NexusGenRootTypes['TestPractice'][]; // [TestPractice!]!
@@ -6129,6 +6134,7 @@ export interface NexusGenFieldTypeNames {
     shotResults: 'ShotResult'
     shots: 'Shot'
     structure: 'Json'
+    tags: 'String'
     teamQuestResults: 'TeamQuestResult'
     teamQuests: 'TeamQuest'
     testPractices: 'TestPractice'
@@ -7682,6 +7688,7 @@ export interface NexusGenArgTypes {
       open?: boolean | null; // Boolean
       short_structure?: NexusGenInputs['LessonStructure'] | null; // LessonStructure
       structure?: NexusGenInputs['LessonStructure'] | null; // LessonStructure
+      tags?: Array<string | null> | null; // [String]
       tariffs?: string | null; // String
       text?: string | null; // String
       totalPoints?: number | null; // Int

@@ -1711,17 +1711,36 @@ const Mutation = mutationType({
         short_structure: arg({
           type: "LessonStructure",
         }),
+        tags: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
         delete updates.id;
-        const updatedLesson = await ctx.prisma.lesson.update({
-          data: updates,
-          where: {
-            id: args.id,
-          },
-        });
-        return updatedLesson;
+        delete updates.tags;
+        if (updates.tags) {
+          const updatedLesson = await ctx.prisma.lesson.update({
+            data: {
+              tags: {
+                set: [...args.tags],
+              },
+              ...updates,
+            },
+            where: {
+              id: args.id,
+            },
+          });
+          return updatedLesson;
+        } else {
+          const updatedLesson2 = await ctx.prisma.lesson.update({
+            data: {
+              ...updates,
+            },
+            where: {
+              id: args.id,
+            },
+          });
+          return updatedLesson2;
+        }
       },
     });
     t.field("createNewTest", {

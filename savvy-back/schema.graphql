@@ -2051,6 +2051,7 @@ type Lesson {
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   shots(after: ShotWhereUniqueInput, before: ShotWhereUniqueInput, first: Int, last: Int): [Shot!]!
   structure: Json
+  tags: [String!]!
   teamQuestResults(after: TeamQuestResultWhereUniqueInput, before: TeamQuestResultWhereUniqueInput, first: Int, last: Int): [TeamQuestResult!]!
   teamQuests(after: TeamQuestWhereUniqueInput, before: TeamQuestWhereUniqueInput, first: Int, last: Int): [TeamQuest!]!
   testPractices(after: TestPracticeWhereUniqueInput, before: TestPracticeWhereUniqueInput, first: Int, last: Int): [TestPractice!]!
@@ -2127,6 +2128,7 @@ input LessonOrderByWithRelationInput {
   shotResults: ShotResultOrderByRelationAggregateInput
   shots: ShotOrderByRelationAggregateInput
   structure: SortOrderInput
+  tags: SortOrder
   teamQuestResults: TeamQuestResultOrderByRelationAggregateInput
   teamQuests: TeamQuestOrderByRelationAggregateInput
   test: TestOrderByRelationAggregateInput
@@ -2263,6 +2265,7 @@ input LessonWhereInput {
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
   structure: JsonNullableFilter
+  tags: StringNullableListFilter
   teamQuestResults: TeamQuestResultListRelationFilter
   teamQuests: TeamQuestListRelationFilter
   test: TestListRelationFilter
@@ -2325,6 +2328,7 @@ input LessonWhereUniqueInput {
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
   structure: JsonNullableFilter
+  tags: StringNullableListFilter
   teamQuestResults: TeamQuestResultListRelationFilter
   teamQuests: TeamQuestListRelationFilter
   test: TestListRelationFilter
@@ -2597,7 +2601,7 @@ type Mutation {
   updateEmailReminder(emailsSent: [String], id: String): EmailReminder
   updateForum(id: String, text: String): Forum
   updateGrowthArea(id: String!, marks: MarksList, maxProgress: Int, name: String): GrowthArea
-  updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
+  updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest

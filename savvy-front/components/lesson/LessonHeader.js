@@ -136,8 +136,6 @@ const TextBar = styled.div`
 `;
 
 const A = styled.a`
-  /* justify-self: center;
-  align-self: center; */
   width: 100%;
 `;
 
@@ -688,47 +686,10 @@ const LessonHeader = (props) => {
                 }}
               >
                 <A>
-                  <Button
-                  // onClick={handleButtonClick}
-                  >
-                    {t("open")}
-                  </Button>
+                  <Button>{t("open")}</Button>
                 </A>
               </Link>
             )}
-
-            {/* {!me && lesson.open && (
-              <Button id="sign_up_open_lesson" onClick={(e) => slide2()}>
-                {t("sign_up_and_open")}
-              </Button>
-            )}
-
-            {me &&
-              (me.permissions.includes("ADMIN") ||
-                me.new_subjects.filter((s) => s.id == coursePageId).length >
-                  0 ||
-                me.id === lesson.user.id ||
-                i_am_author ||
-                lesson.open) && (
-                <Link
-                  legacyBehavior
-                  href={{
-                    pathname: "/lesson",
-                    query: {
-                      id: lesson.id,
-                      type: lesson.type.toLowerCase(),
-                    },
-                  }}
-                >
-                  <A>
-                    <Button
-                    // onClick={handleButtonClick}
-                    >
-                      {t("open")}
-                    </Button>
-                  </A>
-                </Link>
-              )} */}
           </Buttons>
         </div>
       </TextBar>

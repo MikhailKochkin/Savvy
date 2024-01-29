@@ -3,7 +3,7 @@ import { gql, useQuery } from "@apollo/client";
 
 import styled from "styled-components";
 import Loading from "../../Loading";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -62,6 +62,7 @@ const Data = styled.div`
   box-shadow: 0 4px 6px -7px rgb(0 0 0 / 5%), 0 4px 30px -9px rgb(0 0 0 / 10%);
   .description {
     margin-top: 20px;
+    line-height: 1.4;
   }
   p {
     margin: 0;

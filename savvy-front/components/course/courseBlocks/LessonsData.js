@@ -5,6 +5,7 @@ import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import Feedback from "../Feedback";
 import Loading from "../../Loading";
 import LessonHeader from "../../lesson/LessonHeader";
+import LessonRow from "../../lesson/LessonRow";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -35,6 +36,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         name
         number
+        tags
         type
         open
         description
@@ -131,8 +133,7 @@ const LESSON_RESULTS_QUERY = gql`
 
 export const LessonsInfo = styled.div`
   margin-top: 30px;
-
-  padding: 0 3%;
+  padding: 0;
   h1 {
     line-height: 1.2;
   }
@@ -157,7 +158,8 @@ const Button = styled.button`
   font-family: Montserrat;
   padding-bottom: 10px;
   border-bottom: ${(props) =>
-    props.primary ? "1px solid black" : "1px solid white"};
+    props.primary ? "2px solid black" : "2px solid white"};
+  transition: 0.2s;
   &#forum {
     font-weight: bold;
   }
@@ -212,26 +214,86 @@ const Lessons = styled.div`
   }
 `;
 
-const Header = styled.span`
-  font-size: 2.4rem;
-  margin: 1% 0;
-  padding: 1%;
-  padding-right: 1.5%;
-  font-style: italic;
-  -webkit-box-decoration-break: clone;
-  -o-box-decoration-break: clone;
-  box-decoration-break: clone;
-  line-height: 1.4;
-  font-weight: bold;
+const LessonsTable = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   justify-content: space-between;
-  /* background: #ffdad7; */
-  /* transform: skew(-5deg);
-  -webkit-transform: skew(-5deg);
-  -moz-transform: skew(-5deg);
-  -o-transform: skew(-5deg); */
-  /* transform: skew(10deg, 10deg); */
+  align-items: stretch;
+  border-radius: 20px;
+  padding: 10px;
+  background: #fff;
+  margin-bottom: 20px;
+  @media (max-width: 800px) {
+    overflow-x: auto;
+    max-width: 100%;
+    /* height: 200px; */
+  }
+`;
+
+const Box = styled.div`
+  border-bottom: 2px solid #e8eff6;
+  display: flex;
+  flex-direction: row;
+  flex: 1; /* This makes the Box component stretch in height */
+  background: #e8eff6;
+  color: #76706c;
+  div {
+    padding: 5px 10px;
+    font-size: 1.4rem;
+    background: #fff;
+  }
+  .div1 {
+    width: 5%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    line-height: 1.4;
+    margin-right: 2px;
+  }
+  .div2 {
+    width: 22%;
+    display: flex;
+
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    line-height: 1.4;
+  }
+  .div3 {
+    width: 40%;
+
+    p {
+      margin: 0;
+      margin-bottom: 5px;
+      line-height: 1.5;
+    }
+  }
+  .div4 {
+    width: 13%;
+  }
+  .div5 {
+    width: 20%;
+  }
+  @media (max-width: 850px) {
+    .div1 {
+      min-width: 50px;
+    }
+    .div2 {
+      min-width: 250px;
+    }
+    .div3 {
+      min-width: 400px;
+    }
+    .div4 {
+      min-width: 100px;
+    }
+    .div5 {
+      min-width: 200px;
+    }
+  }
 `;
 
 const LessonsData = (props) => {
@@ -239,7 +301,7 @@ const LessonsData = (props) => {
   const { me, id } = props;
   const { t } = useTranslation("course");
   const [page, setPage] = useState("lessons");
-  const [format, setFormat] = useState("weeks");
+  const [format, setFormat] = useState("table");
 
   // 2. get course data
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
@@ -380,11 +442,12 @@ const LessonsData = (props) => {
     .sort((a, b) => (a.number > b.number ? 1 : -1))
     .filter((l) => l.published);
 
-  let broken_lessons = sliceIntoChunks(
-    initial_lessons,
-    coursePage.weeks ? coursePage.weeks : 3
-  );
+  // let broken_lessons = sliceIntoChunks(
+  //   initial_lessons,
+  //   coursePage.weeks ? coursePage.weeks : 3
+  // );
 
+  let broken_lessons = initial_lessons;
   let unpublished_lessons = [...coursePage.lessons]
     .sort((a, b) => (a.number > b.number ? 1 : -1))
     .filter((l) => !l.published);
@@ -410,7 +473,7 @@ const LessonsData = (props) => {
 
   return (
     <LessonsInfo>
-      <Buttons>
+      {/* <Buttons>
         <Button
           primary={page === "lessons"}
           onClick={(e) => setPage("lessons")}
@@ -423,12 +486,12 @@ const LessonsData = (props) => {
         >
           {t("feedback")}
         </Button>
-      </Buttons>
+      </Buttons> */}
 
       {page === "lessons" && (
         <>
           <Total>
-            {" "}
+            {/* {" "}
             {t("total_lessons")}
             <b>{lessons.filter((l) => l.published).length}</b> <br />{" "}
             {t("course_term")}{" "}
@@ -440,13 +503,19 @@ const LessonsData = (props) => {
                 : Math.ceil(
                     lessons.length / (coursePage.weeks ? coursePage.weeks : 3)
                   )}
-            </b>
+            </b> */}
             <Buttons>
               <Button
-                primary={format === "weeks"}
-                onClick={(e) => setFormat("weeks")}
+                primary={format === "gallery"}
+                onClick={(e) => setFormat("gallery")}
               >
-                {t("in_weeks")}
+                {t("gallery")}
+              </Button>
+              <Button
+                primary={format === "table"}
+                onClick={(e) => setFormat("table")}
+              >
+                {t("table")}
               </Button>
               {/* {full_modules.length > 0 && (
                 <Button
@@ -458,81 +527,69 @@ const LessonsData = (props) => {
               )} */}
             </Buttons>
           </Total>
-          {/* {format == "modules" && (
+          {format == "gallery" && (
             <Syllabus>
-              {full_modules.map((m, i) => (
-                <>
-                  <div className="week_number">
-                    Модуль {i + 1}. {m.name}
-                  </div>
-                  <Lessons>
-                    {m.lessons
-                      .sort((a, b) => a.number - b.number)
-                      .map((les, index) => {
-                        return (
-                          <>
-                            <LessonHeader
-                              me={me}
-                              key={les.id}
-                              name={les.name}
-                              lesson={les}
-                              lessonResult={maxes.find(
-                                (m) => m.lesson.id == les.id
-                              )}
-                              lessonLength={les.structure}
-                              i_am_author={i_am_author}
-                              coursePage={props.id}
-                              author={coursePage.user.id}
-                              open={index + 1 === 1}
-                              index={index + 1}
-                              coursePageId={coursePage.id}
-                            />
-                          </>
-                        );
-                      })}
-                  </Lessons>
-                </>
-              ))}
+              <Lessons>
+                {broken_lessons.map((lesson, index) => (
+                  <>
+                    <LessonHeader
+                      me={me}
+                      key={lesson.id}
+                      name={lesson.name}
+                      lesson={lesson}
+                      lessonResult={maxes.find((m) => m.lesson.id == lesson.id)}
+                      lessonLength={
+                        lesson.structure && lesson.structure.lessonItems
+                          ? lesson.structure.lessonItems.length
+                          : 0
+                      }
+                      i_am_author={i_am_author}
+                      statements={lesson.forum ? lesson.forum.statements : null}
+                      coursePage={props.id}
+                      author={coursePage.user.id}
+                      open={index + 1 === 1}
+                      index={index + 1}
+                      coursePageId={coursePage.id}
+                    />
+                  </>
+                ))}
+              </Lessons>
             </Syllabus>
-          )} */}
-          {format == "weeks" && (
+          )}
+          {format == "table" && (
             <Syllabus>
-              {[...broken_lessons].map((b, i) => (
-                <>
-                  <div className="week_number">
-                    {t("week")} {i + 1}
-                  </div>
-                  <Lessons>
-                    {b.map((lesson, index) => (
-                      <>
-                        <LessonHeader
-                          me={me}
-                          key={lesson.id}
-                          name={lesson.name}
-                          lesson={lesson}
-                          lessonResult={maxes.find(
-                            (m) => m.lesson.id == lesson.id
-                          )}
-                          lessonLength={
-                            lesson.structure && lesson.structure.lessonItems
-                              ? lesson.structure.lessonItems.length
-                              : 0
-                          }
-                          i_am_author={i_am_author}
-                          statements={
-                            lesson.forum ? lesson.forum.statements : null
-                          }
-                          coursePage={props.id}
-                          author={coursePage.user.id}
-                          open={index + 1 === 1}
-                          index={index + 1}
-                          coursePageId={coursePage.id}
-                        />
-                      </>
-                    ))}
-                  </Lessons>
-                </>
-              ))}
+              <LessonsTable>
+                <Box>
+                  <div className="div1">№</div>
+                  <div className="div2">{t("name")}</div>
+                  <div className="div3">{t("description")}</div>
+                  <div className="div4"></div>
+                  <div className="div5">{t("tags")}</div>
+                </Box>
+                {broken_lessons.map((lesson, index) => (
+                  <>
+                    <LessonRow
+                      me={me}
+                      key={lesson.id}
+                      name={lesson.name}
+                      lesson={lesson}
+                      lessonResult={maxes.find((m) => m.lesson.id == lesson.id)}
+                      lessonLength={
+                        lesson.structure && lesson.structure.lessonItems
+                          ? lesson.structure.lessonItems.length
+                          : 0
+                      }
+                      i_am_author={i_am_author}
+                      statements={lesson.forum ? lesson.forum.statements : null}
+                      coursePage={props.id}
+                      author={coursePage.user.id}
+                      open={index + 1 === 1}
+                      index={index + 1}
+                      coursePageId={coursePage.id}
+                    />
+                  </>
+                ))}
+              </LessonsTable>
             </Syllabus>
           )}
           {/* } */}
@@ -570,23 +627,22 @@ const LessonsData = (props) => {
         </>
       )}
 
-      {page === "feedback" &&
-        (me && isEnrolled ? (
-          <>
-            {me.studentFeedback.filter(
-              (f) => f.lesson.coursePage.id == coursePage.id
-            ).length === 0 ? (
-              <p>{t("no_feedback_yet")}</p>
-            ) : null}
-            {me.studentFeedback
-              .filter((f) => f.lesson.coursePage.id == coursePage.id)
-              .map((feedback) => (
-                <Feedback feedback={feedback} />
-              ))}
-          </>
-        ) : (
-          <Comment>{t("join_the_course")}</Comment>
-        ))}
+      {me && isEnrolled ? (
+        <>
+          {me.studentFeedback.filter(
+            (f) => f.lesson.coursePage.id == coursePage.id
+          ).length === 0 ? (
+            <p>{t("no_feedback_yet")}</p>
+          ) : null}
+          {me.studentFeedback
+            .filter((f) => f.lesson.coursePage.id == coursePage.id)
+            .map((feedback) => (
+              <Feedback feedback={feedback} />
+            ))}
+        </>
+      ) : (
+        <Comment>{t("join_the_course")}</Comment>
+      )}
     </LessonsInfo>
   );
 };
