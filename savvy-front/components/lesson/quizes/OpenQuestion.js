@@ -537,6 +537,7 @@ const OpenQuestion = (props) => {
       )
         .then((response) => response.json())
         .then((res) => {
+          console.log("res.res", res.res);
           if (parseFloat(res.res) > 65) {
             setCorrect("true");
             passResult("true");

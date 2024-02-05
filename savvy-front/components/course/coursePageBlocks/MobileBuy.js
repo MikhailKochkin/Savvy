@@ -471,13 +471,14 @@ const MobileBuy = (props) => {
             {t("online_lessons")}
           </div>
           {price > 4000 && <div className="">{t("webinars")}</div>}
-
           <div className="">{t("access")}</div>
           <div className="">{t("chat")}</div>
           <div className="">{t("certificate")}</div>
+          //{" "}
           <div className="">
-            {price}
-            {coursePage.currency == "ruble" ? "₽" : "$"}
+            // {price}
+            // {coursePage.currency == "ruble" ? "₽" : "$"}
+            //{" "}
           </div>
         </div>
         {props.coursePage.prices &&

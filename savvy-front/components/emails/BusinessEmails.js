@@ -6,9 +6,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Company from "./Company";
 
-// import { companyList, emailList } from "../../businessEmailList.js";
-// import { uniList, emailUniList } from "../../lawschool.js";
-// import emailSQEList from "../../sqeList.js";
+import { companyList, emailList } from "../../businessEmailList.js";
+import { uniList, emailUniList } from "../../lawschool.js";
+import emailSQEList from "../../sqeList.js";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(

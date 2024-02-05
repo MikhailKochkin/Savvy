@@ -599,9 +599,9 @@ const Action = (props) => {
             <div className="">◼️ {t("access")}</div>
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
-            <div className="price_div">
+            {/* <div className="price_div">
               ◼️ {price ? `${price} ${currency_symbol}` : t("free")}
-            </div>
+            </div> */}
 
             {props.coursePage.currency == "ruble" &&
               props.coursePage.courseType == "FORMONEY" && (

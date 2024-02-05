@@ -533,6 +533,30 @@ const ConElement = (props) => {
     props.getData(new_el, props.i);
   };
 
+  const includesTextNodes = (htmlValue) => {
+    // Create a temporary element to parse the HTML
+    let tempElement = document.createElement("div");
+    tempElement.innerHTML = htmlValue;
+
+    // Recursive function to check for text nodes
+    const hasTextNodes = (node) => {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== "") {
+        return true;
+      }
+      for (let childNode of node.childNodes) {
+        if (hasTextNodes(childNode)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    // Check if any child nodes contain text nodes
+    return Array.from(tempElement.childNodes).some((node) =>
+      hasTextNodes(node)
+    );
+  };
+
   return (
     <Element size={el.size} rows={el.rows} borders={el.borders}>
       <Settings>
@@ -732,10 +756,11 @@ const ConElement = (props) => {
           )}
         </div>
       </Settings>
+      {console.log("includesTextNodes", el.text, includesTextNodes(el.text))}
       <DynamicLoadedEditor
         onChange={(e) => updateEl(e.target.value)}
         getEditorText={myCallback}
-        value={el.text}
+        value={includesTextNodes(el.text) ? el.text : ""}
         type="DocBuilder"
       />
       {type && type !== "SUMMARY" && (

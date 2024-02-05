@@ -263,35 +263,10 @@ const ProgramMobileBuy = (props) => {
   const [auth, setAuth] = useState("signin");
   const toggleModal = (e) => setIsOpen(!isOpen);
 
-  const getInstallments = () => {
-    tinkoff.create({
-      shopId: process.env.NEXT_PUBLIC_SHOP_ID,
-      showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
-      items: [
-        {
-          name: props.program.title,
-          price: props.program.discountPrice
-            ? props.program.discountPrice
-            : props.program.price,
-          quantity: 1,
-        },
-      ],
-      sum: props.program.discountPrice
-        ? props.program.discountPrice
-        : props.program.price,
-      promoCode: "installment_0_0_9_9,8",
-    });
-    if (me) {
-      createOrder({
-        variables: {
-          coursePageId: coursePage.id,
-          price: parseInt(price),
-          userId: me.id,
-          comment: "Заявка на рассрочку",
-        },
-      });
-    }
-  };
+  const { me, program } = props;
+  const first_course = [...program.coursePages].sort(
+    (a, b) => a.numInCareerTrack - b.numInCareerTrack
+  )[0];
 
   const [
     updateOrderAuto,
@@ -314,11 +289,6 @@ const ProgramMobileBuy = (props) => {
   ] = useMutation(CREATE_ORDER_MUTATION);
   const { t } = useTranslation("coursePage");
   const changeState = (dataFromChild) => setAuth(dataFromChild);
-
-  const { me, program } = props;
-  const first_course = [...program.coursePages].sort(
-    (a, b) => a.numInCareerTrack - b.numInCareerTrack
-  )[0];
 
   let my_orders = [];
   if (me) {
@@ -362,17 +332,40 @@ const ProgramMobileBuy = (props) => {
     );
   }, 0);
 
+  const getInstallments = () => {
+    tinkoff.create({
+      shopId: process.env.NEXT_PUBLIC_SHOP_ID,
+      showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
+      items: [
+        {
+          name: props.program.title,
+          price: props.program.price,
+          quantity: 1,
+        },
+      ],
+      sum: props.program.price,
+      promoCode: "installment_0_0_9_9,8",
+    });
+    if (me) {
+      createOrder({
+        variables: {
+          coursePageId: first_course.id,
+          price: parseInt(props.program.price),
+          userId: me.id,
+          comment: "Заявка на рассрочку",
+        },
+      });
+    }
+  };
+
   return (
     <Styles id="buy_section">
       {!program.discountPrice && <div className="price">{program.price} ₽</div>}
       {program.discountPrice && (
         <div className="price">
           <div>
-            {program.discountPrice}{" "}
-            <span className="discount">{program.price}</span> ₽
-          </div>
-          <div className="bubble">
-            {100 - parseInt((program.discountPrice / program.price) * 100)}%
+            {program.price}{" "}
+            <span className="discount">{program.discountPrice}</span> ₽
           </div>
         </div>
       )}
@@ -404,9 +397,7 @@ const ProgramMobileBuy = (props) => {
             const res = await createOrder({
               variables: {
                 coursePageId: first_course.id,
-                price: program.discountPrice
-                  ? program.discountPrice
-                  : program.price,
+                price: program.price,
                 userId: me.id,
                 // promocode: promo,
               },
@@ -421,11 +412,7 @@ const ProgramMobileBuy = (props) => {
         id="mobile_coursePage_buy_button"
         onClick={(e) => getInstallments()}
       >
-        Купить в рассрочку за{" "}
-        {parseInt(
-          (program.discountPrice ? program.discountPrice : program.price) / 9
-        )}{" "}
-        ₽ / мес
+        Купить в рассрочку за {parseInt(program.price / 9)} ₽ / мес
       </ButtonBuySmall>
       <Info>
         <div className="details">
