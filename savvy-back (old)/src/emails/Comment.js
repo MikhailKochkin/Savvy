@@ -531,7 +531,7 @@ const CommentEmail = (name, lesson, lessonId, text, comment) => `
                   <tr>
                     <td class="content-cell" align="center">
                       <p class="f-fallback sub align-center">
-                        &copy; 2023 BeSavvy
+                        &copy; 2024 BeSavvy
                       </p>
                     </td>
                   </tr>
