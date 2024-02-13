@@ -26,7 +26,7 @@
   "check": "Answer",
   "checking": "Answering...",
   "show_correct": "Want to see the correct answer?",
-  "outline_color": "We have outlined the correct answers with green color. Take a look at the question.",
+  "outline_color": "I have outlined the correct answers with green color. Take a look at the question.",
   "correct": "Correct",
   "looks_true": "It seems that you are going the right way. But we suggest that you try to improve your answer.",
   "wrong": "Incorrect",

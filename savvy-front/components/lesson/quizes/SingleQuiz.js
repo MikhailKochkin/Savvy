@@ -13,34 +13,6 @@ import Form from "./Form";
 import Generate from "./Generate";
 import Prompt from "./Prompt";
 
-const CREATE_QUIZRESULT_MUTATION = gql`
-  mutation CREATE_QUIZRESULT_MUTATION(
-    $answer: String
-    $quiz: String
-    $lessonId: String
-    $correct: Boolean
-    $comment: String
-    $hint: String
-    $explanation: String
-    $improvement: String
-    $ideasList: QuizIdeas
-  ) {
-    createQuizResult(
-      answer: $answer
-      quiz: $quiz
-      lessonId: $lessonId
-      correct: $correct
-      comment: $comment
-      hint: $hint
-      explanation: $explanation
-      improvement: $improvement
-      ideasList: $ideasList
-    ) {
-      id
-    }
-  }
-`;
-
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -164,6 +136,8 @@ const SingleQuiz = (props) => {
               lessonId={props.lessonID}
               quizId={props.quizID}
               passResult={onMove}
+              name={props.name}
+              image={props.image}
             />
           )}
           {props.type?.toLowerCase() == "form" && (
@@ -179,6 +153,8 @@ const SingleQuiz = (props) => {
               lessonId={props.lessonID}
               quizId={props.quizID}
               passResult={onMove}
+              name={props.name}
+              image={props.image}
             />
           )}
           {props.type?.toLowerCase() == "generate" && (
@@ -211,6 +187,8 @@ const SingleQuiz = (props) => {
               lessonId={props.lessonID}
               quizId={props.quizID}
               passResult={onMove}
+              name={props.name}
+              image={props.image}
             />
           )}
         </>
@@ -231,6 +209,8 @@ const SingleQuiz = (props) => {
           answers={props.answers}
           lesson={props.lesson}
           question={props.question}
+          name={props.name}
+          image={props.image}
           type={props.type}
           goalType={props.goalType}
           complexity={complexity}

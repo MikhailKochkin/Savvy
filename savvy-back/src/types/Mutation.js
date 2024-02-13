@@ -1753,6 +1753,8 @@ const Mutation = mutationType({
         question: list(stringArg()),
         goal: stringArg(),
         type: stringArg(),
+        name: stringArg(),
+        image: stringArg(),
         ifRight: stringArg(),
         ifWrong: stringArg(),
       },
@@ -1798,6 +1800,8 @@ const Mutation = mutationType({
           ifRight,
           ifWrong,
           type,
+          name,
+          image,
           goal,
         };
 
@@ -2015,6 +2019,8 @@ const Mutation = mutationType({
         complexity: intArg(),
         goal: stringArg(),
         goalType: stringArg(),
+        name: stringArg(),
+        image: stringArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
@@ -2109,6 +2115,8 @@ const Mutation = mutationType({
         check: stringArg(),
         goal: stringArg(),
         goalType: stringArg(),
+        name: stringArg(),
+        image: stringArg(),
         answers: arg({
           type: "ComplexAnswer",
         }),

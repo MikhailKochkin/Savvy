@@ -62,6 +62,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         ifWrong
         check
         type
+        name
+        image
         goalType
         next
         user {
@@ -77,6 +79,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         question
+        name
+        image
         next
         id
         user {

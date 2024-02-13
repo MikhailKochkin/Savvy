@@ -623,6 +623,8 @@ const LessonBlock = (props) => {
                   me={me}
                   ifRight={data.ifRight}
                   ifWrong={data.ifWrong}
+                  name={data.name}
+                  image={data.image}
                   hidden={true}
                   lesson={lesson}
                   lessonID={lesson.id}

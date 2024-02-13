@@ -2526,7 +2526,7 @@ type Mutation {
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
   createMiniForum(lessonId: String, type: String, value: String): MiniForum
   createMiniStatement(miniforumId: String, text: String): Statement
-  createNewTest(answers: [String], comments: [String], correct: [Boolean], goal: String, ifRight: String, ifWrong: String, lessonId: String, question: [String], type: String): NewTest
+  createNewTest(answers: [String], comments: [String], correct: [Boolean], goal: String, ifRight: String, ifWrong: String, image: String, lessonId: String, name: String, question: [String], type: String): NewTest
   createNote(lessonId: String, text: String): Note
   createOffer(courseId: String, discountPrice: Int, header: String, lessonId: String, price: Int, text: String, type: String): Offer
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
@@ -2604,7 +2604,7 @@ type Mutation {
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
-  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
+  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, name: String, next: NextType, question: [String], type: String): NewTest
   updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String, type: String): Note
   updateOffer(courseId: String, discountPrice: Int, header: String, id: String, price: Int, text: String, type: String): Offer
   updateOrder(id: String, isPaid: Boolean): Order
@@ -2613,7 +2613,7 @@ type Mutation {
   updateProblem(complexity: Int, goal: String, id: String, isSecret: Boolean, steps: ProblemStructure, text: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String, type: String): Quiz
+  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, lessonId: String, name: String, next: NextType, question: String, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateScore(id: String, score: Int): User
   updateShot(comments: [String], id: String, parts: [String], title: String): Shot
@@ -2758,9 +2758,11 @@ type NewTest {
   id: String!
   ifRight: String
   ifWrong: String
+  image: String
   lesson: Lesson
   lessonID: String
   lessonId: String
+  name: String
   next: Json
   question: [String!]!
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int): [TestResult!]!
@@ -2791,9 +2793,11 @@ input NewTestOrderByWithRelationInput {
   id: SortOrder
   ifRight: SortOrderInput
   ifWrong: SortOrderInput
+  image: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
+  name: SortOrderInput
   next: SortOrderInput
   question: SortOrder
   testResults: TestResultOrderByRelationAggregateInput
@@ -2817,9 +2821,11 @@ input NewTestWhereInput {
   id: StringFilter
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
+  image: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  name: StringNullableFilter
   next: JsonNullableFilter
   question: StringNullableListFilter
   testResults: TestResultListRelationFilter
@@ -2843,9 +2849,11 @@ input NewTestWhereUniqueInput {
   id: String
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
+  image: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  name: StringNullableFilter
   next: JsonNullableFilter
   question: StringNullableListFilter
   testResults: TestResultListRelationFilter
@@ -3784,9 +3792,11 @@ type Quiz {
   id: String!
   ifRight: String
   ifWrong: String
+  image: String
   lesson: Lesson
   lessonID: String
   lessonId: String
+  name: String
   next: Json
   question: String!
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int): [QuizResult!]!
@@ -3828,9 +3838,11 @@ input QuizOrderByWithRelationInput {
   id: SortOrder
   ifRight: SortOrderInput
   ifWrong: SortOrderInput
+  image: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
+  name: SortOrderInput
   next: SortOrderInput
   question: SortOrder
   quizResults: QuizResultOrderByRelationAggregateInput
@@ -3958,9 +3970,11 @@ input QuizWhereInput {
   id: StringFilter
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
+  image: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  name: StringNullableFilter
   next: JsonNullableFilter
   question: StringFilter
   quizResults: QuizResultListRelationFilter
@@ -3984,9 +3998,11 @@ input QuizWhereUniqueInput {
   id: String
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
+  image: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  name: StringNullableFilter
   next: JsonNullableFilter
   question: StringFilter
   quizResults: QuizResultListRelationFilter

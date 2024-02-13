@@ -18,6 +18,8 @@ const UPDATE_QUIZ_MUTATION = gql`
     $goalType: String
     $ifRight: String
     $ifWrong: String
+    $name: String
+    $image: String
     $answers: ComplexAnswer
   ) {
     updateQuiz(
@@ -31,6 +33,8 @@ const UPDATE_QUIZ_MUTATION = gql`
       ifRight: $ifRight
       ifWrong: $ifWrong
       answers: $answers
+      name: $name
+      image: $image
     ) {
       id
       question
@@ -44,6 +48,8 @@ const UPDATE_QUIZ_MUTATION = gql`
       next
       goalType
       createdAt
+      name
+      image
       user {
         id
         name
@@ -189,6 +195,18 @@ const AnswerOption = styled.div`
   }
 `;
 
+const Input = styled.input`
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  font-family: Montserrat;
+  font-weight: 500;
+  .com {
+    border-top: 1px solid #c4c4c4;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -197,6 +215,8 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 const UpdateQuiz = (props) => {
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
+  const [name, setName] = useState(props.name);
+  const [image, setImage] = useState(props.image);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
@@ -218,13 +238,13 @@ const UpdateQuiz = (props) => {
   const { lessonID, quizId, lesson } = props;
   return (
     <Container>
+      <label for="types">Checking mode</label>
       <select defaultValue={check} onChange={(e) => setCheck(e.target.value)}>
-        <option value={undefined}>Не выбран</option>
-        <option value={"WORD"}>Дословно</option>
-        <option value={"IDEA"}>По смыслу</option>
+        <option value={undefined}>Not chosen</option>
+        <option value={"WORD"}>Literally</option>
+        <option value={"IDEA"}>By implication</option>
       </select>
       <label for="types">{t("type")}</label>
-      {console.log("type", type)}
       <select
         name="types"
         id="types"
@@ -247,7 +267,13 @@ const UpdateQuiz = (props) => {
         <option value="EDUCATE">Educate</option>
         <option value="ASSESS">Assess</option>
       </select>
-
+      <label>Name</label>
+      <br />
+      <Input defaultValue={name} onChange={(e) => setName(e.target.value)} />
+      <br />
+      <label>Image</label>
+      <br />
+      <Input defaultValue={image} onChange={(e) => setImage(e.target.value)} />
       {/* 
       <Complexity>
         <select
@@ -291,7 +317,7 @@ const UpdateQuiz = (props) => {
                 placeholder={`Answer`}
                 onChange={(e) => {
                   const newAnswers = [...answers];
-                  newAnswers[i].answer = e.target.value;
+                  newAnswers[i] = { ...newAnswers[i], answer: e.target.value }; // Create a new object for the specific element and update its property
                   setAnswers(newAnswers);
                 }}
               />
@@ -416,6 +442,8 @@ const UpdateQuiz = (props) => {
           complexity,
           check: check,
           type: type,
+          name: name,
+          image: image,
           goalType: goalType,
           answers: {
             answerElements: answers,

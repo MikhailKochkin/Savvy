@@ -183,6 +183,9 @@ const NewInteractive = (props) => {
                   ifWrong={el.ifWrong}
                   user={el.user.id}
                   user_name={el.user}
+                  name={el.name}
+                  image={el.image}
+                  comments={el.comments}
                   type={el.type}
                   goalType={el.goalType}
                   me={me}

@@ -572,6 +572,8 @@ model NewTest {
   next        Json?
   goalType    String?      @default("EDUCATE")
   goal        String?
+  name        String?
+  image       String?
   ifRight     String?
   ifWrong     String?
   question    String[]
@@ -790,6 +792,8 @@ model Quiz {
   next        Json?
   ifRight     String?
   ifWrong     String?
+  name        String?
+  image       String?
   check       String?      @default("IDEA")
   userId      String       @db.VarChar(30)
   lessonId    String?      @db.VarChar(30)

@@ -77,6 +77,7 @@ const IconBlock = styled.div`
     color: #8f93a3;
     max-width: 80px;
     margin: 0 7px;
+    line-height: 1.4rem;
   }
 `;
 
@@ -309,8 +310,18 @@ const Option = styled.div`
 `;
 
 const SingleTest = (props) => {
-  const { exam, story, ifWrong, ifRight, me, comments, miniforum, author } =
-    props;
+  const {
+    exam,
+    story,
+    ifWrong,
+    ifRight,
+    me,
+    comments,
+    miniforum,
+    author,
+    name,
+    image,
+  } = props;
   const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
   const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
   const [answer, setAnswer] = useState([]); // what is the answer?
@@ -406,7 +417,6 @@ const SingleTest = (props) => {
     if (comments && comments.length > 0) {
       answerNums.map((num) => comments_arr.push(comments[num]));
     }
-
     setCommentsList(comments_arr);
     const res2 = await res();
     createTestResult({
@@ -477,6 +487,8 @@ const SingleTest = (props) => {
 
     let comments_arr = [];
 
+    console.log("comments", comments);
+
     if (comments && comments.length > 0) {
       answerNums.map((num) => {
         if (comments[num] == undefined) {
@@ -546,13 +558,15 @@ const SingleTest = (props) => {
           <div className="question_box">
             <div className="question_text">{parse(props.question[0])}</div>
             <IconBlock>
-              {author && author.image != null ? (
+              {image ? (
+                <img className="icon" src={image} />
+              ) : author && author.image != null ? (
                 <img className="icon" src={author.image} />
               ) : (
                 <img className="icon" src="../../static/hipster.svg" />
               )}{" "}
               <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
+                {name ? name : author && author.name ? author.name : "BeSavvy"}
               </div>
             </IconBlock>
           </div>
@@ -589,13 +603,19 @@ const SingleTest = (props) => {
             <div className="question_box">
               <div className="question_text">{t("choose_option")}</div>
               <IconBlock>
-                {author && author.image != null ? (
+                {image ? (
+                  <img className="icon" src={image} />
+                ) : author && author.image != null ? (
                   <img className="icon" src={author.image} />
                 ) : (
                   <img className="icon" src="../../static/hipster.svg" />
                 )}{" "}
                 <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
+                  {name
+                    ? name
+                    : author && author.name
+                    ? author.name
+                    : "BeSavvy"}
                 </div>
               </IconBlock>
             </div>
@@ -633,6 +653,7 @@ const SingleTest = (props) => {
           {answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
+                {console.log("commentsList", commentsList)}
                 {props.type != "FORM" && "🎉" + "  " + t("correct") + "!"}
                 {commentsList.length > 0 &&
                   commentsList.map((com, i) => {
@@ -641,13 +662,19 @@ const SingleTest = (props) => {
                 {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
               </div>
               <IconBlock>
-                {author && author.image != null ? (
+                {image ? (
+                  <img className="icon" src={image} />
+                ) : author && author.image != null ? (
                   <img className="icon" src={author.image} />
                 ) : (
                   <img className="icon" src="../../static/hipster.svg" />
                 )}{" "}
                 <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
+                  {name
+                    ? name
+                    : author && author.name
+                    ? author.name
+                    : "BeSavvy"}
                 </div>
               </IconBlock>
             </Question>
@@ -666,13 +693,19 @@ const SingleTest = (props) => {
                 {/* {ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)}{" "} */}
               </div>
               <IconBlock>
-                {author && author.image != null ? (
+                {image ? (
+                  <img className="icon" src={image} />
+                ) : author && author.image != null ? (
                   <img className="icon" src={author.image} />
                 ) : (
                   <img className="icon" src="../../static/hipster.svg" />
                 )}{" "}
                 <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
+                  {name
+                    ? name
+                    : author && author.name
+                    ? author.name
+                    : "BeSavvy"}
                 </div>
               </IconBlock>
             </Question>
@@ -688,13 +721,19 @@ const SingleTest = (props) => {
                 <div className="question_box">
                   <div className="question_text">{t("show_explainer")}</div>
                   <IconBlock>
-                    {author && author.image != null ? (
+                    {image ? (
+                      <img className="icon" src={image} />
+                    ) : author && author.image != null ? (
                       <img className="icon" src={author.image} />
                     ) : (
                       <img className="icon" src="../../static/hipster.svg" />
                     )}{" "}
                     <div className="name">
-                      {author && author.name ? author.name : "BeSavvy"}
+                      {name
+                        ? name
+                        : author && author.name
+                        ? author.name
+                        : "BeSavvy"}
                     </div>
                   </IconBlock>
                 </div>
@@ -728,13 +767,19 @@ const SingleTest = (props) => {
                   <div className="question_box">
                     <div className="question_text">{parse(ifWrong)}</div>
                     <IconBlock>
-                      {author && author.image != null ? (
+                      {image ? (
+                        <img className="icon" src={image} />
+                      ) : author && author.image != null ? (
                         <img className="icon" src={author.image} />
                       ) : (
                         <img className="icon" src="../../static/hipster.svg" />
                       )}{" "}
                       <div className="name">
-                        {author && author.name ? author.name : "BeSavvy"}
+                        {name
+                          ? name
+                          : author && author.name
+                          ? author.name
+                          : "BeSavvy"}
                       </div>
                     </IconBlock>
                   </div>
@@ -752,13 +797,19 @@ const SingleTest = (props) => {
                 <div className="question_box">
                   <div className="question_text">{t("show_correct")}</div>
                   <IconBlock>
-                    {author && author.image != null ? (
+                    {image ? (
+                      <img className="icon" src={image} />
+                    ) : author && author.image != null ? (
                       <img className="icon" src={author.image} />
                     ) : (
                       <img className="icon" src="../../static/hipster.svg" />
                     )}{" "}
                     <div className="name">
-                      {author && author.name ? author.name : "BeSavvy"}
+                      {name
+                        ? name
+                        : author && author.name
+                        ? author.name
+                        : "BeSavvy"}
                     </div>
                   </IconBlock>
                 </div>
@@ -787,13 +838,19 @@ const SingleTest = (props) => {
                   <div className="question_box">
                     <div className="question_text">{t("outline_color")}</div>
                     <IconBlock>
-                      {author && author.image != null ? (
+                      {image ? (
+                        <img className="icon" src={image} />
+                      ) : author && author.image != null ? (
                         <img className="icon" src={author.image} />
                       ) : (
                         <img className="icon" src="../../static/hipster.svg" />
                       )}{" "}
                       <div className="name">
-                        {author && author.name ? author.name : "BeSavvy"}
+                        {name
+                          ? name
+                          : author && author.name
+                          ? author.name
+                          : "BeSavvy"}
                       </div>
                     </IconBlock>
                   </div>
@@ -813,6 +870,8 @@ const SingleTest = (props) => {
           comments={props.comments}
           answers={props.answers}
           correct={props.true}
+          name={props.name}
+          image={props.image}
           mes={mes}
           type={props.type}
           next={props.next}

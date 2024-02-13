@@ -176,25 +176,29 @@ const NewBlock = (props) => {
         <CreateNewTest lessonID={lesson.id} getResult={getResult} />
       )}
       {saved && type == "NewTest" && data && (
-        <SingleTest
-          id={data.id}
-          testID={data.id}
-          question={data.question}
-          type={data.type}
-          answers={data.answers}
-          true={data.correct}
-          comments={data.comments}
-          complexity={data.complexity}
-          ifRight={data.ifRight}
-          ifWrong={data.ifWrong}
-          next={data.next}
-          user={data.user.id}
-          user_name={data.user}
-          me={me}
-          lessonID={lesson.id}
-          getResult={getResult}
-          passUpdated={passUpdated}
-        />
+        <>
+          <SingleTest
+            id={data.id}
+            testID={data.id}
+            question={data.question}
+            type={data.type}
+            answers={data.answers}
+            name={data.name}
+            image={data.image}
+            true={data.correct}
+            comments={data.comments}
+            complexity={data.complexity}
+            ifRight={data.ifRight}
+            ifWrong={data.ifWrong}
+            next={data.next}
+            user={data.user.id}
+            user_name={data.user}
+            me={me}
+            lessonID={lesson.id}
+            getResult={getResult}
+            passUpdated={passUpdated}
+          />
+        </>
       )}
       {type == "NewTest" && (
         <Block getOldResult={getOldResult} tests={lesson.newTests} />

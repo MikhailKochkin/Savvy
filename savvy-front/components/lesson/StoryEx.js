@@ -214,6 +214,8 @@ const StoryEx = (props) => {
           comments={el.comments}
           true={el.correct}
           user={el.user.id}
+          name={el.name}
+          image={el.image}
           user_name={el.user}
           type={el.type}
           ifRight={el.ifRight}
@@ -246,6 +248,8 @@ const StoryEx = (props) => {
           lesson={lesson}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
+          name={el.name}
+          image={el.image}
           hidden={true}
           lessonID={lesson.id}
           quizID={el.id}
@@ -280,12 +284,10 @@ const StoryEx = (props) => {
     } else if (task.type.toLowerCase() === "teamquest") {
       el = lesson.teamQuests.find((t) => t.id === task.id);
       if (!el) return;
-
       item = (
         <TeamQuest
           key={el.id}
           lessonID={lesson.id}
-          // getResults={getResults}
           me={me}
           teamQuest={el}
           quizes={lesson.quizes}
@@ -299,7 +301,6 @@ const StoryEx = (props) => {
     } else if (task.type.toLowerCase() === "shot") {
       el = lesson.shots.find((shot) => shot.id === task.id);
       if (!el) return;
-
       item = (
         <Shots
           key={el.id}

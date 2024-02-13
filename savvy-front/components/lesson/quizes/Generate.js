@@ -320,6 +320,31 @@ const Circle = styled.div`
   }
 `;
 
+const OptionsGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-width: 60%;
+  max-width: 80%;
+  margin-bottom: 20px;
+`;
+
+const Option = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid #c4c4c4;
+  padding: 10px 15px;
+  background: #fff;
+  cursor: pointer;
+  margin-right: 3%;
+  margin-bottom: 2%;
+  height: 50px;
+  transition: 0.3s;
+  &:hover {
+    border: 1px solid #3f51b5;
+  }
+`;
+
 const Generate = (props) => {
   const { author, me, story, ifRight, ifWrong } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
@@ -329,6 +354,7 @@ const Generate = (props) => {
   const [progress, setProgress] = useState("false");
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [generating, setGenerating] = useState(false);
+  const [areIdeasShown, setAreIdeasShown] = useState(false);
 
   const [createQuizResult, { data, loading, error }] = useMutation(
     CREATE_QUIZRESULT_MUTATION
@@ -355,7 +381,6 @@ const Generate = (props) => {
   const getMatchingAnswers = async () => {
     let matchedAnswers = [];
     setProgress("true");
-    console.log("props.answers", props.answers);
     // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
 
@@ -442,6 +467,14 @@ const Generate = (props) => {
     return matchedAnswers;
   };
 
+  const hasNonEmptyNextIdAndType = (array) => {
+    return array.some(
+      (element) => element.next_id !== "" && element.next_type !== ""
+    );
+  };
+
+  console.log("props.answers.answerElements", props.answers.answerElements);
+
   return (
     <Question story={story}>
       {/* 2.1 Question part */}
@@ -519,23 +552,93 @@ const Generate = (props) => {
           <Circle onClick={() => setIdeas(ideas.slice(0, -1))}>-1</Circle>
           <Circle onClick={(e) => setIdeas([...ideas, ""])}>+1</Circle>
         </Group>
-        {nextQuestions && nextQuestions.length > 0 && (
-          <div className="question_box">
-            <div className="question_text">
-              <p>{t("ideas_result")}</p>
-            </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
+        {nextQuestions &&
+          nextQuestions.length > 0 &&
+          (hasNonEmptyNextIdAndType(nextQuestions) ? (
+            <div className="question_box">
+              <div className="question_text">
+                <p>{t("ideas_result")}</p>
               </div>
-            </IconBlock>
-          </div>
-        )}
+              <IconBlock>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
+              </IconBlock>
+            </div>
+          ) : (
+            <>
+              <div className="question_box">
+                <div className="question_text">
+                  <p>🎉 Great job!</p>
+                  <p>
+                    Would you like to take a look at other ideas I have come up
+                    with?
+                  </p>
+                </div>
+                <IconBlock>
+                  {author && author.image != null ? (
+                    <img className="icon" src={author.image} />
+                  ) : (
+                    <img className="icon" src="../../static/hipster.svg" />
+                  )}{" "}
+                  <div className="name">
+                    {author && author.name ? author.name : "BeSavvy"}
+                  </div>
+                </IconBlock>
+              </div>
+              <div className="answer">
+                <IconBlock>
+                  <div className="icon2">
+                    {me && me.image ? (
+                      <img className="icon" src={me.image} />
+                    ) : me.surname ? (
+                      `${me.name[0]}${me.surname[0]}`
+                    ) : (
+                      `${me.name[0]}${me.name[1]}`
+                    )}
+                  </div>{" "}
+                  <div className="name">{me.name}</div>
+                </IconBlock>{" "}
+                <OptionsGroup>
+                  <Option
+                    onClick={(e) => {
+                      setAreIdeasShown(true);
+                      // setHidden(false);
+                    }}
+                  >
+                    {t("yes")}
+                  </Option>
+                </OptionsGroup>
+              </div>
+              {areIdeasShown && (
+                <div className="question_box">
+                  <div className="question_text">
+                    <p>These are my ideas:</p>
+                    <ul>
+                      {props.answers.answerElements.map((idea) => (
+                        <li>{idea.answer}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <IconBlock>
+                    {author && author.image != null ? (
+                      <img className="icon" src={author.image} />
+                    ) : (
+                      <img className="icon" src="../../static/hipster.svg" />
+                    )}{" "}
+                    <div className="name">
+                      {author && author.name ? author.name : "BeSavvy"}
+                    </div>
+                  </IconBlock>
+                </div>
+              )}
+            </>
+          ))}
       </>
     </Question>
   );

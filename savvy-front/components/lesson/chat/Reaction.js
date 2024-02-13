@@ -134,6 +134,7 @@ const IconBlock = styled.div`
     color: #8f93a3;
     max-width: 80px;
     margin: 0 7px;
+    line-height: 1.4;
   }
 `;
 
@@ -215,8 +216,8 @@ const Reaction = (props) => {
             <Message key={i} time={i} className="student">
               <IconBlock>
                 <Icon className="icon2" background={m.author}>
-                  {m.image && <img className="icon" src={m.image} />}
-                  {!m.image &&
+                  {me.image && <img className="icon" src={me.image} />}
+                  {!me.image &&
                     (me && me.image ? (
                       <img className="icon" src={me.image} />
                     ) : me.surname ? (
@@ -252,27 +253,33 @@ const Reaction = (props) => {
         ))}
         {leftReactions.length > 0 && (
           <>
-            {usedReactions.length > 0 && (
+            {/* {usedReactions.length > 0 && (
               <Message className="author">
                 <div className="author_text">{t("more_explain")}</div>
                 <IconBlock>
-                  {author && author.image != null ? (
+                  {m && m.image ? (
+                    <img className="icon" src={m.image} />
+                  ) : author && author.image != null ? (
                     <img className="icon" src={author.image} />
                   ) : (
                     <img className="icon" src="../../static/hipster.svg" />
                   )}
+
                   <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
+                    {m
+                      ? m.name
+                      : author && author.name
+                      ? author.name
+                      : "BeSavvy"}
                   </div>
                 </IconBlock>
               </Message>
-            )}
-            <br />
+            )} */}
             <Message className="student">
               <IconBlock>
                 <Icon className="icon2" background={m.author}>
-                  {m.image && <img className="icon" src={m.image} />}
-                  {!m.image &&
+                  {me.image && <img className="icon" src={me.image} />}
+                  {!me.image &&
                     (me && me.image ? (
                       <img className="icon" src={me.image} />
                     ) : me.surname ? (
@@ -313,8 +320,8 @@ const Reaction = (props) => {
           <Message className="student">
             <IconBlock>
               <Icon className="icon2" background={m.author}>
-                {m.image && <img className="icon" src={m.image} />}
-                {!m.image &&
+                {me.image && <img className="icon" src={me.image} />}
+                {!me.image &&
                   (me && me.image ? (
                     <img className="icon" src={me.image} />
                   ) : me.surname ? (

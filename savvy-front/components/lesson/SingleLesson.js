@@ -117,6 +117,8 @@ const SINGLE_LESSON_QUERY = gql`
         ifWrong
         answer
         answers
+        name
+        image
         next
         createdAt
         user {
@@ -222,6 +224,8 @@ const SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         next
+        name
+        image
         question
         createdAt
         user {

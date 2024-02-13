@@ -152,10 +152,11 @@ const Course = (props) => {
           </div>
           <div onClick={(e) => setOpen(!open)}>{open ? "⬆️" : "⬇️"}</div>
         </div>
+        {console.log("c.lessons", c.lessons)}
         {open && (
           <div className="lessons">
-            {c.lessons
-              .filter((l) => l.published)
+            {[...c.lessons]
+              .filter((l) => l.type.toLowerCase() !== "regular")
               .sort((a, b) => (a.number > b.number ? 1 : -1))
               .map((l, i) => (
                 <div className="lesson_row">

@@ -306,7 +306,7 @@ const Progress2 = styled.div`
 `;
 
 const Prompt = (props) => {
-  const { author, me, story, ifRight, ifWrong } = props;
+  const { author, me, story, ifRight, ifWrong, name, image } = props;
   const [text, setText] = useState(""); // The answer provided by the student
   const [generating, setGenerating] = useState(false);
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
@@ -376,13 +376,15 @@ const Prompt = (props) => {
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
         <IconBlock>
-          {author && author.image != null ? (
+          {image ? (
+            <img className="icon" src={image} />
+          ) : author && author.image != null ? (
             <img className="icon" src={author.image} />
           ) : (
             <img className="icon" src="../../static/hipster.svg" />
           )}{" "}
           <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
+            {name ? name : author && author.name ? author.name : "BeSavvy"}
           </div>
         </IconBlock>{" "}
       </div>
@@ -435,13 +437,15 @@ const Prompt = (props) => {
         <div className="question_box" id={`ideal_answer_${props.id}`}>
           <div className="question_text">{recommendation}</div>
           <IconBlock>
-            {author && author.image != null ? (
+            {image ? (
+              <img className="icon" src={image} />
+            ) : author && author.image != null ? (
               <img className="icon" src={author.image} />
             ) : (
               <img className="icon" src="../../static/hipster.svg" />
             )}{" "}
             <div className="name">
-              {author && author.name ? author.name : "BeSavvy"}
+              {name ? name : author && author.name ? author.name : "BeSavvy"}
             </div>
           </IconBlock>{" "}
         </div>

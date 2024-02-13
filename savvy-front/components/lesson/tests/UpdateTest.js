@@ -17,6 +17,8 @@ const UPDATE_TEST_MUTATION = gql`
     $goal: String
     $complexity: Int
     $type: String
+    $name: String
+    $image: String
     $ifRight: String
     $ifWrong: String
   ) {
@@ -31,6 +33,8 @@ const UPDATE_TEST_MUTATION = gql`
       ifRight: $ifRight
       ifWrong: $ifWrong
       type: $type
+      name: $name
+      image: $image
     ) {
       id
       answers
@@ -43,6 +47,8 @@ const UPDATE_TEST_MUTATION = gql`
       ifWrong
       next
       question
+      name
+      image
       createdAt
       user {
         id
@@ -199,6 +205,18 @@ const CustomSelect1 = styled.div`
   }
 `;
 
+const Input = styled.input`
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  width: 80%;
+  padding: 5px;
+  font-family: Montserrat;
+  font-weight: 500;
+  .com {
+    border-top: 1px solid #c4c4c4;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -219,7 +237,8 @@ const UpdateTest = (props) => {
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
-
+  const [image, setImage] = useState(props.image ? props.image : null);
+  const [name, setName] = useState(props.name ? props.name : null);
   const { t } = useTranslation("lesson");
 
   const handleArray = (val, name, i) => {
@@ -253,7 +272,6 @@ const UpdateTest = (props) => {
   };
 
   const { testID, mes, lessonID } = props;
-  // console.log("options", options, answers, comments);
   return (
     <Styles>
       <h3>Type</h3>
@@ -268,6 +286,10 @@ const UpdateTest = (props) => {
       </select>
       <h3>Goal</h3>
       <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
+      <h3>Name</h3>
+      <Input defaultValue={name} onChange={(e) => setName(e.target.value)} />
+      <h3>Image</h3>
+      <Input defaultValue={image} onChange={(e) => setImage(e.target.value)} />
       <Comment>
         <DynamicLoadedEditor
           id="question"
@@ -390,6 +412,8 @@ const UpdateTest = (props) => {
           complexity,
           type,
           goal,
+          name,
+          image,
           ifRight: ifRight,
           ifWrong: ifWrong,
         }}

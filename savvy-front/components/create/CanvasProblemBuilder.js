@@ -127,6 +127,31 @@ const StyledModal = Modal.styled`
   }
 `;
 
+const QuestionButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  .directionButton {
+    width: 90%;
+    font-size: 1.2rem;
+    border: 1px solid #eef1f4;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .circle_connector {
+      background-color: #a5a5a5;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+  }
+`;
+
 const CanvasProblemBuilder = (props) => {
   const canvasWidth = 500; // You can adjust this
   const canvasHeight = 500; // You can adjust this
@@ -435,6 +460,25 @@ const CanvasProblemBuilder = (props) => {
         ref={dropCanvas}
         style={{ backgroundColor: "#f9f9fb" }}
       >
+        <g
+        // transform={`scale(${zoomLevel})`}
+        >
+          {messages.map((message, index) => (
+            <Message
+              key={index}
+              number={index + 1}
+              id={message.id}
+              content={message.content}
+              type={message.type}
+              position={message.position}
+              onConnect={connectMessages}
+              developElement={developElement}
+              onRemove={deleteMessage}
+              lesson={props.lesson}
+              // ... other props
+            />
+          ))}
+        </g>
         <svg
           style={{
             position: "absolute",
@@ -470,21 +514,23 @@ const CanvasProblemBuilder = (props) => {
 
               const x1 =
                 key === "true"
-                  ? message.position.x + squareSize
-                  : message.position.x + squareSize / 2;
+                  ? message.position.x + squareSize + 170
+                  : message.position.x + squareSize / 2 + 177;
               const y1 =
                 key === "true"
-                  ? message.position.y + squareSize / 2
-                  : message.position.y + squareSize;
+                  ? message.position.y + squareSize / 2 + 170
+                  : message.position.y + squareSize + 213;
 
               const x2 =
                 key === "true"
-                  ? target.position.x
-                  : target.position.x + squareSize / 2;
+                  ? target.position.x - 5
+                  : target.position.x + squareSize / 2 - 15;
               const y2 =
                 key === "true"
-                  ? target.position.y + squareSize / 2
-                  : target.position.y;
+                  ? target.position.y + squareSize / 2 + 15
+                  : target.position.y + 50;
+
+              // Check if the path intersects with the bounding box of the message element
 
               // Calculate control points using our function
               // Control point offset
@@ -514,7 +560,7 @@ const CanvasProblemBuilder = (props) => {
                     stroke={key === "true" ? "#72D47F" : "#EB5E55"}
                     markerEnd="url(#arrowhead)"
                     onClick={() => breakConnection(message.id, targetId, key)}
-                    style={{ pointerEvents: "auto" }}
+                    style={{ pointerEvents: "visiblePainted" }}
                     stroke-dasharray="5,5"
                   />
                   <circle
@@ -530,23 +576,6 @@ const CanvasProblemBuilder = (props) => {
             })
           )}
         </svg>
-        <g transform={`scale(${zoomLevel})`}>
-          {messages.map((message, index) => (
-            <Message
-              key={index}
-              number={index + 1}
-              id={message.id}
-              content={message.content}
-              type={message.type}
-              position={message.position}
-              onConnect={connectMessages}
-              developElement={developElement}
-              onRemove={deleteMessage}
-              lesson={props.lesson}
-              // ... other props
-            />
-          ))}
-        </g>
       </div>
     </Styles>
   );
@@ -648,30 +677,30 @@ const Message = ({
           : null}
       </div>
       <button onClick={handleRemove}>X</button>
-      <div
-        ref={dragConnectorTrue}
-        style={{
-          width: "10px",
-          height: "10px",
-          backgroundColor: "#72D47F",
-          cursor: "pointer",
-          position: "absolute",
-          top: "95%",
-          right: "95%",
-        }}
-      ></div>
-      <div
-        ref={dragConnectorFalse}
-        style={{
-          width: "10px",
-          height: "10px",
-          backgroundColor: "#EB5E55",
-          cursor: "pointer",
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-        }}
-      ></div>
+      <QuestionButtons>
+        <div
+          className="directionButton"
+          ref={dragConnectorTrue}
+          style={{ position: "absolute", bottom: "50px" }}
+        >
+          <div>
+            {type.toLowerCase() == "newtest" || type.toLowerCase() == "quiz"
+              ? "True Answer"
+              : "Next"}
+          </div>
+          <div className="circle_connector"></div>
+        </div>
+        {(type.toLowerCase() == "newtest" || type.toLowerCase() == "quiz") && (
+          <div
+            className="directionButton"
+            ref={dragConnectorFalse}
+            style={{ position: "absolute", bottom: 0 }}
+          >
+            <div>False Answer</div>
+            <div className="circle_connector"></div>
+          </div>
+        )}
+      </QuestionButtons>
     </MessageStyles>
   );
 };

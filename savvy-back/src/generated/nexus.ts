@@ -2028,9 +2028,11 @@ export interface NexusGenInputs {
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     ifRight?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     ifWrong?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    image?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    name?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     next?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     question?: NexusGenEnums['SortOrder'] | null; // SortOrder
     testResults?: NexusGenInputs['TestResultOrderByRelationAggregateInput'] | null; // TestResultOrderByRelationAggregateInput
@@ -2053,9 +2055,11 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     next?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     question?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     testResults?: NexusGenInputs['TestResultListRelationFilter'] | null; // TestResultListRelationFilter
@@ -2078,9 +2082,11 @@ export interface NexusGenInputs {
     id?: string | null; // String
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     next?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     question?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     testResults?: NexusGenInputs['TestResultListRelationFilter'] | null; // TestResultListRelationFilter
@@ -2744,9 +2750,11 @@ export interface NexusGenInputs {
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     ifRight?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     ifWrong?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    image?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    name?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     next?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     question?: NexusGenEnums['SortOrder'] | null; // SortOrder
     quizResults?: NexusGenInputs['QuizResultOrderByRelationAggregateInput'] | null; // QuizResultOrderByRelationAggregateInput
@@ -2846,9 +2854,11 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     next?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     question?: NexusGenInputs['StringFilter'] | null; // StringFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
@@ -2871,9 +2881,11 @@ export interface NexusGenInputs {
     id?: string | null; // String
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     next?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     question?: NexusGenInputs['StringFilter'] | null; // StringFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
@@ -4361,8 +4373,10 @@ export interface NexusGenObjects {
     id: string; // String!
     ifRight?: string | null; // String
     ifWrong?: string | null; // String
+    image?: string | null; // String
     lessonID?: string | null; // String
     lessonId?: string | null; // String
+    name?: string | null; // String
     next?: NexusGenScalars['Json'] | null; // Json
     question: string[]; // [String!]!
     type?: string | null; // String
@@ -4510,8 +4524,10 @@ export interface NexusGenObjects {
     id: string; // String!
     ifRight?: string | null; // String
     ifWrong?: string | null; // String
+    image?: string | null; // String
     lessonID?: string | null; // String
     lessonId?: string | null; // String
+    name?: string | null; // String
     next?: NexusGenScalars['Json'] | null; // Json
     question: string; // String!
     type?: string | null; // String
@@ -5276,9 +5292,11 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     ifRight: string | null; // String
     ifWrong: string | null; // String
+    image: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
+    name: string | null; // String
     next: NexusGenScalars['Json'] | null; // Json
     question: string[]; // [String!]!
     testResults: NexusGenRootTypes['TestResult'][]; // [TestResult!]!
@@ -5505,9 +5523,11 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     ifRight: string | null; // String
     ifWrong: string | null; // String
+    image: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
+    name: string | null; // String
     next: NexusGenScalars['Json'] | null; // Json
     question: string; // String!
     quizResults: NexusGenRootTypes['QuizResult'][]; // [QuizResult!]!
@@ -6322,9 +6342,11 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     ifRight: 'String'
     ifWrong: 'String'
+    image: 'String'
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
+    name: 'String'
     next: 'Json'
     question: 'String'
     testResults: 'TestResult'
@@ -6551,9 +6573,11 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     ifRight: 'String'
     ifWrong: 'String'
+    image: 'String'
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
+    name: 'String'
     next: 'Json'
     question: 'String'
     quizResults: 'QuizResult'
@@ -7255,7 +7279,9 @@ export interface NexusGenArgTypes {
       goal?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
+      image?: string | null; // String
       lessonId?: string | null; // String
+      name?: string | null; // String
       question?: Array<string | null> | null; // [String]
       type?: string | null; // String
     }
@@ -7713,6 +7739,8 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
+      image?: string | null; // String
+      name?: string | null; // String
       next?: NexusGenInputs['NextType'] | null; // NextType
       question?: Array<string | null> | null; // [String]
       type?: string | null; // String
@@ -7796,7 +7824,9 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
+      image?: string | null; // String
       lessonId?: string | null; // String
+      name?: string | null; // String
       next?: NexusGenInputs['NextType'] | null; // NextType
       question?: string | null; // String
       type?: string | null; // String

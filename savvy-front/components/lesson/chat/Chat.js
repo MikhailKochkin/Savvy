@@ -21,15 +21,12 @@ const UPDATE_CHAT_MUTATION = gql`
 const Buttons = styled.div``;
 
 const Styles = styled.div`
-  /* padding: 70% 0; */
   width: 570px;
   margin: 20px 0;
   font-weight: 500;
   margin-bottom: 100px;
   display: flex;
   flex-direction: column;
-  /* background: #000000;
-  min-height: 100vh; */
   img {
     display: block;
     width: 100%;
@@ -137,9 +134,7 @@ const Next = styled.div`
     transition: 0.3s;
     animation-duration: 1s;
     animation-name: animate-fade;
-    /* animation-delay: 0.5s; */
     animation-fill-mode: both;
-
     @keyframes animate-fade {
       0% {
         opacity: 0;
