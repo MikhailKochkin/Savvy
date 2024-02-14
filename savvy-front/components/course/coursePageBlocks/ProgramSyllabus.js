@@ -152,7 +152,6 @@ const Course = (props) => {
           </div>
           <div onClick={(e) => setOpen(!open)}>{open ? "⬆️" : "⬇️"}</div>
         </div>
-        {console.log("c.lessons", c.lessons)}
         {open && (
           <div className="lessons">
             {[...c.lessons]
