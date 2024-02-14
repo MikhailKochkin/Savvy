@@ -344,8 +344,6 @@ const Mutation = mutationType({
         //     where: { id: referal },
         //   });
 
-        //   console.log("user.score + score", old_user.score, 100);
-
         //   const updated_user = await ctx.prisma.user.update({
         //     data: {
         //       score: old_user.score + 100,
