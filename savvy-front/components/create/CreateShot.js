@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { Mutation } from "@apollo/client/react/components";
@@ -31,7 +31,9 @@ const CREATE_SHOTS_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  displa: flex;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 const TestCreate = styled.div`
@@ -136,9 +138,27 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 });
 
 const CreateShot = (props) => {
-  const [parts, setParts] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [title, setTitle] = useState("Презентация");
+  const [parts, setParts] = useState(
+    props.initial_data?.content ? props.initial_data.content.parts : []
+  );
+  const [comments, setComments] = useState(
+    props.initial_data?.content ? props.initial_data.content.comments : []
+  );
+  const [title, setTitle] = useState(
+    props.initial_data ? props.initial_data.idea : "Deck"
+  );
+
+  // useEffect(() => {
+  //   console.log("props.initial_data in CreateShot", props.initial_data);
+  //   if (props.initial_data?.content) {
+  //     console.log(
+  //       "props.initial_data.content.parts",
+  //       props.initial_data.content.parts
+  //     );
+  //     setParts(props.initial_data.content.parts);
+  //     setComments(props.initial_data.content.comments);
+  //   }
+  // }, [props.initial_data]);
 
   const myCallback = (dataFromChild, name, index) => {
     let new_parts = parts;
@@ -171,10 +191,10 @@ const CreateShot = (props) => {
 
   return (
     <Styles>
-      <Advice>
+      {/* <Advice>
         Составьте слайды. Слайд состоит из двух частей: текста и комментария.
         Заполните информацию по каждому пункту для каждого слайда.
-      </Advice>
+      </Advice> */}
       <Mutation
         mutation={CREATE_SHOTS_MUTATION}
         variables={{
@@ -200,7 +220,7 @@ const CreateShot = (props) => {
               placeholder="Название документа"
               autoFocus
               required
-              defaultValue={"Презентация"}
+              defaultValue={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             <>
@@ -210,6 +230,7 @@ const CreateShot = (props) => {
                     <DynamicLoadedEditor
                       index={i}
                       // name={part}
+                      value={parts[i]}
                       getEditorText={myCallback}
                       placeholder={`Текст ${i + 1}`}
                     />
@@ -217,6 +238,7 @@ const CreateShot = (props) => {
                       <DynamicLoadedEditor
                         index={i}
                         // name={comment}
+                        value={comments[i]}
                         placeholder={`Комментарий к тексту ${i + 1}`}
                         getEditorText={myCallback2}
                       />

@@ -130,7 +130,17 @@ const Buttons = styled.div`
 `;
 
 const LessonBlock = (props) => {
-  const { el, lesson, index, me, el_type, el_id, saved, lessonData } = props;
+  const {
+    el,
+    lesson,
+    index,
+    me,
+    el_type,
+    el_id,
+    saved,
+    lessonData,
+    initial_data,
+  } = props;
   const [isSaved, setIsSaved] = useState(saved);
   const [isAdded, setIsAdded] = useState(saved);
   const [updated, setUpdated] = useState(false);
@@ -170,7 +180,13 @@ const LessonBlock = (props) => {
     d = null;
   }
   const [data, setData] = useState(d);
-  const [type, setType] = useState(props.el_type ? props.el_type : "");
+  const [type, setType] = useState(
+    props.el_type
+      ? props.el_type
+      : props.initial_data?.format
+      ? props.initial_data?.format
+      : ""
+  );
   const [idNum, setIdNum] = useState(props.el_id ? props.el_id : "");
 
   useEffect(() => {
@@ -178,10 +194,11 @@ const LessonBlock = (props) => {
     if (props.updateTemplate) setType(props.el_type ? props.el_type : "");
   });
 
-  // useEffect(() => {
-  //   console.log("type");
-  //   setType(props.el_type ? props.el_type : "");
-  // }, []);
+  useEffect(() => {
+    if (props.initial_data?.format) {
+      setType(props.initial_data?.format);
+    }
+  }, [props.initial_data]);
 
   const addBlock = (type) => {
     setType(type);
@@ -480,11 +497,22 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "note" && (
           <>
+            {console.log(
+              "lesson block note",
+              initial_data && initial_data.format == "note"
+                ? initial_data
+                : null
+            )}
             {!isSaved && el.id == undefined && (
               <CreateNote
                 lessonID={lesson.id}
                 getResult={getResult}
                 isSaved={isSaved}
+                initial_data={
+                  initial_data && initial_data.format == "note"
+                    ? initial_data
+                    : null
+                }
               />
             )}
             {(isSaved || d != null) && data && data.__typename == "Note" && (
@@ -507,11 +535,22 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "shot" && (
           <>
+            {console.log(
+              "initial_data in lesson block",
+              initial_data && initial_data.format == "slides"
+                ? initial_data
+                : null
+            )}
             {!isSaved && el.id == undefined && (
               <CreateShot
                 lessonID={lesson.id}
                 getResult={getResult}
                 isSaved={isSaved}
+                initial_data={
+                  initial_data && initial_data.format == "shot"
+                    ? initial_data
+                    : null
+                }
               />
             )}
             {(isSaved || d != null) && data && data.__typename == "Shot" && (
@@ -738,6 +777,11 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
                 me={me}
                 prompt={props.prompt}
+                initial_data={
+                  initial_data && initial_data.format == "chat"
+                    ? initial_data
+                    : null
+                }
               />
             )}
             {(isSaved || d != null) && data && data.__typename == "Chat" && (
@@ -775,6 +819,7 @@ const LessonBlock = (props) => {
                     text={data.text}
                     complexity={data.complexity}
                     textEditor={data}
+                    lesson={lesson}
                     me={me}
                     story={false}
                     lessonID={lesson.id}

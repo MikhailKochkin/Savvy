@@ -256,6 +256,7 @@ const UpdateQuiz = (props) => {
         <option value="FORM">Form</option>
         <option value="GENERATE">Generate Ideas</option>
         <option value="PROMPT">Check with AI</option>
+        <option value="FINDALL">Find All</option>
       </select>
       <label for="types">Format</label>
       <select
@@ -297,7 +298,7 @@ const UpdateQuiz = (props) => {
           getEditorText={setQuestion}
         />
       </Comment>
-      {type !== "GENERATE" && (
+      {type !== "GENERATE" && type !== "FINDALL" && (
         <textarea
           id="answer"
           name="answer"
@@ -306,7 +307,7 @@ const UpdateQuiz = (props) => {
           onChange={(e) => setAnswer(e.target.value)}
         />
       )}
-      {type == "GENERATE" && (
+      {(type == "GENERATE" || type == "FINDALL") && (
         <>
           <label for="types">Ideas</label>
           {answers.map((an, i) => (
@@ -317,7 +318,10 @@ const UpdateQuiz = (props) => {
                 placeholder={`Answer`}
                 onChange={(e) => {
                   const newAnswers = [...answers];
-                  newAnswers[i] = { ...newAnswers[i], answer: e.target.value }; // Create a new object for the specific element and update its property
+                  newAnswers[i] = {
+                    ...newAnswers[i],
+                    answer: e.target.value,
+                  }; // Create a new object for the specific element and update its property
                   setAnswers(newAnswers);
                 }}
               />

@@ -55,6 +55,7 @@ import {
   BiAlignRight,
   BiAlignMiddle,
   BiCommentDots,
+  BiCustomize,
 } from "react-icons/bi";
 import { FaQuoteLeft } from "react-icons/fa";
 // import Modal from "./Modal";
@@ -260,13 +261,10 @@ const Note = styled.span`
 
 const Conceal = styled.div`
   color: #3a5a40;
-  /* border-bottom: 1px solid #3a5a40; */
-  /* font-size: 2rem;
-  width: 100%;
-  margin: 3% 0;
-  padding: 3% 8%;
-  background-color: #f2fafb;
-  border-radius: 5px; */
+`;
+
+const Problem2 = styled.span`
+  color: brown;
 `;
 
 const Error = styled.span`
@@ -319,6 +317,7 @@ const StyledModal = Modal.styled`
     overflow-y: scroll;
   }
 `;
+
 // 1. Serializer – slate to html
 
 const serialize = (node) => {
@@ -344,6 +343,9 @@ const serialize = (node) => {
       }
       if (styles.includes("quiz")) {
         text = `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
+      }
+      if (styles.includes("problem")) {
+        text = `<span className="editor_problem" type="problem" elementId="${node.elementId}">${text}</span>`;
       }
       return text;
     } else {
@@ -384,6 +386,8 @@ const serialize = (node) => {
       return `<span className="editor_error" type="error" id="id" error_text="${node.error_text}" error_data="${node.error_text}">${children}</span>`;
     case "note":
       return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
+    case "problem":
+      return `<span className="editor_problem" type="problem" elementId="${node.elementId}">${children}</span>`;
     case "quiz":
       return `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${children}</span>`;
     case "video":
@@ -500,6 +504,17 @@ const deserialize = (el) => {
     );
   }
 
+  if (el.getAttribute("classname") == "editor_problem") {
+    return jsx(
+      "element",
+      {
+        type: "problem",
+        elementId: el.getAttribute("elementId"),
+      },
+      children.length > 0 ? children : [{ text: "" }]
+    );
+  }
+
   if (el.getAttribute("classname") == "align-right") {
     return jsx(
       "element",
@@ -611,10 +626,6 @@ const uploadFile = async (e, editor) => {
   );
   const file = await res.json();
   let link = file.secure_url;
-
-  // editor.selection.anchor.path == [0, 0] &&
-  //   editor.selection.anchor.offset == 0 &&
-  //   editor.insertBreak();
   editor.insertNode({
     type: "image",
     src: link,
@@ -717,25 +728,6 @@ const CustomEditor = {
     const block = { type: "conceal", data: text, children: [] };
     Transforms.wrapNodes(editor, block);
   },
-
-  // addQuiz(editor) {
-  //   let q = prompt("Вопрос: ");
-  //   let a = prompt("Ответ: ");
-  //   let ifr = prompt("Если правильно: ");
-  //   let ifw = prompt("Если неправильно: ");
-  //   Transforms.setNodes(
-  //     editor,
-  //     {
-  //       type: "quiz",
-  //       quiz: true,
-  //       question: q,
-  //       answer: a,
-  //       ifRight: ifr,
-  //       ifWrong: ifw,
-  //     },
-  //     { match: (n) => Text.isText(n), split: true }
-  //   );
-  // },
 };
 
 const withLinks = (editor) => {
@@ -746,7 +738,7 @@ const withLinks = (editor) => {
   // };
 
   editor.isInline = (element) =>
-    ["link", "note", "error", "quiz"].includes(element.type) ||
+    ["link", "note", "error", "quiz", "problem"].includes(element.type) ||
     isInline(element);
 
   editor.insertText = (text) => {
@@ -775,7 +767,14 @@ const insertComment = (editor, data, setModalData, setModalOpen) => {
     wrapComment(editor, data);
     // Open the modal and set the initial modal data
     setModalData(data);
-    // setModalOpen(true);
+  }
+};
+
+const insertProblem = (editor, data, setModalData, setModalOpen) => {
+  if (editor.selection) {
+    wrapProblem(editor, data);
+    // Open the modal and set the initial modal data
+    setModalData(data);
   }
 };
 
@@ -798,6 +797,24 @@ const wrapComment = (editor, data) => {
   } else {
     Transforms.wrapNodes(editor, com, { split: true });
     Transforms.collapse(editor, { edge: "end" });
+  }
+};
+
+const wrapProblem = (editor, data) => {
+  const { selection } = editor;
+  const isCollapsed = selection && Range.isCollapsed(selection);
+
+  const com = {
+    type: "problem",
+    elementId: data,
+    children: isCollapsed ? [{ text: data }] : [],
+  };
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, com);
+  } else {
+    Transforms.wrapNodes(editor, com, { split: true });
+    // Transforms.collapse(editor, { edge: "end" });
   }
 };
 
@@ -970,7 +987,10 @@ const App = (props) => {
         modalIfWrongData,
         notePath
       );
+    } else if (type == "createProblem") {
+      insertProblem(editor, modalData, setModalOpen, notePath);
     }
+
     handleCloseModal();
   };
 
@@ -1046,6 +1066,17 @@ const App = (props) => {
             {...props}
           />
         );
+      case "problem":
+        return (
+          <ProblemElement
+            editor={editor}
+            setModalData={setModalData}
+            setModalOpen={setModalOpen}
+            setNotePath={setNotePath}
+            setType={setType}
+            {...props}
+          />
+        );
       case "conceal":
         return <ConcealElement {...props} />;
       case "error":
@@ -1112,6 +1143,7 @@ const App = (props) => {
             />
           </>
         )}
+
         <div>Type: {type}</div>
         <button
           onClick={(e) => {
@@ -1133,7 +1165,6 @@ const App = (props) => {
           let arr = [];
           value.map((v) => arr.push(serialize(v)));
           props.getEditorText(arr.join(""));
-          // console.log("arr.join()", arr.join(""));
         }}
       >
         <FormatToolBar>
@@ -1276,6 +1307,14 @@ const App = (props) => {
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
+                    toggleElement(editor, "question");
+                  }}
+                >
+                  <BiCommentDots value={{ className: "react-icons" }} />
+                </ButtonStyle>
+                <ButtonStyle
+                  onMouseDown={(event) => {
+                    event.preventDefault();
                     setType("createNote");
                     setModalOpen(true);
                   }}
@@ -1303,10 +1342,11 @@ const App = (props) => {
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    toggleElement(editor, "question");
+                    setType("createProblem");
+                    setModalOpen(true);
                   }}
                 >
-                  <BiCommentDots value={{ className: "react-icons" }} />
+                  <BiCustomize value={{ className: "react-icons" }} />
                 </ButtonStyle>
               </>
             )}
@@ -1413,6 +1453,31 @@ const NoteElement = ({
     >
       {props.children}
     </Note>
+  );
+};
+
+const ProblemElement = ({
+  editor,
+  setModalData,
+  setModalOpen,
+  setNotePath,
+  setType,
+  ...props
+}) => {
+  return (
+    <Problem2
+      {...props.attributes}
+      onMouseDown={(event) => {
+        event.preventDefault(); // prevent Slate's default mouse down handling
+        setModalData(props.element.problem_data);
+        setModalOpen(true);
+        const path = ReactEditor.findPath(editor, props.element);
+        setNotePath(path); // store the path
+        setType("problem");
+      }}
+    >
+      {props.children}
+    </Problem2>
   );
 };
 

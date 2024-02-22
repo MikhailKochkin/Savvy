@@ -8,9 +8,11 @@ import { htmlToText } from "html-to-text";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
-
+import SingleProblem from "../problems/SingleProblem";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
+import smoothscroll from "smoothscroll-polyfill";
+
 import { CURRENT_USER_QUERY } from "../../User";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
@@ -407,8 +409,13 @@ const SingleTextEditor = (props) => {
   const [update, setUpdate] = useState(false);
   const [type, setType] = useState("");
   const [mistakesShown, setMistakesShown] = useState(false);
+  const [problemId, setProblemId] = useState();
 
   const { t } = useTranslation("lesson");
+
+  useEffect(() => {
+    smoothscroll.polyfill();
+  });
 
   const [createTextEditorResult, { data, loading, error }] = useMutation(
     CREATE_TEXTEDITORRESULT_MUTATION
@@ -432,12 +439,6 @@ const SingleTextEditor = (props) => {
       answer1: answer1,
       answer2: answer2,
     };
-    // console.log(
-    //   "answers",
-    //   containsOnlyNumbers(answer1),
-    //   containsOnlyNumbers(answer2)
-    // );
-
     let el = document.getElementById(chosenElement);
     e.target.innerHTML = "Checking...";
     let r;
@@ -487,7 +488,8 @@ const SingleTextEditor = (props) => {
             button2.addEventListener("click", show);
             e.target.after(button2);
           }
-          if (parseFloat(res.res) > 69) {
+          console.log("res.res", res, data);
+          if (parseFloat(res.res) > 65) {
             setResult(true);
             props.getResults(1);
             el.style.background = "#D9EAD3";
@@ -643,7 +645,16 @@ const SingleTextEditor = (props) => {
     props.passUpdated(true);
   };
 
-  const { textEditor, me, lessonID, story, complexity, text } = props;
+  const slide = (id) => {
+    var my_element = document.getElementById(id);
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+
+  const { textEditor, me, lessonID, story, complexity, text, lesson } = props;
   return (
     <>
       {me &&
@@ -764,6 +775,23 @@ const SingleTextEditor = (props) => {
                       });
                       setType("quiz");
                     }
+
+                    if (
+                      e.target &&
+                      (e.target.getAttribute("type") === "problem" ||
+                        (e.target.parentElement &&
+                          e.target.parentElement.getAttribute("type") ===
+                            "problem"))
+                    ) {
+                      // 1.1 add styles to the text with a mistake
+                      e.target.className = "edit";
+                      // 1.2 add data necessary tp prove student with feedback to state
+                      setType("problem");
+                      setProblemId(e.target.getAttribute("elementid"));
+                      setTimeout(() => {
+                        slide(e.target.getAttribute("elementid"));
+                      }, 500);
+                    }
                   }}
                 >
                   {parse(text)}
@@ -883,6 +911,20 @@ const SingleTextEditor = (props) => {
           getResult={getResult}
           switchUpdate={switchUpdate}
           passUpdated={passUpdated}
+        />
+      )}
+      {type == "problem" && problemId && (
+        <SingleProblem
+          key={problemId}
+          problem={lesson.problems.find((pr) => pr.id == problemId)}
+          complexity={
+            lesson.problems.find((pr) => pr.id == problemId).complexity
+          }
+          lessonID={lesson.problems.find((pr) => pr.id == problemId)}
+          me={me}
+          story={true}
+          lesson={lesson}
+          author={lesson.user}
         />
       )}
     </>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import CreateMessage from "./CreateMessage";
@@ -115,15 +115,20 @@ const Buttons = styled.div`
 `;
 
 const CreateChat = (props) => {
-  const { me, lessonData } = props;
+  const { me, lessonData, initial_data } = props;
   const [name, setName] = useState("Dialogue");
   const [generating, setGenerating] = useState(false);
-
   const [messages, setMessages] = useState([]);
   const [isGenerated, setIsGenerated] = useState(true);
   const [createChat, { data, loading, error }] =
     useMutation(CREATE_CHAT_MUTATION);
   const { t } = useTranslation("lesson");
+
+  useEffect(() => {
+    if (initial_data?.content?.messagesList) {
+      setMessages(initial_data.content.messagesList);
+    }
+  }, [initial_data]);
 
   const getMessage = (data) => {
     setMessages([...messages, data]);
@@ -158,44 +163,6 @@ const CreateChat = (props) => {
     old_messages[i].name = val;
     setMessages([...old_messages]);
   };
-
-  async function onGenerate(event) {
-    event.preventDefault();
-    setGenerating(true);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-            Imagine that you are a course author ${me.name} ${me.surname} ${me.work}. Create a dialogue for the following situation using the lesson name:${lessonData.name} and description ${lessonData.description}:
-           ${props.prompt} Return a dialogue in the following format:
-           {messages: [{number: 0,author: "author",text: "course author phrase",image: "",reactions: [],}]}.
-           The object property author can be one of two options: "author" or "student".
-            `,
-        }),
-      });
-
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw (
-          data.error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      setGenerating(false);
-
-      const generated_chat = JSON.parse(data.result.content);
-      setMessages([...generated_chat.messages]);
-      setIsGenerated(true);
-    } catch (error) {
-      // Consider implementing your own error handling logic here
-      console.error(error);
-      alert(error.message);
-    }
-  }
 
   return (
     <Styles>

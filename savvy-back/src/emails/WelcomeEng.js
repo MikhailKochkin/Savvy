@@ -432,7 +432,8 @@ const WelcomeEmailEng = (name, password, email) => `
   </head>
   <body>
   <!--<span class="preheader"
-      >Спасибо, что выбрали BeSavvy. Хотели в двух словах рассказать, как работают наши курсы.</span
+      >Thanks for creating an account on BeSavvy. Let me explain how BeSavvy works.
+</span
     >-->
     <table
       class="email-wrapper"
@@ -488,15 +489,10 @@ const WelcomeEmailEng = (name, password, email) => `
                         <!-- Action -->
                     
                         <p>
-                          There is a number of online courses for lawyers on the website. 
-                          Every course has a free week consisting of up to 5 lessons. 
-                          The free week can help you better understand the topic, check your existing knowledge or familiarize yourself with the course author.
-                          Please check it out. We make free weeks useful, entertaining and insightful. 
+                          BeSavvy is a simulation training platform. You will have a chance to go through different legal scenarios and develop multiple practical legal skills. 
+                          Find available simulators on the main page of the website or get access to private simulators from one of our partners. 
                         </p>
-                     
-
-                    
-
+              
                         <p>
                           If you have any questions, feel free to
                           <a href="mailto:{{mike@besavvy.app}}"

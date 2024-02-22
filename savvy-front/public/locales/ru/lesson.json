@@ -174,5 +174,14 @@
   "other_simulators": "Другие симуляторы",
   "find_related": "Найдите другие уроки и симуляторы",
   "lesson_menu": "Меню урока",
-  "open_development_page": "Открыть страницу разработки урока"
+  "open_development_page": "Открыть страницу разработки урока",
+  "how_many_options_are_left": "Сколько еще вариантов нужно предложить?",
+  "show_correct_answers": "Покажите правильные ответы",
+  "number_of_correct_guesses": "Число правильных ответов",
+  "let_me_give_a_hint": "Сейчас ситуация обстоит так:",
+  "great_job": "Отлично!",
+  "try_more": "Попробуй еще раз.",
+  "what_are_we_doing_next": "Что делаем дальше?",
+  "these_are_the_right_answers": "Вот правильные ответы: ",
+  "not_all_answers": "Но вы нашли еще не все ответы."
 }

@@ -173,5 +173,14 @@
   "other_simulators": "Other simulators",
   "find_related": "Find related lessons and simulators",
   "lesson_menu": "Lesson menu",
-  "open_development_page": "Open development page"
+  "open_development_page": "Open development page",
+  "how_many_options_are_left": "How many options are there left?",
+  "show_correct_answers": "Could you show me the correct answers?",
+  "number_of_correct_guesses": "№ of correct guesses",
+  "let_me_give_a_hint": "Let me give you a hint:",
+  "great_job": "Great job!",
+  "try_more": "Try one more time.",
+  "what_are_we_doing_next": "Now. What are we doing next?",
+  "these_are_the_right_answers": "These are the right answers: ",
+  "not_all_answers": "But you haven't found all the answers."
 }

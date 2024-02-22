@@ -8,6 +8,7 @@ import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import UpdateLesson from "./UpdateLesson";
 import LessonBlock from "./LessonBlock";
 import Analyzer from "./Analyzer";
+import GenerateLesson from "./GenerateLesson";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure) {
@@ -480,7 +481,13 @@ const LessonBuilder = (props) => {
   const [elements, setElements] = useState(
     props.lesson.structure && props.lesson.structure.lessonItems.length > 0
       ? props.lesson.structure.lessonItems
-      : templates["standard"][router.locale]
+      : [
+          {
+            id: undefined,
+            type: "Chat",
+            num: 1,
+          },
+        ]
   );
   const [lessonData, setLessonData] = useState({
     name: lesson.name,
@@ -628,6 +635,10 @@ const LessonBuilder = (props) => {
     addBlock(id);
   };
 
+  const passData = (blocks) => {
+    setElements([...blocks]);
+  };
+
   return (
     <Styles>
       <Container>
@@ -639,7 +650,8 @@ const LessonBuilder = (props) => {
           getTemplate={getTemplate}
           onUpdateLessonData={updateLessonData}
         />
-        <Analyzer elements={elements} lesson={lesson} />
+        {/* <Analyzer elements={elements} lesson={lesson} /> */}
+        {/* <GenerateLesson passData={passData} /> */}
         <BuilderPart id="builder_part">
           {[...elements].map((el, i) => {
             return (
@@ -661,6 +673,16 @@ const LessonBuilder = (props) => {
                   remove={remove}
                   addToLesson={addToLesson}
                   addPlace={addPlace}
+                  initial_data={
+                    el.status && el.status == "generated"
+                      ? {
+                          content: el.content,
+                          format: el.format,
+                          idea: el.idea,
+                          description: el.description,
+                        }
+                      : null
+                  }
                 />
               </>
             );

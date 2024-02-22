@@ -580,8 +580,7 @@ const Action = (props) => {
               ◼️{" "}
               {program
                 ? total_lessons_number
-                : coursePage.lessons.filter((l) => l.type !== "HIDDEN")
-                    .length}{" "}
+                : coursePage.lessons.filter((l) => l.published).length}{" "}
               {t("online_lessons")}
               {/* {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")} */}
             </div>

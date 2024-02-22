@@ -67,6 +67,7 @@ const SINGLE_PROGRAM_QUERY = gql`
           number
           type
           open
+          published
         }
       }
       #   published

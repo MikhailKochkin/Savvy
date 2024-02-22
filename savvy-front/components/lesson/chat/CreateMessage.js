@@ -194,10 +194,10 @@ const CreateMessage = (props) => {
   const { message } = props;
 
   const [author, setAuthor] = useState(
-    message.author.toLowerCase() ? message.author.toLowerCase() : "author"
+    message?.author?.toLowerCase() ? message.author.toLowerCase() : "author"
   );
   const [name, setName] = useState();
-  const [text, setText] = useState(message.text ? message.text : "");
+  const [text, setText] = useState(message?.text ? message.text : "");
   const [reactions, setReactions] = useState([]);
   const [image, setImage] = useState("");
 
@@ -229,7 +229,7 @@ const CreateMessage = (props) => {
             <select
               value={author}
               index={props.index}
-              defaultValue={message.author.toLowerCase()}
+              defaultValue={message?.author?.toLowerCase()}
               onChange={(e) => {
                 e.preventDefault();
                 updateAuthor(e.target.value);

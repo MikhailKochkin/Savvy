@@ -385,6 +385,7 @@ const StoryEx = (props) => {
           lessonID={lesson.id}
           text={el.text}
           complexity={el.complexity}
+          lesson={lesson}
           getResults={getResults}
           textEditor={el}
           me={me}

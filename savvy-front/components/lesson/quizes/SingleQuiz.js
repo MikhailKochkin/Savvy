@@ -12,6 +12,7 @@ import OpenQuestion from "./OpenQuestion";
 import Form from "./Form";
 import Generate from "./Generate";
 import Prompt from "./Prompt";
+import FindAll from "./FindAll";
 
 const Styles = styled.div`
   display: flex;
@@ -175,6 +176,24 @@ const SingleQuiz = (props) => {
           )}
           {props.type?.toLowerCase() == "prompt" && (
             <Prompt
+              question={props.question}
+              author={author}
+              me={me}
+              story={story}
+              goalType={props.goalType}
+              answer={props.answer}
+              answers={props.answers}
+              ifWrong={props.ifWrong}
+              ifRight={props.ifRight}
+              lessonId={props.lessonID}
+              quizId={props.quizID}
+              passResult={onMove}
+              name={props.name}
+              image={props.image}
+            />
+          )}
+          {props.type?.toLowerCase() == "findall" && (
+            <FindAll
               question={props.question}
               author={author}
               me={me}

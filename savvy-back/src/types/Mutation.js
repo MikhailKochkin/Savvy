@@ -1756,21 +1756,18 @@ const Mutation = mutationType({
         ifRight: stringArg(),
         ifWrong: stringArg(),
       },
-      resolve: async (
-        _,
-        {
-          lessonId,
-          answers,
-          correct,
-          comments,
-          question,
-          ifRight,
-          ifWrong,
-          type,
-          goal,
-        },
-        ctx
-      ) => {
+      resolve: async (_, args, ctx) => {
+        const lessonId = args.lessonId;
+        const answers = args.answers;
+        const comments = args.comments;
+        const correct = args.correct;
+        const question = args.question;
+        delete args.lessonId;
+        delete args.answers;
+        delete args.comments;
+        delete args.correct;
+        delete args.question;
+
         const new_data = {
           user: {
             connect: {
@@ -1795,12 +1792,7 @@ const Mutation = mutationType({
             set: [...question],
           },
           lessonID: lessonId,
-          ifRight,
-          ifWrong,
-          type,
-          name,
-          image,
-          goal,
+          ...args,
         };
 
         const newTest = await ctx.prisma.newTest.create({ data: new_data });

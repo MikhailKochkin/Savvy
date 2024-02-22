@@ -99,36 +99,25 @@ const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
 });
 
 const CreateSingleNote = (props) => {
-  const [text, setText] = useState("");
-
+  const [text, setText] = useState(
+    props.initial_data?.content?.text ? props.initial_data.content.text : ""
+  );
+  console.log("final text", props.initial_data?.content?.text);
   const { t } = useTranslation("lesson");
 
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
 
-  const uploadFile = async (e) => {
-    const files = e.target.files;
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "savvy-app");
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-    const file = await res.json();
-    alert(file.secure_url);
-  };
-
   const { lessonID } = props;
   return (
     <Container>
-      <Explainer></Explainer>
       <Editor>
-        <DynamicLoadedEditor getEditorText={myCallback} simple={true} />
+        <DynamicLoadedEditor
+          value={text}
+          getEditorText={myCallback}
+          simple={true}
+        />
       </Editor>
       <Mutation
         mutation={CREATE_NOTE_MUTATION}

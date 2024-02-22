@@ -345,7 +345,7 @@ const Option = styled.div`
   }
 `;
 
-const Generate = (props) => {
+const FindAll = (props) => {
   const { author, me, story, ifRight, ifWrong } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [ideas, setIdeas] = useState([""]);
@@ -355,6 +355,13 @@ const Generate = (props) => {
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [generating, setGenerating] = useState(false);
   const [areIdeasShown, setAreIdeasShown] = useState(false);
+  const [isAnswerCountShown, setIsAnswerCountShown] = useState(false);
+  const [answerCountText, setAnswerCountText] = useState("");
+  const [isFeedbackShown, setIsFeedbackShown] = useState(false);
+  const [AIhint, setAIHint] = useState(null);
+  const [expectedAnswers, setExpectedAnswers] = useState(
+    new Array(props.answers.answerElements.length).fill(null)
+  );
 
   const [createQuizResult, { data, loading, error }] = useMutation(
     CREATE_QUIZRESULT_MUTATION
@@ -390,6 +397,7 @@ const Generate = (props) => {
     let matchedIndexes = new Set();
     let correctIdeasList = [];
     let results = [];
+    let updatedExpectedAnswers = [...expectedAnswers]; // Initialize temporary array
 
     // 3. Iterate over each idea
     for (let idea of ideas) {
@@ -399,7 +407,6 @@ const Generate = (props) => {
           answer1: answer.answer,
           answer2: idea,
         };
-
         try {
           const response = await fetch(
             "https://arcane-refuge-67529.herokuapp.com/checker",
@@ -429,42 +436,45 @@ const Generate = (props) => {
             matchedIndexes.add(answer.index);
           }
           if (res.res > 60) {
-            correctIdeasList.push(idea);
+            correctIdeasList.push({
+              idea: idea,
+              matchedAnswer: answer,
+            });
+            updatedExpectedAnswers[answer.index] = answer; // Accumulate changes
           }
         } catch (error) {
           console.error("There was an error:", error);
         }
       }
     }
+
     let unique_values = [];
     results.forEach((item) => {
       const existingItem = unique_values.find((uv) => uv.idea === item.idea);
       if (!existingItem) {
-        let new_item = item;
-        unique_values.push(new_item);
+        unique_values.push({ ...item }); // Add a copy of the item if it doesn't exist
       } else if (parseFloat(item.result) > parseFloat(existingItem.result)) {
-        if (item.next_id && item.next_type) {
-          existingItem.next_id = item.next_id;
-          existingItem.result = item.result;
-          existingItem.next_type = item.next_type;
-        }
+        existingItem.result = item.result;
+        existingItem.next_id = item.next_id;
+        existingItem.next_type = item.next_type;
       }
     });
 
+    setProgress("false");
     setNextQuestions(matchedAnswers);
     setCorrectIdeas(correctIdeasList);
-    setProgress("false");
+    setIsFeedbackShown(true);
+    setExpectedAnswers(updatedExpectedAnswers); // Update state with accumulated changes
     createQuizResult({
       variables: {
         quiz: props.quizId,
         lessonId: props.lessonId,
+        hint: AIhint,
         ideasList: { quizIdeas: unique_values },
         comment: ``,
       },
     });
     props.passResult(true);
-
-    return matchedAnswers;
   };
 
   const hasNonEmptyNextIdAndType = (array) => {
@@ -473,6 +483,81 @@ const Generate = (props) => {
     );
   };
 
+  const countNullsAndIndices = (arr) => {
+    const nullCount = arr.filter((item) => item === null).length;
+    return nullCount;
+  };
+
+  const generateAnswerCountComment = (e) => {
+    e.preventDefault();
+    setAreIdeasShown(false);
+    let count_info = countNullsAndIndices(expectedAnswers);
+    let comment = `
+        <p>${t("number_of_correct_guesses")} – ${correctIdeas.length}. ${t(
+      "let_me_give_a_hint"
+    )}</p>
+        <ol>
+        ${expectedAnswers
+          .map((an, i) => {
+            if (an == null) {
+              return `<li>??</li>`;
+            } else {
+              return `<li>${
+                correctIdeas.find((el) => el.matchedAnswer.answer == an.answer)
+                  ? correctIdeas.find(
+                      (el) => el.matchedAnswer.answer == an.answer
+                    ).idea
+                  : "??"
+              }</li>`;
+            }
+          })
+          .join("")}
+        </ol>
+    
+    `;
+    setAnswerCountText(comment);
+
+    setIsAnswerCountShown(true);
+  };
+
+  const getHint = async (event) => {
+    setAIHint(null);
+    event.preventDefault();
+    setGenerating(true);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `
+          You are a law professor. You help your student answer this question ${props.question}
+          The correct answers are: ${props.answers.answerElements}
+          The student has already given these correct answers: ${correctIdeas}. But struggles to find the rest.
+          Give a detailed hint to the student in a Socratic manner that will help them find every remaining answers.
+          Answer in the same language as the text of the question. Answer in second person.`,
+        }),
+      });
+
+      if (response.status !== 200) {
+        throw (
+          (await response.json()).error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
+      }
+      const data = await response.json();
+      if (data.result.content) {
+        setAIHint(data.result.content);
+      } else {
+        setAIHint("Sorry, you are on your own");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+    setGenerating(false);
+  };
   return (
     <Question story={story}>
       {/* 2.1 Question part */}
@@ -489,11 +574,7 @@ const Generate = (props) => {
           </div>
         </IconBlock>{" "}
       </div>
-      {generating && (
-        <Progress2>
-          <TailSpin width="50" color="#2E80EC" />
-        </Progress2>
-      )}
+
       {/* 3.5. Generate ideas */}
       <>
         <div className="answer">
@@ -513,7 +594,10 @@ const Generate = (props) => {
             {ideas.map((idea, index) => {
               let inputColor;
 
-              if (props.goalType !== "ASSESS" && correctIdeas.includes(idea)) {
+              if (
+                props.goalType !== "ASSESS" &&
+                correctIdeas.filter((el) => el.idea == idea).length > 0
+              ) {
                 inputColor = "#D0EADB";
               } else {
                 inputColor = "#f3f3f3";
@@ -543,19 +627,25 @@ const Generate = (props) => {
             onClick={async (e) => {
               e.preventDefault();
               getMatchingAnswers(answer);
+              setIsAnswerCountShown(false);
             }}
           >
-            {t("evaluate_ideas")}
+            {t("check")}
           </Button1>
           <Circle onClick={() => setIdeas(ideas.slice(0, -1))}>-1</Circle>
           <Circle onClick={(e) => setIdeas([...ideas, ""])}>+1</Circle>
         </Group>
-        {nextQuestions &&
-          nextQuestions.length > 0 &&
-          (hasNonEmptyNextIdAndType(nextQuestions) ? (
+        {isFeedbackShown && (
+          <>
             <div className="question_box">
               <div className="question_text">
-                <p>{t("ideas_result")}</p>
+                <p>🎉 {t("great_job")}</p>
+                <p>
+                  {correctIdeas.length < props.answers.answerElements.length
+                    ? t("not_all_answers")
+                    : null}
+                  {t("what_are_we_doing_next")}
+                </p>
               </div>
               <IconBlock>
                 {author && author.image != null ? (
@@ -568,78 +658,106 @@ const Generate = (props) => {
                 </div>
               </IconBlock>
             </div>
-          ) : (
-            <>
-              <div className="question_box">
-                <div className="question_text">
-                  <p>🎉 Great job!</p>
-                  <p>
-                    Would you like to take a look at other ideas I have come up
-                    with?
-                  </p>
-                </div>
-                <IconBlock>
-                  {author && author.image != null ? (
-                    <img className="icon" src={author.image} />
+            <div className="answer">
+              <IconBlock>
+                <div className="icon2">
+                  {me && me.image ? (
+                    <img className="icon" src={me.image} />
+                  ) : me.surname ? (
+                    `${me.name[0]}${me.surname[0]}`
                   ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}{" "}
-                  <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
-                  </div>
-                </IconBlock>
-              </div>
-              <div className="answer">
-                <IconBlock>
-                  <div className="icon2">
-                    {me && me.image ? (
-                      <img className="icon" src={me.image} />
-                    ) : me.surname ? (
-                      `${me.name[0]}${me.surname[0]}`
-                    ) : (
-                      `${me.name[0]}${me.name[1]}`
-                    )}
-                  </div>{" "}
-                  <div className="name">{me.name}</div>
-                </IconBlock>{" "}
-                <OptionsGroup>
-                  <Option
-                    onClick={(e) => {
-                      setAreIdeasShown(true);
-                      // setHidden(false);
-                    }}
-                  >
-                    {t("yes")}
+                    `${me.name[0]}${me.name[1]}`
+                  )}
+                </div>{" "}
+                <div className="name">{me.name}</div>
+              </IconBlock>
+              <OptionsGroup>
+                {correctIdeas.length < props.answers.answerElements.length && (
+                  <Option onClick={(e) => generateAnswerCountComment(e)}>
+                    {t("how_many_options_are_left")}
                   </Option>
-                </OptionsGroup>
+                )}
+                {correctIdeas.length < props.answers.answerElements.length && (
+                  <Option onClick={(e) => getHint(e)}>
+                    {t("i_need_a_hint")}
+                  </Option>
+                )}
+                <Option
+                  onClick={(e) => {
+                    setIsAnswerCountShown(false);
+                    setAreIdeasShown(true);
+                    setAIHint(null);
+                  }}
+                >
+                  {t("show_correct_answers")}
+                </Option>
+              </OptionsGroup>
+            </div>
+          </>
+        )}
+        {generating && (
+          <Progress2>
+            <TailSpin width="50" color="#2E80EC" />
+          </Progress2>
+        )}
+        {/* 2.2 If AI hint */}
+        {AIhint && (
+          <div className="question_box">
+            <div className="question_text">
+              <p>{AIhint}</p>
+            </div>
+            <IconBlock>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
               </div>
-              {areIdeasShown && (
-                <div className="question_box">
-                  <div className="question_text">
-                    <p>These are my ideas:</p>
-                    <ul>
-                      {props.answers.answerElements.map((idea) => (
-                        <li>{idea.answer}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <IconBlock>
-                    {author && author.image != null ? (
-                      <img className="icon" src={author.image} />
-                    ) : (
-                      <img className="icon" src="../../static/hipster.svg" />
-                    )}{" "}
-                    <div className="name">
-                      {author && author.name ? author.name : "BeSavvy"}
-                    </div>
-                  </IconBlock>
-                </div>
-              )}
-            </>
-          ))}
+            </IconBlock>
+          </div>
+        )}
+        {isAnswerCountShown && (
+          <div className="question_box">
+            <div className="question_text">{parse(answerCountText)}</div>
+            <IconBlock>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
+            </IconBlock>
+          </div>
+        )}
+        {areIdeasShown && (
+          <div className="question_box">
+            <div className="question_text">
+              <p>{t("these_are_the_right_answers")}</p>
+              <ul>
+                {props.answers.answerElements.map((idea) => (
+                  <li>{idea.answer}</li>
+                ))}
+              </ul>
+            </div>
+            <IconBlock>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
+            </IconBlock>
+          </div>
+        )}
       </>
     </Question>
   );
 };
 
-export default Generate;
+export default FindAll;
