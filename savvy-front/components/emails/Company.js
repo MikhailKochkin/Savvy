@@ -32,7 +32,7 @@ const Styles = styled.div`
   .result {
     width: auto;
     display: inline-block;
-    background-color: #f4a261;
+    border: 2px solid #f4a261;
     color: #14213d;
     padding: 2px 10px;
     border-radius: 15px;
@@ -48,6 +48,12 @@ const Company = (props) => {
       <div className="company_name">
         {index + 1}. {company.name} – {emails.length}{" "}
         <button onClick={(e) => setOpen(!open)}>{open ? "⬆️" : "⬇️"}</button>
+      </div>
+      <div>
+        <div className="result">
+          {" "}
+          <b>Size:</b> {company.size}
+        </div>
       </div>
       <div>
         <b>Comment:</b> {parse(company.comment)}

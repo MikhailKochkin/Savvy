@@ -149,7 +149,7 @@ const Frame = styled.div`
 const Input = styled.input`
   border: 1px solid #c4c4c4;
   border-radius: 5px;
-  width: 100%;
+  width: 40px;
   padding: 5px;
   font-family: Montserrat;
   font-weight: 500;
@@ -286,6 +286,7 @@ const LessonRow = (props) => {
       >
         {isNumberUpdated ? (
           <Input
+            type="number"
             value={number}
             onChange={async (e) => {
               setNumber(parseInt(e.target.value));
@@ -427,6 +428,7 @@ const LessonRow = (props) => {
               let new_arr = [...tags, tag];
               setTags(new_arr);
               setTag("");
+              console.log("new_arr", new_arr);
               return updateLesson({
                 variables: {
                   id: lesson.id,

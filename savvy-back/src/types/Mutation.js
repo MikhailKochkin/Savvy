@@ -1715,7 +1715,7 @@ const Mutation = mutationType({
         const updates = { ...args };
         delete updates.id;
         delete updates.tags;
-        if (updates.tags) {
+        if (args.tags) {
           const updatedLesson = await ctx.prisma.lesson.update({
             data: {
               tags: {
@@ -1752,6 +1752,7 @@ const Mutation = mutationType({
         goal: stringArg(),
         type: stringArg(),
         name: stringArg(),
+        instructorName: stringArg(),
         image: stringArg(),
         ifRight: stringArg(),
         ifWrong: stringArg(),
@@ -2010,6 +2011,7 @@ const Mutation = mutationType({
         goal: stringArg(),
         goalType: stringArg(),
         name: stringArg(),
+        instructorName: stringArg(),
         image: stringArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
@@ -2049,6 +2051,9 @@ const Mutation = mutationType({
     t.field("createQuiz", {
       type: "Quiz",
       args: {
+        instructorName: stringArg(),
+        name: stringArg(),
+        image: stringArg(),
         question: stringArg(),
         answer: stringArg(),
         lessonId: stringArg(),
@@ -2105,6 +2110,7 @@ const Mutation = mutationType({
         check: stringArg(),
         goal: stringArg(),
         goalType: stringArg(),
+        instructorName: stringArg(),
         name: stringArg(),
         image: stringArg(),
         answers: arg({
@@ -2217,6 +2223,7 @@ const Mutation = mutationType({
       args: {
         lessonId: stringArg(),
         text: stringArg(),
+        name: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
@@ -2309,13 +2316,13 @@ const Mutation = mutationType({
         link_clicks: intArg(),
         isSecret: booleanArg(),
         complexity: intArg(),
+        name: stringArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
-        // console.log("args", args);
         delete updates.id;
         return ctx.prisma.note.update({
           data: updates,
@@ -2735,6 +2742,7 @@ const Mutation = mutationType({
       type: "Problem",
       args: {
         lessonId: stringArg(),
+        name: stringArg(),
         text: stringArg(),
         goal: stringArg(),
         steps: arg({
@@ -2770,6 +2778,7 @@ const Mutation = mutationType({
         complexity: intArg(),
         isSecret: booleanArg(),
         goal: stringArg(),
+        name: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -3246,6 +3255,7 @@ const Mutation = mutationType({
       type: "Shot",
       args: {
         lessonId: stringArg(),
+        name: stringArg(),
         title: stringArg(),
         parts: list(stringArg()),
         comments: list(stringArg()),
@@ -3281,24 +3291,27 @@ const Mutation = mutationType({
       type: "Shot",
       args: {
         id: stringArg(),
+        name: stringArg(),
         parts: list(stringArg()),
         comments: list(stringArg()),
         title: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const id = args.id;
-        //remove the ID from updates
+        const parts = args.parts;
+        const comments = args.comments;
         delete args.id;
-        //run the update method
+        delete args.parts;
+        delete args.comments;
         return ctx.prisma.shot.update({
           data: {
             parts: {
-              set: [...args.parts],
+              set: [...parts],
             },
             comments: {
-              set: [...args.comments],
+              set: [...comments],
             },
-            title: args.title,
+            ...args,
           },
           where: {
             id,
@@ -3361,6 +3374,7 @@ const Mutation = mutationType({
         lessonId: stringArg(),
         title: stringArg(),
         goal: stringArg(),
+        name: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;

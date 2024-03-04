@@ -95,39 +95,56 @@ const GenerateLesson = (props) => {
     // },
   ]);
   const [blocks, setBlocks] = useState([
-    // {
-    //   idea: "Выбор технологии разработки",
-    //   description:
-    //     "Определение наиболее подходящей технологии для создания программного обеспечения (ПО)",
-    //   format: "note",
-    //   status: "generated",
-    //   content: {
-    //     text: "<h2>Выбор технологии разработки</h2><p>Выбор технологии разработки является важным этапом при создании программного обеспечения (ПО). Он включает в себя определение наиболее подходящей технологии или набора технологий для реализации конкретного проекта.</p><p><b>Определение наиболее подходящей технологии</b></p><p>При выборе технологии разработки необходимо учитывать ряд факторов, таких как:</p><ul><li>Требования к функциональности ПО</li><li>Требования к производительности</li><li>Требования к безопасности</li><li>Наличие специалистов, знакомых с выбранной технологией</li><li>Стоимость разработки и поддержки</li></ul><p><b>Процесс выбора технологии разработки</b></p><p>Процесс выбора технологии разработки включает в себя следующие шаги:</p><ol><li>Анализ требований к ПО</li><li>Изучение существующих технологий</li><li>Сравнительный анализ технологий</li><li>Принятие решения о выборе технологии</li></ol><p><b>Важность выбора правильной технологии разработки</b></p><p>Выбор правильной технологии разработки может существенно повлиять на успешность проекта. Правильно подобранная технология позволяет эффективно реализовать требования к ПО, обеспечить его стабильную работу, масштабируемость и безопасность.</p><p>В итоге, выбор технологии разработки является важным решением, которое должно быть основано на анализе требований и сравнительном анализе доступных технологий.</p>",
-    //   },
-    // },
-    // {
-    //   idea: "Процесс выбора технологии разработки",
-    //   description:
-    //     "Определение требований к ПО, анализ технологий, оценка технологий, выбор наиболее подходящей технологии, внедрение выбранной технологии.",
-    //   format: "shot",
-    //   status: "generated",
-    //   content: {
-    //     parts: [
-    //       "<h2>Слайд 1. Определение требований к ПО</h2><p>Первый этап процесса выбора технологии разработки - определение требований к программному обеспечению. На этом этапе определяются функциональные и нефункциональные требования, которым должна удовлетворять выбранная технология.</p>",
-    //       "<h2>Слайд 2. Анализ технологий</h2><p>На втором этапе производится анализ различных технологий разработки, которые могут быть применены для реализации требований. Рассматриваются и сравниваются различные аспекты технологий, такие как производительность, стоимость, гибкость и поддержка сообщества.</p>",
-    //       "<h2>Слайд 3. Оценка технологий</h2><p>На третьем этапе происходит оценка каждой технологии на основе ранее определенных требований. Производится сравнение технологий и их соответствие требованиям. Это помогает сузить выбор и определить наиболее подходящие варианты.</p>",
-    //       "<h2>Слайд 4. Выбор наиболее подходящей технологии</h2><p>После оценки технологий происходит выбор наиболее подходящей технологии разработки. Этот выбор основан на анализе и оценке, а также учитывает бизнес-цели и ограничения проекта.</p>",
-    //       "<h2>Слайд 5. Внедрение выбранной технологии</h2><p>Последний этап процесса - внедрение выбранной технологии разработки. На этом этапе осуществляется практическая реализация выбранной технологии и интеграция ее в проект.</p>",
-    //     ],
-    //     comments: [
-    //       "<p>Давайте рассмотрим пример процесса выбора технологии разработки. Представьте, что у вас есть проект по созданию веб-приложения. На первом этапе вы определяете требования к функциональности и производительности приложения.</p>",
-    //       "<p>Затем, на втором этапе, вы проводите анализ различных технологий разработки, таких как Ruby on Rails, Angular и Django. Вы сравниваете их по производительности, стоимости и гибкости.</p>",
-    //       "<p>На третьем этапе вы оцениваете каждую технологию на основе определенных требований. Например, вы можете оценивать их по скорости разработки и поддержке сообщества.</p>",
-    //       "<p>После оценки технологий вы выбираете наиболее подходящую для вашего проекта. Например, если вам важна быстрая разработка, то можете выбрать Ruby on Rails.</p>",
-    //       "<p>И, наконец, на последнем этапе вы внедряете выбранную технологию разработки, создавая веб-приложение с использованием выбранного фреймворка.</p>",
-    //     ],
-    //   },
-    // },
+    {
+      content: {
+        messagesList: [
+          {
+            author: "author",
+            text: "Let's dive into the world of laws regulating capital markets. Have you heard about these laws before?",
+          },
+          {
+            author: "student",
+            text: "I've heard of them but I'm not sure what they are for.",
+          },
+          {
+            author: "author",
+            text: "These laws, such as the Securities Act of 1933, the Jobs Act of 2012, and the Sarbanes-Oxley Act of 2002, are designed to protect investors and the public from fraud. They aim to instill confidence in the public's capital by regulating the activities of companies involved in the capital markets.",
+          },
+        ],
+      },
+      description:
+        "Various federal laws such as the Securities Act of 1933, the Jobs Act of 2012, and the Sarbanes-Oxley Act of 2002, aim to protect investors and the public from fraud and to instill confidence in the public’s capital.",
+      format: "chat",
+      idea: "Laws regulating capital markets",
+      status: "generated",
+    },
+    {
+      content: {
+        parts: [
+          "<h2>Slide 1. Introduction to Blue Sky Laws</h2><p>Blue Sky Laws are state regulations designed to protect investors from securities fraud. These laws require companies to provide full and fair disclosure of their financial information before going public.",
+          "<h2>Slide 2. Purpose of Blue Sky Laws</h2><p>The main goal of Blue Sky Laws is to prevent financial misrepresentation and ensure that investors have access to accurate and transparent information about the companies they are investing in.",
+          "<h2>Slide 3. Role of the Securities Commissioner</h2><p>Each state has a securities commissioner who is responsible for enforcing Blue Sky Laws within their jurisdiction. The commissioner oversees the registration and regulation of securities offerings to ensure compliance with state laws.",
+        ],
+        comments: [
+          "<p>Blue Sky Laws play a crucial role in maintaining the integrity of the financial markets and protecting investors from fraudulent schemes. It is important for companies to adhere to these laws to build trust with their investors.</p>",
+        ],
+      },
+      description:
+        "States have enacted laws known as Blue Sky Laws to prevent financial misrepresentation in companies looking to go public, regulated by each state’s securities commissioner.",
+      format: "shot",
+      idea: "State laws to prevent financial misrepresentation",
+      status: "generated",
+    },
+    {
+      content: {
+        text: "<h2>Role of Lawyers in Helping Public Companies Comply with Laws</h2><p>Public companies operate in a complex legal environment where compliance with laws and regulations is crucial for their success and sustainability. This is where lawyers play a critical role in guiding these companies through the legal landscape.</p><p>Key Responsibilities:</p><ul><li>Ensuring Compliance: Lawyers help public companies understand and adhere to various laws and regulations that govern their operations. This includes securities laws, employment laws, environmental regulations, and more.</li><li>Avoiding Liability: By providing legal advice and counsel, lawyers assist public companies in mitigating risks and avoiding potential legal pitfalls that could lead to liability.</li><li>Handling Legal Proceedings: In the event of legal challenges such as subpoenas, investigations, or testimony by the SEC, lawyers represent public companies and navigate the legal process on their behalf.</li><li>Strategic Counsel: Lawyers offer strategic counsel to public companies on how to structure their operations and transactions in a way that minimizes legal risks and maximizes compliance.</li><li>Drafting Legal Documents: Lawyers draft and review various legal documents such as contracts, disclosures, and filings to ensure they are in compliance with applicable laws and regulations.</li></ul><p>Overall, the role of lawyers in helping public companies comply with laws is indispensable in today's regulatory environment, where legal compliance is a key factor in maintaining a company's reputation and profitability.</p>",
+      },
+      description:
+        "Lawyers are needed to help public companies comply with laws and regulations, avoid liability, and handle legal proceedings such as subpoenas, investigations, and testimony by the SEC.",
+      format: "note",
+      idea: "Role of lawyers in helping public companies comply with laws",
+      status: "generated",
+    },
   ]);
 
   const runBreaking = async (e) => {
@@ -150,7 +167,7 @@ const GenerateLesson = (props) => {
           Return these ideas as an object that looks like this. Use the same language as the text!!! 
 
           { 
-            "idea": [
+            "ideas": [
               {
                 "idea": "The concept of a contract in English law",
                 "description": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other.",
@@ -190,11 +207,11 @@ const GenerateLesson = (props) => {
       if (data.result.content) {
         try {
           let jsonArray = JSON.parse(data.result.content);
-          console.log("jsonArray", jsonArray);
-          console.log("ideas", jsonArray.ideas);
+          // console.log("jsonArray", jsonArray);
+          // console.log("ideas", jsonArray.ideas);
           setIdeas(jsonArray.ideas);
         } catch (error) {
-          console.error("Error parsing JSON:", error);
+          // console.error("Error parsing JSON:", error);
           alert("Error parsing JSON: " + error.message);
         }
       } else {
@@ -210,7 +227,6 @@ const GenerateLesson = (props) => {
   const runGenereation = async (e) => {
     e.preventDefault();
     setGenerating(true);
-    console.log(typeof ideas, ideas);
 
     await Promise.all(
       ideas.map(async (el) => {
@@ -363,9 +379,9 @@ const GenerateLesson = (props) => {
           }
           const data = await response.json();
           if (data.result.content) {
-            console.log("data.result.content", data.result.content);
+            // console.log("data.result.content", data.result.content);
             let new_block = JSON.parse(data.result.content);
-            console.log("new_block", typeof new_block, new_block);
+            // console.log("new_block", typeof new_block, new_block);
             let new_blocks = blocks;
             new_blocks.push(new_block);
             setBlocks(new_blocks);
@@ -378,7 +394,7 @@ const GenerateLesson = (props) => {
         }
       })
     );
-    console.log("blocks", blocks);
+    // console.log("blocks", blocks);
     setGenerating(false);
   };
 
@@ -469,7 +485,6 @@ const GenerateLesson = (props) => {
       <Button onClick={(e) => generateQuizzes(e)}>Generate Quizzes</Button>
       <br />
 
-      {console.log("blocks", blocks)}
       {/* {blocks?.length > 0 &&
         blocks.map((b) => (
           <li>

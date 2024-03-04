@@ -11,12 +11,20 @@ const UPDATE_SHOTS_MUTATION = gql`
   mutation UPDATE_SHOTS_MUTATION(
     $id: String!
     $title: String
+    $name: String
     $parts: [String!]
     $comments: [String!]
   ) {
-    updateShot(id: $id, title: $title, parts: $parts, comments: $comments) {
+    updateShot(
+      id: $id
+      title: $title
+      name: $name
+      parts: $parts
+      comments: $comments
+    ) {
       id
       title
+      name
       parts
       comments
       user {
@@ -32,7 +40,7 @@ const TestCreate = styled.div`
   width: 100%;
   padding: 1% 2%;
   margin: 5% 0;
-  input {
+  /* input {
     align-self: flex-start;
     margin-bottom: 3%;
     border-radius: 5px;
@@ -43,7 +51,7 @@ const TestCreate = styled.div`
     padding: 1.5% 5px;
     font-size: 1.6rem;
     outline: 0;
-  }
+  } */
 `;
 
 const Row = styled.div`
@@ -110,15 +118,27 @@ const Save = styled.button`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
 
-const CreateShot = (props) => {
+const UpdateShot = (props) => {
   const [parts, setParts] = useState([...props.parts]);
   const [comments, setComments] = useState([...props.comments]);
   const [title, setTitle] = useState(props.title);
+  const [name, setName] = useState(props.name);
   const { t } = useTranslation("lesson");
 
   const myCallback = (dataFromChild, name, index) => {
@@ -142,14 +162,13 @@ const CreateShot = (props) => {
     if (parts.length > 1) {
       let new_parts = [...parts];
       new_parts.pop();
-
       let new_comments = [...comments];
       new_comments.pop();
       setParts([...new_parts]);
       setComments([...new_comments]);
     }
   };
-
+  console.log("props.shotID", props.shotID);
   return (
     <Mutation
       mutation={UPDATE_SHOTS_MUTATION}
@@ -158,6 +177,7 @@ const CreateShot = (props) => {
         parts: parts,
         comments: comments,
         title: title,
+        name: name,
       }}
       refetchQueries={() => [
         {
@@ -169,15 +189,14 @@ const CreateShot = (props) => {
     >
       {(updateShot, { loading, error }) => (
         <TestCreate>
-          <input
-            id="title"
+          <NameInput
             name="title"
             spellCheck={true}
             placeholder="Doc name"
             autoFocus
             required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <>
             {_.times(parts.length, (i) => (
@@ -220,4 +239,4 @@ const CreateShot = (props) => {
   );
 };
 
-export default CreateShot;
+export default UpdateShot;

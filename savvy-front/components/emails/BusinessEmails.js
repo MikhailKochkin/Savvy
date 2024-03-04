@@ -6,9 +6,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Company from "./Company";
 
-// import { companyList, emailList } from "../../businessEmailList.js";
-// import { uniList, emailUniList } from "../../lawschool.js";
-// import emailSQEList from "../../sqeList.js";
+import {
+  companyList,
+  emailList,
+  company_tags,
+} from "../../businessEmailList.js";
+import { uniList, emailUniList } from "../../lawschool.js";
+import emailSQEList from "../../sqeList.js";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -101,6 +105,20 @@ const Buttons = styled.div`
   border-top: 1px dashed grey;
   padding-top: 25px;
   margin-top: 25px;
+`;
+
+const Tags = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 70%;
+  div {
+    padding: 5px;
+    border: 1px solid grey;
+    margin-right: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
@@ -234,6 +252,18 @@ const ClientData = (props) => {
           Law Schools
         </button>
       </div>
+      <Tags>
+        {company_tags.by_size.map((tag) => (
+          <div
+            onClick={(e) =>
+              setOrganizations(companyList.filter((c) => c.size == tag))
+            }
+          >
+            {tag}
+          </div>
+        ))}
+      </Tags>
+      <div>Organizations: {organizations.length}</div>
 
       {organizations.map((c, i) => {
         return (

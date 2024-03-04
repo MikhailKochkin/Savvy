@@ -13,6 +13,7 @@ const NewTest = objectType({
     t.model.lessonID();
     t.model.next();
     t.model.name();
+    t.model.instructorName();
     t.model.image();
     t.model.comments();
     t.model.question();
@@ -41,6 +42,7 @@ const Quiz = objectType({
     t.model.goalType();
     t.model.next();
     t.model.name();
+    t.model.instructorName();
     t.model.image();
     t.model.complexity();
     t.model.ifRight();
@@ -80,6 +82,7 @@ const Note = objectType({
   definition(t) {
     t.model.id();
     t.model.text();
+    t.model.name();
     t.model.next();
     t.model.type();
     t.model.link_clicks();
@@ -167,6 +170,7 @@ const Problem = objectType({
   definition(t) {
     t.model.id();
     t.model.text();
+    t.model.name();
     t.model.nodeType();
     t.model.complexity();
     t.model.isSecret();
@@ -250,6 +254,7 @@ const Shot = objectType({
   name: "Shot",
   definition(t) {
     t.model.id();
+    t.model.name();
     t.model.title();
     t.model.parts();
     t.model.comments();
@@ -269,6 +274,7 @@ const Document = objectType({
   definition(t) {
     t.model.id();
     t.model.title();
+    t.model.name();
     t.model.clauses();
     t.model.userId();
     t.model.complexity();

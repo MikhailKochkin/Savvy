@@ -2,6 +2,7 @@ import { useState, memo } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
+import parse from "html-react-parser";
 import "react-datepicker/dist/react-datepicker.css";
 import BusinessEmail from "./BusinessEmail";
 import FollowUpEmail from "./FollowUpEmail";
@@ -146,7 +147,8 @@ const UserCard = memo((props) => {
         </div>
         <div>
           {" "}
-          {props.comment} at {props.firm}
+          {parse(props.comment)}
+          {/* at {props.firm} */}
         </div>
         {props.linkedin && (
           <button>

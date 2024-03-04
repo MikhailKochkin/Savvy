@@ -497,12 +497,12 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "note" && (
           <>
-            {console.log(
+            {/* {console.log(
               "lesson block note",
               initial_data && initial_data.format == "note"
                 ? initial_data
                 : null
-            )}
+            )} */}
             {!isSaved && el.id == undefined && (
               <CreateNote
                 lessonID={lesson.id}
@@ -518,6 +518,7 @@ const LessonBlock = (props) => {
             {(isSaved || d != null) && data && data.__typename == "Note" && (
               <Note
                 text={data.text}
+                name={data.name}
                 me={me}
                 clicks={data.link_clicks}
                 user={lesson.user.id}
@@ -535,12 +536,12 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "shot" && (
           <>
-            {console.log(
+            {/* {console.log(
               "initial_data in lesson block",
               initial_data && initial_data.format == "slides"
                 ? initial_data
                 : null
-            )}
+            )} */}
             {!isSaved && el.id == undefined && (
               <CreateShot
                 lessonID={lesson.id}
@@ -564,6 +565,7 @@ const LessonBlock = (props) => {
                   shotID={data.id}
                   lessonID={lesson.id}
                   title={data.title}
+                  name={data.name}
                   userData={[]}
                   story={false}
                   getResult={getResult}

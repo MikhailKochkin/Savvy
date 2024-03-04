@@ -33,6 +33,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         link_clicks
         text
+        name
         type
         isSecret
         complexity
@@ -177,6 +178,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       }
       shots {
         id
+        name
         title
         parts
         comments

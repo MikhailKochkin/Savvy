@@ -72,7 +72,7 @@ const Styles = styled.div`
         margin-top: 10px;
         border: 1px solid #c2c2c2;
         color: #c2c2c2;
-        width: 45px;
+        /* width: 45px; */
         height: 45px;
         border-radius: 50px;
         display: flex;
@@ -243,10 +243,11 @@ const MenuColumn = styled.div`
       }
       #button_square {
         /* margin-top: 10px;*/
-        margin-left: 20px;
+        /* margin-left: 20px; */
         border: 1px solid #c2c2c2;
         color: #c2c2c2;
-        width: 35px;
+        /* width: 35px; */
+        padding: 10px;
         height: 35px;
         border-radius: 12px;
         display: flex;
@@ -256,9 +257,9 @@ const MenuColumn = styled.div`
         font-size: 1.4rem;
         cursor: pointer;
         transition: 0.5s;
-        &:hover {
+        /* &:hover {
           border: 1px solid #1a2980;
-        }
+        } */
         select {
           border: none;
           display: inline-block;
@@ -271,13 +272,10 @@ const MenuColumn = styled.div`
           -webkit-appearance: none;
           appearance: none;
           text-indent: 0.01px;
-          text-align-last: center;
-          text-align: center;
+          text-align-last: left;
+          text-align: left;
           text-overflow: "";
           cursor: pointer;
-          /* &:hover {
-            color: #1a2980;
-          } */
         }
         option {
           color: #c2c2c2;
@@ -813,10 +811,12 @@ const Feed = (props) => {
               <img className="icon" src="/static/navigation.svg" />
               <div>{t("navigate")}</div>
             </div>
+            {console.log("lessonElements", props.lesson, lesson_structure)}
             {openNavigation && (
               <div className="navigate_block">
                 <div className="nav">
-                  <div id="text">{t("choose_section")}</div>
+                  {/* <div id="text">{t("choose_section")}</div> */}
+                  <br />
                   <div id="button_square">
                     <select
                       id="num"
@@ -824,9 +824,27 @@ const Feed = (props) => {
                       value={num - 1}
                       onChange={(e) => search(parseInt(e.target.value))}
                     >
-                      {lessonElements.map((el, i) => (
+                      {lesson_structure.map((el, i) => (
                         <option key={i + "option3"} value={i - 1}>
-                          {i + 1}
+                          {i + 1}.{" "}
+                          {el.type.toLowerCase() == "chat"
+                            ? `${
+                                props.lesson.chats.find((ch) => ch.id == el.id)
+                                  .name
+                              }`
+                            : null}
+                          {el.type.toLowerCase() == "shot"
+                            ? `${
+                                props.lesson.shots.find((ch) => ch.id == el.id)
+                                  .name
+                              }`
+                            : null}
+                          {el.type.toLowerCase() == "note"
+                            ? `${
+                                props.lesson.notes.find((ch) => ch.id == el.id)
+                                  .name
+                              }`
+                            : null}
                         </option>
                       ))}
                     </select>

@@ -1236,6 +1236,7 @@ type Document {
   id: String!
   lesson: Lesson!
   lessonId: String!
+  name: String
   title: String!
   updatedAt: DateTime!
   user: User!
@@ -1322,6 +1323,7 @@ input DocumentWhereInput {
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
+  name: StringNullableFilter
   title: StringFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -1340,6 +1342,7 @@ input DocumentWhereUniqueInput {
   id: String
   lesson: LessonWhereInput
   lessonId: StringFilter
+  name: StringNullableFilter
   title: StringFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -2514,7 +2517,7 @@ type Mutation {
   createConstructionResult(answer: String, answers: ConstructionAnswers, attempts: Int, constructionId: String, elements: ElementsList, goal: String, lessonId: String): ConstructionResult
   createCoursePage(audience: String, courseType: String, description: String, image: String, published: Boolean, result: String, title: String): CoursePage
   createCourseVisit(coursePageId: String, studentId: String, visitsNumber: Int): CourseVisit
-  createDocument(goal: String, lessonId: String, title: String): Document
+  createDocument(goal: String, lessonId: String, name: String, title: String): Document
   createDocumentResult(answers: [String], documentId: String, drafts: [String], lessonId: String): DocumentResult
   createEmailCampaign(content: String, emails: EmailsList, name: String): EmailCampaign
   createEmailReminder(coursePageId: String, emailCampaignId: String, gap: Int, link: String, userId: String): EmailReminder
@@ -2526,19 +2529,19 @@ type Mutation {
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
   createMiniForum(lessonId: String, type: String, value: String): MiniForum
   createMiniStatement(miniforumId: String, text: String): Statement
-  createNewTest(answers: [String], comments: [String], correct: [Boolean], goal: String, ifRight: String, ifWrong: String, image: String, lessonId: String, name: String, question: [String], type: String): NewTest
-  createNote(lessonId: String, text: String): Note
+  createNewTest(answers: [String], comments: [String], correct: [Boolean], goal: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: [String], type: String): NewTest
+  createNote(lessonId: String, name: String, text: String): Note
   createOffer(courseId: String, discountPrice: Int, header: String, lessonId: String, price: Int, text: String, type: String): Offer
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
   createPost(image: String, summary: String, text: String, title: String): Post
   createPrivateOrder(coursePageId: String, promocode: String, userId: String): PaymentInfo
-  createProblem(goal: String, lessonId: String, steps: ProblemStructure, text: String): Problem
+  createProblem(goal: String, lessonId: String, name: String, steps: ProblemStructure, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createProgram(audience: String, description: String, goals: [String], header: [String], image: String, methods: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String): Program
-  createQuiz(answer: String, answers: ComplexAnswer, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
+  createQuiz(answer: String, answers: ComplexAnswer, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: String, type: String): Quiz
   createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeas, improvement: String, lessonId: String, quiz: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
-  createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
+  createShot(comments: [String], lessonId: String, name: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
   createStatement(forumId: String, miniforumId: String, text: String): Statement
   createTeam(name: String): Team
@@ -2604,19 +2607,19 @@ type Mutation {
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
-  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, name: String, next: NextType, question: [String], type: String): NewTest
-  updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String, type: String): Note
+  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextType, question: [String], type: String): NewTest
+  updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextType, text: String, type: String): Note
   updateOffer(courseId: String, discountPrice: Int, header: String, id: String, price: Int, text: String, type: String): Offer
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
-  updateProblem(complexity: Int, goal: String, id: String, isSecret: Boolean, steps: ProblemStructure, text: String): Problem
+  updateProblem(complexity: Int, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, lessonId: String, name: String, next: NextType, question: String, type: String): Quiz
+  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, next: NextType, question: String, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateScore(id: String, score: Int): User
-  updateShot(comments: [String], id: String, parts: [String], title: String): Shot
+  updateShot(comments: [String], id: String, name: String, parts: [String], title: String): Shot
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateTextEditor(complexity: Int, goal: String, id: String, name: String, text: String, totalMistakes: Int): TextEditor
@@ -2759,6 +2762,7 @@ type NewTest {
   ifRight: String
   ifWrong: String
   image: String
+  instructorName: String
   lesson: Lesson
   lessonID: String
   lessonId: String
@@ -2794,6 +2798,7 @@ input NewTestOrderByWithRelationInput {
   ifRight: SortOrderInput
   ifWrong: SortOrderInput
   image: SortOrderInput
+  instructorName: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
@@ -2822,6 +2827,7 @@ input NewTestWhereInput {
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
   image: StringNullableFilter
+  instructorName: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -2850,6 +2856,7 @@ input NewTestWhereUniqueInput {
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
   image: StringNullableFilter
+  instructorName: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -2887,6 +2894,7 @@ type Note {
   lessonID: String
   lessonId: String
   link_clicks: Int
+  name: String
   next: Json
   text: String!
   type: String
@@ -2918,6 +2926,7 @@ input NoteWhereInput {
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
   link_clicks: IntNullableFilter
+  name: StringNullableFilter
   next: JsonNullableFilter
   text: StringFilter
   type: StringNullableFilter
@@ -2939,6 +2948,7 @@ input NoteWhereUniqueInput {
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
   link_clicks: IntNullableFilter
+  name: StringNullableFilter
   next: JsonNullableFilter
   text: StringFilter
   type: StringNullableFilter
@@ -3338,6 +3348,7 @@ type Problem {
   lesson: Lesson!
   lessonID: String!
   lessonId: String!
+  name: String
   nodeID: String
   nodeType: String
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
@@ -3377,6 +3388,7 @@ input ProblemOrderByWithRelationInput {
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrder
   lessonId: SortOrder
+  name: SortOrderInput
   nodeID: SortOrderInput
   nodeType: SortOrderInput
   problemResults: ProblemResultOrderByRelationAggregateInput
@@ -3492,6 +3504,7 @@ input ProblemWhereInput {
   lesson: LessonWhereInput
   lessonID: StringFilter
   lessonId: StringFilter
+  name: StringNullableFilter
   nodeID: StringNullableFilter
   nodeType: StringNullableFilter
   problemResults: ProblemResultListRelationFilter
@@ -3519,6 +3532,7 @@ input ProblemWhereUniqueInput {
   lesson: LessonWhereInput
   lessonID: StringFilter
   lessonId: StringFilter
+  name: StringNullableFilter
   nodeID: StringNullableFilter
   nodeType: StringNullableFilter
   problemResults: ProblemResultListRelationFilter
@@ -3793,6 +3807,7 @@ type Quiz {
   ifRight: String
   ifWrong: String
   image: String
+  instructorName: String
   lesson: Lesson
   lessonID: String
   lessonId: String
@@ -3839,6 +3854,7 @@ input QuizOrderByWithRelationInput {
   ifRight: SortOrderInput
   ifWrong: SortOrderInput
   image: SortOrderInput
+  instructorName: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
@@ -3971,6 +3987,7 @@ input QuizWhereInput {
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
   image: StringNullableFilter
+  instructorName: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -3999,6 +4016,7 @@ input QuizWhereUniqueInput {
   ifRight: StringNullableFilter
   ifWrong: StringNullableFilter
   image: StringNullableFilter
+  instructorName: StringNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -4181,6 +4199,7 @@ type Shot {
   lesson: Lesson
   lessonID: String
   lessonId: String
+  name: String
   parts: [String!]!
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   title: String!
@@ -4271,6 +4290,7 @@ input ShotWhereInput {
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  name: StringNullableFilter
   parts: StringNullableListFilter
   shotResults: ShotResultListRelationFilter
   title: StringFilter
@@ -4289,6 +4309,7 @@ input ShotWhereUniqueInput {
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  name: StringNullableFilter
   parts: StringNullableListFilter
   shotResults: ShotResultListRelationFilter
   title: StringFilter

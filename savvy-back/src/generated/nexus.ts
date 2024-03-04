@@ -989,6 +989,7 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     title?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -1006,6 +1007,7 @@ export interface NexusGenInputs {
     id?: string | null; // String
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     title?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -2029,6 +2031,7 @@ export interface NexusGenInputs {
     ifRight?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     ifWrong?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     image?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    instructorName?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -2056,6 +2059,7 @@ export interface NexusGenInputs {
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    instructorName?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2083,6 +2087,7 @@ export interface NexusGenInputs {
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    instructorName?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2128,6 +2133,7 @@ export interface NexusGenInputs {
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     link_clicks?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     next?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
     type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2148,6 +2154,7 @@ export interface NexusGenInputs {
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     link_clicks?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     next?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
     type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2459,6 +2466,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenEnums['SortOrder'] | null; // SortOrder
     lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    name?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     nodeID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     nodeType?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     problemResults?: NexusGenInputs['ProblemResultOrderByRelationAggregateInput'] | null; // ProblemResultOrderByRelationAggregateInput
@@ -2550,6 +2558,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringFilter'] | null; // StringFilter
     lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     nodeID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     nodeType?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
@@ -2576,6 +2585,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringFilter'] | null; // StringFilter
     lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     nodeID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     nodeType?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
@@ -2751,6 +2761,7 @@ export interface NexusGenInputs {
     ifRight?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     ifWrong?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     image?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    instructorName?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -2855,6 +2866,7 @@ export interface NexusGenInputs {
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    instructorName?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2882,6 +2894,7 @@ export interface NexusGenInputs {
     ifRight?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     ifWrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    instructorName?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -3089,6 +3102,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     parts?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     title?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -3106,6 +3120,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     parts?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     title?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -4233,6 +4248,7 @@ export interface NexusGenObjects {
     goal?: string | null; // String
     id: string; // String!
     lessonId: string; // String!
+    name?: string | null; // String
     title: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
@@ -4374,6 +4390,7 @@ export interface NexusGenObjects {
     ifRight?: string | null; // String
     ifWrong?: string | null; // String
     image?: string | null; // String
+    instructorName?: string | null; // String
     lessonID?: string | null; // String
     lessonId?: string | null; // String
     name?: string | null; // String
@@ -4391,6 +4408,7 @@ export interface NexusGenObjects {
     lessonID?: string | null; // String
     lessonId?: string | null; // String
     link_clicks?: number | null; // Int
+    name?: string | null; // String
     next?: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
     type?: string | null; // String
@@ -4456,6 +4474,7 @@ export interface NexusGenObjects {
     isSecret?: boolean | null; // Boolean
     lessonID: string; // String!
     lessonId: string; // String!
+    name?: string | null; // String
     nodeID?: string | null; // String
     nodeType?: string | null; // String
     steps?: NexusGenScalars['Json'] | null; // Json
@@ -4525,6 +4544,7 @@ export interface NexusGenObjects {
     ifRight?: string | null; // String
     ifWrong?: string | null; // String
     image?: string | null; // String
+    instructorName?: string | null; // String
     lessonID?: string | null; // String
     lessonId?: string | null; // String
     name?: string | null; // String
@@ -4566,6 +4586,7 @@ export interface NexusGenObjects {
     id: string; // String!
     lessonID?: string | null; // String
     lessonId?: string | null; // String
+    name?: string | null; // String
     parts: string[]; // [String!]!
     title: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -4975,6 +4996,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     lesson: NexusGenRootTypes['Lesson']; // Lesson!
     lessonId: string; // String!
+    name: string | null; // String
     title: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
@@ -5293,6 +5315,7 @@ export interface NexusGenFieldTypes {
     ifRight: string | null; // String
     ifWrong: string | null; // String
     image: string | null; // String
+    instructorName: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
@@ -5314,6 +5337,7 @@ export interface NexusGenFieldTypes {
     lessonID: string | null; // String
     lessonId: string | null; // String
     link_clicks: number | null; // Int
+    name: string | null; // String
     next: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
     type: string | null; // String
@@ -5390,6 +5414,7 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson']; // Lesson!
     lessonID: string; // String!
     lessonId: string; // String!
+    name: string | null; // String
     nodeID: string | null; // String
     nodeType: string | null; // String
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
@@ -5524,6 +5549,7 @@ export interface NexusGenFieldTypes {
     ifRight: string | null; // String
     ifWrong: string | null; // String
     image: string | null; // String
+    instructorName: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
@@ -5574,6 +5600,7 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
+    name: string | null; // String
     parts: string[]; // [String!]!
     shotResults: NexusGenRootTypes['ShotResult'][]; // [ShotResult!]!
     title: string; // String!
@@ -6025,6 +6052,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     lesson: 'Lesson'
     lessonId: 'String'
+    name: 'String'
     title: 'String'
     updatedAt: 'DateTime'
     user: 'User'
@@ -6343,6 +6371,7 @@ export interface NexusGenFieldTypeNames {
     ifRight: 'String'
     ifWrong: 'String'
     image: 'String'
+    instructorName: 'String'
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
@@ -6364,6 +6393,7 @@ export interface NexusGenFieldTypeNames {
     lessonID: 'String'
     lessonId: 'String'
     link_clicks: 'Int'
+    name: 'String'
     next: 'Json'
     text: 'String'
     type: 'String'
@@ -6440,6 +6470,7 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
+    name: 'String'
     nodeID: 'String'
     nodeType: 'String'
     problemResults: 'ProblemResult'
@@ -6574,6 +6605,7 @@ export interface NexusGenFieldTypeNames {
     ifRight: 'String'
     ifWrong: 'String'
     image: 'String'
+    instructorName: 'String'
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
@@ -6624,6 +6656,7 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
+    name: 'String'
     parts: 'String'
     shotResults: 'ShotResult'
     title: 'String'
@@ -7207,6 +7240,7 @@ export interface NexusGenArgTypes {
     createDocument: { // args
       goal?: string | null; // String
       lessonId?: string | null; // String
+      name?: string | null; // String
       title?: string | null; // String
     }
     createDocumentResult: { // args
@@ -7280,6 +7314,7 @@ export interface NexusGenArgTypes {
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
       image?: string | null; // String
+      instructorName?: string | null; // String
       lessonId?: string | null; // String
       name?: string | null; // String
       question?: Array<string | null> | null; // [String]
@@ -7287,6 +7322,7 @@ export interface NexusGenArgTypes {
     }
     createNote: { // args
       lessonId?: string | null; // String
+      name?: string | null; // String
       text?: string | null; // String
     }
     createOffer: { // args
@@ -7319,6 +7355,7 @@ export interface NexusGenArgTypes {
     createProblem: { // args
       goal?: string | null; // String
       lessonId?: string | null; // String
+      name?: string | null; // String
       steps?: NexusGenInputs['ProblemStructure'] | null; // ProblemStructure
       text?: string | null; // String
     }
@@ -7346,7 +7383,10 @@ export interface NexusGenArgTypes {
       answers?: NexusGenInputs['ComplexAnswer'] | null; // ComplexAnswer
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
+      image?: string | null; // String
+      instructorName?: string | null; // String
       lessonId?: string | null; // String
+      name?: string | null; // String
       question?: string | null; // String
       type?: string | null; // String
     }
@@ -7369,6 +7409,7 @@ export interface NexusGenArgTypes {
     createShot: { // args
       comments?: Array<string | null> | null; // [String]
       lessonId?: string | null; // String
+      name?: string | null; // String
       parts?: Array<string | null> | null; // [String]
       title?: string | null; // String
     }
@@ -7740,6 +7781,7 @@ export interface NexusGenArgTypes {
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
       image?: string | null; // String
+      instructorName?: string | null; // String
       name?: string | null; // String
       next?: NexusGenInputs['NextType'] | null; // NextType
       question?: Array<string | null> | null; // [String]
@@ -7750,6 +7792,7 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       isSecret?: boolean | null; // Boolean
       link_clicks?: number | null; // Int
+      name?: string | null; // String
       next?: NexusGenInputs['NextType'] | null; // NextType
       text?: string | null; // String
       type?: string | null; // String
@@ -7785,6 +7828,7 @@ export interface NexusGenArgTypes {
       goal?: string | null; // String
       id?: string | null; // String
       isSecret?: boolean | null; // Boolean
+      name?: string | null; // String
       steps?: NexusGenInputs['ProblemStructure'] | null; // ProblemStructure
       text?: string | null; // String
     }
@@ -7825,6 +7869,7 @@ export interface NexusGenArgTypes {
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
       image?: string | null; // String
+      instructorName?: string | null; // String
       lessonId?: string | null; // String
       name?: string | null; // String
       next?: NexusGenInputs['NextType'] | null; // NextType
@@ -7842,6 +7887,7 @@ export interface NexusGenArgTypes {
     updateShot: { // args
       comments?: Array<string | null> | null; // [String]
       id?: string | null; // String
+      name?: string | null; // String
       parts?: Array<string | null> | null; // [String]
       title?: string | null; // String
     }

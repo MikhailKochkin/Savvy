@@ -149,16 +149,21 @@ const QuizResult = (props) => {
                           <>
                             <div className="standard">
                               {q.type !== "FORM" &&
+                                q.type !== "PROMPT" &&
                                 (t.correct && t.correct == true
                                   ? "✅ Marked as correct"
                                   : "❌ Marked as wrong")}
                             </div>
+                            {q.type == "PROMPT" && console.log("t", t)}
                             <b>Student answer:</b> {t.answer}
                             <div className="standard">
                               <b>Comment:</b> {t.comment}
                             </div>
                             <div className="standard">
                               <b>Hint:</b> {t.hint}
+                            </div>
+                            <div className="standard">
+                              <b>Explanantion:</b> {t.explanation}
                             </div>
                           </>
                         )}

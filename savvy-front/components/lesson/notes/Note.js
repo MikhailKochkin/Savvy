@@ -295,7 +295,7 @@ const NoteStyles = styled.div`
     background: #e0e0e0;
   }
   h2 {
-    font-size: 3.2rem;
+    font-size: 2.8rem;
     font-weight: 600;
     line-height: 1.2;
   }
@@ -422,7 +422,11 @@ const EmailForm = styled.div`
   padding: 20px;
 `;
 
-const Header = styled.div``;
+const Header = styled.h1`
+  font-size: 3.8rem;
+  width: 100%;
+  font-weight: 600;
+`;
 
 const EmailInfo = styled.div`
   display: flex;
@@ -589,6 +593,7 @@ const Note = (props) => {
     author,
     text,
     note,
+    name,
     complexity,
     id,
     miniforum,
@@ -634,7 +639,6 @@ const Note = (props) => {
         (note.type == "email" ? (
           <EmailContainer>
             <EmailForm>
-              <Header></Header>
               <EmailInfo>
                 <div className="image_column">
                   <div className="circle">
@@ -658,6 +662,8 @@ const Note = (props) => {
           </EmailContainer>
         ) : (
           <Container id={id} width={width}>
+            <Header>{note.name}</Header>
+
             <div className="text">
               {!update && (
                 <>
@@ -726,6 +732,7 @@ const Note = (props) => {
           complexity={complexity}
           id={id}
           next={props.next}
+          name={name}
           lessonID={lessonID}
           getResult={getResult}
           switchUpdate={switchUpdate}

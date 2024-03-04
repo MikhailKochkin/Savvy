@@ -8,13 +8,18 @@ import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import { useTranslation } from "next-i18next";
 
 const CREATE_NOTE_MUTATION = gql`
-  mutation CREATE_NOTE_MUTATION($text: String!, $lessonId: String!) {
-    createNote(text: $text, lessonId: $lessonId) {
+  mutation CREATE_NOTE_MUTATION(
+    $text: String!
+    $name: String
+    $lessonId: String!
+  ) {
+    createNote(text: $text, name: $name, lessonId: $lessonId) {
       id
       link_clicks
       complexity
       isSecret
       text
+      name
       next
       user {
         id
@@ -22,8 +27,6 @@ const CREATE_NOTE_MUTATION = gql`
     }
   }
 `;
-
-const Explainer = styled.div``;
 
 const Container = styled.div`
   width: 95%;
@@ -82,15 +85,15 @@ const Editor = styled.div`
   margin-top: 1%;
 `;
 
-const Advice = styled.p`
-  font-size: 1.5rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2%;
-  margin: 30px 0;
-  width: 80%;
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
@@ -99,10 +102,10 @@ const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
 });
 
 const CreateSingleNote = (props) => {
+  const [name, setName] = useState();
   const [text, setText] = useState(
     props.initial_data?.content?.text ? props.initial_data.content.text : ""
   );
-  console.log("final text", props.initial_data?.content?.text);
   const { t } = useTranslation("lesson");
 
   const myCallback = (dataFromChild) => {
@@ -112,6 +115,11 @@ const CreateSingleNote = (props) => {
   const { lessonID } = props;
   return (
     <Container>
+      <NameInput
+        onChange={(e) => setName(e.target.value)}
+        defaultValue={name}
+        placeholder="Untitled"
+      />
       <Editor>
         <DynamicLoadedEditor
           value={text}

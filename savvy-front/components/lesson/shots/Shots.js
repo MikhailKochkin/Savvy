@@ -176,8 +176,17 @@ const Shots = (props) => {
   const [update, setUpdate] = useState(false);
   const { t } = useTranslation("lesson");
 
-  const { comments, parts, shotID, lessonID, me, shotUser, title, userData } =
-    props;
+  const {
+    comments,
+    parts,
+    shotID,
+    lessonID,
+    me,
+    shotUser,
+    title,
+    userData,
+    name,
+  } = props;
 
   let width;
   if (props.problem) {
@@ -285,9 +294,13 @@ const Shots = (props) => {
               </Text>
             )}
             {comments.length > 0 && (
-              <Commentary>
-                <>{parse(comments[num - 1])}</>
-              </Commentary>
+              <>
+                {comments[num - 1] ? (
+                  <Commentary>
+                    {comments[num - 1] ? parse(comments[num - 1]) : ""}
+                  </Commentary>
+                ) : null}
+              </>
             )}
           </>
         </>
@@ -300,6 +313,7 @@ const Shots = (props) => {
             parts={parts}
             comments={comments}
             title={title}
+            name={name}
             getResult={getResult}
             switchUpdate={switchUpdate}
             passUpdated={passUpdated}

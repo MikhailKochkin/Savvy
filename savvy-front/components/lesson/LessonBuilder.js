@@ -597,11 +597,16 @@ const LessonBuilder = (props) => {
     const b = a.map(({ num, ...keepAttrs }) => keepAttrs);
     const c = b.map(({ data, ...keepAttrs }) => keepAttrs);
     const d = c.map(({ comment, ...keepAttrs }) => keepAttrs);
+    const e = d.map(({ content, ...keepAttrs }) => keepAttrs);
+    const f = e.map(({ description, ...keepAttrs }) => keepAttrs);
+    const g = f.map(({ format, ...keepAttrs }) => keepAttrs);
+    const h = g.map(({ idea, ...keepAttrs }) => keepAttrs);
+    const j = h.map(({ status, ...keepAttrs }) => keepAttrs);
     updateLesson({
       variables: {
         id: props.lesson.id,
         structure: {
-          lessonItems: d,
+          lessonItems: j,
         },
       },
     });
@@ -619,12 +624,18 @@ const LessonBuilder = (props) => {
     const b = a.map(({ num, ...keepAttrs }) => keepAttrs);
     const c = b.map(({ data, ...keepAttrs }) => keepAttrs);
     const d = c.map(({ comment, ...keepAttrs }) => keepAttrs);
-    const e = d.map(({ prompt, ...keepAttrs }) => keepAttrs);
+    const e = d.map(({ content, ...keepAttrs }) => keepAttrs);
+    const f = e.map(({ description, ...keepAttrs }) => keepAttrs);
+    const g = f.map(({ format, ...keepAttrs }) => keepAttrs);
+    const h = g.map(({ idea, ...keepAttrs }) => keepAttrs);
+    const j = h.map(({ status, ...keepAttrs }) => keepAttrs);
+    const k = j.map(({ prompt, ...keepAttrs }) => keepAttrs);
+
     updateLesson({
       variables: {
         id: props.lesson.id,
         structure: {
-          lessonItems: e,
+          lessonItems: k,
         },
       },
     });
@@ -636,7 +647,7 @@ const LessonBuilder = (props) => {
   };
 
   const passData = (blocks) => {
-    setElements([...blocks]);
+    setElements([...elements, ...blocks]);
   };
 
   return (
@@ -651,7 +662,7 @@ const LessonBuilder = (props) => {
           onUpdateLessonData={updateLessonData}
         />
         {/* <Analyzer elements={elements} lesson={lesson} /> */}
-        {/* <GenerateLesson passData={passData} /> */}
+        <GenerateLesson passData={passData} />
         <BuilderPart id="builder_part">
           {[...elements].map((el, i) => {
             return (

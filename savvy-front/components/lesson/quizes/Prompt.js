@@ -424,7 +424,11 @@ const Prompt = (props) => {
           <Button1
             onClick={async (e) => {
               e.preventDefault();
-              const res1 = await getFeedback(e);
+              if (text == "") {
+                alert("No input found");
+              } else {
+                const res1 = await getFeedback(e);
+              }
             }}
           >
             {t("check")}

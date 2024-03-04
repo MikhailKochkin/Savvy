@@ -464,7 +464,7 @@ const GeneralEmail = (name, text) => `
                         <p>Mike Kochkin</p>
                         <p>CEO of BeSavvy</p>
                         <p>
-                        We help lawyers acquire new skills with simulators
+                        We help lawyers acquire new skills with transaction simulators
                         </p>
                         <!-- Sub copy -->
                       </div>

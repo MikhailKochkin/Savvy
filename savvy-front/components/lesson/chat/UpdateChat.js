@@ -84,8 +84,19 @@ const Bottom = styled.div`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const UpdateChat = (props) => {
-  // const [name, setName] = useState(props.name);
+  const [name, setName] = useState(props.name);
   const [mess, setMess] = useState(props.messages.messagesList);
   const [isSecret, setIsSecret] = useState(props.isSecret);
   const { t } = useTranslation("lesson");
@@ -148,13 +159,18 @@ const UpdateChat = (props) => {
 
   return (
     <Styles>
-      <select
+      {/* <select
         defaultValue={isSecret}
         onChange={(e) => setIsSecret(e.target.value == "true")}
       >
         <option value={"true"}>Секретный</option>
         <option value={"false"}>Открытый</option>
-      </select>
+      </select> */}
+      <NameInput
+        onChange={(e) => setName(e.target.value)}
+        defaultValue={name}
+        placeholder="Untitled"
+      />
       {mess.map((m, i) => (
         <UpdateMessage
           index={i}

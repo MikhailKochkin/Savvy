@@ -112,6 +112,17 @@ const Explainer = styled.div`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
@@ -224,7 +235,11 @@ const CreateTextEditor = (props) => {
           </>
         )}
       </Explainer>
-
+      <NameInput
+        onChange={(e) => setName(e.target.value)}
+        defaultValue={name}
+        placeholder="Untitled"
+      />
       <DynamicLoadedEditor
         getEditorText={myCallback}
         complex={true}

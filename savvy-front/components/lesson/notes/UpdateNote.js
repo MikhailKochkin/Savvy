@@ -10,6 +10,7 @@ const UPDATE_NOTE_MUTATION = gql`
   mutation UPDATE_NOTE_MUTATION(
     $id: String!
     $text: String
+    $name: String
     $complexity: Int
     $isSecret: Boolean
     $type: String
@@ -17,12 +18,14 @@ const UPDATE_NOTE_MUTATION = gql`
     updateNote(
       id: $id
       text: $text
+      name: $name
       complexity: $complexity
       isSecret: $isSecret
       type: $type
     ) {
       id
       text
+      name
       next
     }
   }
@@ -120,6 +123,17 @@ const Complexity = styled.div`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
@@ -127,6 +141,8 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 
 const UpdateNote = (props) => {
   const [text, setText] = useState(props.text);
+  const [name, setName] = useState(props.name);
+
   const [show, setShow] = useState(false);
   const [isSecret, setIsSecret] = useState(props.isSecret);
   const [type, setType] = useState("longread");
@@ -219,9 +235,9 @@ const UpdateNote = (props) => {
             <option value={"false"}>Открытый</option>
           </select> */}
         <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value={"longread"}>Выберите тип материала</option>
-          <option value={"longread"}>Лонгрид</option>
-          <option value={"email"}>Имейл</option>
+          <option value={"longread"}>Choose type</option>
+          <option value={"longread"}>Longread</option>
+          <option value={"email"}>Email</option>
         </select>
         {/* <select
             defaultValue={isSecret}
@@ -241,11 +257,14 @@ const UpdateNote = (props) => {
           </a>
         </button> */}
         <h3>Text Editor</h3>
-
         <SimpleButton className="switch_button" onClick={(e) => setShow(!show)}>
           {show ? t("close") : t("open")}
         </SimpleButton>
-
+        <NameInput
+          onChange={(e) => setName(e.target.value)}
+          defaultValue={name}
+          placeholder="Untitled"
+        />
         {show && <DynamicLoadedEditor getEditorText={getText} value={text} />}
         <h3>HTML</h3>
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
@@ -258,6 +277,7 @@ const UpdateNote = (props) => {
             complexity,
             isSecret,
             type,
+            name,
           }}
           refetchQueries={() => [
             {

@@ -494,10 +494,8 @@ const Person = (props) => {
     };
     lesResults.push(new_obj);
   });
-  console.log("maxes", maxes);
 
   maxes = maxes.filter((m) => m.lesson.published);
-  console.log("maxes", maxes);
   let color;
   let total = 0;
   maxes.map((l) => {
