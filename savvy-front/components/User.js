@@ -24,26 +24,26 @@ const CURRENT_USER_QUERY = gql`
       work
       score
       description
-      teams {
-        id
-        name
-        users {
-          id
-          name
-          surname
-          image
-        }
-      }
-      myTeams {
-        id
-        name
-        users {
-          id
-          name
-          surname
-          image
-        }
-      }
+      # teams {
+      #   id
+      #   name
+      #   users {
+      #     id
+      #     name
+      #     surname
+      #     image
+      #   }
+      # }
+      # myTeams {
+      #   id
+      #   name
+      #   users {
+      #     id
+      #     name
+      #     surname
+      #     image
+      #   }
+      # }
       certificates {
         id
         createdAt
@@ -69,12 +69,6 @@ const CURRENT_USER_QUERY = gql`
       level {
         id
         level
-        # consumedContent
-        # myProgress
-        # learningStreak
-        # growthAreas {
-        #   id
-        # }
       }
       studentFeedback {
         id
@@ -96,9 +90,9 @@ const CURRENT_USER_QUERY = gql`
         name
       }
       status
-      lessonResults {
-        id
-      }
+      # lessonResults {
+      #   id
+      # }
       orders {
         id
         coursePage {
@@ -106,18 +100,18 @@ const CURRENT_USER_QUERY = gql`
         }
         isPaid
       }
-      uni {
-        id
-        title
-        # teachers {
-        #   id
-        # }
-        capacity
-        paidMonths
-        # uniCoursePages {
-        #   id
-        # }
-      }
+      # uni {
+      #   id
+      #   title
+      # teachers {
+      #   id
+      # }
+      # capacity
+      # paidMonths
+      # uniCoursePages {
+      #   id
+      # }
+      # }
       # isFamiliar
       # favourites
       # coverLetter

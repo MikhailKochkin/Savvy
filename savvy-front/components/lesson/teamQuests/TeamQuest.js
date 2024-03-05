@@ -227,7 +227,7 @@ const TeamQuest = (props) => {
   const [createTeamQuestResult, { data, loading, error }] =
     useMutation(CREATE_TQR_MUTATION);
 
-  const my_team = me.myTeams[0];
+  // const my_team = me.myTeams[0];
   const myCallback = (dataFromChild, name) => {
     setAnswer(dataFromChild);
   };

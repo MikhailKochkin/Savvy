@@ -11,27 +11,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
     coursePage(where: { id: $id }) {
       id
-      title
-      image
-      news
-      price
-      discountPrice
-      video
-      audience
-      result
-      tags
-      weeks
-      modules
-      tariffs
-      methods
-      reviews
-      subscriptionPrice
-      subscription
-      promocode
-      published
-      user {
-        id
-      }
       lessons {
         id
         name
@@ -40,18 +19,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         type
         open
         description
-        structure
-        forum {
-          id
-          statements {
-            id
-            comments
-          }
-          rating {
-            id
-            rating
-          }
-        }
         published
         coursePage {
           id
@@ -62,74 +29,50 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       }
       description
       courseType
-      students
-      new_students {
-        id
-      }
       user {
         id
         name
         surname
         image
         description
-        work
-        status
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
       }
       authors {
         id
         name
         surname
         image
-        description
-        status
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
       }
     }
   }
 `;
 
-const LESSON_RESULTS_QUERY = gql`
-  query LESSON_RESULTS_QUERY($coursePageId: String!, $userId: String!) {
-    lessonResults(
-      where: {
-        lesson: { coursePageId: { equals: $coursePageId } }
-        student: { id: { equals: $userId } }
-      }
-    ) {
-      id
-      visitsNumber
-      progress
-      lesson {
-        id
-        name
-        structure
-        type
-        number
-      }
-      student {
-        id
-        email
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
+// const LESSON_RESULTS_QUERY = gql`
+//   query LESSON_RESULTS_QUERY($coursePageId: String!, $userId: String!) {
+//     lessonResults(
+//       where: {
+//         lesson: { coursePageId: { equals: $coursePageId } }
+//         student: { id: { equals: $userId } }
+//       }
+//     ) {
+//       id
+//       visitsNumber
+//       progress
+//       lesson {
+//         id
+//         name
+//         structure
+//         type
+//         number
+//       }
+//       student {
+//         id
+//         email
+//       }
+//       createdAt
+//       updatedAt
+//     }
+//   }
+// `;
 
 export const LessonsInfo = styled.div`
   margin-top: 30px;
@@ -307,87 +250,10 @@ const LessonsData = (props) => {
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
     variables: { id: props.id },
   });
-  // 3. get students' data
-  const [
-    fetchQuery,
-    { loading: stats_loading, error: stats_error, data: stats_data },
-  ] = useLazyQuery(LESSON_RESULTS_QUERY);
 
-  useEffect(() => {
-    // when the first query is loaded, then fire this lazy query function
-    if (me) {
-      fetchQuery({
-        variables: {
-          coursePageId: props.id,
-          userId: me.id,
-        },
-      });
-
-      // if (stats_error) return <p>{stats_error}</p>;
-      // if (stats_loading) return <Loading />;
-    }
-  }, [me]);
   if (loading) return <Loading />;
 
-  // 4. prepare for data analysis
   const coursePage = data.coursePage;
-  let lessons = coursePage.lessons;
-  let maxes = [];
-
-  // 5. analyze user's lesson results to provide them wiith up-to-date progress information
-  if (stats_data) {
-    let lessonResults = stats_data.lessonResults;
-
-    // 5.1. Get all lesson results
-    const sorted_lessons = lessonResults
-      .slice()
-      .sort((a, b) => a.lesson.number - b.lesson.number);
-
-    // 5.2. group all lesson results by lesson
-    let new_array = [];
-    sorted_lessons.forEach((l) => {
-      let lessonId = l.lesson.id;
-      if (new_array.find((x) => x.lessonId === lessonId)) {
-        let obj = new_array.find((x) => x.lessonId === lessonId);
-        let new_results_list = [...obj.results, l];
-        return (obj.results = new_results_list);
-      } else {
-        let new_obj = {
-          lessonId: lessonId,
-          results: [l],
-        };
-        return new_array.push(new_obj);
-      }
-    });
-
-    // 5.3. leave only lesson results with the highest progress
-
-    let new_array_2 = new_array.map((el) => {
-      const max = el.results.reduce((prev, current) =>
-        prev.progress > current.progress ? prev : current
-      );
-      el["max"] = max;
-      return el;
-    });
-
-    // 5.4. Leave only maxes
-
-    new_array_2.forEach((el) => maxes.push(el.max));
-
-    let lesResults = [];
-    maxes.forEach((lr) => {
-      let new_obj = {
-        progress: lr.progress,
-        lesson_number: lr.lesson.number,
-        lesson_size: lr.lesson.structure
-          ? lr.lesson.structure.lessonItems.length
-          : 1,
-        lesson_name: lr.lesson.name,
-        visits: lr.visitsNumber,
-      };
-      lesResults.push(new_obj);
-    });
-  }
 
   // 6. determiine which lessons are open
 
@@ -415,95 +281,22 @@ const LessonsData = (props) => {
       coursePage.user.id == me.id)
   ) {
     i_am_author = true;
-
-    //   let have_cert = false;
-    //   let cert;
-    //   me &&
-    //     me.certificates.forEach((c) => {
-    //       if (c.coursePage.id == coursePage.id) {
-    //         have_cert = true;
-    //         cert = c;
-    //       }
-    //     });
-  }
-
-  //  8. groupe lessons by week
-
-  function sliceIntoChunks(arr, chunkSize) {
-    const res = [];
-    for (let i = 0; i < arr.length; i += chunkSize) {
-      const chunk = arr.slice(i, i + chunkSize);
-      res.push(chunk);
-    }
-    return res;
   }
 
   let initial_lessons = [...coursePage.lessons]
     .sort((a, b) => (a.number > b.number ? 1 : -1))
     .filter((l) => l.published);
 
-  // let broken_lessons = sliceIntoChunks(
-  //   initial_lessons,
-  //   coursePage.weeks ? coursePage.weeks : 3
-  // );
-
   let broken_lessons = initial_lessons;
   let unpublished_lessons = [...coursePage.lessons]
     .sort((a, b) => (a.number > b.number ? 1 : -1))
     .filter((l) => !l.published);
 
-  // let full_modules = [];
-  // if (coursePage.modules && coursePage.modules.modules.length > 0) {
-  //   coursePage.modules.modules.map((m, i) => {
-  //     let newLessons = [];
-  //     m.lessonsInModule.map((lim) => {
-  //       let les = coursePage.lessons.find((les) => les.id == lim.id);
-  //       if (les.type !== "HIDDEN") {
-  //         return newLessons.push(les);
-  //       }
-  //     });
-  //     let new_module = {
-  //       name: m.name,
-  //       number: m.number,
-  //       lessons: newLessons,
-  //     };
-  //     full_modules.push(new_module);
-  //   });
-  // }
-
   return (
     <LessonsInfo>
-      {/* <Buttons>
-        <Button
-          primary={page === "lessons"}
-          onClick={(e) => setPage("lessons")}
-        >
-          {t("lessons")}
-        </Button>
-        <Button
-          primary={page === "feedback"}
-          onClick={(e) => setPage("feedback")}
-        >
-          {t("feedback")}
-        </Button>
-      </Buttons> */}
-
       {page === "lessons" && (
         <>
           <Total>
-            {/* {" "}
-            {t("total_lessons")}
-            <b>{lessons.filter((l) => l.published).length}</b> <br />{" "}
-            {t("course_term")}{" "}
-            <b>
-              {Math.ceil(
-                lessons.length / (coursePage.weeks ? coursePage.weeks : 3)
-              ) == 0
-                ? 1
-                : Math.ceil(
-                    lessons.length / (coursePage.weeks ? coursePage.weeks : 3)
-                  )}
-            </b> */}
             <Buttons>
               <Button
                 primary={format === "gallery"}
@@ -517,45 +310,33 @@ const LessonsData = (props) => {
               >
                 {t("table")}
               </Button>
-              {/* {full_modules.length > 0 && (
-                <Button
-                  primary={format === "modules"}
-                  onClick={(e) => setFormat("modules")}
-                >
-                  По модулям
-                </Button>
-              )} */}
             </Buttons>
           </Total>
-          {format == "gallery" && (
-            <Syllabus>
-              <Lessons>
-                {broken_lessons.map((lesson, index) => (
-                  <>
-                    <LessonHeader
-                      me={me}
-                      key={lesson.id}
-                      name={lesson.name}
-                      lesson={lesson}
-                      lessonResult={maxes.find((m) => m.lesson.id == lesson.id)}
-                      lessonLength={
-                        lesson.structure && lesson.structure.lessonItems
-                          ? lesson.structure.lessonItems.length
-                          : 0
-                      }
-                      i_am_author={i_am_author}
-                      statements={lesson.forum ? lesson.forum.statements : null}
-                      coursePage={props.id}
-                      author={coursePage.user.id}
-                      open={index + 1 === 1}
-                      index={index + 1}
-                      coursePageId={coursePage.id}
-                    />
-                  </>
-                ))}
-              </Lessons>
-            </Syllabus>
-          )}
+          {me &&
+            (i_am_author ||
+              (me.permissions && me.permissions.includes("ADMIN"))) &&
+            format == "gallery" && (
+              <Syllabus>
+                <Lessons>
+                  {broken_lessons.map((lesson, index) => (
+                    <>
+                      <LessonHeader
+                        me={me}
+                        key={lesson.id}
+                        name={lesson.name}
+                        lesson={lesson}
+                        i_am_author={i_am_author}
+                        coursePage={props.id}
+                        author={coursePage.user.id}
+                        open={index + 1 === 1}
+                        index={index + 1}
+                        coursePageId={coursePage.id}
+                      />
+                    </>
+                  ))}
+                </Lessons>
+              </Syllabus>
+            )}
           {format == "table" && (
             <Syllabus>
               <LessonsTable>
@@ -573,14 +354,7 @@ const LessonsData = (props) => {
                       key={lesson.id}
                       name={lesson.name}
                       lesson={lesson}
-                      lessonResult={maxes.find((m) => m.lesson.id == lesson.id)}
-                      lessonLength={
-                        lesson.structure && lesson.structure.lessonItems
-                          ? lesson.structure.lessonItems.length
-                          : 0
-                      }
                       i_am_author={i_am_author}
-                      statements={lesson.forum ? lesson.forum.statements : null}
                       coursePage={props.id}
                       author={coursePage.user.id}
                       open={index + 1 === 1}
@@ -606,13 +380,7 @@ const LessonsData = (props) => {
                         key={lesson.id}
                         name={lesson.name}
                         lesson={lesson}
-                        lessonResult={maxes.find(
-                          (m) => m.lesson.id == lesson.id
-                        )}
                         i_am_author={i_am_author}
-                        statements={
-                          lesson.forum ? lesson.forum.statements : null
-                        }
                         coursePage={coursePage}
                         author={coursePage.user.id}
                         open={index + 1 === 1}

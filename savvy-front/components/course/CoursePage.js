@@ -20,128 +20,6 @@ import {
   Lessons,
 } from "./styles/CoursePage_Styles";
 
-const SINGLE_COURSEPAGE_QUERY = gql`
-  query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
-      id
-      title
-      image
-      news
-      price
-      discountPrice
-      video
-      audience
-      result
-      tags
-      weeks
-      tariffs
-      methods
-      reviews
-      subscriptionPrice
-      subscription
-      promocode
-      published
-      user {
-        id
-      }
-      lessons {
-        id
-        name
-        number
-        type
-        open
-        description
-        structure
-        forum {
-          id
-          statements {
-            id
-            comments
-          }
-          rating {
-            id
-            rating
-          }
-        }
-        published
-        coursePage {
-          id
-        }
-        user {
-          id
-        }
-      }
-      description
-      courseType
-      students
-      new_students {
-        id
-      }
-      user {
-        id
-        name
-        surname
-        image
-        description
-        work
-        status
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
-      }
-      authors {
-        id
-        name
-        surname
-        image
-        description
-        status
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-
-const LESSON_RESULTS_QUERY = gql`
-  query LESSON_RESULTS_QUERY($coursePageId: String!, $userId: String!) {
-    lessonResults(
-      where: {
-        lesson: { coursePageId: { equals: $coursePageId } }
-        student: { id: { equals: $userId } }
-      }
-    ) {
-      id
-      visitsNumber
-      progress
-      lesson {
-        id
-        name
-        structure
-        type
-        number
-      }
-      student {
-        id
-        email
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-
 const CourseInfo = styled.div`
   display: flex;
   flex-direction: row;
@@ -157,11 +35,6 @@ const CoursePage = (props) => {
     <>
       <div id="root"></div>
       <>
-        {/* {(!me ||
-          (me &&
-            me.new_subjects.filter((s) => s.id == props.id).length == 0)) && (
-          <TopLine id={props.id} />
-        )} */}
         <Container>
           <LessonStyles>
             <CourseInfo>
@@ -170,49 +43,6 @@ const CoursePage = (props) => {
             </CourseInfo>
             <LessonSearch me={me} id={props.id} />
             <LessonsData me={me} id={props.id} />
-
-            {/* <Details>
-              {data.coursePage.audience && (
-                <div className="info">
-                  <div className="header">
-                    <span>{t("who_for")}</span>
-                  </div>
-                  <div>{parse(data.coursePage.audience)}</div>
-                </div>
-              )}
-              {data.coursePage.video && data.coursePage.video !== "" && (
-                <Video>
-                  <div className="header">{t("presentation")}</div>
-                  <iframe src={data.coursePage.video} allowFullScreen />
-                </Video>
-              )}
-              {data.coursePage.methods && (
-                <div className="info">
-                  <div className="header">{t("author")}</div>
-                  <div>{parse(data.coursePage.methods)}</div>
-                </div>
-              )}
-              {data.coursePage.result && (
-                <div className="info">
-                  <div className="header">{t("about")}</div>
-                  <div>{parse(data.coursePage.result)}</div>
-                </div>
-              )}
-              {data.coursePage.batch && (
-                <div className="red">
-                  <div className="header">{t("next_cohort")}</div>
-                  {parse(data.coursePage.batch)}
-                </div>
-              )}
-            </Details>
-            <Details>
-              {data.coursePage.tariffs && (
-                <div className="info">
-                  <div className="header">{t("tariffs")}</div>
-                  <div>{parse(data.coursePage.tariffs)}</div>
-                </div>
-              )}
-            </Details> */}
           </LessonStyles>
         </Container>
       </>
@@ -221,4 +51,4 @@ const CoursePage = (props) => {
 };
 
 export default CoursePage;
-export { SINGLE_COURSEPAGE_QUERY };
+// export { SINGLE_COURSEPAGE_QUERY };

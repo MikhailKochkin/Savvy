@@ -10,28 +10,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
     coursePage(where: { id: $id }) {
       id
       title
-      #   image
-      #   news
-      #   price
-      #   discountPrice
-      #   video
-      #   audience
-      #   result
-      #   tags
-      #   weeks
-      #   tariffs
-      #   methods
-      #   reviews
-      #   subscriptionPrice
-      #   subscription
-      #   promocode
-      # published
-      # lessons {
-      #   id
-      #   assignment
-      # }
       description
-      #   students
       user {
         id
         name

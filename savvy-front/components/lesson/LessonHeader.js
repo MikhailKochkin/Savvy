@@ -67,8 +67,7 @@ const TextBar = styled.div`
   font-size: 1.6rem;
   margin-bottom: 35px;
   margin-right: 55px;
-  border-left: 2px solid;
-  border-color: ${(props) => props.color};
+
   padding: 2%;
   padding-left: 2%;
   position: relative;
@@ -319,58 +318,7 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const {
-    lesson,
-    name,
-    author,
-    lessonResult,
-    coursePage,
-    lessonLength,
-    coursePageId,
-    me,
-    i_am_author,
-  } = props;
-  let color;
-  let progress;
-  let visit;
-  if (me) {
-    visit = lessonResult;
-    if (visit && lesson.structure && lesson.structure.lessonItems) {
-      progress = visit.progress / lesson.structure.lessonItems.length;
-    } else {
-      progress = 0;
-    }
-    if (visit && progress < 0.8) {
-      color = "#FFD836";
-    } else if (visit && progress >= 0.8) {
-      color = "#32AC66";
-    } else {
-      color = "white";
-    }
-  } else {
-    color = "white";
-  }
-
-  let forums = [];
-  let ratings = [];
-  let average;
-
-  let time;
-
-  if (lesson.structure && lesson.structure.lessonItems) {
-    time = calculateSum(lesson.structure.lessonItems);
-  } else {
-    time = 40;
-  }
-
-  const slide2 = () => {
-    var my_element = document.getElementById("info_box");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
+  const { lesson, name, author, me, i_am_author } = props;
 
   const myCallback = (data) => {
     setDescription(parseInt(data));
@@ -382,138 +330,10 @@ const LessonHeader = (props) => {
       },
     });
   };
-  const handleButtonClick = async () => {
-    const isRegisteredUser =
-      me &&
-      lesson &&
-      me.id !== lesson.user.id &&
-      !lesson.authors?.includes(me.id);
-    const isAdmin = me.permissions.includes("ADMIN");
-    const isFirstVisit = visit === undefined;
-    const isSubscribedToCourse =
-      me.new_subjects.filter((s) => s.id === coursePageId).length > 0;
-    const isAuthorOrAdmin = me.id && (isAdmin || i_am_author);
-    const isLessonFinished =
-      visit?.progress == lessonLength && lessonLength !== undefined && visit
-        ? true
-        : false;
-
-    const createVisit = () => {
-      createLessonResult({
-        variables: {
-          lessonID: lesson.id,
-          visitsNumber: 1,
-        },
-      });
-    };
-
-    const updateVisit = () => {
-      updateLessonResult({
-        variables: {
-          id: visit.id,
-          visitsNumber: visit.visitsNumber + 1,
-        },
-      });
-    };
-
-    // A student is visiting the lesson for the first time
-    if (published) {
-      if (
-        isRegisteredUser &&
-        isFirstVisit &&
-        isSubscribedToCourse &&
-        !isAuthorOrAdmin &&
-        !isLessonFinished
-        //&& !lesson.open
-      ) {
-        createVisit();
-        // console.log(1);
-      }
-
-      // A student continues the unfinished lesson
-
-      if (
-        isRegisteredUser &&
-        !isFirstVisit &&
-        isSubscribedToCourse &&
-        !isLessonFinished &&
-        !isAuthorOrAdmin
-      ) {
-        updateVisit();
-        // console.log(2);
-      }
-
-      // A student is revisiting the finished lesson
-
-      if (
-        isRegisteredUser &&
-        !isFirstVisit &&
-        isSubscribedToCourse &&
-        isLessonFinished &&
-        !isAuthorOrAdmin
-      ) {
-        createVisit();
-        // console.log(3);
-      }
-
-      // An author visits the lesson for the first time
-
-      if (isFirstVisit && isAuthorOrAdmin) {
-        createVisit();
-        // console.log(4);
-      }
-
-      // An author visits the lesson for second or more time
-
-      if (!isFirstVisit && isAuthorOrAdmin) {
-        updateVisit();
-        // console.log(5);
-      }
-
-      // An unsubscribed  student is visiting an open lesson for the first time
-
-      if (
-        lesson.open &&
-        isFirstVisit &&
-        !isAuthorOrAdmin &&
-        !isLessonFinished &&
-        !isSubscribedToCourse
-      ) {
-        createVisit();
-        // console.log(6);
-      }
-
-      // An unsubscribed student continues the open lesson
-
-      if (
-        lesson.open &&
-        !isFirstVisit &&
-        !isAuthorOrAdmin &&
-        !isLessonFinished &&
-        !isSubscribedToCourse
-      ) {
-        updateVisit();
-        // console.log(7);
-      }
-
-      // An unsubscribed student revisits the open lesson that they have already finished
-
-      if (
-        lesson.open &&
-        !isFirstVisit &&
-        !isAuthorOrAdmin &&
-        isLessonFinished &&
-        !isSubscribedToCourse
-      ) {
-        createVisit();
-        // console.log(8);
-      }
-    }
-  };
 
   return (
     <>
-      <TextBar color={color} id={"simulator_" + lesson.id}>
+      <TextBar id={"simulator_" + lesson.id}>
         <div>
           <Text>
             <div className="lesson_name">
@@ -561,9 +381,6 @@ const LessonHeader = (props) => {
           </Text>
         </div>
         <div>
-          <Time>
-            {time} {t("minutes")}
-          </Time>
           <Buttons>
             {/* Case 2. Admin or course author publishes the course */}
 
@@ -598,98 +415,20 @@ const LessonHeader = (props) => {
               </>
             ) : null}
 
-            {/* Case 3. Admin or course opens the lesson */}
-
-            {me &&
-              (me.id === author ||
-                me.permissions.includes("ADMIN") ||
-                i_am_author) && (
-                <Link
-                  legacyBehavior
-                  href={{
-                    pathname: "/lesson",
-                    query: {
-                      id: lesson.id,
-                      type: lesson.type.toLowerCase(),
-                    },
-                  }}
-                >
-                  <A>
-                    <Button>{t("open")} </Button>
-                  </A>
-                </Link>
-              )}
-
-            {/* {lesson.type.toLowerCase()} */}
-
-            {/* Case 4. Web site user opens the lesson */}
-            {/* First check if the lesson is not under development and i am not the developer */}
-
-            {lesson.type.toLowerCase() !== "regular" &&
-            me &&
-            me.id !== author &&
-            !me.permissions.includes("ADMIN") &&
-            !i_am_author ? (
-              lesson.open ? (
-                <Link
-                  legacyBehavior
-                  href={{
-                    pathname: "/lesson",
-                    query: {
-                      id: lesson.id,
-                      type: lesson.type.toLowerCase(),
-                    },
-                  }}
-                >
-                  <A>
-                    <Button
-                    // onClick={handleButtonClick}
-                    >
-                      {t("open")}
-                    </Button>
-                  </A>
-                </Link>
-              ) : me.new_subjects.filter((s) => s.id == coursePageId).length >
-                0 ? (
-                <Link
-                  legacyBehavior
-                  href={{
-                    pathname: "/lesson",
-                    query: {
-                      id: lesson.id,
-                      type: lesson.type.toLowerCase(),
-                    },
-                  }}
-                >
-                  <A>
-                    <Button
-                    // onClick={handleButtonClick}
-                    >
-                      {t("open")}
-                    </Button>
-                  </A>
-                </Link>
-              ) : null
-            ) : null}
-
-            {/* Case 5. Open lesson */}
-
-            {!me && lesson.open && lesson.type.toLowerCase() !== "regular" && (
-              <Link
-                legacyBehavior
-                href={{
-                  pathname: "/lesson",
-                  query: {
-                    id: lesson.id,
-                    type: lesson.type.toLowerCase(),
-                  },
-                }}
-              >
-                <A>
-                  <Button>{t("open")}</Button>
-                </A>
-              </Link>
-            )}
+            <Link
+              legacyBehavior
+              href={{
+                pathname: "/lesson",
+                query: {
+                  id: lesson.id,
+                  type: lesson.type.toLowerCase(),
+                },
+              }}
+            >
+              <A>
+                <Button>{t("open")}</Button>
+              </A>
+            </Link>
           </Buttons>
         </div>
       </TextBar>

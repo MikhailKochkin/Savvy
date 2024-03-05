@@ -185,9 +185,9 @@ const Navigation = (props) => {
   const { t } = useTranslation("lesson");
 
   let list_of_ids = [];
-  me &&
-    me.myTeams.length > 0 &&
-    me.myTeams[0].users.map((u) => list_of_ids.push(u.id));
+  // me &&
+  //   me.myTeams.length > 0 &&
+  //   me.myTeams[0].users.map((u) => list_of_ids.push(u.id));
   // const { loading, error, data } = useQuery(TEAM_RESULTS, {
   //   variables: { lessonId: lesson.id, list_of_ids: list_of_ids },
   // });
