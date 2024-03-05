@@ -31,6 +31,11 @@ const CourseInfo = styled.div`
 
 const CoursePage = (props) => {
   const me = useUser();
+  const dataString = JSON.stringify(me);
+  // Get the size of the data string in bytes
+  const dataSizeInBytes = new Blob([dataString]).size;
+  // Log the size in bytes
+  console.log(`Size of data: ${dataSizeInBytes / 1000000} megabytes`);
   return (
     <>
       <div id="root"></div>
