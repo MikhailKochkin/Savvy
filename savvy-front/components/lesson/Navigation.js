@@ -252,7 +252,12 @@ const Navigation = (props) => {
               },
             }}
           >
-            <span>⬅</span>
+            <span
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Back to course page"
+            >
+              ⬅
+            </span>
           </Link>
         )}
       </Left>

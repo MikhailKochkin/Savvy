@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import Modal from "styled-react-modal";
 import styled from "styled-components";
 import parse from "html-react-parser";
 
@@ -246,8 +246,10 @@ const Message = ({
   m,
   me,
   author,
+  passTextToBeTranslated,
 }) => {
-  const studentTextRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [translatedText, setTranslatedText] = useState(""); // State to hold the translated text
 
   return (
     <Styles id={id} key={key} className={className}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
@@ -77,6 +77,7 @@ const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID, coursePage } = props;
   const [experience, setExperience] = useState(0);
   const [showArrow, setShowArrow] = useState(true);
+  const [textToBeTranslated, setTextToBeTranslated] = useState("");
   const [solved, setSolved] = useState([]);
   const total = props.lesson.totalPoints;
 
@@ -90,6 +91,31 @@ const StoryEx = (props) => {
 
   const getResults = (res, id) => {
     setExperience(experience + res);
+  };
+
+  const handleSelection = useCallback(() => {
+    const selection = window.getSelection().toString();
+    if (selection && selection !== prevSelection.current) {
+      translateSelectedText(selection, "es");
+      prevSelection.current = selection;
+    }
+  }, [translateSelectedText]);
+
+  const prevSelection = useRef("");
+
+  useEffect(() => {
+    document.addEventListener("mouseup", handleSelection);
+    return () => {
+      document.removeEventListener("mouseup", handleSelection);
+    };
+  }, [handleSelection]);
+
+  const translateSelectedText = async (text, targetLang) => {
+    passTextToBeTranslated(text);
+  };
+
+  const passTextToBeTranslated = (text) => {
+    setTextToBeTranslated(text);
   };
 
   const [
@@ -128,7 +154,6 @@ const StoryEx = (props) => {
         />{" "}
       </Progress>
     );
-  console.log("stats_data", stats_data);
   let my_result = null;
 
   if (stats_data && stats_data.lessonResults.length > 0) {
@@ -214,6 +239,7 @@ const StoryEx = (props) => {
           comments={el.comments}
           true={el.correct}
           user={el.user.id}
+          instructorName={el.instructorName}
           name={el.name}
           image={el.image}
           user_name={el.user}
@@ -337,6 +363,7 @@ const StoryEx = (props) => {
           id={el.id}
           lessonId={lesson.id}
           story={true}
+          passTextToBeTranslated={passTextToBeTranslated}
         />
       );
       components.push(item);
@@ -510,6 +537,7 @@ const StoryEx = (props) => {
           i_am_author={props.i_am_author}
           width={props.width}
           stats_data={stats_data}
+          textToBeTranslated={textToBeTranslated}
         />
       )}
     </Container>

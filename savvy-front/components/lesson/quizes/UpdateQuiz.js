@@ -18,6 +18,7 @@ const UPDATE_QUIZ_MUTATION = gql`
     $goalType: String
     $ifRight: String
     $ifWrong: String
+    $instructorName: String
     $name: String
     $image: String
     $answers: ComplexAnswer
@@ -34,6 +35,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       ifWrong: $ifWrong
       answers: $answers
       name: $name
+      instructorName: $instructorName
       image: $image
     ) {
       id
@@ -207,6 +209,17 @@ const Input = styled.input`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -216,6 +229,7 @@ const UpdateQuiz = (props) => {
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
   const [name, setName] = useState(props.name);
+  const [instructorName, setInstructorName] = useState(props.instructorName);
   const [image, setImage] = useState(props.image);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
@@ -238,6 +252,11 @@ const UpdateQuiz = (props) => {
   const { lessonID, quizId, lesson } = props;
   return (
     <Container>
+      <NameInput
+        defaultValue={name}
+        placeholder="Undefined"
+        onChange={(e) => setName(e.target.value)}
+      />
       <label for="types">Checking mode</label>
       <select defaultValue={check} onChange={(e) => setCheck(e.target.value)}>
         <option value={undefined}>Not chosen</option>
@@ -268,9 +287,12 @@ const UpdateQuiz = (props) => {
         <option value="EDUCATE">Educate</option>
         <option value="ASSESS">Assess</option>
       </select>
-      <label>Name</label>
+      <label>Instructor Name</label>
       <br />
-      <Input defaultValue={name} onChange={(e) => setName(e.target.value)} />
+      <Input
+        defaultValue={name}
+        onChange={(e) => setInstructorName(e.target.value)}
+      />
       <br />
       <label>Image</label>
       <br />
@@ -446,6 +468,7 @@ const UpdateQuiz = (props) => {
           complexity,
           check: check,
           type: type,
+          instructorName: instructorName,
           name: name,
           image: image,
           goalType: goalType,

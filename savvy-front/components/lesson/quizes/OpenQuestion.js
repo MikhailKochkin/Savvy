@@ -340,7 +340,7 @@ const Circle = styled.div`
 `;
 
 const OpenQuestion = (props) => {
-  const { author, me, story, ifRight, ifWrong } = props;
+  const { author, me, story, ifRight, ifWrong, quizId } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [correct, setCorrect] = useState(""); // is the answer by the student correct?
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
@@ -473,10 +473,51 @@ const OpenQuestion = (props) => {
             props.question
           }
           The correct answer is:  ${props.answer}. 
-          The mentor's comment is: ${props.ifWrong}
+          The mentor's comment is: ${ifWrong}
           Your student's answer is: ${answer}
           Explain in 3 sentences how this answer can be improved using the correct answer as the foundation. 
           Write in second person. Adress the student as "you". Do not use the words from the correct answer.
+          Answer in ${
+            router.locale == "ru" ? "Russian" : "English"
+          }Make the answer at least 3 sentences long.`,
+        }),
+      });
+
+      if (response.status !== 200) {
+        throw (
+          (await response.json()).error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
+      }
+      const data = await response.json();
+      if (data.result.content) {
+        setAIImprovement(data.result.content);
+      } else {
+        setAIImprovement("Sorry, we are disconnected.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+    setGeneratingImprovement(false);
+  };
+
+  const getMoreImprovements = async (event) => {
+    event.preventDefault();
+    setGeneratingImprovement(true);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `
+          You are a mentor and a teacher. 
+          Use this script: ${props.ifRight} to improve the student's answer.
+          Your student's answer is: ${answer}
+          The initial question is: ${props.question}
+          Write in second person. Adress the student as "you".
           Answer in ${
             router.locale == "ru" ? "Russian" : "English"
           }Make the answer at least 3 sentences long.`,
@@ -541,8 +582,9 @@ const OpenQuestion = (props) => {
           if (parseFloat(res.res) > 65) {
             setCorrect("true");
             passResult("true");
-            if (props.goalType !== "ASSESS")
+            if (props.goalType !== "ASSESS") {
               setInputColor("rgba(50, 172, 102, 0.25)");
+            }
             createQuizResult({
               variables: {
                 quiz: props.quizId,
@@ -876,6 +918,16 @@ const OpenQuestion = (props) => {
                 >
                   {t("show_an_ideal_answer")}
                 </Button1>
+                {correct == "true" && ifRight && (
+                  <Button1
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      getMoreImprovements(e);
+                    }}
+                  >
+                    {t("more_improvements")}
+                  </Button1>
+                )}
               </Group2>
             </Options>
           </div>

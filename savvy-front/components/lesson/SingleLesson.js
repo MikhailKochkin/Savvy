@@ -225,6 +225,7 @@ const SINGLE_LESSON_QUERY = gql`
         ifWrong
         next
         name
+        instructorName
         image
         question
         createdAt
@@ -235,6 +236,7 @@ const SINGLE_LESSON_QUERY = gql`
       problems {
         id
         text
+        name
         goal
         nodeID
         complexity

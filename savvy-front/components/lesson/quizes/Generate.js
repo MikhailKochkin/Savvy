@@ -346,7 +346,7 @@ const Option = styled.div`
 `;
 
 const Generate = (props) => {
-  const { author, me, story, ifRight, ifWrong } = props;
+  const { author, me, story, ifRight, ifWrong, quizId } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [ideas, setIdeas] = useState([""]);
   const [nextQuestions, setNextQuestions] = useState();

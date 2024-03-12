@@ -132,6 +132,9 @@ const Row = styled.div`
       font-size: 1rem;
     }
   }
+  input {
+    width: 90%;
+  }
   .index {
     width: 2%;
     display: flex;
@@ -565,12 +568,12 @@ const UserCard = memo((props) => {
             </Editor>
           ))} */}
         {/* DynamicLoadedEditor with loaded text */}
-        <p>{props.name}, здравствуйте!</p>
+        {/* <p>{props.name}, здравствуйте!</p>
         <p>
           Я Михаил, создатель BeSavvy. Это не рассылка, а прямое письмо от меня.
           Я пишу, потому что мы сделали очень полезные симуляторы по ключевым
           правовым темам, и я хочу, чтобы вы попробовали пройти их.
-        </p>
+        </p> */}
         <div className="editor">
           <DynamicLoadedEditor
             getEditorText={myCallback2}
@@ -578,7 +581,7 @@ const UserCard = memo((props) => {
             name="text"
           />
         </div>
-        <p>
+        {/* <p>
           И последнее. Возможно, вы сейчас не нуждаетесь в обучении. Это
           нормально. Напишите мне об этом. Я не продавец. Мне просто будет
           приятно узнать, что ваша карьера развивается в правильном напрвлении.
@@ -588,7 +591,7 @@ const UserCard = memo((props) => {
           В любом случае спасибо, что уделили внимание непростому и важному для
           меня проекту, над которым я работаю каждый день последние 5 лет.{" "}
         </p>
-        <p>Надеюсь, у вас сегодня отличный день,</p>
+        <p>Надеюсь, у вас сегодня отличный день,</p> */}
         <button
           onClick={async (e) => {
             const res = await sendClientEmail({
@@ -653,15 +656,20 @@ const UserCard = memo((props) => {
         )}
         {showLessonResults &&
           props.lessonResults.length > 0 &&
-          props.lessonResults.map((l) => (
-            <div>
-              <div>
-                <b>{l.lesson.name}</b>
+          props.lessonResults
+            .slice() // Make a copy of the array to avoid mutating the original
+            .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // Sort by newest updatedAt
+            .map((l) => (
+              <div key={l.lesson.id}>
+                {" "}
+                {/* Assuming lesson has an id */}
+                <div>
+                  <b>{l.lesson.name}</b>
+                </div>
+                <li>{l.progress}</li>
+                <li>{l.updatedAt}</li>
               </div>
-              <li>{l.progress}</li>
-              <li>{l.createdAt}</li>
-            </div>
-          ))}
+            ))}
         <h4>Результаты испытаний</h4>
         {props.challengeResults.length > 0 &&
           props.challengeResults.map((l) => (

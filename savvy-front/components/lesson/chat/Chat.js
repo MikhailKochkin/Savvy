@@ -252,6 +252,10 @@ const Chat = (props) => {
     props.getResult(data);
   };
 
+  const passTextToBeTranslated = (text) => {
+    props.passTextToBeTranslated(text);
+  };
+
   const passUpdated = () => {
     props.passUpdated(true);
   };
@@ -349,6 +353,7 @@ const Chat = (props) => {
                         m={m}
                         me={me}
                         author={author}
+                        passTextToBeTranslated={passTextToBeTranslated}
                       />
                       {m.reactions && m.reactions.length > 0 && (
                         <Reaction
@@ -373,6 +378,7 @@ const Chat = (props) => {
                         m={m}
                         me={me}
                         author={author}
+                        passTextToBeTranslated={passTextToBeTranslated}
                       />
                     </>
                   );
@@ -414,6 +420,7 @@ const Chat = (props) => {
                     m={m}
                     me={me}
                     author={author}
+                    passTextToBeTranslated={passTextToBeTranslated}
                   />
                   {m.reactions && m.reactions.length > 0 && (
                     <Reaction
@@ -439,6 +446,7 @@ const Chat = (props) => {
                   m={m}
                   me={me}
                   author={author}
+                  passTextToBeTranslated={passTextToBeTranslated}
                 />
               );
             }

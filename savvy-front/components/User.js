@@ -148,16 +148,16 @@ function useUser() {
   // 2. Update user mutation
   const [recordSession, { record_data }] = useMutation(RECORD_SESSION);
   // 3. run mutation inside useEffect once get me data
-  // useEffect(() => {
-  //   if (data && data.me && data.me.id !== "cjqy9i57l000k0821rj0oo8l4") {
-  //     const new_record = recordSession({
-  //       variables: {
-  //         id: data.me.id,
-  //         traffic_sources: { visitsList: visits },
-  //       },
-  //     });
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data && data.me) {
+      const new_record = recordSession({
+        variables: {
+          id: data.me.id,
+          traffic_sources: { visitsList: visits },
+        },
+      });
+    }
+  }, [data]);
   if (error) return console.log(error);
   if (data) {
     return data.me;

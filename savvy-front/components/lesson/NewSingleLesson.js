@@ -80,6 +80,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         question
+        instructorName
         name
         image
         next
@@ -105,6 +106,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       problems {
         id
         text
+        name
         nodeID
         steps
         complexity

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import _ from "lodash";
 import Link from "next/link";
@@ -7,6 +7,8 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import Auth from "../auth/Auth.js";
 import AnswerQuestions from "./AnswerQuestions";
+import TranslateText from "./TranslateText";
+
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
@@ -46,7 +48,8 @@ const Buttons = styled.div`
 const Styles = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: stretch;
+  width: 100vw;
   .firstColumn {
     width: 4vw;
     transition: 0.5s;
@@ -90,6 +93,7 @@ const Styles = styled.div`
           display: inline-block;
           background: none;
           outline: 0;
+          width: 90%;
           font-family: Montserrat;
           color: #c2c2c2;
           font-size: 1.4rem;
@@ -128,8 +132,31 @@ const Styles = styled.div`
   }
 `;
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+`;
+
 const MenuColumn = styled.div`
-  width: ${(props) => (props.open ? "25vw" : "0px")};
+  width: ${(props) => (props.open ? "25vw" : "px")};
+  max-width: 400px;
   display: ${(props) => (props.open ? "flex" : "none")};
   height: 100vh;
   background: #fbfbfa;
@@ -142,7 +169,8 @@ const MenuColumn = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  transition: width 0.3s ease; /* Add this line for smooth transition */
+  transition: width 0.3s ease; // Add this line for smooth transition
+  animation: ${(props) => (props.open ? fadeIn : fadeOut)} 0.5s ease-in-out;
   @media (max-width: 800px) {
     width: ${(props) => (props.open ? "100vw" : "0px")};
   }
@@ -154,6 +182,9 @@ const MenuColumn = styled.div`
     margin-top: 30px;
     .navigate_block {
       margin: 15px 0;
+    }
+    .top_line {
+      margin-bottom: 20px;
     }
     .lesson_number {
       color: #8a8a8a;
@@ -257,6 +288,7 @@ const MenuColumn = styled.div`
         font-size: 1.4rem;
         cursor: pointer;
         transition: 0.5s;
+        width: 100%;
         /* &:hover {
           border: 1px solid #1a2980;
         } */
@@ -265,6 +297,7 @@ const MenuColumn = styled.div`
           display: inline-block;
           background: none;
           outline: 0;
+          width: 100%;
           font-family: Montserrat;
           font-size: 1.6rem;
           font-weight: 500;
@@ -345,7 +378,6 @@ const Block = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   width: ${(props) => (props.open ? "70vw" : "100vw")};
   @media (max-width: 800px) {
     /* width: ${(props) => (props.open ? "0vw" : "95vw")}; */
@@ -382,11 +414,12 @@ const SimpleButton = styled.button`
 `;
 
 const Content = styled.div`
-  width: ${(props) => (props.open ? "75vw" : "100vw")};
+  /* width: ${(props) => (props.open ? "75vw" : "100vw")}; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
   .arrowmenu {
     cursor: pointer;
     padding: 10px 2%;
@@ -562,6 +595,44 @@ const Section = styled.div`
   cursor: pointer;
 `;
 
+const TranslationBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-top: 5px;
+  font-size: 1.4rem;
+  .translationBlockRow {
+    border-bottom: 1px solid #efefee;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    line-height: 1.4;
+    select {
+      /* width: 90%; */
+      font-size: 1.4rem;
+      outline: none;
+      line-height: 1.3;
+      font-family: Montserrat;
+      padding: 0.4em 1.6em 0.4em 0.6em;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin-left: 2%;
+      margin-bottom: 0.5%;
+      border: 1px solid #c5c5c5;
+      border-radius: 4px;
+      background: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: #fff;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
+        linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+      background-repeat: no-repeat, repeat;
+      background-position: right 0.7em top 50%, 0 0;
+      background-size: 0.65em auto, 100%;
+    }
+  }
+`;
+
 const SimulatorLinks = styled.div`
   display: flex;
   flex-direction: column;
@@ -641,12 +712,18 @@ const Feed = (props) => {
   const [secondRound, setSecondRound] = useState(false);
   const totalSections = lessonElements.length;
   const sectionWidth = 100 / totalSections + "%";
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
   const [openNavigation, setOpenNavigation] = useState(false);
+  const [openTranslation, setOpenTranslation] = useState(false);
+  const [translationMode, setTranslationMode] = useState(false);
+  const [translationLanguage, setTranslationLanguage] = useState("French");
+
   const passMenuChange = () => {
     setOpen(!open);
+
+    setTranslationMode(false);
   };
   const [linkMenuOpen, setLinkMenuOpen] = useState(false);
 
@@ -788,6 +865,9 @@ const Feed = (props) => {
     )
     .sort((a, b) => a.number > b.number);
 
+  const handleToggleTranslation = () => {
+    setTranslationMode(!translationMode);
+  };
   return (
     <>
       <Styles>
@@ -797,7 +877,13 @@ const Feed = (props) => {
               <div className="lesson_name">
                 {props.lesson_number}. {props.lesson_name}
               </div>
-              <div className="close-button" onClick={(e) => setOpen(false)}>
+              <div
+                className="close-button"
+                onClick={(e) => {
+                  setOpen(false);
+                  setTranslationMode(false);
+                }}
+              >
                 <img src="../static/close-lg.svg" />
               </div>
             </div>
@@ -811,11 +897,9 @@ const Feed = (props) => {
               <img className="icon" src="/static/navigation.svg" />
               <div>{t("navigate")}</div>
             </div>
-            {console.log("lessonElements", props.lesson, lesson_structure)}
             {openNavigation && (
               <div className="navigate_block">
                 <div className="nav">
-                  {/* <div id="text">{t("choose_section")}</div> */}
                   <br />
                   <div id="button_square">
                     <select
@@ -845,6 +929,28 @@ const Feed = (props) => {
                                   .name
                               }`
                             : null}
+                          {el.type.toLowerCase() == "newtest"
+                            ? `${
+                                props.lesson.newTests.find(
+                                  (ch) => ch.id == el.id
+                                ).name
+                              }`
+                            : null}
+                          {el.type.toLowerCase() == "problem"
+                            ? `${
+                                props.lesson.problems.find(
+                                  (ch) => ch.id == el.id
+                                ).name
+                              }`
+                            : null}
+                          {el.type.toLowerCase() == "texteditor"
+                            ? `${
+                                props.lesson.texteditors.find(
+                                  (ch) => ch.id == el.id
+                                ).name
+                              }`
+                            : null}
+                          {el.type.toLowerCase() == "forum" ? `Q&A` : null}
                         </option>
                       ))}
                     </select>
@@ -861,6 +967,58 @@ const Feed = (props) => {
                   ))}
                 </div>
               </div>
+            )}
+            <div
+              className="navigate"
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("translate")}
+              onClick={(e) => {
+                setOpenTranslation(!openTranslation);
+                setTranslationMode(false);
+              }}
+            >
+              <img className="icon" src="/static/translate.svg" />
+              <div>Translate</div>
+            </div>
+            {openTranslation && (
+              <TranslationBlock>
+                <div className="translationBlockRow">
+                  <label htmlFor="translationCheckbox">
+                    Turn on translation:
+                  </label>
+                  <input
+                    type="checkbox"
+                    id="translationCheckbox"
+                    checked={translationMode}
+                    onChange={handleToggleTranslation}
+                  />
+                </div>
+                <div className="translationBlockRow">
+                  <label htmlFor="translationSelect">Choose language:</label>
+                  <select
+                    id="translationSelect"
+                    onChange={(e) => setTranslationLanguage(e.target.value)}
+                  >
+                    <option value="French">French</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="German">German</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Turkish">Turkish</option>
+                  </select>
+                </div>
+                {translationMode && (
+                  <div className="translationBlockRow">
+                    Now just select any text in the lesson and it willl be
+                    translated below.
+                  </div>
+                )}
+                {translationMode && (
+                  <TranslateText
+                    textToBeTranslated={props.textToBeTranslated}
+                    translationLanguage={translationLanguage}
+                  />
+                )}
+              </TranslationBlock>
             )}
 
             {/* <div className="questions">{t("have_questions")}</div> */}
@@ -906,13 +1064,6 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
-          {/* <CustomProgressBar myResult={num} lessonItems={lesson_structure} /> */}
-          {/* <Message visible={visible}>
-            <div id="message_text">
-              🚀 {t("level_up")} {complexity}
-            </div>
-          </Message> */}
-
           <Navigation
             i_am_author={props.i_am_author}
             lesson={props.lesson}
@@ -920,6 +1071,7 @@ const Feed = (props) => {
             width={props.width}
             passMenuChange={passMenuChange}
           />
+
           {props.hasSecret && (
             <div
               className="arrowmenu2"

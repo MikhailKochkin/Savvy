@@ -17,6 +17,7 @@ const UPDATE_TEST_MUTATION = gql`
     $goal: String
     $complexity: Int
     $type: String
+    $instructorName: String
     $name: String
     $image: String
     $ifRight: String
@@ -33,6 +34,7 @@ const UPDATE_TEST_MUTATION = gql`
       ifRight: $ifRight
       ifWrong: $ifWrong
       type: $type
+      instructorName: $instructorName
       name: $name
       image: $image
     ) {
@@ -47,6 +49,7 @@ const UPDATE_TEST_MUTATION = gql`
       ifWrong
       next
       question
+      instructorName
       name
       image
       createdAt
@@ -217,6 +220,17 @@ const Input = styled.input`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -239,6 +253,9 @@ const UpdateTest = (props) => {
   const [type, setType] = useState(props.type);
   const [image, setImage] = useState(props.image ? props.image : null);
   const [name, setName] = useState(props.name ? props.name : null);
+  const [instructorName, setInstructorName] = useState(
+    props.instructorName ? props.instructorName : null
+  );
   const { t } = useTranslation("lesson");
 
   const handleArray = (val, name, i) => {
@@ -274,6 +291,11 @@ const UpdateTest = (props) => {
   const { testID, mes, lessonID } = props;
   return (
     <Styles>
+      <NameInput
+        onChange={(e) => setName(e.target.value)}
+        defaultValue={name}
+        placeholder="Untitled"
+      />
       <h3>Type</h3>
       <select
         name="types"
@@ -286,8 +308,11 @@ const UpdateTest = (props) => {
       </select>
       <h3>Goal</h3>
       <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
-      <h3>Name</h3>
-      <Input defaultValue={name} onChange={(e) => setName(e.target.value)} />
+      <h3>Instructor Name</h3>
+      <Input
+        defaultValue={instructorName}
+        onChange={(e) => setInstructorName(e.target.value)}
+      />
       <h3>Image</h3>
       <Input defaultValue={image} onChange={(e) => setImage(e.target.value)} />
       <Comment>

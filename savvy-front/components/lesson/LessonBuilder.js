@@ -662,7 +662,7 @@ const LessonBuilder = (props) => {
           onUpdateLessonData={updateLessonData}
         />
         {/* <Analyzer elements={elements} lesson={lesson} /> */}
-        <GenerateLesson passData={passData} />
+        {/* <GenerateLesson passData={passData} /> */}
         <BuilderPart id="builder_part">
           {[...elements].map((el, i) => {
             return (

@@ -536,12 +536,6 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "shot" && (
           <>
-            {/* {console.log(
-              "initial_data in lesson block",
-              initial_data && initial_data.format == "slides"
-                ? initial_data
-                : null
-            )} */}
             {!isSaved && el.id == undefined && (
               <CreateShot
                 lessonID={lesson.id}
@@ -591,6 +585,7 @@ const LessonBlock = (props) => {
                 problem={data}
                 complexity={data.complexity}
                 lessonID={lesson.id}
+                name={lesson.name}
                 me={me}
                 lesson={lesson}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
@@ -623,6 +618,9 @@ const LessonBlock = (props) => {
                 answers={data.answers}
                 comments={data.comments}
                 true={data.correct}
+                name={data.name}
+                instructorName={data.instructorName}
+                image={data.image}
                 goal={data.goal}
                 user={data.user.id}
                 user_name={data.user}
@@ -820,6 +818,7 @@ const LessonBlock = (props) => {
                     id={data.id}
                     text={data.text}
                     complexity={data.complexity}
+                    name={data.name}
                     textEditor={data}
                     lesson={lesson}
                     me={me}

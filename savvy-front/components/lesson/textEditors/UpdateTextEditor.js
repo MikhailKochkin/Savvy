@@ -76,16 +76,6 @@ const Container = styled.div`
   @media (max-width: 600px) {
     width: 100%;
   }
-  input {
-    padding: 0.5%;
-    height: 75%;
-    width: 100%;
-    outline: 0;
-    border: 1px solid #ccc;
-    border-radius: 3.5px;
-    padding: 2%;
-    font-size: 1.4rem;
-  }
 `;
 
 const Button = styled.button`
@@ -176,12 +166,24 @@ const Explainer = styled.div`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
 const UpdateTextEditor = (props) => {
+  const [name, setName] = useState(props.name ? props.name : null);
   const [text, setText] = useState(props.text);
   const [open, setOpen] = useState(false);
   const [goal, setGoal] = useState(props.goal);
@@ -199,19 +201,7 @@ const UpdateTextEditor = (props) => {
   return (
     <>
       <Container>
-        {/* <Title>Редактор</Title> */}
-        {/* <Label>
-          <p>Всего ошибок / рисков: </p>
-          <input
-            type="number"
-            spellcheck={true}
-            id="totalMistakes"
-            name="totalMistakes"
-            defaultValue={mistakes}
-            onChange={(e) => setMistakes(e.target.value)}
-          />
-        </Label> */}
-        <Explainer>
+        {/* <Explainer>
           <p>
             Задача редактора – воссоздать опыт работы над реальным документом
             вместе с наставником. Для этого мы создали разные инструменты.
@@ -247,7 +237,12 @@ const UpdateTextEditor = (props) => {
             фрагменту текста. Задайте вопрос, ответ, а также комментарии на
             случай правильного и неправильного ответов.
           </p>
-        </Explainer>
+        </Explainer> */}
+        <NameInput
+          onChange={(e) => setName(e.target.value)}
+          defaultValue={name}
+          placeholder="Untitled"
+        />
         <h3>Goal</h3>
         <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
         <h3>Doc Editor</h3>
@@ -291,6 +286,7 @@ const UpdateTextEditor = (props) => {
             text: text,
             complexity,
             goal,
+            name,
             totalMistakes: parseInt(mistakes),
           }}
           refetchQueries={() => [

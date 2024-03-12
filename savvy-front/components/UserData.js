@@ -218,9 +218,16 @@ const ClientData = (props) => {
   };
 
   const search = (val) => {
+    // Split the input string into an array of tags
+    const tagsArray = val.split(",").map((tag) => tag.trim());
+
+    // Filter clients based on whether any of their tags match the input tags
     let filtered_clients = clients.filter(
-      (c) => c.tags.includes(val) || c.tags.includes(val.toLowerCase())
+      (c) =>
+        c.tags.filter((t) => tagsArray.includes(t.toLowerCase())).length > 0
     );
+
+    // Update the state with the filtered clients
     setClients(filtered_clients);
   };
 
@@ -315,6 +322,13 @@ const ClientData = (props) => {
     setClients(filtered_clients);
   };
 
+  const search8 = (val) => {
+    let filtered_clients = props.initial_clients.filter((client) =>
+      client.lessonResults.some((result) => result.lesson.coursePage.id == val)
+    );
+    setClients(filtered_clients);
+  };
+
   const sortClientsByActivity = () => {
     setClients(
       [...clients].sort(
@@ -324,6 +338,32 @@ const ClientData = (props) => {
     );
   };
 
+  const sortClientsByActivity2 = () => {
+    setClients(
+      [...clients].sort((a, b) => {
+        // Get the updatedAt property of the latest lessonResult for client A
+        const latestUpdatedAtA = a.lessonResults.reduce(
+          (latest, lessonResult) => {
+            const updatedAt = new Date(lessonResult.updatedAt).getTime();
+            return updatedAt > latest ? updatedAt : latest;
+          },
+          0
+        );
+
+        // Get the updatedAt property of the latest lessonResult for client B
+        const latestUpdatedAtB = b.lessonResults.reduce(
+          (latest, lessonResult) => {
+            const updatedAt = new Date(lessonResult.updatedAt).getTime();
+            return updatedAt > latest ? updatedAt : latest;
+          },
+          0
+        );
+
+        // Compare the latest updatedAt properties of clients A and B
+        return latestUpdatedAtB - latestUpdatedAtA;
+      })
+    );
+  };
   function findNewestItem(array) {
     if (array.length === 0) {
       return null;
@@ -486,6 +526,9 @@ const ClientData = (props) => {
         <button onClick={(e) => sortClientsByActivity()}>
           Сортировать по последней активности
         </button>
+        <button onClick={(e) => sortClientsByActivity2()}>
+          Сортировать по последней активности в уроках
+        </button>
         <br />
         <button onClick={(e) => setClients(props.initial_clients)}>
           Показать всех пользователей
@@ -542,6 +585,15 @@ const ClientData = (props) => {
           <button onClick={(e) => search3(courseId)}>
             Искать по курсу (EmailReminder)
           </button>
+          <br />
+          <input
+            onChange={(e) => setCourseId(e.target.value)}
+            value={courseId}
+            type="text"
+            name="email"
+            placeholder="..."
+          />
+          <button onClick={(e) => search8(courseId)}>Искать по курсу</button>
           <br />
           <EmailBox>
             <input

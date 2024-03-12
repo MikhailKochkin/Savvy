@@ -17,6 +17,7 @@ const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
     $id: String!
     $text: String
+    $name: String
     $complexity: Int
     $steps: ProblemStructure
     $goal: String
@@ -24,12 +25,14 @@ const UPDATE_PROBLEM_MUTATION = gql`
     updateProblem(
       id: $id
       text: $text
+      name: $name
       steps: $steps
       complexity: $complexity
       goal: $goal
     ) {
       id
       text
+      name
       nodeID
       steps
       goal
@@ -74,7 +77,7 @@ const Styles = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
-  input {
+  /* input {
     padding: 0.5%;
     height: 75%;
     width: 100%;
@@ -83,7 +86,7 @@ const Styles = styled.div`
     border-radius: 3.5px;
     padding: 2%;
     font-size: 1.4rem;
-  }
+  } */
   textarea {
     width: 100%;
     height: 120px;
@@ -138,6 +141,17 @@ const Complexity = styled.div`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
@@ -146,6 +160,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
   const [goal, setGoal] = useState(props.goal);
+  const [name, setName] = useState(props.name);
 
   const [updatedSteps, setUpdatedSteps] = useState(
     props.steps && props.steps.problemItems.length > 0
@@ -153,8 +168,6 @@ const UpdateProblem = (props) => {
       : []
   );
 
-  // const [nodeID, setNodeID] = useState(props.nodeID);
-  // const [nodeType, setNodeType] = useState(props.nodeType);
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -186,19 +199,11 @@ const UpdateProblem = (props) => {
   return (
     <Styles>
       <div className="editor_container">
-        {/* <Complexity>
-          <select
-            value={complexity}
-            onChange={(e) => setComplexity(parseInt(e.target.value))}
-          >
-            <option value={0}>Выберите сложность</option>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-            <option value={5}>5</option>
-          </select>
-        </Complexity> */}
+        <NameInput
+          onChange={(e) => setName(e.target.value)}
+          defaultValue={name}
+          placeholder="Untitled"
+        />
         <h3>HTML Editor</h3>
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
         <h3>Problem Goal</h3>
@@ -253,6 +258,7 @@ const UpdateProblem = (props) => {
           text,
           complexity,
           goal,
+          name,
           steps: {
             problemItems: [...updatedSteps].map(
               ({ position, content, ...keepAttrs }) => keepAttrs

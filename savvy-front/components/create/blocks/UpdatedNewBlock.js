@@ -14,7 +14,6 @@ import SingleQuiz from "../../lesson/quizes/SingleQuiz";
 
 const Block = styled.div`
   font-size: 1.5rem;
-  margin: 1% 4%;
   border: 1px solid #dee2e6;
   border-radius: 10px;
   padding: 2%;

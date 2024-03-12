@@ -615,7 +615,6 @@ const Mutation = mutationType({
             ),
           };
         }
-
         const updated_user = await ctx.prisma.user.update({
           data: {
             traffic_sources: new_traffic_sources,

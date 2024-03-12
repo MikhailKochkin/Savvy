@@ -106,7 +106,7 @@ const StyledModal = Modal.styled`
   border: 1px solid grey;
   border-radius: 10px;
   height: 800px;
-  max-width: 800px;
+  max-width: 880px;
   min-width: 560px;
   padding: 2%;
       overflow-y: scroll;
@@ -654,7 +654,7 @@ const Message = ({
       <div className="question">
         {type.toLowerCase() == "quiz" && lesson.quizes.find((el) => el.id == id)
           ? parse(
-              lesson.quizes.find((el) => el.id == id).question.substring(0, 180)
+              lesson.quizes.find((el) => el.id == id).question.substring(0, 80)
             )
           : null}
         {type.toLowerCase() == "newtest" &&
@@ -662,11 +662,11 @@ const Message = ({
           ? parse(
               lesson.newTests
                 .find((el) => el.id == id)
-                .question[0].substring(0, 180)
+                .question[0].substring(0, 80)
             )
           : null}
         {type.toLowerCase() == "note" && lesson.notes.find((el) => el.id == id)
-          ? parse(lesson.notes.find((el) => el.id == id).text.substring(0, 120))
+          ? parse(lesson.notes.find((el) => el.id == id).text.substring(0, 80))
           : null}
 
         {type.toLowerCase() == "chat" && lesson.chats.find((el) => el.id == id)

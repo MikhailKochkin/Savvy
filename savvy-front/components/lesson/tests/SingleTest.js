@@ -319,6 +319,7 @@ const SingleTest = (props) => {
     comments,
     miniforum,
     author,
+    instructorName,
     name,
     image,
   } = props;
@@ -487,8 +488,6 @@ const SingleTest = (props) => {
 
     let comments_arr = [];
 
-    console.log("comments", comments);
-
     if (comments && comments.length > 0) {
       answerNums.map((num) => {
         if (comments[num] == undefined) {
@@ -566,7 +565,11 @@ const SingleTest = (props) => {
                 <img className="icon" src="../../static/hipster.svg" />
               )}{" "}
               <div className="name">
-                {name ? name : author && author.name ? author.name : "BeSavvy"}
+                {instructorName
+                  ? instructorName
+                  : author && author.name
+                  ? author.name
+                  : "BeSavvy"}
               </div>
             </IconBlock>
           </div>
@@ -611,8 +614,8 @@ const SingleTest = (props) => {
                   <img className="icon" src="../../static/hipster.svg" />
                 )}{" "}
                 <div className="name">
-                  {name
-                    ? name
+                  {instructorName
+                    ? instructorName
                     : author && author.name
                     ? author.name
                     : "BeSavvy"}
@@ -670,8 +673,8 @@ const SingleTest = (props) => {
                   <img className="icon" src="../../static/hipster.svg" />
                 )}{" "}
                 <div className="name">
-                  {name
-                    ? name
+                  {instructorName
+                    ? instructorName
                     : author && author.name
                     ? author.name
                     : "BeSavvy"}
@@ -701,8 +704,8 @@ const SingleTest = (props) => {
                   <img className="icon" src="../../static/hipster.svg" />
                 )}{" "}
                 <div className="name">
-                  {name
-                    ? name
+                  {instructorName
+                    ? instructorName
                     : author && author.name
                     ? author.name
                     : "BeSavvy"}
@@ -729,8 +732,8 @@ const SingleTest = (props) => {
                       <img className="icon" src="../../static/hipster.svg" />
                     )}{" "}
                     <div className="name">
-                      {name
-                        ? name
+                      {instructorName
+                        ? instructorName
                         : author && author.name
                         ? author.name
                         : "BeSavvy"}
@@ -775,8 +778,8 @@ const SingleTest = (props) => {
                         <img className="icon" src="../../static/hipster.svg" />
                       )}{" "}
                       <div className="name">
-                        {name
-                          ? name
+                        {instructorName
+                          ? instructorName
                           : author && author.name
                           ? author.name
                           : "BeSavvy"}
@@ -805,8 +808,8 @@ const SingleTest = (props) => {
                       <img className="icon" src="../../static/hipster.svg" />
                     )}{" "}
                     <div className="name">
-                      {name
-                        ? name
+                      {instructorName
+                        ? instructorName
                         : author && author.name
                         ? author.name
                         : "BeSavvy"}
@@ -846,8 +849,8 @@ const SingleTest = (props) => {
                         <img className="icon" src="../../static/hipster.svg" />
                       )}{" "}
                       <div className="name">
-                        {name
-                          ? name
+                        {instructorName
+                          ? instructorName
                           : author && author.name
                           ? author.name
                           : "BeSavvy"}

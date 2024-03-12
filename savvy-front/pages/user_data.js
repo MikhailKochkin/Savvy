@@ -4,7 +4,10 @@ import { useQuery, gql } from "@apollo/client";
 
 const CLIENTS_QUERY = gql`
   query CLIENTS_QUERY {
-    users(orderBy: { createdAt: desc }) {
+    users(
+      where: { updatedAt: { gte: "2023-01-01T14:49:32.954Z" } }
+      orderBy: { createdAt: desc }
+    ) {
       id
       name
       surname
@@ -43,6 +46,7 @@ const CLIENTS_QUERY = gql`
         id
         progress
         createdAt
+        updatedAt
         lesson {
           id
           name

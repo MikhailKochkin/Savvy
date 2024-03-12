@@ -20,9 +20,8 @@ import Block from "../../lesson/Block";
 const Styles = styled.div`
   font-size: 1.5rem;
   margin: 1% 4%;
-  border: 1px solid #dee2e6;
+  /* border: 1px solid #dee2e6; */
   border-radius: 10px;
-  padding: 2%;
   margin: 30px 0;
   width: 100%;
 `;
@@ -209,7 +208,7 @@ const NewBlock = (props) => {
       {saved && type == "Quiz" && data && (
         <SingleQuiz
           id={data.id}
-          testID={data.id}
+          quizID={data.id}
           question={data.question}
           type={data.type}
           answer={data.answer}

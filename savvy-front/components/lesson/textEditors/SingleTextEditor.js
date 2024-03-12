@@ -906,6 +906,7 @@ const SingleTextEditor = (props) => {
           id={props.textEditor.id}
           goal={props.textEditor.goal}
           text={text}
+          name={props.textEditor.name}
           complexity={complexity}
           totalMistakes={total}
           getResult={getResult}
