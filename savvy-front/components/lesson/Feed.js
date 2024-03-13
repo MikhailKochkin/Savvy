@@ -5,6 +5,7 @@ import _ from "lodash";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import ReactResizeDetector from "react-resize-detector";
 import Auth from "../auth/Auth.js";
 import AnswerQuestions from "./AnswerQuestions";
 import TranslateText from "./TranslateText";
@@ -155,7 +156,7 @@ const fadeOut = keyframes`
 `;
 
 const MenuColumn = styled.div`
-  width: ${(props) => (props.open ? "25vw" : "px")};
+  width: ${(props) => (props.open ? "25vw" : "0")};
   max-width: 400px;
   display: ${(props) => (props.open ? "flex" : "none")};
   height: 100vh;
@@ -704,7 +705,8 @@ const Feed = (props) => {
     lessonElements = props.components;
     next_lesson = true;
   }
-
+  const [width, setWidth] = useState(0);
+  const onResize = (width) => setWidth(width);
   const [num, setNum] = useState(step ? parseInt(step) - 1 : 0);
   const [result, setResult] = useState(
     props.my_result ? props.my_result : null
@@ -712,7 +714,7 @@ const Feed = (props) => {
   const [secondRound, setSecondRound] = useState(false);
   const totalSections = lessonElements.length;
   const sectionWidth = 100 / totalSections + "%";
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(width < 500 ? false : true);
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
   const [openNavigation, setOpenNavigation] = useState(false);
@@ -804,6 +806,10 @@ const Feed = (props) => {
   }
 
   useEffect(() => {
+    setOpen(width < 500 ? false : true);
+  }, [width]);
+
+  useEffect(() => {
     if (step == 0) {
       setResult(props.my_result ? props.my_result : null);
 
@@ -871,6 +877,7 @@ const Feed = (props) => {
   return (
     <>
       <Styles>
+        <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <MenuColumn open={open} className="lastColumn">
           <div className="container">
             <div className="top_line">
@@ -1064,6 +1071,8 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
+          <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
+
           <Navigation
             i_am_author={props.i_am_author}
             lesson={props.lesson}
@@ -1071,7 +1080,6 @@ const Feed = (props) => {
             width={props.width}
             passMenuChange={passMenuChange}
           />
-
           {props.hasSecret && (
             <div
               className="arrowmenu2"

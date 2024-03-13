@@ -411,6 +411,10 @@ const MobileBuy = (props) => {
     currency_symbol = "$";
   }
 
+  let first_open_lesson = props.coursePage.lessons
+    .filter((l) => l.type !== "CHALLENGE")
+    .find((l) => l.open == true);
+
   return (
     <Styles id="buy_section">
       {/* Part 1. Header. Open course button*/}
@@ -447,10 +451,10 @@ const MobileBuy = (props) => {
             onClick={(e) => {
               e.preventDefault();
               Router.push({
-                pathname: "/course",
+                pathname: "/lesson",
                 query: {
-                  id: coursePage.id,
-                  // type: "story",
+                  id: first_open_lesson.id,
+                  type: "story",
                 },
               });
             }}
@@ -474,11 +478,9 @@ const MobileBuy = (props) => {
           <div className="">{t("access")}</div>
           <div className="">{t("chat")}</div>
           <div className="">{t("certificate")}</div>
-          //{" "}
           <div className="">
-            // {price}
-            // {coursePage.currency == "ruble" ? "₽" : "$"}
-            //{" "}
+            {price}
+            {coursePage.currency == "ruble" ? "₽" : "$"}{" "}
           </div>
         </div>
         {props.coursePage.prices &&

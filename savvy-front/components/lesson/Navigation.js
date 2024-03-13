@@ -6,26 +6,9 @@ import { useQuery, gql } from "@apollo/client";
 import { result } from "lodash";
 import { Tooltip } from "react-tooltip";
 
-const TEAM_RESULTS = gql`
-  query questResults($lessonId: String!, $list_of_ids: [String!]) {
-    questResults(lessonId: $lessonId, list_of_ids: $list_of_ids) {
-      lessonResults {
-        id
-        student {
-          id
-          name
-          surname
-          image
-        }
-        progress
-      }
-    }
-  }
-`;
-
 const Head = styled.div`
   position: sticky;
-  top: 0;
+  top: 40px;
   z-index: 1000; /* You can adjust the z-index as needed */
   display: flex;
   flex-direction: row;
@@ -37,7 +20,6 @@ const Head = styled.div`
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
-  border-top: 1px solid #efefee;
   #change_page {
     font-size: 1.7rem;
   }
@@ -89,50 +71,6 @@ const Level = styled.div`
       } 360deg)`;
     }
   }};
-`;
-
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 65px;
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 45px;
-    width: 45px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .icon_letters {
-    margin: 5px;
-    border-radius: 50%;
-    height: 45px;
-    width: 45px;
-    background: #d5d9e4;
-    color: #171e2e;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-  }
-`;
-
-const Team = styled.div`
-  display: flex;
-  flex-direction: row;
 `;
 
 const Left = styled.div`

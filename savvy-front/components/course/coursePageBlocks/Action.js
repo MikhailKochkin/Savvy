@@ -518,6 +518,10 @@ const Action = (props) => {
     }
   };
 
+  let first_open_lesson = props.coursePage.lessons
+    .filter((l) => l.type !== "CHALLENGE")
+    .find((l) => l.open == true);
+
   const d = props.data;
   const { me, coursePage } = props;
   let my_orders = [];
@@ -544,12 +548,10 @@ const Action = (props) => {
               onClick={(e) => {
                 e.preventDefault();
                 Router.push({
-                  pathname: "/navigator",
+                  pathname: "/lesson",
                   query: {
-                    level: "post",
-                    id: coursePage.promotionId,
-                    source: "coursePage",
-                    name: coursePage.title,
+                    id: first_open_lesson.id,
+                    type: "story",
                   },
                 });
               }}

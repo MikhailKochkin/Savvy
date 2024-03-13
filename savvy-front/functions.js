@@ -1,16 +1,16 @@
 const calculateSum = (arr) => {
   const typeValues = {
-    note: 7,
-    texteditor: 5,
-    chat: 2,
-    newtest: 2,
-    problem: 7,
-    quiz: 3,
-    forum: 2,
-    shot: 3,
+    note: 3,
+    texteditor: 4,
+    chat: 1,
+    newtest: 1,
+    problem: 5,
+    quiz: 2,
+    forum: 1,
+    shot: 1,
     offer: 1,
-    construction: 5,
-    testPractice: 5,
+    construction: 3,
+    testPractice: 3,
   };
 
   return arr.reduce((sum, item) => {

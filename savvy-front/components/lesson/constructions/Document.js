@@ -353,6 +353,28 @@ const NewConstructor = (props) => {
     return array;
   };
 
+  function compareArrays(arr1, arr2) {
+    // Check if both arrays have the same length
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+
+    // Loop through the arrays to compare the 'text' property
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] && arr2[i]) {
+        if (arr1[i].text !== arr2[i].text) {
+          return false;
+        }
+      } else if (!arr1[i] && !arr2[i]) {
+        continue;
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   useEffect(() => {
     // 1. slide smoothly
     smoothscroll.polyfill();
@@ -385,15 +407,16 @@ const NewConstructor = (props) => {
     setIsResultShown(true);
     // 2. the new data structure? Input?
     setAttempts(attempts + 1);
-    createConstructionResult({
-      variables: {
-        answer: "",
-        attempts: attempts,
-        lessonId: lessonID,
-        constructionId: construction.id,
-        elements: { elements: input },
-      },
-    });
+    console.log("input", input);
+    // createConstructionResult({
+    //   variables: {
+    //     answer: "",
+    //     attempts: attempts,
+    //     lessonId: lessonID,
+    //     constructionId: construction.id,
+    //     elements: { elements: input },
+    //   },
+    // });
   };
 
   return (
@@ -415,7 +438,8 @@ const NewConstructor = (props) => {
               // 2. Element logic
               isTest={t.isTest}
               type={construction.type}
-              // should we show the resulu
+              allCorrect={compareArrays(elements, input)}
+              // should we show the result
               isResultShown={isResultShown}
               // shows if the answer has been answered correctly
               answer_status={currentConfig[i]}
@@ -668,6 +692,7 @@ const ConElement = (props) => {
           <div
             className="single_option"
             onClick={(e) => {
+              console.log("allCorrect", allCorrect);
               if (!allCorrect) {
                 alert("First build the structure of the document");
               } else {
