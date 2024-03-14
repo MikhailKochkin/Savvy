@@ -662,7 +662,7 @@ const Note = (props) => {
           </EmailContainer>
         ) : (
           <Container id={id} width={width}>
-            <Header>{note.name}</Header>
+            {/* <Header>{note.name}</Header> */}
 
             <div className="text">
               {!update && (

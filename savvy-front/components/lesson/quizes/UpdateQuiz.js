@@ -297,20 +297,6 @@ const UpdateQuiz = (props) => {
       <label>Image</label>
       <br />
       <Input defaultValue={image} onChange={(e) => setImage(e.target.value)} />
-      {/* 
-      <Complexity>
-        <select
-          value={complexity}
-          onChange={(e) => setComplexity(parseInt(e.target.value))}
-        >
-          <option value={0}>Выберите сложность</option>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-        </select>
-      </Complexity> */}
       <Comment>
         <DynamicLoadedEditor
           id="question"
@@ -407,7 +393,7 @@ const UpdateQuiz = (props) => {
           ))}
         </>
       )}
-      {type == "GENERATE" && (
+      {(type == "GENERATE" || type == "FINDALL") && (
         <>
           <button
             onClick={(e) => {

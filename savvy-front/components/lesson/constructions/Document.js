@@ -407,7 +407,6 @@ const NewConstructor = (props) => {
     setIsResultShown(true);
     // 2. the new data structure? Input?
     setAttempts(attempts + 1);
-    console.log("input", input);
     // createConstructionResult({
     //   variables: {
     //     answer: "",
@@ -692,7 +691,6 @@ const ConElement = (props) => {
           <div
             className="single_option"
             onClick={(e) => {
-              console.log("allCorrect", allCorrect);
               if (!allCorrect) {
                 alert("First build the structure of the document");
               } else {

@@ -529,9 +529,7 @@ const Feed = (props) => {
 
   // const classes = useStyles();
   const { t } = useTranslation("lesson");
-  const getResults = (el) => {
-    // console.log("res2", el);
-  };
+  const getResults = (el) => {};
   const move = async (e) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
@@ -622,11 +620,11 @@ const Feed = (props) => {
           angle={props.experience * (360 / props.total)}
         >
           <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
-          <Message visible={visible}>
+          {/* <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
             </div>
-          </Message>
+          </Message> */}
           {props.hasSecret && (
             <div
               className="arrowmenu2"

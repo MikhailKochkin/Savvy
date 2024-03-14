@@ -17,6 +17,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
     $elements: ElementsList
     $goal: String
     $type: String
+    $name: String
   ) {
     updateConstruction(
       id: $id
@@ -25,6 +26,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
       elements: $elements
       goal: $goal
       type: $type
+      name: $name
     ) {
       id
       name
@@ -305,6 +307,17 @@ const MoreButton = styled.button`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -314,6 +327,7 @@ const UpdateNewConstructor = (props) => {
   const { construction, lesson } = props;
   const [hint, setHint] = useState(construction.hint);
   const [goal, setGoal] = useState(construction.goal);
+  const [name, setName] = useState(construction.name);
   const [columnsNum, setColumns] = useState(construction.columnsNum);
   const [elements, setElements] = useState(construction.elements.elements);
   const [type, setType] = useState(
@@ -369,6 +383,11 @@ const UpdateNewConstructor = (props) => {
   return (
     <Center>
       <Title>{t("Construction")}</Title>
+      <NameInput
+        defaultValue={name}
+        placeholder="Undefined"
+        onChange={(e) => setName(e.target.value)}
+      />
       <Explainer>
         {router.locale == "ru" ? (
           <>
@@ -495,6 +514,7 @@ const UpdateNewConstructor = (props) => {
               columnsNum,
               goal,
               type,
+              name,
               elements: { elements },
             },
           });

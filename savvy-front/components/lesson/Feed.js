@@ -957,6 +957,13 @@ const Feed = (props) => {
                                 ).name
                               }`
                             : null}
+                          {el.type.toLowerCase() == "construction"
+                            ? `${
+                                props.lesson.constructions.find(
+                                  (ch) => ch.id == el.id
+                                ).name
+                              }`
+                            : null}
                           {el.type.toLowerCase() == "forum" ? `Q&A` : null}
                         </option>
                       ))}

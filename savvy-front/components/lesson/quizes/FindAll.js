@@ -360,7 +360,7 @@ const FindAll = (props) => {
   const [isFeedbackShown, setIsFeedbackShown] = useState(false);
   const [AIhint, setAIHint] = useState(null);
   const [expectedAnswers, setExpectedAnswers] = useState(
-    new Array(props.answers.answerElements.length).fill(null)
+    new Array(props.answers?.answerElements?.length).fill(null)
   );
 
   const [createQuizResult, { data, loading, error }] = useMutation(

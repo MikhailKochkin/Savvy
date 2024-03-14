@@ -663,6 +663,7 @@ const LessonBlock = (props) => {
                   ifRight={data.ifRight}
                   ifWrong={data.ifWrong}
                   name={data.name}
+                  instructorName={data.instructorName}
                   image={data.image}
                   hidden={true}
                   lesson={lesson}

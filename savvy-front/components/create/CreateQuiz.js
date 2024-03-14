@@ -16,6 +16,8 @@ const CREATE_QUIZ_MUTATION = gql`
     $ifRight: String
     $ifWrong: String
     $type: String
+    $goalType: String
+    $name: String
     $answers: ComplexAnswer
   ) {
     createQuiz(
@@ -25,6 +27,8 @@ const CREATE_QUIZ_MUTATION = gql`
       ifRight: $ifRight
       ifWrong: $ifWrong
       type: $type
+      goalType: $goalType
+      name: $name
       answers: $answers
     ) {
       id
@@ -36,6 +40,8 @@ const CREATE_QUIZ_MUTATION = gql`
       ifWrong
       answer
       next
+      name
+      goalType
       createdAt
       user {
         id
@@ -86,32 +92,6 @@ const Answers = styled.div`
   select {
     width: 25%;
   }
-`;
-
-const Generate = styled.div`
-  width: 100%;
-  margin: 20px 0;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  textarea {
-    width: 100%;
-    min-height: 170px;
-    margin-bottom: 20px;
-  }
-`;
-
-const Advice = styled.p`
-  font-size: 1.5rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2%;
-  margin: 30px 0;
-  width: 80%;
 `;
 
 const AnswerBlock = styled.div`
@@ -177,6 +157,17 @@ const Comment = styled.div`
   }
 `;
 
+const NameInput = styled.input`
+  width: 100%;
+  height: 40px;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Montserrat;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -199,53 +190,54 @@ const CreateQuiz = (props) => {
   const [input, setInput] = useState("");
   const [dataLoaded, setDataLoaded] = useState(true); // new state for managing JSON data loading status
   const [generating, setGenerating] = useState(false);
+  const [goalType, setGoalType] = useState("EDUCATE");
 
   const { t } = useTranslation("lesson");
 
-  const handleButtonClick = async (e) => {
-    e.preventDefault();
-    try {
-      setGenerating(true);
+  //   const handleButtonClick = async (e) => {
+  //     e.preventDefault();
+  //     try {
+  //       setGenerating(true);
 
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-           Use this text to create an open question based on this information: ${input} to a student. The result must be a json in the following format:
-{"ifRight": "Some text for ifRight state","ifWrong": "Some text for ifWrong state","answer": "answer","question": "question text"}, where:
-ifRight – explainer text if the student gives the correct answer
-ifWrong – explainer text if the student gives the wrong answer
-answer – is a sample answer to which student answer will be compared
-question – the question to the student. It must be in HTML format
-Write the question as a case. Give a back story, make it engaging and interesting. Make comments and explainers detailed. The question must be straight and require a detailed answer (ideally it should be 1-2 sentences). 
-All text must be in Russian.`,
-        }),
-      });
+  //       const response = await fetch("/api/generate", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           prompt: `
+  //            Use this text to create an open question based on this information: ${input} to a student. The result must be a json in the following format:
+  // {"ifRight": "Some text for ifRight state","ifWrong": "Some text for ifWrong state","answer": "answer","question": "question text"}, where:
+  // ifRight – explainer text if the student gives the correct answer
+  // ifWrong – explainer text if the student gives the wrong answer
+  // answer – is a sample answer to which student answer will be compared
+  // question – the question to the student. It must be in HTML format
+  // Write the question as a case. Give a back story, make it engaging and interesting. Make comments and explainers detailed. The question must be straight and require a detailed answer (ideally it should be 1-2 sentences).
+  // All text must be in Russian.`,
+  //         }),
+  //       });
 
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw (
-          data.error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      setGenerating(false);
+  //       const data = await response.json();
+  //       if (response.status !== 200) {
+  //         throw (
+  //           data.error ||
+  //           new Error(`Request failed with status ${response.status}`)
+  //         );
+  //       }
+  //       setGenerating(false);
 
-      const generated_question = JSON.parse(data.result.content);
-      setIfRight(generated_question.ifRight);
-      setIfWrong(generated_question.ifWrong);
-      setQuestion(generated_question.question);
-      setAnswer(generated_question.answer);
-      setDataLoaded(true);
-    } catch (error) {
-      // Consider implementing your own error handling logic here
-      console.error(error);
-      alert(error.message);
-    }
-  };
+  //       const generated_question = JSON.parse(data.result.content);
+  //       setIfRight(generated_question.ifRight);
+  //       setIfWrong(generated_question.ifWrong);
+  //       setQuestion(generated_question.question);
+  //       setAnswer(generated_question.answer);
+  //       setDataLoaded(true);
+  //     } catch (error) {
+  //       // Consider implementing your own error handling logic here
+  //       console.error(error);
+  //       alert(error.message);
+  //     }
+  //   };
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
@@ -277,6 +269,11 @@ All text must be in Russian.`,
       >
         {(createQuiz, { loading, error }) => (
           <Form>
+            <NameInput
+              defaultValue={name}
+              placeholder="Undefined"
+              onChange={(e) => setName(e.target.value)}
+            />
             <fieldset>
               {/* <Generate>
                 <textarea
@@ -314,11 +311,22 @@ All text must be in Russian.`,
                     defaultValue={type}
                     onChange={(e) => setType(e.target.value)}
                   >
+                    <option value={null}>Undefined</option>
                     <option value="TEST">Question</option>
                     <option value="FORM">Form</option>
-                    <option value="GENERATE">Generate Ideas </option>
+                    <option value="GENERATE">Generate Ideas</option>
+                    <option value="PROMPT">Check with AI</option>
+                    <option value="FINDALL">Find All</option>
                   </select>
-
+                  <select
+                    name="types"
+                    id="types"
+                    defaultValue={goalType}
+                    onChange={(e) => setGoalType(e.target.value)}
+                  >
+                    <option value="EDUCATE">Educate</option>
+                    <option value="ASSESS">Assess</option>
+                  </select>
                   <AnswerBlock>
                     <Comment>
                       <DynamicLoadedEditor
@@ -329,7 +337,7 @@ All text must be in Russian.`,
                         getEditorText={setQuestion}
                       />
                     </Comment>
-                    {type !== "GENERATE" && (
+                    {type !== "GENERATE" && type !== "FINDALL" && (
                       <textarea
                         id="answer"
                         name="answer"
@@ -339,7 +347,7 @@ All text must be in Russian.`,
                         onChange={(e) => setAnswer(e.target.value)}
                       />
                     )}
-                    {type == "GENERATE" && (
+                    {(type == "GENERATE" || type == "FINDALL") && (
                       <>
                         <label for="types">Ideas</label>
                         {answers.map((an, i) => (
@@ -388,7 +396,7 @@ All text must be in Russian.`,
                         ))}
                       </>
                     )}
-                    {type == "GENERATE" && (
+                    {(type == "GENERATE" || type == "FINDALL") && (
                       <>
                         <button
                           onClick={(e) => {
