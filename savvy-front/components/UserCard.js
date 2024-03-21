@@ -12,16 +12,10 @@ import wa_messages from "../wa_messages";
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
     $userId: String!
-    $subject: String!
-    $text: String
-    $comment: String
+    $text: String!
+    $subject: String
   ) {
-    sendMessage(
-      userId: $userId
-      subject: $subject
-      text: $text
-      comment: $comment
-    ) {
+    sendMessage(userId: $userId, text: $text, subject: $subject) {
       id
     }
   }
@@ -221,42 +215,22 @@ const Message = styled.div`
 
 const UserCard = memo((props) => {
   const [comment, setComment] = useState(props.comment);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(
+    // `<p>${props.name}, привет!</p><p>Я Михаил, директор BeSavvy. Я увидел, что вы проходили уроки на платформе по: ... И решил узнать, как у вас дела? Какие впечатления от работы на симуляторах?</p><p>Я хотел бы порекомендовать вам еще один открытый симулятор. Обратите внимание на:</p><p>На самом деле, в BeSavvy скрыта тонна бесплатных полезных материалов, но часто пользователи просто не знают, как их найти и как с ними работать. А еще не понимают, как их встроить в свой рабочий календарь.</p><p><b>Давайте я вам сделаю индивидуальную подборку? И расскажу, как создать идеальную рабочую среду, в которой ничто не потеряется?</p><p>Если интересно, просто ответьте на это письмо (чтобы я знал,  что их кто-то читает). И я пришлю.</p><p>Михаил из BeSavvy</p>`
+    `<p>${props.name},привет!</p><p>Я Михаил, директор BeSavvy. Я увидел, что вы в феврале проходили тестовое собеседование на английском языке. И решил узнать, как у вас дела? Какие впечатления от работы на симуляторах?</p><p>На самом деле, в BeSavvy скрыта тонна бесплатных полезных материалов, но часто пользователи просто не знают, как их найти и как с ними работать.</p><p><b>Хотите я вам открою доступ к нашей системе старта изучения юр английского?</b>Она содержит не только сами симуляторы, но еще и <b>автоматические напоминания, календари, шпаргалки и советы.</b></p><p>Это поможет не бросить обучение на второй день и получить понятный результат через неделю.</p><p>Если интересно, просто ответьте на это письмо. И я вам отправлю всю информацию.</p><p>На связи,</p><p>Михаил из BeSavvy</p>`
+  );
   const [wa_message, setWa_message] = useState("");
-
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
   const [showTraffic, setShowTraffic] = useState(false);
   const [show, setShow] = useState(false);
   const [showLessonResults, setShowLessonResults] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState(null);
-  const [selectedEmail, setSelectedEmail] = useState(null);
-  const [selectedMessageGroup, setSelectedMessageGroup] = useState(null);
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [messageSubject, setMessageSubject] = useState(null);
-  const [subject, setSubject] = useState(
-    `${props.name}, начните изучать право на симуляторах сегодня`
-  );
+  const [subject, setSubject] = useState(`Директор BeSavvy написал вам письмо`);
 
   const [editorText, setEditorText] = useState(null);
 
-  const [sendClientEmail, { data: data2, loading: loading2, error: error2 }] =
-    useMutation(SEND_MESSAGE2_MUTATION);
-
-  const handleMessageGroupChange = (groupName) => {
-    const group = wa_messages.find((group) => group.name === groupName);
-    setSelectedMessageGroup(group);
-    setSelectedMessage(null); // Reset selected email when group changes
-  };
-
-  const handleMessageChange = (subject) => {
-    const mes = selectedMessageGroup?.messages.find(
-      (message) => message.subject === subject
-    );
-    setWa_message(mes.text);
-    setMessageSubject(mes.subject);
-    setSelectedMessage(mes.text);
-  };
+  const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
+    useMutation(SEND_MESSAGE_MUTATION);
 
   function earliestObjectsByDate(objects) {
     let grouped = {};
@@ -278,10 +252,6 @@ const UserCard = memo((props) => {
 
     return result;
   }
-
-  const [sendMessage, { data, loading, error }] = useMutation(
-    SEND_MESSAGE_MUTATION
-  );
 
   moment.locale("ru");
 
@@ -354,52 +324,51 @@ const UserCard = memo((props) => {
     });
   };
 
-  const wa_send = () => {
-    let comment_for_wa = wa_message
-      ? wa_message.replaceAll("</p>", "\n\n")
-      : "";
-    comment_for_wa = comment_for_wa.replaceAll("<p>", "");
-    let date = new Date();
+  // const wa_send = () => {
+  //   let comment_for_wa = wa_message
+  //     ? wa_message.replaceAll("</p>", "\n\n")
+  //     : "";
+  //   comment_for_wa = comment_for_wa.replaceAll("<p>", "");
+  //   let date = new Date();
 
-    let day = date.getDate(); // Get current date
-    let month = date.getMonth(); // Get current month
-    let year = date.getFullYear(); // Get current year
+  //   let day = date.getDate(); // Get current date
+  //   let month = date.getMonth(); // Get current month
+  //   let year = date.getFullYear(); // Get current year
 
-    // Array of month names
-    let monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
+  //   // Array of month names
+  //   let monthNames = [
+  //     "January",
+  //     "February",
+  //     "March",
+  //     "April",
+  //     "May",
+  //     "June",
+  //     "July",
+  //     "August",
+  //     "September",
+  //     "October",
+  //     "November",
+  //     "December",
+  //   ];
 
-    let formattedDate = day + " " + monthNames[month] + " " + year; // Format the date
-
-    let wa_comment = `<p>WhatsApp Message, ${formattedDate}</p>`;
-    console.log("wa_comment", comment + wa_comment);
-    setComment(comment + wa_comment);
-    updateUser({
-      variables: {
-        id: props.id,
-        tags: [...tags, `wa_message${formattedDate}`],
-        comment: comment + wa_comment,
-      },
-    });
-    textUser({
-      variables: {
-        id: props.id,
-        comment: comment_for_wa,
-      },
-    });
-  };
+  // let formattedDate = day + " " + monthNames[month] + " " + year; // Format the date
+  // let wa_comment = `<p>WhatsApp Message, ${formattedDate}</p>`;
+  // // console.log("wa_comment", comment + wa_comment);
+  // setComment(comment + wa_comment);
+  // updateUser({
+  //   variables: {
+  //     id: props.id,
+  //     tags: [...tags, `wa_message${formattedDate}`],
+  //     comment: comment + wa_comment,
+  //   },
+  // });
+  // textUser({
+  //   variables: {
+  //     id: props.id,
+  //     comment: comment_for_wa,
+  //   },
+  // });
+  // };
 
   return (
     <Row id={props.id}>
@@ -437,7 +406,6 @@ const UserCard = memo((props) => {
             let new_arr = [...tags, newTag];
             setTags(new_arr);
             setNewTag("");
-
             let updated_client = updateUser({
               variables: {
                 id: props.id,
@@ -481,99 +449,8 @@ const UserCard = memo((props) => {
             name="text"
           />
         </div>
-        <h4>Сообщение</h4>
-        {/* Dropdown for email groups */}
-        <select onChange={(e) => handleMessageGroupChange(e.target.value)}>
-          <option value="">Select message group</option>
-          {wa_messages.map((group) => (
-            <option key={group.name} value={group.name}>
-              {group.name}
-            </option>
-          ))}
-        </select>
-        <br />
-
-        {/* Dropdown for emails */}
-        {selectedMessageGroup && (
-          <select onChange={(e) => handleMessageChange(e.target.value)}>
-            <option value="">Select email</option>
-            {selectedMessageGroup.messages.map((mes) => (
-              <option key={mes.subject} value={mes.subject}>
-                {mes.subject}
-              </option>
-            ))}
-          </select>
-        )}
-        {selectedMessageGroup &&
-          selectedMessageGroup.messages.map((s) => {
-            return (
-              <Editor
-                show={selectedMessage !== null && s.subject === messageSubject}
-              >
-                <DynamicLoadedEditor
-                  getEditorText={myCallback3}
-                  value={s.text}
-                  name="text"
-                />
-              </Editor>
-            );
-          })}
-        <button onClick={(e) => wa_send()}>Send WA</button>
-        <br />
         <h4>Имейл</h4>
         <input value={subject} onChange={(e) => setSubject(e.target.value)} />
-
-        {/* Dropdown for email groups */}
-        {/* <select onChange={(e) => handleGroupChange(e.target.value)}>
-          <option value="">Select email group</option>
-          {emailGroups.map((group) => (
-            <option key={group.name} value={group.name}>
-              {group.name}
-            </option>
-          ))}
-        </select>
-        <br /> */}
-
-        {/* Dropdown for emails */}
-        {/* {selectedGroup && (
-          <select onChange={(e) => handleEmailChange(e.target.value)}>
-            <option value="">Select email</option>
-            {selectedGroup.emails.map((email) => (
-              <option key={email.subject} value={email.subject}>
-                {email.subject}
-              </option>
-            ))}
-          </select>
-        )}
-        <br />
-        {selectedEmail && (
-          <input
-            type="text"
-            onChange={(e) => setSubject(e.target.value)}
-            value={subject}
-          />
-        )} */}
-        {/* {selectedGroup &&
-          selectedGroup.emails.map((s) => (
-            <Editor
-              show={
-                selectedEmail !== null && s.subject === selectedEmail.subject
-              }
-            >
-              <DynamicLoadedEditor
-                getEditorText={myCallback2}
-                value={s.text}
-                name="text"
-              />
-            </Editor>
-          ))} */}
-        {/* DynamicLoadedEditor with loaded text */}
-        {/* <p>{props.name}, здравствуйте!</p>
-        <p>
-          Я Михаил, создатель BeSavvy. Это не рассылка, а прямое письмо от меня.
-          Я пишу, потому что мы сделали очень полезные симуляторы по ключевым
-          правовым темам, и я хочу, чтобы вы попробовали пройти их.
-        </p> */}
         <div className="editor">
           <DynamicLoadedEditor
             getEditorText={myCallback2}
@@ -581,31 +458,18 @@ const UserCard = memo((props) => {
             name="text"
           />
         </div>
-        {/* <p>
-          И последнее. Возможно, вы сейчас не нуждаетесь в обучении. Это
-          нормально. Напишите мне об этом. Я не продавец. Мне просто будет
-          приятно узнать, что ваша карьера развивается в правильном напрвлении.
-          А если у вас есть вопросы, задавайте, я буду рад помочь.
-        </p>
-        <p>
-          В любом случае спасибо, что уделили внимание непростому и важному для
-          меня проекту, над которым я работаю каждый день последние 5 лет.{" "}
-        </p>
-        <p>Надеюсь, у вас сегодня отличный день,</p> */}
         <button
           onClick={async (e) => {
-            const res = await sendClientEmail({
+            const res = await sendMessage({
               variables: {
-                name: props.name,
-                email: props.email,
-                connection: message,
+                userId: props.id,
+                text: message,
                 subject: subject,
-                type: "client_rus",
               },
             });
           }}
         >
-          {loading ? "Sending..." : "Send"}
+          {loading1 ? "Sending..." : "Send"}
         </button>
         <br />
 

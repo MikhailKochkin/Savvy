@@ -107,6 +107,27 @@ const IconBlock = styled.div`
       outline: 0;
     }
   }
+  .number {
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 10px;
+    display: flex;
+    font-size: 1.4rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    /* height: 25px; */
+    /* margin-right: 15px; */
+    button {
+      border: none;
+      cursor: pointer;
+      background: none;
+      font-size: 1.2rem;
+      font-family: Montserrat;
+    }
+  }
 `;
 
 const Phrase = styled.div`
@@ -229,6 +250,19 @@ const UpdateMessage = (props) => {
               value={name}
             />
           </div>
+          <div className="number">
+            <button
+              onClick={(e) => {
+                let link = prompt("Image link: ");
+                if (link) {
+                  setImage(link);
+                  props.updateImage(link, props.index);
+                }
+              }}
+            >
+              Image
+            </button>
+          </div>
         </IconBlock>
 
         <MainFrame>
@@ -250,19 +284,6 @@ const UpdateMessage = (props) => {
         />
       </Phrase>
       <Buttons>
-        <div className="number">
-          <button
-            onClick={(e) => {
-              let link = prompt("Image link: ");
-              if (link) {
-                setImage(link);
-                props.updateImage(link, props.index);
-              }
-            }}
-          >
-            Add image
-          </button>
-        </div>
         <div className="number">
           <button
             onClick={(e) => {

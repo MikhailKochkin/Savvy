@@ -431,8 +431,8 @@ const OpenQuestion = (props) => {
           Your student's answer is: ${answer}. It is not correct.
           Use the information about the correct answer:${props.answer}
           and information from the lesson: ${props.ifWrong} to
-          explain in 3 sentences why this answer is incorrect in comparison to the correct answer. Write in second person. Adress the student as "you". 
-          Do not use the words from the correct answer. Be very polite and careful.
+          explain in 3 sentences why this answer is incorrect in comparison to the correct answer. Give hints on how to make the answer better. Write in second person. Adress the student as "you". 
+          DO NOT USE the words from the correct answer!!! Be very polite and careful.
           Answer in ${
             router.locale == "ru" ? "Russian" : "English"
           }Make the answer at least 2 sentences long.`,

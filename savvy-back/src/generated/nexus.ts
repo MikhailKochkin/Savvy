@@ -7381,6 +7381,7 @@ export interface NexusGenArgTypes {
     createQuiz: { // args
       answer?: string | null; // String
       answers?: NexusGenInputs['ComplexAnswer'] | null; // ComplexAnswer
+      goalType?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
       image?: string | null; // String

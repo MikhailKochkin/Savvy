@@ -418,7 +418,7 @@ const Content = styled.div`
   /* width: ${(props) => (props.open ? "75vw" : "100vw")}; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   .arrowmenu {
@@ -922,18 +922,30 @@ const Feed = (props) => {
                             ? `${
                                 props.lesson.chats.find((ch) => ch.id == el.id)
                                   .name
+                                  ? props.lesson.chats.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Chat"
                               }`
                             : null}
                           {el.type.toLowerCase() == "shot"
                             ? `${
                                 props.lesson.shots.find((ch) => ch.id == el.id)
                                   .name
+                                  ? props.lesson.shots.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Deck"
                               }`
                             : null}
                           {el.type.toLowerCase() == "note"
                             ? `${
                                 props.lesson.notes.find((ch) => ch.id == el.id)
                                   .name
+                                  ? props.lesson.notes.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Longread"
                               }`
                             : null}
                           {el.type.toLowerCase() == "newtest"
@@ -941,6 +953,20 @@ const Feed = (props) => {
                                 props.lesson.newTests.find(
                                   (ch) => ch.id == el.id
                                 ).name
+                                  ? props.lesson.newTests.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Quiz"
+                              }`
+                            : null}
+                          {el.type.toLowerCase() == "quiz"
+                            ? `${
+                                props.lesson.quizes.find((ch) => ch.id == el.id)
+                                  .name
+                                  ? props.lesson.quizes.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Question"
                               }`
                             : null}
                           {el.type.toLowerCase() == "problem"
@@ -948,6 +974,10 @@ const Feed = (props) => {
                                 props.lesson.problems.find(
                                   (ch) => ch.id == el.id
                                 ).name
+                                  ? props.lesson.problems.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Case Study"
                               }`
                             : null}
                           {el.type.toLowerCase() == "texteditor"
@@ -955,6 +985,10 @@ const Feed = (props) => {
                                 props.lesson.texteditors.find(
                                   (ch) => ch.id == el.id
                                 ).name
+                                  ? props.lesson.texteditors.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Text Editor"
                               }`
                             : null}
                           {el.type.toLowerCase() == "construction"
@@ -962,6 +996,10 @@ const Feed = (props) => {
                                 props.lesson.constructions.find(
                                   (ch) => ch.id == el.id
                                 ).name
+                                  ? props.lesson.constructions.find(
+                                      (ch) => ch.id == el.id
+                                    ).name
+                                  : "Doc Builder"
                               }`
                             : null}
                           {el.type.toLowerCase() == "forum" ? `Q&A` : null}

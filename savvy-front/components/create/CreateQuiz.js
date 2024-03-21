@@ -91,6 +91,7 @@ const Answers = styled.div`
   background: white;
   select {
     width: 25%;
+    margin-bottom: 3%;
   }
 `;
 
@@ -141,7 +142,7 @@ const AnswerOption = styled.div`
 `;
 
 const Comment = styled.div`
-  margin: 3% 0;
+  margin-bottom: 3%;
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   width: 100%;
@@ -269,11 +270,6 @@ const CreateQuiz = (props) => {
       >
         {(createQuiz, { loading, error }) => (
           <Form>
-            <NameInput
-              defaultValue={name}
-              placeholder="Undefined"
-              onChange={(e) => setName(e.target.value)}
-            />
             <fieldset>
               {/* <Generate>
                 <textarea
@@ -302,6 +298,11 @@ const CreateQuiz = (props) => {
                   <div>Generating... It can take up to 30 seconds.</div>
                 )}
               </Generate> */}
+              <NameInput
+                defaultValue={name}
+                placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
+              />
               {dataLoaded && (
                 <Answers>
                   <label for="types">{t("type")}</label>
@@ -429,21 +430,21 @@ const CreateQuiz = (props) => {
                       </>
                     )}
 
-                    <Comment id="ifRight">
+                    <Comment>
                       <DynamicLoadedEditor
                         id="answer"
                         name="answer"
                         value={ifRight}
-                        placeholder="Explainer if the answer is right"
+                        placeholder="This text helps provide feedback if the answer is correct"
                         getEditorText={setIfRight}
                       />
                     </Comment>
-                    <Comment id="ifWrong">
+                    <Comment>
                       <DynamicLoadedEditor
                         id="answer"
                         name="answer"
                         value={ifWrong}
-                        placeholder="Explainer if the answer is wrong"
+                        placeholder="This text helps provide feedback if the answer is incorrect"
                         getEditorText={setIfWrong}
                       />
                     </Comment>

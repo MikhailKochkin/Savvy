@@ -894,9 +894,7 @@ const Mutation = mutationType({
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: user.email,
-          Subject: `${
-            args.subject ? args.subject : "Информация от BeSavvy 👋🏻"
-          }`,
+          Subject: `${args.subject ? args.subject : "Hello from BeSavvy 👋🏻"}`,
           HtmlBody: GenericEmail.GenericEmail(args.text),
           Tag: "communication_email",
           MessageStream: "broadcast",
@@ -2059,6 +2057,7 @@ const Mutation = mutationType({
         ifRight: stringArg(),
         ifWrong: stringArg(),
         type: stringArg(),
+        goalType: stringArg(),
         answers: arg({
           type: "ComplexAnswer",
         }),
@@ -4206,7 +4205,6 @@ const Mutation = mutationType({
         { name, email, firm, subject, personalTouch, connection, type },
         ctx
       ) => {
-        // console.log("data", type);
         if (type == "follow_up_1") {
           const newEmail2 = await client.sendEmail({
             From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
@@ -4251,15 +4249,6 @@ const Mutation = mutationType({
         { name, email, firm, subject, personalTouch, connection, type },
         ctx
       ) => {
-        // if (type == "follow_up_1") {
-        //   const newEmail2 = await client.sendEmail({
-        //     From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
-        //     To: email,
-        //     Subject: subject,
-        //     HtmlBody: FollowUpEmailOne.FollowUpEmailOne(name, connection),
-        //     MessageStream: "international-law-firms",
-        //   });
-        // } else if (type == "client_rus") {
         const newEmail2 = await client.sendEmail({
           From: '"Михаил Кочкин из BeSavvy" <Mikhail@besavvy.app>',
           To: email,
@@ -4267,15 +4256,6 @@ const Mutation = mutationType({
           HtmlBody: ClientEmail.ClientEmail(name, connection),
           MessageStream: "broadcast",
         });
-        // } else {
-        //   const newEmail3 = await client.sendEmail({
-        //     From: '"Mike Kochkin, CEO of BeSavvy" <Mike@besavvy.app>',
-        //     To: email,
-        //     Subject: subject,
-        //     HtmlBody: BusinessEmail2.BusinessEmail2(name, connection, firm),
-        //     MessageStream: "international-law-firms",
-        //   });
-        // }
         return { name: name };
       },
     });

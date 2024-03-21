@@ -469,10 +469,6 @@ const GenericEmail = (text) => `
                     <td class="content-cell">
                       <div class="f-fallback">
                           ${text}
-                        <p><br />Misha from BeSavvy</p>
-                        <p>
-                          <strong>P.S.</strong> Feel free to respond to this letter. I will be happy to help any way possible.
-                        </p>
                         <!-- Sub copy -->
                       </div>
                     </td>
