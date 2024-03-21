@@ -151,7 +151,7 @@ const Phrase = styled.div`
       border: none;
       outline: none;
       font-size: 2rem;
-      fon-weight: bold;
+      font-weight: bold;
       cursor: pointer;
     }
   }
