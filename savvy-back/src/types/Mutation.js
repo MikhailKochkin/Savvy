@@ -2998,7 +2998,7 @@ const Mutation = mutationType({
         let statement;
         if (forumId) {
           const author = await ctx.prisma.user.findMany({
-            where: { forums: { some: { id: { equals: forumId } } } },
+            where: { forum: { some: { id: { equals: forumId } } } },
           });
           const lesson = await ctx.prisma.lesson.findMany(
             {
@@ -3069,7 +3069,7 @@ const Mutation = mutationType({
         const miniforumId = args.miniforumId;
         delete args.miniforumId;
         const author = await ctx.prisma.user.findMany({
-          where: { forums: { some: { id: { equals: forumId } } } },
+          where: { forum: { some: { id: { equals: forumId } } } },
         });
         // const lesson = await ctx.prisma.lesson.findMany(
         //   {
