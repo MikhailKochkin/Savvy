@@ -23,13 +23,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       open
       totalPoints
       hasSecret
-      # lessonResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   progress
-      # }
       createdAt
       user {
         id
@@ -63,11 +56,15 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
+        answers
         complexity
         ifRight
         ifWrong
         check
         type
+        name
+        image
+        goalType
         next
         user {
           id

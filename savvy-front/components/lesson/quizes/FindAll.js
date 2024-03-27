@@ -643,7 +643,7 @@ const FindAll = (props) => {
                 <p>
                   {correctIdeas.length < props.answers.answerElements.length
                     ? t("not_all_answers")
-                    : null}
+                    : null}{" "}
                   {t("what_are_we_doing_next")}
                 </p>
               </div>
