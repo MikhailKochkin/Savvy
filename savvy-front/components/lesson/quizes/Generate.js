@@ -462,7 +462,7 @@ const Generate = (props) => {
         comment: ``,
       },
     });
-    props.passResult(true);
+    props.passResult("true");
 
     return matchedAnswers;
   };

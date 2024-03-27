@@ -338,7 +338,7 @@ const Option = styled.div`
   cursor: pointer;
   margin-right: 3%;
   margin-bottom: 2%;
-  height: 50px;
+  /* height: 50px; */
   transition: 0.3s;
   &:hover {
     border: 1px solid #3f51b5;
@@ -474,7 +474,7 @@ const FindAll = (props) => {
         comment: ``,
       },
     });
-    props.passResult(true);
+    props.passResult("true");
   };
 
   const hasNonEmptyNextIdAndType = (array) => {
