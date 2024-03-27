@@ -486,7 +486,7 @@ const Person = (props) => {
     let new_obj = {
       progress: lr.progress,
       lesson_number: lr.lesson.number,
-      lesson_size: lr.lesson.structure
+      lesson_size: lr.lesson.structure?.lessonItems
         ? lr.lesson.structure.lessonItems.length
         : 1,
       lesson_name: lr.lesson.name,

@@ -95,9 +95,7 @@ const Styles = styled.div`
           background: none;
           outline: 0;
           width: 90%;
-          font-family: Montserrat;
           color: #c2c2c2;
-          font-size: 1.4rem;
           -moz-appearance: none;
           -webkit-appearance: none;
           appearance: none;
@@ -274,11 +272,8 @@ const MenuColumn = styled.div`
         font-size: 1.6rem;
       }
       #button_square {
-        /* margin-top: 10px;*/
-        /* margin-left: 20px; */
         border: 1px solid #c2c2c2;
         color: #c2c2c2;
-        /* width: 35px; */
         padding: 10px;
         height: 35px;
         border-radius: 12px;
@@ -290,9 +285,7 @@ const MenuColumn = styled.div`
         cursor: pointer;
         transition: 0.5s;
         width: 100%;
-        /* &:hover {
-          border: 1px solid #1a2980;
-        } */
+
         select {
           border: none;
           display: inline-block;
@@ -1107,6 +1100,13 @@ const Feed = (props) => {
                     </div>
                   </a>
                 ))}
+                {other_simulators.length == 0 ? (
+                  <div className="simulator_row_link">
+                    {" "}
+                    {/* <img className="arrow_icon" src="/static/right-arrow.svg" /> */}
+                    <div>No other simulators built yet</div>
+                  </div>
+                ) : null}
               </SimulatorLinks>
             )}
           </div>

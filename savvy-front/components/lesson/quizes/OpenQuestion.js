@@ -659,6 +659,14 @@ const OpenQuestion = (props) => {
     setProgress("false");
   };
 
+  const removeSpecialChars = (text) => {
+    // Define the pattern to match the specified characters
+    const pattern = /[\[\]\|*<>]/g;
+    // Replace all matches of the pattern in the text with an empty string
+    const result = text.replace(pattern, "");
+    return result;
+  };
+
   const startListening = () => {
     const newRecognition = new (window.SpeechRecognition ||
       window.webkitSpeechRecognition ||
@@ -982,7 +990,8 @@ const OpenQuestion = (props) => {
       {!hidden && (
         <div className="question_box">
           <div className="question_text">
-            <b>{t("correct_answer")}:</b> {parse(props.answer)}
+            <b>{t("correct_answer")}:</b>{" "}
+            {parse(removeSpecialChars(props.answer))}
             {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
           </div>
           <IconBlock>
