@@ -472,7 +472,6 @@ const ClientData = (props) => {
     //   }
     // });
     clients.map((c) => {
-      console.log("c", c);
       const res = sendMessage({
         variables: {
           userId: c.id,

@@ -49,7 +49,6 @@
     "next-auth": "^4.24.7",
     "next-i18next": "^10.4.0",
     "next-optimized-images": "^2.6.2",
-    "next-with-apollo": "^5.2.1",
     "nprogress": "^0.2.0",
     "openai": "^4.11.0",
     "postmark": "^3.0.15",

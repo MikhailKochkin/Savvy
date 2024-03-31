@@ -230,7 +230,6 @@ const Construction = (props) => {
     <>
       <div className="time">{moment(s.createdAt).format("LLL")} </div>
       <Block id={id} columns={construction.columnsNum}>
-        {console.log("elems", elems)}
         {elems.map((t, i) => {
           if (t) {
             return (

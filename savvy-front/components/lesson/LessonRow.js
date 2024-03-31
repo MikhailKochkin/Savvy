@@ -428,7 +428,6 @@ const LessonRow = (props) => {
               let new_arr = [...tags, tag];
               setTags(new_arr);
               setTag("");
-              console.log("new_arr", new_arr);
               return updateLesson({
                 variables: {
                   id: lesson.id,

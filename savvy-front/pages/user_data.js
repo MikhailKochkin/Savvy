@@ -76,7 +76,6 @@ const ClientData = () => {
   const [getUserData, { loading, error, data }] = useLazyQuery(CLIENTS_QUERY);
 
   const handleButtonClick = () => {
-    console.log("initialDate", initialDate);
     getUserData({
       variables: {
         initialDate: `${initialDate}:00.000Z`,

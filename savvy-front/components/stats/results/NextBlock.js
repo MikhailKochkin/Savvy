@@ -26,7 +26,6 @@ const NextBlock = (props) => {
     testResults,
     problemResults,
   } = props;
-  console.log("testResults", testResults);
   return task ? (
     <Styles>
       {task && task.toLowerCase() == "quiz" && (

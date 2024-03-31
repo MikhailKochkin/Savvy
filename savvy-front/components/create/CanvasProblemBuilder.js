@@ -328,14 +328,12 @@ const CanvasProblemBuilder = (props) => {
 
   const getData = (newId, type) => {
     let copy_messages = [...messages];
-    console.log("newId", newId);
     const updatedArray = copy_messages.map((obj) => {
       if (obj.id === activeMessage.id) {
         return { ...obj, id: newId };
       }
       return obj;
     });
-    console.log("updatedArray", updatedArray);
 
     props.getSteps([...updatedArray]);
     setMessages([...updatedArray]);

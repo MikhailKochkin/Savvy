@@ -169,7 +169,6 @@ const StoryEx = (props) => {
         />{" "}
       </Progress>
     );
-  console.log("stats_data", stats_data);
   // Find the lesson result with the highest progress value for the current user
   const findNewestLessonResult = (stats_data, lesson) => {
     // Check if stats_data is valid and contains lesson results
@@ -191,14 +190,8 @@ const StoryEx = (props) => {
 
     // If the newest result's progress equals the total number of lesson items (meaning lesson was finished), set my_result to null
     if (newestResult.progress === lesson.structure.lessonItems.length) {
-      console.log("null");
       return null; // Start over the lesson
     }
-    console.log(
-      "newestResult",
-      newestResult.progress,
-      lesson.structure.lessonItems.length
-    );
 
     // Otherwise, return the newest lesson result
     return newestResult;
@@ -206,7 +199,6 @@ const StoryEx = (props) => {
 
   // Usage
   let my_result = findNewestLessonResult(stats_data, lesson);
-  console.log("my_result", my_result);
   // 6. Now, my_result should contain the item with the highest progress value that is not equal to maxProgress, or null if no such item exists.
   // Now we build the structure of the lesson
 

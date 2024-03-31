@@ -168,7 +168,6 @@ const UpdateShot = (props) => {
       setComments([...new_comments]);
     }
   };
-  console.log("props.shotID", props.shotID);
   return (
     <Mutation
       mutation={UPDATE_SHOTS_MUTATION}

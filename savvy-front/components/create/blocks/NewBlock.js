@@ -81,7 +81,6 @@ const NewBlock = (props) => {
     setData((prevData) => {
       return newData;
     });
-    console.log("newData", newData);
 
     // If you still need to pass the data to the parent component
     if (newData) {

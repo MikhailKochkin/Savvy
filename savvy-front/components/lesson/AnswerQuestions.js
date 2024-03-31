@@ -94,7 +94,6 @@ const AnswerQuestions = (props) => {
     // Ensure searchItems is an array
 
     if (!Array.isArray(searchItems)) {
-      console.error("searchItems must be an array");
       return;
     }
 
@@ -104,7 +103,6 @@ const AnswerQuestions = (props) => {
         .map((item) => item.trim().split(/\s+/))
         .reduce((acc, val) => acc.concat(val), []);
 
-      console.log("searchStrings", searchStrings);
       const results = notes.flatMap((note) => {
         if (
           searchStrings.every((str) =>
@@ -115,7 +113,6 @@ const AnswerQuestions = (props) => {
         }
         return [];
       });
-      console.log("results", results);
 
       const chatResults = chats.flatMap((chat) => {
         const chatMessagesResults = chat.messages.messagesList.flatMap(
@@ -180,16 +177,13 @@ const AnswerQuestions = (props) => {
       if ([...arr].length > 0) {
         console.log(1);
         info_source = findSource(arr, notes, chats);
-        console.log(info_source);
       }
     } catch (error) {
       console.error(error);
       alert(error.message);
     }
 
-    console.log("info_source", info_source);
     let stringifyItems = (items) => {
-      console.log("items", items);
       return items.reduce((acc, item) => acc + item.data, "");
     };
 
