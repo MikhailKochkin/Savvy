@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { appWithTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { ApolloProvider } from "@apollo/client";
+import { SessionProvider } from "next-auth/react";
 import Page from "../components/Page";
 import withData from "../lib/withData";
 import TagManager from "react-gtm-module";
@@ -38,11 +39,13 @@ function MyApp({ Component, apollo, pageProps }) {
   }, [0]);
 
   return (
-    <ApolloProvider client={apollo}>
-      <Page>
-        <Component {...pageProps} />
-      </Page>
-    </ApolloProvider>
+    <SessionProvider session={pageProps.session}>
+      <ApolloProvider client={apollo}>
+        <Page>
+          <Component {...pageProps} />
+        </Page>
+      </ApolloProvider>
+    </SessionProvider>
   );
 }
 

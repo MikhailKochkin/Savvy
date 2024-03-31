@@ -307,7 +307,7 @@ const PagePurchase = (props) => {
   };
 
   return (
-    <Styles ref={bannerRef}>
+    <Styles ref={bannerRef} id="pagePurchase">
       <BiggerBlock>
         <Block>
           <Left>Откройте полный доступ за {coursePage.price} ₽</Left>

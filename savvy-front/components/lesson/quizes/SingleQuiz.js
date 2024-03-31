@@ -105,7 +105,7 @@ const SingleQuiz = (props) => {
     width = "100%";
   }
   return (
-    <Styles width={width}>
+    <Styles width={width} id={props.quizID}>
       {/* 1. Settings part */}
       <Buttons>
         {!exam && !story && (

@@ -401,50 +401,6 @@ const Content = styled.div`
   }
 `;
 
-const Message = styled.div`
-  width: 100vw;
-  height: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 2.5%;
-  font-size: 1.8rem;
-  #message_text {
-    background: #8a2387; /* fallback for old browsers */
-    width: 32%;
-    background: -webkit-linear-gradient(
-      to right,
-      #f27121,
-      #e94057,
-      #8a2387
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      to right,
-      #f27121,
-      #e94057,
-      #8a2387
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: white;
-    border-radius: 10px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    visibility: ${(props) => (props.visible ? "visible" : "hidden")};
-    opacity: ${(props) => (props.visible ? 1 : 0)};
-    transition: visibility 0.5s linear, opacity 0.5s linear;
-  }
-  @media (max-width: 800px) {
-    #message_text {
-      width: 90%;
-    }
-  }
-`;
-
 const ProgressBarContainer = styled.div`
   position: -webkit-sticky;
   position: sticky;
@@ -596,21 +552,6 @@ const Feed = (props) => {
   } else {
     visited = [];
   }
-
-  // let color;
-  // if (props.components[num].props.complexity == 1) {
-  //   color = "#55a630";
-  // } else if (props.components[num].props.complexity == 2) {
-  //   color = "#3a86ff";
-  // } else if (props.components[num].props.complexity == 3) {
-  //   color = "#f4d35e";
-  // } else if (props.components[num].props.complexity == 4) {
-  //   color = "#f95738";
-  // } else if (props.components[num].props.complexity == 5) {
-  //   color = "#201C35";
-  // } else {
-  //   color = "#55a630";
-  // }
   return (
     <>
       <Styles>

@@ -282,6 +282,9 @@ const Chat = (props) => {
   }, [num]);
 
   useEffect(() => {
+    if (messages.messagesList.length == 1 && props.moveNext) {
+      props.moveNext(props.id);
+    }
     const elements = document.getElementById(id).querySelectorAll("#user_name");
     let p;
     elements.forEach((element) => {
@@ -460,6 +463,9 @@ const Chat = (props) => {
               // if (num == messages.messagesList.length - 1) {
               //   props.getShowArrow(true);
               // }
+
+              if (num == messages.messagesList.length - 1 && props.moveNext)
+                props.moveNext(props.id);
               setNum(num + 1);
             }}
           >
@@ -467,7 +473,7 @@ const Chat = (props) => {
           </button>
         </Next>
       )}
-      {getData && num == messages.messagesList.length && !moved && (
+      {getData && props.next.true.value && !moved && (
         <ArrowBox>
           <div className="arrow_box" onClick={(e) => push()}>
             <img className="arrow" src="../../static/down-arrow.svg" />

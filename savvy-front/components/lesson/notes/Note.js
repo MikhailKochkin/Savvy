@@ -5,20 +5,8 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
 import parse from "html-react-parser";
-
 import UpdateNote from "./UpdateNote";
 import DeleteNote from "../../delete/DeleteNote";
-import Chat from "../questions/Chat";
-
-// const StyledButton = withStyles({
-//   root: {
-//     width: "140px",
-//     height: "45px",
-//     marginRight: "2%",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//   },
-// })(Button);
 
 const Body = styled.div``;
 
@@ -251,7 +239,6 @@ const Secret = styled.div`
       cursor: pointer;
     }
   }
-  /* justify-content: center; */
 `;
 
 const NoteStyles = styled.div`
@@ -302,7 +289,6 @@ const NoteStyles = styled.div`
   img {
     display: block;
     max-width: 600px;
-    /* max-height: 50em; */
     box-shadow: "0 0 0 2px blue;";
     object-fit: contain;
     @media (max-width: 800px) {
@@ -344,7 +330,6 @@ const NoteStyles = styled.div`
     margin: 1% 1%;
     padding: 1% 4%;
     border-left: 3px solid #0094c6;
-    /* line-height: 1.6; */
     p {
       margin: 10px 0;
     }
@@ -355,7 +340,6 @@ const NoteStyles = styled.div`
     margin: 0;
     padding: 1% 4%;
     border-left: 3px solid #0094c6;
-    /* line-height: 1.6; */
     p {
       margin: 10px 0;
     }
@@ -637,7 +621,7 @@ const Note = (props) => {
       )}
       {!update &&
         (note.type == "email" ? (
-          <EmailContainer>
+          <EmailContainer id={id}>
             <EmailForm>
               <EmailInfo>
                 <div className="image_column">

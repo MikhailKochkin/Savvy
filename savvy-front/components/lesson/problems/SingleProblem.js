@@ -54,7 +54,16 @@ const TextBar = styled.div`
     /* line-height: 1.6; */
     p {
       margin: 10px 0;
-      line-height: 1.4;
+    }
+  }
+  blockquote {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 0;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    p {
+      margin: 10px 0;
     }
   }
   #text {
@@ -227,20 +236,6 @@ const Button2 = styled.div`
   }
 `;
 
-// const StyledButton = withStyles({
-//   root: {
-//     margin: "4% 0",
-//     fontSize: "1.6rem",
-//     borderRadius: "10px",
-//     fontFamily: "Montserrat",
-//     fontWeight: "600",
-//     textTransform: "none",
-//     padding: "10px",
-//     width: "140px",
-//     height: "45px",
-//   },
-// })(Button);
-
 const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -263,6 +258,7 @@ const SingleProblem = (props) => {
 
   const onFinish = (status, type) => {
     props.updateArray ? props.updateArray(true) : null;
+    if (props.moveNext) props.moveNext(props.id);
     if (type == "old") {
       setIsOldFinished(true);
     } else if (type == "new") {
@@ -347,7 +343,6 @@ const SingleProblem = (props) => {
           <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />
         ) : null}
       </Buttons>
-      {/* <div>{problem.id}</div> */}
       {!update && (
         <TextBar id={problem.id} story={story}>
           <div id="text">{parse(problem.text)}</div>

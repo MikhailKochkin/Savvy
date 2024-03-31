@@ -329,10 +329,11 @@ const LessonPart = styled.div`
 `;
 
 const NewSingleLesson = (props) => {
-  const [width, setWidth] = useState(0);
   const { t } = useTranslation("lesson");
-  const onResize = (width) => setWidth(width);
+  // const onResize = (width) => setWidth(width);
   let loadedMe = useUser();
+
+  // 1. Demo User data
 
   let me = {
     company: {
@@ -374,24 +375,39 @@ const NewSingleLesson = (props) => {
     __typename: "User",
     __proto__: Object,
   };
-  // const me = useUser();
+
+  // 2. Move around the lesson
+
   useEffect(() => {
     if (props.passStep) props.passStep(0);
   }, [0]);
+
+  const passStep = (num) => {
+    if (props.passStep) props.passStep(num);
+  };
+
+  // 3. Download lesson data
+
   const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {
     variables: { id: props.id },
     fetchPolicy: "no-cache",
   });
   if (loading) return <LoadingText />;
+
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
     (l) => l.number === lesson.number + 1
   );
+
   if (loadedMe) {
     me = loadedMe;
   }
+
+  // 4. Check if I am the student or the author
+
   let i_am_author = false;
   let i_am_student = false;
+
   if (
     me &&
     lesson.coursePage.authors.filter((auth) => auth.id == me.id).length > 0
@@ -406,38 +422,17 @@ const NewSingleLesson = (props) => {
     i_am_student = true;
   }
 
-  const passStep = (num) => {
-    if (props.passStep) props.passStep(num);
-  };
   return (
     <>
-      {/* {!i_am_student &&
-        lesson.open &&
-        lesson.coursePage.courseType == "FORMONEY" && (
-          <Offer me={me} coursePageId={lesson.coursePage.id} />
-        )} */}
       <div id="root"></div>
       <>
         {lesson && (
           <>
             <Container>
-              <ReactResizeDetector
-                handleWidth
-                handleHeight
-                onResize={onResize}
-              />
-
               <LessonPart>
-                {/* {!props.isBot && !props.embedded && (
-                  <Navigation
-                    i_am_author={i_am_author}
-                    lesson={lesson}
-                    me={me}
-                    width={width}
-                  />
-                )} */}
                 <StoryEx
                   id={props.id}
+                  // step is the ability to set the part of the lesson you want to open via menu
                   step={props.step}
                   tasks={
                     props.add == "offer"
@@ -456,7 +451,6 @@ const NewSingleLesson = (props) => {
                   passStep={passStep}
                   openLesson={lesson.open}
                   i_am_author={i_am_author}
-                  width={width}
                 />
               </LessonPart>
             </Container>{" "}

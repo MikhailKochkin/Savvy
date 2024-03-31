@@ -230,26 +230,31 @@ const Construction = (props) => {
     <>
       <div className="time">{moment(s.createdAt).format("LLL")} </div>
       <Block id={id} columns={construction.columnsNum}>
-        {elems.map((t, i) => (
-          <ConElement
-            text={t.text}
-            size={t.size}
-            rows={t.rows}
-            borders={t.borders}
-            isTest={t.isTest}
-            className={"header" + i}
-            id={i + 1}
-            i={i}
-            place={t.place}
-            construction={construction}
-            elems={elems}
-            // isShown={check}
-            // check={check}
-            // status={currentConfig[i]}
-            // shiver={shiverList[i]}
-            display={t.inDoc}
-          />
-        ))}
+        {console.log("elems", elems)}
+        {elems.map((t, i) => {
+          if (t) {
+            return (
+              <ConElement
+                text={t.text}
+                size={t.size}
+                rows={t.rows}
+                borders={t.borders}
+                isTest={t.isTest}
+                className={"header" + i}
+                id={i + 1}
+                i={i}
+                place={t.place}
+                construction={construction}
+                elems={elems}
+                // isShown={check}
+                // check={check}
+                // status={currentConfig[i]}
+                // shiver={shiverList[i]}
+                display={t.inDoc}
+              />
+            );
+          }
+        })}
       </Block>
     </>
   );

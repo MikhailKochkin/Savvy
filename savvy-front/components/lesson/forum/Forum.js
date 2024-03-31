@@ -238,7 +238,7 @@ const Forum = (props) => {
   moment.locale("ru");
   const { text, forum, id, statements, lesson, result, story, me } = props;
   return (
-    <Styles story={story}>
+    <Styles story={story} id={id}>
       <div className="question">
         <div className="question_text">{t("rate")}</div>
         <IconBlock>

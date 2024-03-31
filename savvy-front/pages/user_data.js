@@ -97,7 +97,6 @@ const ClientData = () => {
   if (error) return <p>Error: {error.message}</p>; // Handle error here
 
   let initialClients = data ? data.users : [];
-  console.log("initialClients", initialClients);
   return (
     <div>
       <div>

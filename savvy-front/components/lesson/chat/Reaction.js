@@ -161,7 +161,7 @@ const StyledButton = styled.div`
   /* border-color: ${(props) => props.color}; */
   padding: 10px 15px;
   cursor: pointer;
-  margin-right: 6%;
+  margin-right: 10px;
   margin-bottom: 10px;
   transition: 0.3s;
   &:hover {

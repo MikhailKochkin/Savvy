@@ -3,6 +3,8 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 // // import Button from "@material-ui/core/Button";
 // // import { makeStyles } from "@material-ui/core/styles";
 import { getCookie } from "cookies-next";
@@ -137,6 +139,18 @@ const BlueButton = styled.button`
 const Signin = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { data, status } = useSession();
+  // if (status === "loading") return <h1> loading... please wait</h1>;
+  // if (status === "authenticated") {
+  //   console.log("user data", data);
+  //   return (
+  //     <div>
+  //       <h1> hi {data.user.name}</h1>
+  //       <img src={data.user.image} alt={data.user.name + " photo"} />
+  //       <button onClick={signOut}>sign out</button>
+  //     </div>
+  //   );
+  // }
   // // const classes = useStyles();
   const change = (e) => props.getData(e.target.getAttribute("name"));
   const { t } = useTranslation("auth");
@@ -171,6 +185,10 @@ const Signin = (props) => {
             <Title>
               👋 {props.page == "lesson" ? t("signin_lesson_page") : t("c2a2")}
             </Title>
+            {/* <button onClick={() => signIn("google")}>
+              sign in with gooogle
+            </button> */}
+
             <Error error={error} />
             <Input
               type="email"

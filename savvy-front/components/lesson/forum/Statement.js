@@ -3,7 +3,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 
 import moment from "moment";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const UPDATE_STATEMENT_MUTATION = gql`
   mutation UPDATE_STATEMENT_MUTATION($comments: [String!], $id: String!) {
@@ -12,6 +12,15 @@ const UPDATE_STATEMENT_MUTATION = gql`
     }
   }
 `;
+
+const DELETE_STATEMENT_MUTATION = gql`
+  mutation DELETE_STATEMENT_MUTATION($id: String!) {
+    deleteStatement(id: $id) {
+      id
+    }
+  }
+`;
+
 const Comment = styled.div`
   margin-bottom: 20px;
   button {
@@ -178,6 +187,24 @@ const Statement = (props) => {
   const [updateStatement, { data, loading }] = useMutation(
     UPDATE_STATEMENT_MUTATION
   );
+  const [deleteStatement] = useMutation(DELETE_STATEMENT_MUTATION);
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this statement?")) {
+      try {
+        await deleteStatement({
+          variables: {
+            id: s.id,
+          },
+        });
+        // Optionally, you can implement a callback or refetch the data here
+        // For example, refetch the statements after deletion
+      } catch (error) {
+        console.error("Error deleting statement:", error);
+      }
+    }
+  };
+
   const { s, author, me } = props;
   moment.locale("ru");
 
@@ -188,20 +215,26 @@ const Statement = (props) => {
           {s.user.id == author ? (
             <img className="icon" src="../../static/hipster.svg" />
           ) : (
-            <img className="icon" src="../../static/batman.svg" />
+            <img className="icon" src="../../static/study_icon.png" />
           )}
           <div className="name">{s.user.name}</div>
         </IconBlock>{" "}
         <div className="answer_text">
           <div>{parse(s.text)}</div>
           <span>{moment(s.createdAt).format("LLL")}</span>
+          <br />
+          {me && (me.id == author || me.permissions.includes("ADMIN")) && (
+            <button onClick={handleDelete}>Delete</button>
+          )}
         </div>
       </div>
       <div className="comment">
         <div className="comment_box">
           {s.comments &&
-            s.comments.map((c) => (
-              <div className="comment_text">{parse(c)}</div>
+            s.comments.map((c, index) => (
+              <div key={index} className="comment_text">
+                {parse(c)}
+              </div>
             ))}
           {me && (me.id == author || me.permissions.includes("ADMIN")) && (
             <>

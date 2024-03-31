@@ -302,7 +302,7 @@ const Option = styled.div`
   cursor: pointer;
   margin-right: 3%;
   margin-bottom: 2%;
-  height: 50px;
+  /* height: 50px; */
   transition: 0.3s;
   &:hover {
     border: 1px solid #3f51b5;
@@ -538,7 +538,7 @@ const SingleTest = (props) => {
     width = "100%";
   }
   return (
-    <Styles width={width}>
+    <Styles width={width} id={props.id}>
       {!exam && story !== true && (
         <button onClick={(e) => setUpdate(!update)}>
           {!update ? t("update") : t("back")}
@@ -653,10 +653,9 @@ const SingleTest = (props) => {
 
           {/* 4. Верный ответ. Поздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}
 
-          {answerState === "right" && (
+          {props.type != "FORM" && answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {console.log("commentsList", commentsList)}
                 {props.type != "FORM" && "🎉" + "  " + t("correct") + "!"}
                 {commentsList.length > 0 &&
                   commentsList.map((com, i) => {
@@ -685,7 +684,7 @@ const SingleTest = (props) => {
 
           {/* 5. Неправильный ответ. Говорим об этом, даем комментарии к неправильным вариантам*/}
 
-          {answerState === "wrong" && (
+          {props.type != "FORM" && answerState === "wrong" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
                 {props.type != "FORM" && "🔎 " + "  " + t("wrong") + "..."}
@@ -713,6 +712,39 @@ const SingleTest = (props) => {
               </IconBlock>
             </Question>
           )}
+
+          {/* 5. Неправильный ответ. Говорим об этом, даем комментарии к неправильным вариантам*/}
+
+          {props.type == "FORM" &&
+            (answerState === "wrong" || answerState === "right") &&
+            (ifWrong || ifRight || commentsList.length > 0) && (
+              <Question inputColor={inputColor}>
+                <div className="question_text">
+                  {commentsList.length > 0 &&
+                    commentsList.map((com, i) => {
+                      return com ? parse(com) : null;
+                    })}
+                  {answerState === "wrong" && parse(ifWrong)}
+                  {answerState === "right" && parse(ifRight)}
+                </div>
+                <IconBlock>
+                  {image ? (
+                    <img className="icon" src={image} />
+                  ) : author && author.image != null ? (
+                    <img className="icon" src={author.image} />
+                  ) : (
+                    <img className="icon" src="../../static/hipster.svg" />
+                  )}{" "}
+                  <div className="name">
+                    {instructorName
+                      ? instructorName
+                      : author && author.name
+                      ? author.name
+                      : "BeSavvy"}
+                  </div>
+                </IconBlock>
+              </Question>
+            )}
 
           {/* 6. Неправильный ответ. Спрашиваем, показать ли объяснение?*/}
 

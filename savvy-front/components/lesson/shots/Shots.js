@@ -213,7 +213,7 @@ const Shots = (props) => {
   };
 
   return (
-    <Styles width={width}>
+    <Styles width={width} id={shotID}>
       {me && !props.story && (
         <DeleteSingleShot shotID={shotID} lessonID={lessonID} />
       )}

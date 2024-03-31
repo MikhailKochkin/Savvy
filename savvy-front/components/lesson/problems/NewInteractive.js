@@ -86,7 +86,6 @@ const NewInteractive = (props) => {
   const findUnconnectedItems = (arr) => {
     // Step 1: Create a set of all item IDs
     const ids = new Set(arr.map((item) => item.id));
-
     // Step 2: Iterate over the array and remove connected IDs from the set
     arr.forEach((item) => {
       if (item.next.true && item.next.true.value) {
@@ -115,10 +114,6 @@ const NewInteractive = (props) => {
     let nextValue = data[0] ? nextTrueValue : nextFalseValue;
 
     // If nextValue is undefined or null, then exit early
-    if (!nextValue) {
-      props.onFinish(true, "new");
-      return;
-    }
 
     let next_el = problem.steps.problemItems.find((el) => el.id == nextValue);
 
@@ -126,6 +121,14 @@ const NewInteractive = (props) => {
       setComponentList([...componentList, next_el]);
     } else {
       props.onFinish(true, "new");
+    }
+
+    let last_value = [...componentList, next_el][
+      [...componentList, next_el].length - 1
+    ];
+    if (!last_value.next.true.value) {
+      props.onFinish(true, "new");
+      return;
     }
   };
 
@@ -223,11 +226,11 @@ const NewInteractive = (props) => {
               let el = lesson.chats.filter((q) => q.id === com.id)[0];
               return (
                 <Chat
+                  next={com.next}
                   key={el.id}
                   name={el.name}
                   isSecret={el.isSecret}
                   me={me}
-                  // getShowArrow={getShowArrow}
                   author={author}
                   complexity={el.complexity}
                   messages={el.messages}

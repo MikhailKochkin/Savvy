@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import { TailSpin } from "react-loader-spinner";
@@ -75,23 +74,16 @@ const Progress = styled.div`
 
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID, coursePage } = props;
-  const [experience, setExperience] = useState(0);
-  const [showArrow, setShowArrow] = useState(true);
-  const [textToBeTranslated, setTextToBeTranslated] = useState("");
-  const [solved, setSolved] = useState([]);
-  const total = props.lesson.totalPoints;
+  const [experience, setExperience] = useState(0); // User's experience points
+  const [textToBeTranslated, setTextToBeTranslated] = useState(""); // Text selected for translation
+  const [solved, setSolved] = useState([]); // List of solved task IDs
+  const total = props.lesson.totalPoints; // Total points for the lesson
 
-  const getShowArrow = (val) => {
-    setShowArrow(val);
+  const translateSelectedText = async (text, targetLang) => {
+    passTextToBeTranslated(text);
   };
 
-  const moveNext = (id) => {
-    setSolved([...solved, id]);
-  };
-
-  const getResults = (res, id) => {
-    setExperience(experience + res);
-  };
+  // 0. Translation functionality
 
   const handleSelection = useCallback(() => {
     const selection = window.getSelection().toString();
@@ -101,8 +93,7 @@ const StoryEx = (props) => {
     }
   }, [translateSelectedText]);
 
-  const prevSelection = useRef("");
-
+  // Event listener for text selection
   useEffect(() => {
     document.addEventListener("mouseup", handleSelection);
     return () => {
@@ -110,14 +101,34 @@ const StoryEx = (props) => {
     };
   }, [handleSelection]);
 
-  const translateSelectedText = async (text, targetLang) => {
-    passTextToBeTranslated(text);
+  // 1. Function to handle the "next" button visibility
+  // It adds the task ID to the solved array when completed
+  // This works the following way:
+  // 1.1 We have two arrays: solved (state) and move_statuses
+  // 1.2 Solved has the ids of all the blocks the user has worked with already. Solved is updated every time a block is completed.
+  // 1.3 Move_statuses has the boolean value for every block that determines if the next arrow button should be shown. Move_statuses is created on page load.
+  // 1.4. Once the block is completed its id is passed to the solved array
+  // 1.5. Then the function checks if current block's id is in the solved array. If yes, the next arrow is shown
+
+  const moveNext = (id) => {
+    if (!solved.includes(id)) {
+      setSolved((prevSolved) => [...prevSolved, id]);
+    }
   };
+
+  // Function to update user experience points
+
+  const getResults = (res, id) => {
+    setExperience((prevExperience) => prevExperience + res);
+  };
+
+  const prevSelection = useRef("");
 
   const passTextToBeTranslated = (text) => {
     setTextToBeTranslated(text);
   };
 
+  // 5.  Fetch lesson results for the current user
   const [
     fetchQuery,
     { loading: stats_loading, error: stats_error, data: stats_data },
@@ -126,9 +137,12 @@ const StoryEx = (props) => {
       lessonId: props.id,
       userId: me.id,
     },
+    fetchPolicy: "no-cache", // Use cached data first, then fetch from the network
+    // nextFetchPolicy: "cache-first", // Use cached data for subsequent queries
   });
+
   useEffect(() => {
-    // when the first query is loaded, then fire this lazy query function
+    // when the user is loaded, fetch the lesson results
     if (me) {
       fetchQuery({
         variables: {
@@ -138,6 +152,7 @@ const StoryEx = (props) => {
       });
     }
   }, [props.me]);
+
   if (stats_error) return <p>{stats_error}</p>;
   if (stats_loading)
     return (
@@ -154,38 +169,57 @@ const StoryEx = (props) => {
         />{" "}
       </Progress>
     );
-  let my_result = null;
-
-  if (stats_data && stats_data.lessonResults.length > 0) {
-    // Special case: if there's only one item, return it
-    if (stats_data.lessonResults.length === 1) {
-      my_result = stats_data.lessonResults[0];
-    } else {
-      const filteredResults = stats_data.lessonResults.filter(
-        (result) => result.progress < lesson.structure.lessonItems.length
-      );
-
-      // If any items are left, find the one with the maximum progress
-      if (filteredResults.length > 0) {
-        my_result = filteredResults.reduce((prev, current) => {
-          return prev.progress > current.progress ? prev : current;
-        });
-      }
+  console.log("stats_data", stats_data);
+  // Find the lesson result with the highest progress value for the current user
+  const findNewestLessonResult = (stats_data, lesson) => {
+    // Check if stats_data is valid and contains lesson results
+    if (
+      !stats_data ||
+      !stats_data.lessonResults ||
+      stats_data.lessonResults.length === 0
+    ) {
+      return null; // Return null if no valid lesson results are found
     }
-  }
 
-  // Now, my_result should contain the item with the highest progress value that is not equal to maxProgress, or null if no such item exists.
+    // Find the newest lesson result based on the updatedAt property
+    const newestResult = stats_data.lessonResults.reduce((prev, current) => {
+      const prevUpdatedAt = new Date(prev.updatedAt);
+      const currentUpdatedAt = new Date(current.updatedAt);
+      // Compare the update dates to find the newest result
+      return prevUpdatedAt > currentUpdatedAt ? prev : current;
+    });
+
+    // If the newest result's progress equals the total number of lesson items (meaning lesson was finished), set my_result to null
+    if (newestResult.progress === lesson.structure.lessonItems.length) {
+      console.log("null");
+      return null; // Start over the lesson
+    }
+    console.log(
+      "newestResult",
+      newestResult.progress,
+      lesson.structure.lessonItems.length
+    );
+
+    // Otherwise, return the newest lesson result
+    return newestResult;
+  };
+
+  // Usage
+  let my_result = findNewestLessonResult(stats_data, lesson);
+  console.log("my_result", my_result);
+  // 6. Now, my_result should contain the item with the highest progress value that is not equal to maxProgress, or null if no such item exists.
+  // Now we build the structure of the lesson
 
   let components = [];
   let move_statuses = [];
   tasks.map((task) => {
     let el;
     let item;
+    // Render different components based on the task type
     if (task.type.toLowerCase() === "note") {
       el = lesson.notes.find((note) => note.id === task.id);
       if (!el) return;
       item = (
-        // <BannerOffer me={me} coursePageId={coursePageID} />
         <Note
           text={el.text}
           me={me}
@@ -295,6 +329,7 @@ const StoryEx = (props) => {
       item = (
         <TestPractice
           key={el.id}
+          id={el.id}
           lessonID={lesson.id}
           getResults={getResults}
           me={me}
@@ -313,6 +348,7 @@ const StoryEx = (props) => {
       item = (
         <TeamQuest
           key={el.id}
+          id={el.id}
           lessonID={lesson.id}
           me={me}
           teamQuest={el}
@@ -330,6 +366,7 @@ const StoryEx = (props) => {
       item = (
         <Shots
           key={el.id}
+          id={el.id}
           comments={el.comments}
           parts={el.parts}
           shotUser={el.user.id}
@@ -350,24 +387,24 @@ const StoryEx = (props) => {
       item = (
         <Chat
           key={el.id}
+          id={el.id}
           name={el.name}
+          moveNext={moveNext}
           isSecret={el.isSecret}
           experience={experience}
           total={total}
           clicks={el.link_clicks}
           me={me}
-          getShowArrow={getShowArrow}
           author={lesson.user}
           complexity={el.complexity}
           messages={el.messages}
-          id={el.id}
           lessonId={lesson.id}
           story={true}
           passTextToBeTranslated={passTextToBeTranslated}
         />
       );
       components.push(item);
-      move_statuses.push(true);
+      move_statuses.push(solved.includes(el.id) ? true : false);
     }
     // else if (task.type.toLowerCase() === "offer") {
     //   item = (
@@ -392,6 +429,7 @@ const StoryEx = (props) => {
       item = (
         <SingleProblem
           key={el.id}
+          id={el.id}
           problem={el}
           complexity={el.complexity}
           getResults={getResults}
@@ -400,15 +438,18 @@ const StoryEx = (props) => {
           story={true}
           lesson={lesson}
           author={lesson.user}
+          moveNext={moveNext}
         />
       );
       components.push(item);
-      move_statuses.push(true);
+      // move_statuses.push(true);
+      move_statuses.push(solved.includes(el.id) ? true : false);
     } else if (task.type.toLowerCase() === "texteditor") {
       el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);
       item = (
         <SingleTextEditor
           key={el.id}
+          id={el.id}
           lessonID={lesson.id}
           text={el.text}
           complexity={el.complexity}
@@ -429,6 +470,7 @@ const StoryEx = (props) => {
         el.elements !== null ? (
           <NewConstructor
             key={el.id}
+            id={el.id}
             lessonID={lesson.id}
             construction={el}
             complexity={el.complexity}
@@ -440,6 +482,7 @@ const StoryEx = (props) => {
         ) : (
           <SingleConstructor
             key={el.id}
+            id={el.id}
             lessonID={lesson.id}
             complexity={el.complexity}
             getResults={getResults}
@@ -465,6 +508,7 @@ const StoryEx = (props) => {
       item = (
         <Document
           key={el.id}
+          id={el.id}
           clauses={el.clauses}
           complexity={el.complexity}
           title={el.title}
@@ -503,7 +547,6 @@ const StoryEx = (props) => {
   const passStep = (num) => {
     props.passStep(num);
   };
-
   return (
     <Container>
       {me && (
@@ -528,14 +571,12 @@ const StoryEx = (props) => {
           lesson_number={lesson.number}
           lesson_name={lesson.name}
           lessonID={lesson.id}
-          showArrow={showArrow}
           my_result={my_result}
           passStep={passStep}
           lessonId={props.id}
           openSize={lesson.openSize}
           lesson={lesson}
           i_am_author={props.i_am_author}
-          width={props.width}
           stats_data={stats_data}
           textToBeTranslated={textToBeTranslated}
         />

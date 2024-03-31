@@ -605,16 +605,29 @@ const Mutation = mutationType({
         const user = await ctx.prisma.user.findUnique({
           where: { id: id },
         });
+
         let new_traffic_sources = [];
+
         if (user.traffic_sources === null) {
           new_traffic_sources = traffic_sources;
-        } else if (traffic_sources.visitsList.length > 0) {
+        } else {
+          // Concatenate new traffic sources with existing ones
           new_traffic_sources = {
-            visitsList: traffic_sources.visitsList.concat(
-              user.traffic_sources.visitsList
+            visitsList: user.traffic_sources.visitsList.concat(
+              traffic_sources.visitsList
             ),
           };
+
+          // Limit the total number of traffic sources to 30
+          if (new_traffic_sources.visitsList.length > 30) {
+            // Trim the new traffic sources to 30 most recent ones
+            new_traffic_sources.visitsList =
+              new_traffic_sources.visitsList.slice(
+                Math.max(new_traffic_sources.visitsList.length - 30, 0)
+              );
+          }
         }
+
         const updated_user = await ctx.prisma.user.update({
           data: {
             traffic_sources: new_traffic_sources,
@@ -623,9 +636,11 @@ const Mutation = mutationType({
             id: id,
           },
         });
-        return user;
+
+        return updated_user;
       },
     });
+
     t.field("updateUser", {
       type: "User",
       args: {
@@ -3241,10 +3256,10 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
+        // const ownsTest = C.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
         //3. Delete it
         return ctx.prisma.statement.delete({ where });
       },

@@ -85,7 +85,7 @@ const NewConstructor = (props) => {
   };
 
   return (
-    <>
+    <div id={props.construction.id}>
       {story !== true && (
         <Buttons>
           <button onClick={(e) => setUpdate(!update)}>
@@ -134,7 +134,7 @@ const NewConstructor = (props) => {
           />
         )}
       </Styles>
-    </>
+    </div>
   );
 };
 
