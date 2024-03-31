@@ -3,7 +3,7 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-import { useSession, signIn, signOut } from "next-auth/react";
+// import { useSession, signIn, signOut } from "next-auth/react";
 
 // // import Button from "@material-ui/core/Button";
 // // import { makeStyles } from "@material-ui/core/styles";
@@ -139,7 +139,7 @@ const BlueButton = styled.button`
 const Signin = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { data, status } = useSession();
+  // const { data, status } = useSession();
   // if (status === "loading") return <h1> loading... please wait</h1>;
   // if (status === "authenticated") {
   //   console.log("user data", data);
