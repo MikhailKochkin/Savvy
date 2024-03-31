@@ -2,13 +2,16 @@ import React, { useEffect } from "react";
 import { appWithTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { ApolloProvider } from "@apollo/client";
+// import { SessionProvider } from "next-auth/react";
 import Page from "../components/Page";
-import withData from "../lib/withData";
+import { useApollo } from "../lib/withData";
+
 import TagManager from "react-gtm-module";
 import * as fbq from "../lib/fpixel";
 
-function MyApp({ Component, apollo, pageProps }) {
+function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  const apolloClient = useApollo(pageProps); // Initialize Apollo Client using the useApollo hook
 
   useEffect(() => {
     // This pageview only triggers the first time (it's important for Pixel to have real information)
@@ -38,11 +41,15 @@ function MyApp({ Component, apollo, pageProps }) {
   }, [0]);
 
   return (
-    <ApolloProvider client={apollo}>
+    // <SessionProvider session={pageProps.session}>
+    <ApolloProvider client={apolloClient}>
+      {" "}
+      {/* Use the Apollo Client instance */}
       <Page>
         <Component {...pageProps} />
       </Page>
     </ApolloProvider>
+    // </SessionProvider>
   );
 }
 
@@ -56,4 +63,4 @@ MyApp.getInitialProps = async function ({ Component, ctx }) {
   return { pageProps };
 };
 
-export default withData(appWithTranslation(MyApp));
+export default appWithTranslation(MyApp); // Remove withData hoc
