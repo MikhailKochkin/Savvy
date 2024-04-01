@@ -552,7 +552,7 @@ const SingleTest = (props) => {
         />
       )}{" "}
       {/* 1. Вопрос студенту и варианты ответа */}
-      {!update && (
+      {!update && me && (
         <TextBar className="Test" story={story}>
           <div className="question_box">
             <div className="question_text">{parse(props.question[0])}</div>
@@ -576,15 +576,16 @@ const SingleTest = (props) => {
           <div className="answer">
             <IconBlock>
               <div className="icon2">
-                {me && me.image ? (
-                  <img className="icon" src={me.image} />
-                ) : me.surname ? (
-                  `${me.name[0]}${me.surname[0]}`
-                ) : (
-                  `${me.name[0]}${me.name[1]}`
-                )}
+                {me &&
+                  (me.image ? (
+                    <img className="icon" src={me.image} />
+                  ) : me.surname ? (
+                    `${me.name[0]}${me.surname[0]}`
+                  ) : (
+                    `${me.name[0]}${me.name[1]}`
+                  ))}
               </div>
-              <div className="name">{me.name}</div>
+              <div className="name">{me?.name}</div>
             </IconBlock>
             <Options>
               {mes.map((answer, index) => (
@@ -777,15 +778,16 @@ const SingleTest = (props) => {
                   <IconBlock>
                     {/* <img className="icon" src="../../static/flash.svg" /> */}
                     <div className="icon2">
-                      {me && me.image ? (
-                        <img className="icon" src={me.image} />
-                      ) : me.surname ? (
-                        `${me.name[0]}${me.surname[0]}`
-                      ) : (
-                        `${me.name[0]}${me.name[1]}`
-                      )}
+                      {me &&
+                        (me.image ? (
+                          <img className="icon" src={me.image} />
+                        ) : me.surname ? (
+                          `${me.name[0]}${me.surname[0]}`
+                        ) : (
+                          `${me.name[0]}${me.name[1]}`
+                        ))}
                     </div>
-                    <div className="name">{me.name}</div>
+                    <div className="name">{me?.name}</div>
                   </IconBlock>{" "}
                   <OptionsGroup>
                     <Option
@@ -853,15 +855,16 @@ const SingleTest = (props) => {
                   <IconBlock>
                     {/* <img className="icon" src="../../static/flash.svg" /> */}
                     <div className="icon2">
-                      {me && me.image ? (
-                        <img className="icon" src={me.image} />
-                      ) : me.surname ? (
-                        `${me.name[0]}${me.surname[0]}`
-                      ) : (
-                        `${me.name[0]}${me.name[1]}`
-                      )}
+                      {me &&
+                        (me.image ? (
+                          <img className="icon" src={me.image} />
+                        ) : me.surname ? (
+                          `${me.name[0]}${me.surname[0]}`
+                        ) : (
+                          `${me.name[0]}${me.name[1]}`
+                        ))}
                     </div>
-                    <div className="name">{me.name}</div>
+                    <div className="name">{me?.name}</div>
                   </IconBlock>{" "}
                   <OptionsGroup>
                     <Option onClick={(e) => setShowAnswer(true)}>

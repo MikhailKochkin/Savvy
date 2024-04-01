@@ -650,6 +650,7 @@ const LessonBuilder = (props) => {
     setElements([...elements, ...blocks]);
   };
 
+  console.log("me", props.me);
   return (
     <Styles>
       <Container>

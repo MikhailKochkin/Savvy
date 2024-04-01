@@ -142,33 +142,44 @@ const StoryEx = (props) => {
   });
 
   useEffect(() => {
-    // when the user is loaded, fetch the lesson results
+    const fetchLessonResults = async () => {
+      try {
+        const response = await fetchQuery({
+          variables: {
+            lessonId: props.id,
+            userId: me.id,
+          },
+        });
+        const data = await response.json();
+        // setLoading(false);
+      } catch (error) {
+        // setError(error.message);
+        // setLoading(false);
+      }
+    };
+
     if (me) {
-      fetchQuery({
-        variables: {
-          lessonId: props.id,
-          userId: me.id,
-        },
-      });
+      fetchLessonResults();
     }
-  }, [props.me]);
+  }, [props.id, me]);
 
   if (stats_error) return <p>{stats_error}</p>;
-  if (stats_loading)
-    return (
-      <Progress>
-        <TailSpin
-          height="80"
-          width="80"
-          color="#2E80EC"
-          ariaLabel="tail-spin-loading"
-          radius="1"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-        />{" "}
-      </Progress>
-    );
+  // if (stats_loading)
+  //   return (
+  //     <Progress>
+  //       <TailSpin
+  //         height="80"
+  //         width="80"
+  //         color="#2E80EC"
+  //         ariaLabel="tail-spin-loading"
+  //         radius="1"
+  //         wrapperStyle={{}}
+  //         wrapperClass=""
+  //         visible={true}
+  //       />{" "}
+  //     </Progress>
+  //   );
+
   // Find the lesson result with the highest progress value for the current user
   const findNewestLessonResult = (stats_data, lesson) => {
     // Check if stats_data is valid and contains lesson results

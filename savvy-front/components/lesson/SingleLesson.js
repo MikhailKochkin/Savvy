@@ -375,35 +375,6 @@ const Head = styled.div`
   }
 `;
 
-const Head2 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 0;
-  background-image: url("/static/pattern.svg");
-  background-size: cover;
-  color: white;
-  width: 100vw;
-  text-align: center;
-  font-size: 1.8rem;
-  span {
-    color: #3ddc97;
-    cursor: pointer;
-    &:hover {
-      color: #139a43;
-    }
-  }
-  @media (max-width: 800px) {
-    font-size: 1.6rem;
-    justify-content: center;
-    padding: 2% 15px;
-    div {
-      flex: 85%;
-      text-align: right;
-    }
-  }
-`;
-
 const LessonStyles = styled.div`
   display: flex;
   max-width: 1400px;
@@ -563,7 +534,7 @@ const SingleLesson = (props) => {
                   </Head>
                   <LessonStyles>
                     <LessonPart>
-                      <LessonBuilder lesson={lesson} me={me} />
+                      {me && <LessonBuilder lesson={lesson} me={me} />}
                     </LessonPart>
                   </LessonStyles>
                 </Container>

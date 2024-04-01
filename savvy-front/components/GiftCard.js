@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { GoogleLogin } from "react-google-login";
-// import { signIn, useSession } from "next-auth/client";
 
 const Styles = styled.div`
   min-height: 100vh;

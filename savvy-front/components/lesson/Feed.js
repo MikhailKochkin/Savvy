@@ -732,7 +732,7 @@ const Feed = (props) => {
             inline: "nearest",
           });
         }
-      }, 1500);
+      }, 1000);
     }
   }, [props.my_result]);
 

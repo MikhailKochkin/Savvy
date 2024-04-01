@@ -393,7 +393,6 @@ const NewSingleLesson = (props) => {
     fetchPolicy: "no-cache",
   });
   if (loading) return <LoadingText />;
-
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
     (l) => l.number === lesson.number + 1
