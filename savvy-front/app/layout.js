@@ -37,7 +37,7 @@ const Inner = styled.div`
 export default function RootLayout({ children }) {
   return (
     // <ThemeProvider theme={theme}>
-    <html lang={"en"}>
+    <html lang={"ru"}>
       <StyledPage>
         <StyledComponentsRegistry>
           {/* <GlobalStyles /> */}
