@@ -3,6 +3,8 @@ import Link from "next/link";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import Image from "next/image";
+
 import { useUser } from "../User";
 import Signup from "../auth/Signup";
 import Signin from "../auth/Signin";
@@ -241,7 +243,12 @@ const NewNav = (props) => {
       <div className="menu_bar">
         <Link href="/">
           <div className="logo">
-            <img src="static/logo_colored.svg" />
+            <Image
+              src={`/static/logo_colored.svg`}
+              alt={"alt"}
+              width="112"
+              height="32"
+            />
           </div>
         </Link>
         <MobileMenu onClick={(e) => openNav()}>

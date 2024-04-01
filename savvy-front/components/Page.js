@@ -6,8 +6,6 @@ import dynamic from "next/dynamic";
 import Meta from "./Meta";
 import Footer from "./Footer";
 import Header from "./Header";
-import Ad from "./Ad";
-import Ad2 from "./Ad2";
 import Layout from "../components/Layout";
 // import { useUser } from "./User";
 

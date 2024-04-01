@@ -4,7 +4,6 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 
 import { CURRENT_USER_QUERY } from "./User";
 import { Unis, Companies } from "../config";

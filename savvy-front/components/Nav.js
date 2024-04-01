@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
+import Image from "next/image";
 
 import { useUser } from "./User";
 import Signup from "./auth/Signup";
@@ -308,6 +309,7 @@ const Nav = (props) => {
                 <Link href="/">
                   <div className="logo">
                     <img src="/static/long_logo.svg" />
+                    // <Image src={`/long_logo.svg`} alt={"alt"} />
                   </div>
                 </Link>
               </CourseMenu>
