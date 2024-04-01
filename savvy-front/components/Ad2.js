@@ -14,7 +14,7 @@ const Styles = styled.div`
   justify-content: center;
   padding: 10px 0;
   div {
-    width: 65%;
+    width: 55%;
     text-align: center;
     line-height: 1.5;
   }
