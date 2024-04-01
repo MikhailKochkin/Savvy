@@ -53,8 +53,8 @@ const AreYouEnrolled = (props) =>
     <Query query={CURRENT_USER_QUERY}>
       {({ data }, loading) => {
         if (loading) return <p>Loading...</p>;
-        if (!data.me) return null;
-        if (data.me) {
+        if (!data?.me) return null;
+        if (data?.me) {
           if (
             !props.openLesson &&
             data.me.new_subjects.filter((sbj) => sbj.id == props.subject)
