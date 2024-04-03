@@ -3,7 +3,12 @@
 const { i18n } = require("./next-i18next.config");
 
 module.exports = {
-  i18n,
+  // reactStrictMode: true,
+  // swcMinify: true,
+  compiler: {
+    styledComponents: true,
+  },
+  i18n, // include any other configuration options here
 };
 
 // module.exports = {

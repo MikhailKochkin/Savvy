@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 const TextBar = styled.div`
   display: flex;
@@ -49,9 +49,9 @@ const Legal = (props) => {
               <p>От 23 июля 2021 года</p>
               <p>
                 Настоящая Политика обработки персональных данных (далее —
-                Политика) регламентирует отношения, связанные с обработкой ООО
-                "БиСэвви" (далее — Администрация) персональных данных лиц,
-                использующих Сайт www.besavvy.app.
+                Политика) регламентирует отношения, связанные с обработкой ИП
+                Кочкиным Михаилом Валерьевичем (далее — Администрация)
+                персональных данных лиц, использующих Сайт www.besavvy.app.
               </p>
               <p>
                 Текст Политики доступен в сети Интернет по адресу{" "}

@@ -309,7 +309,6 @@ const Nav = (props) => {
                 <Link href="/">
                   <div className="logo">
                     <img src="/static/long_logo.svg" />
-                    // <Image src={`/long_logo.svg`} alt={"alt"} />
                   </div>
                 </Link>
               </CourseMenu>
