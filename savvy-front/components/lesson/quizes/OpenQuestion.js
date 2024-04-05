@@ -857,9 +857,7 @@ const OpenQuestion = (props) => {
               {hint !== null && hint !== 0 && props.goalType !== "ASSESS" && (
                 <p>{hint}</p>
               )}
-              {props.goalType == "ASSESS" && (
-                <p>We saved your answer. Please proceed.</p>
-              )}
+              {props.goalType == "ASSESS" && <p>{t("saved_answer")}</p>}
               {/* <p>{ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)} </p> */}
             </div>
             <IconBlock>

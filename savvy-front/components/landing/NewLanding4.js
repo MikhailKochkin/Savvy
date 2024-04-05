@@ -132,21 +132,24 @@ const Block = styled.div`
 `;
 
 const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   width: 100%;
-  button {
+  .button1 {
     background: none;
     color: #1a1a1a;
     border-radius: 10px;
     font-weight: 600;
     border: 4px solid #7000ff;
-    width: 240px;
+    width: 260px;
     padding: 10px 0;
     outline: 0;
     cursor: pointer;
     font-family: Montserrat;
     font-size: 1.8rem;
     transition: 0.3s;
-
+    margin-right: 20px;
     &:hover {
       background: #7000ff;
       color: #fff;
@@ -159,11 +162,41 @@ const Buttons = styled.div`
       font-size: 1.4rem;
     }
   }
+  .button2 {
+    background: #7000ff;
+    border-radius: 10px;
+    font-weight: 600;
+    border: 4px solid #7000ff;
+    width: 260px;
+    padding: 10px 0;
+    outline: 0;
+    cursor: pointer;
+    font-family: Montserrat;
+    font-size: 1.8rem;
+    transition: 0.3s;
+    color: #fff;
+    a {
+      color: #fff;
+    }
+    &:hover {
+      border: 4px solid #edaf20;
+    }
+
+    div {
+      font-size: 1.4rem;
+    }
+  }
   @media (max-width: 1300px) {
   }
   @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
     button {
       width: 80%;
+    }
+    .button1 {
+      margin: 0;
+      margin-bottom: 10px;
     }
   }
 `;
@@ -209,9 +242,15 @@ const Landing = (props) => {
             <h1>{t("upskill_with_simulators")}</h1>
             <div>{t("build_in_minutes")}</div>
             <Buttons>
-              <button>
+              <button className="button1">
                 {" "}
-                <Link href="/demo?lang=eng">{t("c2a")}</Link>
+                <Link href="/demo?lang=eng">📺 {t("c2a")}</Link>
+              </button>
+              <button className="button2">
+                {" "}
+                <Link href="/build_your_simulator">
+                  ⚙️ Build your simulator
+                </Link>
               </button>
             </Buttons>
           </div>

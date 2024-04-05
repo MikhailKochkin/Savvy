@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import ReactResizeDetector from "react-resize-detector";
 
 const Styles = styled.div`
   width: 100%;
@@ -51,6 +52,7 @@ const Row = styled.div`
     align-items: center;
     justify-content: center;
     padding: 10px 0;
+    margin: 20px 0;
   }
 `;
 
@@ -61,7 +63,6 @@ const Example = styled.div`
   padding: 10px 15px;
   margin-bottom: 25px;
   margin-right: 15px;
-  /* background: #fafaf9; */
   background-color: ${(props) => (props.background ? "#fff" : "#FAFAF9")};
   cursor: pointer;
   -webkit-box-shadow: 0px 0px 1px 0px rgba(199, 199, 199, 1);
@@ -70,7 +71,8 @@ const Example = styled.div`
   transition: 0.3s;
   display: flex; /* Add this line */
   flex-direction: column; /* Add this line */
-  align-self: stretch; /* Add this line to make the height stretch */
+  align-self: stretch;
+  /* Add this line to make the height stretch  */
   &:hover {
     background: #fff;
   }
@@ -94,22 +96,20 @@ const Example = styled.div`
     font-size: 1.4rem;
   }
   @media (max-width: 800px) {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     margin-right: 0;
-
-    width: 95%;
-    height: auto;
+    width: 85%;
+    align-self: auto;
     .example_main {
       font-size: 1.8rem;
       justify-content: flex-start;
       align-items: center;
-
       .icon {
         width: 22px;
       }
     }
     .example_details {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
     }
   }
 `;
@@ -137,24 +137,31 @@ const Search = styled.div`
     border-radius: 15px;
   }
   @media (max-width: 800px) {
-    margin-top: 0px;
-
-    width: 95%;
+    margin-top: -25px;
+    width: 85%;
     margin-bottom: 10px;
-
     .landing_image {
+      height: 400px;
       object-fit: cover;
+      overflow: auto; /* Make the container scrollable */
     }
   }
 `;
 
 const UseCases = () => {
+  const [width, setWidth] = useState(800);
+
   const [currentImage, setCurrentImage] = useState("landing_image_3.png");
   const { t } = useTranslation("landing");
+
+  const onResize = (width) => {
+    setWidth(width);
+  };
 
   return (
     <Styles>
       <div className="usecases_container">
+        <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <div className="usecases_header">
           <img
             className="landing_main_image"
@@ -216,10 +223,18 @@ const UseCases = () => {
           </Example>
         </Row>
       </div>
-      <Search>
-        {" "}
-        <img className="landing_image" src={`/static/${currentImage}`} />
-      </Search>
+      {width > 800 && (
+        <Search>
+          {" "}
+          <img className="landing_image" src={`/static/${currentImage}`} />
+        </Search>
+      )}
+      {width < 800 && (
+        <Search>
+          {" "}
+          <img className="landing_image" src={`/static/landing_image_5.png`} />
+        </Search>
+      )}
     </Styles>
   );
 };

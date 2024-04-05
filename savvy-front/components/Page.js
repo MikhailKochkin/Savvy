@@ -83,16 +83,15 @@ const Page = ({ children }) => {
                 router.pathname !== "/embeddedPage" &&
                 router.pathname !== "/recommend" &&
                 router.pathname !== "/" &&
+                router.pathname !== "/build_your_simulator" &&
                 router.pathname !== "/connect" &&
                 router.pathname !== "/useful" && <DynamicNav />}
               {router.pathname == "/useful" && <DynamicSpaceNav />}
               <Inner>{children}</Inner>
               {router.pathname !== "/lesson" &&
-                router.pathname !== "/conf" &&
                 router.pathname !== "/demo" &&
                 router.pathname !== "/embeddedPage" &&
-                router.pathname !== "/recommend" &&
-                router.pathname !== "/english" && <Footer />}
+                router.pathname !== "/build_your_simulator" && <Footer />}
             </ModalProvider>
           </Layout>
         </>
