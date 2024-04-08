@@ -129,6 +129,7 @@ const SingleQuiz = (props) => {
               question={props.question}
               author={author}
               me={me}
+              check={props.check}
               story={story}
               goalType={props.goalType}
               answer={props.answer}

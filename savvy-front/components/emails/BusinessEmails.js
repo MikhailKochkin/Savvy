@@ -5,14 +5,14 @@ import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Company from "./Company";
-
-// import {
-//   companyList,
-//   emailList,
-//   company_tags,
-// } from "../../businessEmailList.js";
-// import { uniList, emailUniList } from "../../lawschool.js";
-// import emailSQEList from "../../sqeList.js";
+import BusinessEmailCard from "./BusinessEmailCard";
+import {
+  companyList,
+  emailList,
+  company_tags,
+} from "../../businessEmailList.js";
+import { uniList, emailUniList } from "../../lawschool.js";
+import emailSQEList from "../../sqeList.js";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -121,6 +121,13 @@ const Tags = styled.div`
   }
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin: 20px 0;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -132,6 +139,7 @@ const ClientData = (props) => {
   const [organizations, setOrganizations] = useState(
     companyList ? [...companyList] : []
   );
+  const [filterInput, setFilterInput] = useState("");
   const [subject, setSubject] = useState();
   const [tags, setTags] = useState(props.tags);
   const [text, setText] = useState();
@@ -142,6 +150,15 @@ const ClientData = (props) => {
   const [sendBusinessEmail, { data, loading, error }] = useMutation(
     SEND_MESSAGE_MUTATION
   );
+
+  const filterClientsByComment = (clients, str) => {
+    const filteredClients = clients.filter((client) =>
+      client.comment.toLowerCase().includes(str.toLowerCase())
+    );
+    console.log("filteredClients", filteredClients);
+    setClients(filteredClients);
+  };
+
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -150,12 +167,12 @@ const ClientData = (props) => {
   };
   // console.log("lawSchoolList", lawSchoolList);
   // Calculating the items to show based on the current page
-  // const indexOfLastItem = currentPage * itemsPerPage;
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = clients.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = clients.slice(indexOfFirstItem, indexOfLastItem);
 
   // Calculating total number of pages
-  // const totalPages = Math.ceil(clients.length / itemsPerPage);
+  const totalPages = Math.ceil(clients.length / itemsPerPage);
 
   const addOrgList = (name) => {
     setOrgList([...orgList, name]);
@@ -206,6 +223,16 @@ const ClientData = (props) => {
           </EmailBox>
           <button onClick={(e) => send()}>Отправить имейлы</button>
           <button onClick={(e) => setAddressees([])}>Обнулить</button>
+          <br />
+          <input
+            value={filterInput}
+            onChange={(e) => setFilterInput(e.target.value)}
+            type="text"
+          />
+          <button onClick={(e) => filterClientsByComment(clients, filterInput)}>
+            Фильтровать
+          </button>
+          <button onClick={(e) => setClients(emailList)}>Обнулить</button>
         </div>
         <br />
         {/* <div className="pagination">
@@ -263,6 +290,27 @@ const ClientData = (props) => {
           </div>
         ))}
       </Tags>
+      <Container>
+        {currentItems.map((c, i) => {
+          const globalIndex = indexOfFirstItem + i;
+          return (
+            <BusinessEmailCard
+              id={c.id}
+              key={globalIndex}
+              index={globalIndex}
+              name={c.name}
+              comment={c.comment}
+              surname={c.surname}
+              result={c.result}
+              personalTouch={c.personalTouch}
+              connection={c.connection}
+              firm={c.firm}
+              sentEmailsTime={c.sentEmailsTime}
+              email={c.email}
+            />
+          );
+        })}
+      </Container>
       <div>Organizations: {organizations.length}</div>
 
       {organizations.map((c, i) => {
@@ -281,25 +329,6 @@ const ClientData = (props) => {
           </>
         );
       })}
-      {/* {currentItems.map((c, i) => {
-        const globalIndex = indexOfFirstItem + i;
-        return (
-          <BusinessEmailCard
-            id={c.id}
-            key={globalIndex}
-            index={globalIndex}
-            name={c.name}
-            comment={c.comment}
-            surname={c.surname}
-            result={c.result}
-            personalTouch={c.personalTouch}
-            connection={c.connection}
-            firm={c.firm}
-            sentEmailsTime={c.sentEmailsTime}
-            email={c.email}
-          />
-        );
-      })} */}
     </Styles>
   );
 };

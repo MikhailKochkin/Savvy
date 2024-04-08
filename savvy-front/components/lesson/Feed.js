@@ -885,6 +885,8 @@ const Feed = (props) => {
                                   : "Doc Builder"
                               }`
                             : null}
+                          {el.type.toLowerCase() == "testpractice" &&
+                            "Chain of questions"}
                           {el.type.toLowerCase() == "forum" ? `Q&A` : null}
                         </option>
                       ))}
@@ -1004,6 +1006,7 @@ const Feed = (props) => {
             me={me}
             width={width}
             passMenuChange={passMenuChange}
+            page="simulator"
           />
           <Border>
             {lessonElements.slice(0, num + 2).map((c, i) => (
@@ -1014,6 +1017,11 @@ const Feed = (props) => {
                 className={i === num + 1 ? "final" : "no"}
               >
                 {c}
+                {console.log(
+                  "props.move_statuses[i]",
+                  props.move_statuses[i],
+                  i
+                )}
                 {props.move_statuses[i] && (
                   <Buttons>
                     {/* Show move button if it is not the last block in the lesson */}

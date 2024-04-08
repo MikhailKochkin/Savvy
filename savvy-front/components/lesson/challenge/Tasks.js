@@ -311,6 +311,8 @@ const Tasks = (props) => {
               : null}
           </div>
         </Header>
+        {console.log(props)}
+
         <div className="circles">
           {_.times(tasks.length, (i) => (
             <Circle

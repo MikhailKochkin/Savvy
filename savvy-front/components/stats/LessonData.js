@@ -17,6 +17,14 @@ import ProblemResult from "./results/ProblemResult";
 import ConstructionResult from "./results/ConstructionResult";
 import DocumentResult from "./results/DocumentResult";
 import Feedback from "./Feedback";
+import {
+  findProblems,
+  populateProblemsWithQuestions,
+  populateQuizzesWithResults,
+  analyzeStudentPerformance,
+  generateReportIntro,
+  generateOverAllResults,
+} from "./ReportFunctions";
 
 const GET_RESULTS = gql`
   query stats($lessonId: String!, $userId: String!) {
@@ -167,20 +175,6 @@ const CHECK_MUTATION = gql`
       id
     }
   }
-`;
-
-const Styles = styled.div``;
-const Data = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const Name = styled.div`
-  font-size: 1.6rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-align: left;
 `;
 
 const Box = styled.div`
@@ -629,84 +623,145 @@ const LessonData = (props) => {
 
   const removeHTMLTags = (input) => input.replace(/<[^>]*>/g, "");
 
-  const generateReport = async (event, reportData) => {
+  const generateReport = async (event) => {
     event.preventDefault();
-    setGenerating(true);
     setReport("");
-    const well_done = reportData.filter((rd) => rd.result > 70);
-    const not_good_enough = reportData.filter((rd) => rd.result <= 70);
-    // console.log("not_good_enough", not_good_enough);
-    // console.log("lesson", lesson.goal);
-    let student_result;
+    setGenerating(true);
+    let initial_report;
+    event.preventDefault();
+    console.log("start report");
+    // 1. Find all problems
+    let availableData = findProblems(lesson);
 
-    if (studentResults && totalDifficulty) {
-      student_result = (studentResults / totalDifficulty).toFixed(2);
-    } else {
-      student_result = 0;
-    }
+    // 2. Populate problems with questions
+    populateProblemsWithQuestions(availableData, lesson);
 
-    let recommendation;
-    if (student_result < 0.5) {
-      recommendation = "The student needs to redo this lesson.";
-    } else if (student_result >= 0.5 && student_result < 0.7) {
-      recommendation = `The student has generally understood this lesson but there are still some gaps in the knowledge and skillset.
-       The student needs minor help form mentor or senior colleagues.`;
-    } else {
-      recommendation = `The student has learned everything and ready for work.`;
-    }
-    // console.log("recommendation", recommendation, student_result);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-            You are mentor of a law student.
-            Prepare a report describing how well the student has completed the lesson using this structure. 
-            Return the report in HTML form. Include only p, ul and li tags. Use the information below as an outline.
-            <p>The goal of the lesson is: "${
-              lesson.goal
-            }". The student completed the simulator with a total score of ${
-            studentResults && totalDifficulty
-              ? parseInt((studentResults / totalDifficulty).toFixed(2) * 100)
-              : 0
-          } out of 100.</p>
-            <p>This indicates that ${recommendation} (update recommendation text to fit into the text) </p>
-            <p>Problem points:</p>
-            ${
-              not_good_enough.length > 0
-                ? `${not_good_enough.map(
-                    (mis) =>
-                      `<li>The student has not ${mis.goal} (update the skill text to fit into the text. Write in third person.). 
-                  </li>`
-                  )}`
-                : `The student has completed all the tasks correctly.`
-            }
-            `,
-        }),
-      });
+    // 3. Populate all quizzes with quizResults
+    populateQuizzesWithResults(availableData, data.stats.quizResults);
 
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      const data = await response.json();
-      if (data.result.content) {
-        setReport(data.result.content);
-        // console.log("data.result.content", data.result.content);
-      } else {
-        setReport("Sorry, we are disconnected.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
+    // 4. Analyze student performance
+    analyzeStudentPerformance(availableData, res, data);
+    console.log("available data 4", availableData);
+
+    // 5. Prepare initial report draft.
+
+    // availableData.map((el) => console.log(el.goal));
+
+    // let intro = `<p>The goal of the simulator is: "${
+    //   lesson.goal
+    // }". To achieve this goal the student has to complete the following tasks:</p> <ol>${availableData
+    //   .map((el) => `<li>${el.goal}</li>`)
+    //   .join("")}</ol>`;
+
+    // let completedTasks = `<p>Based on the student's performance, the student has completed ${
+    //   availableData.filter(
+    //     (d) => d.totalResults.hasLearnt || d.totalResults.hasPracticed
+    //   ).length
+    // } out of ${availableData.length} tasks.</p>`;
+
+    // let feedbackOnTasks = [];
+    // let feedbackOnReflection = [];
+
+    // availableData.map((el) => {
+    //   let name = el.name;
+    //   let goal = el.goal;
+    //   let receivedFeedback;
+    //   if (el && !el.totalResults.hasReceivedFeedback) {
+    //     receivedFeedback =
+    //       "The student has not studied the feedback on these points: ";
+    //     let missedPoints = el.totalResults.weakQuestions.map(
+    //       (wq) => wq.question
+    //     );
+    //     receivedFeedback = receivedFeedback + missedPoints;
+    //     console.log("receivedFeedback", receivedFeedback);
+    //     feedbackOnTasks.push(receivedFeedback);
+    //   } else {
+    //     receivedFeedback =
+    //       "The student has studied the feedback on their questions and answers.";
+    //     feedbackOnTasks.push(receivedFeedback);
+    //   }
+    //   if (el && !el.totalResults.hasReflected) {
+    //     receivedFeedback =
+    //       "The student has not done enough reflection on these points:";
+    //     let unreflectedPoints = el.totalResults.unreflectedQuestions.map(
+    //       (wq) => wq.question
+    //     );
+    //     receivedFeedback = receivedFeedback + unreflectedPoints;
+    //     feedbackOnReflection.push(receivedFeedback);
+    //   } else {
+    //     receivedFeedback =
+    //       "The student has done enough reflection on their questions and answers.";
+    //     feedbackOnReflection.push(receivedFeedback);
+    //   }
+    // });
+
+    // let all1 = `
+    //   <ol>${feedbackOnTasks.map((el) => `<li>${el}</li>`).join("")}</ol>
+    // `;
+
+    // let all2 = `
+    //   <ol>${feedbackOnReflection.map((el) => `<li>${el}</li>`).join("")}</ol>
+    // `;
+
+    // initial_report = intro + completedTasks + all1 + all2;
+
+    // 6. Generate the final report
+
+    // Report consists of the following sections:
+    // 1. Introduction: the goal of the smulator
+    // 2. Overall results: how many tasks the student has completed
+    // 3. Feedback on separate tasks
+    // 3.1. Task 1
+    // 3.2. Task 2
+    // 3.3. ...
+    // 4. Conclusion
+    // 5. Recommendations
+
+    // 6.1 Generate the introduction
+    let intro = await generateReportIntro(student, lesson, props.date);
+
+    let overall = {
+      learning: [],
+      practiced: [],
+      feedback: [],
+      reflection: [],
+    };
+    availableData.map((el) => {
+      overall.learning.push(el.totalResults.hasLearnt);
+      overall.practiced.push(el.totalResults.hasPracticed);
+      overall.feedback.push(el.totalResults.hasReceivedFeedback);
+      overall.reflection.push(el.totalResults.hasReflected);
+    });
+    let overallResults = await generateOverAllResults(student, overall);
+
+    setReport(intro + overallResults);
     setGenerating(false);
   };
+
+  // setGenerating(true);
+  // setReport("");
+  // const well_done = reportData.filter((rd) => rd.result > 70);
+  // const not_good_enough = reportData.filter((rd) => rd.result <= 70);
+  // // console.log("not_good_enough", not_good_enough);
+  // // console.log("lesson", lesson.goal);
+  // let student_result;
+
+  // if (studentResults && totalDifficulty) {
+  //   student_result = (studentResults / totalDifficulty).toFixed(2);
+  // } else {
+  //   student_result = 0;
+  // }
+
+  // let recommendation;
+  // if (student_result < 0.5) {
+  //   recommendation = "The student needs to redo this lesson.";
+  // } else if (student_result >= 0.5 && student_result < 0.7) {
+  //   recommendation = `The student has generally understood this lesson but there are still some gaps in the knowledge and skillset.
+  //    The student needs minor help form mentor or senior colleagues.`;
+  // } else {
+  //   recommendation = `The student has learned everything and ready for work.`;
+  // }
+  // // console.log("recommendation", recommendation, student_result);
 
   let challenge_result =
     student.challengeResults.filter((ch) => ch.lesson.id == lesson.id).length >
@@ -836,8 +891,9 @@ const LessonData = (props) => {
                 </li>
               </ul>
             </div>
+            <div>Lesson goal: {lesson.goal}</div>
             {lesson.goal && (
-              <button onClick={(e) => generateReport(e, reportData)}>
+              <button onClick={(e) => generateReport(e)}>
                 Generate report
               </button>
             )}
@@ -911,6 +967,7 @@ const LessonData = (props) => {
                   student={student}
                   results={data.stats.problemResults}
                   newTests={lesson.newTests}
+                  chats={lesson.chats}
                   testResults={data.stats.testResults}
                   quizes={lesson.quizes}
                   quizResults={data.stats.quizResults}

@@ -549,7 +549,7 @@ const Person = (props) => {
 
     // Check if the phone number has less than 9 digits
     if (phoneNumber.length < 9) {
-      alert("Error: Phone number must have at least 9 digits");
+      // alert("Error: Phone number must have at least 9 digits");
       return;
     }
 
@@ -642,9 +642,13 @@ const Person = (props) => {
               : false
           }
         >
-          {courseVisit
-            ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
-            : "Не определен"}
+          {props.lesson_analytics
+            ? courseVisit
+              ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
+              : "Undefined"
+            : results.length > 0
+            ? moment(results[0].createdAt).format("Do MMMM YYYY")
+            : "Undefined"}
         </RegDate>
       </Header>
       <Open secret={secret}>
@@ -789,12 +793,14 @@ const Person = (props) => {
         </EmailBlock>
         <Block>
           <h2>Lesson stats</h2>
-          <Journey
-            student={student}
-            maxes={maxes}
-            results={results}
-            lessons={lessons}
-          />
+          {props.type !== "lesson_analytics" && (
+            <Journey
+              student={student}
+              maxes={maxes}
+              results={results}
+              lessons={lessons}
+            />
+          )}
           {page === "results" && (
             <>
               <>
@@ -820,6 +826,17 @@ const Person = (props) => {
                       coursePageID={coursePageID}
                       student={student}
                       res={res}
+                      date={
+                        props.lesson_analytics
+                          ? courseVisit
+                            ? moment(courseVisit.createdAt).format(
+                                "Do MMMM YYYY"
+                              )
+                            : "Undefined"
+                          : results.length > 0
+                          ? moment(results[0].createdAt).format("Do MMMM YYYY")
+                          : "Undefined"
+                      }
                     />
                   );
                 })}

@@ -90,7 +90,7 @@ const TestPractice = (props) => {
   return (
     <>
       {!start && (
-        <Container width={width}>
+        <Container width={width} id={props.testPractice.id}>
           <img src="/static/test_pattern.svg" />
           <h2>{t("practice")}</h2>
           <div>
@@ -101,6 +101,7 @@ const TestPractice = (props) => {
           <button onClick={(e) => setStart(true)}>{t("start")}</button>
         </Container>
       )}
+      {console.log("props.testPractice", props.testPractice)}
       {start && (
         <Container>
           <Block

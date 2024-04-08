@@ -1,7 +1,7 @@
 import SingleLesson from "../components/lesson/SingleLesson";
 import Challenge from "../components/lesson/challenge/Challenge";
 import OldSingleLesson from "../components/lesson/OldSingleLesson";
-
+import LessonStats from "../components/stats/LessonStats";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -31,6 +31,7 @@ const LessonPage = (props) => (
         step={props.query.step}
       />
     )}
+    {props.query.type === "stats" && <LessonStats id={props.query.id} />}
     {props.query.type === "challenge" && <Challenge id={props.query.id} />}
   </div>
 );

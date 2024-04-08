@@ -126,7 +126,7 @@ const NewInteractive = (props) => {
     let last_value = [...componentList, next_el][
       [...componentList, next_el].length - 1
     ];
-    if (!last_value.next.true.value) {
+    if (!last_value || !last_value.next.true.value) {
       props.onFinish(true, "new");
       return;
     }

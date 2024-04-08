@@ -552,7 +552,7 @@ const OpenQuestion = (props) => {
     if (props.check === "WORD") {
       if (props.answer.toLowerCase() === answer.toLowerCase()) {
         if (!isExperienced) {
-          props.getResults(2);
+          if (props.getResults) props.getResults(2);
           setIsExperienced(true);
         }
         setCorrect("true");

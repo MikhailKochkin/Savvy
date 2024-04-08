@@ -25,6 +25,7 @@ const ProblemResults = (props) => {
     newTests,
     quizes,
     notes,
+    chats,
     testResults,
     quizResults,
   } = props;
@@ -38,6 +39,7 @@ const ProblemResults = (props) => {
               student={student}
               results={results}
               newTests={newTests}
+              chats={chats}
               testResults={testResults}
               quizes={quizes}
               quizResults={quizResults}

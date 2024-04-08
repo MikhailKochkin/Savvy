@@ -274,6 +274,7 @@ const Challenge = (props) => {
                         lesson={lesson}
                         me={me}
                         width={width}
+                        page="simulator"
                       />
                     )}
                     <Box>

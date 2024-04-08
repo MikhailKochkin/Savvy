@@ -119,7 +119,7 @@ const Right = styled.div`
 `;
 
 const Navigation = (props) => {
-  const { lesson, i_am_author, me, width } = props;
+  const { lesson, i_am_author, me } = props;
   const { t } = useTranslation("lesson");
 
   let list_of_ids = [];
@@ -165,7 +165,7 @@ const Navigation = (props) => {
   return (
     <Head>
       <Left>
-        {lesson.open ? (
+        <div className="block">
           <Link
             href={{
               pathname: "/course",
@@ -174,29 +174,24 @@ const Navigation = (props) => {
               },
             }}
           >
-            <span
+            <img
               data-tooltip-id="my-tooltip"
               data-tooltip-content="Back to course page"
-            >
-              ⬅
-            </span>
+              src="/static/arrow_left.svg"
+              // onClick={(e) => props.passMenuChange()}
+            />
           </Link>
-        ) : (
-          <Link
-            href={{
-              pathname: "/course",
-              query: {
-                id: lesson.coursePage.id,
-              },
-            }}
-          >
-            <span
+        </div>
+        {props.passMenuChange && (
+          <div className="block">
+            {" "}
+            <img
               data-tooltip-id="my-tooltip"
-              data-tooltip-content="Back to course page"
-            >
-              ⬅
-            </span>
-          </Link>
+              data-tooltip-content={t("lesson_menu")}
+              src="/static/sidebar.svg"
+              onClick={(e) => props.passMenuChange()}
+            />
+          </div>
         )}
       </Left>
       {/* {width > 100 && ( */}
@@ -267,9 +262,6 @@ const Navigation = (props) => {
                   },
                 }}
               >
-                {/* <span>{t("switch")}</span> */}
-                {/* <span>{t("to_development")}</span> */}
-
                 <img
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content={t("open_development_page")}
@@ -279,22 +271,51 @@ const Navigation = (props) => {
             )}
         </div>
         <div className="block">
-          {" "}
-          <img
-            data-tooltip-id="my-tooltip"
-            data-tooltip-content={t("lesson_menu")}
-            src="/static/menu-dots.svg"
-            onClick={(e) => props.passMenuChange()}
-          />
+          {props.page !== "analytics" &&
+            me &&
+            (lesson.user.id === me.id ||
+              i_am_author ||
+              me.permissions.includes("ADMIN")) && (
+              <Link
+                href={{
+                  pathname: "/lesson",
+                  query: {
+                    id: lesson.id,
+                    type: "stats",
+                  },
+                }}
+              >
+                <img
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={"Open analytics page"}
+                  src="/static/stats_circle.svg"
+                />
+              </Link>
+            )}
         </div>
-        {/* <div className="block">
-            {" "}
-            <img
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Notebook"
-              src="/static/notebook_menu.svg"
-            />
-          </div> */}
+        <div className="block">
+          {props.page !== "simulator" &&
+            me &&
+            (lesson.user.id === me.id ||
+              i_am_author ||
+              me.permissions.includes("ADMIN")) && (
+              <Link
+                href={{
+                  pathname: "/lesson",
+                  query: {
+                    id: lesson.id,
+                    type: "story",
+                  },
+                }}
+              >
+                <img
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={"Open simulator page"}
+                  src="/static/blocks.svg"
+                />
+              </Link>
+            )}
+        </div>
         <Tooltip id="my-tooltip" />
       </Right>
     </Head>

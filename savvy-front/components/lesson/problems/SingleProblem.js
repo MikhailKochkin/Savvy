@@ -311,6 +311,8 @@ const SingleProblem = (props) => {
         }
       }
     });
+    if (props.moveNext && problem?.steps?.problemItems.length == 0)
+      props.moveNext(props.id);
   }, []);
 
   const { problem, me, lesson, story, complexity, author } = props;
@@ -427,10 +429,10 @@ const SingleProblem = (props) => {
               </>
             </ResponseArea>
           )}
-          {teacherAnswer.length > 0 &&
-            problem.steps &&
-            problem.steps.problemItems.length >= 1 &&
-            (isNewFinished || isOldFinished) && (
+          {problem.steps &&
+            (problem.steps.problemItems.length == 0 ||
+              (problem.steps.problemItems.length >= 1 &&
+                (isNewFinished || isOldFinished))) && (
               <ResponseArea>
                 <h2>{t("write_answer")}</h2>
                 <Frame story={story}>

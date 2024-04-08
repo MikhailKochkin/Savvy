@@ -12,6 +12,7 @@ const Box = styled.div`
   font-size: 1.6rem;
   h2 {
     margin: 15px 0;
+    line-height: 1.4;
   }
   div {
     flex: 50%;
@@ -75,6 +76,7 @@ const Span = styled.div`
 const Block = styled.div`
   padding: 2% 0;
   margin-bottom: 15px;
+  line-height: 1.6;
   border-bottom: ${(props) =>
     props.final ? "1px solid #edefed" : "1px solid #edefed"};
   background: ${(props) => (props.color ? "#b5e48c" : "#fff")};
@@ -84,7 +86,18 @@ const Results = styled.div`
   .question {
     padding: 20px 0;
     margin-bottom: 20px;
-    border-bottom: 1px solid #edefed;
+    /* border-bottom: 1px solid #edefed; */
+  }
+  .standard {
+    line-height: 1.6;
+  }
+  .question_text {
+    line-height: 1.6;
+  }
+  .time {
+    color: grey;
+    font-size: 1.3rem;
+    margin-top: 3px;
   }
   .arrow {
     margin: 20px 0;
@@ -105,7 +118,7 @@ const ProblemModal = (props) => {
     results,
     newTests,
     quizes,
-    notes,
+    chats,
     testResults,
     quizResults,
   } = props;
@@ -144,61 +157,6 @@ const ProblemModal = (props) => {
     };
   });
 
-  let arr = [];
-  let first_element;
-
-  const getAllIndexes = (arr, val) => {
-    var indexes = [],
-      i;
-    for (i = 0; i < arr.length; i++) if (arr[i] === val) indexes.push(i);
-    return indexes;
-  };
-
-  const checker = (el) => {
-    // 2. add element to the queue
-    // 3. check if the element has next_elements
-    if (
-      el == null ||
-      el == undefined ||
-      el.next == undefined ||
-      el.next == null
-    )
-      return;
-    arr.push(el);
-
-    if (
-      (el.next.true.type !== null && el.next.true.value !== null) ||
-      (el.next.false.type !== null && el.next.false.value)
-    ) {
-      // 4. find the element
-      let new_el;
-
-      if (el.next.true.type.toLowerCase() == "newtest") {
-        new_el = newTests.find((t) => t.id == el.next.true.value);
-      } else if (el.next.true.type.toLowerCase() == "quiz") {
-        new_el = quizes.find((q) => q.id == el.next.true.value);
-      } else if (el.next.true.type.toLowerCase() == "note") {
-        new_el = notes.find((n) => n.id == el.next.true.value);
-      }
-      if (new_el) checker(new_el);
-    }
-    // 4. restart the process
-  };
-
-  const solution_builder = () => {
-    if (problem.nodeID == null || problem.nodeType == null) {
-      return;
-    }
-    if (problem.nodeType.toLowerCase() == "newtest") {
-      first_element = newTests.find((el) => el.id == problem.nodeID);
-    } else if (problem.nodeType.toLowerCase() == "quiz") {
-      first_element = quizes.find((el) => el.id == problem.nodeID);
-    } else if (problem.nodeType.toLowerCase() == "note") {
-      first_element = notes.find((el) => el.id == problem.nodeID);
-    }
-    checker(first_element);
-  };
-
   const arraysHaveSameItem = (arr1, arr2) => {
     // First, check if both arrays are of the same length
     if (arr1.length !== arr2.length) {
@@ -221,6 +179,10 @@ const ProblemModal = (props) => {
 
   const filterByTruthiness = (arr1, arr2) => {
     return arr1.filter((item, index) => arr2[index]);
+  };
+
+  const removePTags = (htmlString) => {
+    return htmlString?.replace(/<\/?p>/g, "");
   };
 
   return (
@@ -250,95 +212,164 @@ const ProblemModal = (props) => {
           <b>Step-by-step solution:</b>
         </div>
         {mergedData.length > 0
-          ? mergedData.map((m) => (
-              <Results>
-                <div>
-                  {m.type.toLowerCase() == "newtest" && (
-                    <div className="question">
-                      <div>
-                        <b>Quiz</b>
-                      </div>
-                      <div>
-                        {parse(
-                          newTests.find((nt) => nt.id === m.id).question[0]
-                        )}
-                      </div>
-                      <div>⬇️</div>
-                      <>
-                        {m.results.map((t) =>
-                          t.answerArray ? (
-                            <Block>
-                              {arraysHaveSameItem(
-                                t.answerArray,
-                                filterByTruthiness(
+          ? mergedData.map((m) => {
+              let stepType = m.type.toLowerCase();
+              let el;
+              if (stepType === "newtest") {
+                el = newTests.find((nt) => nt.id === m.id);
+              } else if (stepType === "quiz") {
+                el = quizes.find((q) => q.id === m.id);
+              } else if (stepType === "chat") {
+                el = chats.find((q) => q.id === m.id);
+              }
+              let subtype = el?.type?.toLowerCase();
+              let results = m.results;
+              return (
+                <Results>
+                  <div>
+                    {m.type.toLowerCase() == "newtest" && (
+                      <div className="question">
+                        <div>
+                          <b>Quiz</b>
+                        </div>
+                        <div>{parse(el.question[0])}</div>
+                        {/* <div>⬇️</div> */}
+                        <>
+                          {m.results.map((result) =>
+                            result.answerArray ? (
+                              <Block>
+                                {result.answerArray.map((item) =>
+                                  removePTags(item)
+                                )}{" "}
+                                {arraysHaveSameItem(
+                                  result.answerArray,
+                                  filterByTruthiness(
+                                    newTests.find((nt) => nt.id === m.id)
+                                      .answers,
+                                    newTests.find((nt) => nt.id === m.id)
+                                      .correct
+                                  )
+                                )
+                                  ? "✅"
+                                  : "❌"}{" "}
+                                <div className="time">
+                                  {moment(result.createdAt).format("LLL")}{" "}
+                                </div>
+                              </Block>
+                            ) : (
+                              <Block>
+                                {result.answer ==
+                                getAllTrueValues(
                                   newTests.find((nt) => nt.id === m.id).answers,
                                   newTests.find((nt) => nt.id === m.id).correct
-                                )
-                              )
-                                ? "✅"
-                                : "❌"}{" "}
-                              {t.answerArray.map((item) => parse(item))}(
-                              {moment(t.createdAt).format("LLL")})
-                            </Block>
-                          ) : (
-                            <Block>
-                              {t.answer ==
-                              getAllTrueValues(
-                                newTests.find((nt) => nt.id === m.id).answers,
-                                newTests.find((nt) => nt.id === m.id).correct
-                              ).join(", ")
-                                ? "✅"
-                                : "❌"}{" "}
-                              {stringToArray(t.answer).map(
-                                (el) => parse(el) + ", "
+                                ).join(", ")
+                                  ? "✅"
+                                  : "❌"}{" "}
+                                {stringToArray(result.answer).map(
+                                  (el) => parse(el) + ", "
+                                )}
+                                <div className="time">
+                                  {moment(result.createdAt).format("LLL")}{" "}
+                                </div>
+                              </Block>
+                            )
+                          )}
+                        </>
+                      </div>
+                    )}
+                    {m.type.toLowerCase() == "quiz" && (
+                      <div className="question">
+                        <div>
+                          <b>Open Question:</b>
+                        </div>
+                        <div className="question_text">
+                          {parse(el.question)}
+                        </div>
+                        <div className="standard">
+                          <b>Type:</b> {subtype}
+                        </div>
+                        {/* <div className="arrow">⬇️</div> */}
+                        <div>
+                          <b>Answers:</b>
+                        </div>
+                        <div>
+                          {results.map((result) => (
+                            <div className="result">
+                              {subtype == "test" ? (
+                                <>
+                                  <div className="standard"></div>
+                                  <b>Student answer: </b>
+                                  {result.answer}
+                                  <div className="standard">
+                                    <b>Comment: </b> {result.comment}{" "}
+                                    {result.correct && result.correct == true
+                                      ? "✅"
+                                      : "❌"}
+                                    <br />
+                                    <b>Hint:</b> {result.hint}
+                                    <br />
+                                    <b>Explanation:</b> {result.explanation}
+                                    <br />
+                                    <b>Improvement:</b> {result.improvement}
+                                  </div>
+                                </>
+                              ) : null}
+
+                              {subtype == "form" ? (
+                                <>
+                                  <div className="standard">
+                                    {result.answer}
+                                  </div>
+                                </>
+                              ) : null}
+
+                              {(subtype == "generate" ||
+                                subtype == "findall") && (
+                                <>
+                                  {result.ideasList?.quizIdeas?.map(
+                                    (item, i) => (
+                                      <div>
+                                        <div>
+                                          {i + 1}. {item.idea} –{" "}
+                                          <b>{item.result}%</b>{" "}
+                                          {parseFloat(item.result) > 60
+                                            ? "✅"
+                                            : "❌"}
+                                        </div>
+                                        {item.next_id && (
+                                          <SendButton
+                                            onClick={(e) =>
+                                              openTask(
+                                                item.next_id,
+                                                item.next_type
+                                              )
+                                            }
+                                          >
+                                            Move to task
+                                          </SendButton>
+                                        )}
+                                      </div>
+                                    )
+                                  )}
+                                  {result.ideasList == null ||
+                                  result.ideasList?.quizIdeas.length == 0
+                                    ? "No ideas provided"
+                                    : null}
+                                </>
                               )}
-                              <br />({moment(t.createdAt).format("LLL")})
-                            </Block>
-                          )
-                        )}
-                      </>
-                    </div>
-                  )}
-                  {m.type.toLowerCase() == "quiz" && (
-                    <div className="question">
-                      <div>
-                        <b>Question</b>
-                      </div>
-                      <div>
-                        {parse(quizes.find((q) => q.id === m.id).question)}
-                      </div>
-                      <div className="arrow">⬇️</div>
-                      <div>
-                        {m.results.map((t) => (
-                          <div className="result">
-                            <div className="standard">
-                              {t.correct && t.correct == true
-                                ? "✅ Marked as correct"
-                                : "❌ Marked as wrong"}
+                              <div className="time">
+                                {moment(result.createdAt).format("LLL")}{" "}
+                              </div>
                             </div>
-                            <b>Student answer: </b>
-                            {t.answer}
-                            <div className="standard">
-                              <b>Comment: </b> {t.comment}
-                              <br />
-                              <b>Hint:</b> {t.hint}
-                              <br />
-                              <b>Explanation:</b> {t.explanation}
-                              <br />
-                              <b>Improvement:</b> {t.improvement}
-                              {/* {console.log("t", t)} */}
-                            </div>
-                            <div className="time">
-                              {moment(t.createdAt).format("LLL")}{" "}
-                            </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </Results>
-            ))
+                    )}
+                    {m.type.toLowerCase() == "quiz" && <div>Chat</div>}
+                  </div>
+                </Results>
+              );
+            })
           : null}
       </div>
     </Box>

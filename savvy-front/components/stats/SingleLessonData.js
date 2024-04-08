@@ -1,31 +1,16 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
-import Loading from "../Loading";
-import UserAnalytics from "./UserAnalytics";
+import styled from "styled-components";
 
-const SINGLE_COURSEPAGE_QUERY = gql`
-  query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
-      id
-      title
-      courseType
-      lessons {
-        id
-        text
-        name
-        open
-        assignment
-        number
-        structure
-      }
-    }
-  }
-`;
+import Loading from "../Loading";
+import SingleLessonAnalytics from "./SingleLessonAnalytics";
+import Navigation from "../lesson/Navigation";
+import { useUser } from "../User";
 
 const STUDENTS_QUERY = gql`
-  query STUDENTS_QUERY($coursePageId: String!) {
+  query STUDENTS_QUERY($lessonId: String!) {
     users(
-      where: { new_subjects: { some: { id: { equals: $coursePageId } } } }
+      where: { lessonResults: { some: { lessonId: { equals: $lessonId } } } }
     ) {
       id
       name
@@ -71,7 +56,7 @@ const STUDENTS_QUERY = gql`
 
 const LESSONS_QUERY = gql`
   query LESSONS_QUERY($id: String!) {
-    lessons(where: { coursePage: { id: { equals: $id } } }) {
+    lessons(where: { id: { equals: $id } }) {
       id
       text
       name
@@ -212,16 +197,21 @@ const LESSONS_QUERY = gql`
   }
 `;
 
-const StudentsData = (props) => {
-  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
-    variables: { id: props.id },
-  });
+const Styles = styled.div`
+  background: #f2f6f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+`;
+
+const SingleLessonData = (props) => {
   const {
     loading: loading1,
     error: error1,
     data: data1,
   } = useQuery(STUDENTS_QUERY, {
-    variables: { coursePageId: props.id },
+    variables: { lessonId: props.id },
   });
   const {
     loading: loading2,
@@ -230,26 +220,22 @@ const StudentsData = (props) => {
   } = useQuery(LESSONS_QUERY, {
     variables: { id: props.id },
   });
+  const me = useUser();
 
-  if (loading) return <p>Loading course data...</p>;
-  if (loading1) return <p>Loading students data...</p>;
-  if (loading2) return <p>Loading lessons data...</p>;
+  // if (loading1) return <p>Loading students data...</p>;
+  if (loading1 || loading2) return <Loading />;
 
-  let coursePage = data.coursePage;
-  let students = data1.users;
-  let lessons = data2.lessons;
+  let students = data1?.users;
+  let lesson = data2?.lessons[0];
 
   return (
-    <div>
-      <UserAnalytics
-        coursePage={coursePage.title}
-        coursePageID={coursePage.id}
-        lessons={lessons}
-        students={students}
-      />
-    </div>
+    <Styles>
+      <Navigation i_am_author={true} lesson={lesson} me={me} page="analytics" />
+      {students && lesson ? (
+        <SingleLessonAnalytics lesson={lesson} students={students} />
+      ) : null}
+    </Styles>
   );
 };
 
-export default StudentsData;
-export { SINGLE_COURSEPAGE_QUERY };
+export default SingleLessonData;
