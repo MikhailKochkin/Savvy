@@ -446,7 +446,6 @@ const StoryEx = (props) => {
       );
       components.push(item);
       // move_statuses.push(true);
-      console.log("solved.includes(el.id)", solved.includes(el.id));
       move_statuses.push(solved.includes(el.id) ? true : false);
     } else if (task.type.toLowerCase() === "texteditor") {
       el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);

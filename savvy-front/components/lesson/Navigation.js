@@ -9,7 +9,8 @@ import { Tooltip } from "react-tooltip";
 const Head = styled.div`
   position: sticky;
   top: 40px;
-  z-index: 1000; /* You can adjust the z-index as needed */
+  z-index: 1000;
+  pointer-events: none;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -48,33 +49,9 @@ const Head = styled.div`
   }
 `;
 
-const Level = styled.div`
-  margin: 5px;
-  border-radius: 50%;
-  height: 55px;
-  width: 55px;
-  background: #d5d9e4;
-  color: #171e2e;
-  object-fit: cover;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background: ${(props) => {
-    if (props.angle >= 360) {
-      return `conic-gradient(#ffb703 0deg ${props.angle + "deg"}, #f2e8cf ${
-        props.angle + "deg"
-      } 360deg)`;
-    } else {
-      return `conic-gradient(#6a994e 0deg ${props.angle + "deg"}, #f2e8cf ${
-        props.angle + "deg"
-      } 360deg)`;
-    }
-  }};
-`;
-
 const Left = styled.div`
   padding: 20px 0;
+  pointer-events: auto;
 `;
 
 const Right = styled.div`
@@ -83,6 +60,7 @@ const Right = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px 0;
+  pointer-events: auto;
   #my-tooltip {
     font-family: Montserrat;
     font-size: 1.2rem;
@@ -121,47 +99,6 @@ const Right = styled.div`
 const Navigation = (props) => {
   const { lesson, i_am_author, me } = props;
   const { t } = useTranslation("lesson");
-
-  let list_of_ids = [];
-  // me &&
-  //   me.myTeams.length > 0 &&
-  //   me.myTeams[0].users.map((u) => list_of_ids.push(u.id));
-  // const { loading, error, data } = useQuery(TEAM_RESULTS, {
-  //   variables: { lessonId: lesson.id, list_of_ids: list_of_ids },
-  // });
-  // if (loading) return "";
-  // let results = data.questResults.lessonResults;
-
-  // let grouped_results = [];
-  // results.map((r, i) => {
-  //   if (grouped_results.filter((gr) => gr.id === r.student.id).length == 0) {
-  //     grouped_results.push({
-  //       id: r.student.id,
-  //       results: [r],
-  //     });
-  //   } else {
-  //     let found = grouped_results.find((obj) => obj.id == r.student.id);
-  //     let index = grouped_results.findIndex((object) => {
-  //       return object.id === r.student.id;
-  //     });
-
-  //     let new_el = {
-  //       id: r.student.id,
-  //       results: [...found.results, r],
-  //     };
-  //     grouped_results[index] = new_el;
-  //   }
-  // });
-
-  // let new_array_2 = grouped_results.map((el) => {
-  //   const max = el.results.reduce((prev, current) =>
-  //     prev.progress > current.progress ? prev : current
-  //   );
-  //   el["max"] = max;
-  //   return el;
-  // });
-  // let filtered_results = [];
-  // new_array_2.map((el) => filtered_results.push(el.max));
   return (
     <Head>
       <Left>
@@ -194,60 +131,7 @@ const Navigation = (props) => {
           </div>
         )}
       </Left>
-      {/* {width > 100 && ( */}
       <Right>
-        {/* {me.id !== "clkvdew14837181f13vcbbcw0x" && me.myTeams.length == 0 && (
-            <button>
-              <a
-                target="_blank"
-                href={`https://besavvy.app/account?id=${me.id}`}
-              >
-                Create a team
-              </a>
-            </button>
-          )} */}
-        {/* {me && me.myTeams.length > 0 && (
-            <button>
-              <a
-                target="_blank"
-                href={`https://besavvy.app/account?id=${me.id}`}
-              >
-                Invite to your team
-              </a>
-            </button>
-          )} */}
-        {/* <Team>
-            {me.myTeams.length > 0 &&
-              me.myTeams[0].users.map((t, i) => (
-                <Level
-                  key={i + "level"}
-                  angle={
-                    lesson.structure &&
-                    (filtered_results.find((lr) => lr.student.id == t.id)
-                      ? filtered_results.find((lr) => lr.student.id == t.id)
-                          .progress
-                      : 0) *
-                      (360 / lesson.structure.lessonItems.length)
-                  }
-                >
-                  <IconBlock>
-                    {t.image ? (
-                      <img className="icon" src={t.image} />
-                    ) : t.surname ? (
-                      <div className="icon_letters">
-                        {t.name[0]}
-                        {t.surname[0]}
-                      </div>
-                    ) : (
-                      <div className="icon_letters">
-                        {t.name[0]}
-                        {t.name[1]}
-                      </div>
-                    )}
-                  </IconBlock>
-                </Level>
-              ))}
-          </Team> */}
         <div className="block">
           {me &&
             (lesson.user.id === me.id ||

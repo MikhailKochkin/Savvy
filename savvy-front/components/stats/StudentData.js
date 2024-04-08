@@ -477,7 +477,6 @@ const Person = (props) => {
   });
 
   // 4. Leave only maxes
-
   let maxes = [];
   new_array_2.forEach((el) => maxes.push(el.max));
 
@@ -495,7 +494,6 @@ const Person = (props) => {
     lesResults.push(new_obj);
   });
 
-  maxes = maxes.filter((m) => m.lesson.published);
   let color;
   let total = 0;
   maxes.map((l) => {
@@ -518,9 +516,9 @@ const Person = (props) => {
     }
     if (s < 0.3) {
       total += 0;
-    } else if (s >= 0.3 && s <= 0.8) {
+    } else if (s >= 0.3 && s < 0.75) {
       total += 0.5;
-    } else if (s > 0.8) {
+    } else if (s >= 0.75) {
       total += 1;
     }
   });
@@ -531,15 +529,14 @@ const Person = (props) => {
       active_lessons.push(l);
     }
   });
-
   if (total / active_lessons.length <= 0.2) {
     color = "#e97573";
   } else if (
     total / active_lessons.length > 0.2 &&
-    total / active_lessons.length < 0.85
+    total / active_lessons.length < 0.75
   ) {
     color = "#FDF3C8";
-  } else if (total / active_lessons.length >= 0.85) {
+  } else if (total / active_lessons.length >= 0.75) {
     color = "#84BC9C";
   }
 
@@ -624,11 +621,20 @@ const Person = (props) => {
             }}
           </Mutation>
         </Tags>
+
         <Square className="div3" inputColor={color}>
           <div>
-            {total}/{active_lessons.length}
+            {props.type !== "lesson_analytics"
+              ? total / active_lessons.length
+              : (
+                  (maxes[0].progress /
+                    maxes[0].lesson.structure.lessonItems.length) *
+                  100
+                ).toFixed(0)}
+            %
           </div>
         </Square>
+
         <ButtonBox>
           <SimpleButton className="div4" onClick={(e) => setSecret(!secret)}>
             {secret ? "Open" : "Close"}
@@ -652,147 +658,149 @@ const Person = (props) => {
         </RegDate>
       </Header>
       <Open secret={secret}>
-        <EmailBlock>
-          <h2>Connect</h2>
-          <div>{student.number}</div>
-          <Editor className="editor">
-            <DynamicLoadedEditor
-              getEditorText={myCallback}
-              value={""}
-              name="text"
-            />
-          </Editor>
-          <SendEmailButton
-            onClick={async (e) => {
-              const res = await sendMessage({
-                variables: {
-                  userId: student.id,
-                  text: message,
-                },
-              });
-            }}
-          >
-            {loading1 ? "Sending..." : "Send Email"}
-          </SendEmailButton>
-          <Buttons>
-            {student.number && (
-              <SendButton>
-                <a
-                  target="_blank"
-                  href={`https://wa.me/${checkPhoneNumber(
-                    student.number
-                  )}?text=Добрый!`}
+        {props.me && (
+          <EmailBlock>
+            <h2>Connect</h2>
+            {/* <div>{student.number}</div> */}
+            <Editor className="editor">
+              <DynamicLoadedEditor
+                getEditorText={myCallback}
+                value={""}
+                name="text"
+              />
+            </Editor>
+            <SendEmailButton
+              onClick={async (e) => {
+                const res = await sendMessage({
+                  variables: {
+                    userId: student.id,
+                    text: message,
+                  },
+                });
+              }}
+            >
+              {loading1 ? "Sending..." : "Send Email"}
+            </SendEmailButton>
+            <Buttons>
+              {student.number && (
+                <SendButton>
+                  <a
+                    target="_blank"
+                    href={`https://wa.me/${checkPhoneNumber(
+                      student.number
+                    )}?text=Добрый!`}
+                  >
+                    {/* Написать в Wh */}
+                    WhatsApp
+                  </a>
+                </SendButton>
+              )}
+              {student.number && (
+                <SendButton>
+                  <a
+                    target="_blank"
+                    href={`https://t.me/${checkPhoneNumber(student.number)}`}
+                  >
+                    {/* Написать в Tg */}
+                    Telegram
+                  </a>
+                </SendButton>
+              )}
+              {courseVisit && (
+                <Mutation
+                  mutation={UPDATE_COURSE_VISIT_MUTATION}
+                  variables={{
+                    id: courseVisit.id,
+                    reminders: courseVisit.reminders
+                      ? [...courseVisit.reminders, new Date()]
+                      : [new Date()],
+                    comment: "hello",
+                    info: emailInfo,
+                  }}
                 >
-                  {/* Написать в Wh */}
-                  WhatsApp
-                </a>
-              </SendButton>
-            )}
-            {student.number && (
-              <SendButton>
-                <a
-                  target="_blank"
-                  href={`https://t.me/${checkPhoneNumber(student.number)}`}
+                  {(sendEmailToStudent, { loading, error }) => {
+                    return (
+                      <SendButton
+                        onClick={(e) => {
+                          const data = sendEmailToStudent();
+                          alert("Отправлено!");
+                        }}
+                        name="CV"
+                      >
+                        {/* Приветствие */}
+                        Welcome Email
+                      </SendButton>
+                    );
+                  }}
+                </Mutation>
+              )}
+              {courseVisit && (
+                <Mutation
+                  mutation={UPDATE_COURSE_VISIT_MUTATION}
+                  variables={{
+                    id: courseVisit.id,
+                    reminders: courseVisit.reminders
+                      ? [...courseVisit.reminders, new Date()]
+                      : [new Date()],
+                    comment: "problem",
+                    info: emailInfo,
+                  }}
                 >
-                  {/* Написать в Tg */}
-                  Telegram
-                </a>
-              </SendButton>
-            )}
-            {courseVisit && (
-              <Mutation
-                mutation={UPDATE_COURSE_VISIT_MUTATION}
-                variables={{
-                  id: courseVisit.id,
-                  reminders: courseVisit.reminders
-                    ? [...courseVisit.reminders, new Date()]
-                    : [new Date()],
-                  comment: "hello",
-                  info: emailInfo,
-                }}
-              >
-                {(sendEmailToStudent, { loading, error }) => {
-                  return (
-                    <SendButton
-                      onClick={(e) => {
-                        const data = sendEmailToStudent();
-                        alert("Отправлено!");
-                      }}
-                      name="CV"
-                    >
-                      {/* Приветствие */}
-                      Welcome Email
-                    </SendButton>
-                  );
-                }}
-              </Mutation>
-            )}
-            {courseVisit && (
-              <Mutation
-                mutation={UPDATE_COURSE_VISIT_MUTATION}
-                variables={{
-                  id: courseVisit.id,
-                  reminders: courseVisit.reminders
-                    ? [...courseVisit.reminders, new Date()]
-                    : [new Date()],
-                  comment: "problem",
-                  info: emailInfo,
-                }}
-              >
-                {(sendEmailToStudent, { loading, error }) => {
-                  return (
-                    <SendButton
-                      onClick={(e) => {
-                        const data = sendEmailToStudent();
-                        // alert("Отправлено!");
-                        alert("Email has been sent!");
-                      }}
-                      name="CV"
-                    >
-                      {/* Проблемное */}
-                      Problem Email
-                    </SendButton>
-                  );
-                }}
-              </Mutation>
-            )}
-            {courseVisit && (
-              <Mutation
-                mutation={UPDATE_COURSE_VISIT_MUTATION}
-                variables={{
-                  id: courseVisit.id,
-                  reminders: courseVisit.reminders
-                    ? [...courseVisit.reminders, new Date()]
-                    : [new Date()],
-                  comment: "motivation",
-                  info: emailInfo,
-                }}
-              >
-                {(sendEmailToStudent, { loading, error }) => {
-                  return (
-                    <SendButton
-                      onClick={(e) => {
-                        const data = sendEmailToStudent();
-                        alert("Отправлено!");
-                      }}
-                      name="CV"
-                    >
-                      {/* Мотивационнное */}
-                      Motivation Email
-                    </SendButton>
-                  );
-                }}
-              </Mutation>
-            )}
-          </Buttons>
-          {courseVisit &&
-            courseVisit.reminders &&
-            courseVisit.reminders.map((r) => (
-              <li>{moment(r).format("LLL")}</li>
-            ))}
-        </EmailBlock>
+                  {(sendEmailToStudent, { loading, error }) => {
+                    return (
+                      <SendButton
+                        onClick={(e) => {
+                          const data = sendEmailToStudent();
+                          // alert("Отправлено!");
+                          alert("Email has been sent!");
+                        }}
+                        name="CV"
+                      >
+                        {/* Проблемное */}
+                        Problem Email
+                      </SendButton>
+                    );
+                  }}
+                </Mutation>
+              )}
+              {courseVisit && (
+                <Mutation
+                  mutation={UPDATE_COURSE_VISIT_MUTATION}
+                  variables={{
+                    id: courseVisit.id,
+                    reminders: courseVisit.reminders
+                      ? [...courseVisit.reminders, new Date()]
+                      : [new Date()],
+                    comment: "motivation",
+                    info: emailInfo,
+                  }}
+                >
+                  {(sendEmailToStudent, { loading, error }) => {
+                    return (
+                      <SendButton
+                        onClick={(e) => {
+                          const data = sendEmailToStudent();
+                          alert("Отправлено!");
+                        }}
+                        name="CV"
+                      >
+                        {/* Мотивационнное */}
+                        Motivation Email
+                      </SendButton>
+                    );
+                  }}
+                </Mutation>
+              )}
+            </Buttons>
+            {courseVisit &&
+              courseVisit.reminders &&
+              courseVisit.reminders.map((r) => (
+                <li>{moment(r).format("LLL")}</li>
+              ))}
+          </EmailBlock>
+        )}
         <Block>
-          <h2>Lesson stats</h2>
+          {/* <h2>Lesson stats</h2> */}
           {props.type !== "lesson_analytics" && (
             <Journey
               student={student}
@@ -825,6 +833,7 @@ const Person = (props) => {
                       index={index}
                       coursePageID={coursePageID}
                       student={student}
+                      type={props.type}
                       res={res}
                       date={
                         props.lesson_analytics

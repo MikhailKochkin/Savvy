@@ -1,10 +1,11 @@
 import { useState } from "react";
-import StudentData from "./StudentData";
 import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
 import PropTypes from "prop-types";
-import Loading from "../Loading";
 import * as _ from "lodash";
+
+import Loading from "../Loading";
+import StudentData from "./StudentData";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!) {
@@ -55,50 +56,39 @@ const UserAnalytics = (props) => {
   const { students, lesson } = props;
   const [number, setNumber] = useState(25);
 
-  //   let cloned_elements = _.cloneDeep(students);
-  //   let d = cloned_elements.map((el) =>
-  //     Object.defineProperty(el, "date", {
-  //       value:
-  //         el.courseVisits.filter((c) => c.coursePage.id == coursePageID).length >
-  //         0
-  //           ? new Date(
-  //               el.courseVisits.filter(
-  //                 (c) => c.coursePage.id == coursePageID
-  //               )[0].createdAt
-  //             )
-  //           : new Date("2016-01-01T08:16:20.669Z"),
-  //       writable: true,
-  //     })
-  //   );
-  //   let sorted = d.sort((a, b) => b.date - a.date);
-
-  //   let student_arr = [];
-  //   sorted.map((s) => student_arr.push(s.id));
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
     variables: {
       lessonId: lesson.id,
     },
   });
   if (loading) return <Loading />;
-  // <p>Loading students results data...</p>;
   const results = data.lessonResults;
   return (
     <Styles>
       <Header>{lesson.name}</Header>
       <Header># Users: {students.length} </Header>
-      {students.slice(0, number).map((student) => {
-        return (
-          <StudentData
-            student={student}
-            lessons={[lesson]}
-            results={results.filter((r) => r.student.id === student.id)}
-            type="lesson_analytics"
-          />
-        );
-      })}
-      {number < students.length && (
-        <button onClick={(e) => setNumber(number + 25)}>Еще</button>
-      )}
+      {[...students]
+        .sort((a, b) => {
+          const resultA = results.find((res) => res.student.id === b.id);
+          const resultB = results.find((res) => res.student.id === a.id);
+
+          if (!resultA || !resultB) {
+            return 0; // or handle this case differently
+          }
+
+          return new Date(resultA.createdAt) - new Date(resultB.createdAt);
+        })
+        .map((student) => {
+          return (
+            <StudentData
+              me={props.me}
+              student={student}
+              lessons={[lesson]}
+              results={results.filter((r) => r.student.id === student.id)}
+              type="lesson_analytics"
+            />
+          );
+        })}
     </Styles>
   );
 };

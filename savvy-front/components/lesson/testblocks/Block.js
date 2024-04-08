@@ -250,7 +250,6 @@ const Element = (props) => {
 
   let item;
   let task = tasks[activeStep];
-  console.log("tasks[activeStep]", tasks, activeStep, tasks[activeStep]);
   if (tasks.length === activeStep) {
     item = (
       <Final

@@ -232,7 +232,7 @@ const SingleLessonData = (props) => {
     <Styles>
       <Navigation i_am_author={true} lesson={lesson} me={me} page="analytics" />
       {students && lesson ? (
-        <SingleLessonAnalytics lesson={lesson} students={students} />
+        <SingleLessonAnalytics lesson={lesson} students={students} me={me} />
       ) : null}
     </Styles>
   );

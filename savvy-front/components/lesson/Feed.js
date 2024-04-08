@@ -1017,11 +1017,6 @@ const Feed = (props) => {
                 className={i === num + 1 ? "final" : "no"}
               >
                 {c}
-                {console.log(
-                  "props.move_statuses[i]",
-                  props.move_statuses[i],
-                  i
-                )}
                 {props.move_statuses[i] && (
                   <Buttons>
                     {/* Show move button if it is not the last block in the lesson */}

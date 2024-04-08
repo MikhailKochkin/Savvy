@@ -101,7 +101,6 @@ const TestPractice = (props) => {
           <button onClick={(e) => setStart(true)}>{t("start")}</button>
         </Container>
       )}
-      {console.log("props.testPractice", props.testPractice)}
       {start && (
         <Container>
           <Block

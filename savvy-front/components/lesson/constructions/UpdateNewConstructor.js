@@ -776,7 +776,6 @@ const ConElement = (props) => {
           )}
         </div>
       </Settings>
-      {console.log("includesTextNodes", el.text, includesTextNodes(el.text))}
       <DynamicLoadedEditor
         onChange={(e) => updateEl(e.target.value)}
         getEditorText={myCallback}

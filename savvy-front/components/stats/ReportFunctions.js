@@ -45,7 +45,8 @@ export const populateQuizzesWithResults = (availableData, quizResults) => {
       return {
         ...question,
         results: activeResults,
-        completionDate: activeResults[0].createdAt,
+        completionDate:
+          activeResults.length > 0 ? activeResults[0]?.createdAt : undefined,
       };
     });
   });
@@ -62,43 +63,88 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
       let criteria = {
         hasLearnt: false,
         hasPracticed: false,
-        completionRate: 0,
         hasReceivedFeedback: false,
-        feedbackRate: 0,
-        weakQuestions: [],
-        unreflectedQuestions: [],
         hasReflected: false,
         mark: 0,
+        feedbackRate: 0,
+        completionRate: 0,
+        weakQuestions: [],
+        unreflectedQuestions: [],
       };
 
+      // How do we use these criteria?
+
+      // – if the student has looked through all the lesson we assume that they have learnt something. Student gets 20 total points
+      // – if the student has given asnwers to exercises we assume that they have practiced and has received feedback. Student can get up to 20 total points. The final points depend on how many exercises have the student completed.
+      // – if the student has given correct asnwers to exercises we assume that they have received feedback. They now know which answer is correct. Student can get up to 20 total points. The final points depend on how many exercises have the student completed.
+      // - if the student has used additional functions (like hints, explanations, etc) we assume that they have reflected on the feedback. Student gets 40 total points. The final points depend on how many exercises have the student completed.
+
       // 2. Has the student learnt something?
-      if (
+
+      let completion_rate =
         (res[0].progress / res[0].lesson.structure.lessonItems.length).toFixed(
           2
-        ) *
-          100 >
-        90
-      ) {
+        ) * 100;
+      if (completion_rate > 90) {
         criteria.hasLearnt = true;
+        criteria.mark += 20;
+      } else if (completion_rate > 50 && completion_rate <= 90) {
+        criteria.hasLearnt = true;
+        criteria.mark += 10;
+      } else {
+        criteria.hasLearnt = false;
       }
 
+      // 3. Has the student practiced. received feedback and reflected?
       el.questions.forEach((question) => {
+        // 3.1 the student gets a point for every question which has saved results
         if (question.results.length > 0) {
           practice += 1;
         }
+        // 3.2 the student gets a point for every question that has saved results with correct answers
 
-        // 3. What feedback has the student received?
-        let correctAnswers = question.results.filter(
-          (result) => result.correct && parseFloat(result.comment) > 65
-        );
-        if (correctAnswers.length == 0) {
-          criteria.weakQuestions.push(question);
-        }
-        if (correctAnswers.length > 0) {
-          correctAnswersNum += 1;
+        if (question.__typename === "Quiz") {
+          if (question.type.toLowerCase() === "test") {
+            // console.log("question test", question);
+            let correctAnswers = question.results.filter(
+              (result) => result.correct && parseFloat(result.comment) > 65
+            );
+            // console.log("correctAnswers", question.results);
+            if (correctAnswers.length == 0) {
+              criteria.weakQuestions.push(question);
+            }
+            if (correctAnswers.length > 0) {
+              correctAnswersNum += 1;
+            }
+          } else if (
+            question.type.toLowerCase() === "findall" ||
+            question.type.toLowerCase() === "generate"
+          ) {
+            // console.log(
+            //   "question findall",
+            //   question.results.filter(
+            //     (result) =>
+            //       result.ideasList.quizIdeas.filter(
+            //         (idea) => parseFloat(idea.result) > 60
+            //       ).length > 0
+            //   )
+            // );
+            let correctAnswers = question.results.filter(
+              (result) =>
+                result.ideasList.quizIdeas.filter(
+                  (idea) => parseFloat(idea.result) > 60
+                ).length > 0
+            );
+            if (correctAnswers.length == 0) {
+              criteria.weakQuestions.push(question);
+            }
+            if (correctAnswers.length > 0) {
+              correctAnswersNum += 1;
+            }
+          }
         }
 
-        // 4. Has the student reflected on the feedback?
+        // 3.3. Has the student reflected on the feedback?
         let questionResultsWithReflection = question.results.filter(
           (result) => result.improvement !== "" || result.explanation !== ""
         );
@@ -110,30 +156,48 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
         }
       });
 
-      // Completion rate calculation
-      criteria.completionRate =
-        (practice / el.questions.length).toFixed(2) * 100;
-      if (practice == el.questions.length) {
-        criteria.hasPracticed = true;
-        criteria.mark += 25;
+      // Practice rate calculation
+      if ((practice / el.questions.length) * 100 > 90) {
+        criteria.mark += 20;
+      } else if (
+        (practice / el.questions.length) * 100 > 50 &&
+        (practice / el.questions.length) * 100 <= 90
+      ) {
+        criteria.mark += 10;
       }
 
       // Feedback rate calculation
       criteria.feedbackRate =
         (correctAnswersNum / el.questions.length).toFixed(2) * 100;
-      if (correctAnswersNum == el.questions.length) {
+      if (criteria.feedbackRate > 90) {
         criteria.hasReceivedFeedback = true;
-        criteria.mark += 25;
+        criteria.mark += 20;
+      } else if (criteria.feedbackRate > 50 && criteria.feedbackRate <= 90) {
+        criteria.hasReceivedFeedback = true;
+        criteria.mark += 10;
       }
 
       // Reflection check
-      if (questionResultsWithReflectionNum == el.questions.length) {
+      if (questionResultsWithReflectionNum / el.questions.length > 0.9) {
         criteria.hasReflected = true;
-        criteria.mark += 50;
+        criteria.mark += 40;
+      } else if (
+        questionResultsWithReflectionNum / el.questions.length > 0.5 &&
+        questionResultsWithReflectionNum / el.questions.length <= 0.9
+      ) {
+        criteria.hasReflected = true;
+        criteria.mark += 20;
+      } else if (
+        questionResultsWithReflectionNum / el.questions.length > 0.1 &&
+        questionResultsWithReflectionNum / el.questions.length <= 0.5
+      ) {
+        criteria.hasReflected = true;
+        criteria.mark += 10;
       }
 
       // Assigning total results to the problem
       el.totalResults = criteria;
+      console.log("el.totalResults", el.totalResults);
     }
   });
 };
@@ -232,9 +296,73 @@ export const generateOverAllResults = async (student, overall) => {
   }
 };
 
-// module.exports = {
-//   findProblems,
-//   populateProblemsWithQuestions,
-//   populateQuizzesWithResults,
-//   analyzeStudentPerformance,
-// };
+export const getFeedbackOnTasks = async (availableData, student) => {
+  console.log("availableData", availableData);
+  let insights = [];
+  const res = await Promise.all(
+    availableData.map(async (el, i) => {
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            prompt: `You are an AI assistant specializing in legal training and Learning and Development (L&D).
+          Your objective is to help L&D manager prepare a comprehensive, insightful, and captivating L&D report on the progress of their students.
+          Write an paragraph of the report on how well the student solved the problem using the following data.
+          The name of the student: """ ${student.name} """.
+          The name of the task: """ ${el.name} """.
+          The number of the task: """ ${i + 1} """.
+          The goal of the task: """ ${el.goal} """.
+          Student grade is """ ${el.totalResults.mark} """ out of 100.
+          Has the student practiced enough? """ ${
+            el.totalResults.hasPracticed
+          } """.
+          Has the student got enough feedback? """ ${
+            el.totalResults.hasReceivedFeedback
+          } """.
+          Has the student reflected on their errors? """ ${
+            el.totalResults.hasReflected
+          } """.
+          The student's weak points that they need to work more on: """ ${el.totalResults.weakQuestions
+            .map((el) => `<li>${el.question}</li>`)
+            .join("")} """.
+          Recommendations: The student does not yet have necessary skills. Go through simulator one more time.
+          Use this paragraph as an example.
+          1. "<h3>Task 1. What is a contract?</h3><p>
+          <p>The goal of this task was to make sure that the student understands what is contract and waht are its essential elements. 
+          Michael has not yet mastered this new skill yet. Theie overall grade is 50. They have worked throught the problem, answered questions and received some feedback.
+          But thet have not spent enought time reflecting on some questions. Especailly their weak points and area of growth are the differences between offer and acceptance and the legal nature of consideration. 
+          Our recommendation is that they go through the simulator one more time and spend more time thinking over the case studies.</p>"
+          `,
+          }),
+        });
+
+        if (response.status !== 200) {
+          throw (
+            (await response.json()).error ||
+            new Error(`Request failed with status ${response.status}`)
+          );
+        }
+        const data = await response.json();
+        if (data.result.content) {
+          insights.push(data.result.content);
+          return data.result.content;
+
+          // setReportIntro(data.result.content);
+          // console.log("data.result.content", data.result.content);
+        } else {
+          return "Sorry, we are disconnected.";
+          // setReportIntro("Sorry, we are disconnected.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    })
+  );
+  console.log("finished");
+
+  return insights;
+};

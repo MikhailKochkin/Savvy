@@ -293,6 +293,9 @@ const ProblemModal = (props) => {
                           <b>Answers:</b>
                         </div>
                         <div>
+                          {!results || results.length == 0
+                            ? "🛑 No answers provided"
+                            : null}
                           {results.map((result) => (
                             <div className="result">
                               {subtype == "test" ? (

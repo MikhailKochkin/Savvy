@@ -22,6 +22,7 @@ import {
   populateProblemsWithQuestions,
   populateQuizzesWithResults,
   analyzeStudentPerformance,
+  getFeedbackOnTasks,
   generateReportIntro,
   generateOverAllResults,
 } from "./ReportFunctions";
@@ -178,7 +179,6 @@ const CHECK_MUTATION = gql`
 `;
 
 const Box = styled.div`
-  border-bottom: 3px solid #f2f6f9;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -627,8 +627,6 @@ const LessonData = (props) => {
     event.preventDefault();
     setReport("");
     setGenerating(true);
-    let initial_report;
-    event.preventDefault();
     console.log("start report");
     // 1. Find all problems
     let availableData = findProblems(lesson);
@@ -641,7 +639,7 @@ const LessonData = (props) => {
 
     // 4. Analyze student performance
     analyzeStudentPerformance(availableData, res, data);
-    console.log("available data 4", availableData);
+    // console.log("available data 4", availableData);
 
     // 5. Prepare initial report draft.
 
@@ -734,7 +732,9 @@ const LessonData = (props) => {
     });
     let overallResults = await generateOverAllResults(student, overall);
 
-    setReport(intro + overallResults);
+    let feedbackOnTasks = await getFeedbackOnTasks(availableData, student);
+
+    setReport(intro + overallResults + feedbackOnTasks.join(""));
     setGenerating(false);
   };
 
@@ -892,7 +892,7 @@ const LessonData = (props) => {
               </ul>
             </div>
             <div>Lesson goal: {lesson.goal}</div>
-            {lesson.goal && (
+            {/* {lesson.goal && (
               <button onClick={(e) => generateReport(e)}>
                 Generate report
               </button>
@@ -913,7 +913,7 @@ const LessonData = (props) => {
             ) : (
               ""
             )}
-            {report && report.length > 0 && <Report>{parse(report)}</Report>}
+            {report && report.length > 0 && <Report>{parse(report)}</Report>}*/}
           </IntroData>
           <div>
             <h2>Lesson results</h2>

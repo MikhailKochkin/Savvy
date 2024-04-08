@@ -5,7 +5,6 @@ import { useDrag, useDrop } from "react-dnd";
 import { mergeRefs } from "react-merge-refs";
 import parse from "html-react-parser";
 import Modal from "styled-react-modal";
-
 import NewBlock from "./blocks/NewBlock";
 
 const Styles = styled.div`
@@ -652,7 +651,7 @@ const Message = ({
       <div className="question">
         {type.toLowerCase() == "quiz" && lesson.quizes.find((el) => el.id == id)
           ? parse(
-              lesson.quizes.find((el) => el.id == id).question.substring(0, 80)
+              lesson.quizes.find((el) => el.id == id).question.substring(0, 100)
             )
           : null}
         {type.toLowerCase() == "newtest" &&
@@ -660,17 +659,18 @@ const Message = ({
           ? parse(
               lesson.newTests
                 .find((el) => el.id == id)
-                .question[0].substring(0, 80)
+                .question[0].substring(0, 100)
             )
           : null}
         {type.toLowerCase() == "note" && lesson.notes.find((el) => el.id == id)
-          ? parse(lesson.notes.find((el) => el.id == id).text.substring(0, 80))
+          ? parse(lesson.notes.find((el) => el.id == id).text.substring(0, 100))
           : null}
 
         {type.toLowerCase() == "chat" && lesson.chats.find((el) => el.id == id)
           ? parse(
-              lesson.chats.find((el) => el.id == id).messages.messagesList[0]
-                .text
+              lesson.chats
+                .find((el) => el.id == id)
+                .messages.messagesList[0].text?.substring(0, 100)
             )
           : null}
       </div>
