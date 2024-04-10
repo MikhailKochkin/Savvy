@@ -25,6 +25,7 @@ import {
   getFeedbackOnTasks,
   generateReportIntro,
   generateOverAllResults,
+  generateRecommendation,
 } from "./ReportFunctions";
 
 const GET_RESULTS = gql`
@@ -723,18 +724,24 @@ const LessonData = (props) => {
       practiced: [],
       feedback: [],
       reflection: [],
+      marks: [],
     };
     availableData.map((el) => {
       overall.learning.push(el.totalResults.hasLearnt);
       overall.practiced.push(el.totalResults.hasPracticed);
       overall.feedback.push(el.totalResults.hasReceivedFeedback);
       overall.reflection.push(el.totalResults.hasReflected);
+      overall.marks.push(el.totalResults.mark);
     });
+    // 6.2. Overall results: how many tasks the student has completed
     let overallResults = await generateOverAllResults(student, overall);
-
+    // 6.3. Feedback on separate tasks
     let feedbackOnTasks = await getFeedbackOnTasks(availableData, student);
-
-    setReport(intro + overallResults + feedbackOnTasks.join(""));
+    // 6.4. Recommendations
+    let recommendation = await generateRecommendation(student, lesson, overall);
+    setReport(
+      intro + overallResults + feedbackOnTasks.join("") + recommendation
+    );
     setGenerating(false);
   };
 
@@ -892,7 +899,7 @@ const LessonData = (props) => {
               </ul>
             </div>
             <div>Lesson goal: {lesson.goal}</div>
-            {/* {lesson.goal && (
+            {lesson.goal && (
               <button onClick={(e) => generateReport(e)}>
                 Generate report
               </button>
@@ -913,7 +920,7 @@ const LessonData = (props) => {
             ) : (
               ""
             )}
-            {report && report.length > 0 && <Report>{parse(report)}</Report>}*/}
+            {report && report.length > 0 && <Report>{parse(report)}</Report>}
           </IntroData>
           <div>
             <h2>Lesson results</h2>

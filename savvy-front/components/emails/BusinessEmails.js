@@ -146,7 +146,7 @@ const ClientData = (props) => {
   const [orgList, setOrgList] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 25;
+  const itemsPerPage = 100;
   const [sendBusinessEmail, { data, loading, error }] = useMutation(
     SEND_MESSAGE_MUTATION
   );

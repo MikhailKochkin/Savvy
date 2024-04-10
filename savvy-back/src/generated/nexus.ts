@@ -2799,8 +2799,10 @@ export interface NexusGenInputs {
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     quiz?: NexusGenInputs['QuizOrderByWithRelationInput'] | null; // QuizOrderByWithRelationInput
     quizId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    result?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     student?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
     studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    type?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   QuizResultWhereInput: { // input type
@@ -2823,8 +2825,10 @@ export interface NexusGenInputs {
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     quiz?: NexusGenInputs['QuizWhereInput'] | null; // QuizWhereInput
     quizId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    result?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     student?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     studentId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   QuizResultWhereUniqueInput: { // input type
@@ -2847,8 +2851,10 @@ export interface NexusGenInputs {
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     quiz?: NexusGenInputs['QuizWhereInput'] | null; // QuizWhereInput
     quizId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    result?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     student?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     studentId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   QuizWhereInput: { // input type
@@ -4569,7 +4575,9 @@ export interface NexusGenObjects {
     lessonID?: string | null; // String
     lessonId?: string | null; // String
     quizId?: string | null; // String
+    result?: string | null; // String
     studentId: string; // String!
+    type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Rating: { // root type
@@ -5579,8 +5587,10 @@ export interface NexusGenFieldTypes {
     lessonId: string | null; // String
     quiz: NexusGenRootTypes['Quiz'] | null; // Quiz
     quizId: string | null; // String
+    result: string | null; // String
     student: NexusGenRootTypes['User']; // User!
     studentId: string; // String!
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Rating: { // field return type
@@ -6635,8 +6645,10 @@ export interface NexusGenFieldTypeNames {
     lessonId: 'String'
     quiz: 'Quiz'
     quizId: 'String'
+    result: 'String'
     student: 'User'
     studentId: 'String'
+    type: 'String'
     updatedAt: 'DateTime'
   }
   Rating: { // field return type name
@@ -7402,6 +7414,8 @@ export interface NexusGenArgTypes {
       improvement?: string | null; // String
       lessonId?: string | null; // String
       quiz?: string | null; // String
+      result?: string | null; // String
+      type?: string | null; // String
     }
     createRating: { // args
       forumId?: string | null; // String

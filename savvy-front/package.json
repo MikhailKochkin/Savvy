@@ -17,6 +17,7 @@
   "author": "M.Kochkin",
   "license": "ISC",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.1",
     "@apollo/client": "^3.4.16",
     "@apollo/react-ssr": "^4.0.0",
     "@babel/runtime": "^7.11.2",

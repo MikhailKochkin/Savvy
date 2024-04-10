@@ -2173,6 +2173,8 @@ const Mutation = mutationType({
         explanation: stringArg(),
         improvement: stringArg(),
         goal: stringArg(),
+        type: stringArg(),
+        result: stringArg(),
         ideasList: arg({
           type: "QuizIdeas",
         }),

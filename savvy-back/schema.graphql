@@ -2539,7 +2539,7 @@ type Mutation {
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createProgram(audience: String, description: String, goals: [String], header: [String], image: String, methods: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String): Program
   createQuiz(answer: String, answers: ComplexAnswer, goalType: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: String, type: String): Quiz
-  createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeas, improvement: String, lessonId: String, quiz: String): QuizResult
+  createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeas, improvement: String, lessonId: String, quiz: String, result: String, type: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createShot(comments: [String], lessonId: String, name: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
@@ -3885,8 +3885,10 @@ type QuizResult {
   lessonId: String
   quiz: Quiz
   quizId: String
+  result: String
   student: User!
   studentId: String!
+  type: String
   updatedAt: DateTime!
 }
 
@@ -3917,8 +3919,10 @@ input QuizResultOrderByWithRelationInput {
   lessonId: SortOrderInput
   quiz: QuizOrderByWithRelationInput
   quizId: SortOrderInput
+  result: SortOrderInput
   student: UserOrderByWithRelationInput
   studentId: SortOrder
+  type: SortOrderInput
   updatedAt: SortOrder
 }
 
@@ -3942,8 +3946,10 @@ input QuizResultWhereInput {
   lessonId: StringNullableFilter
   quiz: QuizWhereInput
   quizId: StringNullableFilter
+  result: StringNullableFilter
   student: UserWhereInput
   studentId: StringFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -3967,8 +3973,10 @@ input QuizResultWhereUniqueInput {
   lessonId: StringNullableFilter
   quiz: QuizWhereInput
   quizId: StringNullableFilter
+  result: StringNullableFilter
   student: UserWhereInput
   studentId: StringFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 

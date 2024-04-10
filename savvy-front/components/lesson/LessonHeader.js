@@ -7,6 +7,24 @@ import dynamic from "next/dynamic";
 import parse from "html-react-parser";
 import calculateSum from "../../functions.js";
 
+const LESSON_RESULTS_QUERY = gql`
+  query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
+    lessonResults(
+      where: {
+        lesson: { id: { equals: $lessonId } }
+        student: { id: { equals: $userId } }
+      }
+    ) {
+      id
+      progress
+      lesson {
+        id
+        structure
+      }
+    }
+  }
+`;
+
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
     updatePublished(id: $id, published: $published) {
@@ -67,11 +85,12 @@ const TextBar = styled.div`
   font-size: 1.6rem;
   margin-bottom: 35px;
   margin-right: 55px;
-
   padding: 2%;
   padding-left: 2%;
   position: relative;
   box-shadow: 0 4px 6px -7px rgb(0 0 0 / 5%), 0 4px 30px -9px rgb(0 0 0 / 10%);
+  border-left: 2px solid;
+  border-color: ${(props) => props.color};
   .open {
     display: flex;
     flex-direction: column;
@@ -301,23 +320,17 @@ const LessonHeader = (props) => {
   const [published, setPublished] = useState(props.lesson.published);
   const [number, setNumber] = useState(props.lesson.number);
   const [description, setDescription] = useState(props.lesson.description);
-
   const { t } = useTranslation("course");
-
-  const [createLessonResult, { create_data }] = useMutation(
-    CREATE_LESSONRESULT_MUTATION
-  );
-
-  const [updateLessonResult, { update_data }] = useMutation(
-    UPDATE_LESSONRESULT_MUTATION
-  );
-
   const [updateLesson, { lesson_data }] = useMutation(UPDATE_LESSON_MUTATION);
 
   const [updatePublished, { published_data }] = useMutation(
     UPDATE_PUBLISHED_MUTATION
   );
 
+  const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
+    variables: { lessonId: props.lesson.id, userId: props.me.id },
+  });
+  if (error) return <p>Error</p>;
   const { lesson, name, author, me, i_am_author } = props;
 
   const myCallback = (data) => {
@@ -331,9 +344,33 @@ const LessonHeader = (props) => {
     });
   };
 
+  const getLessonWithHighestProgress = (lessonResults) => {
+    return lessonResults.reduce((highest, current) => {
+      return current.progress > highest.progress ? current : highest;
+    });
+  };
+
+  let maxResult = null;
+  let completionRate = 0;
+  let color;
+  if (data?.lessonResults.length > 0 && lesson?.structure?.lessonItems) {
+    maxResult = getLessonWithHighestProgress(data.lessonResults);
+    completionRate = (
+      (maxResult.progress / lesson.structure.lessonItems.length) *
+      100
+    ).toFixed(0);
+  }
+
+  if (completionRate > 80) {
+    color = "#32AC66";
+  } else if (completionRate > 50 && completionRate <= 80) {
+    color = "#FFD836";
+  } else {
+    color = "white";
+  }
   return (
     <>
-      <TextBar id={"simulator_" + lesson.id}>
+      <TextBar id={"simulator_" + lesson.id} color={color}>
         <div>
           <Text>
             <div className="lesson_name">
@@ -436,7 +473,6 @@ const LessonHeader = (props) => {
   );
 };
 
-// export default withTranslation("course")(LessonHeader);
 export default LessonHeader;
 
 export { CREATE_LESSONRESULT_MUTATION };

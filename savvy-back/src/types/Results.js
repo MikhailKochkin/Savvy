@@ -27,6 +27,8 @@ const QuizResult = objectType({
     t.model.answer();
     t.model.comment();
     t.model.attempts();
+    t.model.type();
+    t.model.result();
     t.model.hint();
     t.model.ideas();
     t.model.ideasList();

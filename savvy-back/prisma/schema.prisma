@@ -817,6 +817,8 @@ model QuizResult {
   hint        String?
   explanation String?
   comment     String?
+  type        String?
+  result      String?
   improvement String?
   lessonID    String?  @db.VarChar(30)
   updatedAt   DateTime @updatedAt

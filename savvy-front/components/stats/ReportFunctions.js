@@ -105,11 +105,9 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
 
         if (question.__typename === "Quiz") {
           if (question.type.toLowerCase() === "test") {
-            // console.log("question test", question);
             let correctAnswers = question.results.filter(
               (result) => result.correct && parseFloat(result.comment) > 65
             );
-            // console.log("correctAnswers", question.results);
             if (correctAnswers.length == 0) {
               criteria.weakQuestions.push(question);
             }
@@ -120,15 +118,6 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
             question.type.toLowerCase() === "findall" ||
             question.type.toLowerCase() === "generate"
           ) {
-            // console.log(
-            //   "question findall",
-            //   question.results.filter(
-            //     (result) =>
-            //       result.ideasList.quizIdeas.filter(
-            //         (idea) => parseFloat(idea.result) > 60
-            //       ).length > 0
-            //   )
-            // );
             let correctAnswers = question.results.filter(
               (result) =>
                 result.ideasList.quizIdeas.filter(
@@ -197,7 +186,6 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
 
       // Assigning total results to the problem
       el.totalResults = criteria;
-      console.log("el.totalResults", el.totalResults);
     }
   });
 };
@@ -297,7 +285,6 @@ export const generateOverAllResults = async (student, overall) => {
 };
 
 export const getFeedbackOnTasks = async (availableData, student) => {
-  console.log("availableData", availableData);
   let insights = [];
   const res = await Promise.all(
     availableData.map(async (el, i) => {
@@ -362,7 +349,57 @@ export const getFeedbackOnTasks = async (availableData, student) => {
       }
     })
   );
-  console.log("finished");
-
   return insights;
+};
+
+export const generateRecommendation = async (student, lesson, overall) => {
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: `You are an AI assistant specializing in legal training and Learning and Development (L&D). 
+          Your objective is to transform help L&D manager prepare a comprehensive, insightful, and captivating L&D report on the progress of their students. 
+          Write the recommendation part of the report using the following data.
+          The name of the student: """ ${student.name}  """.
+          The name of the simulator: """ ${lesson.name}  """.
+          The goal of the simulator: """ ${lesson.goal}  """.
+          The total mark of this lesson is: """ ${
+            overall.marks.reduce((a, b) => a + b, 0) / overall.marks.length
+          } """.
+          Practice: all exercises have been completed: """ ${overall.practiced.every(
+            (value) => value === true
+          )} """.
+          Feedback: all correct answers have been found: """ ${overall.feedback.every(
+            (value) => value === true
+          )} """.
+          Reflection: all errors have been reflected and worked on: """ ${overall.reflection.every(
+            (value) => value === true
+          )} """.
+          Use this recommendation paragraph as an example.
+          "<h3>Recommendation</h3><p>Michael has practiced enough, but their work lacked reflection. We are afraid they have no acheived the goal of the lesson.
+          That's why his total grade for the simulator "Contract law essentials" is 50. We suggest that Mikes goes though the sumulator one time
+           so that they have another chance to reflect on the problems from this simulator.</p>"
+          `,
+      }),
+    });
+
+    if (response.status !== 200) {
+      throw (
+        (await response.json()).error ||
+        new Error(`Request failed with status ${response.status}`)
+      );
+    }
+    const data = await response.json();
+    if (data.result.content) {
+      return data.result.content;
+    } else {
+      return "Sorry, we are disconnected.";
+    }
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
 };

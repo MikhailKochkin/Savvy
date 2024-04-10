@@ -14,6 +14,8 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $answer: String
     $quiz: String
     $lessonId: String
+    $result: String
+    $type: String
     $correct: Boolean
     $comment: String
     $hint: String
@@ -27,6 +29,8 @@ const CREATE_QUIZRESULT_MUTATION = gql`
       lessonId: $lessonId
       correct: $correct
       comment: $comment
+      type: $type
+      result: $result
       hint: $hint
       explanation: $explanation
       improvement: $improvement
@@ -59,7 +63,6 @@ const IconBlock = styled.div`
     width: 55px;
     display: flex;
     object-fit: cover;
-
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -76,7 +79,6 @@ const IconBlock = styled.div`
       #ef473a,
       #cb2d3e
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
     color: #fff;
     font-size: 2rem;
     font-weight: bold;
@@ -133,7 +135,6 @@ const Question = styled.div`
     /* Add slide-in animation from bottom */
     opacity: 0;
     transform: translateY(30px); /* Start below */
-
     animation: animate-slide-in-from-bottom 0.8s forwards;
 
     /* Animation from the bottom */
@@ -192,7 +193,6 @@ const Question = styled.div`
     height: 55px;
     width: 55px;
     object-fit: cover;
-
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -374,8 +374,17 @@ const OpenQuestion = (props) => {
   const getHint = async (event) => {
     event.preventDefault();
     setGenerating(true);
+    let AItype = "openai";
+    let url;
+    let result;
+
+    if (AItype == "claude") {
+      url = "/api/generate2";
+    } else {
+      url = "/api/generate";
+    }
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -402,10 +411,19 @@ const OpenQuestion = (props) => {
         );
       }
       const data = await response.json();
-      if (data.result.content) {
-        setAIHint(data.result.content);
+      if (AItype == "claude") {
+        result = data.result.content[0].text;
+      } else {
+        result = data.result.content;
+      }
+      if (result) {
+        setAIHint(result);
+        setGenerating(false);
+        return result;
       } else {
         setAIHint("Sorry, you are on your own");
+        setGenerating(false);
+        return "Sorry, you are on your own";
       }
     } catch (error) {
       console.error(error);
@@ -417,8 +435,17 @@ const OpenQuestion = (props) => {
   const getExplanation = async (event) => {
     event.preventDefault();
     setGeneratingExplanation(true);
+    let AItype = "openai";
+    let url;
+    let result;
+
+    if (AItype == "claude") {
+      url = "/api/generate2";
+    } else {
+      url = "/api/generate";
+    }
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -446,23 +473,58 @@ const OpenQuestion = (props) => {
         );
       }
       const data = await response.json();
-      if (data.result.content) {
-        setAIExplanation(data.result.content);
+      if (AItype == "claude") {
+        result = data.result.content[0].text;
+      } else {
+        result = data.result.content;
+      }
+      if (result) {
+        setAIExplanation(result);
+        setGeneratingExplanation(false);
+        createQuizResult({
+          variables: {
+            quiz: props.quizId,
+            lessonId: props.lessonId,
+            answer: answer,
+            type: "explanation",
+            correct: false,
+            hint: AIhint,
+            explanation: result,
+            improvement: AIImprovement,
+            comment: `Student asked for explanations`,
+          },
+        });
+
+        return result;
       } else {
         setAIExplanation("Sorry, you are on your own");
+        setGeneratingExplanation(false);
+
+        return "Sorry, error";
       }
     } catch (error) {
+      setGeneratingExplanation(false);
+
       console.error(error);
       alert(error.message);
     }
-    setGeneratingExplanation(false);
   };
 
   const getImprovements = async (event) => {
     event.preventDefault();
     setGeneratingImprovement(true);
+    let AItype = "openai";
+    let url;
+    let result;
+
+    if (AItype == "claude") {
+      url = "/api/generate2";
+    } else {
+      url = "/api/generate";
+    }
+
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -479,7 +541,7 @@ const OpenQuestion = (props) => {
           Write in second person. Adress the student as "you". Do not use the words from the correct answer.
           Answer in ${
             router.locale == "ru" ? "Russian" : "English"
-          }Make the answer at least 3 sentences long.`,
+          }. Make the answer at least 3 sentences long.`,
         }),
       });
 
@@ -490,10 +552,32 @@ const OpenQuestion = (props) => {
         );
       }
       const data = await response.json();
+      if (AItype == "claude") {
+        result = data.result.content[0].text;
+      } else {
+        result = data.result.content;
+      }
       if (data.result.content) {
-        setAIImprovement(data.result.content);
+        createQuizResult({
+          variables: {
+            quiz: props.quizId,
+            lessonId: props.lessonId,
+            answer: answer,
+            correct: false,
+            type: "improvement",
+            hint: AIhint,
+            explanation: AIExplanation,
+            improvement: result,
+            comment: `Student asked for improvements`,
+          },
+        });
+        setAIImprovement(result);
+        setGeneratingImprovement(false);
+        return result;
       } else {
         setAIImprovement("Sorry, we are disconnected.");
+        setGeneratingImprovement(false);
+        return "Sorry, we are disconnected.";
       }
     } catch (error) {
       console.error(error);
@@ -591,6 +675,8 @@ const OpenQuestion = (props) => {
                 lessonId: props.lessonId,
                 answer: answer,
                 correct: true,
+                result: res.res,
+                type: "answer",
                 hint: AIhint,
                 explanation: AIExplanation,
                 improvement: AIImprovement,
@@ -618,7 +704,9 @@ const OpenQuestion = (props) => {
                 lessonId: props.lessonId,
                 answer: answer,
                 correct: true,
+                type: "answer",
                 hint: AIhint,
+                result: res.res,
                 explanation: AIExplanation,
                 improvement: AIImprovement,
                 comment: `Looks true: ${parseFloat(res.res)}%`,
@@ -646,6 +734,8 @@ const OpenQuestion = (props) => {
                 answer: answer,
                 correct: false,
                 hint: AIhint,
+                type: "answer",
+                result: res.res,
                 explanation: AIExplanation,
                 improvement: AIImprovement,
                 comment: `Result: ${parseFloat(res.res)}%`,
@@ -799,7 +889,22 @@ const OpenQuestion = (props) => {
               inputColor={inputColor}
               onClick={async (e) => {
                 e.preventDefault();
-                getHint(e);
+                let new_hint = await getHint(e);
+                if (answer !== "") {
+                  createQuizResult({
+                    variables: {
+                      quiz: props.quizId,
+                      lessonId: props.lessonId,
+                      answer: answer,
+                      correct: false,
+                      type: "hint",
+                      hint: new_hint,
+                      explanation: AIExplanation,
+                      improvement: AIImprovement,
+                      comment: `Student asked for a hint`,
+                    },
+                  });
+                }
               }}
               correct={correct}
             >
@@ -899,7 +1004,8 @@ const OpenQuestion = (props) => {
                     onClick={async (e) => {
                       e.preventDefault();
                       setAIExplanation("...");
-                      getExplanation(e);
+                      const res = await getExplanation(e);
+                      console.log("AIExplanation", res);
                     }}
                   >
                     {t("explain_what_is_wrong_with_my_answer")}
@@ -920,6 +1026,19 @@ const OpenQuestion = (props) => {
                     e.preventDefault();
                     setHidden(false);
                     slide();
+                    createQuizResult({
+                      variables: {
+                        quiz: props.quizId,
+                        lessonId: props.lessonId,
+                        answer: answer,
+                        correct: false,
+                        type: "answerReveal",
+                        hint: AIhint,
+                        explanation: AIExplanation,
+                        improvement: AIImprovement,
+                        comment: `Student opened correct answer`,
+                      },
+                    });
                   }}
                 >
                   {t("show_an_ideal_answer")}

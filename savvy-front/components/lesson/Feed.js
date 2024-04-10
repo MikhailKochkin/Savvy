@@ -577,9 +577,10 @@ const SimulatorLinks = styled.div`
     display: flex;
     flex-direction: row;
     transition: width 0.3s ease; /* Add this line for smooth transition */
-    margin-top: 5px;
+    margin: 8px 0;
     padding: 0px 5px;
     border-radius: 5px;
+    line-height: 1.5;
     &:hover {
       background-color: #ebebea;
       cursor: pointer;
@@ -741,7 +742,15 @@ const Feed = (props) => {
       (les) =>
         les.published == true && les.type !== "REGULAR" && les.id !== lessonId
     )
-    .sort((a, b) => a.number > b.number);
+    .sort((a, b) => a.number - b.number);
+
+  if (
+    !props.i_am_student &&
+    !props.i_am_author &&
+    !me.permissions.includes("ADMIN")
+  ) {
+    other_simulators = other_simulators.filter((sim) => sim.open);
+  }
 
   const handleToggleTranslation = () => {
     setTranslationMode(!translationMode);
@@ -967,6 +976,7 @@ const Feed = (props) => {
 
             {linkMenuOpen && (
               <SimulatorLinks>
+                {console.log("other_simulators", other_simulators)}
                 {other_simulators.map((s) => (
                   <a
                     href={`https://besavvy.app/ru/lesson?id=${s.id}&type=story`}

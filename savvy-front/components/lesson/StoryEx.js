@@ -580,6 +580,7 @@ const StoryEx = (props) => {
           openSize={lesson.openSize}
           lesson={lesson}
           i_am_author={props.i_am_author}
+          i_am_student={props.i_am_student}
           stats_data={stats_data}
           textToBeTranslated={textToBeTranslated}
         />

@@ -269,6 +269,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           type
           published
           name
+          open
         }
       }
     }
@@ -450,6 +451,7 @@ const NewSingleLesson = (props) => {
                   passStep={passStep}
                   openLesson={lesson.open}
                   i_am_author={i_am_author}
+                  i_am_student={i_am_student}
                 />
               </LessonPart>
             </Container>{" "}

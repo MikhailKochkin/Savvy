@@ -311,7 +311,10 @@ const SingleProblem = (props) => {
         }
       }
     });
-    if (props.moveNext && problem?.steps?.problemItems.length == 0)
+    if (
+      props.moveNext &&
+      (problem?.steps?.problemItems.length == 0 || !problem?.steps)
+    )
       props.moveNext(props.id);
   }, []);
 

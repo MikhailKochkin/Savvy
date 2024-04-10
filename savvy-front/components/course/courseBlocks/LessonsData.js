@@ -18,6 +18,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         tags
         type
         open
+        structure
         description
         published
         coursePage {
@@ -45,34 +46,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
     }
   }
 `;
-
-// const LESSON_RESULTS_QUERY = gql`
-//   query LESSON_RESULTS_QUERY($coursePageId: String!, $userId: String!) {
-//     lessonResults(
-//       where: {
-//         lesson: { coursePageId: { equals: $coursePageId } }
-//         student: { id: { equals: $userId } }
-//       }
-//     ) {
-//       id
-//       visitsNumber
-//       progress
-//       lesson {
-//         id
-//         name
-//         structure
-//         type
-//         number
-//       }
-//       student {
-//         id
-//         email
-//       }
-//       createdAt
-//       updatedAt
-//     }
-//   }
-// `;
 
 export const LessonsInfo = styled.div`
   margin-top: 30px;
@@ -298,12 +271,14 @@ const LessonsData = (props) => {
         <>
           <Total>
             <Buttons>
-              <Button
-                primary={format === "gallery"}
-                onClick={(e) => setFormat("gallery")}
-              >
-                {t("gallery")}
-              </Button>
+              {me && (
+                <Button
+                  primary={format === "gallery"}
+                  onClick={(e) => setFormat("gallery")}
+                >
+                  {t("gallery")}
+                </Button>
+              )}
               <Button
                 primary={format === "table"}
                 onClick={(e) => setFormat("table")}
@@ -312,31 +287,28 @@ const LessonsData = (props) => {
               </Button>
             </Buttons>
           </Total>
-          {me &&
-            (i_am_author ||
-              (me.permissions && me.permissions.includes("ADMIN"))) &&
-            format == "gallery" && (
-              <Syllabus>
-                <Lessons>
-                  {broken_lessons.map((lesson, index) => (
-                    <>
-                      <LessonHeader
-                        me={me}
-                        key={lesson.id}
-                        name={lesson.name}
-                        lesson={lesson}
-                        i_am_author={i_am_author}
-                        coursePage={props.id}
-                        author={coursePage.user.id}
-                        open={index + 1 === 1}
-                        index={index + 1}
-                        coursePageId={coursePage.id}
-                      />
-                    </>
-                  ))}
-                </Lessons>
-              </Syllabus>
-            )}
+          {me && format == "gallery" && (
+            <Syllabus>
+              <Lessons>
+                {broken_lessons.map((lesson, index) => (
+                  <>
+                    <LessonHeader
+                      me={me}
+                      key={lesson.id}
+                      name={lesson.name}
+                      lesson={lesson}
+                      i_am_author={i_am_author}
+                      coursePage={props.id}
+                      author={coursePage.user.id}
+                      open={index + 1 === 1}
+                      index={index + 1}
+                      coursePageId={coursePage.id}
+                    />
+                  </>
+                ))}
+              </Lessons>
+            </Syllabus>
+          )}
           {format == "table" && (
             <Syllabus>
               <LessonsTable>
