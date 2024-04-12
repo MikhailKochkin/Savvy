@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import { gql } from "@apollo/client";
-import { Query } from "@apollo/client/react/components";
+import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
-import ReactResizeDetector from "react-resize-detector";
-import Link from "next/link";
 import PleaseSignIn from "../auth/PleaseSignIn";
-import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import { useUser } from "../User";
 import LessonBuilder from "./LessonBuilder";
-import { useTranslation } from "next-i18next";
+import Navigation from "./Navigation";
+import LoadingText from "../LoadingText";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: String!) {
@@ -241,6 +237,7 @@ const SINGLE_LESSON_QUERY = gql`
         nodeID
         complexity
         steps
+        type
         nodeType
         user {
           id
@@ -426,12 +423,7 @@ const LessonPart = styled.div`
   display: flex;
   flex-basis: 100%;
   flex-direction: column;
-  /* background: white; */
   border-radius: 2px;
-  /* a {
-    padding-top: 2%;
-    padding-left: 2%;
-  } */
   @media (max-width: 800px) {
     order: 2;
     margin: 1%;
@@ -439,112 +431,42 @@ const LessonPart = styled.div`
 `;
 
 const SingleLesson = (props) => {
-  const [page, setPage] = useState("lesson");
-  const [shown, setShown] = useState(false);
-  const [width, setWidth] = useState(800);
-  const [isMenuShown, setIsMenuShown] = useState(true);
-
-  const { t } = useTranslation("lesson");
-
-  const onResize = (width) => {
-    setWidth(width);
-  };
-
-  const getData = (data) => setPage(data);
-  const getDataMob = (data) => {
-    setPage(data);
-    document.getElementById("mySidenav2").style.width = "0";
-  };
-
-  const openNav = () => {
-    document.getElementById("mySidenav2").style.width = "180px";
-  };
-
-  const getLink = (dataFromChild) => setPage(dataFromChild);
   const me = useUser();
+  const { loading, error, data } = useQuery(SINGLE_LESSON_QUERY, {
+    variables: { id: props.id },
+  });
+  if (loading) return <LoadingText />;
+  if (error) return <Error error={error} />;
+  if (!data || !data.lesson) return <p>No lesson found</p>;
+  const lesson = data.lesson;
+  let i_am_author = false;
+  if (
+    me &&
+    (me.coursePages.filter((c) => c.id == lesson.coursePage.id).length > 0 ||
+      me.co_coursePages.filter((c) => c.id == lesson.coursePage.id).length > 0)
+  ) {
+    i_am_author = true;
+  }
+  if (!me) {
+    return "Please sign up or log in to access this page";
+  }
+  if (!me.permissions.includes("ADMIN") && !i_am_author) {
+    return "No access";
+  }
   return (
-    <PleaseSignIn number={props.number}>
-      <Query
-        query={SINGLE_LESSON_QUERY}
-        variables={{
-          id: props.id,
-        }}
-        fetchPolicy="cache-first"
-      >
-        {({ data, error, loading }) => {
-          if (error) return <Error error={error} />;
-          if (loading) return <p>Loading...</p>;
-          if (data === null) return <p>Нет урока</p>;
-          const lesson = data.lesson;
-          return (
-            <>
-              <AreYouEnrolled
-                subject={lesson.coursePage.id}
-                openLesson={lesson.coursePage.openLesson}
-                lesson={lesson.id}
-              >
-                <Container>
-                  <ReactResizeDetector
-                    handleWidth
-                    handleHeight
-                    onResize={onResize}
-                  />
-                  {width < 800 && (
-                    <SingleLesson_MobileMenu
-                      lesson={lesson}
-                      getDataMob={getDataMob}
-                    />
-                  )}
-
-                  <Head>
-                    {width > 800 && (
-                      <Link
-                        href={{
-                          pathname: "/course",
-                          query: {
-                            id: lesson.coursePage.id,
-                          },
-                        }}
-                      >
-                        <span>⬅</span>
-                      </Link>
-                    )}
-                    {/* // : (
-                      // width < 800 && (
-                      //   // <span onClick={(e) => openNav()}>Навигация</span>
-                      // )
-                    // )} */}
-                    <div id="to_student_page">
-                      {me &&
-                        (lesson.user.id === me.id ||
-                          me.permissions.includes("ADMIN")) && (
-                          <Link
-                            href={{
-                              pathname: "/lesson",
-                              query: {
-                                id: lesson.id,
-                                type: "story",
-                              },
-                            }}
-                          >
-                            <span>{` ➡️ ${t("to_student_page")} `}</span>
-                          </Link>
-                        )}
-                    </div>
-                  </Head>
-                  <LessonStyles>
-                    <LessonPart>
-                      {me && <LessonBuilder lesson={lesson} me={me} />}
-                    </LessonPart>
-                  </LessonStyles>
-                </Container>
-                <div id="root"></div>
-              </AreYouEnrolled>
-            </>
-          );
-        }}
-      </Query>
-    </PleaseSignIn>
+    <Container>
+      <Navigation
+        i_am_author={true}
+        lesson={lesson}
+        me={me}
+        page="development"
+      />
+      <LessonStyles>
+        <LessonPart>
+          <LessonBuilder lesson={lesson} me={me} />
+        </LessonPart>
+      </LessonStyles>
+    </Container>
   );
 };
 

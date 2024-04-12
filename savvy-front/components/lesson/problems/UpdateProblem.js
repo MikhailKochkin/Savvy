@@ -18,6 +18,7 @@ const UPDATE_PROBLEM_MUTATION = gql`
     $id: String!
     $text: String
     $name: String
+    $type: String
     $complexity: Int
     $steps: ProblemStructure
     $goal: String
@@ -27,6 +28,7 @@ const UPDATE_PROBLEM_MUTATION = gql`
       text: $text
       name: $name
       steps: $steps
+      type: $type
       complexity: $complexity
       goal: $goal
     ) {
@@ -36,6 +38,7 @@ const UPDATE_PROBLEM_MUTATION = gql`
       nodeID
       steps
       goal
+      type
       complexity
       nodeType
       user {
@@ -91,6 +94,10 @@ const Styles = styled.div`
     width: 100%;
     height: 120px;
   }
+  select {
+    width: 25%;
+    margin-bottom: 3%;
+  }
   .editor_container {
     width: 660px;
     textarea {
@@ -126,21 +133,6 @@ const ButtonTwo = styled.button`
   }
 `;
 
-const Complexity = styled.div`
-  select,
-  option {
-    width: 80%;
-    border-radius: 5px;
-    margin-top: 3%;
-    border: 1px solid #c4c4c4;
-    font-family: Montserrat;
-    font-size: 1.4rem;
-    outline: 0;
-    padding: 1.5%;
-    margin-bottom: 20px;
-  }
-`;
-
 const NameInput = styled.input`
   width: 100%;
   height: 40px;
@@ -161,6 +153,7 @@ const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
   const [goal, setGoal] = useState(props.goal);
   const [name, setName] = useState(props.name);
+  const [type, setType] = useState(props.problem.type);
 
   const [updatedSteps, setUpdatedSteps] = useState(
     props.steps && props.steps.problemItems.length > 0
@@ -195,6 +188,7 @@ const UpdateProblem = (props) => {
     story,
     author,
   } = props;
+  console.log("PROBLEM", problem);
 
   return (
     <Styles>
@@ -208,6 +202,18 @@ const UpdateProblem = (props) => {
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
         <h3>Problem Goal</h3>
         <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
+        <h3>Type</h3>
+        {console.log("TYPE", type)}
+        <select
+          name="types"
+          id="types"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value="BRANCHING_SCENARIO">Branching scenario</option>
+          <option value="GENERATE">Generate Ideas</option>
+          <option value="ONLY_CORRECT">Quiz-based learning scenario</option>
+        </select>
         <h3>Text Editor</h3>
         <DynamicLoadedEditor
           getEditorText={getText}
@@ -258,6 +264,7 @@ const UpdateProblem = (props) => {
           text,
           complexity,
           goal,
+          type,
           name,
           steps: {
             problemItems: [...updatedSteps].map(

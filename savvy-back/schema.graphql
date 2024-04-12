@@ -2549,7 +2549,7 @@ type Mutation {
   createTeamQuestResult(answer: String, lessonId: String, teamQuestId: String): TeamQuestResult
   createTestPractice(failureText: String, goal: String, intro: String, lessonId: String, successText: String, tasks: [String], tasksNum: Int, text: String): TestPractice
   createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
-  createTestResult(answer: String, answerArray: [String], lessonID: String, testID: String): TestResult
+  createTestResult(answer: String, answerArray: [String], lessonID: String, result: String, testID: String): TestResult
   createTextEditor(goal: String, lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, type: String, wrong: String): TextEditorResult
   createUseful(buttonText: String, header: String, image: String, link: String, name: String, tags: [String]): Useful
@@ -2613,7 +2613,7 @@ type Mutation {
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
-  updateProblem(complexity: Int, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String): Problem
+  updateProblem(complexity: Int, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String, type: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, next: NextType, question: String, type: String): Quiz
@@ -3354,6 +3354,7 @@ type Problem {
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
   steps: Json
   text: String!
+  type: String
   updatedAt: DateTime!
   user: User!
   userId: String!
@@ -3396,6 +3397,7 @@ input ProblemOrderByWithRelationInput {
   solutionList: SortOrder
   steps: SortOrderInput
   text: SortOrder
+  type: SortOrderInput
   updatedAt: SortOrder
   user: UserOrderByWithRelationInput
   userId: SortOrder
@@ -3512,6 +3514,7 @@ input ProblemWhereInput {
   solutionList: StringNullableListFilter
   steps: JsonNullableFilter
   text: StringFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -3540,6 +3543,7 @@ input ProblemWhereUniqueInput {
   solutionList: StringNullableListFilter
   steps: JsonNullableFilter
   text: StringFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -4761,6 +4765,7 @@ type TestResult {
   lesson: Lesson
   lessonID: String
   lessonId: String
+  result: String
   student: User!
   studentId: String!
   test: NewTest
@@ -4788,6 +4793,7 @@ input TestResultOrderByWithRelationInput {
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
+  result: SortOrderInput
   student: UserOrderByWithRelationInput
   studentId: SortOrder
   test: NewTestOrderByWithRelationInput
@@ -4808,6 +4814,7 @@ input TestResultWhereInput {
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  result: StringNullableFilter
   student: UserWhereInput
   studentId: StringFilter
   test: NewTestWhereInput
@@ -4828,6 +4835,7 @@ input TestResultWhereUniqueInput {
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
+  result: StringNullableFilter
   student: UserWhereInput
   studentId: StringFilter
   test: NewTestWhereInput

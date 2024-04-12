@@ -107,29 +107,50 @@ const NewInteractive = (props) => {
   }, [0]);
 
   const updateArray = (data) => {
+    console.log("data", data);
+    console.log("props.type", props.type);
     // Use optional chaining to safely access properties
     let nextTrueValue = componentList.at(-1)?.next?.true?.value;
     let nextFalseValue = componentList.at(-1)?.next?.false?.value;
     // Set nextValue based on the value of data
     let nextValue = data[0] ? nextTrueValue : nextFalseValue;
-
-    // If nextValue is undefined or null, then exit early
-
     let next_el = problem.steps.problemItems.find((el) => el.id == nextValue);
 
-    if (next_el) {
-      setComponentList([...componentList, next_el]);
-    } else {
-      props.onFinish(true, "new");
-    }
+    if (props.type === "ONLY_CORRECT") {
+      if (data[0]) {
+        if (next_el) {
+          setComponentList([...componentList, next_el]);
+        } else {
+          props.onFinish(true, "new");
+        }
 
-    let last_value = [...componentList, next_el][
-      [...componentList, next_el].length - 1
-    ];
-    if (!last_value || !last_value.next.true.value) {
-      props.onFinish(true, "new");
-      return;
+        let last_value = [...componentList, next_el][
+          [...componentList, next_el].length - 1
+        ];
+        if (!last_value || !last_value.next.true.value) {
+          props.onFinish(true, "new");
+          return;
+        }
+      } else {
+        console.log("ONLY_CORRECT_FALSE");
+        return;
+      }
+    } else {
+      if (next_el) {
+        setComponentList([...componentList, next_el]);
+      } else {
+        props.onFinish(true, "new");
+      }
+
+      let last_value = [...componentList, next_el][
+        [...componentList, next_el].length - 1
+      ];
+      if (!last_value || !last_value.next.true.value) {
+        props.onFinish(true, "new");
+        return;
+      }
     }
+    // If nextValue is undefined or null, then exit early
   };
 
   const getResults = () => {
@@ -158,6 +179,7 @@ const NewInteractive = (props) => {
                   ifRight={el.ifRight}
                   ifWrong={el.ifWrong}
                   me={me}
+                  problemType={props.type}
                   hidden={true}
                   userData={[]}
                   lessonID={lesson.id}
@@ -191,6 +213,7 @@ const NewInteractive = (props) => {
                   comments={el.comments}
                   type={el.type}
                   goalType={el.goalType}
+                  problemType={props.type}
                   me={me}
                   lessonID={lesson.id}
                   length={Array(el.correct.length).fill(false)}

@@ -6,7 +6,6 @@ import smoothscroll from "smoothscroll-polyfill";
 
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
-import Chat from "../questions/Chat";
 import NextQuestions from "./NextQuestions";
 import OpenQuestion from "./OpenQuestion";
 import Form from "./Form";
@@ -43,27 +42,29 @@ const SingleQuiz = (props) => {
     smoothscroll.polyfill();
   });
 
+  // this function is responsible for moving through the problem
   const onMove = (result) => {
-    // 1. if the data is sent for the first time
-    // 2. and if we get the right answer
-    if (result === "true" && props.getData) {
-      // 3. and if this quiz is a part of an exam
-      props.getData(
-        props.next && props.next.true
-          ? [true, props.next.true]
-          : [true, { type: "finish" }],
-        "true"
-      );
-    }
-    // 2. and if we get the wrong answer
-    else if (result === "false" && props.getData) {
-      // 3. and if this quiz is a part of an exam
-      // 4. we transfer the "false" data to the exam component
-      props.getData(
-        props.next && props.next.false
-          ? [false, props.next.false]
-          : [false, { type: "finish" }]
-      );
+    // helper function to handle getData
+    const handleGetData = (resultBool) => {
+      if (props.getData) {
+        props.getData(
+          props.next && props.next[resultBool]
+            ? [resultBool, props.next[resultBool]]
+            : [resultBool, { type: "finish" }]
+        );
+      }
+    };
+
+    // first we check the type of the problem
+    if (props.problemType === "ONLY_CORRECT") {
+      if (result === "true") {
+        handleGetData(true);
+      }
+      // if result is "false", we do nothing
+    } else {
+      if (result === "true" || result === "false") {
+        handleGetData(result === "true");
+      }
     }
   };
 
@@ -82,6 +83,7 @@ const SingleQuiz = (props) => {
     lesson,
     author,
     answers,
+    problemType,
   } = props;
 
   const getResult = (data) => {
@@ -209,6 +211,7 @@ const SingleQuiz = (props) => {
               passResult={onMove}
               name={props.name}
               image={props.image}
+              problemType={props.problemType}
             />
           )}
         </>

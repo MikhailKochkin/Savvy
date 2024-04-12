@@ -68,6 +68,7 @@ const GET_RESULTS = gql`
         id
         correct
         comment
+        type
         hint
         ideasList
         explanation

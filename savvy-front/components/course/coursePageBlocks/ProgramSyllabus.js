@@ -1,13 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-
-import LessonHeader from "./LessonHeader";
 import { useUser } from "../../User";
-import Feedback from "../Feedback";
-
 import { Container, Total, Lessons } from "../styles/CoursePage_Styles";
-import ProgramBottomLine from "./ProgramBottomLine";
 
 const LessonStyles = styled.div`
   width: 85%;
@@ -51,51 +46,10 @@ const ProgramSyllabus = (props) => {
             <LessonsInfo>
               <h2>{t("what_u_will_learn")}</h2>
               <div>
-                {coursePages
-                  // .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-                  .map((c, i) => (
-                    <Course c={c} i={i} />
-                  ))}
+                {coursePages.map((c, i) => (
+                  <Course c={c} i={i} />
+                ))}
               </div>
-              {/* {page === "lessons" && (
-                <>
-                 <Total> {t("open_lessons")}</Total>
-                  <Total>
-                    {" "}
-                    {t("total_lessons")} {props.lessons.length}
-                  </Total>
-                  <Lessons>
-                    {[...props.lessons]
-                      .filter((l) => l.type !== "HIDDEN")
-                      .sort((a, b) => (a.number > b.number ? 1 : -1))
-                      .slice(0, open)
-                      .map((lesson, index) => (
-                        <>
-                          <LessonHeader
-                            me={me}
-                            key={lesson.id}
-                            name={lesson.name}
-                            lesson={lesson}
-                            coursePage={props.id}
-                            // author={coursePage.user.id}
-                            // students={coursePage.students}
-                            open={index + 1 === 1}
-                            index={index + 1}
-                            coursePageId={props.coursePageId}
-                          />
-                        </>
-                      ))}
-                  </Lessons>
-                  {open == 6 && props.lessons.length > 6 && (
-                    <Button
-                      id="show_all_lessons"
-                      onClick={(e) => setOpen(props.lessons.length)}
-                    >
-                      {t("show")}
-                    </Button>
-                  )}
-                </>
-              )} */}
             </LessonsInfo>
           </LessonStyles>
         </Container>
@@ -155,7 +109,7 @@ const Course = (props) => {
         {open && (
           <div className="lessons">
             {[...c.lessons]
-              .filter((l) => l.type.toLowerCase() !== "regular")
+              .filter((l) => l.published)
               .sort((a, b) => (a.number > b.number ? 1 : -1))
               .map((l, i) => (
                 <div className="lesson_row">

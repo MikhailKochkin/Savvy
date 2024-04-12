@@ -712,6 +712,7 @@ model Problem {
   solution       String?
   answer         String?
   goal           String?
+  type           String?         @default("BRANCHING_SCENARIO")
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   lessonID       String          @db.VarChar(30)
@@ -1025,6 +1026,7 @@ model TestResult {
   id         String   @id @default(cuid()) @db.VarChar(30)
   answer     String?
   attempts   Int?
+  result     String?
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
   lessonID   String?  @db.VarChar(30)

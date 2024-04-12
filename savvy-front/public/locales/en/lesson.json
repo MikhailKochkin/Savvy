@@ -182,8 +182,10 @@
   "number_of_correct_guesses": "№ of correct guesses",
   "let_me_give_a_hint": "Let me give you a hint:",
   "great_job": "Great job!",
+  "none_correct": "None of your answers seem to be correct.",
   "try_more": "Try one more time.",
   "what_are_we_doing_next": "Now. What are we doing next?",
   "these_are_the_right_answers": "These are the right answers: ",
-  "not_all_answers": "But you haven't found all the answers."
+  "not_all_answers": "But you haven't found all the answers.",
+  "where_to_start": "Where should I start?"
 }

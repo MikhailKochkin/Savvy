@@ -133,7 +133,31 @@ const Navigation = (props) => {
       </Left>
       <Right>
         <div className="block">
-          {me &&
+          {props.page !== "simulator" &&
+            me &&
+            (lesson.user.id === me.id ||
+              i_am_author ||
+              me.permissions.includes("ADMIN")) && (
+              <Link
+                href={{
+                  pathname: "/lesson",
+                  query: {
+                    id: lesson.id,
+                    type: "story",
+                  },
+                }}
+              >
+                <img
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={"Open simulator page"}
+                  src="/static/blocks.svg"
+                />
+              </Link>
+            )}
+        </div>
+        <div className="block">
+          {props.page !== "development" &&
+            me &&
             (lesson.user.id === me.id ||
               i_am_author ||
               me.permissions.includes("ADMIN")) && (
@@ -173,29 +197,6 @@ const Navigation = (props) => {
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content={"Open analytics page"}
                   src="/static/stats_circle.svg"
-                />
-              </Link>
-            )}
-        </div>
-        <div className="block">
-          {props.page !== "simulator" &&
-            me &&
-            (lesson.user.id === me.id ||
-              i_am_author ||
-              me.permissions.includes("ADMIN")) && (
-              <Link
-                href={{
-                  pathname: "/lesson",
-                  query: {
-                    id: lesson.id,
-                    type: "story",
-                  },
-                }}
-              >
-                <img
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content={"Open simulator page"}
-                  src="/static/blocks.svg"
                 />
               </Link>
             )}

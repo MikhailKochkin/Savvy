@@ -288,7 +288,6 @@ const ProblemModal = (props) => {
                         <div className="standard">
                           <b>Type:</b> {subtype}
                         </div>
-                        {/* <div className="arrow">⬇️</div> */}
                         <div>
                           <b>Answers:</b>
                         </div>
@@ -332,6 +331,11 @@ const ProblemModal = (props) => {
                                   {result.ideasList?.quizIdeas?.map(
                                     (item, i) => (
                                       <div>
+                                        <b>Type:</b>{" "}
+                                        {result.type ? result.type : null}
+                                        <br />
+                                        <b>Comment:</b>{" "}
+                                        {result.comment ? result.comment : null}
                                         <div>
                                           {i + 1}. {item.idea} –{" "}
                                           <b>{item.result}%</b>{" "}
@@ -355,9 +359,26 @@ const ProblemModal = (props) => {
                                     )
                                   )}
                                   {result.ideasList == null ||
-                                  result.ideasList?.quizIdeas.length == 0
-                                    ? "No ideas provided"
-                                    : null}
+                                  result.ideasList?.quizIdeas.length == 0 ? (
+                                    <>
+                                      <b>Type:</b>{" "}
+                                      {result.type ? result.type : null}{" "}
+                                      {result.type == "hint" ? "👀" : null}
+                                      {result.type == "answerReveal"
+                                        ? "📖"
+                                        : null}
+                                      {result.type == "hint" ? (
+                                        <div>{result.hint}</div>
+                                      ) : null}
+                                      <br />
+                                      {result.type !== "hint" &&
+                                        result.type !== "answerReveal" && (
+                                          <div>
+                                            <b>Comment:</b> No answers
+                                          </div>
+                                        )}
+                                    </>
+                                  ) : null}
                                 </>
                               )}
                               <div className="time">

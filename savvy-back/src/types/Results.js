@@ -14,6 +14,7 @@ const TestResult = objectType({
     t.model.testId();
     t.model.lesson();
     t.model.student();
+    t.model.result();
     t.model.test();
     t.model.createdAt();
     t.model.updatedAt();

@@ -1912,6 +1912,7 @@ const Mutation = mutationType({
         answer: stringArg(),
         testID: stringArg(),
         lessonID: stringArg(),
+        result: stringArg(),
         answerArray: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {
@@ -2794,6 +2795,7 @@ const Mutation = mutationType({
         isSecret: booleanArg(),
         goal: stringArg(),
         name: stringArg(),
+        type: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };

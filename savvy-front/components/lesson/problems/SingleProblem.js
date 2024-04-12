@@ -4,8 +4,6 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
-// import Button from "@material-ui/core/Button";
-// import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
@@ -33,10 +31,7 @@ const CREATE_PROBLEMRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  /* width: ${(props) => (props.story ? "100vw" : "100%")}; */
-  /* max-width: 540px; */
   width: 570px;
-
   font-size: 1.6rem;
   padding: 0;
   display: flex;
@@ -51,7 +46,6 @@ const TextBar = styled.div`
     margin: 1% 1%;
     padding: 1% 4%;
     border-left: 3px solid #0094c6;
-    /* line-height: 1.6; */
     p {
       margin: 10px 0;
     }
@@ -152,7 +146,6 @@ const BlueButton = styled.button`
   border-radius: 5px;
   padding: 10px 30px;
   margin-bottom: 15px;
-  /* height: 45px; */
   cursor: pointer;
   color: #000a60;
   border: none;
@@ -210,7 +203,6 @@ const Buttons = styled.div`
   align-items: center;
   justify-content: flex-start;
   margin-top: 20px;
-  /* pointer-events: ${(props) => (props.block ? "none" : "auto")}; */
   @media (max-width: 800px) {
     width: 50%;
   }
@@ -367,6 +359,7 @@ const SingleProblem = (props) => {
               me={me}
               problem={problem}
               story={story}
+              type={problem.type}
               author={author}
               onFinish={onFinish}
             />

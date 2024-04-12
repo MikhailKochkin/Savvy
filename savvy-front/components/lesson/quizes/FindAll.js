@@ -15,6 +15,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $correct: Boolean
     $comment: String
     $hint: String
+    $type: String
     $explanation: String
     $improvement: String
     $ideasList: QuizIdeas
@@ -26,6 +27,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
       correct: $correct
       comment: $comment
       hint: $hint
+      type: $type
       explanation: $explanation
       improvement: $improvement
       ideasList: $ideasList
@@ -242,7 +244,7 @@ const Group = styled.div`
 `;
 
 const Button1 = styled.div`
-  min-width: 200px;
+  min-width: 120px;
   line-height: 1.6;
   margin-right: 20px;
   text-align: left;
@@ -470,32 +472,31 @@ const FindAll = (props) => {
         quiz: props.quizId,
         lessonId: props.lessonId,
         hint: AIhint,
+        type: "answer",
         ideasList: { quizIdeas: unique_values },
         comment: ``,
       },
     });
-    props.passResult("true");
-  };
-
-  const hasNonEmptyNextIdAndType = (array) => {
-    return array.some(
-      (element) => element.next_id !== "" && element.next_type !== ""
+    console.log(
+      "unique_values",
+      unique_values,
+      correctIdeasList,
+      props.answers.answerElements
     );
-  };
-
-  const countNullsAndIndices = (arr) => {
-    const nullCount = arr.filter((item) => item === null).length;
-    return nullCount;
+    if (props.problemType === "ONLY_CORRECT") {
+      if (correctIdeas.length === props.answers.answerElements.length) {
+        props.passResult("true");
+      }
+    } else {
+      props.passResult("true");
+    }
   };
 
   const generateAnswerCountComment = (e) => {
     e.preventDefault();
     setAreIdeasShown(false);
-    let count_info = countNullsAndIndices(expectedAnswers);
     let comment = `
-        <p>${t("number_of_correct_guesses")} – ${correctIdeas.length}. ${t(
-      "let_me_give_a_hint"
-    )}</p>
+        <p>${t("number_of_correct_guesses")} – ${correctIdeas.length}.</p>
         <ol>
         ${expectedAnswers
           .map((an, i) => {
@@ -516,27 +517,49 @@ const FindAll = (props) => {
     
     `;
     setAnswerCountText(comment);
-
     setIsAnswerCountShown(true);
+
+    createQuizResult({
+      variables: {
+        quiz: props.quizId,
+        lessonId: props.lessonId,
+        hint: AIhint,
+        type: "hint",
+        // ideasList: { quizIdeas: unique_values },
+        comment: `Student asked for remaining options`,
+      },
+    });
   };
 
-  const getHint = async (event) => {
-    setAIHint(null);
-    event.preventDefault();
-    setGenerating(true);
+  const getHint = async (event, isFirstHint) => {
     try {
+      setAIHint(null);
+      event.preventDefault();
+      setGenerating(true);
+
+      let prompt = `
+      You are a law professor. You help your student answer this question ${props.question}
+      The correct answers are: ${props.answers.answerElements}`;
+
+      if (isFirstHint) {
+        prompt += `
+      The student can't come up with any answers. 
+      Give a detailed hint to the student in a Socratic manner that will help them find the first answer: ${props.answers.answerElements[0]}
+      Answer in the same language as the text of the question. Answer in second person.`;
+      } else {
+        prompt += `
+      The student has already given these correct answers: ${correctIdeas}. But struggles to find the rest.
+      Give a detailed hint to the student in a Socratic manner that will help them find every remaining answer.
+      Answer in the same language as the text of the question. Answer in second person.`;
+      }
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: `
-          You are a law professor. You help your student answer this question ${props.question}
-          The correct answers are: ${props.answers.answerElements}
-          The student has already given these correct answers: ${correctIdeas}. But struggles to find the rest.
-          Give a detailed hint to the student in a Socratic manner that will help them find every remaining answers.
-          Answer in the same language as the text of the question. Answer in second person.`,
+          prompt: prompt,
         }),
       });
 
@@ -546,18 +569,32 @@ const FindAll = (props) => {
           new Error(`Request failed with status ${response.status}`)
         );
       }
+
       const data = await response.json();
       if (data.result.content) {
         setAIHint(data.result.content);
+        if (!isFirstHint) {
+          createQuizResult({
+            variables: {
+              quiz: props.quizId,
+              lessonId: props.lessonId,
+              hint: data.result.content,
+              type: "hint",
+              comment: `Student asked for a hint`,
+            },
+          });
+        }
       } else {
         setAIHint("Sorry, you are on your own");
       }
     } catch (error) {
       console.error(error);
       alert(error.message);
+    } finally {
+      setGenerating(false);
     }
-    setGenerating(false);
   };
+
   return (
     <Question story={story}>
       {/* 2.1 Question part */}
@@ -575,7 +612,7 @@ const FindAll = (props) => {
         </IconBlock>{" "}
       </div>
 
-      {/* 3.5. Generate ideas */}
+      {/* 3. Generate ideas */}
       <>
         <div className="answer">
           <IconBlock>
@@ -593,7 +630,6 @@ const FindAll = (props) => {
           <Ideas>
             {ideas.map((idea, index) => {
               let inputColor;
-
               if (
                 props.goalType !== "ASSESS" &&
                 correctIdeas.filter((el) => el.idea == idea).length > 0
@@ -620,6 +656,7 @@ const FindAll = (props) => {
         <Progress display={progress}>
           <InfinitySpin width="200" color="#2E80EC" />
         </Progress>
+
         {/* 4. Answer buttons */}
         <Group progress={progress}>
           <Button1
@@ -632,14 +669,52 @@ const FindAll = (props) => {
           >
             {t("check")}
           </Button1>
+          {props.goalType !== "ASSESS" && (
+            <Button1
+              inputColor={inputColor}
+              onClick={async (e) => {
+                e.preventDefault();
+                getHint(e, true);
+              }}
+            >
+              {t("where_to_start")}
+            </Button1>
+          )}
           <Circle onClick={() => setIdeas(ideas.slice(0, -1))}>-1</Circle>
           <Circle onClick={(e) => setIdeas([...ideas, ""])}>+1</Circle>
         </Group>
+        {/* 4.1 loading sign */}
+        {generating && (
+          <Progress2>
+            <TailSpin width="50" color="#2E80EC" />
+          </Progress2>
+        )}
+        {/* 5. If AI hint */}
+        {AIhint && (
+          <div className="question_box">
+            <div className="question_text">
+              <p>{AIhint}</p>
+            </div>
+            <IconBlock>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
+            </IconBlock>
+          </div>
+        )}
+
+        {/* 6. Feedback */}
         {isFeedbackShown && (
           <>
             <div className="question_box">
               <div className="question_text">
-                <p>🎉 {t("great_job")}</p>
+                <p>{correctIdeas.length > 0 && `🎉 ${t("great_job")}`}</p>
+                <p>{correctIdeas.length == 0 && `🤔 ${t("none_correct")}`}</p>
                 <p>
                   {correctIdeas.length < props.answers.answerElements.length
                     ? t("not_all_answers")
@@ -678,7 +753,7 @@ const FindAll = (props) => {
                   </Option>
                 )}
                 {correctIdeas.length < props.answers.answerElements.length && (
-                  <Option onClick={(e) => getHint(e)}>
+                  <Option onClick={(e) => getHint(e, false)}>
                     {t("i_need_a_hint")}
                   </Option>
                 )}
@@ -687,6 +762,16 @@ const FindAll = (props) => {
                     setIsAnswerCountShown(false);
                     setAreIdeasShown(true);
                     setAIHint(null);
+                    createQuizResult({
+                      variables: {
+                        quiz: props.quizId,
+                        lessonId: props.lessonId,
+                        hint: AIhint,
+                        // ideasList: { quizIdeas: unique_values },
+                        comment: `Student opened correct answer`,
+                        type: "answerReveal",
+                      },
+                    });
                   }}
                 >
                   {t("show_correct_answers")}
@@ -695,29 +780,7 @@ const FindAll = (props) => {
             </div>
           </>
         )}
-        {generating && (
-          <Progress2>
-            <TailSpin width="50" color="#2E80EC" />
-          </Progress2>
-        )}
-        {/* 2.2 If AI hint */}
-        {AIhint && (
-          <div className="question_box">
-            <div className="question_text">
-              <p>{AIhint}</p>
-            </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </div>
-        )}
+
         {isAnswerCountShown && (
           <div className="question_box">
             <div className="question_text">{parse(answerCountText)}</div>

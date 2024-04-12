@@ -2474,6 +2474,7 @@ export interface NexusGenInputs {
     solutionList?: NexusGenEnums['SortOrder'] | null; // SortOrder
     steps?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     text?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    type?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     user?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
     userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -2566,6 +2567,7 @@ export interface NexusGenInputs {
     solutionList?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     steps?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -2593,6 +2595,7 @@ export interface NexusGenInputs {
     solutionList?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     steps?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -3438,6 +3441,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    result?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     student?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
     studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     test?: NexusGenInputs['NewTestOrderByWithRelationInput'] | null; // NewTestOrderByWithRelationInput
@@ -3457,6 +3461,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    result?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     student?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     studentId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     test?: NexusGenInputs['NewTestWhereInput'] | null; // NewTestWhereInput
@@ -3476,6 +3481,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    result?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     student?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     studentId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     test?: NexusGenInputs['NewTestWhereInput'] | null; // NewTestWhereInput
@@ -4485,6 +4491,7 @@ export interface NexusGenObjects {
     nodeType?: string | null; // String
     steps?: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
+    type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
   }
@@ -4690,6 +4697,7 @@ export interface NexusGenObjects {
     id: string; // String!
     lessonID?: string | null; // String
     lessonId?: string | null; // String
+    result?: string | null; // String
     studentId: string; // String!
     testID?: string | null; // String
     testId?: string | null; // String
@@ -5428,6 +5436,7 @@ export interface NexusGenFieldTypes {
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
     steps: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
     userId: string; // String!
@@ -5726,6 +5735,7 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
+    result: string | null; // String
     student: NexusGenRootTypes['User']; // User!
     studentId: string; // String!
     test: NexusGenRootTypes['NewTest'] | null; // NewTest
@@ -6486,6 +6496,7 @@ export interface NexusGenFieldTypeNames {
     problemResults: 'ProblemResult'
     steps: 'Json'
     text: 'String'
+    type: 'String'
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
@@ -6784,6 +6795,7 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
+    result: 'String'
     student: 'User'
     studentId: 'String'
     test: 'NewTest'
@@ -7472,6 +7484,7 @@ export interface NexusGenArgTypes {
       answer?: string | null; // String
       answerArray?: Array<string | null> | null; // [String]
       lessonID?: string | null; // String
+      result?: string | null; // String
       testID?: string | null; // String
     }
     createTextEditor: { // args
@@ -7846,6 +7859,7 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       steps?: NexusGenInputs['ProblemStructure'] | null; // ProblemStructure
       text?: string | null; // String
+      type?: string | null; // String
     }
     updateProgram: { // args
       audience?: string | null; // String

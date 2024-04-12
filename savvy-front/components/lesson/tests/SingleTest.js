@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
-import _ from "lodash";
+import _, { add } from "lodash";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 
@@ -17,12 +17,14 @@ const CREATE_TESTRESULT_MUTATION = gql`
     $answerArray: [String]
     $testID: String
     $lessonID: String
+    $result: String
   ) {
     createTestResult(
       answer: $answer
       testID: $testID
       lessonID: $lessonID
       answerArray: $answerArray
+      result: $result
     ) {
       id
     }
@@ -328,15 +330,15 @@ const SingleTest = (props) => {
   const [answer, setAnswer] = useState([]); // what is the answer?
   const [attempts, setAttempts] = useState(0); // how many attempts to answer correctly did the student make?
   const [answerNums, setAnswerNums] = useState([]); // what is the answer?
+  const [isExperienced, setIsExperienced] = useState(false); // has the student already given the correct answer?
   const [inputColor, setInputColor] = useState("#f3f3f3");
-  const [update, setUpdate] = useState(false);
+  const [update, setUpdate] = useState(false); // change quiz view to update view
   const [sent, setSent] = useState(false);
-  const [zero, setZero] = useState(false);
+  const [zero, setZero] = useState(false); // zero – no answers have been provided by the student wheck clicking answer
   const [hidden, setHidden] = useState(true); // the correct answer is hidden
   const [revealExplainer, setRevealExplainer] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [isExperienced, setIsExperienced] = useState(false);
 
   const { t } = useTranslation("lesson");
 
@@ -346,6 +348,7 @@ const SingleTest = (props) => {
 
   const getTestData = (number, answer) => {
     handleAnswerSelected(number, answer);
+    setAnswerState("think");
   };
 
   const handleAnswerSelected = async (number, student_answer) => {
@@ -366,32 +369,94 @@ const SingleTest = (props) => {
     // 4. get the array of all the answers of the student
     let answerText = answer;
     // 5. check if the student chose or singled out the option
-    function change() {
-      if (!answerText.includes(student_answer)) {
-        answerText.push(student_answer);
-      } else if (answerText.includes(student_answer)) {
-        var index = answerText.indexOf(student_answer);
-        answerText.splice(index, 1);
-      }
+    if (!answerText.includes(student_answer)) {
+      answerText.push(student_answer);
+    } else if (answerText.includes(student_answer)) {
+      var index = answerText.indexOf(student_answer);
+      answerText.splice(index, 1);
     }
-    const res = await change();
+
     //6. save the results
     if (answerVar.includes(true)) {
       setZero(false);
     }
 
-    const res1 = await setAnswerOptions(answerVar);
-    const res2 = await setAnswer(answerText);
+    setAnswerOptions(answerVar);
+    setAnswer(answerText);
+  };
+
+  // this function adds comments to test options after the student has given an answer
+  const addComments = (answerNums) => {
+    let comments_arr = [];
+    if (comments && comments.length > 0) {
+      answerNums.map((num) => comments_arr.push(comments[num]));
+    }
+    setCommentsList(comments_arr);
   };
 
   const onSend = async () => {
     if (props.moveNext) props.moveNext(props.id);
 
-    const res = () => {
+    if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
+      setAnswerState("right");
+      // 1. if the data is sent for the first time
+      if (props.getData) {
+        // 2. and if this quiz is a part of an exam
+        props.getData(
+          props.next && props.next.true
+            ? [true, props.next.true]
+            : [true, { type: "finish" }],
+          "true"
+        );
+        document.querySelector(".button").disabled = true;
+      }
+    } else {
+      setAnswerState("wrong");
+      // 1. if the data is sent for the first time
+      if (props.getData) {
+        // 2. and if this quiz is a part of an exam
+        props.getData(
+          props.next && props.next.false
+            ? [false, props.next.false]
+            : [false, { type: "finish" }]
+        );
+      }
+    }
+
+    addComments(answerNums);
+    // createTestResult({
+    //   variables: {
+    //     testID: props.id,
+    //     lessonID: props.lessonID,
+    //     answer: answer.join(", "),
+    //     answerArray: answer,
+    //   },
+    // });
+  };
+
+  const onCheck = async () => {
+    // 1. if this test is a part of a lesson, move forward when you get an answer
+    // There are 2 types of movement funcitions:
+    // 1.1 moveNext - move through the lesson
+    // 1.2 getData - move through the problem
+
+    if (props.moveNext) props.moveNext(props.id);
+
+    // 2. Here starts the logic that defines how the test is checked and what follows after that
+    // Criteria for that:
+    // 2.1. answer is correct
+    // 2.2. # of attempts to answer the question
+    // 2.3. type of the problem
+
+    // the logic is: if the type of the problem is "ONLY_CORRECT", than the student can give as many aspossible wrong answers, but only one correct answer.
+    // getData is fired only once when the student gives correct answer
+
+    if (props.problemType === "ONLY_CORRECT") {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
         setAnswerState("right");
+        setInputColor("rgba(50, 172, 102, 0.25)");
         // 1. if the data is sent for the first time
-        if (props.getData) {
+        if (props.getData && !isExperienced) {
           // 2. and if this quiz is a part of an exam
           props.getData(
             props.next && props.next.true
@@ -399,117 +464,94 @@ const SingleTest = (props) => {
               : [true, { type: "finish" }],
             "true"
           );
-          // document.querySelector(".button").disabled = true;
+        }
+        setShowAnswer(true);
+        // save answers until you get the right one
+        if (!isExperienced) {
+          setIsExperienced(true);
+          createTestResult({
+            variables: {
+              testID: props.id,
+              lessonID: props.lessonID,
+              answer: answer.join(", "),
+              answerArray: answer,
+              result: "true",
+            },
+          });
         }
       } else {
         setAnswerState("wrong");
+        setInputColor("rgba(222, 107, 72, 0.5)");
+        createTestResult({
+          variables: {
+            testID: props.id,
+            lessonID: props.lessonID,
+            answer: answer.join(", "),
+            answerArray: answer,
+            result: "false",
+          },
+        });
+        // for this type of problems we allow to give as many incorrect answers as needed without moving forward in the problem
+      }
+    } else {
+      // this scenario is fired if we have another type of the problem or the test is not a part of the problem at all
+      if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
+        setAnswerState("right");
+        setInputColor("rgba(50, 172, 102, 0.25)");
         // 1. if the data is sent for the first time
-        if (props.getData) {
-          // 2. and if this quiz is a part of an exam
+        if (props.getData && attempts == 0) {
+          props.getData(
+            props.next && props.next.true
+              ? [true, props.next.true]
+              : [true, { type: "finish" }],
+            "true"
+          );
+        }
+        if (!isExperienced) {
+          setIsExperienced(true);
+          createTestResult({
+            variables: {
+              testID: props.id,
+              lessonID: props.lessonID,
+              answer: answer.join(", "),
+              answerArray: answer,
+              result: "true",
+            },
+          });
+        }
+      } else {
+        setAnswerState("wrong");
+        setInputColor("rgba(222, 107, 72, 0.5)");
+        // 1. if the data is sent for the first time
+        if (props.getData && attempts == 0) {
           props.getData(
             props.next && props.next.false
               ? [false, props.next.false]
               : [false, { type: "finish" }]
           );
         }
+        if (!isExperienced) {
+          setIsExperienced(true);
+          createTestResult({
+            variables: {
+              testID: props.id,
+              lessonID: props.lessonID,
+              answer: answer.join(", "),
+              answerArray: answer,
+              result: "false",
+            },
+          });
+        }
       }
-    };
-    let comments_arr = [];
-    if (comments && comments.length > 0) {
-      answerNums.map((num) => comments_arr.push(comments[num]));
-    }
-    setCommentsList(comments_arr);
-    const res2 = await res();
-    createTestResult({
-      variables: {
-        testID: props.id,
-        lessonID: props.lessonID,
-        answer: answer.join(", "),
-        answerArray: answer,
-      },
-    });
-  };
-
-  const onCheck = async () => {
-    if (props.moveNext) props.moveNext(props.id);
-
-    if (attempts == 0) {
-      // pass test data if the student answers for the first time. Needed for problems.
-      const res = () => {
-        if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
-          setAnswerState("right");
-          if (!isExperienced) {
-            props.getResults(1, props.id);
-            setIsExperienced(true);
-          }
-          setInputColor("rgba(50, 172, 102, 0.25)");
-          // 1. if the data is sent for the first time
-          if (props.getData) {
-            // 2. and if this quiz is a part of an exam
-            props.getData(
-              props.next && props.next.true
-                ? [true, props.next.true]
-                : [true, { type: "finish" }],
-              "true"
-            );
-          }
-        } else {
-          setAnswerState("wrong");
-          setInputColor("rgba(222, 107, 72, 0.5)");
-          // 1. if the data is sent for the first time
-          if (props.getData) {
-            // 2. and if this quiz is a part of an exam
-            props.getData(
-              props.next && props.next.false
-                ? [false, props.next.false]
-                : [false, { type: "finish" }]
-            );
-          }
-        }
-      };
-      const res2 = await res();
-    } else {
-      const res = () => {
-        if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
-          if (!isExperienced) {
-            props.getResults(1);
-            setIsExperienced(true);
-          }
-          setAnswerState("right");
-          setInputColor("rgba(50, 172, 102, 0.25)");
-        } else {
-          setAnswerState("wrong");
-          setInputColor("rgba(222, 107, 72, 0.5)");
-        }
-      };
-
-      const res2 = await res();
     }
 
-    let comments_arr = [];
+    // 3. prepare comments
+    addComments(answerNums);
 
-    if (comments && comments.length > 0) {
-      answerNums.map((num) => {
-        if (comments[num] == undefined) {
-          return;
-        } else {
-          comments_arr.push(comments[num]);
-        }
-      });
+    if (props.problemType !== "ONLY_CORRECT") {
+      setAttempts(attempts + 1);
     }
-    setCommentsList(comments_arr);
-
-    const res1 = await setAttempts(attempts + 1);
-
     setSent(true);
-    createTestResult({
-      variables: {
-        testID: props.id,
-        lessonID: props.lessonID,
-        answer: answer.join(", "),
-        answerArray: answer,
-      },
-    });
   };
 
   const switchUpdate = () => {
@@ -556,22 +598,11 @@ const SingleTest = (props) => {
         <TextBar className="Test" story={story}>
           <div className="question_box">
             <div className="question_text">{parse(props.question[0])}</div>
-            <IconBlock>
-              {image ? (
-                <img className="icon" src={image} />
-              ) : author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {instructorName
-                  ? instructorName
-                  : author && author.name
-                  ? author.name
-                  : "BeSavvy"}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              image={image}
+              instructorName={instructorName}
+              author={author}
+            />
           </div>
           <div className="answer">
             <IconBlock>
@@ -606,22 +637,11 @@ const SingleTest = (props) => {
           {zero && (
             <div className="question_box">
               <div className="question_text">{t("choose_option")}</div>
-              <IconBlock>
-                {image ? (
-                  <img className="icon" src={image} />
-                ) : author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {instructorName
-                    ? instructorName
-                    : author && author.name
-                    ? author.name
-                    : "BeSavvy"}
-                </div>
-              </IconBlock>
+              <IconBlockElement
+                image={image}
+                instructorName={instructorName}
+                author={author}
+              />
             </div>
           )}
 
@@ -639,10 +659,8 @@ const SingleTest = (props) => {
                   setZero(true);
                 } else {
                   if (props.type === "FORM") {
-                    console.log(0);
                     const res1 = await onSend();
                   } else {
-                    console.log(1);
                     const res = await onCheck();
                   }
                 }
@@ -654,32 +672,21 @@ const SingleTest = (props) => {
 
           {/* 4. Верный ответ. Поздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}
 
-          {props.type != "FORM" && answerState === "right" && (
+          {props.type !== "FORM" && answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.type != "FORM" && "🎉" + "  " + t("correct") + "!"}
+                {"🎉" + "  " + t("correct") + "!"}
                 {commentsList.length > 0 &&
                   commentsList.map((com, i) => {
                     return com ? parse(com) : null;
                   })}
                 {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
               </div>
-              <IconBlock>
-                {image ? (
-                  <img className="icon" src={image} />
-                ) : author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {instructorName
-                    ? instructorName
-                    : author && author.name
-                    ? author.name
-                    : "BeSavvy"}
-                </div>
-              </IconBlock>
+              <IconBlockElement
+                image={image}
+                instructorName={instructorName}
+                author={author}
+              />
             </Question>
           )}
 
@@ -688,34 +695,21 @@ const SingleTest = (props) => {
           {props.type != "FORM" && answerState === "wrong" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.type != "FORM" && "🔎 " + "  " + t("wrong") + "..."}
+                {"🔎 " + "  " + t("wrong") + "..."}
                 {commentsList.length > 0 &&
                   commentsList.map((com, i) => {
                     return com ? parse(com) : null;
                   })}
-                {/* {ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)}{" "} */}
               </div>
-              <IconBlock>
-                {image ? (
-                  <img className="icon" src={image} />
-                ) : author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {instructorName
-                    ? instructorName
-                    : author && author.name
-                    ? author.name
-                    : "BeSavvy"}
-                </div>
-              </IconBlock>
+              <IconBlockElement
+                image={image}
+                instructorName={instructorName}
+                author={author}
+              />
             </Question>
           )}
 
-          {/* 5. Неправильный ответ. Говорим об этом, даем комментарии к неправильным вариантам*/}
-
+          {/* 6. Работаем с формами */}
           {props.type == "FORM" &&
             (answerState === "wrong" || answerState === "right") &&
             (ifWrong || ifRight || commentsList.length > 0) && (
@@ -728,50 +722,27 @@ const SingleTest = (props) => {
                   {answerState === "wrong" && parse(ifWrong)}
                   {answerState === "right" && parse(ifRight)}
                 </div>
-                <IconBlock>
-                  {image ? (
-                    <img className="icon" src={image} />
-                  ) : author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}{" "}
-                  <div className="name">
-                    {instructorName
-                      ? instructorName
-                      : author && author.name
-                      ? author.name
-                      : "BeSavvy"}
-                  </div>
-                </IconBlock>
+                <IconBlockElement
+                  image={image}
+                  instructorName={instructorName}
+                  author={author}
+                />
               </Question>
             )}
 
-          {/* 6. Неправильный ответ. Спрашиваем, показать ли объяснение?*/}
+          {/* 7. Неправильный ответ. Спрашиваем показать ли правильный вариант?*/}
 
           {!props.challenge &&
             answerState == "wrong" &&
-            ifWrong &&
             props.type !== "FORM" && (
               <>
                 <div className="question_box">
-                  <div className="question_text">{t("show_explainer")}</div>
-                  <IconBlock>
-                    {image ? (
-                      <img className="icon" src={image} />
-                    ) : author && author.image != null ? (
-                      <img className="icon" src={author.image} />
-                    ) : (
-                      <img className="icon" src="../../static/hipster.svg" />
-                    )}{" "}
-                    <div className="name">
-                      {instructorName
-                        ? instructorName
-                        : author && author.name
-                        ? author.name
-                        : "BeSavvy"}
-                    </div>
-                  </IconBlock>
+                  <div className="question_text">{t("show_correct")}</div>
+                  <IconBlockElement
+                    image={image}
+                    instructorName={instructorName}
+                    author={author}
+                  />
                 </div>
 
                 <div className="answer">
@@ -792,82 +763,29 @@ const SingleTest = (props) => {
                   <OptionsGroup>
                     <Option
                       onClick={(e) => {
-                        setRevealExplainer(true);
-                        setHidden(false);
+                        setShowAnswer(true);
+                        setIsExperienced(true);
+                        setAnswerState("think");
+
+                        if (props.problemType === "ONLY_CORRECT") {
+                          props.getData(
+                            props.next && props.next.true
+                              ? [true, props.next.true]
+                              : [true, { type: "finish" }],
+                            "true"
+                          );
+                        }
+                        createTestResult({
+                          variables: {
+                            testID: props.id,
+                            lessonID: props.lessonID,
+                            answer: answer.join(", "),
+                            answerArray: answer,
+                            result: "answerOpened",
+                          },
+                        });
                       }}
                     >
-                      {t("yes")}
-                    </Option>
-                  </OptionsGroup>
-                </div>
-                {hidden == false && (
-                  <div className="question_box">
-                    <div className="question_text">{parse(ifWrong)}</div>
-                    <IconBlock>
-                      {image ? (
-                        <img className="icon" src={image} />
-                      ) : author && author.image != null ? (
-                        <img className="icon" src={author.image} />
-                      ) : (
-                        <img className="icon" src="../../static/hipster.svg" />
-                      )}{" "}
-                      <div className="name">
-                        {instructorName
-                          ? instructorName
-                          : author && author.name
-                          ? author.name
-                          : "BeSavvy"}
-                      </div>
-                    </IconBlock>
-                  </div>
-                )}
-              </>
-            )}
-
-          {/* 7. Неправильный ответ. Спрашиваем показать ли правильный вариант?*/}
-
-          {!props.challenge &&
-            answerState == "wrong" &&
-            props.type !== "FORM" &&
-            (revealExplainer == true || !ifWrong) && (
-              <>
-                <div className="question_box">
-                  <div className="question_text">{t("show_correct")}</div>
-                  <IconBlock>
-                    {image ? (
-                      <img className="icon" src={image} />
-                    ) : author && author.image != null ? (
-                      <img className="icon" src={author.image} />
-                    ) : (
-                      <img className="icon" src="../../static/hipster.svg" />
-                    )}{" "}
-                    <div className="name">
-                      {instructorName
-                        ? instructorName
-                        : author && author.name
-                        ? author.name
-                        : "BeSavvy"}
-                    </div>
-                  </IconBlock>
-                </div>
-
-                <div className="answer">
-                  <IconBlock>
-                    {/* <img className="icon" src="../../static/flash.svg" /> */}
-                    <div className="icon2">
-                      {me &&
-                        (me.image ? (
-                          <img className="icon" src={me.image} />
-                        ) : me.surname ? (
-                          `${me.name[0]}${me.surname[0]}`
-                        ) : (
-                          `${me.name[0]}${me.name[1]}`
-                        ))}
-                    </div>
-                    <div className="name">{me?.name}</div>
-                  </IconBlock>{" "}
-                  <OptionsGroup>
-                    <Option onClick={(e) => setShowAnswer(true)}>
                       {t("yes")}
                     </Option>
                   </OptionsGroup>
@@ -875,22 +793,11 @@ const SingleTest = (props) => {
                 {showAnswer && (
                   <div className="question_box">
                     <div className="question_text">{t("outline_color")}</div>
-                    <IconBlock>
-                      {image ? (
-                        <img className="icon" src={image} />
-                      ) : author && author.image != null ? (
-                        <img className="icon" src={author.image} />
-                      ) : (
-                        <img className="icon" src="../../static/hipster.svg" />
-                      )}{" "}
-                      <div className="name">
-                        {instructorName
-                          ? instructorName
-                          : author && author.name
-                          ? author.name
-                          : "BeSavvy"}
-                      </div>
-                    </IconBlock>
+                    <IconBlockElement
+                      image={image}
+                      instructorName={instructorName}
+                      author={author}
+                    />
                   </div>
                 )}
               </>
@@ -924,6 +831,31 @@ const SingleTest = (props) => {
         />
       )}
     </Styles>
+  );
+};
+
+const IconBlockElement = ({ image, instructorName, author }) => {
+  return (
+    <IconBlock className="icon-block">
+      {image ? (
+        <img className="icon" src={image} alt="Icon" />
+      ) : author && author.image != null ? (
+        <img className="icon" src={author.image} alt="Author Icon" />
+      ) : (
+        <img
+          className="icon"
+          src="../../static/hipster.svg"
+          alt="Default Icon"
+        />
+      )}
+      <div className="name">
+        {instructorName
+          ? instructorName
+          : author && author.name
+          ? author.name
+          : "BeSavvy"}
+      </div>
+    </IconBlock>
   );
 };
 

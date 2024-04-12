@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Problem" ADD COLUMN     "type" TEXT DEFAULT 'BRANCHING_SCENARIO';

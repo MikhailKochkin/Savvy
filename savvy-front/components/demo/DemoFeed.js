@@ -6,7 +6,7 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import ReactTooltip from "react-tooltip";
+import { ReactTooltip } from "react-tooltip";
 import calculateSum from "../../functions.js";
 
 const Buttons = styled.div`

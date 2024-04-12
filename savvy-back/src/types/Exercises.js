@@ -175,6 +175,7 @@ const Problem = objectType({
     t.model.complexity();
     t.model.isSecret();
     t.model.goal();
+    t.model.type();
     t.model.nodeID();
     t.model.userId();
     t.model.lessonId();

@@ -182,8 +182,10 @@
   "number_of_correct_guesses": "Число правильных ответов",
   "let_me_give_a_hint": "Сейчас ситуация обстоит так:",
   "great_job": "Отлично!",
+  "none_correct": "Ни один ответ не подошел.",
   "try_more": "Попробуй еще раз.",
   "what_are_we_doing_next": "Что делаем дальше?",
   "these_are_the_right_answers": "Вот правильные ответы: ",
-  "not_all_answers": "Но вы нашли еще не все ответы."
+  "not_all_answers": "Но вы нашли еще не все ответы.",
+  "where_to_start": "С чего мне начать?"
 }

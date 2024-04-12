@@ -19,40 +19,40 @@ const MY_COURSES_QUERY = gql`
         id
         name
         surname
-        image
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
+        # image
+        # uni {
+        #   id
+        #   title
+        # }
+        # company {
+        #   id
+        #   name
+        # }
       }
       authors {
         id
         name
         surname
-        image
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
+        # image
+        # uni {
+        #   id
+        #   title
+        # }
+        # company {
+        #   id
+        #   name
+        # }
       }
-      lessons {
-        id
-        forum {
-          id
-          rating {
-            id
-            rating
-          }
-        }
-      }
+      # lessons {
+      #   id
+      #   forum {
+      #     id
+      #     rating {
+      #       id
+      #       rating
+      #     }
+      #   }
+      # }
       description
       courseType
       image
