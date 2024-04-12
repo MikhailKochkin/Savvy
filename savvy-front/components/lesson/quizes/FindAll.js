@@ -477,14 +477,8 @@ const FindAll = (props) => {
         comment: ``,
       },
     });
-    console.log(
-      "unique_values",
-      unique_values,
-      correctIdeasList,
-      props.answers.answerElements
-    );
     if (props.problemType === "ONLY_CORRECT") {
-      if (correctIdeas.length === props.answers.answerElements.length) {
+      if (correctIdeasList.length >= props.answers.answerElements.length) {
         props.passResult("true");
       }
     } else {

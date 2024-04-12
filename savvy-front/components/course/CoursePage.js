@@ -52,4 +52,3 @@ const CoursePage = (props) => {
 };
 
 export default CoursePage;
-// export { SINGLE_COURSEPAGE_QUERY };

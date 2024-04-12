@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
-// import { SINGLE_COURSEPAGE_QUERY } from "./CoursePage";
 
 const MAKE_PUBLIC_MUTATION = gql`
   mutation MAKE_PUBLIC_MUTATION($id: String!, $published: Boolean) {

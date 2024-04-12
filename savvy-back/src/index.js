@@ -40,6 +40,7 @@ const httpServer = http.createServer(app);
 
 (async function startServer() {
   await server.start();
+
   app.use(cookieParser());
 
   app.use(async (req, res, next) => {
@@ -52,6 +53,16 @@ const httpServer = http.createServer(app);
     next();
   });
 
+  app.use(cors(corsOptions)); // Use cors middleware with corsOptions
+
+  app.use(
+    "/",
+    bodyParser.json(),
+    expressMiddleware(server, {
+      context: async ({ req, res }) => ({ req, res, prisma }),
+    })
+  );
+
   app.use(async (req, res, next) => {
     if (!req.userId) return next();
     const user = await prisma.user.findUnique(
@@ -61,21 +72,6 @@ const httpServer = http.createServer(app);
     req.user = user;
     next();
   });
-
-  app.use(cors(corsOptions)); // Use cors middleware with corsOptions
-
-  app.use(
-    "/",
-    // cors(),
-    bodyParser.json(),
-    expressMiddleware(
-      server,
-      // { cors: corsOptions },
-      {
-        context: async ({ req, res }) => ({ req, res, prisma }),
-      }
-    )
-  );
 
   const PORT = process.env.PORT || 4000;
 
