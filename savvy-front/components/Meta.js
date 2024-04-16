@@ -8,20 +8,20 @@ const Meta = () => (
     <meta property="og:title" content="BeSavvy" />
     <meta
       property="og:description"
-      content="Interactive training for lawyers"
+      content="Interactive simulators for lawyers"
     />
     <meta
       property="og:image"
-      content="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1713007750/Group_1407.png"
+      content="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1713257807/Group_1407.png"
     />
     <meta property="og:url" content="https://besavvy.app" />
     <meta
       name="twitter:card"
-      content="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1713007750/Group_1407.png"
+      content="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1713257807/Group_1407.png"
     />
 
     <link rel="shortcut icon" href="/static/favicon2.ico" />
-    <title>Interactive simulators for lawyers</title>
+    <title>BeSavvy: simulators for lawyers</title>
     <script
       async
       strategy="afterInteractive"
