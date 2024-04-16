@@ -473,13 +473,17 @@ const Chat = (props) => {
           </button>
         </Next>
       )}
-      {getData && props.next.true.value && !moved && (
-        <ArrowBox>
-          <div className="arrow_box" onClick={(e) => push()}>
-            <img className="arrow" src="../../static/down-arrow.svg" />
-          </div>
-        </ArrowBox>
-      )}
+      {console.log("num", num, messages.messagesList.length)}
+      {getData &&
+        props.next.true.value &&
+        !moved &&
+        num == messages.messagesList.length && (
+          <ArrowBox>
+            <div className="arrow_box" onClick={(e) => push()}>
+              <img className="arrow" src="../../static/down-arrow.svg" />
+            </div>
+          </ArrowBox>
+        )}
       {update && (
         <UpdateChat
           id={id}

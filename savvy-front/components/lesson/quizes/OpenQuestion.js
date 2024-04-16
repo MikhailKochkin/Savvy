@@ -7,6 +7,8 @@ import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
+import { Tooltip } from "react-tooltip";
+
 import { guessAlphabet, autoResizeTextarea } from "./quiz_functions";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
@@ -225,22 +227,53 @@ const Question = styled.div`
   }
 `;
 
-const Answer_text = styled.textarea`
-  height: 120px;
+const Frame = styled.div`
+  position: relative;
   min-width: 60%;
   max-width: 70%;
   border: 2px solid;
   border: ${(props) =>
     props.inputColor == "#D0EADB" ? "3px solid" : "2px solid"};
   border-color: ${(props) => props.inputColor};
+
+  border-radius: 25px;
+  background: #fff;
+  padding: 0 2%;
+  margin: 15px 0;
+  .com {
+    border-top: 1px solid #f3f3f3;
+  }
+`;
+
+const Answer_text = styled.textarea`
+  height: 120px;
+  width: 95%;
   outline: 0;
+  border: none;
   resize: none;
   border-radius: 25px;
   padding: 3% 4%;
   line-height: 1.8;
   font-family: Montserrat;
   font-size: 1.6rem;
-  margin-bottom: 20px;
+  margin: 10px 0;
+`;
+
+const ResultCircle = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  right: 0;
+  font-size: 1.4rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid;
+  border-color: ${(props) => props.inputColor};
+  margin: 10px; // Adjust margin to position the circle as desired
 `;
 
 const Group = styled.div`
@@ -351,6 +384,8 @@ const OpenQuestion = (props) => {
   const [recognition, setRecognition] = useState(null);
   const [startSpeech, setStartSpeech] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [correctnessLevel, setCorrectnessLevel] = useState();
+  const [result, setResult] = useState(null);
   const [generatingExplanation, setGeneratingExplanation] = useState(false);
   const [generatingImprovement, setGeneratingImprovement] = useState(null); // give the hint to the student
   const [AIhint, setAIHint] = useState(""); // give the hint to the student
@@ -370,6 +405,11 @@ const OpenQuestion = (props) => {
   });
 
   const { t } = useTranslation("lesson");
+
+  const intro = `
+      You are a law professor. You asked your student this question: """ ${props.question} """.
+      You expect to recieve an answer that sounds like this (correct answer): """ ${props.answer} """.
+    `;
 
   const getHint = async (event) => {
     event.preventDefault();
@@ -438,12 +478,74 @@ const OpenQuestion = (props) => {
     let AItype = "openai";
     let url;
     let result;
+    let proportion = ((answer.length / props.answer.length) * 100).toFixed(0);
+    if (proportion < 40) {
+      let simpleExplanation =
+        "Your answer is too short. Please provide a more detailed answer. It is only " +
+        proportion +
+        "% of the correct answer. ";
+      setAIExplanation(simpleExplanation);
+      createQuizResult({
+        variables: {
+          quiz: props.quizId,
+          lessonId: props.lessonId,
+          answer: answer,
+          type: "explanation",
+          correct: false,
+          hint: AIhint,
+          explanation: simpleExplanation,
+          improvement: AIImprovement,
+          comment: `Student asked for explanations`,
+        },
+      });
+      setGeneratingExplanation(false);
+      return simpleExplanation;
+    }
+
+    let explanantion_prompt;
+
+    if (correctnessLevel == "completely_wrong" || correctnessLevel == "wrong") {
+      explanantion_prompt = `
+      However, your student gave you a completely wrong answer: """ ${answer} """.
+      Use the information about the correct answer and information from the lesson: """ ${
+        props.ifRight
+      } """ to
+      explain in 3 sentences why this answer is wrong. Do it in the following way:
+
+      1. Explain what information should be in the question.
+      2. Give recommendations on how to start the answer.
+      
+      Write in second person. Address the student as "you".
+      !!! DO NOT USE the words from the correct answer!!! 
+      Be very polite and gentle.
+      Answer in ${router.locale == "ru" ? "Russian" : "English"}
+      Make the answer at least 2 sentences long.
+      Return every point as a separate <p> tag`;
+    } else {
+      explanantion_prompt = `
+      However, your student gave you a slightly wrong answer: """ ${answer} """.
+      Use the information about the correct answer and information from the lesson: """ ${
+        props.ifRight
+      } """ to
+      explain in 3 sentences how to make this answer correct. Do it in the following way:
+
+      1. Say EXTREMELY politely that the answer is not completely right.
+      2. Explain which part of the answer does not look right and needs to be changed.
+      3. Give recommendations on how to chnage this part of the answer.
+
+      Write in second person. Address the student as "you".
+      DO NOT USE the words from the correct answer!!!
+      Be very polite and gentle.
+      Answer in ${router.locale == "ru" ? "Russian" : "English"}
+      Make the answer at least 2 sentences long.`;
+    }
 
     if (AItype == "claude") {
       url = "/api/generate2";
     } else {
       url = "/api/generate";
     }
+    console.log(intro + explanantion_prompt);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -451,18 +553,7 @@ const OpenQuestion = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: `
-          You are a law professor. You ask your student the question: ${
-            props.question
-          }
-          Your student's answer is: ${answer}. It is not correct.
-          Use the information about the correct answer:${props.answer}
-          and information from the lesson: ${props.ifWrong} to
-          explain in 3 sentences why this answer is incorrect in comparison to the correct answer. Give hints on how to make the answer better. Write in second person. Adress the student as "you". 
-          DO NOT USE the words from the correct answer!!! Be very polite and careful.
-          Answer in ${
-            router.locale == "ru" ? "Russian" : "English"
-          }Make the answer at least 2 sentences long.`,
+          prompt: intro + explanantion_prompt,
         }),
       });
 
@@ -523,6 +614,17 @@ const OpenQuestion = (props) => {
       url = "/api/generate";
     }
 
+    let improvementPrompt = `
+          Use correct answer and this information from the lesson: """ ${ifWrong} """
+          To explain to your student how to inprove their answer: """ ${answer} """
+          Explain in 3 sentences. Use the following structure:
+          1. Identify the part of the question that needs improvememnt
+          2. Suggest what changes should be made
+          Write in second person. Adress the student as "you". DO NOT USE the words from the correct answer!!!
+          Answer in ${router.locale == "ru" ? "Russian" : "English"}. 
+          Make the answer at least 3 sentences long.
+          `;
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -530,18 +632,7 @@ const OpenQuestion = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: `
-          You are a mentor and a teacher. You ask your student the question: ${
-            props.question
-          }
-          The correct answer is:  ${props.answer}. 
-          The mentor's comment is: ${ifWrong}
-          Your student's answer is: ${answer}
-          Explain in 3 sentences how this answer can be improved using the correct answer as the foundation. 
-          Write in second person. Adress the student as "you". Do not use the words from the correct answer.
-          Answer in ${
-            router.locale == "ru" ? "Russian" : "English"
-          }. Make the answer at least 3 sentences long.`,
+          prompt: intro + improvementPrompt,
         }),
       });
 
@@ -597,7 +688,7 @@ const OpenQuestion = (props) => {
         },
         body: JSON.stringify({
           prompt: `
-          You are a mentor and a teacher. 
+          You are a law professor.
           Use this script: ${props.ifRight} to improve the student's answer.
           Your student's answer is: ${answer}
           The initial question is: ${props.question}
@@ -627,7 +718,22 @@ const OpenQuestion = (props) => {
     setGeneratingImprovement(false);
   };
 
+  const determineCorrectness = async (result) => {
+    if (result < 40) {
+      setCorrectnessLevel("completely_wrong");
+    } else if (result >= 40 && result < 50) {
+      setCorrectnessLevel("wrong");
+    } else if (result >= 50 && result < 58) {
+      setCorrectnessLevel("slightly_wrong");
+    } else if (result >= 58 && result < 65) {
+      setCorrectnessLevel("looks_true");
+    } else if (result >= 65) {
+      setCorrectnessLevel("correct");
+    }
+  };
+
   const onAnswer = async (e) => {
+    setAIExplanation(null);
     setProgress("true");
     let data1 = {
       answer1: props.answer.toLowerCase(),
@@ -662,7 +768,9 @@ const OpenQuestion = (props) => {
       )
         .then((response) => response.json())
         .then((res) => {
-          console.log("res.res", res.res);
+          console.log("res.res", parseFloat(res.res));
+          setResult(parseFloat(res.res));
+          determineCorrectness(res.res);
           if (parseFloat(res.res) > 65) {
             setCorrect("true");
             passResult("true");
@@ -855,18 +963,29 @@ const OpenQuestion = (props) => {
             </div>{" "}
             <div className="name">{me.name}</div>
           </IconBlock>{" "}
-          <Answer_text
-            type="text"
-            required
-            inputColor={inputColor}
-            value={answer}
-            onChange={(e) => {
-              setAnswer(e.target.value);
-              autoResizeTextarea(e);
-            }}
-            onInput={autoResizeTextarea}
-            placeholder="..."
-          />
+          <Frame inputColor={inputColor}>
+            <Answer_text
+              type="text"
+              required
+              value={answer}
+              onChange={(e) => {
+                setAnswer(e.target.value);
+                autoResizeTextarea(e);
+              }}
+              onInput={autoResizeTextarea}
+              placeholder="..."
+            />
+            {result && (
+              <ResultCircle
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content={t("answer_above_65")}
+                data-tooltip-place="right"
+                inputColor={inputColor}
+              >
+                {parseInt(result)}
+              </ResultCircle>
+            )}
+          </Frame>
         </div>
         {startSpeech && <Group>{<p>📣 {t("start_speaking")}..</p>}</Group>}
         <Progress display={progress}>
@@ -1005,7 +1124,6 @@ const OpenQuestion = (props) => {
                       e.preventDefault();
                       setAIExplanation("...");
                       const res = await getExplanation(e);
-                      console.log("AIExplanation", res);
                     }}
                   >
                     {t("explain_what_is_wrong_with_my_answer")}
@@ -1064,7 +1182,7 @@ const OpenQuestion = (props) => {
           {AIExplanation && correct !== "true" && (
             <div className="question_box">
               <div className="question_text">
-                <p>{AIExplanation}</p>
+                <p>{parse(AIExplanation)}</p>
               </div>
               <IconBlock>
                 {author && author.image != null ? (
@@ -1123,6 +1241,7 @@ const OpenQuestion = (props) => {
           </IconBlock>{" "}
         </div>
       )}
+      {/* <Tooltip id="quiz-tooltip" /> */}
     </Question>
   );
 };

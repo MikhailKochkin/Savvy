@@ -46,74 +46,24 @@ const Title = styled.div`
   }
 `;
 
-const AreYouEnrolled = (props) =>
-  props.open ? (
-    props.children
-  ) : (
-    <Query query={CURRENT_USER_QUERY}>
-      {({ data }, loading) => {
-        if (loading) return <p>Loading...</p>;
-        if (!data?.me) return null;
-        if (data?.me) {
-          if (
-            !props.openLesson &&
-            data.me.new_subjects.filter((sbj) => sbj.id == props.subject)
-              .length == 0 &&
-            data.me.coursePages.filter((c) => c.id == props.subject).length ==
-              0 &&
-            data.me.co_coursePages.filter((c) => c.id == props.subject)
-              .length == 0 &&
-            !data.me.permissions.includes("ADMIN")
-          ) {
-            return (
-              <Styles>
-                <Box>
-                  <Title>
-                    You are not enrolled. Please go to the course page to get
-                    access to the course.
-                  </Title>
-                  <Link
-                    legacyBehavior
-                    href={{
-                      pathname: "/coursePage",
-                      query: { id: props.subject },
-                    }}
-                  >
-                    <a>Go to course page</a>
-                  </Link>
-                </Box>
-              </Styles>
-            );
-          }
-        }
-        return props.children;
-      }}
-    </Query>
-  );
-
-// const AreYouEnrolled = (props) => {
-//   if (props.open) {
-//     return props.children;
-//   } else {
-//     return (
-//       <Styles>
-//         <Box>
-//           <Title>
-//             You are not enrolled. Please go to the course page to get access to
-//             the course.
-//           </Title>
-//           <Link
-//             href={{
-//               pathname: "/coursePage",
-//               query: { id: props.subject },
-//             }}
-//           >
-//             <a>Go to course page</a>
-//           </Link>
-//         </Box>
-//       </Styles>
-//     );
-//   }
-// };
+const AreYouEnrolled = (props) => (
+  <Styles>
+    <Box>
+      <Title>
+        You don't have access to this simulator. Please go to the course page to
+        get access.
+      </Title>
+      <Link
+        legacyBehavior
+        href={{
+          pathname: "/coursePage",
+          query: { id: props.coursePageId },
+        }}
+      >
+        <a>Go to course page</a>
+      </Link>
+    </Box>
+  </Styles>
+);
 
 export default AreYouEnrolled;

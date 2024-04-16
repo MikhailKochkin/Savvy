@@ -187,5 +187,6 @@
   "what_are_we_doing_next": "Now. What are we doing next?",
   "these_are_the_right_answers": "These are the right answers: ",
   "not_all_answers": "But you haven't found all the answers.",
-  "where_to_start": "Where should I start?"
+  "where_to_start": "Where should I start?",
+  "answer_above_65": "Answers above 65 are correct, while those from 58 to 65 are partially correct."
 }

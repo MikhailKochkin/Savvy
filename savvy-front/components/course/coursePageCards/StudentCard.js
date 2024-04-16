@@ -433,7 +433,7 @@ class StudentCard extends Component {
             )}
           </div>
         )} */}
-        {ratio > 85 && my_certificate && (
+        {/* {ratio > 85 && my_certificate && (
           <button>
             <a
               href={`https://besavvy.app/certificate?id=${my_certificate.id}`}
@@ -442,10 +442,10 @@ class StudentCard extends Component {
               Открыть мой сертификат
             </a>
           </button>
-        )}
-        {ratio > 85 && !my_certificate && (
+        )} */}
+        {/* {ratio > 85 && !my_certificate && (
           <CreateCertificate coursePageId={coursePage.id} studentId={me.id} />
-        )}
+        )} */}
       </Payment>
     );
   }

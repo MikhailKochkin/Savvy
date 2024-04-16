@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import ReactTooltip from "react-tooltip";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useMutation, gql } from "@apollo/client";
 import moment from "moment";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import smoothscroll from "smoothscroll-polyfill";
 import { useRouter } from "next/router";

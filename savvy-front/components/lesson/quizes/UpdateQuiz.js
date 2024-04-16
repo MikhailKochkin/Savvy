@@ -276,6 +276,7 @@ const UpdateQuiz = (props) => {
         <option value="GENERATE">Generate Ideas</option>
         <option value="PROMPT">Check with AI</option>
         <option value="FINDALL">Find All</option>
+        <option value="CALL">Call Simulation</option>
       </select>
       <label for="types">Format</label>
       <select

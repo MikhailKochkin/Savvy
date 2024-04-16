@@ -322,63 +322,6 @@ const Tag = styled.div`
   align-items: center;
 `;
 
-const Box = styled.div`
-  border-bottom: 3px solid #f2f6f9;
-  border-top: 3px solid #f2f6f9;
-  background: #f2f6f9;
-  min-height: 45px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 5px;
-  div {
-    padding: 0 5px;
-    font-size: 1.4rem;
-    font-weight: 600;
-  }
-  .div1 {
-    width: 30%;
-  }
-  .div2 {
-    width: 9%;
-  }
-  .div3 {
-    width: 9%;
-  }
-  .div4 {
-    width: 9%;
-  }
-  .div5 {
-    width: 17%;
-  }
-  .div6 {
-    width: 17%;
-  }
-  .div7 {
-    width: 9%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-
-  @media (max-width: 850px) {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 5%;
-    div {
-      padding: 8px 15px;
-    }
-    .div2 {
-      border-left: 1px solid white;
-      border-top: 1px solid #edefed;
-    }
-    .div3 {
-      border-left: 1px solid white;
-      border-top: 1px solid #edefed;
-    }
-  }
-`;
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -398,15 +341,6 @@ const Editor = styled.div`
     width: 350px;
   }
 `;
-
-// const StyledButton = withStyles({
-//   root: {
-//     margin: "1% 0",
-//     marginRight: "2%",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//   },
-// })(Button);
 
 const Person = (props) => {
   const [secret, setSecret] = useState(true);
@@ -625,7 +559,7 @@ const Person = (props) => {
         <Square className="div3" inputColor={color}>
           <div>
             {props.type !== "lesson_analytics"
-              ? total / active_lessons.length
+              ? ((total / active_lessons.length) * 100).toFixed(0)
               : (
                   (maxes[0].progress /
                     maxes[0].lesson.structure.lessonItems.length) *
@@ -649,16 +583,16 @@ const Person = (props) => {
           }
         >
           {props.lesson_analytics
-            ? courseVisit
-              ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
+            ? results.length > 0
+              ? moment(results[0].createdAt).format("Do MMMM YYYY")
               : "Undefined"
-            : results.length > 0
-            ? moment(results[0].createdAt).format("Do MMMM YYYY")
+            : courseVisit
+            ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
             : "Undefined"}
         </RegDate>
       </Header>
       <Open secret={secret}>
-        {props.me && (
+        {props.type !== "lesson_analytics" && (
           <EmailBlock>
             <h2>Connect</h2>
             {/* <div>{student.number}</div> */}

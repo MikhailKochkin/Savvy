@@ -275,7 +275,7 @@ const ATF = (props) => {
       <BImage>
         <InfoBlock>
           <Container>
-            <h1>{course.header.length > 0 ? parse(course.header[0]) : ""}</h1>
+            <h1>{course?.header?.length > 0 ? parse(course.header[0]) : ""}</h1>
             <h2 id="header2">
               {course.subheader.length > 0 ? parse(course.subheader[0]) : ""}
             </h2>

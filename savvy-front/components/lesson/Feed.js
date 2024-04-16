@@ -976,7 +976,6 @@ const Feed = (props) => {
 
             {linkMenuOpen && (
               <SimulatorLinks>
-                {console.log("other_simulators", other_simulators)}
                 {other_simulators.map((s) => (
                   <a
                     href={`https://besavvy.app/ru/lesson?id=${s.id}&type=story`}

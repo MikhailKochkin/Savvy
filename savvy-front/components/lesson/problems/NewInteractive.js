@@ -107,8 +107,6 @@ const NewInteractive = (props) => {
   }, [0]);
 
   const updateArray = (data) => {
-    console.log("data", data);
-    console.log("props.type", props.type);
     // Use optional chaining to safely access properties
     let nextTrueValue = componentList.at(-1)?.next?.true?.value;
     let nextFalseValue = componentList.at(-1)?.next?.false?.value;
@@ -132,7 +130,6 @@ const NewInteractive = (props) => {
           return;
         }
       } else {
-        console.log("ONLY_CORRECT_FALSE");
         return;
       }
     } else {

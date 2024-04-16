@@ -253,7 +253,6 @@ const CreateChat = (props) => {
                     },
                   ],
                 });
-                console.log("res", res);
                 props.getResult(res);
               }}
             >

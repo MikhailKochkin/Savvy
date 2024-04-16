@@ -12,16 +12,16 @@ const Meta = () => (
     />
     <meta
       property="og:image"
-      content="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+      content="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1713007750/Group_1407.png"
     />
     <meta property="og:url" content="https://besavvy.app" />
     <meta
       name="twitter:card"
-      content="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+      content="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1713007750/Group_1407.png"
     />
 
     <link rel="shortcut icon" href="/static/favicon2.ico" />
-    <title>Interactive training for lawyers</title>
+    <title>Interactive simulators for lawyers</title>
     <script
       async
       strategy="afterInteractive"
