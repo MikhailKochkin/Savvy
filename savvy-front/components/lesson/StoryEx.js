@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
-import { TailSpin } from "react-loader-spinner";
 
 import Note from "./notes/Note";
 import BannerOffer from "./offers/BannerOffer";
@@ -18,7 +17,6 @@ import Forum from "./forum/Forum";
 import Document from "./documents/Document";
 import Exam from "./exams/Exam";
 import Feed from "./Feed";
-import LessonHeader from "./LessonHeader";
 import TestPractice from "./testblocks/TB";
 
 const LESSON_RESULTS_QUERY = gql`

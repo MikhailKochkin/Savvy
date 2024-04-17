@@ -628,7 +628,6 @@ const LessonData = (props) => {
         lesson_results.push(val);
       }
     });
-    console.log("initial_report", initial_report);
     setReportData(initial_report);
     setStudentResults(
       lesson_results.reduce(
@@ -670,19 +669,19 @@ const LessonData = (props) => {
       setGenerating(false);
 
       setReport(`
-                <p>The student completed the simulator with a total score of <b>62 out of 100</b>. This indicates that while the student has mastered some skills related to Due Diligence in M&amp;A, there are still areas that require improvement.</p>
+                <p>The student completed the simulator with a total score of <b>60 out of 100</b>. This indicates that while the student has mastered some skills related to Due Diligence in M&amp;A, there are still areas that require improvement.</p>
     <p>We would like to focus your attention on the following points:</p>
     <ul>
       <li>
         <p><strong>Learning goal: Learn to find errors / typos / risks in a term sheet</strong></p>
-        <p>The student achieved a result of 0.65, which is below the success threshold. This suggests that the student requires further assistance in learning how to find errors in a term sheet. We recommend either assigning more similar tasks to the student or seeking guidance from a senior lawyer.</p>
+        <p>The student achieved a result of 65%, which is below the success threshold. Moreover, we see that the student has completed the exercises, made some mistakes, but have not paid enough attention to reflecting on these errors and trying to resolve them. This suggests that the student requires further assistance in learning how to find errors in a term sheet. We recommend either assigning more similar tasks to the student or seeking guidance from a senior lawyer.</p>
       </li>
       <li>
-        <p><strong>Learning goal: Learn to draft an email to a client explaining the details of the legal problem</strong></p>
-        <p>The student achieved a result of 0, indicating that the task was not completed at all. It is important to remind the student to complete this task.</p>
+        <p><strong>Learning goal: Learn to distinguish between different types of M&A deals</strong></p>
+        <p>The student achieved a result of 84%, indicating that the student has completed this part of the lesson with ease. They have made some mistakes, but we have seen them reflecting on these mistakes, asking for explanations and finally arriving to the correct answer. This suggests that the student is well aware of this topic and is ready for billable work related to it.</p>
       </li>
     </ul>
-    <p>The student's overall score is 62% out of 100. While they have successfully completed several tasks, <b>there are areas where further assistance is needed</b>. Specifically, the student should focus on improving their skills in finding errors in a term sheet and drafting emails to clients. It might be a good idea to get help from a senior lawyer.</p>
+    <p>The student's overall score is 60% out of 100. While they have successfully completed several tasks, <b>there are areas where further assistance is needed</b>. Specifically, the student should focus on improving their skills in finding errors in a term sheet. It might be a good idea to get help from a senior lawyer.</p>
     <p>Taking into account the simulator's goal—to prepare the student for work on due diligence in M&amp;A projects—we believe that <b>additional training is needed before the student is ready for client work.</b></p>
   
   `);
@@ -944,12 +943,12 @@ const LessonData = (props) => {
               );
             }
           })}
-          <Feedback feedback={data.stats.feedbacks} lesson={lesson.id} />
+          {/* <Feedback feedback={data.stats.feedbacks} lesson={lesson.id} />
           <CreateFeedback
             coursePage={coursePageID}
             lesson={lesson.id}
             student={student.id}
-          />
+          /> */}
         </LessonContent>
       )}
       <Bottom></Bottom>

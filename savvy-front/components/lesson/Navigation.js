@@ -102,23 +102,25 @@ const Navigation = (props) => {
   return (
     <Head>
       <Left>
-        <div className="block">
-          <Link
-            href={{
-              pathname: "/course",
-              query: {
-                id: lesson.coursePage.id,
-              },
-            }}
-          >
-            <img
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Back to course page"
-              src="/static/arrow_left.svg"
-              // onClick={(e) => props.passMenuChange()}
-            />
-          </Link>
-        </div>
+        {props.page !== "demo" && (
+          <div className="block">
+            <Link
+              href={{
+                pathname: "/course",
+                query: {
+                  id: lesson.coursePage.id,
+                },
+              }}
+            >
+              <img
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Back to course page"
+                src="/static/arrow_left.svg"
+                // onClick={(e) => props.passMenuChange()}
+              />
+            </Link>
+          </div>
+        )}
         {props.passMenuChange && (
           <div className="block">
             {" "}

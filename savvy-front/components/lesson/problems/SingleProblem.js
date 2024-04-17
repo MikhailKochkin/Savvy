@@ -425,7 +425,7 @@ const SingleProblem = (props) => {
               </>
             </ResponseArea>
           )}
-          {problem.steps &&
+          {/* {problem.steps &&
             (problem.steps.problemItems.length == 0 ||
               (problem.steps.problemItems.length >= 1 &&
                 (isNewFinished || isOldFinished))) && (
@@ -488,7 +488,7 @@ const SingleProblem = (props) => {
                   )}
                 </>
               </ResponseArea>
-            )}
+            )} */}
         </TextBar>
       )}
       {update && (

@@ -13,6 +13,7 @@ import Generate from "./Generate";
 import Prompt from "./Prompt";
 import FindAll from "./FindAll";
 import CallSimulation from "./CallSimulation";
+import { set } from "lodash";
 
 const Styles = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ const Buttons = styled.div`
 const SingleQuiz = (props) => {
   const [nextQuestions, setNextQuestions] = useState();
   const [update, setUpdate] = useState(false);
+  const [isMoveMade, setIsMoveMade] = useState(false);
 
   useEffect(() => {
     // kick off the polyfill!
@@ -56,15 +58,21 @@ const SingleQuiz = (props) => {
       }
     };
 
+    if (isMoveMade) {
+      return;
+    }
+
     // first we check the type of the problem
     if (props.problemType === "ONLY_CORRECT") {
       if (result === "true") {
         handleGetData(true);
+        setIsMoveMade(true);
       }
       // if result is "false", we do nothing
     } else {
       if (result === "true" || result === "false") {
         handleGetData(result === "true");
+        setIsMoveMade(true);
       }
     }
   };

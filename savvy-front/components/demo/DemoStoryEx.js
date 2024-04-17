@@ -1,11 +1,10 @@
-import DemoFeed from "./DemoFeed";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import { TailSpin } from "react-loader-spinner";
 
+import DemoFeed from "./DemoFeed";
 import Note from "../lesson/notes/Note";
-// import Offer from "../lesson/Offer";
 import Shots from "../lesson/shots/Shots";
 import SingleTest from "../lesson/tests/SingleTest";
 import Chat from "../lesson/chat/Chat";
@@ -181,14 +180,41 @@ const result = [
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID } = props;
   const [experience, setExperience] = useState(0);
+  const [textToBeTranslated, setTextToBeTranslated] = useState(""); // Text selected for translation
+  const [solved, setSolved] = useState([]); // List of solved task IDs
 
   const total = props.lesson.totalPoints;
+
+  const translateSelectedText = async (text, targetLang) => {
+    passTextToBeTranslated(text);
+  };
+
+  // 0. Translation functionality
+
+  const handleSelection = useCallback(() => {
+    const selection = window.getSelection().toString();
+    console.log("selection", selection);
+    if (selection && selection !== prevSelection.current) {
+      translateSelectedText(selection, "es");
+      prevSelection.current = selection;
+    }
+  }, [translateSelectedText]);
+
+  // Event listener for text selection
+  useEffect(() => {
+    document.addEventListener("mouseup", handleSelection);
+    return () => {
+      document.removeEventListener("mouseup", handleSelection);
+    };
+  }, [handleSelection]);
 
   const getResults = (res) => {
     // if (experience <= total) {
     setExperience(experience + res);
     // }
   };
+
+  const prevSelection = useRef("");
 
   const [
     fetchQuery,
@@ -233,12 +259,25 @@ const StoryEx = (props) => {
           prev.progress > current.progress ? prev : current
         )
       : [];
+
   let components = [];
+  let move_statuses = [];
+  const moveNext = (id) => {
+    if (!solved.includes(id)) {
+      setSolved((prevSolved) => [...prevSolved, id]);
+    }
+  };
+  const passTextToBeTranslated = (text) => {
+    setTextToBeTranslated(text);
+  };
+
   tasks.map((task) => {
     let el;
     let item;
+    // Render different components based on the task type
     if (task.type.toLowerCase() === "note") {
       el = lesson.notes.find((note) => note.id === task.id);
+      if (!el) return;
       item = (
         <Note
           text={el.text}
@@ -255,12 +294,35 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
+    } else if (task.type.toLowerCase() === "offer") {
+      el = lesson.offers.find((t) => t.id === task.id);
+      if (!el) return;
+      item = (
+        <BannerOffer
+          key={el.id}
+          id={el.id}
+          offer={el}
+          me={me}
+          coursePage={lesson.coursePage}
+          coursePageId={lesson.coursePage.id}
+          lessonId={lesson.id}
+          user={el.user.id}
+          story={true}
+          getResults={getResults}
+        />
+      );
+      components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "newtest") {
       el = lesson.newTests.find((t) => t.id === task.id);
+      if (!el) return;
+
       item = (
         <SingleTest
           key={el.id}
           id={el.id}
+          moveNext={moveNext}
           getResults={getResults}
           testID={el.id}
           author={lesson.user}
@@ -270,6 +332,9 @@ const StoryEx = (props) => {
           comments={el.comments}
           true={el.correct}
           user={el.user.id}
+          instructorName={el.instructorName}
+          name={el.name}
+          image={el.image}
           user_name={el.user}
           type={el.type}
           ifRight={el.ifRight}
@@ -282,8 +347,10 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(solved.includes(el.id) ? true : false);
     } else if (task.type.toLowerCase() === "quiz") {
       el = lesson.quizes.find((quiz) => quiz.id === task.id);
+      if (!el) return;
       item = (
         <SingleQuiz
           key={el.id}
@@ -292,11 +359,16 @@ const StoryEx = (props) => {
           getResults={getResults}
           question={el.question}
           answer={el.answer}
+          answers={el.answers}
           type={el.type}
+          goalType={el.goalType}
           check={el.check}
           me={me}
+          lesson={lesson}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
+          name={el.name}
+          image={el.image}
           hidden={true}
           lessonID={lesson.id}
           quizID={el.id}
@@ -308,11 +380,15 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "testpractice") {
       el = lesson.testPractices.find((t) => t.id === task.id);
+      if (!el) return;
+
       item = (
         <TestPractice
           key={el.id}
+          id={el.id}
           lessonID={lesson.id}
           getResults={getResults}
           me={me}
@@ -324,11 +400,32 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
+    } else if (task.type.toLowerCase() === "teamquest") {
+      el = lesson.teamQuests.find((t) => t.id === task.id);
+      if (!el) return;
+      item = (
+        <TeamQuest
+          key={el.id}
+          id={el.id}
+          lessonID={lesson.id}
+          me={me}
+          teamQuest={el}
+          quizes={lesson.quizes}
+          tests={lesson.newTests}
+          lesson={lesson}
+          story={true}
+        />
+      );
+      components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "shot") {
       el = lesson.shots.find((shot) => shot.id === task.id);
+      if (!el) return;
       item = (
         <Shots
           key={el.id}
+          id={el.id}
           comments={el.comments}
           parts={el.parts}
           shotUser={el.user.id}
@@ -341,12 +438,17 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "chat") {
       el = lesson.chats.find((chat) => chat.id === task.id);
+      if (!el) return;
+
       item = (
         <Chat
           key={el.id}
+          id={el.id}
           name={el.name}
+          moveNext={moveNext}
           isSecret={el.isSecret}
           experience={experience}
           total={total}
@@ -355,12 +457,13 @@ const StoryEx = (props) => {
           author={lesson.user}
           complexity={el.complexity}
           messages={el.messages}
-          id={el.id}
           lessonId={lesson.id}
           story={true}
+          passTextToBeTranslated={passTextToBeTranslated}
         />
       );
       components.push(item);
+      move_statuses.push(solved.includes(el.id) ? true : false);
     }
     // else if (task.type.toLowerCase() === "offer") {
     //   item = (
@@ -385,6 +488,7 @@ const StoryEx = (props) => {
       item = (
         <SingleProblem
           key={el.id}
+          id={el.id}
           problem={el}
           complexity={el.complexity}
           getResults={getResults}
@@ -393,17 +497,22 @@ const StoryEx = (props) => {
           story={true}
           lesson={lesson}
           author={lesson.user}
+          moveNext={moveNext}
         />
       );
       components.push(item);
+      // move_statuses.push(true);
+      move_statuses.push(solved.includes(el.id) ? true : false);
     } else if (task.type.toLowerCase() === "texteditor") {
       el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);
       item = (
         <SingleTextEditor
           key={el.id}
+          id={el.id}
           lessonID={lesson.id}
           text={el.text}
           complexity={el.complexity}
+          lesson={lesson}
           getResults={getResults}
           textEditor={el}
           me={me}
@@ -411,12 +520,16 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "construction") {
       el = lesson.constructions.find((con) => con.id === task.id);
+      if (!el) return;
+
       item =
         el.elements !== null ? (
           <NewConstructor
             key={el.id}
+            id={el.id}
             lessonID={lesson.id}
             construction={el}
             complexity={el.complexity}
@@ -428,6 +541,7 @@ const StoryEx = (props) => {
         ) : (
           <SingleConstructor
             key={el.id}
+            id={el.id}
             lessonID={lesson.id}
             complexity={el.complexity}
             getResults={getResults}
@@ -439,15 +553,21 @@ const StoryEx = (props) => {
           />
         );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "exam") {
       el = lesson.exams.find((con) => con.id === task.id);
+      if (!el) return;
+
       item = <Exam lesson={lesson} me={props.me} exam={el} story={true} />;
       components.push(item);
     } else if (task.type.toLowerCase() === "document") {
       el = lesson.documents.find((con) => con.id === task.id);
+      if (!el) return;
+
       item = (
         <Document
           key={el.id}
+          id={el.id}
           clauses={el.clauses}
           complexity={el.complexity}
           title={el.title}
@@ -459,8 +579,10 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "forum") {
       el = lesson.forum;
+      if (!el) return;
       item = (
         <Forum
           key={el.id}
@@ -476,15 +598,21 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
+    } else {
+      return;
     }
   });
+  const passStep = (num) => {
+    props.passStep(num);
+  };
   return (
     <Container>
       {me && (
         <DemoFeed
           components={[
             ...components,
-            <StatsColumn>
+            <StatsColumn id="demo_lesson_data">
               <LessonData
                 index={1}
                 lesson={lesson}
@@ -495,18 +623,33 @@ const StoryEx = (props) => {
             </StatsColumn>,
             <DemoSignUp />,
           ]}
+          move_statuses={move_statuses}
           experience={experience}
           total={total}
           next={next}
+          step={props.step}
           number_of_tasks={tasks.length}
           coursePageID={coursePageID}
+          coursePageId={coursePageID}
           me={me}
-          hasSecret={lesson.hasSecret}
           lesson_structure={lesson.structure.lessonItems}
+          openLesson={props.openLesson}
+          move={false}
+          notes={lesson.notes}
+          chats={lesson.chats}
+          hasSecret={lesson.hasSecret}
           lesson_number={lesson.number}
           lesson_name={lesson.name}
           lessonID={lesson.id}
           my_result={my_result}
+          passStep={passStep}
+          lessonId={props.id}
+          openSize={lesson.openSize}
+          lesson={lesson}
+          i_am_author={props.i_am_author}
+          i_am_student={props.i_am_student}
+          stats_data={stats_data}
+          textToBeTranslated={textToBeTranslated}
         />
       )}
     </Container>

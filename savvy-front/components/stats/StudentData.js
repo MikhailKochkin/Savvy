@@ -560,11 +560,14 @@ const Person = (props) => {
           <div>
             {props.type !== "lesson_analytics"
               ? ((total / active_lessons.length) * 100).toFixed(0)
-              : (
-                  (maxes[0].progress /
-                    maxes[0].lesson.structure.lessonItems.length) *
+              : Math.min(
+                  (
+                    (maxes[0].progress /
+                      maxes[0].lesson.structure.lessonItems.length) *
+                    100
+                  ).toFixed(0),
                   100
-                ).toFixed(0)}
+                )}
             %
           </div>
         </Square>

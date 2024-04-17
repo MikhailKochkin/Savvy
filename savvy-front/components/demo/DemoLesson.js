@@ -2,11 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
-import Link from "next/link";
-// import CircularProgress from "@material-ui/core/CircularProgress";
 import { useTranslation } from "next-i18next";
 import DemoStoryEx from "./DemoStoryEx";
-import { useUser } from "../User";
 import { TailSpin } from "react-loader-spinner";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
@@ -18,7 +15,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       number
       type
       structure
-      short_structure
       change
       open
       totalPoints
@@ -34,6 +30,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         link_clicks
         text
+        name
+        type
         isSecret
         complexity
         next
@@ -79,24 +77,24 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         question
+        instructorName
+        name
+        image
         next
         id
         user {
           id
         }
       }
-      testPractices {
-        id
-        tasks
-        tasksNum
-      }
       problems {
         id
         text
+        name
         nodeID
         steps
         complexity
         nodeType
+        type
         user {
           id
         }
@@ -146,6 +144,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       }
       shots {
         id
+        name
         title
         parts
         comments
@@ -227,14 +226,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           number
           type
           published
-          # lessonResults {
-          #   id
-          #   visitsNumber
-          #   lessonID
-          #   student {
-          #     id
-          #   }
-          # }
+          name
+          open
         }
       }
     }

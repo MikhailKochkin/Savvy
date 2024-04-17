@@ -12,7 +12,7 @@ import AnswerQuestions from "./AnswerQuestions";
 import TranslateText from "./TranslateText";
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
-import PagePurchase from "./PagePurchase.js";
+// import PagePurchase from "./PagePurchase.js";
 import calculateSum from "../../functions.js";
 import Navigation from "./Navigation";
 
@@ -613,24 +613,6 @@ const Feed = (props) => {
       <Auth id="buy_section" />,
     ];
     next_lesson = false;
-    // } else if (
-    //   !props.openLesson &&
-    //   me.new_subjects.filter((sbj) => sbj.id == coursePageId).length == 0 &&
-    //   me.coursePages.filter((c) => c.id == coursePageId).length == 0 &&
-    //   me.co_coursePages.filter((c) => c.id == coursePageId).length == 0 &&
-    //   !me.permissions.includes("ADMIN")
-    // ) {
-    //   lessonElements = [
-    //     props.components.slice(0, 2),
-    //     <PagePurchase
-    //       coursePageId={coursePageId}
-    //       me={me}
-    //       coursePage={coursePage}
-    //       lesson_structure={lesson_structure}
-    //       lessonId={lessonId}
-    //     />,
-    //   ];
-    //   next_lesson = false;
   } else {
     lessonElements = props.components;
     next_lesson = true;
@@ -663,7 +645,7 @@ const Feed = (props) => {
     setTranslationMode(false);
   };
 
-  // 3. Move through the lesson functionality for the arrow button
+  // 2. Move through the lesson functionality for the arrow button
 
   const move = async (id) => {
     setNum(num + 1);
@@ -697,7 +679,7 @@ const Feed = (props) => {
     }, 500);
   };
 
-  // 5. Determine screen width
+  // 4. Determine screen width
 
   useEffect(() => {
     setOpen(width < 500 ? false : true);

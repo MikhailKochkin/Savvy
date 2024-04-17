@@ -473,7 +473,6 @@ const Chat = (props) => {
           </button>
         </Next>
       )}
-      {console.log("num", num, messages.messagesList.length)}
       {getData &&
         props.next.true.value &&
         !moved &&

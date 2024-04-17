@@ -92,7 +92,6 @@ const TranslateText = (props) => {
   }, [props.textToBeTranslated, props.translationLanguage]);
 
   const translate = async (event) => {
-    console.log("11");
     if (props.translationLanguage.split(" ").length > 130) return;
     setGenerating(true);
     try {
