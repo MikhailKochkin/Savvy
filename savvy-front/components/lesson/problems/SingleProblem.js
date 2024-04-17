@@ -364,7 +364,7 @@ const SingleProblem = (props) => {
               onFinish={onFinish}
             />
           )}
-          {!problem.steps && (
+          {(!problem.steps || problem.steps.problemItems.length == 0) && (
             <ResponseArea>
               <h2>{t("write_answer")}</h2>
               <Frame story={story}>

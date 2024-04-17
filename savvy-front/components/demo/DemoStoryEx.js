@@ -193,7 +193,6 @@ const StoryEx = (props) => {
 
   const handleSelection = useCallback(() => {
     const selection = window.getSelection().toString();
-    console.log("selection", selection);
     if (selection && selection !== prevSelection.current) {
       translateSelectedText(selection, "es");
       prevSelection.current = selection;
