@@ -42,7 +42,7 @@ const Info = styled.div`
   .container {
     width: 1050px;
     display: flex;
-    height: 340px;
+    height: 450px;
     /* min-height: 75vh; */
     margin-top: 20px;
     flex-direction: column;
@@ -88,9 +88,7 @@ const Info = styled.div`
           transform: skew(-6deg);
           background: #fce969;
         }
-        @media (max-width: 1150px) {
-          font-size: 6.4rem;
-        }
+
         @media (max-width: 900px) {
           font-size: 4rem;
           width: 100%;
@@ -136,6 +134,7 @@ const Buttons = styled.div`
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  margin-bottom: 50px;
   .button1 {
     background: none;
     color: #1a1a1a;
@@ -185,8 +184,6 @@ const Buttons = styled.div`
     div {
       font-size: 1.4rem;
     }
-  }
-  @media (max-width: 1300px) {
   }
   @media (max-width: 800px) {
     flex-direction: column;

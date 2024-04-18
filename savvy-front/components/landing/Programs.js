@@ -133,6 +133,9 @@ const Option = styled.div`
 
 const Programs = () => {
   const router = useRouter();
+  if (router.locale !== "ru") {
+    return;
+  }
   const { loading, error, data } = useQuery(COURSES_QUERY);
   const {
     loading: loading1,
@@ -169,85 +172,63 @@ const Programs = () => {
   return (
     <Styles id="course_search">
       <Search>
-        {router.locale == "ru" && (
-          <>
-            <div id="want">😏 Я хочу ...</div>
-            <Tags>
-              <Option active={tag == "now"} onClick={(e) => move("now")}>
-                Построить карьеру
-              </Option>
-              <Option
-                active={tag == "english"}
-                onClick={(e) => move("english")}
-              >
-                Выучить Legal English
-              </Option>
-              <Option active={tag == "corp"} onClick={(e) => move("corp")}>
-                Работать с корпоративным правом
-              </Option>
-              <Option active={tag == "civil"} onClick={(e) => move("civil")}>
-                Изучать гражданское право
-              </Option>
-              <Option active={tag == "ip"} onClick={(e) => move("ip")}>
-                Работать в IT/IP
-              </Option>
-              <Option
-                active={tag == "real_estate"}
-                onClick={(e) => move("real_estate")}
-              >
-                Работать с недвижимостью
-              </Option>
-              {/* <Option onClick={(e) => setTag("real_estate")}>
+        <>
+          <div id="want">😏 Я хочу ...</div>
+          <Tags>
+            <Option active={tag == "now"} onClick={(e) => move("now")}>
+              Построить карьеру
+            </Option>
+            <Option active={tag == "english"} onClick={(e) => move("english")}>
+              Выучить Legal English
+            </Option>
+            <Option active={tag == "corp"} onClick={(e) => move("corp")}>
+              Работать с корпоративным правом
+            </Option>
+            <Option active={tag == "civil"} onClick={(e) => move("civil")}>
+              Изучать гражданское право
+            </Option>
+            <Option active={tag == "ip"} onClick={(e) => move("ip")}>
+              Работать в IT/IP
+            </Option>
+            <Option
+              active={tag == "real_estate"}
+              onClick={(e) => move("real_estate")}
+            >
+              Работать с недвижимостью
+            </Option>
+            {/* <Option onClick={(e) => setTag("real_estate")}>
             Больше зарабатывать
           </Option> */}
-              <Option
-                active={tag == "law_school"}
-                onClick={(e) => move("law_school")}
-              >
-                Закончить юрфак
-              </Option>
-              <Option
-                active={tag == "litigation"}
-                onClick={(e) => move("litigation")}
-              >
-                Стать судебным юристом
-              </Option>
-              <Option
-                active={tag == "first_job"}
-                onClick={(e) => move("first_job")}
-              >
-                Найти первую работу
-              </Option>
-              <Option active={tag == "tech"} onClick={(e) => move("tech")}>
-                Погрузиться в Legal Tech
-              </Option>
-              <Option id="create">
-                <a href="https://t.me/MikKochkin" target="_blank">
-                  Создать свой курс на BeSavvy
-                </a>
-              </Option>
-            </Tags>
-          </>
-        )}
-        {router.locale == "en" && (
-          <>
-            <div id="want">😏 Or you can try ...</div>
-            <Tags>
-              <Option
-                active={tag == "english_eng"}
-                onClick={(e) => move("english")}
-              >
-                Mastering Legal English
-              </Option>
-              {/* <Option id="create">
-                <a href="https://t.me/MikKochkin" target="_blank">
-                  Create my own course
-                </a>
-              </Option> */}
-            </Tags>
-          </>
-        )}
+            <Option
+              active={tag == "law_school"}
+              onClick={(e) => move("law_school")}
+            >
+              Закончить юрфак
+            </Option>
+            <Option
+              active={tag == "litigation"}
+              onClick={(e) => move("litigation")}
+            >
+              Стать судебным юристом
+            </Option>
+            <Option
+              active={tag == "first_job"}
+              onClick={(e) => move("first_job")}
+            >
+              Найти первую работу
+            </Option>
+            <Option active={tag == "tech"} onClick={(e) => move("tech")}>
+              Погрузиться в Legal Tech
+            </Option>
+            <Option id="create">
+              <a href="https://t.me/MikKochkin" target="_blank">
+                Создать свой курс на BeSavvy
+              </a>
+            </Option>
+          </Tags>
+        </>
       </Search>
+
       <Container
         id="course_container"
         moreThanOne={data.coursePages.length > 1 ? true : false}

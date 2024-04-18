@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 const Styles = styled.div`
   /* min-height: 100vh; */
   width: 100vw;
-  min-height: 60vh;
+  min-height: 30vh;
 
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@ const Styles = styled.div`
     display: flex;
     flex-direction: row;
     max-width: 1300px;
-
+    margin-bottom: 50px;
     flex-wrap: nowrap;
     justify-content: space-between;
     /* grid-column-gap: 20px; */
@@ -167,6 +167,48 @@ const Review = styled.div`
   }
 `;
 
+const LogoBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 150px;
+  margin-top: 80px;
+  h2 {
+    font-size: 3.4rem;
+    font-weight: 600;
+    width: 100%;
+    line-height: 1.2;
+    text-align: center;
+  }
+  @media (max-width: 800px) {
+    flex-direction: column;
+    h2 {
+      font-size: 3rem;
+    }
+  }
+`;
+
+const Logos = styled.div`
+  width: 40vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  img {
+    height: 70px;
+    margin: 20px 0;
+  }
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    img {
+      height: 40px;
+      margin: 20px 0;
+    }
+  }
+`;
+
 const Reviews = () => {
   const router = useRouter();
 
@@ -217,24 +259,34 @@ const Reviews = () => {
 
   return (
     <Styles>
-      <div class="parent">
-        {reviews.map((r, i) => (
-          <div
-            key={"review" + i}
-            className={(i + 1) % 2 == 0 ? "div1" : "div2"}
-          >
-            <Review>
-              <div className="author">
-                <img src={r.author_image} />
-              </div>
-              <div className="bubble">{r.text}</div>
-              <div className="author">
-                <div>{r.author_name}</div>
-              </div>
-            </Review>
-          </div>
-        ))}
-      </div>
+      {router.locale == "ru" ? (
+        <div class="parent">
+          {reviews.map((r, i) => (
+            <div
+              key={"review" + i}
+              className={(i + 1) % 2 == 0 ? "div1" : "div2"}
+            >
+              <Review>
+                <div className="author">
+                  <img src={r.author_image} />
+                </div>
+                <div className="bubble">{r.text}</div>
+                <div className="author">
+                  <div>{r.author_name}</div>
+                </div>
+              </Review>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <LogoBlock>
+          <h2>Worked with and supported by</h2>
+          <Logos>
+            <img src="static/Strive.png" alt="" />
+            <img src="static/lawtechuk.png" alt="" />
+          </Logos>
+        </LogoBlock>
+      )}
     </Styles>
   );
 };

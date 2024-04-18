@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
 import { useTranslation } from "next-i18next";
-
+import Modal from "styled-react-modal";
 import Box from "./Box";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
@@ -33,11 +33,13 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  width: ${(props) => (props.story ? "85vw" : "100%")};
-  max-width: 1350px;
+  width: 95vw;
+  padding: 100px 0;
+  /* max-width: 950px; */
   display: flex;
+  background: #f8f9fa;
   margin-bottom: 4%;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
@@ -56,9 +58,9 @@ const Styles = styled.div`
 
 const OuterContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  background-color: blue;
   @media (max-width: 800px) {
     flex-direction: column;
     align-items: center;
@@ -92,8 +94,8 @@ const ButtonTwo = styled.button`
 `;
 
 const Block = styled.div`
-  overflow: auto; // Add this line
-  width: 950px;
+  /* overflow: auto; // Add this line */
+  width: 940px;
   height: auto;
   display: grid;
   background: #fff;
@@ -112,7 +114,7 @@ const Block = styled.div`
   }
   grid-template-rows: auto;
   @media (max-width: 800px) {
-    width: 95%;
+    width: 100%;
   }
 `;
 
@@ -135,7 +137,7 @@ const Element = styled.div`
   }
   .single_option {
     p {
-      margin: 10px 0;
+      margin: 3px 0;
     }
   }
   .tick {
@@ -161,7 +163,7 @@ const Element = styled.div`
     `1px ${
       props.borders && props.borders.left !== "none" ? "solid" : "dashed"
     } ${props.borders && props.borders.left !== "none" ? "#98A0A6" : "#fff"}`};
-  padding: 5px 15px;
+  padding: 0px 15px;
   grid-column-start: ${(props) => props.startColumn};
   grid-column-end: span ${(props) => props.size};
   grid-row-end: span ${(props) => props.rows};
@@ -277,9 +279,10 @@ const Variants = styled.div`
   display: flex;
   flex-direction: column;
   top: 50px;
-  height: ${(props) => {
+  /* height: ${(props) => {
     return `${props.height}px`;
-  }};
+  }}; */
+  height: 600px;
   overflow-y: auto; // Handle overflow
   padding: 10px;
   @media (max-width: 800px) {
@@ -291,8 +294,10 @@ const Variants = styled.div`
 const VarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex-basis: 30%;
   padding: 10px;
+  width: 100%;
+  min-height: 600px;
+
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -301,7 +306,6 @@ const VarContainer = styled.div`
   }
 `;
 
-const checkArray = (arr) => arr.map((item) => !item.isTest || !item.inDoc);
 const setNullForIsTest = (elements) => {
   return elements.map((element) => {
     if (element.isTest && element.inDoc) {
@@ -314,46 +318,26 @@ const setNullForIsTest = (elements) => {
   });
 };
 
+const findIsTest = (elements) => {
+  let arr = [];
+  elements.map((element, i) => {
+    if (element.isTest && element.inDoc) {
+      // If isTest is true, set the element to null
+      return arr.push({
+        index: i,
+        element: null,
+      });
+    } else {
+      // Otherwise, keep the element unchanged
+      return;
+    }
+  });
+  return arr;
+};
+
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
-  const elements = construction.elements.elements;
-  // Count the # of clicks on check button
-  const [attempts, setAttempts] = useState(0);
-
-  // DIFFERENT COLLECTIONS OF ELEMENTS
-  // the data of the constructor
-  const [input, setInput] = useState(setNullForIsTest(elements));
-  // const [input, setInput] = useState(removeAndReplaceIsTest(elements));
-  // elements array turned into boolean array that will be used to check the answers of the students
-  const [currentConfig, setCurrentConfig] = useState(checkArray(elements));
-
-  // optional elements in the right column
-  const [variants, setVariants] = useState([]);
-
-  // can we show the student if their results are (in)correct
-  const [isResultShown, setIsResultShown] = useState(false);
-  // smth to do with the width / height of the elements
-  const [heightInPixels, setHeightInPixels] = useState(200); // Initialize state
-
-  const [createConstructionResult, { data, loading, error }] = useMutation(
-    CREATE_CONSTRUCTIONRESULT_MUTATION
-  );
-  const { t } = useTranslation("lesson");
-
-  const shuffle = (array) => {
-    let m = array.length,
-      t,
-      i;
-    while (m) {
-      i = Math.floor(Math.random() * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-    return array;
-  };
-
-  function compareArrays(arr1, arr2) {
+  const compareArrays = (arr1, arr2) => {
     // Check if both arrays have the same length
     if (arr1.length !== arr2.length) {
       return false;
@@ -373,7 +357,45 @@ const NewConstructor = (props) => {
     }
 
     return true;
-  }
+  };
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeBlock, setActiveBlock] = useState(null);
+  const elements = construction.elements.elements;
+  const [attempts, setAttempts] = useState(0); // Count the # of clicks on check button
+  const [elementsInUse, setElementsInUse] = useState();
+  const [startCheckingProcedure, setStartCheckingProcedure] = useState(false);
+  const [mode, setMode] = useState("learn");
+
+  // DIFFERENT COLLECTIONS OF ELEMENTS
+  // the data of the constructor
+  const [input, setInput] = useState(setNullForIsTest(elements));
+  // optional elements in the right column
+  const [variants, setVariants] = useState([]);
+  // can we show the student if their results are (in)correct
+  const [isResultShown, setIsResultShown] = useState(false);
+  // smth to do with the width / height of the elements
+  const [heightInPixels, setHeightInPixels] = useState(200); // Initialize state
+
+  const [createConstructionResult, { data, loading, error }] = useMutation(
+    CREATE_CONSTRUCTIONRESULT_MUTATION
+  );
+
+  const { t } = useTranslation("lesson");
+
+  const toggleModal = (e) => setIsOpen(!isOpen);
+
+  const shuffle = (array) => {
+    let m = array.length,
+      t,
+      i;
+    while (m) {
+      i = Math.floor(Math.random() * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+    return array;
+  };
 
   useEffect(() => {
     // 1. slide smoothly
@@ -383,39 +405,50 @@ const NewConstructor = (props) => {
     setVariants(vars);
     // 3. Change width of the right column
     const el = document.getElementById("con_block");
+    setElementsInUse(findIsTest(elements));
     if (el) {
       const height = el.clientHeight;
       setHeightInPixels(height); // Set state
     }
   }, []);
 
-  const getInputFromSingleElement = (isCorrect, index, el) => {
-    setIsResultShown(false);
-    // 1. Make a copy of old answers
-    let new_config = [...currentConfig];
-    // 2. Make changes
-    new_config[index] = isCorrect;
-    // 3. Save to state
-    setCurrentConfig([...new_config]);
-    // 4. Chnage whole doc structure using the input state
-    let new_input = [...input];
-    new_input[index] = el;
-    setInput(new_input);
-  };
-
   const onCheck = (val, i) => {
     setIsResultShown(true);
+    setMode("check");
     // 2. the new data structure? Input?
     setAttempts(attempts + 1);
-    // createConstructionResult({
-    //   variables: {
-    //     answer: "",
-    //     attempts: attempts,
-    //     lessonId: lessonID,
-    //     constructionId: construction.id,
-    //     elements: { elements: input },
-    //   },
-    // });
+    createConstructionResult({
+      variables: {
+        answer: "",
+        attempts: attempts,
+        lessonId: lessonID,
+        constructionId: construction.id,
+        elements: { elements: input },
+      },
+    });
+  };
+
+  const passElementValue = (val) => {
+    setStartCheckingProcedure(false);
+    setMode("learn");
+
+    let newEl = [...elements].find((el) => el.text == val);
+    let newInput = [...input];
+    newInput[activeBlock] = newEl;
+    setInput(newInput);
+    let newElementsInUse = [...elementsInUse];
+    newElementsInUse.find((el) => el.index == activeBlock).element = newEl;
+    setElementsInUse(newElementsInUse);
+    setIsOpen(false);
+    setIsResultShown(false);
+  };
+
+  const passModalOpen = (val) => {
+    setIsOpen(true);
+  };
+
+  const passActiveBlock = (index) => {
+    setActiveBlock(index);
   };
 
   return (
@@ -424,65 +457,74 @@ const NewConstructor = (props) => {
         <Block id="con_block" columns={construction.columnsNum}>
           {[...elements].map((t, i) => (
             <ConElement
-              // 0. Element itself + elements
+              // 1. Element itself + elements
               el={t}
               elems={elements}
-              // 1. Element design options
+              id={i + 1}
+              i={i}
+              // 2. Element design options
               text={t.text}
               size={t.size}
               rows={t.rows}
               borders={t.borders}
               place={t.place}
               display={t.inDoc}
-              // 2. Element logic
+              // 3. Element logic
               isTest={t.isTest}
               type={construction.type}
               allCorrect={compareArrays(elements, input)}
-              // should we show the result
+              isCorrect={elements[i]?.text == input[i]?.text}
+              // 4. Checking logic
               isResultShown={isResultShown}
-              // shows if the answer has been answered correctly
-              answer_status={currentConfig[i]}
-              // 3. Element identification
-              id={i + 1}
-              i={i}
+              startCheckingProcedure={startCheckingProcedure}
+              mode={mode}
               // shuffled elements in the right column. We will need this data to check if the chosen variant is in the right position.
               variants={variants}
-              // Get the answer of the student re this element
-              getInputFromSingleElement={getInputFromSingleElement}
+              inputSingleElement={input[i]}
+              passModalOpen={passModalOpen}
+              passActiveBlock={passActiveBlock}
             />
           ))}
           <ButtonTwo onClick={(e) => onCheck()}>{t("check")}</ButtonTwo>
         </Block>
-        <VarContainer>
-          <Variants height={heightInPixels ? heightInPixels : 500}>
-            {variants.map((option, index) => {
-              return (
-                <Box
-                  // used={used.includes(index + 1)}
-                  index={index}
-                  option={option.text}
-                />
-              );
-            })}
-          </Variants>
-        </VarContainer>
+
+        <StyledModal
+          isOpen={isOpen}
+          onBackgroundClick={toggleModal}
+          onEscapeKeydown={toggleModal}
+        >
+          <VarContainer>
+            <Variants height={heightInPixels ? heightInPixels : 500}>
+              {variants.map((option, index) => {
+                return (
+                  <Box
+                    index={index}
+                    option={option.text}
+                    passElementValue={passElementValue}
+                    elementsInUse={elementsInUse}
+                  />
+                );
+              })}
+            </Variants>
+          </VarContainer>
+        </StyledModal>
       </OuterContainer>
     </Styles>
   );
 };
 
-const Number_Input = styled.input`
+const InputBlock = styled.div`
   padding: 5px;
-  width: 45px;
-  height: 35px;
-  border: 1px dashed;
-  border-color: #c4c4c4;
-  white-space: nowrap;
+  width: 90%;
+  min-height: ${(props) => (props.isTest ? "75px" : "25px")};
+  border: ${(props) => props.border};
+  /* white-space: nowrap; */
   font-family: Montserrat;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   line-height: 1.8;
-  margin: 5px 0;
   margin-right: 15px;
+  cursor: pointer;
+  margin-bottom: 10px;
 `;
 
 const ConElement = (props) => {
@@ -497,43 +539,32 @@ const ConElement = (props) => {
   const [correctAnswer, setCorrectAnswer] = useState();
   const [chosenElement, setChosenElement] = useState();
   const [result, setResult] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [answer, setAnswer] = useState();
-
-  useEffect(() => {
-    if (isResultShown && el.place == variants[value - 1]?.place) {
-      setReveal(false);
-    }
-  }, [props.isResultShown]);
-
+  let sign = "";
   const {
-    el,
     isResultShown,
     isTest,
     text,
     i,
     borders,
     rows,
-    variants,
-    answer_status,
+    el,
+    elems,
     display,
     passResult,
-    getInputFromSingleElement,
     allCorrect,
+    isCorrect,
+    inputSingleElement,
+    mode,
   } = props;
 
-  const changeValue = (e) => {
-    // 1. Change the state
-    setValue(parseInt(e.target.value));
-    // 2. Pass the value up
-    // getInputFromSingleElement(variants[e.target.value - 1], i);
-    getInputFromSingleElement(
-      el.place == variants[e.target.value - 1]?.place,
-      i,
-      variants[e.target.value - 1]
-    );
-    // setReveal(false);
-  };
+  useEffect(() => {
+    if (isCorrect && mode == "check") {
+      setIsFinished(true);
+    }
+  }, [isCorrect, mode]);
 
   const checkAnswer = async (e) => {
     e.persist();
@@ -668,6 +699,34 @@ const ConElement = (props) => {
     e.target.previousSibling.previousSibling.style.pointerEvents = "none";
   };
 
+  let border;
+  if (isTest) {
+    console.log("isTest", isTest && !isCorrect && mode == "check");
+  }
+  if (!isTest) {
+    border = "none";
+    sign = "";
+  } else if (!inputSingleElement) {
+    border = "1px dashed #c4c4c4";
+    sign = "";
+  } else if (isTest && isCorrect && mode == "check") {
+    border = "2px dashed #00B600";
+    sign = "✅";
+  } else if (isTest && !isCorrect && mode == "check") {
+    console.log("wrong");
+    border = "1px dashed #c4c4c4";
+    sign = "❌";
+  } else if (isTest && !isFinished) {
+    border = "1px dashed #c4c4c4";
+    sign = "";
+  } else if (isFinished) {
+    border = "2px dashed #00B600";
+    sign = "✅";
+  } else {
+    border = "none";
+    sign = "";
+  }
+
   return (
     <Element
       isTest={isTest}
@@ -677,54 +736,77 @@ const ConElement = (props) => {
       borders={borders}
       colored={text !== "<p></p>"}
     >
-      {reveal && isTest && (
-        <Number_Input
-          type="number"
-          value={value}
-          onChange={(e) => changeValue(e)}
-          min="0"
-          max={variants.length}
-        />
-      )}
-      {isTest && (
-        <>
-          <div
-            className="single_option"
-            onClick={(e) => {
-              if (!allCorrect) {
-                alert("First build the structure of the document");
-              } else {
-                if (e.target.getAttribute("class") == "mini_button") {
-                  const ch = checkAnswer(e);
+      <InputBlock
+        border={border}
+        isTest={isTest}
+        onClick={(e) => {
+          console.log("click");
+          if (!props.isCorrect) {
+            props.passModalOpen(true);
+            props.passActiveBlock(i);
+          } else {
+          }
+        }}
+      >
+        {isTest && (
+          <>
+            <div
+              className="single_option"
+              onClick={(e) => {
+                if (allCorrect) {
+                  if (e.target.getAttribute("class") == "mini_button") {
+                    const ch = checkAnswer(e);
+                  }
+                  if (e.target.getAttribute("type") === "comment") {
+                    onMouseClick(e);
+                  }
                 }
-                if (e.target.getAttribute("type") === "comment") {
-                  onMouseClick(e);
-                }
-              }
-            }}
-          >
-            {variants[value - 1]
-              ? parse(variants[value - 1].text)
-              : parse("<p></p>")}
-          </div>
-          {isTest && isResultShown && (answer_status ? "✅" : "❌")}
-
-          {isTest && isResultShown && (
-            <div className="single_option_comment">
-              {reveal && variants[value - 1] && variants[value - 1].comment ? (
-                <div className="comment_yellow">
-                  {parse(variants[value - 1].comment)}
-                </div>
-              ) : (
-                parse("<p></p>")
-              )}
+              }}
+            >
+              {inputSingleElement
+                ? parse(inputSingleElement.text)
+                : parse("<p></p>")}
             </div>
-          )}
-        </>
-      )}
-      {!isTest && <div className="single_option">{parse(text)}</div>}
+            {sign}
+            {isTest && isResultShown && (
+              <div className="single_option_comment">
+                {mode == "check" && inputSingleElement?.comment ? (
+                  <div className="comment_yellow">
+                    {parse(inputSingleElement?.comment)}
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </>
+        )}
+        {!isTest && <div className="single_option">{parse(text)}</div>}
+      </InputBlock>
     </Element>
   );
 };
+
+const StyledModal = Modal.styled`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  width: 600px;
+  min-height: 600px;
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    width: 90%;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;
 
 export default NewConstructor;

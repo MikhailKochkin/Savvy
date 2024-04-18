@@ -30,25 +30,29 @@ const Styles = styled.div`
   padding: 50px 0;
   min-height: 85vh;
   width: 100vw;
-  background-image: url("/static/pattern.svg");
-  background-size: cover;
+  background-color: #0d1321;
+  /* background-image: url("/static/pattern.svg");
+  background-size: cover; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   @media (max-width: 800px) {
     height: auto;
-    padding: 0;
+    padding: 80px 0;
     min-height: 0;
     background-size: contain;
   }
 `;
 
 const Container = styled.div`
-  width: 75%;
+  width: 35%;
   height: 90%;
   max-width: 1100px;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -60,15 +64,19 @@ const Description = styled.div`
   justify-content: space-between;
   width: 48%;
   min-width: 460px;
-  height: 400px;
-  border: 1px solid #e7ebef;
+
   padding: 4%;
-  background: #fff;
-  border-radius: 25px;
+  color: #fff;
+  line-height: 1.2;
+  font-size: 4rem;
+  font-weight: 400;
   .highlight {
     padding-bottom: 1px;
     border-bottom: 3px solid #f9d801;
     font-weight: 600;
+  }
+  .orange {
+    color: #edaf20;
   }
   #header {
     font-size: 2.8rem;
@@ -131,18 +139,15 @@ const Description = styled.div`
   }
   @media (max-width: 800px) {
     height: auto;
-    min-height: 350px;
     width: 100%;
     min-width: 100px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     #description {
       width: 100%;
-      margin-bottom: 20px;
     }
     #header {
       font-size: 2.6rem;
       width: 95%;
-      margin-top: 10px;
     }
     #details {
       #prices {
@@ -169,15 +174,12 @@ const Description = styled.div`
 const Contact = styled.div`
   width: 48%;
   min-width: 460px;
-  height: 400px;
+  margin-top: 50px;
   border-radius: 25px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  border: 1px solid #e7ebef;
-  border-radius: 25px;
   #form_container {
     display: flex;
     width: 100%;
@@ -192,19 +194,25 @@ const Contact = styled.div`
       line-height: 1.2;
     }
     form {
-      width: 80%;
+      width: 90%;
     }
+  }
+  .label {
+    color: #929395;
   }
   input {
     width: 100%;
     padding: 1% 2%;
     font-family: Montserrat;
     border: none;
+    background: none;
+    margin-top: 10px;
     margin-bottom: 20px;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #702eff;
     outline: 0;
+    color: #fff;
     cursor: pointer;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   #legal {
     width: 80%;
@@ -216,25 +224,27 @@ const Contact = styled.div`
   }
   button {
     width: 100%;
-    padding: 2%;
+    padding: 3% 2%;
     font-family: Montserrat;
     border: none;
-    background: #f9d801;
+    background: #fff;
     border-radius: 5px;
     margin-bottom: 10px;
+    background-color: #edaf20;
     outline: 0;
     cursor: pointer;
     font-size: 1.8rem;
+    font-weight: 500;
     transition: ease-in 0.2s;
     &:hover {
-      background-color: #dfc201;
+      background-color: #d09611;
     }
   }
   @media (max-width: 800px) {
     width: 100%;
     min-width: 100px;
     height: auto;
-
+    margin-top: 0px;
     flex-direction: column;
     padding: 4% 4%;
     input {
@@ -267,12 +277,11 @@ const Contact = styled.div`
 `;
 
 const Form = styled.div`
-  width: 100%;
   height: 90%;
   /* padding: 4%; */
   color: black;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: space-between;
   justify-content: space-between;
   .PhoneInput {
@@ -332,7 +341,7 @@ const Form = styled.div`
 const Action = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+  const [number, setNumber] = useState("000000000000000");
   const [isOpen, setIsOpen] = useState(false);
 
   const { t } = useTranslation("landing");
@@ -340,16 +349,6 @@ const Action = (props) => {
   const { asPath } = useRouter();
 
   let program;
-
-  if (props.offer === "school") {
-    program = "Карьерная Школа Юриста + Юр Английский";
-  } else if (props.offer === "corp") {
-    program = "Корпоративное право + Юр Английский";
-  } else if (props.offer === "litigation") {
-    program = "Арбитражный процесс + Юр Английский";
-  } else if (props.offer === "start") {
-    program = "Старт Карьеры";
-  }
 
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
@@ -359,36 +358,35 @@ const Action = (props) => {
       <Container>
         <Form>
           <Description>
-            <div id="header">
-              <span>{t("connect_header")}</span>
-            </div>
-            <div id="details2">
-              <div>{t("arg1")}</div>
-              {/* <div>{t("arg2")}</div> */}
-            </div>
+            Talk to our <span className="orange">founder</span> to get started
           </Description>
           <Contact>
             <div id="form_container">
-              <div className="h2">{t("c2a_header")}</div>
               <form>
+                <div className="label">Name</div>
                 <input
                   id="name"
                   className="data"
-                  placeholder={t("name")}
+                  autocomplete="off"
+                  // placeholder={t("name")}
                   onChange={(e) => setName(e.target.value)}
                 />
+                {/* <div className="label">Number</div>
                 <input
                   id="tel"
                   className="data"
                   type="tel"
-                  placeholder={t("number")}
+                  autocomplete="off"
+                  // placeholder={t("number")}
                   onChange={(e) => setNumber(e.target.value)}
-                />
+                /> */}
+                <div className="label">Email</div>
                 <input
                   id="email"
                   className="data"
                   type="email"
-                  placeholder={t("email")}
+                  autocomplete="off"
+                  // placeholder={t("email")}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <button
@@ -396,33 +394,24 @@ const Action = (props) => {
                   id="english_application_button1"
                   onClick={async (e) => {
                     e.preventDefault();
-
                     if (!EmailValidator.validate(email)) {
                       alert("Wrong Email");
-                    } else if (number.length < 7) {
-                      alert("Wrong mobile number");
                     } else {
-                      Router.push({
-                        pathname: "/hello",
-                        query: {
-                          name: name,
-                          email: email,
-                          course: program,
-                          number: number,
-                        },
-                      });
                       const res = await createBusinessClient({
                         variables: {
-                          type: asPath ? asPath : "main_page",
+                          type: "main_page",
                           email,
                           name,
                           number,
                         },
                       });
+                      alert(
+                        "Thank you for your interest! We will contact you soon"
+                      );
                     }
                   }}
                 >
-                  {t("c2a_button")}
+                  {t("c2a_button2")}
                 </button>
               </form>
             </div>

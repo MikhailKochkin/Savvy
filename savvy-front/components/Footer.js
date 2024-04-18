@@ -5,8 +5,9 @@ import { useTranslation } from "next-i18next";
 import CookieConsent from "react-cookie-consent";
 
 const FooterStyles = styled.div`
-  background-image: url("/static/pattern.svg");
-  background-size: cover;
+  /* background-image: url("/static/pattern.svg"); */
+  /* background-size: cover; */
+  background-color: #0d1321;
   color: white;
   max-height: 40%;
   min-height: 400px;
@@ -135,7 +136,7 @@ const Footer = () => {
           </div>
         )}
         <div className="block">
-          <div>{t("name")} © 2018 — 2023 </div>
+          <div>{t("name")} © 2023 — 2024 </div>
         </div>
         <div className="block">
           {router.locale == "ru" && (

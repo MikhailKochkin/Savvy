@@ -40,6 +40,7 @@ const Styles = styled.div`
   max-width: 1350px;
   padding-right: 4%;
   display: flex;
+  background: #f9f9f9;
   margin-bottom: 4%;
   font-size: 1.4rem;
   flex-direction: row;

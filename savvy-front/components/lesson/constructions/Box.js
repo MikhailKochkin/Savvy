@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
+import { set } from "lodash";
 
 const Styles = styled.div`
   border: 1px solid #c4c4c4;
@@ -8,10 +9,13 @@ const Styles = styled.div`
   margin-bottom: 4%;
   background: white;
   font-size: 1.4rem;
-  max-width: 350px;
   line-height: 1.8;
+  width: 90%;
   font-weight: 500;
   background: #f6ec9a;
+  cursor: pointer;
+  border: ${(props) =>
+    props.active ? `2px solid #3F51B5` : `1px solid #c4c4c4`};
   padding: 4% 6%;
   box-shadow: 0px 4px 4px rgba(182, 182, 182, 0.25);
   transform: ${(props) =>
@@ -81,12 +85,23 @@ const Styles = styled.div`
 `;
 
 const Box = (props) => {
+  const [active, setActive] = useState(false);
+  const [activeValue, setActiveValue] = useState();
   return (
     <Styles
       used={props.used}
       index={props.index}
       key={props.index}
       id={props.index + props.id}
+      onClick={(e) => {
+        props.passElementValue(props.option, activeValue);
+        setActive(!active);
+        setActiveValue(props.option);
+      }}
+      active={
+        props.elementsInUse.filter((el) => el?.element?.text == props.option)
+          .length > 0
+      }
     >
       <div className="number">
         <div className="circle">{props.index + 1}. </div>

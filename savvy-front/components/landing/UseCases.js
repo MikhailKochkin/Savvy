@@ -18,6 +18,7 @@ const Styles = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 100px;
     .landing_main_image {
       height: 500px;
     }
@@ -33,6 +34,8 @@ const Styles = styled.div`
       width: 100%;
     }
     .usecases_header {
+      margin-top: 10px;
+
       .landing_main_image {
         height: auto;
         width: 100%;
@@ -44,7 +47,7 @@ const Styles = styled.div`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: nowrap;
   align-items: flex-start;
   @media (max-width: 800px) {
@@ -83,7 +86,7 @@ const Example = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     div {
       line-height: 1.2;
     }

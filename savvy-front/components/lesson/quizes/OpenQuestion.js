@@ -512,8 +512,8 @@ const OpenQuestion = (props) => {
       } """ to
       explain in 3 sentences why this answer is wrong. Do it in the following way:
 
-      1. Explain what information should be in the question.
-      2. Give recommendations on how to start the answer.
+      Explain what information should be in the question.
+      Give recommendations on how to start the answer.
       
       Write in second person. Address the student as "you".
       !!! DO NOT USE the words from the correct answer!!! 
@@ -529,9 +529,9 @@ const OpenQuestion = (props) => {
       } """ to
       explain in 3 sentences how to make this answer correct. Do it in the following way:
 
-      1. Say EXTREMELY politely that the answer is not completely right.
-      2. Explain which part of the answer does not look right and needs to be changed.
-      3. Give recommendations on how to chnage this part of the answer.
+      Say EXTREMELY politely that the answer is not completely right.
+      Explain which part of the answer does not look right and needs to be changed.
+      Give recommendations on how to chnage this part of the answer.
 
       Write in second person. Address the student as "you".
       DO NOT USE the words from the correct answer!!!
@@ -618,8 +618,7 @@ const OpenQuestion = (props) => {
           Use correct answer and this information from the lesson: """ ${ifWrong} """
           To explain to your student how to inprove their answer: """ ${answer} """
           Explain in 3 sentences. Use the following structure:
-          1. Identify the part of the question that needs improvememnt
-          2. Suggest what changes should be made
+          Identify the part of the question that needs improvement. Suggest what changes should be made based on the correct answer and  information from the lesson.
           Write in second person. Adress the student as "you". DO NOT USE the words from the correct answer!!!
           Answer in ${router.locale == "ru" ? "Russian" : "English"}. 
           Make the answer at least 3 sentences long.
@@ -800,9 +799,13 @@ const OpenQuestion = (props) => {
                 setHint(res.comment);
               } else {
                 if (res.comment == "Дайте более развернутый ответ") {
-                  setHint("Try giving a more detailed answer.");
+                  setHint(
+                    "Try giving a more detailed answer. That might help me better undersatnd yur answer."
+                  );
                 } else {
-                  setHint("Try giving a shorter answer.");
+                  setHint(
+                    "Try giving a shorter, more concise answer. That might help me better undersatnd yur answer."
+                  );
                 }
               }
             }
@@ -829,9 +832,13 @@ const OpenQuestion = (props) => {
                 setHint(res.comment);
               } else {
                 if (res.comment == "Дайте более развернутый ответ") {
-                  setHint("Try giving a more detailed answer.");
+                  setHint(
+                    "Try giving a more detailed answer. That might help me better undersatnd yur answer."
+                  );
                 } else {
-                  setHint("Try giving a shorter answer.");
+                  setHint(
+                    "Try giving a shorter, more concise answer. That might help me better undersatnd yur answer."
+                  );
                 }
               }
             }

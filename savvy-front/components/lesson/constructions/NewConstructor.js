@@ -39,7 +39,7 @@ const Styles = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  background: #fcfcfc;
+  background: #f8f9fa;
   @media (max-width: 800px) {
     font-size: 1.4rem;
     width: 100%;
