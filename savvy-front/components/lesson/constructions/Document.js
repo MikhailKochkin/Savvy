@@ -33,8 +33,8 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  width: 95vw;
-  padding: 100px 0;
+  width: 100%;
+  padding: 100px 50px;
   /* max-width: 950px; */
   display: flex;
   background: #f8f9fa;
@@ -50,6 +50,7 @@ const Styles = styled.div`
     font-size: 1.4rem;
     width: 100%;
     padding-right: 0%;
+    padding: 0;
     margin-bottom: 30px;
     display: block;
     height: auto;
