@@ -366,7 +366,7 @@ const NewConstructor = (props) => {
   const [elementsInUse, setElementsInUse] = useState();
   const [startCheckingProcedure, setStartCheckingProcedure] = useState(false);
   const [mode, setMode] = useState("learn");
-
+  const [isButtonHidden, setIsButtonHidden] = useState(false);
   // DIFFERENT COLLECTIONS OF ELEMENTS
   // the data of the constructor
   const [input, setInput] = useState(setNullForIsTest(elements));
@@ -418,6 +418,7 @@ const NewConstructor = (props) => {
     setMode("check");
     // 2. the new data structure? Input?
     setAttempts(attempts + 1);
+    if (compareArrays(elements, input)) setIsButtonHidden(true);
     createConstructionResult({
       variables: {
         answer: "",
@@ -486,7 +487,9 @@ const NewConstructor = (props) => {
               passActiveBlock={passActiveBlock}
             />
           ))}
-          <ButtonTwo onClick={(e) => onCheck()}>{t("check")}</ButtonTwo>
+          {!isButtonHidden && (
+            <ButtonTwo onClick={(e) => onCheck()}>{t("check")}</ButtonTwo>
+          )}
         </Block>
 
         <StyledModal
@@ -701,9 +704,7 @@ const ConElement = (props) => {
   };
 
   let border;
-  if (isTest) {
-    console.log("isTest", isTest && !isCorrect && mode == "check");
-  }
+
   if (!isTest) {
     border = "none";
     sign = "";

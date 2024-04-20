@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-
 import Modal from "styled-react-modal";
 import moment from "moment";
 
@@ -303,16 +302,51 @@ const ProblemModal = (props) => {
                                   <b>Student answer: </b>
                                   {result.answer}
                                   <div className="standard">
+                                    {console.log(
+                                      "result.comment",
+                                      result.comment
+                                    )}
                                     <b>Comment: </b> {result.comment}{" "}
-                                    {result.correct && result.correct == true
-                                      ? "✅"
-                                      : "❌"}
+                                    {result?.comment ==
+                                    "Student asked for explanations"
+                                      ? "🤔"
+                                      : null}
+                                    {result?.comment ==
+                                    "Student opened correct answer"
+                                      ? "👀"
+                                      : null}
+                                    {result?.comment ==
+                                    "Student asked for a hint"
+                                      ? "🔍"
+                                      : null}
+                                    {result?.comment ==
+                                    "Student asked for improvements"
+                                      ? "💡"
+                                      : null}
+                                    {result?.comment !==
+                                      "Student asked for explanations" &&
+                                    result?.comment !==
+                                      "Student opened correct answer" &&
+                                    result?.comment !==
+                                      "Student asked for a hint" &&
+                                    result?.comment !==
+                                      "Student asked for improvements"
+                                      ? result?.correct == true
+                                        ? "✅"
+                                        : "❌"
+                                      : null}
                                     <br />
                                     <b>Hint:</b> {result.hint}
                                     <br />
-                                    <b>Explanation:</b> {result.explanation}
+                                    <b>Explanation:</b>{" "}
+                                    {result?.explanation
+                                      ? parse(result.explanation)
+                                      : null}
                                     <br />
-                                    <b>Improvement:</b> {result.improvement}
+                                    <b>Improvement:</b>{" "}
+                                    {result?.improvement
+                                      ? parse(result.improvement)
+                                      : null}
                                   </div>
                                 </>
                               ) : null}
@@ -389,7 +423,24 @@ const ProblemModal = (props) => {
                         </div>
                       </div>
                     )}
-                    {m.type.toLowerCase() == "quiz" && <div>Chat</div>}
+                    {m.type.toLowerCase() == "chat" && (
+                      <Block className="question">
+                        {console.log(
+                          "lesson",
+                          props.chats.find((ch) => ch.id == m.id)
+                        )}
+                        <div>
+                          <b>Chat:</b>
+                        </div>
+                        {props.chats
+                          .find((ch) => ch.id == m.id)
+                          .messages.messagesList.map((message) => (
+                            <div>
+                              <b>{message.author}</b>: {parse(message.text)}
+                            </div>
+                          ))}
+                      </Block>
+                    )}
                   </div>
                 </Results>
               );

@@ -188,5 +188,7 @@
   "these_are_the_right_answers": "These are the right answers: ",
   "not_all_answers": "But you haven't found all the answers.",
   "where_to_start": "Where should I start?",
-  "answer_above_65": "Answers above 64 are correct, while those from 58 to 64 are partially correct."
+  "answer_above_65": "Answers above 64 are correct, while those from 58 to 64 are partially correct.",
+  "more_detailed_response_recommended": "Try giving a more detailed answer. That might help me better understand your answer and evaluate it better.",
+  "more_concise_response_recommended": "Try giving a shorter, more concise answer. That might help me better understand your answer and evaluate it better."
 }

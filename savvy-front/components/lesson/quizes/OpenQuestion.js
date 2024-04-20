@@ -391,7 +391,7 @@ const OpenQuestion = (props) => {
   const [AIhint, setAIHint] = useState(""); // give the hint to the student
   const [AIExplanation, setAIExplanation] = useState("");
   const [AIImprovement, setAIImprovement] = useState("");
-
+  const [isAnswerTooShortFirst, setIsAnswerTooShortFirst] = useState(false);
   const { passResult } = props;
   const router = useRouter();
 
@@ -479,11 +479,8 @@ const OpenQuestion = (props) => {
     let url;
     let result;
     let proportion = ((answer.length / props.answer.length) * 100).toFixed(0);
-    if (proportion < 40) {
-      let simpleExplanation =
-        "Your answer is too short. Please provide a more detailed answer. It is only " +
-        proportion +
-        "% of the correct answer. ";
+    if (proportion < 25 && !isAnswerTooShortFirst) {
+      let simpleExplanation = t("more_detailed_response_recommended");
       setAIExplanation(simpleExplanation);
       createQuizResult({
         variables: {
@@ -499,6 +496,7 @@ const OpenQuestion = (props) => {
         },
       });
       setGeneratingExplanation(false);
+      setIsAnswerTooShortFirst(true);
       return simpleExplanation;
     }
 
@@ -545,7 +543,6 @@ const OpenQuestion = (props) => {
     } else {
       url = "/api/generate";
     }
-    console.log(intro + explanantion_prompt);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -767,7 +764,6 @@ const OpenQuestion = (props) => {
       )
         .then((response) => response.json())
         .then((res) => {
-          console.log("res.res", parseFloat(res.res));
           setResult(parseFloat(res.res));
           determineCorrectness(res.res);
           if (parseFloat(res.res) > 65) {
@@ -795,18 +791,10 @@ const OpenQuestion = (props) => {
             if (props.goalType !== "ASSESS") setInputColor("#ffd166");
             passResult("true");
             if (typeof res.comment === "string") {
-              if (router.locale == "ru") {
-                setHint(res.comment);
-              } else {
-                if (res.comment == "Дайте более развернутый ответ") {
-                  setHint(
-                    "Try giving a more detailed answer. That might help me better undersatnd yur answer."
-                  );
-                } else {
-                  setHint(
-                    "Try giving a shorter, more concise answer. That might help me better undersatnd yur answer."
-                  );
-                }
+              if (res.comment == "more_detailed_response_recommended") {
+                setHint(t("more_detailed_response_recommended"));
+              } else if (res.comment == "more_concise_response_recommended") {
+                setHint(t("more_concise_response_recommended"));
               }
             }
             createQuizResult({
@@ -828,18 +816,10 @@ const OpenQuestion = (props) => {
             if (props.goalType !== "ASSESS")
               setInputColor("rgba(222, 107, 72, 0.5)");
             if (typeof res.comment === "string") {
-              if (router.locale == "ru") {
-                setHint(res.comment);
-              } else {
-                if (res.comment == "Дайте более развернутый ответ") {
-                  setHint(
-                    "Try giving a more detailed answer. That might help me better undersatnd yur answer."
-                  );
-                } else {
-                  setHint(
-                    "Try giving a shorter, more concise answer. That might help me better undersatnd yur answer."
-                  );
-                }
+              if (res.comment == "more_detailed_response_recommended") {
+                setHint(t("more_detailed_response_recommended"));
+              } else if (res.comment == "more_concise_response_recommended") {
+                setHint(t("more_concise_response_recommended"));
               }
             }
             createQuizResult({

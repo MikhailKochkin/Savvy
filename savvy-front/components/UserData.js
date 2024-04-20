@@ -219,17 +219,17 @@ const ClientData = (props) => {
 
   const search = (val) => {
     // Split the input string into an array of tags
-    // const tagsArray = val.split(",").map((tag) => tag.trim());
+    const tagsArray = val.split(",").map((tag) => tag.trim());
 
     // Filter clients based on whether any of their tags match the input tags
-    // let filtered_clients = clients.filter(
-    //   (c) =>
-    //     c.tags.filter((t) => tagsArray.includes(t.toLowerCase())).length > 0
-    // );
-
     let filtered_clients = clients.filter(
-      (c) => c.tags.includes(val) || c.tags.includes(val.toLowerCase())
+      (c) =>
+        c.tags.filter((t) => tagsArray.includes(t.toLowerCase())).length > 0
     );
+
+    // let filtered_clients = clients.filter(
+    //   (c) => c.tags.includes(val) || c.tags.includes(val.toLowerCase())
+    // );
 
     // Update the state with the filtered clients
     setClients(filtered_clients);
