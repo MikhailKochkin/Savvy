@@ -3755,6 +3755,7 @@ export interface NexusGenInputs {
   }
   UserOrderByWithRelationInput: { // input type
     active?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    authType?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     careerTrack?: NexusGenInputs['CareerTrackOrderByWithRelationInput'] | null; // CareerTrackOrderByWithRelationInput
     careerTrackID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     careerTrackId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -3850,6 +3851,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     OR?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     active?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    authType?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     careerTrack?: NexusGenInputs['CareerTrackWhereInput'] | null; // CareerTrackWhereInput
     careerTrackID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     careerTrackId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -3945,6 +3947,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     OR?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     active?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    authType?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     careerTrack?: NexusGenInputs['CareerTrackWhereInput'] | null; // CareerTrackWhereInput
     careerTrackID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     careerTrackId?: string | null; // String
@@ -4749,6 +4752,7 @@ export interface NexusGenObjects {
   }
   User: { // root type
     active?: boolean | null; // Boolean
+    authType?: string | null; // String
     comment?: string | null; // String
     country?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -5281,6 +5285,8 @@ export interface NexusGenFieldTypes {
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    singleSignin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    singleSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     textBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     textUser: NexusGenRootTypes['User'] | null; // User
     updateActiveUser: NexusGenRootTypes['User'] | null; // User
@@ -5796,6 +5802,7 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     active: boolean | null; // Boolean
+    authType: string | null; // String
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
     challengeResults: NexusGenRootTypes['ChallengeResult'][]; // [ChallengeResult!]!
     co_coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
@@ -6341,6 +6348,8 @@ export interface NexusGenFieldTypeNames {
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
+    singleSignin: 'AuthPayload'
+    singleSignup: 'AuthPayload'
     textBusinessClient: 'BusinessClient'
     textUser: 'User'
     updateActiveUser: 'User'
@@ -6856,6 +6865,7 @@ export interface NexusGenFieldTypeNames {
   }
   User: { // field return type name
     active: 'Boolean'
+    authType: 'String'
     certificates: 'Certificate'
     challengeResults: 'ChallengeResult'
     co_coursePages: 'CoursePage'
@@ -7657,6 +7667,17 @@ export interface NexusGenArgTypes {
       surname?: string | null; // String
       traffic_sources?: NexusGenInputs['Visits'] | null; // Visits
       uniID?: string | null; // String
+    }
+    singleSignin: { // args
+      email?: string | null; // String
+    }
+    singleSignup: { // args
+      email?: string | null; // String
+      image?: string | null; // String
+      isFamiliar?: boolean | null; // Boolean
+      name?: string | null; // String
+      password?: string | null; // String
+      surname?: string | null; // String
     }
     textBusinessClient: { // args
       comment?: string | null; // String

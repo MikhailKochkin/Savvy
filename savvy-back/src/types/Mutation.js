@@ -276,6 +276,79 @@ const Mutation = mutationType({
         return { user, token };
       },
     });
+    t.field("singleSignup", {
+      type: "AuthPayload",
+      args: {
+        name: stringArg(),
+        surname: stringArg(),
+        email: stringArg(),
+        password: stringArg(),
+        isFamiliar: booleanArg(),
+        image: stringArg(),
+      },
+      resolve: async (_, { name, surname, email, password, image }, ctx) => {
+        const hashed_password = await bcrypt.hash(password, 10);
+        const our_user = await ctx.prisma.user.findUnique({
+          where: { email: email.toLowerCase() },
+        });
+        if (our_user) {
+          throw new Error(
+            `User with this email already exists. Please sign in.`
+          );
+        }
+
+        const user = await ctx.prisma.user.create({
+          data: {
+            name,
+            surname,
+            email: email.toLowerCase(),
+            permissions: { set: ["USER"] },
+            password: hashed_password,
+            authType: "google",
+            image: image,
+            // uni: { connect: { id: uniID } },
+            // company: { connect: { id: company } },
+            // careerTrack: { connect: { id: careerTrackID } },
+            isFamiliar: true,
+          },
+        });
+
+        const UserLevel = await ctx.prisma.userLevel.create({
+          data: {
+            user: {
+              connect: { id: user.id },
+            },
+            level: 1,
+          },
+        });
+
+        let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+          expiresIn: 1000 * 60 * 60 * 24 * 365,
+        });
+        if (process.env.NODE_ENV === "production") {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            maxAge: 31557600000,
+          });
+        } else {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 31557600000,
+          });
+        }
+
+        const newEmailEng = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: email,
+          Subject: "Hello from BeSavvy",
+          HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
+        });
+
+        return { user, token };
+      },
+    });
     t.field("botSignup", {
       type: "AuthPayload",
       args: {
@@ -522,6 +595,47 @@ const Mutation = mutationType({
             email: low_email,
           },
         });
+        // 3. generate the JWT Token
+        let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+          expiresIn: 1000 * 60 * 60 * 24 * 365,
+        });
+        if (process.env.NODE_ENV === "production") {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            maxAge: 31557600000,
+          });
+        } else {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 31557600000,
+          });
+        }
+
+        // 4. Return the user and token
+        return { user, token };
+      },
+    });
+    t.field("singleSignin", {
+      type: "AuthPayload",
+      args: {
+        email: stringArg(),
+        // password: stringArg(),
+        // traffic_sources: arg({
+        //   type: "Visits",
+        // }),
+      },
+      resolve: async (_, { email }, ctx) => {
+        // 1. check if there is a user with that email
+        const low_email = email.toLowerCase();
+        const user = await ctx.prisma.user.findUnique({
+          where: { email: low_email },
+        });
+
+        if (!user) {
+          throw new Error(`No such user found for email ${email}`);
+        }
         // 3. generate the JWT Token
         let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
           expiresIn: 1000 * 60 * 60 * 24 * 365,

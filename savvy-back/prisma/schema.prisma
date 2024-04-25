@@ -1105,6 +1105,7 @@ model User {
   password           String
   resetToken         String?
   resetTokenExpiry   Decimal?
+  authType           String?              @default("email")
   isFamiliar         Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt

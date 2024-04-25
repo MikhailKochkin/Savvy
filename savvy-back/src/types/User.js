@@ -5,6 +5,7 @@ const User = objectType({
   definition(t) {
     t.model.id();
     t.model.name();
+    t.model.authType();
     t.model.createdAt();
     t.model.updatedAt();
     t.model.surname();

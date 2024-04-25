@@ -2588,6 +2588,8 @@ type Mutation {
   signin(email: String, password: String, traffic_sources: Visits): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, referal: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
+  singleSignin(email: String): AuthPayload
+  singleSignup(email: String, image: String, isFamiliar: Boolean, name: String, password: String, surname: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
   textUser(comment: String, id: String): User
   updateActiveUser(active: Boolean, email: String): User
@@ -5116,6 +5118,7 @@ input UsefulWhereUniqueInput {
 
 type User {
   active: Boolean
+  authType: String
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int): [Certificate!]!
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
   co_coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCo_coursePagesOrderByInput!]): [CoursePage!]!
@@ -5247,6 +5250,7 @@ input UserOrderByRelationAggregateInput {
 
 input UserOrderByWithRelationInput {
   active: SortOrderInput
+  authType: SortOrderInput
   careerTrack: CareerTrackOrderByWithRelationInput
   careerTrackID: SortOrderInput
   careerTrackId: SortOrderInput
@@ -5343,6 +5347,7 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
   active: BoolNullableFilter
+  authType: StringNullableFilter
   careerTrack: CareerTrackWhereInput
   careerTrackID: StringNullableFilter
   careerTrackId: StringNullableFilter
@@ -5439,6 +5444,7 @@ input UserWhereUniqueInput {
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
   active: BoolNullableFilter
+  authType: StringNullableFilter
   careerTrack: CareerTrackWhereInput
   careerTrackID: StringNullableFilter
   careerTrackId: String
