@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import Signup from "../auth/Signup";
-import Signin from "../auth/Signin";
-import RequestReset from "../auth/RequestReset";
 import Modal from "styled-react-modal";
 
 const Button = styled.button`
@@ -30,22 +27,6 @@ const Button = styled.button`
   }
 `;
 
-const StyledModal = Modal.styled`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-  }
-`;
-
 class BuyDummy extends React.Component {
   state = {
     loading: false,
@@ -64,21 +45,6 @@ class BuyDummy extends React.Component {
     return (
       <>
         <Button onClick={this.toggleModal}>{this.props.children}</Button>
-        <StyledModal
-          isOpen={this.state.isOpen}
-          onBackgroundClick={this.toggleModal}
-          onEscapeKeydown={this.toggleModal}
-        >
-          {this.state.auth === "signin" && (
-            <Signin getData={this.changeState} closeNavBar={this.toggleModal} />
-          )}
-          {this.state.auth === "signup" && (
-            <Signup getData={this.changeState} closeNavBar={this.toggleModal} />
-          )}
-          {this.state.auth === "reset" && (
-            <RequestReset getData={this.changeState} />
-          )}
-        </StyledModal>
       </>
     );
   }

@@ -4,9 +4,9 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import Modal from "styled-react-modal";
 import parse from "html-react-parser";
 
-import Signup from "../auth/Signup";
-import Signin from "../auth/Signin";
-import RequestReset from "../auth/RequestReset";
+// import Signup from "../auth/Signup";
+// import Signin from "../auth/Signin";
+// import RequestReset from "../auth/RequestReset";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION($userId: String!, $text: String!) {
@@ -183,19 +183,6 @@ const AnswerOption = (props) => {
             {props.answer && parse(props.answer)}
           </StyledButton>
         ))}
-      <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
     </>
   );
 };

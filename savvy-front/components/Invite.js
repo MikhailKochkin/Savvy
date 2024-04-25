@@ -6,9 +6,9 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 
 import { useUser } from "./User";
-import Signup from "./auth/Signup";
-import Signin from "./auth/Signin";
-import RequestReset from "./auth/RequestReset";
+// import Signup from "./auth/Signup";
+// import Signin from "./auth/Signin";
+// import RequestReset from "./auth/RequestReset";
 const ADD_TO_TEAM = gql`
   mutation ADD_TO_TEAM($id: String!) {
     addToTeam(id: $id) {
@@ -29,43 +29,6 @@ const SINGLE_TEAM_QUERY = gql`
         image
       }
     }
-  }
-`;
-
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  padding: 2%;
-  .top_message {
-    padding-bottom: 2%;
-    border-bottom: 1px solid grey;
-    font-size: 2rem;
-    width: 100%;
-    text-align: center;
-  }
-  .bottom_message {
-    margin-top: 2%;
-  }
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
   }
 `;
 
@@ -249,19 +212,6 @@ const Invite = (props) => {
           </Buttons>
         </Fieldset>
       </Form>
-      <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
     </Styles>
   );
 };
