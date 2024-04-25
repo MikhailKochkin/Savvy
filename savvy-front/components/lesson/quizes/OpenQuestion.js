@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -7,9 +7,22 @@ import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
-import { Tooltip } from "react-tooltip";
+import PropTypes from "prop-types";
 
-import { guessAlphabet, autoResizeTextarea } from "./quiz_functions";
+import {
+  guessAlphabet,
+  autoResizeTextarea,
+  removeSpecialChars,
+} from "./quizFunctions";
+import {
+  IconBlock,
+  Question,
+  Answer_text,
+  ResultCircle,
+  Button1,
+  Circle,
+  Frame,
+} from "./quizesStyles";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -53,229 +66,6 @@ const Options = styled.div`
   margin-bottom: 20px;
 `;
 
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 55px;
-    width: 55px;
-    display: flex;
-    object-fit: cover;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .icon2 {
-    margin: 5px;
-    border-radius: 50%;
-    background: #cb2d3e; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-  }
-`;
-
-const Question = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 50%;
-  margin-bottom: 3%;
-  margin-top: ${(props) => (props.story ? "2%" : "0%")};
-
-  p {
-    margin: 5px 0;
-  }
-  a {
-    border-bottom: 2px solid #26ba8d;
-    padding: 0%;
-    transition: 0.3s;
-    cursor: pointer;
-  }
-  .video {
-    height: 489px;
-    width: 275px;
-    iframe {
-      width: 100%;
-      border: none;
-      height: 100%;
-      border-radius: 15px;
-    }
-  }
-  .question_box {
-    display: flex;
-    background: #ffffff;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-
-    /* Add slide-in animation from bottom */
-    opacity: 0;
-    transform: translateY(30px); /* Start below */
-    animation: animate-slide-in-from-bottom 0.8s forwards;
-
-    /* Animation from the bottom */
-    @keyframes animate-slide-in-from-bottom {
-      0% {
-        opacity: 0;
-        transform: translateY(50px); /* Start below */
-      }
-      50% {
-        transform: translateY(-10px); /* Move up */
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0); /* Rest position */
-      }
-    }
-  }
-  .question_name {
-    margin-left: 5px;
-    background: #00204e;
-    color: white;
-    border-radius: 50%;
-    padding: 2% 3%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .question_text {
-    background: #f3f3f3;
-    color: black;
-    border-radius: 25px;
-    padding: 2% 5%;
-    min-width: 40%;
-    max-width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-  }
-  .answer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-  .answer_name {
-    margin-right: 10px;
-    background: #00204e;
-    color: white;
-    border-radius: 50%;
-    padding: 2%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .answer_test {
-    width: 50%;
-    border: 2px solid;
-    border-color: #f3f3f3;
-    border-radius: 25px;
-    padding: 2% 5%;
-    margin-bottom: 20px;
-  }
-  button {
-    width: 30%;
-    padding: 2%;
-    margin-top: 5%;
-  }
-  @media (max-width: 800px) {
-    padding: 0%;
-    margin-bottom: 5%;
-    button {
-      width: 50%;
-      padding: 3%;
-    }
-    .video {
-      height: 356px;
-      width: 200px;
-    }
-  }
-`;
-
-const Frame = styled.div`
-  position: relative;
-  min-width: 60%;
-  max-width: 70%;
-  border: 2px solid;
-  border: ${(props) =>
-    props.inputColor == "#D0EADB" ? "3px solid" : "2px solid"};
-  border-color: ${(props) => props.inputColor};
-
-  border-radius: 25px;
-  background: #fff;
-  padding: 0 2%;
-  margin: 15px 0;
-  .com {
-    border-top: 1px solid #f3f3f3;
-  }
-`;
-
-const Answer_text = styled.textarea`
-  height: 120px;
-  width: 95%;
-  outline: 0;
-  border: none;
-  resize: none;
-  border-radius: 25px;
-  padding: 3% 4%;
-  line-height: 1.8;
-  font-family: Montserrat;
-  font-size: 1.6rem;
-  margin: 10px 0;
-`;
-
-const ResultCircle = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  bottom: 0;
-  right: 0;
-  font-size: 1.4rem;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid;
-  border-color: ${(props) => props.inputColor};
-  margin: 10px; // Adjust margin to position the circle as desired
-`;
-
 const Group = styled.div`
   flex-direction: row;
   justify-content: center;
@@ -299,42 +89,6 @@ const Group2 = styled.div`
   margin-bottom: 20px;
 `;
 
-const Button1 = styled.div`
-  min-width: 200px;
-  line-height: 1.6;
-  margin-right: 20px;
-  text-align: left;
-  background: #d2edfd;
-  border-radius: 5px;
-  padding: 10px 30px;
-  margin-bottom: 15px;
-  /* height: 45px; */
-  cursor: pointer;
-  color: #000a60;
-  border: none;
-  white-space: nowrap;
-  font-size: 1.6rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  display: ${(props) => (props.correct === "true" ? "none" : "flex")};
-  pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  &:hover {
-    background: #a5dcfe;
-  }
-  @media (max-width: 800px) {
-    min-width: 100px;
-    margin-right: 10px;
-    padding: 10px 15px;
-    height: auto;
-
-    white-space: normal;
-    text-align: left;
-  }
-`;
-
 const Progress = styled.div`
   display: ${(props) => (props.display === "true" ? "flex" : "none")};
   flex-direction: row;
@@ -351,47 +105,38 @@ const Progress2 = styled.div`
   margin: 10px;
 `;
 
-const Circle = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50px;
-  border: 1px solid gray;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: 15px;
-  cursor: pointer;
-  transition: ease-in 0.4s;
-  &:hover {
-    border: 1px solid blue;
-  }
-  @media (max-width: 800px) {
-    margin-left: 5px;
-    display: none;
-  }
-`;
-
 const OpenQuestion = (props) => {
   const { author, me, story, ifRight, ifWrong, quizId } = props;
+
   const [answer, setAnswer] = useState(""); // The answer provided by the student
-  const [correct, setCorrect] = useState(""); // is the answer by the student correct?
+  const [previousAnswers, setPreviousAnswers] = useState([]); // The answer provided by the student
+  const [correct, setCorrect] = useState(""); // is the answer by the student correct? Used to communicate with the student
+  const [correctnessLevel, setCorrectnessLevel] = useState(); // more deep understanding of the correctness. Used to generate prompts
+  const [result, setResult] = useState(null); // student's grade
+
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
-  const [hint, setHint] = useState(null); // give the hint to the student
   const [progress, setProgress] = useState("false");
   const [inputColor, setInputColor] = useState("#f3f3f3");
-  const [isExperienced, setIsExperienced] = useState(false);
-  const [recognition, setRecognition] = useState(null);
-  const [startSpeech, setStartSpeech] = useState(false);
-  const [generating, setGenerating] = useState(false);
-  const [correctnessLevel, setCorrectnessLevel] = useState();
-  const [result, setResult] = useState(null);
-  const [generatingExplanation, setGeneratingExplanation] = useState(false);
-  const [generatingImprovement, setGeneratingImprovement] = useState(null); // give the hint to the student
-  const [AIhint, setAIHint] = useState(""); // give the hint to the student
-  const [AIExplanation, setAIExplanation] = useState("");
-  const [AIImprovement, setAIImprovement] = useState("");
-  const [isAnswerTooShortFirst, setIsAnswerTooShortFirst] = useState(false);
+  const [isExperienced, setIsExperienced] = useState(false); // set to false once we get the student answer
+
+  const [recognition, setRecognition] = useState(null); // used for voice recognition
+  const [startSpeech, setStartSpeech] = useState(false); // used for voice recognition
+
+  const [generating, setGenerating] = useState(false); // loading spinner when checking the student's answer
+  const [hint, setHint] = useState(null); // give the hint to the student without the use of AI
+  const [AIhint, setAIHint] = useState(""); // student's last hint generated by AI
+  const [hints, setHints] = useState([]); // all AI generated hints
+
+  const [generatingExplanation, setGeneratingExplanation] = useState(false); // loading new explanation
+  const [explanations, setExplanantions] = useState([]); // all AI generated explanations
+  const [explanationsNum, setExplanationsNum] = useState(0); // how many explanations the student asked for
+  const [AIExplanation, setAIExplanation] = useState(""); // student's last explanation generated by AI
+
+  const [generatingImprovement, setGeneratingImprovement] = useState(null); // loading new improvement
+  const [improvementsNum, setImprovementsNum] = useState(0); // how many improvements the student asked for
+  const [improvements, setImprovements] = useState([]); // all AI generated improvements
+  const [AIImprovement, setAIImprovement] = useState(""); // student's last improvement generated by AI
+
   const { passResult } = props;
   const router = useRouter();
 
@@ -411,18 +156,230 @@ const OpenQuestion = (props) => {
       You expect to recieve an answer that sounds like this (correct answer): """ ${props.answer} """.
     `;
 
+  // 1. Check student's answer
+
+  const onAnswer = async (e) => {
+    setAIExplanation(null);
+    setProgress("true");
+    setExplanationsNum(0);
+    setImprovementsNum(0);
+    let data1 = {
+      answer1: props.answer.toLowerCase(),
+      answer2: answer.toLowerCase(),
+    };
+    setPreviousAnswers([...previousAnswers, answer]);
+    if (props.check === "WORD") {
+      if (props.answer.toLowerCase() === answer.toLowerCase()) {
+        if (!isExperienced) {
+          if (props.getResults) props.getResults(2);
+          setIsExperienced(true);
+        }
+        setCorrect("true");
+        if (props.goalType !== "ASSESS")
+          setInputColor("rgba(50, 172, 102, 0.25)");
+        passResult("true");
+      } else {
+        setCorrect("false");
+        if (props.goalType !== "ASSESS")
+          setInputColor("rgba(222, 107, 72, 0.5)");
+        passResult("false");
+      }
+    } else {
+      const r = await fetch(
+        "https://arcane-refuge-67529.herokuapp.com/checker",
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data1),
+        }
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          determineCorrectness(res.res);
+          if (parseFloat(res.res) > 65) {
+            setCorrect("true");
+            passResult("true");
+            if (props.goalType !== "ASSESS") {
+              setInputColor("rgba(50, 172, 102, 0.25)");
+            }
+            setResult(parseFloat(res.res));
+
+            createQuizResult({
+              variables: {
+                quiz: props.quizId,
+                lessonId: props.lessonId,
+                answer: answer,
+                correct: true,
+                result: res.res,
+                type: "answer",
+                hint: AIhint,
+                explanation: AIExplanation,
+                improvement: AIImprovement,
+                comment: `Result: ${parseFloat(res.res)}%`,
+              },
+            });
+            setProgress("false");
+          } else if (parseFloat(res.res) > 58 && parseFloat(res.res) < 60) {
+            setCorrect("has_flaws");
+            setResult(parseFloat(res.res));
+            if (props.goalType !== "ASSESS") setInputColor("#ffd166");
+            passResult("true");
+            if (typeof res.comment === "string") {
+              if (res.comment == "more_detailed_response_recommended") {
+                setHint(t("more_detailed_response_recommended"));
+              } else if (res.comment == "more_concise_response_recommended") {
+                setHint(t("more_concise_response_recommended"));
+              }
+            }
+            createQuizResult({
+              variables: {
+                quiz: props.quizId,
+                lessonId: props.lessonId,
+                answer: answer,
+                correct: true,
+                type: "answer",
+                hint: AIhint,
+                result: res.res,
+                explanation: AIExplanation,
+                improvement: AIImprovement,
+                comment: `Looks true: ${parseFloat(res.res)}%`,
+              },
+            });
+
+            setProgress("false");
+          } else if (parseFloat(res.res) > 60 && parseFloat(res.res) <= 65) {
+            setCorrect("looks_true");
+            setResult(parseFloat(res.res));
+            if (props.goalType !== "ASSESS") setInputColor("#ffd166");
+            passResult("true");
+            if (typeof res.comment === "string") {
+              if (res.comment == "more_detailed_response_recommended") {
+                setHint(t("more_detailed_response_recommended"));
+              } else if (res.comment == "more_concise_response_recommended") {
+                setHint(t("more_concise_response_recommended"));
+              }
+            }
+            createQuizResult({
+              variables: {
+                quiz: props.quizId,
+                lessonId: props.lessonId,
+                answer: answer,
+                correct: true,
+                type: "answer",
+                hint: AIhint,
+                result: res.res,
+                explanation: AIExplanation,
+                improvement: AIImprovement,
+                comment: `Looks true: ${parseFloat(res.res)}%`,
+              },
+            });
+
+            setProgress("false");
+          } else {
+            setCorrect("false");
+            setResult(parseFloat(res.res));
+            if (props.goalType !== "ASSESS")
+              setInputColor("rgba(222, 107, 72, 0.5)");
+            if (typeof res.comment === "string") {
+              if (res.comment == "more_detailed_response_recommended") {
+                setHint(t("more_detailed_response_recommended"));
+              } else if (res.comment == "more_concise_response_recommended") {
+                setHint(t("more_concise_response_recommended"));
+              }
+            }
+            createQuizResult({
+              variables: {
+                quiz: props.quizId,
+                lessonId: props.lessonId,
+                answer: answer,
+                correct: false,
+                hint: AIhint,
+                type: "answer",
+                result: res.res,
+                explanation: AIExplanation,
+                improvement: AIImprovement,
+                comment: `Result: ${parseFloat(res.res)}%`,
+              },
+            });
+            setProgress("false");
+            passResult("false");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+    // setProgress("false");
+  };
+
+  // 2. Determine the correctness of the student's answer
+
+  const determineCorrectness = async (result) => {
+    if (result < 40) {
+      setCorrectnessLevel("completely_wrong");
+    } else if (result >= 40 && result < 50) {
+      setCorrectnessLevel("wrong");
+    } else if (result >= 50 && result < 58) {
+      setCorrectnessLevel("slightly_wrong");
+    } else if (result >= 58 && result < 60) {
+      setCorrectnessLevel("has_flaws");
+    } else if (result >= 60 && result < 65) {
+      setCorrectnessLevel("looks_true");
+    } else if (result >= 65) {
+      setCorrectnessLevel("correct");
+    }
+  };
+
+  // 3. Provide hints to the student
+
   const getHint = async (event) => {
     event.preventDefault();
     setGenerating(true);
-    let AItype = "openai";
+    let AItype = "claude";
     let url;
     let result;
+    let hintPrompt;
 
     if (AItype == "claude") {
       url = "/api/generate2";
     } else {
       url = "/api/generate";
     }
+
+    // Пока хорошие результаты только на example based hints.
+    // Но можно еще подсказать, где найти ответ, если есть источник.
+
+    let hintingMethods = [
+      `Provide a detailed real-life situation that can help the student understand the problem.`,
+      `Provide a short gentle subtle hint that will help the studnet look at the question from a different angle.`,
+      `Say where the student can find the answer to the question: the law, caselaw, the textbook, the lecture, etc. Use this info to find the source: ${ifWrong}. PROVIDE INFORMATION ONLY ABOUT THE SOURCE.`,
+      // `Start with one or more general premises and arrive at a specific conclusion that follows necessarily from those premises. Use this conclusion as a hint.`,
+    ];
+
+    if (hints[hints.length - 1] == "😔 I have no more hints..") {
+      setGenerating(false);
+      return;
+    }
+
+    if (hints.length >= hintingMethods.length) {
+      setGenerating(false);
+      setAIHint("I am out of hints.");
+      setHints([...hints, "😔 I have no more hints.."]);
+      return "I am out of hints.";
+    }
+
+    let hintIntro = `You are a law professor. You help your student answer this question ${props.question}.
+      The correct answer is:  ${props.answer}`;
+
+    let hintAnswerRecommendations = `Answer in ${
+      router.locale == "ru" ? "Russian" : "English"
+    }. Answer in second person. Limit your hint to 3 sentences.`;
+
+    hintPrompt = `
+      Give a hint to the student in a Socratic manner on what is the correct answer to help them answer the question. 
+      Use this approach: ${hintingMethods[hints.length]}
+      Do not use the words from the correct answer.`;
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -430,17 +387,7 @@ const OpenQuestion = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: `
-          You are a law professor. You help your student answer this question ${
-            props.question
-          }
-          The correct answer is:  ${props.answer}
-          Give a hint to the student in a Socratic manner what is the correct answer to help them answer the question. Do not use the words from the correct answer.
-          Answer in ${
-            router.locale == "ru" ? "Russian" : "English"
-          }. Answer in second person.`,
-          //  Make the answer at least 3 sentences long.
-          // The mentor's comment is: ${props.ifWrong}
+          prompt: hintIntro + hintPrompt + hintAnswerRecommendations,
         }),
       });
 
@@ -458,6 +405,7 @@ const OpenQuestion = (props) => {
       }
       if (result) {
         setAIHint(result);
+        setHints([...hints, result]);
         setGenerating(false);
         return result;
       } else {
@@ -469,19 +417,109 @@ const OpenQuestion = (props) => {
       console.error(error);
       alert(error.message);
     }
-    setGenerating(false);
   };
+
+  // 4. Explain what is wrong with the answer based on the score of the student's answer
 
   const getExplanation = async (event) => {
     event.preventDefault();
     setGeneratingExplanation(true);
-    let AItype = "openai";
+    let AItype = "claude";
     let url;
     let result;
     let proportion = ((answer.length / props.answer.length) * 100).toFixed(0);
-    if (proportion < 25 && !isAnswerTooShortFirst) {
+    if (AItype == "claude") {
+      url = "/api/generate2";
+    } else {
+      url = "/api/generate";
+    }
+    if (explanationsNum > 1) {
+      setGeneratingExplanation(false);
+      // setAIExplanation(
+      //   "Please try answering the question before asking for more explanations."
+      // );
+      setExplanantions([
+        ...explanations,
+        "Please try answering the question before asking for more explanations.",
+      ]);
+      return;
+    }
+
+    let explanationRecommendations = `Write in second person. Address the student as "you".
+      DO NOT USE the words from the correct answer!!! DO NOT REVEAL THE CORRECT ANSWER!!!
+      Be very polite and gentle.
+      Return your response with every paragrpah wrapped in <p> tags.
+      Answer in ${router.locale == "ru" ? "Russian" : "English"}
+      Make the answer at least 2 sentences long.`;
+
+    if (proportion < 25 && explanations.length == 0) {
+      let too_short_prompt = `
+        The student's answer is too short. It is only """ ${proportion} """ of the sample correct answer.
+        Check it: """ ${answer} """  
+        If the answer is just a blob (like this: "test", "sdfsdfsfd", "answer", "..") and has no meaning, 
+        politely say that this answer does not mean anything and ask the student to give a real answer.
+        If the answer is meaningful, then just ask the student to provide more details.
+        
+      `;
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            prompt: too_short_prompt + explanationRecommendations,
+          }),
+        });
+
+        if (response.status !== 200) {
+          throw (
+            (await response.json()).error ||
+            new Error(`Request failed with status ${response.status}`)
+          );
+        }
+        const data = await response.json();
+        if (AItype == "claude") {
+          result = data.result.content[0].text;
+        } else {
+          result = data.result.content;
+        }
+        if (result) {
+          setAIExplanation(result);
+          setExplanantions([...explanations, result]);
+          setGeneratingExplanation(false);
+          createQuizResult({
+            variables: {
+              quiz: props.quizId,
+              lessonId: props.lessonId,
+              answer: answer,
+              type: "explanation",
+              correct: false,
+              hint: AIhint,
+              explanation: result,
+              improvement: AIImprovement,
+              comment: `Student asked for explanations`,
+            },
+          });
+
+          return result;
+        } else {
+          setAIExplanation("Sorry, you are on your own");
+          setGeneratingExplanation(false);
+
+          return "Sorry, error";
+        }
+      } catch (error) {
+        setGeneratingExplanation(false);
+
+        console.error(error);
+        alert(error.message);
+      }
+
       let simpleExplanation = t("more_detailed_response_recommended");
-      setAIExplanation(simpleExplanation);
+      // setAIExplanation(simpleExplanation);
+      setExplanantions([...explanations, simpleExplanation]);
       createQuizResult({
         variables: {
           quiz: props.quizId,
@@ -496,52 +534,34 @@ const OpenQuestion = (props) => {
         },
       });
       setGeneratingExplanation(false);
-      setIsAnswerTooShortFirst(true);
       return simpleExplanation;
     }
-
-    let explanantion_prompt;
+    let explanantionPrompt;
 
     if (correctnessLevel == "completely_wrong" || correctnessLevel == "wrong") {
-      explanantion_prompt = `
-      However, your student gave you a completely wrong answer: """ ${answer} """.
-      Use the information about the correct answer and information from the lesson: """ ${
-        props.ifRight
-      } """ to
-      explain in 3 sentences why this answer is wrong. Do it in the following way:
-
-      Explain what information should be in the question.
-      Give recommendations on how to start the answer.
+      explanantionPrompt = `
+      But your student gave you a completely wrong answer: """ ${answer} """.
+      Use:
+      1) information about the correct answer 
+      2) and information from the lesson: """ ${ifWrong} """
+      3) Previous explanations: """ ${explanations.join(" ")} """
       
-      Write in second person. Address the student as "you".
-      !!! DO NOT USE the words from the correct answer!!! 
-      Be very polite and gentle.
-      Answer in ${router.locale == "ru" ? "Russian" : "English"}
-      Make the answer at least 2 sentences long.
-      Return every point as a separate <p> tag`;
+      to explain in 3 sentences why this answer is wrong. Make this explanantion more deatiled than the previous one.
+      Do it in the following way:
+
+      Explain what information must be in the question.
+      Give recommendations on how to start the answer.
+
+      Return every point as a separate <p> tag
+      `;
     } else {
-      explanantion_prompt = `
-      However, your student gave you a slightly wrong answer: """ ${answer} """.
-      Use the information about the correct answer and information from the lesson: """ ${
-        props.ifRight
-      } """ to
+      explanantionPrompt = `
+      But your student gave you a slightly wrong answer: """ ${answer} """.
+      Use the information about the correct answer and information from the lesson: """ ${props.ifRight} """ to
       explain in 3 sentences how to make this answer correct. Do it in the following way:
 
-      Say EXTREMELY politely that the answer is not completely right.
       Explain which part of the answer does not look right and needs to be changed.
-      Give recommendations on how to chnage this part of the answer.
-
-      Write in second person. Address the student as "you".
-      DO NOT USE the words from the correct answer!!!
-      Be very polite and gentle.
-      Answer in ${router.locale == "ru" ? "Russian" : "English"}
-      Make the answer at least 2 sentences long.`;
-    }
-
-    if (AItype == "claude") {
-      url = "/api/generate2";
-    } else {
-      url = "/api/generate";
+      Give recommendations on how to change this part of the answer.`;
     }
     try {
       const response = await fetch(url, {
@@ -550,7 +570,7 @@ const OpenQuestion = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: intro + explanantion_prompt,
+          prompt: intro + explanantionPrompt + explanationRecommendations,
         }),
       });
 
@@ -567,6 +587,7 @@ const OpenQuestion = (props) => {
         result = data.result.content;
       }
       if (result) {
+        setExplanantions([...explanations, result]);
         setAIExplanation(result);
         setGeneratingExplanation(false);
         createQuizResult({
@@ -598,28 +619,54 @@ const OpenQuestion = (props) => {
     }
   };
 
+  // 5. Explain how to improve existing answer to get a higher score
+
   const getImprovements = async (event) => {
     event.preventDefault();
     setGeneratingImprovement(true);
-    let AItype = "openai";
     let url;
     let result;
-
+    let AItype = "openai";
     if (AItype == "claude") {
       url = "/api/generate2";
     } else {
       url = "/api/generate";
     }
 
-    let improvementPrompt = `
-          Use correct answer and this information from the lesson: """ ${ifWrong} """
-          To explain to your student how to inprove their answer: """ ${answer} """
-          Explain in 3 sentences. Use the following structure:
-          Identify the part of the question that needs improvement. Suggest what changes should be made based on the correct answer and  information from the lesson.
-          Write in second person. Adress the student as "you". DO NOT USE the words from the correct answer!!!
-          Answer in ${router.locale == "ru" ? "Russian" : "English"}. 
-          Make the answer at least 3 sentences long.
+    if (improvementsNum > 1) {
+      setGeneratingImprovement(false);
+      setImprovements([
+        ...improvements,
+        "Please try making changes to your answer before asking for more improvement ideas.",
+      ]);
+      return;
+    }
+
+    let improvementPrompt;
+
+    let improvementIntro = `
+    You are a law professor. You asked your student this question: """ ${props.question} """.
+    You expect to recieve an answer that sounds like this (correct answer): """ ${props.answer} """.
+    Your student's answer is: """ ${answer} """. It is generally correct. But the student want to make it even better.
+    `;
+
+    let improvementRecommendations = `Write in second person. Address the student as "you".
+       DO NOT REVEAL THE CORRECT ANSWER!!!
+      Return your response with every paragrpah wrapped in <p> tags.
+      Answer in ${router.locale == "ru" ? "Russian" : "English"}
+      Make the answer at least 2 sentences long.`;
+
+    if (improvementsNum == 0) {
+      improvementPrompt = `
+          Analyze student's answer using this information and algorithm: """${props.ifRight}""".
+          Return recommendations on how to improve this answer in accordance with provided information and algorithm. 
           `;
+    } else {
+      improvementPrompt = `
+          Use this script: ${props.ifRight} to improve the student's answer.
+          Your previous recommendations are: ${improvements.join(" ")}.
+        `;
+    }
 
     try {
       const response = await fetch(url, {
@@ -628,7 +675,8 @@ const OpenQuestion = (props) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: intro + improvementPrompt,
+          prompt:
+            improvementIntro + improvementPrompt + improvementRecommendations,
         }),
       });
 
@@ -644,12 +692,12 @@ const OpenQuestion = (props) => {
       } else {
         result = data.result.content;
       }
-      if (data.result.content) {
+      if (result) {
         createQuizResult({
           variables: {
             quiz: props.quizId,
             lessonId: props.lessonId,
-            answer: answer,
+            answer: props.answer,
             correct: false,
             type: "improvement",
             hint: AIhint,
@@ -658,6 +706,7 @@ const OpenQuestion = (props) => {
             comment: `Student asked for improvements`,
           },
         });
+        setImprovements([...improvements, result]);
         setAIImprovement(result);
         setGeneratingImprovement(false);
         return result;
@@ -669,188 +718,13 @@ const OpenQuestion = (props) => {
     } catch (error) {
       console.error(error);
       alert(error.message);
-    }
-    setGeneratingImprovement(false);
-  };
-
-  const getMoreImprovements = async (event) => {
-    event.preventDefault();
-    setGeneratingImprovement(true);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-          You are a law professor.
-          Use this script: ${props.ifRight} to improve the student's answer.
-          Your student's answer is: ${answer}
-          The initial question is: ${props.question}
-          Write in second person. Adress the student as "you".
-          Answer in ${
-            router.locale == "ru" ? "Russian" : "English"
-          }Make the answer at least 3 sentences long.`,
-        }),
-      });
-
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      const data = await response.json();
-      if (data.result.content) {
-        setAIImprovement(data.result.content);
-      } else {
-        setAIImprovement("Sorry, we are disconnected.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-    setGeneratingImprovement(false);
-  };
-
-  const determineCorrectness = async (result) => {
-    if (result < 40) {
-      setCorrectnessLevel("completely_wrong");
-    } else if (result >= 40 && result < 50) {
-      setCorrectnessLevel("wrong");
-    } else if (result >= 50 && result < 58) {
-      setCorrectnessLevel("slightly_wrong");
-    } else if (result >= 58 && result < 65) {
-      setCorrectnessLevel("looks_true");
-    } else if (result >= 65) {
-      setCorrectnessLevel("correct");
+      setGeneratingImprovement(false);
     }
   };
 
-  const onAnswer = async (e) => {
-    setAIExplanation(null);
-    setProgress("true");
-    let data1 = {
-      answer1: props.answer.toLowerCase(),
-      answer2: answer.toLowerCase(),
-    };
-    if (props.check === "WORD") {
-      if (props.answer.toLowerCase() === answer.toLowerCase()) {
-        if (!isExperienced) {
-          if (props.getResults) props.getResults(2);
-          setIsExperienced(true);
-        }
-        setCorrect("true");
-        if (props.goalType !== "ASSESS")
-          setInputColor("rgba(50, 172, 102, 0.25)");
-        passResult("true");
-      } else {
-        setCorrect("false");
-        if (props.goalType !== "ASSESS")
-          setInputColor("rgba(222, 107, 72, 0.5)");
-        passResult("false");
-      }
-    } else {
-      const r = await fetch(
-        "https://arcane-refuge-67529.herokuapp.com/checker",
-        {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data1),
-        }
-      )
-        .then((response) => response.json())
-        .then((res) => {
-          setResult(parseFloat(res.res));
-          determineCorrectness(res.res);
-          if (parseFloat(res.res) > 65) {
-            setCorrect("true");
-            passResult("true");
-            if (props.goalType !== "ASSESS") {
-              setInputColor("rgba(50, 172, 102, 0.25)");
-            }
-            createQuizResult({
-              variables: {
-                quiz: props.quizId,
-                lessonId: props.lessonId,
-                answer: answer,
-                correct: true,
-                result: res.res,
-                type: "answer",
-                hint: AIhint,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
-                comment: `Result: ${parseFloat(res.res)}%`,
-              },
-            });
-          } else if (parseFloat(res.res) > 58 && parseFloat(res.res) <= 65) {
-            setCorrect("looks_true");
-            if (props.goalType !== "ASSESS") setInputColor("#ffd166");
-            passResult("true");
-            if (typeof res.comment === "string") {
-              if (res.comment == "more_detailed_response_recommended") {
-                setHint(t("more_detailed_response_recommended"));
-              } else if (res.comment == "more_concise_response_recommended") {
-                setHint(t("more_concise_response_recommended"));
-              }
-            }
-            createQuizResult({
-              variables: {
-                quiz: props.quizId,
-                lessonId: props.lessonId,
-                answer: answer,
-                correct: true,
-                type: "answer",
-                hint: AIhint,
-                result: res.res,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
-                comment: `Looks true: ${parseFloat(res.res)}%`,
-              },
-            });
-          } else {
-            setCorrect("false");
-            if (props.goalType !== "ASSESS")
-              setInputColor("rgba(222, 107, 72, 0.5)");
-            if (typeof res.comment === "string") {
-              if (res.comment == "more_detailed_response_recommended") {
-                setHint(t("more_detailed_response_recommended"));
-              } else if (res.comment == "more_concise_response_recommended") {
-                setHint(t("more_concise_response_recommended"));
-              }
-            }
-            createQuizResult({
-              variables: {
-                quiz: props.quizId,
-                lessonId: props.lessonId,
-                answer: answer,
-                correct: false,
-                hint: AIhint,
-                type: "answer",
-                result: res.res,
-                explanation: AIExplanation,
-                improvement: AIImprovement,
-                comment: `Result: ${parseFloat(res.res)}%`,
-              },
-            });
-            passResult("false");
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-    setProgress("false");
-  };
+  // 6. Remove special characters from the sample ideal answer provided by the author
 
-  const removeSpecialChars = (text) => {
-    // Define the pattern to match the specified characters
-    const pattern = /[\[\]\|*<>]/g;
-    // Replace all matches of the pattern in the text with an empty string
-    const result = text.replace(pattern, "");
-    return result;
-  };
+  // 7. Listening functionaluty
 
   const startListening = () => {
     const newRecognition = new (window.SpeechRecognition ||
@@ -888,7 +762,9 @@ const OpenQuestion = (props) => {
     }
   };
 
-  const slide = () => {
+  // 8. slide to the last comment generated by AI
+
+  const slideToIdealAnswer = () => {
     var my_element = document.getElementById(`ideal_answer_${props.id}`);
     my_element.scrollIntoView({
       behavior: "smooth",
@@ -896,9 +772,28 @@ const OpenQuestion = (props) => {
       inline: "nearest",
     });
   };
+
+  const slideToExplanations = () => {
+    var my_element = document.getElementById(`last_explanation_${props.id}`);
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+
+  const slideToImprovements = () => {
+    var my_element = document.getElementById(`last_improvement_${props.id}`);
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+
   return (
     <Question story={story}>
-      {/* 2.1 Question part */}
+      {/* 1 Question part */}
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
         <IconBlock>
@@ -912,30 +807,33 @@ const OpenQuestion = (props) => {
           </div>
         </IconBlock>{" "}
       </div>
+      {/* 2 AI hints */}
+      {hints.length > 0 &&
+        hints.map((hint, index) => {
+          return (
+            <div className="question_box">
+              <div className="question_text">
+                <p>{hint}</p>
+              </div>
+              <IconBlock>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
+              </IconBlock>
+            </div>
+          );
+        })}
       {generating && (
         <Progress2>
           <TailSpin width="50" color="#2E80EC" />
         </Progress2>
       )}
-      {/* 2.2 If AI hint */}
-      {AIhint && (
-        <div className="question_box">
-          <div className="question_text">
-            <p>{AIhint}</p>
-          </div>
-          <IconBlock>
-            {author && author.image != null ? (
-              <img className="icon" src={author.image} />
-            ) : (
-              <img className="icon" src="../../static/hipster.svg" />
-            )}{" "}
-            <div className="name">
-              {author && author.name ? author.name : "BeSavvy"}
-            </div>
-          </IconBlock>
-        </div>
-      )}
-      {/* 3. Answer bubble part */}
+      {/* 3. Student answer bubble part */}
       <>
         <div className="answer">
           <IconBlock>
@@ -984,7 +882,7 @@ const OpenQuestion = (props) => {
             onClick={async (e) => {
               e.preventDefault();
               const res = await onAnswer();
-              setProgress("false");
+              // setProgress("false");
             }}
             correct={correct}
           >
@@ -1014,7 +912,7 @@ const OpenQuestion = (props) => {
               }}
               correct={correct}
             >
-              {AIhint && AIhint.length > 0
+              {AIhint && hints.length > 0
                 ? t("i_need_another_hint")
                 : t("i_need_a_hint")}
             </Button1>
@@ -1033,7 +931,7 @@ const OpenQuestion = (props) => {
           </Circle>
         </Group>
       </>
-      {/* 4. Reaction to answer part */}
+      {/* 4. Reaction to answer immediately after it is checked */}
       {/* 4.1 If true / looks true */}
       {(correct === "true" || correct === "looks_true") &&
         props.goalType !== "ASSESS" && (
@@ -1059,17 +957,23 @@ const OpenQuestion = (props) => {
             </div>
           </>
         )}
-      {/* 4.2 If false */}
-      {correct === "false" && (
+      {/* 4.2 If false / has flaws */}
+      {(correct === "false" || correct === "has_flaws") && (
         <>
           <div className="question_box">
             <div className="question_text">
-              {props.goalType !== "ASSESS" && "🔎  " + t("wrong") + "..."}
+              {correct === "false" &&
+                props.goalType !== "ASSESS" &&
+                "🔎  " + t("wrong") + "..."}
+              {correct === "has_flaws" &&
+                props.goalType !== "ASSESS" &&
+                "🔎  " +
+                  "You may be on right track but your answer has some flaws. Remove these flaws to find the correct answer."}
+
               {hint !== null && hint !== 0 && props.goalType !== "ASSESS" && (
                 <p>{hint}</p>
               )}
               {props.goalType == "ASSESS" && <p>{t("saved_answer")}</p>}
-              {/* <p>{ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)} </p> */}
             </div>
             <IconBlock>
               {author && author.image != null ? (
@@ -1085,7 +989,7 @@ const OpenQuestion = (props) => {
         </>
       )}
 
-      {/* 5. Show correct answer button */}
+      {/* 5. Show explanation and improvement buttons and the text */}
 
       {!props.challenge && correct !== "" && props.goalType !== "ASSESS" && (
         <>
@@ -1105,32 +1009,40 @@ const OpenQuestion = (props) => {
             {/* {correct == "false" && ( */}
             <Options>
               <Group2 progress={progress} correct={correct}>
-                {correct == "false" && (
+                {(correct == "false" || correct == "has_flaws") && (
                   <Button1
                     onClick={async (e) => {
                       e.preventDefault();
                       setAIExplanation("...");
+                      slideToExplanations();
+                      setExplanationsNum(explanationsNum + 1);
                       const res = await getExplanation(e);
                     }}
                   >
-                    {t("explain_what_is_wrong_with_my_answer")}
+                    {explanations.length == 0
+                      ? t("explain_what_is_wrong_with_my_answer")
+                      : t("more_explanations")}
                   </Button1>
                 )}
                 {correct == "looks_true" && (
                   <Button1
                     onClick={async (e) => {
                       e.preventDefault();
-                      getImprovements(e);
+                      slideToImprovements();
+                      setImprovementsNum(improvementsNum + 1);
+                      const res = await getImprovements(e);
                     }}
                   >
-                    {t("what_can_i_improve")}
+                    {improvements.length == 0
+                      ? t("what_can_i_improve")
+                      : t("more_improvements")}
                   </Button1>
                 )}
                 <Button1
                   onClick={async (e) => {
                     e.preventDefault();
                     setHidden(false);
-                    slide();
+                    slideToIdealAnswer();
                     createQuizResult({
                       variables: {
                         quiz: props.quizId,
@@ -1148,65 +1060,63 @@ const OpenQuestion = (props) => {
                 >
                   {t("show_an_ideal_answer")}
                 </Button1>
-                {correct == "true" && ifRight && (
-                  <Button1
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      getMoreImprovements(e);
-                    }}
-                  >
-                    {t("more_improvements")}
-                  </Button1>
-                )}
               </Group2>
             </Options>
           </div>
+          {explanations.length > 0 &&
+            // correct !== "true" &&
+            explanations.map((explanation, index) => {
+              return (
+                <div className="question_box">
+                  <div className="question_text">{parse(explanation)}</div>
+                  <IconBlock>
+                    {author && author.image != null ? (
+                      <img className="icon" src={author.image} />
+                    ) : (
+                      <img className="icon" src="../../static/hipster.svg" />
+                    )}{" "}
+                    <div className="name">
+                      {author && author.name ? author.name : "BeSavvy"}
+                    </div>
+                  </IconBlock>
+                </div>
+              );
+            })}
+          <div id={`last_explanation_${props.id}`}></div>
           {generatingExplanation && (
             <Progress2>
               <TailSpin width="50" color="#2E80EC" />
             </Progress2>
           )}
-          {AIExplanation && correct !== "true" && (
-            <div className="question_box">
-              <div className="question_text">
-                <p>{parse(AIExplanation)}</p>
-              </div>
-              <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
+          {improvements.length > 0 &&
+            // (correct == "true" || correct == "looks_true") &&
+            improvements.map((improvement, index) => {
+              return (
+                <div className="question_box">
+                  <div className="question_text">{parse(improvement)}</div>
+                  <IconBlock>
+                    {author && author.image != null ? (
+                      <img className="icon" src={author.image} />
+                    ) : (
+                      <img className="icon" src="../../static/hipster.svg" />
+                    )}{" "}
+                    <div className="name">
+                      {author && author.name ? author.name : "BeSavvy"}
+                    </div>
+                  </IconBlock>
                 </div>
-              </IconBlock>
-            </div>
-          )}
+              );
+            })}
+          <div id={`last_improvement_${props.id}`}></div>
+
           {generatingImprovement && (
             <Progress2>
               <TailSpin width="50" color="#2E80EC" />
             </Progress2>
           )}
-          {AIImprovement && (correct == "true" || correct == "looks_true") && (
-            <div className="question_box">
-              <div className="question_text">
-                <p>{AIImprovement}</p>
-              </div>
-              <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
-                </div>
-              </IconBlock>
-            </div>
-          )}
         </>
       )}
+
       {/* 6. Show correct answer bubble */}
       <div id={`ideal_answer_${props.id}`}></div>
       {!hidden && (
@@ -1228,9 +1138,19 @@ const OpenQuestion = (props) => {
           </IconBlock>{" "}
         </div>
       )}
-      {/* <Tooltip id="quiz-tooltip" /> */}
     </Question>
   );
+};
+
+OpenQuestion.propTypes = {
+  author: PropTypes.object.isRequired, // Information about the author of the question
+  me: PropTypes.object.isRequired, // Information about the current user
+  story: PropTypes.bool.isRequired, // Determine the format of the component
+  ifRight: PropTypes.string.isRequired, // Prompt to follow if the answer is correct
+  ifWrong: PropTypes.string.isRequired, // Prompt to follow if the answer is incorrect
+  passResult: PropTypes.func.isRequired, // Function to pass the result
+  quizId: PropTypes.string.isRequired, // ID of the quiz
+  lessonId: PropTypes.string.isRequired, // ID of the lesson
 };
 
 export default OpenQuestion;

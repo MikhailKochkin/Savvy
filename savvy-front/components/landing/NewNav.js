@@ -4,12 +4,9 @@ import Modal from "styled-react-modal";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import { useUser } from "../User";
-import Signup from "../auth/Signup";
-import Signin from "../auth/Signin";
-import RequestReset from "../auth/RequestReset";
-import NewSignout from "../auth/NewSignOut";
 import Signout from "../auth/Signout";
 
 const SideMenu = styled.div`
@@ -76,31 +73,6 @@ const SideMenu = styled.div`
     .sidenav a {
       font-size: 18px;
     }
-  }
-`;
-
-const StyledModal = Modal.styled`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
   }
 `;
 
@@ -222,6 +194,7 @@ const NewNav = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
   const { t } = useTranslation("nav");
+  const router = useRouter();
 
   const toggleModal = (e) => setIsOpen(!isOpen);
 
@@ -337,24 +310,15 @@ const NewNav = (props) => {
             </Link>
           )}
           {!me && (
-            <div className="enter" onClick={(e) => toggleModal()}>
-              {t("login")}
+            <div className="enter">
+              <Link
+                href={{ pathname: "/auth", query: { pathname: router.asPath } }}
+              >
+                {t("login")}
+              </Link>
             </div>
           )}
-          {me ? <NewSignout /> : null}
-          <StyledModal
-            isOpen={isOpen}
-            onBackgroundClick={toggleModal}
-            onEscapeKeydown={toggleModal}
-          >
-            {auth === "signin" && (
-              <Signin getData={changeState} closeNavBar={toggleModal} />
-            )}
-            {auth === "signup" && (
-              <Signup getData={changeState} closeNavBar={toggleModal} />
-            )}
-            {auth === "reset" && <RequestReset getData={changeState} />}
-          </StyledModal>
+          {me ? <Signout landing={true} /> : null}
         </div>
       </div>
     </Styles>

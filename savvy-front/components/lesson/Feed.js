@@ -610,7 +610,7 @@ const Feed = (props) => {
   if (props.me.id == "clkvdew14837181f13vcbbcw0x") {
     lessonElements = [
       ...props.components.slice(0, openSize),
-      <Auth id="buy_section" />,
+      <Auth id="buy_section" type="inside_lesson" />,
     ];
     next_lesson = false;
   } else {

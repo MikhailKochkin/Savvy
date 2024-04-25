@@ -27,8 +27,10 @@ export default async function (req, res) {
   try {
     const completion = await anthropic.messages.create({
       model: "claude-3-haiku-20240307",
+      // model: "claude-3-sonnet-20240229",
       max_tokens: 1024,
       messages: [{ role: "user", content: prompt }],
+      temperature: 0.3,
     });
     // console.log("completion", completion.choices[0].message);
 

@@ -1,16 +1,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Modal from "styled-react-modal";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
-import Image from "next/image";
 
 import { useUser } from "./User";
-import Signup from "./auth/Signup";
-import Signin from "./auth/Signin";
-import RequestReset from "./auth/RequestReset";
 import Signout from "./auth/Signout";
 
 const SideMenu = styled.div`
@@ -236,31 +231,6 @@ const UserData = styled.div`
   }
 `;
 
-const StyledModal = Modal.styled`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
-
 const Span = styled.span`
   margin-left: 10px;
   display: flex;
@@ -272,7 +242,6 @@ const Span = styled.span`
 const Nav = (props) => {
   const [width, setWidth] = useState(800);
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signin");
   const router = useRouter();
   const { pathname, asPath, query } = router;
   const { t } = useTranslation("nav");
@@ -280,8 +249,6 @@ const Nav = (props) => {
   const onResize = (width) => {
     setWidth(width);
   };
-
-  const currentReferal = localStorage.getItem("referal");
 
   const toggleModal = (e) => setIsOpen(!isOpen);
 
@@ -296,7 +263,6 @@ const Nav = (props) => {
     document.getElementById("mySidenav").style.paddingTop = "0";
   };
 
-  const changeState = (dataFromChild) => setAuth(dataFromChild);
   let me = useUser();
   return (
     <>
@@ -313,11 +279,11 @@ const Nav = (props) => {
                 </Link>
               </CourseMenu>
               <UserData>
-                <Link legacyBehavior href="/blog">
+                {/* <Link legacyBehavior href="/blog">
                   <div className="blog">
                     <a>{t("blog")}</a>
                   </div>
-                </Link>
+                </Link> */}
                 {me &&
                   me.status &&
                   me.status !== "STUDENT" &&
@@ -328,28 +294,6 @@ const Nav = (props) => {
                       </div>
                     </Link>
                   )}
-                {/* <div className="imgGroup">
-                  <div className="img">
-                    <img
-                      src="../../static/uk.svg"
-                      onClick={(e) =>
-                        router.push({ pathname, query }, asPath, {
-                          locale: "en",
-                        })
-                      }
-                    />
-                  </div>
-                  <div className="img">
-                    <img
-                      src="../../static/russia.svg"
-                      onClick={(e) =>
-                        router.push({ pathname, query }, asPath, {
-                          locale: "ru",
-                        })
-                      }
-                    />
-                  </div>
-                </div> */}
                 {me && (
                   <Link
                     legacyBehavior
@@ -370,9 +314,6 @@ const Nav = (props) => {
                     }}
                   >
                     <a className="name">
-                      {/* {me.surname
-                        ? `${me.name} ${me.surname} ${me.level.level}`
-                        : `${me.name} ${me.level.level}`} */}
                       {me.surname ? `${me.name} ${me.surname}` : `${me.name}`}
                     </a>
                   </Link>
@@ -380,29 +321,21 @@ const Nav = (props) => {
                 {me ? (
                   <Signout />
                 ) : (
-                  <Button onClick={(e) => toggleModal()}>
-                    <a>{t("login")}</a>
+                  <Button>
+                    <Link
+                      href={{
+                        pathname: "/auth",
+                        query: {
+                          pathname: router.asPath,
+                        },
+                      }}
+                    >
+                      {t("login")}
+                    </Link>{" "}
                   </Button>
                 )}
               </UserData>
             </StyledHeader>
-            <StyledModal
-              isOpen={isOpen}
-              onBackgroundClick={toggleModal}
-              onEscapeKeydown={toggleModal}
-            >
-              {auth === "signin" && (
-                <Signin getData={changeState} closeNavBar={toggleModal} />
-              )}
-              {auth === "signup" && (
-                <Signup
-                  getData={changeState}
-                  closeNavBar={toggleModal}
-                  currentReferal={currentReferal}
-                />
-              )}
-              {auth === "reset" && <RequestReset getData={changeState} />}
-            </StyledModal>
           </>
         )}
         {width < 800 && (
@@ -490,27 +423,6 @@ const Nav = (props) => {
                 {me ? <Signout /> : null}
               </div>
             </SideMenu>
-            <StyledModal
-              isOpen={isOpen}
-              onBackgroundClick={toggleModal}
-              onEscapeKeydown={toggleModal}
-            >
-              {auth === "signin" && (
-                <Signin
-                  getData={changeState}
-                  closeNavBar={toggleModal}
-                  currentReferal={currentReferal}
-                />
-              )}
-              {auth === "signup" && (
-                <Signup
-                  getData={changeState}
-                  closeNavBar={toggleModal}
-                  currentReferal={currentReferal}
-                />
-              )}
-              {auth === "reset" && <RequestReset getData={changeState} />}
-            </StyledModal>
           </>
         )}
       </>

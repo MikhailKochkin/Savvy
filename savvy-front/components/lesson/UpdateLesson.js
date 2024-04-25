@@ -7,10 +7,6 @@ import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import { useTranslation } from "next-i18next";
 
 import DeleteSingleLesson from "../delete/DeleteSingleLesson";
-import AreYouATeacher from "../auth/AreYouATeacher";
-import PleaseSignIn from "../auth/PleaseSignIn";
-import StoryUpdate from "./StoryUpdate";
-import ShortStoryUpdate from "./ShortStoryUpdate";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION(

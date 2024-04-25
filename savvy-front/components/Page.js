@@ -30,11 +30,10 @@ const StyledPage = styled.div`
 const Inner = styled.div`
   margin: 0;
   width: 100%;
-  min-height: 80vh;
+  /* min-height: 100vh; */
 `;
 
 const GlobalStyle = createGlobalStyle`
-
     html {
         font-family: 'Montserrat', sans-serif;
         box-sizing: border-box;

@@ -7,19 +7,15 @@ import dynamic from "next/dynamic";
 
 import { useUser } from "../User";
 import ATF from "./coursePageBlocks/ATF";
-import Details from "./coursePageBlocks/Details";
 import Syllabus from "./coursePageBlocks/Syllabus";
 import SellingPoints from "./coursePageBlocks/SellingPoints";
 import Teachers from "./coursePageBlocks/Teachers";
 import Reviews from "./coursePageBlocks/Reviews";
 import ActionLeads from "./coursePageBlocks/ActionLeads";
 import Prices from "./coursePageBlocks/Prices";
-
 import MobileAction from "./coursePageBlocks/MobileAction";
 import MobileLeads from "./coursePageBlocks/MobileLeads";
-
 import Goal from "./coursePageBlocks/Goal";
-import QA from "./coursePageBlocks/QA";
 import BottomLine from "./coursePageBlocks/BottomLine";
 
 import moment from "moment";
@@ -165,16 +161,7 @@ const Money = styled.div`
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
-
   z-index: 4;
-  /* @media (max-width: 800px) {
-    position: relative;
-  } */
-  /* display: flex;
-  flex-direction: column; */
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* background: #1c1d1f; */
 `;
 
 const NewCoursePage = (props) => {
@@ -227,11 +214,6 @@ const NewCoursePage = (props) => {
                   />
                 ))}
               <Teachers coursePage={data.coursePage} />
-
-              {/* {prog && prog.reviews && prog.reviews.length > 0 && (
-                <Reviews data={prog} />
-              )} */}
-              {/* <QA /> */}
             </>
           )}
         </Main>
@@ -255,6 +237,3 @@ const NewCoursePage = (props) => {
 };
 
 export default NewCoursePage;
-
-// Идеи. Отдельно в ленивом формате подгружать статистические данные
-// Отдельнно подгружать первые элементы страницы, чтобы ускорить время первого взаимодействия студента с курсом

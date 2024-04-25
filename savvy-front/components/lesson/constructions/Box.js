@@ -99,7 +99,7 @@ const Box = (props) => {
         setActiveValue(props.option);
       }}
       active={
-        props.elementsInUse.filter((el) => el?.element?.text == props.option)
+        props.elementsInUse?.filter((el) => el?.element?.text == props.option)
           .length > 0
       }
     >

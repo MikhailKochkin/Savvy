@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Signup from "../../auth/Signup";
-import Signin from "../../auth/Signin";
+import Signup from "../../auth/newauth/Signup";
+import Signin from "../../auth/newauth/Signin";
 import RequestReset from "../../auth/RequestReset";
 import Modal from "styled-react-modal";
 import { useTranslation } from "next-i18next";

@@ -7,10 +7,6 @@ import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
 import moment from "moment";
-
-import Signup from "../../auth/Signup";
-import Signin from "../../auth/Signin";
-import RequestReset from "../../auth/RequestReset";
 import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
 

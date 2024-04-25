@@ -6,9 +6,7 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
-import Signup from "../../auth/Signup";
-import Signin from "../../auth/Signin";
-import RequestReset from "../../auth/RequestReset";
+
 import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
 import tinkoff from "@tcb-web/create-credit";
@@ -412,44 +410,6 @@ const OpenCourse = styled.button`
     background-color: #e2e2e2;
   }
 `;
-
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  padding: 2%;
-  .top_message {
-    padding-bottom: 2%;
-    border-bottom: 1px solid grey;
-    font-size: 2rem;
-    width: 100%;
-    text-align: center;
-  }
-  .bottom_message {
-    margin-top: 2%;
-  }
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
-
 const Action = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
@@ -465,7 +425,6 @@ const Action = (props) => {
   const router = useRouter();
 
   const toggleModal = (e) => setIsOpen(!isOpen);
-  const changeState = (dataFromChild) => setAuth(dataFromChild);
   const addPromo = (val) => {
     props.coursePage.promocode.promocodes.map((p) => {
       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
@@ -708,19 +667,6 @@ const Action = (props) => {
             )}
         </Contact>
       </Container>
-      <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
     </Styles>
   );
 };

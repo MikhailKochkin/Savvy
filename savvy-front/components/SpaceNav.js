@@ -7,10 +7,10 @@ import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
 
 import { useUser } from "./User";
-import Signup from "./auth/Signup";
-import Signin from "./auth/Signin";
-import RequestReset from "./auth/RequestReset";
-import Signout from "./auth/Signout";
+// import Signup from "./auth/Signup";
+// import Signin from "./auth/Signin";
+// import RequestReset from "./auth/RequestReset";
+// import Signout from "./auth/Signout";
 
 const SideMenu = styled.div`
   /* The side navigation menu */

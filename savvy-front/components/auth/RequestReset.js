@@ -103,6 +103,25 @@ const Comment = styled.div`
   font-size: 1.4rem;
 `;
 
+const PurpleButton = styled.button`
+  width: 100%;
+  background: #702eff;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  border-radius: 8px;
+  border: 4px solid #702eff;
+  font-family: Montserrat;
+  outline: 0;
+  padding: 5px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 4px solid #edaf20;
+  }
+`;
+
 const RequestReset = (props) => {
   const [email, setEmail] = useState("");
   const { t } = useTranslation("auth");
@@ -143,7 +162,7 @@ const RequestReset = (props) => {
               <div name="signin" onClick={change}>
                 {t("back")}
               </div>
-              <SubmitButton type="submit">{t("button2")}</SubmitButton>
+              <PurpleButton type="submit">{t("button2")}</PurpleButton>
             </Buttons>
           </Fieldset>
         </Form>

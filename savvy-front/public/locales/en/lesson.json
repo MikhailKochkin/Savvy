@@ -165,6 +165,7 @@
   "i_need_a_hint": "I need a hint",
   "i_need_another_hint": "I need another hint",
   "explain_what_is_wrong_with_my_answer": "Explain what is wrong with my answer",
+  "more_explanations": "Give me more explanations",
   "show_an_ideal_answer": "Show an ideal answer",
   "more_improvements": "Improve more",
   "what_can_i_improve": "What can I improve in my answer?",
@@ -187,7 +188,8 @@
   "what_are_we_doing_next": "Now. What are we doing next?",
   "these_are_the_right_answers": "These are the right answers: ",
   "not_all_answers": "But you haven't found all the answers.",
-  "where_to_start": "Where should I start?",
+  "where_to_start": "How do I start?",
+  "help_with_next_one": "Help me with the next one",
   "answer_above_65": "Answers above 64 are correct, while those from 58 to 64 are partially correct.",
   "more_detailed_response_recommended": "Try giving a more detailed answer. That might help me better understand your answer and evaluate it better.",
   "more_concise_response_recommended": "Try giving a shorter, more concise answer. That might help me better understand your answer and evaluate it better."

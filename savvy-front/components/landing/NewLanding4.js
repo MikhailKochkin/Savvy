@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import smoothscroll from "smoothscroll-polyfill";
 import Link from "next/link";
-import Phone from "./Phone";
 import NewNav from "./NewNav";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
@@ -15,18 +14,6 @@ const Styles = styled.div`
   background: #fff;
   flex-direction: column;
   align-items: center;
-  /* height: 800px; */
-
-  /* @media (min-height: 1000px) and (max-height: 1200px) {
-    transform-origin: -600% 100%;
-    height: 50%;
-    min-height: 50vh;
-  }
-  @media (min-height: 800px) and (max-height: 1000px) {
-    transform-origin: -600% 100%;
-    height: 50%;
-    min-height: 50vh;
-  } */
   @media (max-height: 800px) {
   }
 `;
@@ -199,7 +186,6 @@ const Buttons = styled.div`
 `;
 
 const Landing = (props) => {
-  // const [width, setWidth] = useState(0);
   const [h, setH] = useState(0);
   const { t } = useTranslation("landing");
   const router = useRouter();
@@ -222,14 +208,6 @@ const Landing = (props) => {
     smoothscroll.polyfill();
   });
 
-  const slide = () => {
-    var my_element = document.getElementById("course_search");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
   return (
     <Styles>
       <Info>

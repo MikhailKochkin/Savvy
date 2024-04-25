@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-// import AreYouATeacher from "../auth/AreYouATeacher";
-// import PleaseSignIn from "../auth/PleaseSignIn";
 import CreateLes from "./CreateLes";
 
 const Width = styled.div`

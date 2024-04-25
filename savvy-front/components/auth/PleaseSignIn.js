@@ -1,10 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import WideSignIn from "./WideSignIn";
-import WideSignUp from "./WideSignUp";
-import WideRequestReset from "./WideRequestReset";
 import { useUser } from "../User";
 import { useRouter } from "next/router";
+import Auth from "./Auth";
 
 const Styles = styled.div`
   display: flex;
@@ -27,11 +25,8 @@ const Title = styled.p`
 `;
 
 const PleaseSignIn = (props) => {
-  const [auth, setAuth] = useState("signin");
-  const changeState = (dataFromChild) => setAuth(dataFromChild);
   const me = useUser();
   const router = useRouter();
-
   if (!me)
     return (
       <Styles>
@@ -45,9 +40,7 @@ const PleaseSignIn = (props) => {
             </>
           )}
         </Title>
-        {auth === "signin" && <WideSignIn getData={changeState} />}
-        {auth === "signup" && <WideSignUp getData={changeState} />}
-        {auth === "reset" && <WideRequestReset getData={changeState} />}{" "}
+        <Auth />
       </Styles>
     );
   return props.children;

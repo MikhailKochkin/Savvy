@@ -5,10 +5,6 @@ import Modal from "styled-react-modal";
 import { useTranslation } from "next-i18next";
 import Router from "next/router";
 import tinkoff from "@tcb-web/create-credit";
-
-import Signup from "../../auth/Signup";
-import Signin from "../../auth/Signin";
-import RequestReset from "../../auth/RequestReset";
 import { CURRENT_USER_QUERY } from "../../User";
 
 const CREATE_ORDER_MUTATION = gql`
@@ -261,7 +257,7 @@ const StyledModal = Modal.styled`
 const ProgramMobileBuy = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
-  const toggleModal = (e) => setIsOpen(!isOpen);
+  const toggleModal = (e) => {};
 
   const { me, program } = props;
   const first_course = [...program.coursePages].sort(
@@ -392,7 +388,6 @@ const ProgramMobileBuy = (props) => {
           e.preventDefault();
           if (!me) {
             alert(`Set up an account on BeSavvy`);
-            toggleModal();
           } else {
             const res = await createOrder({
               variables: {
@@ -486,19 +481,6 @@ const ProgramMobileBuy = (props) => {
           </OpenCourse>
         </div>
       </Info>
-      <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
     </Styles>
   );
 };

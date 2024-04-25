@@ -223,8 +223,7 @@ const ClientData = (props) => {
 
     // Filter clients based on whether any of their tags match the input tags
     let filtered_clients = clients.filter(
-      (c) =>
-        c.tags.filter((t) => tagsArray.includes(t.toLowerCase())).length > 0
+      (c) => c.tags.filter((t) => tagsArray.includes(t)).length > 0
     );
 
     // let filtered_clients = clients.filter(

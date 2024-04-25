@@ -6,9 +6,6 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
-import Signup from "../../auth/Signup";
-import Signin from "../../auth/Signin";
-import RequestReset from "../../auth/RequestReset";
 import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
 import tinkoff from "@tcb-web/create-credit";
@@ -380,7 +377,6 @@ const Action = (props) => {
   const { t } = useTranslation("coursePage");
   const router = useRouter();
 
-  const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
 
   const [
@@ -511,7 +507,6 @@ const Action = (props) => {
               e.preventDefault();
               if (!me) {
                 alert(`Set up an account on BeSavvy`);
-                toggleModal();
               } else {
                 const res = await createOrder({
                   variables: {
@@ -581,19 +576,6 @@ const Action = (props) => {
           </div>
         </Contact>
       </Container>
-      <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
     </Styles>
   );
 };

@@ -188,7 +188,6 @@ const UpdateProblem = (props) => {
     story,
     author,
   } = props;
-  console.log("PROBLEM", problem);
 
   return (
     <Styles>
@@ -203,7 +202,6 @@ const UpdateProblem = (props) => {
         <h3>Problem Goal</h3>
         <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
         <h3>Type</h3>
-        {console.log("TYPE", type)}
         <select
           name="types"
           id="types"

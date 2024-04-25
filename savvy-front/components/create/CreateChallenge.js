@@ -5,8 +5,6 @@ import styled from "styled-components";
 import Router from "next/router";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import AreYouATeacher from "../auth/AreYouATeacher";
-import PleaseSignIn from "../auth/PleaseSignIn";
 import { CURRENT_USER_QUERY } from "../User";
 
 const CREATE_CHALLENGE_MUTATION = gql`

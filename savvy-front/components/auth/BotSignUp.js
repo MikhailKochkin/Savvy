@@ -278,26 +278,6 @@ const IconBlock = styled.div`
   }
 `;
 
-// const useStyles = makeStyles({
-//   button: {
-//     width: "80%",
-//     marginBottom: "15px",
-//     fontSize: "1.7rem",
-//     fontFamily: "Montserrat",
-//     textTransform: "none",
-//   },
-//   root: {
-//     marginBottom: "4%",
-//     width: "100%",
-//   },
-//   labelRoot: {
-//     fontSize: "1.5rem",
-//   },
-//   formControl: {
-//     fontSize: "1.5rem",
-//   },
-// });
-
 const Signup = (props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

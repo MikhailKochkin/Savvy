@@ -19,4 +19,12 @@ const guessAlphabet = (str) => {
   return "Unknown";
 };
 
-export { guessAlphabet, autoResizeTextarea };
+const removeSpecialChars = (text) => {
+  // Define the pattern to match the specified characters
+  const pattern = /[\[\]\|*<>]/g;
+  // Replace all matches of the pattern in the text with an empty string
+  const result = text.replace(pattern, "");
+  return result;
+};
+
+export { guessAlphabet, autoResizeTextarea, removeSpecialChars };

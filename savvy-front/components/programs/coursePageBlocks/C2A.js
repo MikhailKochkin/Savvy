@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { calendar } from "react-icons-kit/fa/calendar";
-// import { handshakeO } from "react-icons-kit/fa/handshakeO";
-// import Icon from "react-icons-kit";
 import Modal from "styled-react-modal";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 
-import Signup from "../../auth/Signup";
-import Signin from "../../auth/Signin";
-import RequestReset from "../../auth/RequestReset";
-import ReactGA from "react-ga";
+// import Signup from "../../auth/Signup";
+// import Signin from "../../auth/Signin";
+// import RequestReset from "../../auth/RequestReset";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -228,37 +224,6 @@ const Referral = styled.div`
     cursor: pointer;
   }
 `;
-
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  padding: 2%;
-  p {
-    width: 100%;
-  }
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
-
 const Buy = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 35%;
@@ -461,49 +426,10 @@ const Headline = (props) => {
                   </div>
                 </div>
               </Price>
-              {/* <Referral>
-                <div>
-                  А с реферральной программой скидка может быть еще больше.
-                </div>
-                <button onClick={(e) => toggleModal()}>Узнать</button>
-              </Referral> */}
             </Buy>
           </Container>
         </InfoBlock>
       </Image>
-      {/* <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        <p>
-          С нашей новой реферральной программой вы можете учиться практически
-          бесплатно.
-        </p>{" "}
-        После приобретения этого курса, вы получите специальный код, который
-        можете передать своим друзьям. После того, как ваш друг оплатит участие
-        в программе, вы оба получите бонусные 1000 рублей на следующую покупку
-        на BeSavvy. Таким образом, если по вашему промокоду придет 3 человека,
-        вы сможете участвовать в следующем месяце программы бесплатно.{" "}
-        <p>
-          {" "}
-          Промокод можно получить, написав в личные сообщения группы любого
-          аккаунта нашей социальной сети.
-        </p>
-      </StyledModal> */}
-      {/* <StyledModal
-        isOpen={isOpen2}
-        onBackgroundClick={toggleModal2}
-        onEscapeKeydown={toggleModal2}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal2} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal2} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal> */}
     </div>
   );
 };

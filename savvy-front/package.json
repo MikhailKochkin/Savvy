@@ -53,6 +53,7 @@
     "moment": "^2.29.1",
     "negotiator": "^0.6.3",
     "next": "^14.1.4",
+    "next-auth": "^4.24.7",
     "next-i18next": "^10.4.0",
     "nprogress": "^0.2.0",
     "openai": "^4.11.0",

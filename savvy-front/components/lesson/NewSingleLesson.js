@@ -265,6 +265,9 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         authors {
           id
         }
+        user {
+          id
+        }
         courseType
         lessons {
           id
@@ -413,7 +416,8 @@ const NewSingleLesson = (props) => {
 
   if (
     me &&
-    lesson.coursePage.authors.filter((auth) => auth.id == me.id).length > 0
+    (lesson.coursePage.authors.filter((auth) => auth.id == me.id).length > 0 ||
+      lesson.coursePage?.user?.id == me.id)
   ) {
     i_am_author = true;
   }
