@@ -220,6 +220,7 @@ const LessonBlock = (props) => {
   };
 
   const getResult = async (res) => {
+    console.log("res", res);
     if (res.data.createNote) {
       setType("Note");
       setIdNum(res.data.createNote.id);
@@ -584,6 +585,7 @@ const LessonBlock = (props) => {
                 key={data.id}
                 problem={data}
                 complexity={data.complexity}
+                context={data.context}
                 lessonID={lesson.id}
                 name={lesson.name}
                 me={me}
@@ -820,6 +822,7 @@ const LessonBlock = (props) => {
                     text={data.text}
                     complexity={data.complexity}
                     name={data.name}
+                    context={data.context}
                     textEditor={data}
                     lesson={lesson}
                     me={me}
@@ -881,6 +884,7 @@ const LessonBlock = (props) => {
                       complexity={data.complexity}
                       getResults={getResults}
                       construction={data}
+                      context={data.context}
                       variants={data.variants}
                       me={me}
                       arr={Array(data.answer.length).fill("")}

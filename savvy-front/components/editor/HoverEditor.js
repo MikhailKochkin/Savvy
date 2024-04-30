@@ -53,6 +53,7 @@ const AppStyles = {
   padding: "0 5px",
   width: "100%",
   fontSize: "1.5rem",
+  outline: "none",
 };
 
 const Link = styled.a`
@@ -289,9 +290,9 @@ const HoveringMenu = (props) => {
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
   const [value, setValue] = useState(initial);
-  const editor = useMemo(
-    () => withLinks(withHistory(withReact(createEditor()))),
-    []
+
+  const [editor] = useState(() =>
+    withLinks(withHistory(withReact(createEditor())))
   );
 
   // 4.1 Element renderer
@@ -352,7 +353,7 @@ const HoveringMenu = (props) => {
   return (
     <Slate
       editor={editor}
-      value={value}
+      initialValue={value}
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));

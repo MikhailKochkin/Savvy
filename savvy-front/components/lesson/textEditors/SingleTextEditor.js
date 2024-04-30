@@ -2,19 +2,23 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useMutation, gql } from "@apollo/client";
-// import Button from "@material-ui/core/Button";
 import { htmlToText } from "html-to-text";
-// import { withStyles } from "@material-ui/core/styles";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
+import smoothscroll from "smoothscroll-polyfill";
+import { TailSpin } from "react-loader-spinner";
+
 import SingleProblem from "../problems/SingleProblem";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
-import smoothscroll from "smoothscroll-polyfill";
-
-import { CURRENT_USER_QUERY } from "../../User";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import SingleQuiz from "../quizes/SingleQuiz";
+import Note from "../notes/Note";
+import { MiniOpenQuestionFrame, MiniAIButton } from "../quizes/QuizesStyles";
+import {
+  containsOnlyNumbers,
+  compareStrings,
+} from "../SimulatorDevelopmentFunctions";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
@@ -117,6 +121,9 @@ const TextBar = styled.div`
       width: 5%;
     }
   }
+  h2 {
+    line-height: 1.4;
+  }
   .edit {
     width: 90px;
     font-size: 1.6rem;
@@ -179,10 +186,16 @@ const TextBar = styled.div`
   }
 `;
 
-const Window = styled.div`
+const WindowBundle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
   top: 15%;
   position: -webkit-sticky;
   position: sticky;
+`;
+const Window = styled.div`
   margin-left: -10px;
   margin-bottom: 20px;
   min-height: 80px;
@@ -196,38 +209,47 @@ const Window = styled.div`
   opacity: 0; // Initial opacity
   visibility: hidden; // Initial visibility
   transition: opacity 0.3s ease-in-out; // Transition effect
-  ${(props) =>
+  opacity: 1; // Active opacity
+  visibility: visible; // Active visibility
+  /* ${(props) =>
     props.active &&
     `
     opacity: 1;  // Active opacity
     visibility: visible;  // Active visibility
-  `}
-
+  `} */
   .answerBox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     border-top: 1px solid #dadce0;
     padding: 10px 15px;
     button {
-      background-color: rgb(26, 115, 232);
-      color: rgb(255, 255, 255);
+      background-color: #d2edfd;
+      color: #000a60;
       border-radius: 4px;
       border: none;
       box-shadow: none;
       box-sizing: border-box;
-      font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial,
-        sans-serif;
+      font-family: Montserrat;
       font-weight: 500;
       font-size: 14px;
-      height: 24px;
-      padding: 3px 12px 5px;
-      margin-top: 8px;
+      /* height: 24px; */
+      padding: 8px 15px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      transition: 0.3s;
       cursor: pointer;
       &:hover {
         box-shadow: rgb(66 133 244 / 15%) 0px 1px 3px 1px;
-        background-color: rgb(43, 125, 233);
+        background-color: #a4dbfe;
       }
     }
   }
   .questionBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     padding: 10px 15px;
     .icon {
       border-radius: 50%;
@@ -268,6 +290,19 @@ const Window = styled.div`
       justify-content: center;
     }
   }
+  .studentsWording {
+    width: 100%;
+    margin: 10px 0;
+    .studentsWordingHeader {
+      margin-bottom: 5px;
+    }
+  }
+`;
+
+const Comment = styled.div`
+  padding: 7px 10px;
+  border-radius: 10px;
+  border-color: #d9dce0;
 `;
 
 const IconBlock = styled.div`
@@ -277,32 +312,6 @@ const IconBlock = styled.div`
   /* align-items: center; */
   width: 100%;
   margin: 5px 0;
-`;
-
-const Input = styled.input`
-  font-family: Montserrat;
-  border: 1px solid;
-  border: ${(props) => {
-    if (props.color == true || props.color == false) {
-      return "2px solid";
-    } else {
-      return "1px solid";
-    }
-  }};
-
-  border-radius: 5px;
-  outline: 0;
-  padding: 5px 7px;
-  width: 100%;
-  border-color: ${(props) => {
-    if (props.color == true) {
-      return "rgba(50, 172, 102, 0.75)";
-    } else if (props.color == false) {
-      return "rgba(222, 107, 72, 0.5)";
-    } else {
-      return "#dadce0";
-    }
-  }};
 `;
 
 const EditText = styled.div`
@@ -327,10 +336,6 @@ const Buttons = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
-`;
-
-const Comment = styled.div`
-  margin-top: 10px;
 `;
 
 const WindowColumn = styled.div`
@@ -360,56 +365,42 @@ const BlueButton = styled.button`
   }
 `;
 
-// const StyledButton = withStyles({
-//   root: {
-//     marginRight: "2%",
-//     fontSize: "1.6rem",
-//     textTransform: "none",
-//     maxHeight: "40px",
-//   },
-// })(Button);
-
-function containsOnlyNumbers(str) {
-  const regex = /^[0-9]+$/;
-  return regex.test(str);
-}
-
-function compareStrings(str1, str2) {
-  if (str1.length !== str2.length) {
-    return false;
-  }
-
-  for (let i = 0; i < str1.length; i++) {
-    if (str1[i] !== str2[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
+const Progress2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin: 10px;
+`;
 
 const SingleTextEditor = (props) => {
-  // const [text, setText] = useState(props.textEditor.text);
-  const [attempts, setAttempts] = useState(0);
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [quiz, setQuiz] = useState();
-  const [showNote, setShowNote] = useState(false);
-  const [note, setNote] = useState();
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [errorFeedback, setErrorFeedback] = useState();
-  const [quizResult, setQuizResult] = useState("no");
-  const [quizGuess, setQuizQuess] = useState("");
-  const [errorAnswer, setErrorAnswer] = useState();
-  const [correctErrorOption, setCorrectErrorOption] = useState();
-  const [wrongErrorOption, setWrongErrorOption] = useState();
-  const [chosenElement, setChosenElement] = useState();
-  const [checking, setChecking] = useState(false);
-  const [shown, setShown] = useState(false);
-  const [result, setResult] = useState(false);
-  const [update, setUpdate] = useState(false);
-  const [type, setType] = useState("");
-  const [mistakesShown, setMistakesShown] = useState(false);
-  const [problemId, setProblemId] = useState();
+  const { textEditor, me, lessonID, story, complexity, text, lesson } = props;
+
+  const [attempts, setAttempts] = useState(0); // number of attempts to dinf concealed information
+
+  const [isNoteWindowShown, setIsNoteWindowShown] = useState(false); // is the window with a note shown?
+  const [isErrorWindowShown, setIsErrorWindowShown] = useState(false); // is the window where error can be fixed shown?
+  const [showFeedback, setShowFeedback] = useState(false); // ??
+
+  const [currentlyActiveStringinNotes, setCurrentlyActiveStringinNotes] =
+    useState(""); // source text the click on which reveals the comment / note
+  const [note, setNote] = useState(); // note text
+  const [noteId, setNoteId] = useState(); // note text
+  const [problemId, setProblemId] = useState(); // case study id
+  const [errorId, setErrorId] = useState(); // ???
+
+  const [errorFeedback, setErrorFeedback] = useState(); // ???
+  const [errorAnswer, setErrorAnswer] = useState(); // new wording provided by the student to fix the error
+  const [correctErrorOption, setCorrectErrorOption] = useState(); // sample wording used to check the answer
+  const [wrongErrorOption, setWrongErrorOption] = useState(); // ??
+  const [result, setResult] = useState(null); // is the new wording correct?
+  const [miniQuiz, setMiniQuiz] = useState();
+
+  const [chekingAnswer, setChekingAnswer] = useState(false); // used for the loading widget while the wording is being checked
+  const [update, setUpdate] = useState(false); // update the text editor
+  const [type, setType] = useState(""); // what type of indormation have we found in the document?
+
+  const [mistakesShown, setMistakesShown] = useState(false); // are all the errors outlined on the Show button click
 
   const { t } = useTranslation("lesson");
 
@@ -423,136 +414,82 @@ const SingleTextEditor = (props) => {
 
   const total = props.textEditor.totalMistakes;
 
-  const check = async (e) => {
-    e.persist();
-    e.target.className = "blocked";
-    setShown(true);
-    let answer1 = htmlToText(correctErrorOption.toLowerCase(), {
+  useEffect(() => {
+    if (errorId) {
+      let newMiniQuiz = props.lesson.quizes.find((quiz) => quiz.id == errorId);
+      setMiniQuiz(newMiniQuiz);
+    } else {
+      null;
+    }
+  }, [errorId]);
+
+  let miniNote;
+  if (noteId) {
+    miniNote = props.lesson.notes.find((note) => note.id == noteId);
+  } else {
+    null;
+  }
+
+  const evaluateErrorFix = async (e) => {
+    setChekingAnswer(true);
+    const answer1 = htmlToText(correctErrorOption.toLowerCase(), {
       wordwrap: false,
       uppercase: false,
     });
-    let answer2 = htmlToText(errorAnswer.toLowerCase(), {
+
+    const answer2 = htmlToText(errorAnswer.toLowerCase(), {
       wordwrap: false,
       uppercase: false,
     }).replace(/\_/g, "");
-    let data = {
+    const data = {
       answer1: answer1,
       answer2: answer2,
     };
-    let el = document.getElementById(chosenElement);
-    e.target.innerHTML = "Checking...";
-    let r;
+
     if (containsOnlyNumbers(answer1) && containsOnlyNumbers(answer2)) {
-      r = compareStrings(answer1, answer2);
-      if (
-        !e.target.nextSibling ||
-        (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
-      ) {
-        let button2 = document.createElement("button");
-        button2.innerHTML = "Show";
-        button2.className = "show_button";
-        button2.addEventListener("click", show);
-        e.target.after(button2);
-      }
-      if (r) {
-        setResult(true);
+      const comparisonResult = compareStrings(answer1, answer2);
+      setResult(comparisonResult);
+      if (comparisonResult) {
         props.getResults(1);
-        el.style.background = "#D9EAD3";
-        e.target.style.display = "none";
+      }
+      setChekingAnswer(false);
+
+      return comparisonResult;
+    } else {
+      const fetchResult = await fetchChecker(data);
+      setChekingAnswer(false);
+
+      return fetchResult;
+    }
+  };
+
+  const fetchChecker = async (data) => {
+    try {
+      const response = await fetch(
+        "https://arcane-refuge-67529.herokuapp.com/checker",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const res = await response.json();
+      if (parseFloat(res.res) > 65) {
+        setResult(true);
         return true;
       } else {
         setResult(false);
-        el.style.background = "#FCE5CD";
-        e.target.innerHTML = "Check";
-        e.target.className = "mini_button";
-        setTimeout(() => (el.style.background = "#bef1ed"), 3000);
         return false;
       }
-    } else {
-      r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          if (
-            !e.target.nextSibling ||
-            (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
-          ) {
-            let button2 = document.createElement("button");
-            button2.innerHTML = "Show";
-            button2.className = "show_button";
-            button2.addEventListener("click", show);
-            e.target.after(button2);
-          }
-          console.log("res.res", res, data);
-          if (parseFloat(res.res) > 65) {
-            setResult(true);
-            props.getResults(1);
-            el.style.background = "#D9EAD3";
-            e.target.style.display = "none";
-            return true;
-          } else {
-            setResult(false);
-            el.style.background = "#FCE5CD";
-            e.target.innerHTML = "Check";
-            e.target.className = "mini_button";
-            if (res.comment) {
-              if (res.comment == "Дайте более развернутый ответ") {
-                alert("Try giving a more detailed answer.");
-              } else {
-                alert("Try giving a shorter answer.");
-              }
-            }
-            setTimeout(() => (el.style.background = "#bef1ed"), 3000);
-            return false;
-          }
-        })
-        .catch((err) => console.log(err));
+    } catch (err) {
+      console.error(err);
     }
-
-    setShown(false);
-    return r;
   };
 
-  // check the corrections to the errors
-
-  // check the guesses to the quizes
-  const quizCheck = async (e) => {
-    setChecking(true);
-    let data = {
-      answer1: quiz.answer,
-      answer2: quizGuess,
-    };
-
-    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        if (parseFloat(res.res) > 69) {
-          setQuizResult(true);
-          setChecking(false);
-          return true;
-        } else {
-          setQuizResult(false);
-          setChecking(false);
-          return false;
-        }
-      })
-      .catch((err) => console.log(err));
-
-    return r;
-  };
-
-  // start interaction with the piece of text
+  // Handle click events on the document
   const onMouseClick = (e) => {
     if (e.target.getAttribute("feedback")) {
       setErrorFeedback(e.target.getAttribute("feedback"));
@@ -562,34 +499,36 @@ const SingleTextEditor = (props) => {
     z.contentEditable = true;
     z.innerHTML = e.target.innerHTML;
     z.className = "edit";
-    z.setAttribute("data-initial", e.target.getAttribute("error_data"));
+    z.setAttribute(
+      "data-initial",
+      e.target.getAttribute("error_data")
+        ? e.target.getAttribute("error_data")
+        : e.target.getAttribute("error_text")
+    );
+    if (e.target.getAttribute("elementid")) {
+      z.setAttribute("errorid", e.target.getAttribute("elementid"));
+    }
     z.setAttribute("id", id);
     z.addEventListener("input", changeState);
     let n = e.target.parentNode.replaceChild(z, e.target);
-    let button = document.createElement("button");
-    button.innerHTML = "Check";
-    button.className = "mini_button";
-    button.tabIndex = 0;
-    // button.addEventListener("click", check);
-    z.after(button);
     let wrong_option = htmlToText(e.target.innerHTML, {
       wordwrap: false,
       uppercase: false,
     });
-    setErrorAnswer("");
     setCorrectErrorOption(
-      e.target.getAttribute("error_data") || e.target.getAttribute("data")
+      e.target.getAttribute("error_text") ||
+        e.target.getAttribute("error_data") ||
+        e.target.getAttribute("data")
     );
     setWrongErrorOption(wrong_option);
-    setChosenElement(id);
   };
 
-  // ???
+  // this function is automatically added to the edited text to pass all changes to the state
   const changeState = (e) => {
     setErrorAnswer(e.target.innerHTML);
   };
 
-  // ???
+  // used for old cases when the indormation is revealed when it is clicked on
   const onReveal = (e) => {
     let span = document.createElement("span");
     span.innerHTML = ` (${e.target.getAttribute("data")})`;
@@ -604,23 +543,11 @@ const SingleTextEditor = (props) => {
     }
   };
 
-  // ???
-  const show = (e) => {
-    e.preventDefault();
-    e.target.previousSibling.previousSibling.innerHTML =
-      e.target.previousSibling.previousSibling.getAttribute("data-initial");
-    e.target.style.pointerEvents = "none";
-    e.target.previousSibling.style.display = "none";
-    e.target.style.display = "none";
-    e.target.previousSibling.previousSibling.contentEditable = false;
-    e.target.previousSibling.previousSibling.style.pointerEvents = "none";
-  };
-
-  // ???
+  // Show all parts of the text that contain hidden information
   const onShow = () => {
     const elements = document
       .getElementById(props.textEditor.id + 1)
-      .querySelectorAll("#id, .quiz, .editor_note");
+      .querySelectorAll(".editor_note, .editor_error, .editor_problem");
     if (mistakesShown) {
       elements.forEach((element) => {
         element.classList.remove("edit");
@@ -654,7 +581,20 @@ const SingleTextEditor = (props) => {
     });
   };
 
-  const { textEditor, me, lessonID, story, complexity, text, lesson } = props;
+  const passResultToTextEditor = (val) => {
+    setResult(val);
+    let editedText = document.querySelector(`[errorId=${errorId}]`);
+    if (val == "true") {
+      editedText.style.backgroundColor = "rgba(50, 172, 102, 0.3)";
+      editedText.contentEditable = "false";
+    } else {
+      editedText.style.backgroundColor = "rgba(222, 107, 72, 0.3)";
+      setTimeout(() => {
+        editedText.style.backgroundColor = "#BEF1ED";
+      }, [2500]);
+    }
+  };
+
   return (
     <>
       {me &&
@@ -673,6 +613,7 @@ const SingleTextEditor = (props) => {
       <Styles id={textEditor.id + 1} width={story}>
         {!update && (
           <div>
+            {/* The document itself */}
             <TextBar id={textEditor.id}>
               <EditText story={story}>
                 <div
@@ -700,6 +641,12 @@ const SingleTextEditor = (props) => {
                         });
                       }, 1000);
                     }
+                    if (
+                      e.target.classList.contains("edit") &&
+                      isErrorWindowShown == false
+                    ) {
+                      setErrorAnswer(e.target.innerHTML);
+                    }
                     // 1. Comment / Note
                     if (
                       e.target.getAttribute("type") === "note" ||
@@ -712,8 +659,10 @@ const SingleTextEditor = (props) => {
                       if (e.target.tagName !== "BUTTON") {
                         e.target.className = "edit";
                       }
-                      setShowNote(true);
+                      setIsNoteWindowShown(true);
+                      setCurrentlyActiveStringinNotes(e.target.innerHTML);
                       setNote(val);
+                      setNoteId(e.target.getAttribute("elementid"));
                       setType("note");
                       setTimeout(() => {
                         const res2 = createTextEditorResult({
@@ -736,6 +685,11 @@ const SingleTextEditor = (props) => {
                       e.target.getAttribute("type") === "error" ||
                       e.target.parentElement.getAttribute("type") === "error"
                     ) {
+                      setIsErrorWindowShown(true);
+                      setErrorAnswer(e.target.innerHTML);
+                      setResult(null);
+                      setErrorId(e.target.getAttribute("elementid"));
+
                       if (total > 0) {
                         const res2 = onMouseClick(e);
                       } else if (props.total == 0 || props.total == null) {
@@ -743,38 +697,27 @@ const SingleTextEditor = (props) => {
                       }
                       setType("error");
                     }
-                    // 3. Quiz. Provide the student with data, quiz part of text
+
                     if (
-                      e.target &&
-                      (e.target.getAttribute("type") === "quiz" ||
-                        (e.target.parentElement &&
-                          e.target.parentElement.getAttribute("type") ===
-                            "quiz"))
+                      e.target.classList.contains("edit") &&
+                      e.target.getAttribute("type") !== "note" &&
+                      e.target.getAttribute("type") !== "problem"
                     ) {
-                      // 1.1 add styles to the text with a mistake
-                      e.target.className = "edit";
-                      // 1.2 add data necessary tp prove student with feedback to state
-                      setShowQuiz(true);
-                      setQuiz({
-                        question:
-                          e.target.getAttribute("type") === "quiz"
-                            ? e.target.getAttribute("question")
-                            : e.target.parentElement.getAttribute("question"),
-                        answer:
-                          e.target.getAttribute("type") === "quiz"
-                            ? e.target.getAttribute("answer")
-                            : e.target.parentElement.getAttribute("answer"),
-                        ifRight:
-                          e.target.getAttribute("type") === "quiz"
-                            ? e.target.getAttribute("ifRight")
-                            : e.target.parentElement.getAttribute("ifRight"),
-                        ifWrong:
-                          e.target.getAttribute("type") === "quiz"
-                            ? e.target.getAttribute("ifWrong")
-                            : e.target.parentElement.getAttribute("ifWrong"),
-                      });
-                      setType("quiz");
+                      setErrorAnswer(e.target.innerHTML);
+                      let newMiniQuiz = props.lesson.quizes.find(
+                        (quiz) => quiz.id == e.target.getAttribute("errorid")
+                      );
+                      setErrorId(e.target.getAttribute("errorid"));
+
+                      setMiniQuiz(newMiniQuiz);
+                      setCorrectErrorOption(
+                        e.target.getAttribute("data-initial")
+                      );
+                      setIsErrorWindowShown(true);
+                      setResult(null);
                     }
+
+                    // 3. Case Study. Transition to Case Study.
 
                     if (
                       e.target &&
@@ -798,6 +741,7 @@ const SingleTextEditor = (props) => {
                 </div>
               </EditText>
             </TextBar>
+            {/* The button to reveal hidden information in the document */}
             <Buttons>
               <BlueButton onClick={onShow} variant="contained" color="primary">
                 {mistakesShown ? "Hide" : "Show"}
@@ -805,98 +749,173 @@ const SingleTextEditor = (props) => {
             </Buttons>
           </div>
         )}
-        {(showQuiz || showNote || showFeedback) && (
+        {/* All comments are now presented in the WindowColumn */}
+        {(isErrorWindowShown || isNoteWindowShown || showFeedback) && (
           <WindowColumn>
-            {/* {showNote && ( */}
-            <Window active={showNote}>
-              <div className="questionBox">
-                <IconBlock>
-                  <div className="nameBlock">
-                    <img className="icon" src="../../static/hipster.svg" />
-                    <div className="name">BeSavvy</div>
+            <WindowBundle>
+              {isNoteWindowShown && (
+                <Window>
+                  <div className="questionBox">
+                    <IconBlock>
+                      <div className="nameBlock">
+                        <img className="icon" src="../../static/hipster.svg" />
+                        <div className="name">BeSavvy</div>
+                      </div>
+                      <div
+                        className="cancelBlock"
+                        onClick={(e) => setIsNoteWindowShown(false)}
+                      >
+                        <img className="cancel" src="../../static/cancel.svg" />
+                      </div>
+                    </IconBlock>
                   </div>
-                  <div
-                    className="cancelBlock"
-                    onClick={(e) => setShowNote(false)}
-                  >
-                    <img className="cancel" src="../../static/cancel.svg" />
+                  <div className="answerBox">
+                    <Comment>
+                      <i>"{currentlyActiveStringinNotes}"</i>
+                    </Comment>
                   </div>
-                </IconBlock>
-              </div>
-              <div className="answerBox">
-                <Comment>{note ? parse(note) : null}</Comment>
-              </div>
-            </Window>
-            <Window active={showFeedback}>
-              <div className="questionBox">
-                <IconBlock>
-                  <div className="nameBlock">
-                    <img className="icon" src="../../static/hipster.svg" />
-                    <div className="name">BeSavvy</div>
+                  <div className="answerBox">
+                    <Comment>
+                      {miniNote && miniNote.text ? (
+                        <Note
+                          text={miniNote.text}
+                          name={miniNote.name}
+                          me={me}
+                          user={lesson.user.id}
+                          note={miniNote}
+                          author={lesson.user}
+                          id={miniNote.id}
+                          complexity={miniNote.complexity}
+                          lessonID={lesson.id}
+                          miniforum={null}
+                          getResult={null}
+                          passUpdated={null}
+                          story={true}
+                        />
+                      ) : note ? (
+                        parse(note)
+                      ) : null}
+                    </Comment>
                   </div>
-                  <div
-                    className="cancelBlock"
-                    onClick={(e) => setShowFeedback(false)}
-                  >
-                    <img className="cancel" src="../../static/cancel.svg" />
+                </Window>
+              )}
+              {/* <Window active={showFeedback}>
+                <div className="questionBox">
+                  <IconBlock>
+                    <div className="nameBlock">
+                      <img className="icon" src="../../static/hipster.svg" />
+                      <div className="name">BeSavvy</div>
+                    </div>
+                    <div
+                      className="cancelBlock"
+                      onClick={(e) => setShowFeedback(false)}
+                    >
+                      <img className="cancel" src="../../static/cancel.svg" />
+                    </div>
+                  </IconBlock>
+                </div>
+                <div className="answerBox">
+                  <Comment>{errorFeedback}</Comment>
+                </div>
+              </Window> */}
+              {isErrorWindowShown && (
+                <Window>
+                  <div className="questionBox">
+                    <IconBlock>
+                      <div className="nameBlock">
+                        <img className="icon" src="../../static/hipster.svg" />
+                        <div className="name">BeSavvy</div>
+                      </div>
+                      <div
+                        className="cancelBlock"
+                        onClick={(e) => {
+                          setResult(null);
+                          setErrorAnswer("");
+                          setIsErrorWindowShown(false);
+                        }}
+                      >
+                        <img className="cancel" src="../../static/cancel.svg" />
+                      </div>
+                    </IconBlock>
+                    {!miniQuiz ? (
+                      <div className="studentsWording">
+                        <div className="studentsWordingHeader">
+                          {t("make_changes_to_the_text")}
+                        </div>
+                        {errorAnswer !== "" && (
+                          <MiniOpenQuestionFrame
+                            inputColor={
+                              result === null
+                                ? "rgba(0, 0, 0, 0.1)"
+                                : result === true
+                                ? "rgba(50, 172, 102, 1)"
+                                : "rgba(222, 107, 72, 0.5)"
+                            }
+                          >
+                            {errorAnswer ? parse(errorAnswer) : null}
+                          </MiniOpenQuestionFrame>
+                        )}
+
+                        {chekingAnswer && (
+                          <Progress2>
+                            <TailSpin width="35" color="#2E80EC" />
+                          </Progress2>
+                        )}
+                        <MiniAIButton
+                          onClick={(e) => {
+                            evaluateErrorFix(e);
+                          }}
+                        >
+                          {t("check")}
+                        </MiniAIButton>
+                        <MiniAIButton
+                          onClick={(e) => {
+                            alert(correctErrorOption);
+                          }}
+                        >
+                          {t("show")}
+                        </MiniAIButton>
+                      </div>
+                    ) : null}
+                    {miniQuiz ? (
+                      <SingleQuiz
+                        id={errorId}
+                        key={errorId}
+                        complexity={miniQuiz.complexity}
+                        question={miniQuiz.question}
+                        answer={miniQuiz.answer}
+                        answers={miniQuiz.answers}
+                        type={miniQuiz.type}
+                        goalType={miniQuiz.goalType}
+                        check={miniQuiz.check}
+                        me={me}
+                        story={true}
+                        ifRight={miniQuiz.ifRight}
+                        ifWrong={miniQuiz.ifWrong}
+                        name={miniQuiz.name}
+                        instructorName={miniQuiz.instructorName}
+                        image={miniQuiz.image}
+                        hidden={true}
+                        lesson={lesson}
+                        lessonID={lesson.id}
+                        quizID={miniQuiz.id}
+                        user={miniQuiz.user.id}
+                        user_name={miniQuiz.user}
+                        author={lesson.user}
+                        miniforum={null}
+                        getResults={null}
+                        passUpdated={null}
+                        getResult={null}
+                        passResultToTextEditor={passResultToTextEditor}
+                        openQuestionType="mini"
+                        questionFormat="mini"
+                        studentAnswerPassedFromAnotherComponent={errorAnswer}
+                      />
+                    ) : null}
                   </div>
-                </IconBlock>
-              </div>
-              <div className="answerBox">
-                <Comment>{errorFeedback}</Comment>
-              </div>
-            </Window>
-            {/* )} */}
-            {/* {showQuiz && ( */}
-            <Window active={showQuiz}>
-              <div className="questionBox">
-                <IconBlock>
-                  <div className="nameBlock">
-                    <img className="icon" src="../../static/hipster.svg" />
-                    <div className="name">BeSavvy</div>
-                  </div>
-                  <div
-                    className="cancelBlock"
-                    onClick={(e) => setShowQuiz(false)}
-                  >
-                    <img className="cancel" src="../../static/cancel.svg" />
-                  </div>
-                </IconBlock>
-                <div>{quiz && quiz.question}</div>
-              </div>
-              <div className="answerBox">
-                <Input
-                  color={quizResult}
-                  onChange={(e) => {
-                    setQuizQuess(e.target.value);
-                  }}
-                />
-                <button
-                  onClick={async (e) => {
-                    const res = await quizCheck();
-                    setTimeout(() => {
-                      const res2 = createTextEditorResult({
-                        variables: {
-                          lessonId: props.lessonID,
-                          textEditorId: props.textEditor.id,
-                          attempts: attempts,
-                          correct: quiz.answer,
-                          wrong: quizGuess,
-                          type: "quiz",
-                          guess: quizGuess,
-                          result: res,
-                        },
-                      });
-                    }, 3000);
-                  }}
-                >
-                  {checking ? t("checking") : t("check")}
-                </button>
-                {quizResult === false && <Comment>{quiz.ifWrong}</Comment>}
-                {quizResult === true && <Comment>{quiz.ifRight}</Comment>}
-              </div>
-            </Window>
-            {/* )} */}
+                </Window>
+              )}
+            </WindowBundle>
           </WindowColumn>
         )}
       </Styles>
@@ -906,6 +925,7 @@ const SingleTextEditor = (props) => {
           id={props.textEditor.id}
           goal={props.textEditor.goal}
           text={text}
+          context={props.context}
           name={props.textEditor.name}
           complexity={complexity}
           totalMistakes={total}
@@ -933,9 +953,63 @@ const SingleTextEditor = (props) => {
 };
 
 SingleTextEditor.propTypes = {
+  // A string representing the ID of the lesson
   lessonID: PropTypes.string.isRequired,
-  textEditor: PropTypes.object.isRequired,
-  me: PropTypes.object.isRequired,
+
+  // An object representing the text editor data
+  textEditor: PropTypes.shape({
+    // A string representing the ID of the text editor
+    id: PropTypes.string.isRequired,
+    // An object representing the user who created the text editor
+    user: PropTypes.shape({
+      // A string representing the ID of the user
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+    // A number representing the total number of mistakes in the text editor
+    totalMistakes: PropTypes.number.isRequired,
+    // A string representing the goal of the text editor
+    goal: PropTypes.string,
+    // A string representing the name of the text editor
+    name: PropTypes.string,
+  }).isRequired,
+
+  // An object representing the current user
+  me: PropTypes.shape({
+    // A string representing the ID of the current user
+    id: PropTypes.string.isRequired,
+    // An array of strings representing the permissions of the current user
+    permissions: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+
+  // A boolean indicating whether the text editor is part of a story or not
+  story: PropTypes.bool,
+
+  // A number representing the complexity level of the text editor
+  complexity: PropTypes.number,
+
+  // A string representing the text content of the text editor
+  text: PropTypes.string.isRequired,
+
+  // An object representing the lesson data
+  lesson: PropTypes.shape({
+    // An array of objects representing the problems in the lesson
+    problems: PropTypes.arrayOf(
+      PropTypes.shape({
+        // A string representing the ID of the problem
+        id: PropTypes.string.isRequired,
+        // A number representing the complexity of the problem
+        complexity: PropTypes.number.isRequired,
+      })
+    ),
+    // An object representing the user who created the lesson
+    user: PropTypes.shape({
+      // A string representing the ID of the user
+      id: PropTypes.string.isRequired,
+    }),
+  }),
+  context: PropTypes.string, // A string representing the context of the text editor
+  getResult: PropTypes.func, // A function to handle the result of the text editor
+  passUpdated: PropTypes.func, // A function to handle the update of the text editor
 };
 
 export default SingleTextEditor;

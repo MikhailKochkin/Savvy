@@ -7,7 +7,10 @@ import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
-import { guessAlphabet, autoResizeTextarea } from "./quizFunctions";
+import {
+  guessAlphabet,
+  autoResizeTextarea,
+} from "../SimulatorDevelopmentFunctions";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -328,13 +331,13 @@ const Prompt = (props) => {
     setGenerating(true);
     let recom;
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/api/generates", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: `Use this instruction: ${props.answer} to analyze this text: ${text}`,
+          prompt: `${text}`,
         }),
       });
 

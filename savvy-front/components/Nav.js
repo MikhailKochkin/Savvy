@@ -364,7 +364,16 @@ const Nav = (props) => {
                 ) : null}
                 {!me && (
                   <Button onClick={(e) => toggleModal()}>
-                    <a>{t("login")}</a>
+                    <Link
+                      href={{
+                        pathname: "/auth",
+                        query: {
+                          pathname: router.asPath,
+                        },
+                      }}
+                    >
+                      {t("login")}
+                    </Link>{" "}
                   </Button>
                 )}
               </div>

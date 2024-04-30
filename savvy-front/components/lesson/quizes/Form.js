@@ -7,7 +7,10 @@ import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
-import { guessAlphabet, autoResizeTextarea } from "./quizFunctions";
+import {
+  guessAlphabet,
+  autoResizeTextarea,
+} from "../SimulatorDevelopmentFunctions";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(

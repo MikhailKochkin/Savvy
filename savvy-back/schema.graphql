@@ -625,6 +625,7 @@ type Construction {
   columnsNum: Int
   complexity: Int
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
+  context: String
   createdAt: DateTime!
   elements: Json
   goal: String
@@ -662,6 +663,7 @@ input ConstructionOrderByWithRelationInput {
   columnsNum: SortOrderInput
   complexity: SortOrderInput
   constructionResults: ConstructionResultOrderByRelationAggregateInput
+  context: SortOrderInput
   createdAt: SortOrder
   elements: SortOrderInput
   goal: SortOrderInput
@@ -780,6 +782,7 @@ input ConstructionWhereInput {
   columnsNum: IntNullableFilter
   complexity: IntNullableFilter
   constructionResults: ConstructionResultListRelationFilter
+  context: StringNullableFilter
   createdAt: DateTimeFilter
   elements: JsonNullableFilter
   goal: StringNullableFilter
@@ -806,6 +809,7 @@ input ConstructionWhereUniqueInput {
   columnsNum: IntNullableFilter
   complexity: IntNullableFilter
   constructionResults: ConstructionResultListRelationFilter
+  context: StringNullableFilter
   createdAt: DateTimeFilter
   elements: JsonNullableFilter
   goal: StringNullableFilter
@@ -2598,7 +2602,7 @@ type Mutation {
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
-  updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, goal: String, hint: String, id: String, name: String, type: String, variants: [String]): Construction
+  updateConstruction(answer: [String], columnsNum: Int, complexity: Int, context: String, elements: ElementsList, goal: String, hint: String, id: String, name: String, type: String, variants: [String]): Construction
   updateConstructionResult(elements: ElementsList, id: String): ConstructionResult
   updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, modules: Modules, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
@@ -2615,7 +2619,7 @@ type Mutation {
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
-  updateProblem(complexity: Int, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String, type: String): Problem
+  updateProblem(complexity: Int, context: String, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String, type: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, next: NextType, question: String, type: String): Quiz
@@ -2624,7 +2628,7 @@ type Mutation {
   updateShot(comments: [String], id: String, name: String, parts: [String], title: String): Shot
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
-  updateTextEditor(complexity: Int, goal: String, id: String, name: String, text: String, totalMistakes: Int): TextEditor
+  updateTextEditor(complexity: Int, context: String, goal: String, id: String, name: String, text: String, totalMistakes: Int): TextEditor
   updateUser(active: Boolean, comment: String, description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
   updateUserLevel(consumedContent: ConsumedContentList, id: String, isProgressPublic: Boolean, learningStreak: [DateTime], level: Float, myProgress: MyProgressList): UserLevel
 }
@@ -3343,6 +3347,7 @@ input Prices {
 
 type Problem {
   complexity: Int
+  context: String
   createdAt: DateTime!
   goal: String
   id: String!
@@ -3382,6 +3387,7 @@ input ProblemOrderByRelationAggregateInput {
 input ProblemOrderByWithRelationInput {
   answer: SortOrderInput
   complexity: SortOrderInput
+  context: SortOrderInput
   createdAt: SortOrder
   goal: SortOrderInput
   hints: SortOrderInput
@@ -3499,6 +3505,7 @@ input ProblemWhereInput {
   OR: [ProblemWhereInput!]
   answer: StringNullableFilter
   complexity: IntNullableFilter
+  context: StringNullableFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
   hints: StringNullableFilter
@@ -3528,6 +3535,7 @@ input ProblemWhereUniqueInput {
   OR: [ProblemWhereInput!]
   answer: StringNullableFilter
   complexity: IntNullableFilter
+  context: StringNullableFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
   hints: StringNullableFilter
@@ -4871,6 +4879,7 @@ input TestWhereInput {
 
 type TextEditor {
   complexity: Int
+  context: String
   createdAt: DateTime!
   goal: String
   id: String!
@@ -4898,6 +4907,7 @@ input TextEditorOrderByRelationAggregateInput {
 
 input TextEditorOrderByWithRelationInput {
   complexity: SortOrderInput
+  context: SortOrderInput
   createdAt: SortOrder
   goal: SortOrderInput
   id: SortOrder
@@ -5006,6 +5016,7 @@ input TextEditorWhereInput {
   NOT: [TextEditorWhereInput!]
   OR: [TextEditorWhereInput!]
   complexity: IntNullableFilter
+  context: StringNullableFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
   id: StringFilter
@@ -5026,6 +5037,7 @@ input TextEditorWhereUniqueInput {
   NOT: [TextEditorWhereInput!]
   OR: [TextEditorWhereInput!]
   complexity: IntNullableFilter
+  context: StringNullableFilter
   createdAt: DateTimeFilter
   goal: StringNullableFilter
   id: String

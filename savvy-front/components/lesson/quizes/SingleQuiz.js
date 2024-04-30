@@ -18,7 +18,7 @@ import { set } from "lodash";
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: 570px;
+  width: ${(props) => props.width};
   font-weight: 500;
   margin-bottom: 3%;
   font-size: 1.6rem;
@@ -48,6 +48,9 @@ const SingleQuiz = (props) => {
   // this function is responsible for moving through the problem
   const onMove = (result) => {
     // helper function to handle getData
+    if (props.passResultToTextEditor) {
+      props.passResultToTextEditor(result);
+    }
     const handleGetData = (resultBool) => {
       if (props.getData) {
         props.getData(
@@ -93,6 +96,7 @@ const SingleQuiz = (props) => {
     author,
     answers,
     problemType,
+    studentAnswerPassedFromAnotherComponent,
   } = props;
 
   const getResult = (data) => {
@@ -108,30 +112,26 @@ const SingleQuiz = (props) => {
   };
 
   let width;
-  if (props.problem) {
-    width = "50%";
-  } else if (props.story) {
-    width = "50%";
-  } else {
+  if (props.questionFormat == "mini") {
     width = "100%";
+  } else {
+    width = "570px";
   }
   return (
     <Styles width={width} id={props.quizID}>
       {/* 1. Settings part */}
-      <Buttons>
-        {!exam && !story && (
+      {me && !story ? (
+        <Buttons>
           <button onClick={(e) => setUpdate(!update)}>
             {!update ? t("update") : t("back")}
           </button>
-        )}
-        {me && !props.exam && !props.story ? (
           <DeleteSingleQuiz
             id={me.id}
             quizID={props.quizID}
             lessonID={props.lessonID}
           />
-        ) : null}
-      </Buttons>
+        </Buttons>
+      ) : null}
       {!update && (
         <>
           {props.type?.toLowerCase() == "test" && (
@@ -151,6 +151,10 @@ const SingleQuiz = (props) => {
               passResult={onMove}
               name={props.name}
               image={props.image}
+              openQuestionType={props.openQuestionType}
+              studentAnswerPassedFromAnotherComponent={
+                studentAnswerPassedFromAnotherComponent
+              }
             />
           )}
           {props.type?.toLowerCase() == "form" && (

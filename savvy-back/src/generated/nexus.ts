@@ -481,6 +481,7 @@ export interface NexusGenInputs {
     columnsNum?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     constructionResults?: NexusGenInputs['ConstructionResultOrderByRelationAggregateInput'] | null; // ConstructionResultOrderByRelationAggregateInput
+    context?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     elements?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     goal?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -574,6 +575,7 @@ export interface NexusGenInputs {
     columnsNum?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     constructionResults?: NexusGenInputs['ConstructionResultListRelationFilter'] | null; // ConstructionResultListRelationFilter
+    context?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     elements?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     goal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -599,6 +601,7 @@ export interface NexusGenInputs {
     columnsNum?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     constructionResults?: NexusGenInputs['ConstructionResultListRelationFilter'] | null; // ConstructionResultListRelationFilter
+    context?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     elements?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     goal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2457,6 +2460,7 @@ export interface NexusGenInputs {
   ProblemOrderByWithRelationInput: { // input type
     answer?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    context?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     goal?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     hints?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -2550,6 +2554,7 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['ProblemWhereInput'][] | null; // [ProblemWhereInput!]
     answer?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    context?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     goal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     hints?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2578,6 +2583,7 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['ProblemWhereInput'][] | null; // [ProblemWhereInput!]
     answer?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    context?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     goal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     hints?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -3521,6 +3527,7 @@ export interface NexusGenInputs {
   }
   TextEditorOrderByWithRelationInput: { // input type
     complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    context?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     goal?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -3605,6 +3612,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['TextEditorWhereInput'][] | null; // [TextEditorWhereInput!]
     OR?: NexusGenInputs['TextEditorWhereInput'][] | null; // [TextEditorWhereInput!]
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    context?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     goal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -3624,6 +3632,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['TextEditorWhereInput'][] | null; // [TextEditorWhereInput!]
     OR?: NexusGenInputs['TextEditorWhereInput'][] | null; // [TextEditorWhereInput!]
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    context?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     goal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: string | null; // String
@@ -4178,6 +4187,7 @@ export interface NexusGenObjects {
     answer: string[]; // [String!]!
     columnsNum?: number | null; // Int
     complexity?: number | null; // Int
+    context?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     elements?: NexusGenScalars['Json'] | null; // Json
     goal?: string | null; // String
@@ -4483,6 +4493,7 @@ export interface NexusGenObjects {
   }
   Problem: { // root type
     complexity?: number | null; // Int
+    context?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     goal?: string | null; // String
     id: string; // String!
@@ -4708,6 +4719,7 @@ export interface NexusGenObjects {
   }
   TextEditor: { // root type
     complexity?: number | null; // Int
+    context?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     goal?: string | null; // String
     id: string; // String!
@@ -4913,6 +4925,7 @@ export interface NexusGenFieldTypes {
     columnsNum: number | null; // Int
     complexity: number | null; // Int
     constructionResults: NexusGenRootTypes['ConstructionResult'][]; // [ConstructionResult!]!
+    context: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     elements: NexusGenScalars['Json'] | null; // Json
     goal: string | null; // String
@@ -5429,6 +5442,7 @@ export interface NexusGenFieldTypes {
   }
   Problem: { // field return type
     complexity: number | null; // Int
+    context: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     goal: string | null; // String
     id: string; // String!
@@ -5751,6 +5765,7 @@ export interface NexusGenFieldTypes {
   }
   TextEditor: { // field return type
     complexity: number | null; // Int
+    context: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     goal: string | null; // String
     id: string; // String!
@@ -5976,6 +5991,7 @@ export interface NexusGenFieldTypeNames {
     columnsNum: 'Int'
     complexity: 'Int'
     constructionResults: 'ConstructionResult'
+    context: 'String'
     createdAt: 'DateTime'
     elements: 'Json'
     goal: 'String'
@@ -6492,6 +6508,7 @@ export interface NexusGenFieldTypeNames {
   }
   Problem: { // field return type name
     complexity: 'Int'
+    context: 'String'
     createdAt: 'DateTime'
     goal: 'String'
     id: 'String'
@@ -6814,6 +6831,7 @@ export interface NexusGenFieldTypeNames {
   }
   TextEditor: { // field return type name
     complexity: 'Int'
+    context: 'String'
     createdAt: 'DateTime'
     goal: 'String'
     id: 'String'
@@ -7728,6 +7746,7 @@ export interface NexusGenArgTypes {
       answer?: Array<string | null> | null; // [String]
       columnsNum?: number | null; // Int
       complexity?: number | null; // Int
+      context?: string | null; // String
       elements?: NexusGenInputs['ElementsList'] | null; // ElementsList
       goal?: string | null; // String
       hint?: string | null; // String
@@ -7874,6 +7893,7 @@ export interface NexusGenArgTypes {
     }
     updateProblem: { // args
       complexity?: number | null; // Int
+      context?: string | null; // String
       goal?: string | null; // String
       id?: string | null; // String
       isSecret?: boolean | null; // Boolean
@@ -7951,6 +7971,7 @@ export interface NexusGenArgTypes {
     }
     updateTextEditor: { // args
       complexity?: number | null; // Int
+      context?: string | null; // String
       goal?: string | null; // String
       id?: string | null; // String
       name?: string | null; // String

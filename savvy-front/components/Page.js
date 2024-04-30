@@ -30,7 +30,7 @@ const StyledPage = styled.div`
 const Inner = styled.div`
   margin: 0;
   width: 100%;
-  /* min-height: 100vh; */
+  min-height: 90vh;
 `;
 
 const GlobalStyle = createGlobalStyle`

@@ -1,28 +1,13 @@
 import { useState, useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
-import styled from "styled-components";
 import { useRouter } from "next/router";
-import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
-import parse from "html-react-parser";
-import { InfinitySpin, TailSpin } from "react-loader-spinner";
-import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
 import PropTypes from "prop-types";
+import { useTranslation } from "next-i18next";
 
-import {
-  guessAlphabet,
-  autoResizeTextarea,
-  removeSpecialChars,
-} from "./quizFunctions";
-import {
-  IconBlock,
-  Question,
-  Answer_text,
-  ResultCircle,
-  Button1,
-  Circle,
-  Frame,
-} from "./quizesStyles";
+import FullOpenQuestion from "./FullOpenQuestion";
+import MiniQuestion from "./MiniQuestion";
+import { use } from "i18next";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -56,57 +41,21 @@ const CREATE_QUIZRESULT_MUTATION = gql`
   }
 `;
 
-const Options = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 100%;
-  margin-bottom: 20px;
-`;
-
-const Group = styled.div`
-  flex-direction: row;
-  justify-content: center;
-  background: ${(props) => props.inputColor};
-  width: 100%;
-  pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
-  display: ${(props) => (props.correct === "true" ? "none" : "flex")};
-  padding: 0.5% 0;
-  margin-bottom: 20px;
-`;
-
-const Group2 = styled.div`
-  flex-direction: row;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  background: ${(props) => props.inputColor};
-  width: 90%;
-  pointer-events: auto;
-  display: flex;
-  padding: 0.5% 0;
-  margin-bottom: 20px;
-`;
-
-const Progress = styled.div`
-  display: ${(props) => (props.display === "true" ? "flex" : "none")};
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 10px;
-`;
-
-const Progress2 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  margin: 10px;
-`;
-
 const OpenQuestion = (props) => {
-  const { author, me, story, ifRight, ifWrong, quizId } = props;
+  const {
+    id,
+    author,
+    question,
+    me,
+    story,
+    ifRight,
+    ifWrong,
+    quizId,
+    goalType,
+    challenge,
+    openQuestionType,
+    studentAnswerPassedFromAnotherComponent,
+  } = props;
 
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [previousAnswers, setPreviousAnswers] = useState([]); // The answer provided by the student
@@ -114,13 +63,9 @@ const OpenQuestion = (props) => {
   const [correctnessLevel, setCorrectnessLevel] = useState(); // more deep understanding of the correctness. Used to generate prompts
   const [result, setResult] = useState(null); // student's grade
 
-  const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
   const [progress, setProgress] = useState("false");
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [isExperienced, setIsExperienced] = useState(false); // set to false once we get the student answer
-
-  const [recognition, setRecognition] = useState(null); // used for voice recognition
-  const [startSpeech, setStartSpeech] = useState(false); // used for voice recognition
 
   const [generating, setGenerating] = useState(false); // loading spinner when checking the student's answer
   const [hint, setHint] = useState(null); // give the hint to the student without the use of AI
@@ -139,6 +84,7 @@ const OpenQuestion = (props) => {
 
   const { passResult } = props;
   const router = useRouter();
+  const { t } = useTranslation("lesson");
 
   const [createQuizResult, { data, loading, error }] = useMutation(
     CREATE_QUIZRESULT_MUTATION
@@ -149,12 +95,16 @@ const OpenQuestion = (props) => {
     smoothscroll.polyfill();
   });
 
-  const { t } = useTranslation("lesson");
-
   const intro = `
       You are a law professor. You asked your student this question: """ ${props.question} """.
       You expect to recieve an answer that sounds like this (correct answer): """ ${props.answer} """.
     `;
+
+  // 0. PassAnswer
+
+  const passAnswer = (val) => {
+    setAnswer(val);
+  };
 
   // 1. Check student's answer
 
@@ -175,13 +125,11 @@ const OpenQuestion = (props) => {
           setIsExperienced(true);
         }
         setCorrect("true");
-        if (props.goalType !== "ASSESS")
-          setInputColor("rgba(50, 172, 102, 0.25)");
+        if (goalType !== "ASSESS") setInputColor("rgba(50, 172, 102, 0.25)");
         passResult("true");
       } else {
         setCorrect("false");
-        if (props.goalType !== "ASSESS")
-          setInputColor("rgba(222, 107, 72, 0.5)");
+        if (goalType !== "ASSESS") setInputColor("rgba(222, 107, 72, 0.5)");
         passResult("false");
       }
     } else {
@@ -201,11 +149,10 @@ const OpenQuestion = (props) => {
           if (parseFloat(res.res) > 65) {
             setCorrect("true");
             passResult("true");
-            if (props.goalType !== "ASSESS") {
-              setInputColor("rgba(50, 172, 102, 0.25)");
+            if (goalType !== "ASSESS") {
+              setInputColor("rgba(50, 172, 102, 0.7)");
             }
             setResult(parseFloat(res.res));
-
             createQuizResult({
               variables: {
                 quiz: props.quizId,
@@ -224,7 +171,7 @@ const OpenQuestion = (props) => {
           } else if (parseFloat(res.res) > 58 && parseFloat(res.res) < 60) {
             setCorrect("has_flaws");
             setResult(parseFloat(res.res));
-            if (props.goalType !== "ASSESS") setInputColor("#ffd166");
+            if (goalType !== "ASSESS") setInputColor("#ffd166");
             passResult("true");
             if (typeof res.comment === "string") {
               if (res.comment == "more_detailed_response_recommended") {
@@ -252,7 +199,7 @@ const OpenQuestion = (props) => {
           } else if (parseFloat(res.res) > 60 && parseFloat(res.res) <= 65) {
             setCorrect("looks_true");
             setResult(parseFloat(res.res));
-            if (props.goalType !== "ASSESS") setInputColor("#ffd166");
+            if (goalType !== "ASSESS") setInputColor("#ffd166");
             passResult("true");
             if (typeof res.comment === "string") {
               if (res.comment == "more_detailed_response_recommended") {
@@ -280,8 +227,7 @@ const OpenQuestion = (props) => {
           } else {
             setCorrect("false");
             setResult(parseFloat(res.res));
-            if (props.goalType !== "ASSESS")
-              setInputColor("rgba(222, 107, 72, 0.5)");
+            if (goalType !== "ASSESS") setInputColor("rgba(222, 107, 72, 0.5)");
             if (typeof res.comment === "string") {
               if (res.comment == "more_detailed_response_recommended") {
                 setHint(t("more_detailed_response_recommended"));
@@ -407,6 +353,19 @@ const OpenQuestion = (props) => {
         setAIHint(result);
         setHints([...hints, result]);
         setGenerating(false);
+        createQuizResult({
+          variables: {
+            quiz: props.quizId,
+            lessonId: props.lessonId,
+            answer: answer,
+            correct: false,
+            type: "hint",
+            hint: result,
+            explanation: AIExplanation,
+            improvement: AIImprovement,
+            comment: `Student asked for a hint`,
+          },
+        });
         return result;
       } else {
         setAIHint("Sorry, you are on your own");
@@ -435,32 +394,32 @@ const OpenQuestion = (props) => {
     }
     if (explanationsNum > 1) {
       setGeneratingExplanation(false);
-      // setAIExplanation(
-      //   "Please try answering the question before asking for more explanations."
-      // );
       setExplanantions([
         ...explanations,
         "Please try answering the question before asking for more explanations.",
       ]);
       return;
     }
+    setExplanationsNum(explanationsNum + 1);
 
     let explanationRecommendations = `Write in second person. Address the student as "you".
       DO NOT USE the words from the correct answer!!! DO NOT REVEAL THE CORRECT ANSWER!!!
       Be very polite and gentle.
       Return your response with every paragrpah wrapped in <p> tags.
       Answer in ${router.locale == "ru" ? "Russian" : "English"}
-      Make the answer at least 2 sentences long.`;
+      `;
 
     if (proportion < 25 && explanations.length == 0) {
       let too_short_prompt = `
         The student's answer is too short. It is only """ ${proportion} """ of the sample correct answer.
-        Check it: """ ${answer} """  
-        If the answer is just a blob (like this: "test", "sdfsdfsfd", "answer", "..") and has no meaning, 
-        politely say that this answer does not mean anything and ask the student to give a real answer.
-        If the answer is meaningful, then just ask the student to provide more details.
+        Ask the student to provide a more detailed answer. Make the answer less than 3 sentences long.
         
       `;
+
+      // Check it: """ ${answer} """
+      // If the answer is just a blob (like this: "test", "sdfsdfsfd", "answer", "..") and has no meaning,
+      // politely say that this answer does not mean anything and ask the student to give a real answer.
+      // If the answer is meaningful, then just ask the student to provide more details.
 
       try {
         const response = await fetch(url, {
@@ -546,7 +505,7 @@ const OpenQuestion = (props) => {
       2) and information from the lesson: """ ${ifWrong} """
       3) Previous explanations: """ ${explanations.join(" ")} """
       
-      to explain in 3 sentences why this answer is wrong. Make this explanantion more deatiled than the previous one.
+      to explain in LESS THAN 4 SENTENCES why this answer is wrong. Make this explanantion more deatiled than the previous one.
       Do it in the following way:
 
       Explain what information must be in the question.
@@ -641,6 +600,7 @@ const OpenQuestion = (props) => {
       ]);
       return;
     }
+    setImprovementsNum(improvementsNum + 1);
 
     let improvementPrompt;
 
@@ -722,423 +682,91 @@ const OpenQuestion = (props) => {
     }
   };
 
-  // 6. Remove special characters from the sample ideal answer provided by the author
+  // 6. Reveal correct answer
 
-  // 7. Listening functionaluty
-
-  const startListening = () => {
-    const newRecognition = new (window.SpeechRecognition ||
-      window.webkitSpeechRecognition ||
-      window.mozSpeechRecognition ||
-      window.msSpeechRecognition)();
-    newRecognition.lang =
-      guessAlphabet(props.question) == "Cyrillic" ? "ru-RU" : "en-US";
-    newRecognition.interimResults = false;
-    newRecognition.maxAlternatives = 1;
-
-    newRecognition.start();
-    setStartSpeech(true);
-
-    newRecognition.onresult = function (event) {
-      setAnswer(answer + " " + event.results[0][0].transcript);
-    };
-
-    newRecognition.onspeechend = function () {
-      newRecognition.stop();
-    };
-
-    newRecognition.onerror = function (event) {
-      console.error("Error occurred in recognition: " + event.error);
-    };
-
-    setRecognition(newRecognition);
-  };
-
-  const stopListening = () => {
-    setStartSpeech(false);
-
-    if (recognition) {
-      recognition.stop();
-    }
-  };
-
-  // 8. slide to the last comment generated by AI
-
-  const slideToIdealAnswer = () => {
-    var my_element = document.getElementById(`ideal_answer_${props.id}`);
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
+  const revealCorrectAnswer = () => {
+    createQuizResult({
+      variables: {
+        quiz: props.quizId,
+        lessonId: props.lessonId,
+        answer: answer,
+        correct: false,
+        type: "answerReveal",
+        hint: AIhint,
+        explanation: AIExplanation,
+        improvement: AIImprovement,
+        comment: `Student opened correct answer`,
+      },
     });
   };
 
-  const slideToExplanations = () => {
-    var my_element = document.getElementById(`last_explanation_${props.id}`);
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
-
-  const slideToImprovements = () => {
-    var my_element = document.getElementById(`last_improvement_${props.id}`);
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
-
-  return (
-    <Question story={story}>
-      {/* 1 Question part */}
-      <div className="question_box">
-        <div className="question_text">{parse(props.question)}</div>
-        <IconBlock>
-          {author && author.image != null ? (
-            <img className="icon" src={author.image} />
-          ) : (
-            <img className="icon" src="../../static/hipster.svg" />
-          )}{" "}
-          <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
-          </div>
-        </IconBlock>{" "}
-      </div>
-      {/* 2 AI hints */}
-      {hints.length > 0 &&
-        hints.map((hint, index) => {
-          return (
-            <div className="question_box">
-              <div className="question_text">
-                <p>{hint}</p>
-              </div>
-              <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
-                </div>
-              </IconBlock>
-            </div>
-          );
-        })}
-      {generating && (
-        <Progress2>
-          <TailSpin width="50" color="#2E80EC" />
-        </Progress2>
-      )}
-      {/* 3. Student answer bubble part */}
-      <>
-        <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me && me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              )}
-            </div>{" "}
-            <div className="name">{me.name}</div>
-          </IconBlock>{" "}
-          <Frame inputColor={inputColor}>
-            <Answer_text
-              type="text"
-              required
-              value={answer}
-              onChange={(e) => {
-                setAnswer(e.target.value);
-                autoResizeTextarea(e);
-              }}
-              onInput={autoResizeTextarea}
-              placeholder="..."
-            />
-            {result && (
-              <ResultCircle
-                data-tooltip-id="my-tooltip"
-                data-tooltip-content={t("answer_above_65")}
-                data-tooltip-place="right"
-                inputColor={inputColor}
-              >
-                {parseInt(result)}
-              </ResultCircle>
-            )}
-          </Frame>
-        </div>
-        {startSpeech && <Group>{<p>📣 {t("start_speaking")}..</p>}</Group>}
-        <Progress display={progress}>
-          <InfinitySpin width="200" color="#2E80EC" />
-        </Progress>
-        <Group progress={progress} correct={correct}>
-          <Button1
-            inputColor={inputColor}
-            onClick={async (e) => {
-              e.preventDefault();
-              const res = await onAnswer();
-              // setProgress("false");
-            }}
-            correct={correct}
-          >
-            {t("check")}
-          </Button1>
-          {props.goalType !== "ASSESS" && (
-            <Button1
-              inputColor={inputColor}
-              onClick={async (e) => {
-                e.preventDefault();
-                let new_hint = await getHint(e);
-                if (answer !== "") {
-                  createQuizResult({
-                    variables: {
-                      quiz: props.quizId,
-                      lessonId: props.lessonId,
-                      answer: answer,
-                      correct: false,
-                      type: "hint",
-                      hint: new_hint,
-                      explanation: AIExplanation,
-                      improvement: AIImprovement,
-                      comment: `Student asked for a hint`,
-                    },
-                  });
-                }
-              }}
-              correct={correct}
-            >
-              {AIhint && hints.length > 0
-                ? t("i_need_another_hint")
-                : t("i_need_a_hint")}
-            </Button1>
-          )}
-          <Circle onClick={startListening}>
-            <BiMicrophone
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-          </Circle>
-          <Circle onClick={stopListening} disabled={!recognition}>
-            <BiMicrophoneOff
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-          </Circle>
-        </Group>
-      </>
-      {/* 4. Reaction to answer immediately after it is checked */}
-      {/* 4.1 If true / looks true */}
-      {(correct === "true" || correct === "looks_true") &&
-        props.goalType !== "ASSESS" && (
-          <>
-            <div className="question_box">
-              <div className="question_text">
-                {correct === "true" && "🎉 " + t("correct") + "!"}
-                {correct === "looks_true" && hint !== null && hint !== 0 && (
-                  <p>{hint}</p>
-                )}
-                {correct === "looks_true" && "👋 " + t("looks_true")}
-              </div>
-              <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
-                </div>
-              </IconBlock>
-            </div>
-          </>
-        )}
-      {/* 4.2 If false / has flaws */}
-      {(correct === "false" || correct === "has_flaws") && (
-        <>
-          <div className="question_box">
-            <div className="question_text">
-              {correct === "false" &&
-                props.goalType !== "ASSESS" &&
-                "🔎  " + t("wrong") + "..."}
-              {correct === "has_flaws" &&
-                props.goalType !== "ASSESS" &&
-                "🔎  " +
-                  "You may be on right track but your answer has some flaws. Remove these flaws to find the correct answer."}
-
-              {hint !== null && hint !== 0 && props.goalType !== "ASSESS" && (
-                <p>{hint}</p>
-              )}
-              {props.goalType == "ASSESS" && <p>{t("saved_answer")}</p>}
-            </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </div>
-        </>
-      )}
-
-      {/* 5. Show explanation and improvement buttons and the text */}
-
-      {!props.challenge && correct !== "" && props.goalType !== "ASSESS" && (
-        <>
-          <div className="answer">
-            <IconBlock>
-              <div className="icon2">
-                {me && me.image ? (
-                  <img className="icon" src={me.image} />
-                ) : me.surname ? (
-                  `${me.name[0]}${me.surname[0]}`
-                ) : (
-                  `${me.name[0]}${me.name[1]}`
-                )}
-              </div>{" "}
-              <div className="name">{me.name}</div>
-            </IconBlock>{" "}
-            {/* {correct == "false" && ( */}
-            <Options>
-              <Group2 progress={progress} correct={correct}>
-                {(correct == "false" || correct == "has_flaws") && (
-                  <Button1
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      setAIExplanation("...");
-                      slideToExplanations();
-                      setExplanationsNum(explanationsNum + 1);
-                      const res = await getExplanation(e);
-                    }}
-                  >
-                    {explanations.length == 0
-                      ? t("explain_what_is_wrong_with_my_answer")
-                      : t("more_explanations")}
-                  </Button1>
-                )}
-                {correct == "looks_true" && (
-                  <Button1
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      slideToImprovements();
-                      setImprovementsNum(improvementsNum + 1);
-                      const res = await getImprovements(e);
-                    }}
-                  >
-                    {improvements.length == 0
-                      ? t("what_can_i_improve")
-                      : t("more_improvements")}
-                  </Button1>
-                )}
-                <Button1
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    setHidden(false);
-                    slideToIdealAnswer();
-                    createQuizResult({
-                      variables: {
-                        quiz: props.quizId,
-                        lessonId: props.lessonId,
-                        answer: answer,
-                        correct: false,
-                        type: "answerReveal",
-                        hint: AIhint,
-                        explanation: AIExplanation,
-                        improvement: AIImprovement,
-                        comment: `Student opened correct answer`,
-                      },
-                    });
-                  }}
-                >
-                  {t("show_an_ideal_answer")}
-                </Button1>
-              </Group2>
-            </Options>
-          </div>
-          {explanations.length > 0 &&
-            // correct !== "true" &&
-            explanations.map((explanation, index) => {
-              return (
-                <div className="question_box">
-                  <div className="question_text">{parse(explanation)}</div>
-                  <IconBlock>
-                    {author && author.image != null ? (
-                      <img className="icon" src={author.image} />
-                    ) : (
-                      <img className="icon" src="../../static/hipster.svg" />
-                    )}{" "}
-                    <div className="name">
-                      {author && author.name ? author.name : "BeSavvy"}
-                    </div>
-                  </IconBlock>
-                </div>
-              );
-            })}
-          <div id={`last_explanation_${props.id}`}></div>
-          {generatingExplanation && (
-            <Progress2>
-              <TailSpin width="50" color="#2E80EC" />
-            </Progress2>
-          )}
-          {improvements.length > 0 &&
-            // (correct == "true" || correct == "looks_true") &&
-            improvements.map((improvement, index) => {
-              return (
-                <div className="question_box">
-                  <div className="question_text">{parse(improvement)}</div>
-                  <IconBlock>
-                    {author && author.image != null ? (
-                      <img className="icon" src={author.image} />
-                    ) : (
-                      <img className="icon" src="../../static/hipster.svg" />
-                    )}{" "}
-                    <div className="name">
-                      {author && author.name ? author.name : "BeSavvy"}
-                    </div>
-                  </IconBlock>
-                </div>
-              );
-            })}
-          <div id={`last_improvement_${props.id}`}></div>
-
-          {generatingImprovement && (
-            <Progress2>
-              <TailSpin width="50" color="#2E80EC" />
-            </Progress2>
-          )}
-        </>
-      )}
-
-      {/* 6. Show correct answer bubble */}
-      <div id={`ideal_answer_${props.id}`}></div>
-      {!hidden && (
-        <div className="question_box">
-          <div className="question_text">
-            <b>{t("correct_answer")}:</b>{" "}
-            {parse(removeSpecialChars(props.answer))}
-            {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
-          </div>
-          <IconBlock>
-            {author && author.image != null ? (
-              <img className="icon" src={author.image} />
-            ) : (
-              <img className="icon" src="../../static/hipster.svg" />
-            )}{" "}
-            <div className="name">
-              {author && author.name ? author.name : "BeSavvy"}
-            </div>
-          </IconBlock>{" "}
-        </div>
-      )}
-    </Question>
+  return openQuestionType == "mini" ? (
+    <MiniQuestion
+      id={id}
+      author={author}
+      question={question}
+      story={story}
+      generating={generating}
+      inputColor={inputColor}
+      correctAnswer={props.answer}
+      answer={answer}
+      onAnswer={onAnswer}
+      passAnswer={passAnswer}
+      me={me}
+      result={result}
+      progress={progress}
+      correct={correct}
+      AIhint={AIhint}
+      AIExplanation={AIExplanation}
+      AIImprovement={AIImprovement}
+      hint={hint}
+      hints={hints}
+      getHint={getHint}
+      explanations={explanations}
+      getExplanation={getExplanation}
+      improvements={improvements}
+      getImprovements={getImprovements}
+      goalType={goalType}
+      challenge={challenge}
+      revealCorrectAnswer={revealCorrectAnswer}
+      generatingExplanation={generatingExplanation}
+      generatingImprovement={generatingImprovement}
+      studentAnswerPassedFromAnotherComponent={
+        studentAnswerPassedFromAnotherComponent
+      }
+      explanationsNum={explanationsNum}
+      improvementsNum={improvementsNum}
+    />
+  ) : (
+    <FullOpenQuestion
+      id={id}
+      author={author}
+      question={question}
+      story={story}
+      generating={generating}
+      inputColor={inputColor}
+      correctAnswer={props.answer}
+      answer={answer}
+      onAnswer={onAnswer}
+      passAnswer={passAnswer}
+      me={me}
+      result={result}
+      progress={progress}
+      correct={correct}
+      AIhint={AIhint}
+      hint={hint}
+      hints={hints}
+      getHint={getHint}
+      explanations={explanations}
+      getExplanation={getExplanation}
+      improvements={improvements}
+      getImprovements={getImprovements}
+      goalType={goalType}
+      challenge={challenge}
+      revealCorrectAnswer={revealCorrectAnswer}
+      generatingExplanation={generatingExplanation}
+      generatingImprovement={generatingImprovement}
+    />
   );
 };
 

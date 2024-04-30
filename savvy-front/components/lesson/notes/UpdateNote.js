@@ -27,6 +27,7 @@ const UPDATE_NOTE_MUTATION = gql`
       text
       name
       next
+      type
     }
   }
 `;
@@ -215,6 +216,7 @@ const UpdateNote = (props) => {
   return (
     <>
       <Container>
+        <h2>ID: {id}</h2>
         {/* <Complexity> */}
         {/* <select
             value={complexity}
@@ -234,10 +236,11 @@ const UpdateNote = (props) => {
             <option value={"true"}>Секретный</option>
             <option value={"false"}>Открытый</option>
           </select> */}
-        <select value={type} onChange={(e) => setType(e.target.value)}>
+        <select defaultValue={type} onChange={(e) => setType(e.target.value)}>
           <option value={"longread"}>Choose type</option>
           <option value={"longread"}>Longread</option>
           <option value={"email"}>Email</option>
+          <option value={"mininote"}>Mini Note</option>
         </select>
         {/* <select
             defaultValue={isSecret}

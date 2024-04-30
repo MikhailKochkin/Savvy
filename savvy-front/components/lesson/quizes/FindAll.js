@@ -8,7 +8,7 @@ import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
 import PropTypes from "prop-types";
 
-import { autoResizeTextarea } from "./quizFunctions";
+import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 import {
   IconBlock,
   Question,
@@ -17,7 +17,7 @@ import {
   Button1,
   Circle,
   Frame,
-} from "./quizesStyles";
+} from "./QuizesStyles";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(

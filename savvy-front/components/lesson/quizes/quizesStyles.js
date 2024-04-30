@@ -284,3 +284,39 @@ export const Frame = styled.div`
     border-top: 1px solid #f3f3f3;
   }
 `;
+
+export const MiniOpenQuestionFrame = styled.div`
+  position: relative;
+  width: 100%;
+  min-height: 35px;
+  border: 2px solid;
+  border: ${(props) =>
+    props.inputColor == "#D0EADB" ? "3px solid" : "2px solid"};
+  border-color: ${(props) => props.inputColor};
+  border-radius: 10px;
+  background: #fff;
+  padding: 5px 10px;
+  margin: 15px 0;
+`;
+
+export const MiniAIButton = styled.button`
+  background-color: #d2edfd;
+  color: #000a60;
+  border-radius: 4px;
+  border: none;
+  text-align: left;
+  box-shadow: none;
+  box-sizing: border-box;
+  font-family: Montserrat;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 8px 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    box-shadow: rgb(66 133 244 / 15%) 0px 1px 3px 1px;
+    background-color: #a4dbfe;
+  }
+`;

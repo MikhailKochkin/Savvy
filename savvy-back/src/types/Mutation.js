@@ -2587,6 +2587,7 @@ const Mutation = mutationType({
         totalMistakes: intArg(),
         complexity: intArg(),
         goal: stringArg(),
+        context: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -2738,6 +2739,7 @@ const Mutation = mutationType({
         complexity: intArg(),
         columnsNum: intArg(),
         goal: stringArg(),
+        context: stringArg(),
         elements: arg({
           type: "ElementsList",
         }),
@@ -2910,6 +2912,7 @@ const Mutation = mutationType({
         goal: stringArg(),
         name: stringArg(),
         type: stringArg(),
+        context: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };

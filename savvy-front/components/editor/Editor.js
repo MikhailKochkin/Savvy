@@ -35,7 +35,6 @@ import { css } from "emotion";
 import styled from "styled-components";
 import { jsx } from "slate-hyperscript";
 import FormatToolBar from "./FormatToolbar";
-// import { bold } from "react-icons-kit/fa/bold";
 import { IconContext } from "react-icons";
 import {
   BiBold,
@@ -56,26 +55,12 @@ import {
   BiAlignMiddle,
   BiCommentDots,
   BiCustomize,
+  BiTable,
 } from "react-icons/bi";
 import { FaQuoteLeft } from "react-icons/fa";
-// import Modal from "./Modal";
+import { withTable, TableEditor } from "slate-table";
 import Modal from "styled-react-modal";
-
-// import { underline } from "react-icons-kit/fa/underline";
-// import { italic } from "react-icons-kit/fa/italic";
-// import { header } from "react-icons-kit/fa/header";
-// import { link } from "react-icons-kit/fa/link";
-// import { image } from "react-icons-kit/fa/image";
-// import { listUl } from "react-icons-kit/fa/listUl";
-// import { listOl } from "react-icons-kit/fa/listOl";
-// import { film } from "react-icons-kit/fa/film";
-// import { table } from "react-icons-kit/fa/table";
-// import { flag } from "react-icons-kit/fa/flag";
-// import { question } from "react-icons-kit/fa/question";
-// import { ic_insert_comment } from "react-icons-kit/md/ic_insert_comment";
-// import { ic_find_replace } from "react-icons-kit/md/ic_find_replace";
-// import { undo } from "react-icons-kit/fa/undo";
-// import { exclamation } from "react-icons-kit/fa/exclamation";
+import isHotkey from "is-hotkey";
 
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
@@ -118,7 +103,19 @@ const AppStyles = {
   margin: "25px auto 25px",
   borderRadius: "4.5px",
   fontSize: "1.6rem",
+  outline: "none",
 };
+
+const TableButtons = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+const TableButtonStyles = styled.button`
+  margin-right: 10px;
+  margin-bottom: 10px;
+`;
 
 const ButtonStyle = styled.button`
   padding: 7px;
@@ -137,10 +134,6 @@ const ButtonStyle = styled.button`
   }
 `;
 
-const Span = styled.span`
-  color: darkslateblue;
-`;
-
 const Quiz = styled.span`
   color: #f2cc8f;
 `;
@@ -153,26 +146,50 @@ const Question = styled.div`
 
 const Table = styled.table`
   width: 100%;
-  border: 1px solid #edefed;
+  /* border: 1px solid red; */
   border-collapse: collapse;
   border-spacing: 0;
+  margin: 20px 0;
+  p {
+    margin: 0;
+  }
+  tbody {
+    border-color: #fff;
+    border: none;
+    padding: 0px;
+    border-collapse: collapse;
+  }
   tr {
     border: 1px solid #edefed;
+    padding: 0px;
+    border-collapse: collapse;
   }
   thead {
     background: #f5f5f5;
     font-weight: bold;
+    padding: 0px;
+    border-collapse: collapse;
   }
   th {
     border: 1px solid #edefed;
+    padding: 0px;
+    border-collapse: collapse;
   }
   td {
     border: 1px solid #edefed;
-    padding: 0% 2.5%;
     border-top: none;
+    border-collapse: collapse;
+
     border-bottom: none;
     border-right: none;
     position: relative;
+    min-width: 150px;
+    padding: 10px;
+
+    p {
+      margin: 0;
+      border-color: none;
+    }
   }
 `;
 const Link = styled.a`
@@ -271,53 +288,6 @@ const Error = styled.span`
   color: #e07a5f;
 `;
 
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  padding: 2%;
-  textarea {
-    width: 80%;
-    height: 110px;
-    font-family: Montserrat;
-    margin: 15px 0;
-  }
-  button {
-        width: 80%;
-
-  }
-  .top_message {
-    padding-bottom: 2%;
-    border-bottom: 1px solid grey;
-    font-size: 2rem;
-    width: 100%;
-    text-align: center;
-  }
-  .bottom_message {
-    margin-top: 2%;
-  }
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
-
 // 1. Serializer – slate to html
 
 const serialize = (node) => {
@@ -336,10 +306,10 @@ const serialize = (node) => {
         text = `<u>${text}</u>`;
       }
       if (styles.includes("error")) {
-        text = `<span className="editor_error" type="error" id="id" error_text="${node.error_text}" error_data="${node.error_text}">${text}</span>`;
+        text = `<span className="editor_error" type="error" elementId="${node.elementId}" error_text="${node.error_text}">${text}</span>`;
       }
       if (styles.includes("note")) {
-        text = `<span className="editor_note" type="note" text="${node.note}">${text}</span>`;
+        text = `<span className="editor_note" type="note" text="${node.note}" elementId="${node.elementId}">${text}</span>`;
       }
       if (styles.includes("quiz")) {
         text = `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
@@ -353,6 +323,7 @@ const serialize = (node) => {
     }
   }
   const children = node.children.map((n) => serialize(n)).join("");
+
   switch (node.type) {
     case "quote":
       return `<blockquote>${children}</blockquote>`;
@@ -383,9 +354,9 @@ const serialize = (node) => {
     case "image":
       return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
     case "error":
-      return `<span className="editor_error" type="error" id="id" error_text="${node.error_text}" error_data="${node.error_text}">${children}</span>`;
+      return `<span className="editor_error" type="error"  error_text="${node.error_text}" elementId="${node.elementId}">${children}</span>`;
     case "note":
-      return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
+      return `<span className="editor_note" type="note" text="${node.note}" elementId="${node.elementId}">${children}</span>`;
     case "problem":
       return `<span className="editor_problem" type="problem" elementId="${node.elementId}">${children}</span>`;
     case "quiz":
@@ -400,10 +371,16 @@ const serialize = (node) => {
       )}" target=”_blank”>${children}</a>`;
     case "table":
       return `<table>${children}</table>`;
+    case "table-body":
+      return `<tbody>${children}</tbody>`;
     case "table-row":
       return `<tr>${children}</tr>`;
-    case "table-cell":
+    case "table-head":
+      return `<thead>${children}</thead>`;
+    case "table-header":
       return `<th>${children}</th>`;
+    case "table-cell":
+      return `<td>${children}</td>`;
     default:
       return children;
   }
@@ -419,14 +396,17 @@ const deserialize = (el) => {
   } else if (el.nodeName === "BR") {
     return "\n";
   }
-
   const { nodeName } = el;
   let parent = el;
+
   let children = Array.from(parent.childNodes).map(deserialize).flat();
   // if (children.includes(undefined)) {
   //   return null;
   // }
   // let children = Array.from(el.childNodes).map(deserialize);
+
+  // Handle special cases for <th> and <td> elements
+
   if (TEXT_TAGS[nodeName]) {
     const attrs = TEXT_TAGS[nodeName](el);
     return children.map((child) => {
@@ -456,6 +436,7 @@ const deserialize = (el) => {
       "element",
       {
         type: "error",
+        elementId: el.getAttribute("elementId"),
         error_text: el.getAttribute("error_text")
           ? el.getAttribute("error_data")
           : el.getAttribute("data"),
@@ -499,7 +480,11 @@ const deserialize = (el) => {
   if (el.getAttribute("classname") == "editor_note") {
     return jsx(
       "element",
-      { type: "note", note: el.getAttribute("text") },
+      {
+        type: "note",
+        note: el.getAttribute("text"),
+        elementId: el.getAttribute("elementId"),
+      },
       children.length > 0 ? children : [{ text: "" }]
     );
   }
@@ -530,9 +515,22 @@ const deserialize = (el) => {
       children.length > 0 ? children : [{ text: "" }]
     );
   }
+  const filterObjects = (arr) => {
+    return arr.filter(
+      (item) =>
+        typeof item === "object" && item !== null && !Array.isArray(item)
+    );
+  };
+  // console.log(
+  //   "el",
+  //   el,
+  //   el.nodeName == "TABLE" ? filterObjects(children) : null
+  // );
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
+    case "TABLE":
+      return jsx("element", { type: "table" }, children);
     case "BR":
       return "\n";
     case "IFRAME":
@@ -573,6 +571,16 @@ const deserialize = (el) => {
           ? children
           : [{ text: "link" }]
       );
+    case "TR":
+      return jsx("element", { type: "table-row" }, filterObjects(children));
+    case "TBODY":
+      return jsx("element", { type: "table-body" }, filterObjects(children));
+    case "THEAD":
+      return jsx("element", { type: "table-head" }, filterObjects(children));
+    case "TH":
+      return jsx("element", { type: "table-header" }, children);
+    case "TD":
+      return jsx("element", { type: "table-cell" }, children);
     default:
       return el.textContent;
   }
@@ -786,17 +794,19 @@ const updateComment = (editor, modalData, setModalOpen, notePath) => {
 const wrapComment = (editor, data) => {
   const { selection } = editor;
   const isCollapsed = selection && Range.isCollapsed(selection);
-
+  console.log("data", data);
   const com = {
     type: "note",
-    note: data,
+    elementId: data,
     children: isCollapsed ? [{ text: data }] : [],
   };
+  console.log("com", com);
+
   if (isCollapsed) {
     Transforms.insertNodes(editor, com);
   } else {
     Transforms.wrapNodes(editor, com, { split: true });
-    Transforms.collapse(editor, { edge: "end" });
+    // Transforms.collapse(editor, { edge: "end" });
   }
 };
 
@@ -837,11 +847,10 @@ const wrapError = (editor, data) => {
   const { selection } = editor;
   // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
   const isCollapsed = selection && Range.isCollapsed(selection);
+
   const com = {
     type: "error",
-    error: true,
-    error_text: data,
-    error_data: data,
+    elementId: data,
     children: isCollapsed ? [{ text: data }] : [],
   };
 
@@ -850,47 +859,47 @@ const wrapError = (editor, data) => {
   } else {
     Transforms.wrapNodes(editor, com, { split: true });
     // Collapse the selection to a single point. In ourr case the end point.
-    Transforms.collapse(editor, { edge: "end" });
+    // Transforms.collapse(editor, { edge: "end" });
   }
 };
 
-const insertQuiz = (editor, q, a, ifr, ifw, setModalData, setModalOpen) => {
-  if (editor.selection) {
-    wrapQuiz(editor, q, a, ifr, ifw);
-  }
-};
+// const insertQuiz = (editor, q, a, ifr, ifw, setModalData, setModalOpen) => {
+//   if (editor.selection) {
+//     wrapQuiz(editor, q, a, ifr, ifw);
+//   }
+// };
 
-const updateQuiz = (editor, q, a, ifr, ifw, notePath) => {
-  Transforms.setNodes(
-    editor,
-    { question: q, answer: a, ifRight: ifr, ifWrong: ifw },
-    { at: notePath }
-  );
-};
+// const updateQuiz = (editor, q, a, ifr, ifw, notePath) => {
+//   Transforms.setNodes(
+//     editor,
+//     { question: q, answer: a, ifRight: ifr, ifWrong: ifw },
+//     { at: notePath }
+//   );
+// };
 
-const wrapQuiz = (editor, q, a, ifr, ifw) => {
-  const { selection } = editor;
-  // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
-  const isCollapsed = selection && Range.isCollapsed(selection);
+// const wrapQuiz = (editor, q, a, ifr, ifw) => {
+//   const { selection } = editor;
+//   // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
+//   const isCollapsed = selection && Range.isCollapsed(selection);
 
-  const com = {
-    type: "quiz",
-    quiz: true,
-    question: q,
-    answer: a,
-    ifRight: ifr,
-    ifWrong: ifw,
-    children: isCollapsed ? [{ text: a }] : [],
-  };
+//   const com = {
+//     type: "quiz",
+//     quiz: true,
+//     question: q,
+//     answer: a,
+//     ifRight: ifr,
+//     ifWrong: ifw,
+//     children: isCollapsed ? [{ text: a }] : [],
+//   };
 
-  if (isCollapsed) {
-    Transforms.insertNodes(editor, com);
-  } else {
-    Transforms.wrapNodes(editor, com, { split: true });
-    // Collapse the selection to a single point. In ourr case the end point.
-    Transforms.collapse(editor, { edge: "end" });
-  }
-};
+//   if (isCollapsed) {
+//     Transforms.insertNodes(editor, com);
+//   } else {
+//     Transforms.wrapNodes(editor, com, { split: true });
+//     // Collapse the selection to a single point. In ourr case the end point.
+//     Transforms.collapse(editor, { edge: "end" });
+//   }
+// };
 
 const insertLink = (editor, url) => {
   if (editor.selection) {
@@ -934,24 +943,84 @@ const wrapLink = (editor, url) => {
   }
 };
 
+const TableButton = ({ editor, text, action }) => {
+  return (
+    <TableButtonStyles
+      onClick={(e) => {
+        e.preventDefault();
+        action(editor);
+      }}
+    >
+      {text}
+    </TableButtonStyles>
+  );
+};
+
 const App = (props) => {
   let html;
   props.value ? (html = props.value) : (html = `<p></p>`);
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
+
   const [value, setValue] = useState(initial);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState("");
   const [type, setType] = useState(null);
+  const [areTableOptionsOpen, setAreTableOptionsOpen] = useState(false);
   const [notePath, setNotePath] = useState(null);
   const [modalQuestionAnswerData, setModalQuestionAnswerData] = useState("");
   const [modalIfWrongData, setModalIfWrongData] = useState("");
   const [modalIfRightData, setModalIfRightData] = useState("");
 
-  const editor = useMemo(
-    () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),
-    []
-  );
+  // const editor = useMemo(
+  //   () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),
+  //   []
+  // );
+  const [editor] = useState(() => {
+    const e = withReact(createEditor());
+    return withTable(withLinks(withEmbeds(withHistory(e))), {
+      blocks: {
+        table: "table",
+        thead: "table-head",
+        tbody: "table-body",
+        tfoot: "table-footer",
+        tr: "table-row",
+        th: "header-cell",
+        td: "table-cell",
+        content: "paragraph",
+      },
+      withDelete: true,
+      withFragments: true,
+      withInsertText: true,
+      withNormalization: true,
+      withSelection: true,
+      withSelectionAdjustment: true,
+    });
+  });
+
+  // const [editor] = useState(() => {
+  //   const e = withReact(createEditor());
+  //   return withLinks(withEmbeds(withHistory(e)));
+  // });
+
+  // const HOTKEYS = useMemo(
+  //   () => ({
+  //     // Formatting
+  //     BOLD: isHotkey("mod+b"),
+  //     ITALIC: isHotkey("mod+i"),
+  //     UNDERLINE: isHotkey("mod+u"),
+
+  //     // Navigation
+  //     ARROW_UP: isHotkey("up"),
+  //     ARROW_DOWN: isHotkey("down"),
+  //     ARROW_LEFT: isHotkey("left"),
+  //     ARROW_RIGHT: isHotkey("right"),
+  //     TAB: isHotkey("tab"),
+  //     SHIFT_TAB: isHotkey("shift+tab"),
+  //   }),
+  //   []
+  // );
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -969,24 +1038,6 @@ const App = (props) => {
       insertError(editor, modalData, setModalOpen, notePath);
     } else if (type == "error") {
       updateError(editor, modalData, setModalOpen, notePath);
-    } else if (type == "createQuestion") {
-      insertQuiz(
-        editor,
-        modalData,
-        modalQuestionAnswerData,
-        modalIfRightData,
-        modalIfWrongData,
-        notePath
-      );
-    } else if (type == "updateQuestion") {
-      updateQuiz(
-        editor,
-        modalData,
-        modalQuestionAnswerData,
-        modalIfRightData,
-        modalIfWrongData,
-        notePath
-      );
     } else if (type == "createProblem") {
       insertProblem(editor, modalData, setModalOpen, notePath);
     }
@@ -1037,12 +1088,16 @@ const App = (props) => {
         );
       case "table":
         return (
-          <TableElement>
-            <tbody {...props.attributes}>{props.children}</tbody>
-          </TableElement>
+          <TableElement {...props.attributes}>{props.children}</TableElement>
         );
       case "table-row":
         return <tr {...props.attributes}>{props.children}</tr>;
+      case "table-body":
+        return <tbody {...props.attributes}>{props.children}</tbody>;
+      case "table-head":
+        return <thead {...props.attributes}>{props.children}</thead>;
+      case "table-header":
+        return <th {...props.attributes}>{props.children}</th>;
       case "table-cell":
         return <td {...props.attributes}>{props.children}</td>;
       case "flag":
@@ -1101,6 +1156,41 @@ const App = (props) => {
     return <Leaf {...props} />;
   }, []);
 
+  // 4.3 Define button actions for table editing
+  const createTable = () => {
+    TableEditor.insertTable(editor, { rows: 2, cols: 2 });
+  };
+
+  const deleteTable = () => {
+    TableEditor.removeTable(editor);
+  };
+
+  const addRow = () => {
+    TableEditor.insertRow(editor);
+  };
+
+  const deleteRow = () => {
+    TableEditor.removeRow(editor);
+  };
+
+  const addColumn = () => {
+    TableEditor.insertColumn(editor, { at: editor.selection });
+  };
+
+  const deleteColumn = () => {
+    TableEditor.removeColumn(editor);
+  };
+
+  const mergeCells = () => {
+    if (TableEditor.canMerge(editor)) {
+      TableEditor.merge(editor);
+    }
+  };
+
+  const splitCells = () => {
+    TableEditor.split(editor);
+  };
+
   return (
     <>
       {/* <button onClick={handleOpenModal}>Open Modal</button> */}
@@ -1111,39 +1201,18 @@ const App = (props) => {
         onEscapeKeydown={handleCloseModal}
       >
         <div>
-          Element type: {type}.{" "}
-          {type === "note" && "Write a comment to the highlighted text"}
-          {type === "error" && "Write a correct version of the incorrect text"}
+          Element type: {type}. <br />
+          {type === "note" && "Write down the ID of the target note"}
+          {type === "createError" && "Write down the ID of the target question"}
+          {type === "createProblem" &&
+            "Write down the ID of the target casestudy"}
         </div>
         <textarea
           type="text"
-          placeholder={type == "createQuestion" ? "Your question" : ""}
+          placeholder={""}
           value={modalData}
           onChange={(e) => setModalData(e.target.value)}
         />
-        {(type == "createQuestion" || type == "updateQuestion") && (
-          <>
-            <textarea
-              type="text"
-              placeholder="sample answer"
-              value={modalQuestionAnswerData}
-              onChange={(e) => setModalQuestionAnswerData(e.target.value)}
-            />
-            <textarea
-              type="text"
-              placeholder="comment if wrong answer is given"
-              value={modalIfWrongData}
-              onChange={(e) => setModalIfWrongData(e.target.value)}
-            />
-            <textarea
-              type="text"
-              placeholder="comment if correct answer is given"
-              value={modalIfRightData}
-              onChange={(e) => setModalIfRightData(e.target.value)}
-            />
-          </>
-        )}
-
         <div>Type: {type}</div>
         <button
           onClick={(e) => {
@@ -1159,7 +1228,7 @@ const App = (props) => {
 
       <Slate
         editor={editor}
-        value={value}
+        initialValue={value}
         onChange={(value) => {
           setValue(value);
           let arr = [];
@@ -1242,6 +1311,13 @@ const App = (props) => {
               }}
             >
               <BiAlignRight value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                setAreTableOptionsOpen(!areTableOptionsOpen);
+              }}
+            >
+              <BiTable value={{ className: "react-icons" }} />
             </ButtonStyle>
             <Label for="inputTag">
               {/* Select Image */}
@@ -1330,7 +1406,7 @@ const App = (props) => {
                 >
                   <BiCommentError value={{ className: "react-icons" }} />
                 </ButtonStyle>
-                <ButtonStyle
+                {/* <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
                     setType("createQuestion");
@@ -1338,7 +1414,7 @@ const App = (props) => {
                   }}
                 >
                   <BiCommentCheck value={{ className: "react-icons" }} />
-                </ButtonStyle>
+                </ButtonStyle> */}
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
@@ -1352,24 +1428,94 @@ const App = (props) => {
             )}
           </IconContext.Provider>
         </FormatToolBar>
+        {areTableOptionsOpen && (
+          <TableButtons>
+            <TableButton
+              editor={editor}
+              text="Create Table"
+              action={createTable}
+            />
+            <TableButton
+              editor={editor}
+              text="Delete Table"
+              action={deleteTable}
+            />
+            <TableButton editor={editor} text="Add Row" action={addRow} />
+            <TableButton editor={editor} text="Delete Row" action={deleteRow} />
+            <TableButton editor={editor} text="Add Column" action={addColumn} />
+            <TableButton
+              editor={editor}
+              text="Delete Column"
+              action={deleteColumn}
+            />
+            <TableButton
+              editor={editor}
+              text="Merge Cells"
+              action={mergeCells}
+            />
+            <TableButton
+              editor={editor}
+              text="Split Cells"
+              action={splitCells}
+            />
+          </TableButtons>
+        )}
         <Editable
           style={AppStyles}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           placeholder="Write something..."
-          onKeyDown={(event) => {
-            // if (event.key === "`" && event.ctrlKey) {
-            //   event.preventDefault();
-            //   const [match] = Editor.nodes(editor, {
-            //     match: (n) => n.type === "code",
-            //   });
-            //   Transforms.setNodes(
-            //     editor,
-            //     { type: match ? "paragraph" : "code" },
-            //     { match: (n) => Editor.isBlock(editor, n) }
-            //   );
-            // }
-          }}
+          // onDragStart={() => {
+          //   // mark onDragStart as handled if the selection is in a table
+          //   if (TableCursor.isInTable(editor)) {
+          //     return true;
+          //   }
+          //   return false;
+          // }}
+          // onKeyDown={(event) => {
+          //   if (TableCursor.isInTable(editor)) {
+          //     switch (true) {
+          //       case HOTKEYS.ARROW_DOWN(event) &&
+          //         TableCursor.isOnEdge(editor, "bottom"):
+          //         event.preventDefault();
+          //         return TableCursor.downward(editor);
+          //       case HOTKEYS.ARROW_UP(event) &&
+          //         TableCursor.isOnEdge(editor, "top"):
+          //         event.preventDefault();
+          //         return TableCursor.upward(editor);
+          //       case HOTKEYS.ARROW_RIGHT(event) &&
+          //         TableCursor.isOnEdge(editor, "end"):
+          //         event.preventDefault();
+          //         return TableCursor.forward(editor);
+          //       case HOTKEYS.ARROW_LEFT(event) &&
+          //         TableCursor.isOnEdge(editor, "start"):
+          //         event.preventDefault();
+          //         return TableCursor.backward(editor);
+          //       case HOTKEYS.TAB(event):
+          //         if (TableCursor.isInLastCell(editor)) {
+          //           TableEditor.insertRow(editor);
+          //         }
+          //         event.preventDefault();
+          //         return TableCursor.forward(editor, { mode: "all" });
+          //       case HOTKEYS.SHIFT_TAB(event):
+          //         event.preventDefault();
+          //         return TableCursor.backward(editor, { mode: "all" });
+          //     }
+          //   }
+
+          //   // Formatting
+          //   // switch (true) {
+          //   //   case HOTKEYS.BOLD(event):
+          //   //     event.preventDefault();
+          //   //     return toggleMark(editor, "bold");
+          //   //   case HOTKEYS.ITALIC(event):
+          //   //     event.preventDefault();
+          //   //     return toggleMark(editor, "italic");
+          //   //   case HOTKEYS.UNDERLINE(event):
+          //   //     event.preventDefault();
+          //   //     return toggleMark(editor, "underline");
+          //   // }
+          // }}
         />
       </Slate>
     </>
@@ -1402,6 +1548,10 @@ const Leaf = ({ attributes, children, leaf }) => {
     children = <ErrorElement>{children}</ErrorElement>;
   }
 
+  if (leaf.text.includes("\n")) {
+    return;
+  }
+
   return <span {...attributes}>{children}</span>;
 };
 
@@ -1424,7 +1574,11 @@ const QuoteElement = (props) => {
 // 8. Header element declaration
 
 const HeaderElement = (props) => {
-  return <h2 {...props.attributes}>{props.children}</h2>;
+  return (
+    <h2 {...props.attributes} style={{ lineHeight: "1.4" }}>
+      {props.children}
+    </h2>
+  );
 };
 
 const LinkElement = (props) => {
@@ -1642,5 +1796,52 @@ const ImageElement = ({ attributes, children, element }) => {
     </div>
   );
 };
+
+const StyledModal = Modal.styled`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  max-width: 40%;
+  min-width: 400px;
+  padding: 2%;
+  textarea {
+    width: 80%;
+    height: 110px;
+    font-family: Montserrat;
+    margin: 15px 0;
+  }
+  button {
+        width: 80%;
+
+  }
+  .top_message {
+    padding-bottom: 2%;
+    border-bottom: 1px solid grey;
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+  }
+  .bottom_message {
+    margin-top: 2%;
+  }
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;
 
 export default App;

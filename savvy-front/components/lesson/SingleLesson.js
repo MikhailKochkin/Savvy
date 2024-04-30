@@ -235,6 +235,7 @@ const SINGLE_LESSON_QUERY = gql`
         name
         goal
         nodeID
+        context
         complexity
         steps
         type
@@ -251,6 +252,7 @@ const SINGLE_LESSON_QUERY = gql`
         goal
         complexity
         elements
+        context
         columnsNum
         variants
         hint
@@ -265,6 +267,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         name
         goal
+        context
         complexity
         text
         totalMistakes

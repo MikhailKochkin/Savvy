@@ -436,6 +436,7 @@ const StoryEx = (props) => {
           getResults={getResults}
           lessonID={lesson.id}
           me={me}
+          context={el.context}
           story={true}
           lesson={lesson}
           author={lesson.user}
@@ -453,6 +454,7 @@ const StoryEx = (props) => {
           id={el.id}
           lessonID={lesson.id}
           text={el.text}
+          context={el.context}
           complexity={el.complexity}
           lesson={lesson}
           getResults={getResults}
@@ -476,6 +478,7 @@ const StoryEx = (props) => {
             construction={el}
             complexity={el.complexity}
             me={me}
+            context={el.context}
             story={true}
             elements={el.elements.elements}
             getResults={getResults}

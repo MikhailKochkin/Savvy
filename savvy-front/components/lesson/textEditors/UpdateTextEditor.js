@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { Mutation } from "@apollo/client/react/components";
-import { gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import Option from "../Option";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { useTranslation } from "next-i18next";
+
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import {
+  EditorInfoSection,
+  NameInput,
+  SimpleButton,
+  BlueButton,
+} from "../SimulatorDevelopmentStyles";
+import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 
 import {
   BiCommentAdd,
@@ -22,6 +28,7 @@ const UPDATE_TEXTEDITOR_MUTATION = gql`
     $totalMistakes: Int
     $complexity: Int
     $goal: String
+    $context: String
   ) {
     updateTextEditor(
       id: $id
@@ -30,6 +37,7 @@ const UPDATE_TEXTEDITOR_MUTATION = gql`
       totalMistakes: $totalMistakes
       complexity: $complexity
       goal: $goal
+      context: $context
     ) {
       id
       name
@@ -37,6 +45,7 @@ const UPDATE_TEXTEDITOR_MUTATION = gql`
       text
       goal
       totalMistakes
+      context
       user {
         id
       }
@@ -57,124 +66,9 @@ const Container = styled.div`
   p > a:hover {
     /* text-decoration: underline; */
   }
-  h3 {
-    margin: 15px 0;
-  }
-  textarea {
-    height: 200px;
-    width: 90%;
-    padding: 1%;
-    padding: 10px;
-    font-size: 1.6rem;
-    font-family: Montserrat;
-    line-height: 1.4;
-  }
-  /* button {
-    width: 100px;
-    margin: 10px 5px;
-  } */
   @media (max-width: 600px) {
     width: 100%;
   }
-`;
-
-const Button = styled.button`
-  padding: 0.5% 1%;
-  background: ${(props) => props.theme.green};
-  width: 25%;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin: 2% 0;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    background-color: ${(props) => props.theme.darkGreen};
-  }
-`;
-
-const ButtonTwo = styled.button`
-  border: none;
-  background: none;
-  padding: 10px 20px;
-  border: 2px solid #69696a;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #323334;
-  cursor: pointer;
-  margin: 20px 0;
-  width: 120px;
-  margin-right: 10px;
-  transition: 0.3s;
-  &:hover {
-    background: #f4f4f4;
-  }
-`;
-const Label = styled.label`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 40%;
-  margin-bottom: 1%;
-  @media (max-width: 800px) {
-    width: 70%;
-  }
-  input {
-    width: 60px;
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 3.5px;
-    padding: 1%;
-    font-size: 1.4rem;
-    margin: 4% 2%;
-    text-align: center;
-    @media (max-width: 800px) {
-    }
-  }
-`;
-
-const Complexity = styled.div`
-  select,
-  option {
-    width: 80%;
-    border-radius: 5px;
-    margin: 3% 0;
-    border: 1px solid #c4c4c4;
-    font-family: Montserrat;
-    font-size: 1.4rem;
-    outline: 0;
-    padding: 1.5%;
-  }
-`;
-
-const Explainer = styled.div`
-  .icon {
-    width: 30px;
-    height: 20px;
-  }
-  #green {
-    color: #81b29a;
-  }
-  #red {
-    color: #e07a5f;
-  }
-  #orange {
-    color: #f2cc8f;
-  }
-`;
-
-const NameInput = styled.input`
-  width: 100%;
-  height: 40px;
-  font-weight: 500;
-  font-size: 2rem;
-  font-family: Montserrat;
-  margin-bottom: 20px;
-  border: none;
-  outline: none;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
@@ -183,10 +77,12 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 });
 
 const UpdateTextEditor = (props) => {
+  const { id, lessonID } = props;
   const [name, setName] = useState(props.name ? props.name : null);
   const [text, setText] = useState(props.text);
   const [open, setOpen] = useState(false);
   const [goal, setGoal] = useState(props.goal);
+  const [context, setContext] = useState(props.context);
 
   const [mistakes, setMistakes] = useState(props.totalMistakes);
   const [complexity, setComplexity] = useState(
@@ -194,123 +90,118 @@ const UpdateTextEditor = (props) => {
   );
   const { t } = useTranslation("lesson");
 
+  const [updateTextEditor, { loading, error }] = useMutation(
+    UPDATE_TEXTEDITOR_MUTATION,
+    {
+      variables: {
+        id: id,
+        text: text,
+        complexity,
+        goal,
+        name,
+        context,
+        totalMistakes: parseInt(mistakes),
+      },
+      refetchQueries: [
+        {
+          query: SINGLE_LESSON_QUERY,
+          variables: { id: lessonID },
+        },
+      ],
+      onCompleted: () => {
+        props.switchUpdate();
+        props.passUpdated();
+      },
+    }
+  );
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const res = await updateTextEditor();
+    props.getResult(res);
+  };
+
   const getText = (d) => {
     setText(d);
   };
-  const { id, lessonID } = props;
+
   return (
     <>
       <Container>
-        {/* <Explainer>
-          <p>
-            Задача редактора – воссоздать опыт работы над реальным документом
-            вместе с наставником. Для этого мы создали разные инструменты.
-            Сейчас покажем, как они работают:
-          </p>
-          <p>
-            <BiCommentAdd
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-            Позволит вам добавить{" "}
-            <span id="green">скрытый комментарий в текст</span>. Предложите
-            студенту найти пункт в документе, который нужно разобрать. При
-            нажатии на правильный пункт студент увидит ваш комментарий.
-          </p>
-          <p>
-            <BiCommentError
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-            Позволит вам добавить <span id="red">ошибку в текст</span> и
-            исправленный вариант. Предложите студенту найти пункт в документе, в
-            котором содержится ошибка. При нажатии на правильный пункт студент
-            получит возможность отредактировать текст, автоматически проверить
-            свой ответ и увидеть ваш вариант.
-          </p>
-          <p>
-            <BiCommentCheck
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-            Позволит вам <span id="orange">задать вопрос</span> к определенному
-            фрагменту текста. Задайте вопрос, ответ, а также комментарии на
-            случай правильного и неправильного ответов.
-          </p>
-        </Explainer> */}
-        <NameInput
-          onChange={(e) => setName(e.target.value)}
-          defaultValue={name}
-          placeholder="Untitled"
-        />
-        <h3>Goal</h3>
-        <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
-        <h3>Doc Editor</h3>
-
-        <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
-        <ButtonTwo onClick={(e) => setOpen(!open)}>
-          {open ? "Закрыть" : "Открыть"}
-        </ButtonTwo>
-        {open && (
-          <DynamicLoadedEditor
-            getEditorText={getText}
-            value={text}
-            complex={true}
+        <EditorInfoSection>
+          <h3 className="label">ID: {id}</h3>
+        </EditorInfoSection>
+        <EditorInfoSection>
+          <h3 className="label">Name</h3>
+          <div className="comment">The name will be used for navigation</div>
+          <NameInput
+            onChange={(e) => setName(e.target.value)}
+            defaultValue={name}
+            placeholder="Untitled"
           />
-        )}
-        {/* <Complexity>
-          <select
-            value={complexity}
-            onChange={(e) => setComplexity(parseInt(e.target.value))}
-          >
-            <option value={0}>Выберите сложность</option>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-            <option value={5}>5</option>
-          </select>
-        </Complexity> */}
-        {/* <button>
-          <a
-            href="https://codebeautify.org/html-table-generator"
-            target="_blank"
-          >
-            Создать таблицу
-          </a>
-        </button> */}
-        <Mutation
-          mutation={UPDATE_TEXTEDITOR_MUTATION}
-          variables={{
-            id: id,
-            text: text,
-            complexity,
-            goal,
-            name,
-            totalMistakes: parseInt(mistakes),
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID },
-            },
-          ]}
-        >
-          {(updateTextEditor, { loading, error }) => (
-            <Button
-              onClick={async (e) => {
-                // Stop the form from submitting
-                e.preventDefault();
-                const res = await updateTextEditor();
-                props.getResult(res);
-                props.switchUpdate();
-                props.passUpdated();
-              }}
-            >
-              {loading ? t("saving") : t("save")}
-            </Button>
+        </EditorInfoSection>
+        <EditorInfoSection>
+          <h3 className="label">Goal</h3>
+          <div className="comment">
+            What learning results are students expected to achieve through this
+            document editor
+          </div>
+          <textarea
+            value={goal}
+            onChange={(e) => {
+              setGoal(e.target.value);
+              autoResizeTextarea(e);
+            }}
+            onInput={autoResizeTextarea}
+          />
+        </EditorInfoSection>
+        <EditorInfoSection>
+          <h3 className="label">Context</h3>
+          <div className="comment">
+            This context will be used by AI to generate hints and feedback
+          </div>
+          <textarea
+            value={context}
+            onChange={(e) => {
+              setContext(e.target.value);
+              autoResizeTextarea(e);
+            }}
+            onInput={autoResizeTextarea}
+          />
+        </EditorInfoSection>
+        <EditorInfoSection>
+          <h3 className="label">Text</h3>
+          <div className="comment">
+            We do not reveal the text immediately to prevent errors from
+            breaking the website
+          </div>
+          <SimpleButton onClick={(e) => setOpen(!open)}>
+            {open ? "Close" : "Open"}
+          </SimpleButton>
+          {open && (
+            <DynamicLoadedEditor
+              getEditorText={getText}
+              value={text}
+              complex={true}
+            />
           )}
-        </Mutation>
+        </EditorInfoSection>
+        <EditorInfoSection>
+          <h3 className="label">Doc Editor</h3>
+          <div className="comment">
+            Use TextEditor code to add features unavailable in the default
+          </div>
+          <textarea
+            id="texteditor_code"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          >
+            {text}
+          </textarea>
+        </EditorInfoSection>
+        <BlueButton onClick={handleUpdate}>
+          {loading ? t("saving") : t("save")}
+        </BlueButton>
       </Container>
     </>
   );

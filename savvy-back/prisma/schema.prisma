@@ -164,6 +164,7 @@ model Construction {
   id                  String               @id @default(cuid()) @db.VarChar(30)
   name                String
   goal                String?
+  context             String?
   lessonID            String               @db.VarChar(30)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
@@ -708,6 +709,7 @@ model Problem {
   id             String          @id @default(cuid()) @db.VarChar(30)
   name           String?
   text           String
+  context        String?
   hints          String?
   solution       String?
   answer         String?
@@ -1045,6 +1047,7 @@ model TextEditor {
   name              String
   text              String
   goal              String?
+  context           String?
   lessonID          String             @db.VarChar(30)
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt

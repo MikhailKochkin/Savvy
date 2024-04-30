@@ -127,6 +127,7 @@ const TextEditor = objectType({
     t.model.name();
     t.model.complexity();
     t.model.goal();
+    t.model.context();
     t.model.userId();
     t.model.lessonId();
     t.model.lesson();
@@ -148,6 +149,7 @@ const Construction = objectType({
     t.model.type();
     t.model.text();
     t.model.goal();
+    t.model.context();
     t.model.columnsNum();
     t.model.elements();
     t.model.hasText();
@@ -175,6 +177,7 @@ const Problem = objectType({
     t.model.complexity();
     t.model.isSecret();
     t.model.goal();
+    t.model.context();
     t.model.type();
     t.model.nodeID();
     t.model.userId();
