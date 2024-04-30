@@ -14,7 +14,7 @@ import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
 import SingleQuiz from "../quizes/SingleQuiz";
 import Note from "../notes/Note";
-import { MiniOpenQuestionFrame, MiniAIButton } from "../quizes/QuizesStyles";
+import { MiniOpenQuestionFrame, MiniAIButton } from "../quizes/QuestionStyles";
 import {
   containsOnlyNumbers,
   compareStrings,
@@ -641,6 +641,7 @@ const SingleTextEditor = (props) => {
                         });
                       }, 1000);
                     }
+                    console.log("e.target", e.target);
                     if (
                       e.target.classList.contains("edit") &&
                       isErrorWindowShown == false
@@ -701,7 +702,9 @@ const SingleTextEditor = (props) => {
                     if (
                       e.target.classList.contains("edit") &&
                       e.target.getAttribute("type") !== "note" &&
-                      e.target.getAttribute("type") !== "problem"
+                      e.target.parentElement.getAttribute("type") !== "note" &&
+                      e.target.getAttribute("type") !== "problem" &&
+                      e.target.parentElement.getAttribute("type") !== "problem"
                     ) {
                       setErrorAnswer(e.target.innerHTML);
                       let newMiniQuiz = props.lesson.quizes.find(

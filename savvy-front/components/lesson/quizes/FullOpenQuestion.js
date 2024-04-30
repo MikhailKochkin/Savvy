@@ -18,7 +18,7 @@ import {
   Button1,
   Circle,
   Frame,
-} from "./QuizesStyles";
+} from "./QuestionStyles";
 
 const Options = styled.div`
   display: flex;

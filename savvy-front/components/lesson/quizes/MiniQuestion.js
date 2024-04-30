@@ -7,7 +7,7 @@ import {
   ResultCircle,
   MiniOpenQuestionFrame,
   MiniAIButton,
-} from "./QuizesStyles";
+} from "./QuestionStyles";
 import { removeSpecialChars } from "../SimulatorDevelopmentFunctions";
 
 const Styles = styled.div`

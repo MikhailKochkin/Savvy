@@ -17,7 +17,7 @@ import {
   Button1,
   Circle,
   Frame,
-} from "./QuizesStyles";
+} from "./QuestionStyles";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
