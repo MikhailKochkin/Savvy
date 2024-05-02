@@ -107,7 +107,9 @@ const Note = (props) => {
       )}
       {!update && (
         <>
-          {!note?.type || note?.type?.toLowerCase() == "longread" ? (
+          {!note?.type ||
+          note?.type?.toLowerCase() == "longread" ||
+          note?.type?.toLowerCase() == "library" ? (
             <Longread
               story={story}
               isRevealed={isRevealed}

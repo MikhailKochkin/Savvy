@@ -346,6 +346,7 @@ export interface NexusGenInputs {
     _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   ChatOrderByWithRelationInput: { // input type
+    chatResults?: NexusGenInputs['ChatResultOrderByRelationAggregateInput'] | null; // ChatResultOrderByRelationAggregateInput
     complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -359,10 +360,49 @@ export interface NexusGenInputs {
     user?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
     userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
+  ChatResultListRelationFilter: { // input type
+    every?: NexusGenInputs['ChatResultWhereInput'] | null; // ChatResultWhereInput
+    none?: NexusGenInputs['ChatResultWhereInput'] | null; // ChatResultWhereInput
+    some?: NexusGenInputs['ChatResultWhereInput'] | null; // ChatResultWhereInput
+  }
+  ChatResultOrderByRelationAggregateInput: { // input type
+    _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  ChatResultWhereInput: { // input type
+    AND?: NexusGenInputs['ChatResultWhereInput'][] | null; // [ChatResultWhereInput!]
+    NOT?: NexusGenInputs['ChatResultWhereInput'][] | null; // [ChatResultWhereInput!]
+    OR?: NexusGenInputs['ChatResultWhereInput'][] | null; // [ChatResultWhereInput!]
+    chat?: NexusGenInputs['ChatWhereInput'] | null; // ChatWhereInput
+    chatId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    dialogue?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+  }
+  ChatResultWhereUniqueInput: { // input type
+    AND?: NexusGenInputs['ChatResultWhereInput'][] | null; // [ChatResultWhereInput!]
+    NOT?: NexusGenInputs['ChatResultWhereInput'][] | null; // [ChatResultWhereInput!]
+    OR?: NexusGenInputs['ChatResultWhereInput'][] | null; // [ChatResultWhereInput!]
+    chat?: NexusGenInputs['ChatWhereInput'] | null; // ChatWhereInput
+    chatId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    dialogue?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    id?: string | null; // String
+    lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+  }
   ChatWhereInput: { // input type
     AND?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
     NOT?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
     OR?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
+    chatResults?: NexusGenInputs['ChatResultListRelationFilter'] | null; // ChatResultListRelationFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -380,6 +420,7 @@ export interface NexusGenInputs {
     AND?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
     NOT?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
     OR?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
+    chatResults?: NexusGenInputs['ChatResultListRelationFilter'] | null; // ChatResultListRelationFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: string | null; // String
@@ -931,6 +972,12 @@ export interface NexusGenInputs {
     lte?: NexusGenScalars['Decimal'] | null; // Decimal
     not?: NexusGenInputs['NestedDecimalNullableFilter'] | null; // NestedDecimalNullableFilter
     notIn?: NexusGenScalars['Decimal'][] | null; // [Decimal!]
+  }
+  Dialogue: { // input type
+    answer?: string | null; // String
+    comment?: string | null; // String
+    question?: string | null; // String
+    sourceId?: string | null; // String
   }
   DocumentListRelationFilter: { // input type
     every?: NexusGenInputs['DocumentWhereInput'] | null; // DocumentWhereInput
@@ -1566,6 +1613,7 @@ export interface NexusGenInputs {
     challengeResults?: NexusGenInputs['ChallengeResultOrderByRelationAggregateInput'] | null; // ChallengeResultOrderByRelationAggregateInput
     challenge_num?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     change?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    chatResults?: NexusGenInputs['ChatResultOrderByRelationAggregateInput'] | null; // ChatResultOrderByRelationAggregateInput
     chats?: NexusGenInputs['ChatOrderByRelationAggregateInput'] | null; // ChatOrderByRelationAggregateInput
     constructionResults?: NexusGenInputs['ConstructionResultOrderByRelationAggregateInput'] | null; // ConstructionResultOrderByRelationAggregateInput
     constructions?: NexusGenInputs['ConstructionOrderByRelationAggregateInput'] | null; // ConstructionOrderByRelationAggregateInput
@@ -1684,6 +1732,7 @@ export interface NexusGenInputs {
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     challenge_num?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     change?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    chatResults?: NexusGenInputs['ChatResultListRelationFilter'] | null; // ChatResultListRelationFilter
     chats?: NexusGenInputs['ChatListRelationFilter'] | null; // ChatListRelationFilter
     constructionResults?: NexusGenInputs['ConstructionResultListRelationFilter'] | null; // ConstructionResultListRelationFilter
     constructions?: NexusGenInputs['ConstructionListRelationFilter'] | null; // ConstructionListRelationFilter
@@ -1746,6 +1795,7 @@ export interface NexusGenInputs {
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     challenge_num?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     change?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    chatResults?: NexusGenInputs['ChatResultListRelationFilter'] | null; // ChatResultListRelationFilter
     chats?: NexusGenInputs['ChatListRelationFilter'] | null; // ChatListRelationFilter
     constructionResults?: NexusGenInputs['ConstructionResultListRelationFilter'] | null; // ConstructionResultListRelationFilter
     constructions?: NexusGenInputs['ConstructionListRelationFilter'] | null; // ConstructionListRelationFilter
@@ -1811,6 +1861,7 @@ export interface NexusGenInputs {
   MessageElement: { // input type
     author?: string | null; // String
     image?: string | null; // String
+    isAiAssistantOn?: boolean | null; // Boolean
     name?: string | null; // String
     number?: number | null; // Int
     reactions?: Array<NexusGenInputs['Reaction'] | null> | null; // [Reaction]
@@ -3771,6 +3822,7 @@ export interface NexusGenInputs {
     certificates?: NexusGenInputs['CertificateOrderByRelationAggregateInput'] | null; // CertificateOrderByRelationAggregateInput
     challengeResults?: NexusGenInputs['ChallengeResultOrderByRelationAggregateInput'] | null; // ChallengeResultOrderByRelationAggregateInput
     chat?: NexusGenInputs['ChatOrderByRelationAggregateInput'] | null; // ChatOrderByRelationAggregateInput
+    chatResults?: NexusGenInputs['ChatResultOrderByRelationAggregateInput'] | null; // ChatResultOrderByRelationAggregateInput
     clause?: NexusGenInputs['ClauseOrderByRelationAggregateInput'] | null; // ClauseOrderByRelationAggregateInput
     co_coursePages?: NexusGenInputs['CoursePageOrderByRelationAggregateInput'] | null; // CoursePageOrderByRelationAggregateInput
     comment?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -3867,6 +3919,7 @@ export interface NexusGenInputs {
     certificates?: NexusGenInputs['CertificateListRelationFilter'] | null; // CertificateListRelationFilter
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     chat?: NexusGenInputs['ChatListRelationFilter'] | null; // ChatListRelationFilter
+    chatResults?: NexusGenInputs['ChatResultListRelationFilter'] | null; // ChatResultListRelationFilter
     clause?: NexusGenInputs['ClauseListRelationFilter'] | null; // ClauseListRelationFilter
     co_coursePages?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
     comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -3963,6 +4016,7 @@ export interface NexusGenInputs {
     certificates?: NexusGenInputs['CertificateListRelationFilter'] | null; // CertificateListRelationFilter
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     chat?: NexusGenInputs['ChatListRelationFilter'] | null; // ChatListRelationFilter
+    chatResults?: NexusGenInputs['ChatResultListRelationFilter'] | null; // ChatResultListRelationFilter
     clause?: NexusGenInputs['ClauseListRelationFilter'] | null; // ClauseListRelationFilter
     co_coursePages?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
     comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -4147,6 +4201,15 @@ export interface NexusGenObjects {
     messages?: NexusGenScalars['Json'] | null; // Json
     name?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  ChatResult: { // root type
+    chatId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    dialogue?: NexusGenScalars['Json'] | null; // Json
+    id: string; // String!
+    lessonId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId: string; // String!
   }
   Clause: { // root type
     commentary: string; // String!
@@ -4871,6 +4934,7 @@ export interface NexusGenFieldTypes {
     wrong: number | null; // Int
   }
   Chat: { // field return type
+    chatResults: NexusGenRootTypes['ChatResult'][]; // [ChatResult!]!
     complexity: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -4882,6 +4946,18 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
+  }
+  ChatResult: { // field return type
+    chat: NexusGenRootTypes['Chat']; // Chat!
+    chatId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    dialogue: NexusGenScalars['Json'] | null; // Json
+    id: string; // String!
+    lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lessonId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User']; // User!
+    userId: string; // String!
   }
   Clause: { // field return type
     commentary: string; // String!
@@ -5220,6 +5296,7 @@ export interface NexusGenFieldTypes {
     createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
     createChat: NexusGenRootTypes['Chat'] | null; // Chat
+    createChatResult: NexusGenRootTypes['ChatResult'] | null; // ChatResult
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
     createCommunityMember: NexusGenRootTypes['PaymentInfo2'] | null; // PaymentInfo2
     createConfUser: NexusGenRootTypes['ConfUser'] | null; // ConfUser
@@ -5937,6 +6014,7 @@ export interface NexusGenFieldTypeNames {
     wrong: 'Int'
   }
   Chat: { // field return type name
+    chatResults: 'ChatResult'
     complexity: 'Int'
     createdAt: 'DateTime'
     id: 'String'
@@ -5948,6 +6026,18 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     updatedAt: 'DateTime'
     user: 'User'
+  }
+  ChatResult: { // field return type name
+    chat: 'Chat'
+    chatId: 'String'
+    createdAt: 'DateTime'
+    dialogue: 'Json'
+    id: 'String'
+    lesson: 'Lesson'
+    lessonId: 'String'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
   }
   Clause: { // field return type name
     commentary: 'String'
@@ -6286,6 +6376,7 @@ export interface NexusGenFieldTypeNames {
     createCertificate: 'Certificate'
     createChallengeResult: 'ChallengeResult'
     createChat: 'Chat'
+    createChatResult: 'ChatResult'
     createClause: 'Clause'
     createCommunityMember: 'PaymentInfo2'
     createConfUser: 'ConfUser'
@@ -6941,6 +7032,14 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Chat: {
+    chatResults: { // args
+      after?: NexusGenInputs['ChatResultWhereUniqueInput'] | null; // ChatResultWhereUniqueInput
+      before?: NexusGenInputs['ChatResultWhereUniqueInput'] | null; // ChatResultWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
   Construction: {
     constructionResults: { // args
       after?: NexusGenInputs['ConstructionResultWhereUniqueInput'] | null; // ConstructionResultWhereUniqueInput
@@ -7234,6 +7333,11 @@ export interface NexusGenArgTypes {
       lessonId?: string | null; // String
       messages?: NexusGenInputs['Messages'] | null; // Messages
       name?: string | null; // String
+    }
+    createChatResult: { // args
+      chatId?: string | null; // String
+      dialogue?: NexusGenInputs['Dialogue'] | null; // Dialogue
+      lessonId?: string | null; // String
     }
     createClause: { // args
       commentary?: string | null; // String

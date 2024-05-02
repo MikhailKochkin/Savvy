@@ -641,7 +641,6 @@ const SingleTextEditor = (props) => {
                         });
                       }, 1000);
                     }
-                    console.log("e.target", e.target);
                     if (
                       e.target.classList.contains("edit") &&
                       isErrorWindowShown == false
@@ -702,9 +701,9 @@ const SingleTextEditor = (props) => {
                     if (
                       e.target.classList.contains("edit") &&
                       e.target.getAttribute("type") !== "note" &&
-                      e.target.parentElement.getAttribute("type") !== "note" &&
+                      e.target.parentElement?.getAttribute("type") !== "note" &&
                       e.target.getAttribute("type") !== "problem" &&
-                      e.target.parentElement.getAttribute("type") !== "problem"
+                      e.target.parentElement?.getAttribute("type") !== "problem"
                     ) {
                       setErrorAnswer(e.target.innerHTML);
                       let newMiniQuiz = props.lesson.quizes.find(

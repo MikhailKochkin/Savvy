@@ -80,6 +80,7 @@ const SINGLE_LESSON_QUERY = gql`
       }
       notes {
         id
+        name
         type
         link_clicks
         complexity

@@ -1,11 +1,8 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 
-const Styles = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+import { IconBlock } from "../quizes/QuestionStyles";
 
 const MessageRow = styled.div`
   display: flex;
@@ -59,6 +56,10 @@ const MessageRow = styled.div`
   &.student {
     justify-content: flex-start;
     justify-content: stretch;
+  }
+  .sourceText {
+    font-size: 1.4rem;
+    font-style: italic;
   }
   .author_text {
     background: #f3f3f3;
@@ -125,32 +126,15 @@ const MessageRow = styled.div`
       font-size: 1.6rem;
     }
   }
-`;
-
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 65px;
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-    line-height: 1.4;
+  button {
+    margin: 15px 0;
+    background: none;
+    border: none;
+    font-family: Montserrat;
+    cursor: pointer;
+    padding: 0;
+    font-weight: 500;
+    font-style: italic;
   }
 `;
 
@@ -170,55 +154,67 @@ const Icon = styled.div`
   justify-content: center;
 `;
 
-const Message = ({ id, key, role, m, me, author, lessonId }) => {
+const AiAssistantDialogue = ({ m, me, message, author, library }) => {
+  const [revealSource, setRevealSource] = useState(false);
+
   return (
-    <Styles id={id} key={key}>
-      <MessageRow role={role}>
-        {role === "author" && (
-          <>
-            <div className="author_text">{parse(m.text)}</div>
-            <IconBlock>
-              {m.image && <img className="icon" src={m.image} />}
-              {!m.image &&
-                (author && author.image ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                ))}
-              <div className="name">
-                {m.name && m.name.toLowerCase() !== "author"
-                  ? m.name
-                  : author && author.name
-                  ? author.name
-                  : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </>
-        )}
-        {role === "student" && (
-          <>
-            <IconBlock>
-              <Icon className="icon2" background={m.author}>
-                {m.image && <img className="icon" src={m.image} />}
-                {!m.image &&
-                  (me && me.image ? (
-                    <img className="icon" src={me.image} />
-                  ) : me.surname ? (
-                    `${me.name[0]}${me.surname[0]}`
-                  ) : (
-                    `${me.name[0]}${me.name[1]}`
-                  ))}
-              </Icon>
-              <div className="name">
-                {m.name && m.name !== "student" ? m.name : me.name}
-              </div>
-            </IconBlock>
-            <div className="student_text">{parse(m.text)}</div>
-          </>
-        )}
+    <>
+      <MessageRow role="student">
+        <IconBlock>
+          <Icon className="icon2" background={m.author}>
+            {m.image && <img className="icon" src={m.image} />}
+            {!m.image &&
+              (me && me.image ? (
+                <img className="icon" src={me.image} />
+              ) : me.surname ? (
+                `${me.name[0]}${me.surname[0]}`
+              ) : (
+                `${me.name[0]}${me.name[1]}`
+              ))}
+          </Icon>
+          <div className="name">
+            {m.name && m.name !== "student" ? m.name : me.name}
+          </div>
+        </IconBlock>
+        <div className="student_text">{parse(message.question)}</div>
       </MessageRow>
-    </Styles>
+      <MessageRow role="author">
+        <div className="author_text">
+          <p> {parse(message.answer)}</p>
+          {message.sourceId && message.sourceId !== "" && (
+            <button onClick={(e) => setRevealSource(!revealSource)}>
+              {revealSource ? "Hide source" : "Show source"}
+            </button>
+          )}
+
+          {revealSource ? (
+            <div className="sourceText">
+              <div>
+                <b>Information from our internal library:</b>
+              </div>
+              {parse(library.find((l) => l.id === message.sourceId)?.text)}
+            </div>
+          ) : null}
+        </div>
+        <IconBlock>
+          {m.image && <img className="icon" src={m.image} />}
+          {!m.image &&
+            (author && author.image ? (
+              <img className="icon" src={author.image} />
+            ) : (
+              <img className="icon" src="../../static/hipster.svg" />
+            ))}
+          <div className="name">
+            {m.name && m.name.toLowerCase() !== "author"
+              ? m.name
+              : author && author.name
+              ? author.name
+              : "BeSavvy"}
+          </div>
+        </IconBlock>
+      </MessageRow>
+    </>
   );
 };
 
-export default Message;
+export default AiAssistantDialogue;

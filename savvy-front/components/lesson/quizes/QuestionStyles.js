@@ -279,7 +279,7 @@ export const Frame = styled.div`
   border-radius: 25px;
   background: #fff;
   padding: 0 2%;
-  margin: 15px 0;
+  /* margin: 15px 0; */
   .com {
     border-top: 1px solid #f3f3f3;
   }

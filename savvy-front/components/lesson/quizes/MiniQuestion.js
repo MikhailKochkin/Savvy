@@ -74,7 +74,7 @@ const MiniQuestion = (props) => {
     me,
     answer,
     question,
-    generating,
+    hints,
     inputColor,
     passAnswer,
     result,
@@ -82,10 +82,12 @@ const MiniQuestion = (props) => {
     correct,
     explanations,
     getExplanation,
+    getHint,
     improvements,
     getImprovements,
     generatingExplanation,
     generatingImprovement,
+    generatingHint,
     studentAnswerPassedFromAnotherComponent,
     explanationsNum,
     improvementsNum,
@@ -117,7 +119,10 @@ const MiniQuestion = (props) => {
             </ResultCircle>
           )}
         </MiniOpenQuestionFrame>
-        {(generatingExplanation || generatingImprovement) && (
+        {!generatingHint && hints.length > 0 ? (
+          <Comment>{parse(hints[hints.length - 1])}</Comment>
+        ) : null}
+        {(generatingExplanation || generatingImprovement || generatingHint) && (
           <Progress2>
             <TailSpin width="35" color="#2E80EC" />
           </Progress2>
@@ -143,9 +148,9 @@ const MiniQuestion = (props) => {
         )}
       </div>
       <ButtonsBox>
-        <MiniAIButton onClick={(e) => props.onAnswer()}>
-          {/* {checking ? t("checking") : t("check")} */}
-          Check
+        <MiniAIButton onClick={(e) => props.onAnswer()}>Check</MiniAIButton>
+        <MiniAIButton onClick={(e) => getHint(e)}>
+          {t("i_need_a_hint")}
         </MiniAIButton>
         {(correct === "false" || correct === "has_flaws") && (
           <MiniAIButton onClick={async (e) => getExplanation(e)}>

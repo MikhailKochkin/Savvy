@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import smoothscroll from "smoothscroll-polyfill";
 
 import SingleQuiz from "../quizes/SingleQuiz";
 import SingleTest from "../tests/SingleTest";
 import Note from "../notes/Note";
 import Chat from "../chat/Chat";
+import { set } from "lodash";
 
 const Styles = styled.div`
   width: ${(props) => (props.story ? "100vw" : "100%")};
@@ -77,11 +79,34 @@ const Button = styled.div`
 `;
 
 const NewInteractive = (props) => {
-  const [isShown, setIsShown] = useState(false);
-  const [componentList, setComponentList] = useState([]);
-  const { t } = useTranslation("lesson");
-
   const { problem, lesson, me, author } = props;
+
+  const [componentList, setComponentList] = useState([]);
+
+  useEffect(() => {
+    if (problem.steps.problemItems.length > 0) {
+      setComponentList([findUnconnectedItems(problem.steps.problemItems)[0]]);
+    }
+  }, [0]);
+
+  useEffect(() => {
+    smoothscroll.polyfill();
+  });
+
+  const slide = (id, offset = 200) => {
+    setTimeout(() => {
+      const my_element = document.getElementById(id);
+      if (!my_element) return;
+
+      const elementPosition = my_element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }, 100);
+  };
 
   const findUnconnectedItems = (arr) => {
     // Step 1: Create a set of all item IDs
@@ -100,12 +125,6 @@ const NewInteractive = (props) => {
     return arr.filter((item) => ids.has(item.id));
   };
 
-  useEffect(() => {
-    if (problem.steps.problemItems.length > 0) {
-      setComponentList([findUnconnectedItems(problem.steps.problemItems)[0]]);
-    }
-  }, [0]);
-
   const updateArray = (data) => {
     // Use optional chaining to safely access properties
     let nextTrueValue = componentList.at(-1)?.next?.true?.value;
@@ -118,6 +137,7 @@ const NewInteractive = (props) => {
       if (data[0]) {
         if (next_el) {
           setComponentList([...componentList, next_el]);
+          slide(next_el.id);
         } else {
           props.onFinish(true, "new");
         }
@@ -135,6 +155,7 @@ const NewInteractive = (props) => {
     } else {
       if (next_el) {
         setComponentList([...componentList, next_el]);
+        slide(next_el.id);
       } else {
         props.onFinish(true, "new");
       }
@@ -244,6 +265,7 @@ const NewInteractive = (props) => {
               );
             } else if (com.type.toLowerCase() === "chat") {
               let el = lesson.chats.filter((q) => q.id === com.id)[0];
+              let libraryNotes = lesson.notes;
               return (
                 <Chat
                   next={com.next}
@@ -258,6 +280,7 @@ const NewInteractive = (props) => {
                   lessonId={lesson.id}
                   story={true}
                   getData={updateArray}
+                  library={libraryNotes}
                 />
               );
             }

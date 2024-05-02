@@ -38,7 +38,7 @@ const Group = styled.div`
   pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
   display: ${(props) => (props.correct === "true" ? "none" : "flex")};
   padding: 0.5% 0;
-  margin-bottom: 20px;
+  margin: 10px 0;
 `;
 
 const Group2 = styled.div`

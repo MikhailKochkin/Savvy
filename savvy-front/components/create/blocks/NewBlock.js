@@ -165,6 +165,7 @@ const NewBlock = (props) => {
           lessonId={lesson.id}
           getResult={getResult}
           passUpdated={passUpdated}
+          library={props.library}
         />
       )}
       {type == "Chat" && (

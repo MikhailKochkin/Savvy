@@ -74,7 +74,7 @@ const TextBar = styled.div`
   }
   h2 p {
     line-height: 1.2;
-    width: 80%;
+    width: 100%;
     font-size: 3.2rem;
     font-weight: 700;
   }

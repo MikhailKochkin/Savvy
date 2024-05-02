@@ -100,72 +100,26 @@ const UpdateChat = (props) => {
   const [mess, setMess] = useState(props.messages.messagesList);
   const [isSecret, setIsSecret] = useState(props.isSecret);
   const { t } = useTranslation("lesson");
-
   const [updateChat, { data, loading, error }] = useMutation(
     UPDATE_CHAT_MUTATION,
     {
       refetchQueries: [
-        { query: SINGLE_LESSON_QUERY, variables: { id: props.lessonId } }, // DocumentNode object parsed with gql
-        "SINGLE_LESSON_QUERY", // Query name
+        {
+          query: SINGLE_LESSON_QUERY,
+          variables: { id: props.lessonId },
+        },
       ],
     }
   );
 
-  const getMessage = (data) => {
-    let old_messages = [...mess];
-    old_messages.splice(data.number - 1, 1, data);
-    setMess([...old_messages]);
-  };
-
-  const updateAuthor = (val, i) => {
-    let old_messages = [...mess];
-    let new_obj = { ...old_messages[i] };
-    new_obj.author = val;
-    old_messages[i] = new_obj;
-    setMess([...old_messages]);
-  };
-
-  const updateText = (val, i) => {
-    let old_mess = [...mess];
-    let new_obj = { ...old_mess[i] };
-    new_obj.text = val;
-    old_mess[i] = new_obj;
-    setMess([...old_mess]);
-  };
-
-  const updateReaction = (val, i) => {
-    let old_mess = [...mess];
-    let new_obj = { ...old_mess[i] };
-    new_obj.reactions = val;
-    old_mess[i] = new_obj;
-    setMess([...old_mess]);
-  };
-
-  const updateImage = (val, i) => {
-    let old_mess = [...mess];
-    let new_obj = { ...old_mess[i] };
-    new_obj.image = val;
-    old_mess[i] = new_obj;
-    setMess([...old_mess]);
-  };
-
-  const updateName = (val, i) => {
-    let old_mess = [...mess];
-    let new_obj = { ...old_mess[i] };
-    new_obj.name = val;
-    old_mess[i] = new_obj;
-    setMess([...old_mess]);
+  const updateMessageProperty = (val, i, property) => {
+    const updatedMessages = [...mess];
+    updatedMessages[i] = { ...updatedMessages[i], [property]: val };
+    setMess(updatedMessages);
   };
 
   return (
     <Styles>
-      {/* <select
-        defaultValue={isSecret}
-        onChange={(e) => setIsSecret(e.target.value == "true")}
-      >
-        <option value={"true"}>Секретный</option>
-        <option value={"false"}>Открытый</option>
-      </select> */}
       <NameInput
         onChange={(e) => setName(e.target.value)}
         defaultValue={name}
@@ -173,17 +127,22 @@ const UpdateChat = (props) => {
       />
       {mess.map((m, i) => (
         <UpdateMessage
+          key={i}
           index={i}
-          author={mess[i].author}
+          author={m.author}
           text={m.text}
           name={m.name}
+          isAiAssistantOn={m.isAiAssistantOn}
           reactions={m.reactions}
-          getMessage={getMessage}
-          updateAuthor={updateAuthor}
-          updateText={updateText}
-          updateReaction={updateReaction}
-          updateImage={updateImage}
-          updateName={updateName}
+          getMessage={(data) => updateMessageProperty(data, data.number - 1)}
+          updateAuthor={(val) => updateMessageProperty(val, i, "author")}
+          updateText={(val) => updateMessageProperty(val, i, "text")}
+          updateReaction={(val) => updateMessageProperty(val, i, "reactions")}
+          updateImage={(val) => updateMessageProperty(val, i, "image")}
+          updateName={(val) => updateMessageProperty(val, i, "name")}
+          updateAiAssistant={(val) =>
+            updateMessageProperty(val, i, "isAiAssistantOn")
+          }
         />
       ))}
       <Bottom>
@@ -192,9 +151,7 @@ const UpdateChat = (props) => {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                let old_messages = [...mess];
-                let popped = old_messages.pop();
-                setMess([...old_messages]);
+                setMess(mess.slice(0, -1));
               }}
             >
               -1

@@ -95,37 +95,6 @@ const SimpleButton = styled.button`
   }
 `;
 
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  /* align-items: center;
-  justify-content: center; */
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  height: 800px;
-  max-width: 880px;
-  min-width: 560px;
-  padding: 2%;
-      overflow-y: scroll;
-
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
-
 const QuestionButtons = styled.div`
   display: flex;
   flex-direction: column;
@@ -356,6 +325,7 @@ const CanvasProblemBuilder = (props) => {
               lesson={props.lesson}
               me={props.me}
               data={foundElement}
+              library={props.lesson.notes}
             />
             <button onClick={(e) => setModalOpen(false)}>Close</button>
           </DevWindowStyles>
@@ -702,5 +672,34 @@ const Message = ({
     </MessageStyles>
   );
 };
+
+const StyledModal = Modal.styled`
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  height: 800px;
+  max-width: 880px;
+  min-width: 560px;
+  padding: 2%;
+      overflow-y: scroll;
+
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;
 
 export default CanvasProblemBuilder;

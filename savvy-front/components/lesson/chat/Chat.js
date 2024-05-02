@@ -9,6 +9,7 @@ import DeleteChat from "./DeleteChat";
 import Reaction from "./Reaction";
 import ChangeForum from "../forum/ChangeForum";
 import Message from "./Message"; // Add this import at the top of the Chat component file
+import AiAssistant from "./AiAssistant";
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
@@ -235,6 +236,8 @@ const Secret = styled.div`
 `;
 
 const Chat = (props) => {
+  const { name, messages, me, story, lessonId, id, author, getData, library } =
+    props;
   const [update, setUpdate] = useState(false);
   const [num, setNum] = useState(1);
   const [moved, setMoved] = useState(false);
@@ -247,7 +250,6 @@ const Chat = (props) => {
   const { t } = useTranslation("lesson");
   const [updateChat, { data, loading, error }] =
     useMutation(UPDATE_CHAT_MUTATION);
-  const { name, messages, me, story, lessonId, id, author, getData } = props;
   const getResult = (data) => {
     props.getResult(data);
   };
@@ -332,83 +334,14 @@ const Chat = (props) => {
       }}
     >
       <Buttons>
-        {!story && (
-          <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
-        )}
         {me && !story && (
-          <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
+          <>
+            <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
+            <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
+          </>
         )}
       </Buttons>
-      {!isRevealed && (
-        <Secret shiver={shiver}>
-          <Messages isRevealed={isRevealed}>
-            {!update &&
-              messages.messagesList.slice(0, num).map((m, i) => {
-                if (m.author === "author") {
-                  return (
-                    <>
-                      <Message
-                        id={"message" + i + id}
-                        key={i}
-                        time={i}
-                        className="author"
-                        shouldSlide={true}
-                        m={m}
-                        me={me}
-                        author={author}
-                        passTextToBeTranslated={passTextToBeTranslated}
-                      />
-                      {m.reactions && m.reactions.length > 0 && (
-                        <Reaction
-                          reactions={m.reactions}
-                          me={me}
-                          m={m}
-                          author={author}
-                          initialQuestion={m.text}
-                        />
-                      )}
-                    </>
-                  );
-                } else {
-                  return (
-                    <>
-                      <Message
-                        id={"message" + i + id}
-                        key={i}
-                        time={i}
-                        className="student"
-                        shouldSlide={true}
-                        m={m}
-                        me={me}
-                        author={author}
-                        passTextToBeTranslated={passTextToBeTranslated}
-                      />
-                    </>
-                  );
-                }
-              })}
-          </Messages>
-          <div id="open">
-            <img src="static/lock.svg" />
-            <div
-              id="button"
-              onClick={(e) => {
-                if (props.experience >= props.total) {
-                  setIsRevealed(true);
-                } else {
-                  setShiver(true);
-                  setTimeout(() => {
-                    setShiver(false);
-                  }, 1000);
-                }
-              }}
-            >
-              {t("toOpen")}
-            </div>
-          </div>
-        </Secret>
-      )}
-      {isRevealed && !update && (
+      {!update && (
         <Messages isRevealed={isRevealed}>
           {messages.messagesList.slice(0, num).map((m, i) => {
             if (m.author === "author") {
@@ -418,8 +351,7 @@ const Chat = (props) => {
                     id={"messagee" + i + id}
                     key={i}
                     time={i}
-                    className="author"
-                    shouldSlide={true}
+                    role="author"
                     m={m}
                     me={me}
                     author={author}
@@ -436,6 +368,16 @@ const Chat = (props) => {
                       initialQuestion={m.text}
                     />
                   )}
+                  {m.isAiAssistantOn && (
+                    <AiAssistant
+                      id={id}
+                      author={author}
+                      me={me}
+                      m={m}
+                      library={library}
+                      lessonId={lessonId}
+                    />
+                  )}
                 </>
               );
             } else {
@@ -444,7 +386,7 @@ const Chat = (props) => {
                   id={"message" + i + id}
                   key={i}
                   time={i}
-                  className="student"
+                  role="student"
                   shouldSlide={true}
                   m={m}
                   me={me}

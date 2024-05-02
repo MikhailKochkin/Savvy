@@ -742,7 +742,6 @@ const ConElement = (props) => {
         border={border}
         isTest={isTest}
         onClick={(e) => {
-          console.log("click");
           if (!props.isCorrect) {
             props.passModalOpen(true);
             props.passActiveBlock(i);

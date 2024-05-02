@@ -317,6 +317,7 @@ const MessageElement = inputObjectType({
     t.string("name");
     t.string("text");
     t.string("image");
+    t.boolean("isAiAssistantOn");
     t.list.field("reactions", { type: "Reaction" });
   },
 });
@@ -347,6 +348,7 @@ const Chat = objectType({
     t.model.complexity();
     t.model.messages();
     t.model.isSecret();
+    t.model.chatResults();
     t.model.lessonId();
     t.model.lesson();
     t.model.user();

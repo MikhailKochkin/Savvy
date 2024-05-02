@@ -241,6 +241,7 @@ const UpdateNote = (props) => {
           <option value={"longread"}>Longread</option>
           <option value={"email"}>Email</option>
           <option value={"mininote"}>Mini Note</option>
+          <option value={"library"}>Library</option>
         </select>
         {/* <select
             defaultValue={isSecret}

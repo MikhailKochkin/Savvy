@@ -66,6 +66,7 @@ async function getMessageOpens(serverToken, messageID) {
 }
 
 const { exists } = require("fs");
+const { Dialogue, ChatResult } = require("./Results");
 
 // const { Client } = require("whatsapp-web.js");
 // const wa_client = new Client();
@@ -2549,6 +2550,41 @@ const Mutation = mutationType({
           },
         });
         return Chat;
+      },
+    });
+    t.field("createChatResult", {
+      type: "ChatResult",
+      args: {
+        chatId: stringArg(),
+        lessonId: stringArg(),
+        dialogue: arg({
+          type: "Dialogue",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        const chatId = args.chatId;
+        const lessonId = args.lessonId;
+        delete args.chatId;
+        delete args.lessonId;
+        const ChatResult = await ctx.prisma.chatResult.create({
+          data: {
+            user: {
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "clkvdew14837181f13vcbbcw0x",
+              },
+            },
+            chat: {
+              connect: { id: chatId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            ...args,
+          },
+        });
+        return ChatResult;
       },
     });
     t.field("createTextEditor", {

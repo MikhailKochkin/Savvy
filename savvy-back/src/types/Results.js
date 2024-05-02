@@ -195,6 +195,32 @@ const TeamQuestResult = objectType({
   },
 });
 
+const Dialogue = inputObjectType({
+  name: "Dialogue",
+  definition(t) {
+    t.string("question");
+    t.string("answer");
+    t.string("comment");
+    t.string("sourceId");
+  },
+});
+
+const ChatResult = objectType({
+  name: "ChatResult",
+  definition(t) {
+    t.model.id();
+    t.model.dialogue();
+    t.model.createdAt();
+    t.model.updatedAt();
+    t.model.chatId();
+    t.model.userId();
+    t.model.lessonId();
+    t.model.chat();
+    t.model.lesson();
+    t.model.user();
+  },
+});
+
 module.exports = {
   TestResult,
   QuizResult,
@@ -206,4 +232,6 @@ module.exports = {
   ChallengeResult,
   TestPracticeResult,
   TeamQuestResult,
+  ChatResult,
+  Dialogue,
 };

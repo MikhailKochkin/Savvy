@@ -424,6 +424,7 @@ input ChallengeResultWhereUniqueInput {
 }
 
 type Chat {
+  chatResults(after: ChatResultWhereUniqueInput, before: ChatResultWhereUniqueInput, first: Int, last: Int): [ChatResult!]!
   complexity: Int
   createdAt: DateTime!
   id: String!
@@ -448,6 +449,7 @@ input ChatOrderByRelationAggregateInput {
 }
 
 input ChatOrderByWithRelationInput {
+  chatResults: ChatResultOrderByRelationAggregateInput
   complexity: SortOrderInput
   createdAt: SortOrder
   id: SortOrder
@@ -462,10 +464,66 @@ input ChatOrderByWithRelationInput {
   userId: SortOrder
 }
 
+type ChatResult {
+  chat: Chat!
+  chatId: String!
+  createdAt: DateTime!
+  dialogue: Json
+  id: String!
+  lesson: Lesson
+  lessonId: String!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+input ChatResultListRelationFilter {
+  every: ChatResultWhereInput
+  none: ChatResultWhereInput
+  some: ChatResultWhereInput
+}
+
+input ChatResultOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ChatResultWhereInput {
+  AND: [ChatResultWhereInput!]
+  NOT: [ChatResultWhereInput!]
+  OR: [ChatResultWhereInput!]
+  chat: ChatWhereInput
+  chatId: StringFilter
+  createdAt: DateTimeFilter
+  dialogue: JsonNullableFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
+input ChatResultWhereUniqueInput {
+  AND: [ChatResultWhereInput!]
+  NOT: [ChatResultWhereInput!]
+  OR: [ChatResultWhereInput!]
+  chat: ChatWhereInput
+  chatId: StringFilter
+  createdAt: DateTimeFilter
+  dialogue: JsonNullableFilter
+  id: String
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
 input ChatWhereInput {
   AND: [ChatWhereInput!]
   NOT: [ChatWhereInput!]
   OR: [ChatWhereInput!]
+  chatResults: ChatResultListRelationFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
@@ -484,6 +542,7 @@ input ChatWhereUniqueInput {
   AND: [ChatWhereInput!]
   NOT: [ChatWhereInput!]
   OR: [ChatWhereInput!]
+  chatResults: ChatResultListRelationFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: String
@@ -1229,6 +1288,13 @@ input DecimalNullableFilter {
   lte: Decimal
   not: NestedDecimalNullableFilter
   notIn: [Decimal!]
+}
+
+input Dialogue {
+  answer: String
+  comment: String
+  question: String
+  sourceId: String
 }
 
 type Document {
@@ -2097,6 +2163,7 @@ input LessonOrderByWithRelationInput {
   challengeResults: ChallengeResultOrderByRelationAggregateInput
   challenge_num: SortOrderInput
   change: SortOrderInput
+  chatResults: ChatResultOrderByRelationAggregateInput
   chats: ChatOrderByRelationAggregateInput
   constructionResults: ConstructionResultOrderByRelationAggregateInput
   constructions: ConstructionOrderByRelationAggregateInput
@@ -2234,6 +2301,7 @@ input LessonWhereInput {
   challengeResults: ChallengeResultListRelationFilter
   challenge_num: IntNullableFilter
   change: StringNullableFilter
+  chatResults: ChatResultListRelationFilter
   chats: ChatListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
@@ -2297,6 +2365,7 @@ input LessonWhereUniqueInput {
   challengeResults: ChallengeResultListRelationFilter
   challenge_num: IntNullableFilter
   change: StringNullableFilter
+  chatResults: ChatResultListRelationFilter
   chats: ChatListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
@@ -2383,6 +2452,7 @@ type Message {
 input MessageElement {
   author: String
   image: String
+  isAiAssistantOn: Boolean
   name: String
   number: Int
   reactions: [Reaction]
@@ -2514,6 +2584,7 @@ type Mutation {
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
+  createChatResult(chatId: String, dialogue: Dialogue, lessonId: String): ChatResult
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createCommunityMember(email: String, name: String, number: String, subscription: String, surname: String): PaymentInfo2
   createConfUser(conf_number: Int, email: String): ConfUser
@@ -5269,6 +5340,7 @@ input UserOrderByWithRelationInput {
   certificates: CertificateOrderByRelationAggregateInput
   challengeResults: ChallengeResultOrderByRelationAggregateInput
   chat: ChatOrderByRelationAggregateInput
+  chatResults: ChatResultOrderByRelationAggregateInput
   clause: ClauseOrderByRelationAggregateInput
   co_coursePages: CoursePageOrderByRelationAggregateInput
   comment: SortOrderInput
@@ -5366,6 +5438,7 @@ input UserWhereInput {
   certificates: CertificateListRelationFilter
   challengeResults: ChallengeResultListRelationFilter
   chat: ChatListRelationFilter
+  chatResults: ChatResultListRelationFilter
   clause: ClauseListRelationFilter
   co_coursePages: CoursePageListRelationFilter
   comment: StringNullableFilter
@@ -5463,6 +5536,7 @@ input UserWhereUniqueInput {
   certificates: CertificateListRelationFilter
   challengeResults: ChallengeResultListRelationFilter
   chat: ChatListRelationFilter
+  chatResults: ChatResultListRelationFilter
   clause: ClauseListRelationFilter
   co_coursePages: CoursePageListRelationFilter
   comment: StringNullableFilter

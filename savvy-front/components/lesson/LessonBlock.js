@@ -202,7 +202,6 @@ const LessonBlock = (props) => {
 
   const addBlock = (type) => {
     setType(type);
-    // console.log("type", type);
   };
 
   const getResults = (el) => {
@@ -220,7 +219,6 @@ const LessonBlock = (props) => {
   };
 
   const getResult = async (res) => {
-    console.log("res", res);
     if (res.data.createNote) {
       setType("Note");
       setIdNum(res.data.createNote.id);
@@ -498,12 +496,6 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "note" && (
           <>
-            {/* {console.log(
-              "lesson block note",
-              initial_data && initial_data.format == "note"
-                ? initial_data
-                : null
-            )} */}
             {!isSaved && el.id == undefined && (
               <CreateNote
                 lessonID={lesson.id}
@@ -799,6 +791,7 @@ const LessonBlock = (props) => {
                 lessonId={lesson.id}
                 passUpdated={passUpdated}
                 getResult={getResult}
+                library={lesson.notes}
               />
             )}
           </>

@@ -302,10 +302,6 @@ const ProblemModal = (props) => {
                                   <b>Student answer: </b>
                                   {result.answer}
                                   <div className="standard">
-                                    {console.log(
-                                      "result.comment",
-                                      result.comment
-                                    )}
                                     <b>Comment: </b> {result.comment}{" "}
                                     {result?.comment ==
                                     "Student asked for explanations"
@@ -425,10 +421,6 @@ const ProblemModal = (props) => {
                     )}
                     {m.type.toLowerCase() == "chat" && (
                       <Block className="question">
-                        {console.log(
-                          "lesson",
-                          props.chats.find((ch) => ch.id == m.id)
-                        )}
                         <div>
                           <b>Chat:</b>
                         </div>

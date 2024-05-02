@@ -319,12 +319,13 @@ const OpenQuestion = (props) => {
 
     let hintAnswerRecommendations = `Answer in ${
       router.locale == "ru" ? "Russian" : "English"
-    }. Answer in second person. Limit your hint to 3 sentences.`;
+    }. Always address student as "You" and NEVER address the student as "STUDENT. Limit your hint to 3 sentences.`;
 
     hintPrompt = `
       Give a hint to the student in a Socratic manner on what is the correct answer to help them answer the question. 
       Use this approach: ${hintingMethods[hints.length]}
-      Do not use the words from the correct answer.`;
+      Do not use the words from the correct answer. 
+      `;
 
     try {
       const response = await fetch(url, {
@@ -383,7 +384,7 @@ const OpenQuestion = (props) => {
   const getExplanation = async (event) => {
     event.preventDefault();
     setGeneratingExplanation(true);
-    let AItype = "claude";
+    let AItype = "openai";
     let url;
     let result;
     let proportion = ((answer.length / props.answer.length) * 100).toFixed(0);
@@ -404,7 +405,7 @@ const OpenQuestion = (props) => {
 
     let explanationRecommendations = `Write in second person. Address the student as "you".
       DO NOT USE the words from the correct answer!!! DO NOT REVEAL THE CORRECT ANSWER!!!
-      Be very polite and gentle.
+      Be very polite and gentle. LIMIT YOUR RESPONSE TO 500 CHARACTERS.
       Return your response with every paragrpah wrapped in <p> tags.
       Answer in ${router.locale == "ru" ? "Russian" : "English"}
       `;
@@ -501,14 +502,13 @@ const OpenQuestion = (props) => {
       explanantionPrompt = `
       But your student gave you a completely wrong answer: """ ${answer} """.
       Use:
-      1) information about the correct answer 
-      2) and information from the lesson: """ ${ifWrong} """
-      3) Previous explanations: """ ${explanations.join(" ")} """
+      1) information about the correct answer: : """ ${props.answer} """.
+      2) and information and recommendations from the lesson: """ ${ifWrong} """
       
-      to explain in LESS THAN 4 SENTENCES why this answer is wrong. Make this explanantion more deatiled than the previous one.
+      to explain in 3 SENTENCES why this answer is wrong and what the correct answer should look like.
       Do it in the following way:
 
-      Explain what information must be in the question.
+      Explain what information must be in the student answer
       Give recommendations on how to start the answer.
 
       Return every point as a separate <p> tag
@@ -530,6 +530,7 @@ const OpenQuestion = (props) => {
         },
         body: JSON.stringify({
           prompt: intro + explanantionPrompt + explanationRecommendations,
+          // additionalRecommendationsForTextEditors,
         }),
       });
 
@@ -736,6 +737,7 @@ const OpenQuestion = (props) => {
       }
       explanationsNum={explanationsNum}
       improvementsNum={improvementsNum}
+      generatingHint={generating}
     />
   ) : (
     <FullOpenQuestion
@@ -766,6 +768,7 @@ const OpenQuestion = (props) => {
       revealCorrectAnswer={revealCorrectAnswer}
       generatingExplanation={generatingExplanation}
       generatingImprovement={generatingImprovement}
+      generatingHint={generating}
     />
   );
 };

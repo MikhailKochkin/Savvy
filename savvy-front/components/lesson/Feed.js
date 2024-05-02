@@ -647,18 +647,20 @@ const Feed = (props) => {
 
   // 2. Move through the lesson functionality for the arrow button
 
-  const move = async (id) => {
+  const move = async (id, offset = 200) => {
     setNum(num + 1);
     // this search returns
     setTimeout(() => {
-      var my_element = document.getElementById(id);
-      if (my_element) {
-        my_element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest",
-        });
-      }
+      const my_element = document.getElementById(id);
+      if (!my_element) return;
+
+      const elementPosition = my_element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
     }, 200);
   };
 
@@ -767,6 +769,7 @@ const Feed = (props) => {
               <img className="icon" src="/static/navigation.svg" />
               <div>{t("navigate")}</div>
             </div>
+
             {openNavigation && (
               <div className="navigate_block">
                 <div className="nav">

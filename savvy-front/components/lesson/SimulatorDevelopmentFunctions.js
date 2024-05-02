@@ -20,13 +20,18 @@ export const guessAlphabet = (str) => {
 };
 
 export const removeSpecialChars = (text) => {
-  // Define the pattern to match the specified characters
-  const pattern = /[\[\]\|*<>]/g;
-  // Replace all matches of the pattern in the text with an empty string
-  const result = text.replace(pattern, "");
-  return result;
-};
+  // Remove text inside asterisks
+  text = text.replace(/\*.*?\*/g, "");
 
+  // Remove the specified special characters
+  const pattern = /[\[\]\|*<>]/g;
+  const result = text.replace(pattern, "");
+
+  // Remove extra whitespace
+  const finalResult = result.replace(/\s+/g, " ").trim();
+
+  return finalResult;
+};
 export const containsOnlyNumbers = (str) => {
   const regex = /^[0-9]+$/;
   return regex.test(str);

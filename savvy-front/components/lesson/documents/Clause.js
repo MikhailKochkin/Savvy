@@ -163,7 +163,6 @@ const Clause = (props) => {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log("res.res", res.res);
         setResult(parseInt(res.res));
         if (parseFloat(res.res) > 65) {
           setCorrect("true");

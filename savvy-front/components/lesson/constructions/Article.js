@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -87,7 +87,6 @@ class Article extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
         if (
           !e.target.nextSibling ||
           (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
