@@ -293,21 +293,21 @@ const Chat = (props) => {
       let name = me.name;
       element.innerHTML = name;
     });
-    document.addEventListener("keydown", detectKeyDown, true);
+    // document.addEventListener("keydown", detectKeyDown, true);
     return () => {
       document.removeEventListener("click", detectKeyDown);
     };
   }, []);
 
-  const detectKeyDown = (e) => {
-    if (e.key === "n") {
-      setNum((num) => num + 1);
-    } else if (e.key === "b") {
-      setNum((num) => num - 1);
-    } else if (e.key === "s") {
-      setShowButton((showButton) => !showButton);
-    }
-  };
+  // const detectKeyDown = (e) => {
+  //   if (e.key === "n") {
+  //     setNum((num) => num + 1);
+  //   } else if (e.key === "b") {
+  //     setNum((num) => num - 1);
+  //   } else if (e.key === "s") {
+  //     setShowButton((showButton) => !showButton);
+  //   }
+  // };
 
   let width;
   if (props.problem) {
