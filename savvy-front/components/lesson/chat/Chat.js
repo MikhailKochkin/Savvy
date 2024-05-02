@@ -294,9 +294,9 @@ const Chat = (props) => {
       element.innerHTML = name;
     });
     // document.addEventListener("keydown", detectKeyDown, true);
-    return () => {
-      document.removeEventListener("click", detectKeyDown);
-    };
+    // return () => {
+    //   document.removeEventListener("click", detectKeyDown);
+    // };
   }, []);
 
   // const detectKeyDown = (e) => {
