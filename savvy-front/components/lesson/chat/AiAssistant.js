@@ -232,11 +232,11 @@ const AiAssistant = ({ id, lessonId, role, m, me, author, library }) => {
       keys: [
         {
           name: "text",
-          weight: 0.5,
+          weight: 0.6,
         },
         {
           name: "name",
-          weight: 0.8,
+          weight: 0.7,
         },
       ],
       threshold: 0.6,
@@ -282,11 +282,12 @@ const AiAssistant = ({ id, lessonId, role, m, me, author, library }) => {
           keywords = result.split(",").map((keyword) => keyword.trim());
           const fuse = new Fuse(searchableLibrary, options);
           let searchResult1 = fuse.search(keywords[0]);
-          let searchResult2 = fuse.search(keywords[1]);
+          let searchResult2 = fuse.search(
+            keywords[1] ? keywords[1] : keywords[0]
+          );
           let searchResult = [...searchResult1, ...searchResult2];
           // Sort searchResult by relevance score in descending order
           searchResult.sort((a, b) => a.score - b.score);
-
           if (searchResult.length === 0) {
             newAnswer.answer =
               "I'm sorry, but I couldn't find a relevant answer to your question in my current knowledge base. I will do my best to find the information and email you the answer as soon as possible.";
@@ -334,13 +335,11 @@ const AiAssistant = ({ id, lessonId, role, m, me, author, library }) => {
           } catch (error) {
             console.error(error);
             alert(error.message);
-            setGeneratingImprovement(false);
           }
         }
       } catch (error) {
         console.error(error);
         alert(error.message);
-        setGeneratingImprovement(false);
       }
     } else {
       newAnswer.answer =

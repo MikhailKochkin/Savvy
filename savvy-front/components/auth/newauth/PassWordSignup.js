@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { Mutation } from "@apollo/client/react/components";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import { gql } from "@apollo/client";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { getCookie } from "cookies-next";
 import * as EmailValidator from "email-validator";
@@ -189,26 +188,6 @@ const PurpleButton = styled.button`
   }
 `;
 
-// const useStyles = makeStyles({
-//   button: {
-//     width: "100%",
-//     marginBottom: "2%",
-//     fontSize: "1.7rem",
-//     fontFamily: "Montserrat",
-//     textTransform: "none",
-//   },
-//   root: {
-//     marginBottom: "4%",
-//     width: "100%",
-//   },
-//   labelRoot: {
-//     fontSize: "1.5rem",
-//   },
-//   formControl: {
-//     fontSize: "1.5rem",
-//   },
-// });
-
 const PasswordSignup = (props) => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -219,15 +198,7 @@ const PasswordSignup = (props) => {
   const [isFamiliar, setIsFamiliar] = useState(true);
 
   const { t } = useTranslation("auth");
-
-  // // const classes = useStyles();
-
-  const move = (e) => {
-    const name = e.target.getAttribute("name");
-    props.getData(name);
-  };
-
-  // console.log(now_time);
+  const router = useRouter();
 
   let visits = [
     {
@@ -236,109 +207,99 @@ const PasswordSignup = (props) => {
     },
   ];
 
-  // utm_source => traffic_source
-  // utm_medium => traffic_medium
-  // utm_campaign => traffic_campaign
+  const [signup, { error, loading }] = useMutation(SIGNUP_MUTATION, {
+    variables: {
+      name: name,
+      surname: surname,
+      password: password,
+      email: email,
+      number: number,
+      status: status,
+      isFamiliar: isFamiliar,
+      traffic_sources: { visitsList: visits },
+    },
+    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+  });
 
   return (
-    <Mutation
-      mutation={SIGNUP_MUTATION}
-      variables={{
-        name: name,
-        surname: surname,
-        password: password,
-        email: email,
-        number: number,
-        status: status,
-        isFamiliar: isFamiliar,
-        traffic_sources: { visitsList: visits },
+    <Form
+      method="post"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (surname === "") {
+          alert(t("give_surname"));
+          return;
+        } else if (!EmailValidator.validate(email)) {
+          alert(t("give_email"));
+          return;
+        } else if (number === "" || number.length < 7) {
+          alert(t("give_number"));
+          return;
+        }
+        const res = await signup();
+        if (props.type == "main") {
+          router.push(props.pathname ? props.pathname : "/");
+        }
+        setEmail("");
+        setName("");
+        setSurname("");
+        setPassword("");
       }}
-      refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
-      {(signup, { error, loading }) => (
-        <Form
-          method="post"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            if (country == "") {
-              alert(t("choose_country"));
-              return;
-            } else if (surname === "") {
-              alert(t("give_surname"));
-              return;
-            } else if (!EmailValidator.validate(email)) {
-              alert(t("give_email"));
-              return;
-            } else if (number === "" || number.length < 7) {
-              alert(t("give_number"));
-              return;
-            }
-            const res = await signup();
-            props.closeNavBar() ? props.closeNavBar(true) : null;
-            setEmail("");
-            setName("");
-            setSurname("");
-            setPassword("");
-            (status === "AUTHOR" || status === "HR") &&
-              setTimeout(() => Router.push({ pathname: "/educator" }), 2000);
-          }}
-        >
-          <Fieldset disabled={loading} aria-busy={loading}>
-            {/* <Title>{t("c2a")}</Title> */}
-            <Error error={error} />
-            <Group>
-              <input
-                className="name"
-                type="text"
-                name="name"
-                placeholder={t("name")}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <input
-                className="surname"
-                type="text"
-                name="surname"
-                placeholder={t("surname")}
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-              />
-            </Group>
-            <Input
-              className="email"
-              type="email"
-              name="email"
-              placeholder={t("email")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              label="Электронная почта"
-            />
-            <PhoneInput
-              className="number"
-              type="tel"
-              name="number"
-              placeholder={t("number")}
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
-              label="Number"
-            />
-            <Comment>{t("need_whatsapp")}</Comment>
-            <Input
-              className="password"
-              type="password"
-              name="password"
-              placeholder={t("create_password")}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              label="Пароль"
-            />
-            <PurpleButton type="submit" variant="contained" color="primary">
-              {loading ? t("signing_up") : t("button")}
-            </PurpleButton>
-          </Fieldset>
-        </Form>
-      )}
-    </Mutation>
+      <Fieldset disabled={loading} aria-busy={loading}>
+        {/* <Title>{t("c2a")}</Title> */}
+        <Error error={error} />
+        <Group>
+          <input
+            className="name"
+            type="text"
+            name="name"
+            placeholder={t("name")}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            className="surname"
+            type="text"
+            name="surname"
+            placeholder={t("surname")}
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
+          />
+        </Group>
+        <Input
+          className="email"
+          type="email"
+          name="email"
+          placeholder={t("email")}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          label="Электронная почта"
+        />
+        <PhoneInput
+          className="number"
+          type="tel"
+          name="number"
+          placeholder={t("number")}
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+          label="Number"
+        />
+        <Comment>{t("need_whatsapp")}</Comment>
+        <Input
+          className="password"
+          type="password"
+          name="password"
+          placeholder={t("create_password")}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          label="Пароль"
+        />
+        <PurpleButton type="submit" variant="contained" color="primary">
+          {loading ? t("signing_up") : t("button")}
+        </PurpleButton>
+      </Fieldset>
+    </Form>
   );
 };
 

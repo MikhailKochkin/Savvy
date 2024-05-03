@@ -102,7 +102,6 @@ const PasswordSignIn = (props) => {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { t } = useTranslation("auth");
-  const client = useApolloClient();
   // all mutations and queries
   const [signin, { error, loading }] = useMutation(SIGNIN_MUTATION);
 
