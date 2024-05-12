@@ -805,6 +805,8 @@ model Quiz {
   question    String
   answer      String
   answers     Json?
+  isOrderOfAnswersImportant Boolean? @default(false)
+  shouldAnswerSizeMatchSample Boolean? @default(false)
   goal        String?
   lessonID    String?      @db.VarChar(30)
   createdAt   DateTime     @default(now())

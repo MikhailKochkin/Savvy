@@ -243,6 +243,25 @@ const Challenge = (props) => {
           ) {
             i_am_author = true;
           }
+
+          if (
+            me &&
+            me.new_subjects.filter((c) => c.id == lesson.coursePage.id).length >
+              0
+          ) {
+            i_am_student = true;
+          }
+
+          if (
+            me &&
+            !i_am_student &&
+            !i_am_author &&
+            !me.permissions.includes("ADMIN") &&
+            !lesson.open
+          ) {
+            return <AreYouEnrolled coursePageId={lesson.coursePage.id} />;
+          }
+
           if (lesson) {
             all = shuffle([...lesson.newTests, ...lesson.quizes]).slice(
               0,
@@ -255,60 +274,54 @@ const Challenge = (props) => {
             }
           }
           return (
-            <AreYouEnrolled
-              subject={lesson.coursePage.id}
-              openLesson={lesson.open}
-              lesson={lesson.id}
-            >
-              {lesson && (
-                <>
-                  <Container>
-                    <ReactResizeDetector
-                      handleWidth
-                      handleHeight
-                      onResize={onResize}
+            lesson && (
+              <>
+                <Container>
+                  <ReactResizeDetector
+                    handleWidth
+                    handleHeight
+                    onResize={onResize}
+                  />
+                  {!props.isBot && (
+                    <Navigation
+                      i_am_author={i_am_author}
+                      lesson={lesson}
+                      me={me}
+                      width={width}
+                      page="simulator"
                     />
-                    {!props.isBot && (
-                      <Navigation
-                        i_am_author={i_am_author}
-                        lesson={lesson}
-                        me={me}
-                        width={width}
-                        page="simulator"
-                      />
-                    )}
-                    <Box>
-                      {/* <CSSTransitionGroup
+                  )}
+                  <Box>
+                    {/* <CSSTransitionGroup
                         transitionName="example"
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={300}
                       > */}
-                      {!start && (
-                        <Front
-                          me={me}
-                          text={lesson.text}
-                          getStart={getStart}
-                          completed={completed}
-                          results={lesson.challengeResults}
-                          passStep={passStep}
-                        />
-                      )}
-                      {me && start && (
-                        <Tasks
-                          tasks={all}
-                          lesson={lesson}
-                          me={me}
-                          completed={completed}
-                          results={lesson.challengeResults}
-                          passStep={passStep}
-                        />
-                      )}
-                      {/* </CSSTransitionGroup> */}
-                    </Box>
-                  </Container>{" "}
-                </>
-              )}
-            </AreYouEnrolled>
+                    {!start && (
+                      <Front
+                        me={me}
+                        text={lesson.text}
+                        getStart={getStart}
+                        completed={completed}
+                        results={lesson.challengeResults}
+                        passStep={passStep}
+                      />
+                    )}
+                    {me && start && (
+                      <Tasks
+                        tasks={all}
+                        lesson={lesson}
+                        me={me}
+                        completed={completed}
+                        results={lesson.challengeResults}
+                        passStep={passStep}
+                      />
+                    )}
+                    {/* </CSSTransitionGroup> */}
+                  </Box>
+                </Container>{" "}
+              </>
+            )
           );
         }}
       </Query>

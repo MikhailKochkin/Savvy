@@ -24,7 +24,7 @@ export const removeSpecialChars = (text) => {
   text = text.replace(/\*.*?\*/g, "");
 
   // Remove the specified special characters
-  const pattern = /[\[\]\|*<>]/g;
+  const pattern = /[\[\]|*<>^]/g;
   const result = text.replace(pattern, "");
 
   // Remove extra whitespace
@@ -32,6 +32,18 @@ export const removeSpecialChars = (text) => {
 
   return finalResult;
 };
+
+export const removeSpecialChars2 = (text) => {
+  // Remove the specified special characters
+  const pattern = /[\[\]^*|]/g;
+  const result = text.replace(pattern, "");
+
+  // Remove extra whitespace
+  const finalResult = result.replace(/\s+/g, " ").trim();
+
+  return finalResult;
+};
+
 export const containsOnlyNumbers = (str) => {
   const regex = /^[0-9]+$/;
   return regex.test(str);

@@ -221,7 +221,7 @@ const Window = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    border-top: 1px solid #dadce0;
+    border-top: 1px solid #f3f3f3;
     padding: 10px 15px;
     button {
       background-color: #d2edfd;
@@ -302,7 +302,7 @@ const Window = styled.div`
 const Comment = styled.div`
   padding: 7px 10px;
   border-radius: 10px;
-  border-color: #d9dce0;
+  border-color: #f3f3f3;
 `;
 
 const IconBlock = styled.div`
@@ -342,7 +342,7 @@ const WindowColumn = styled.div`
   height: 100%;
   position: -webkit-sticky;
   position: sticky;
-  top: 35%;
+  top: 10%;
 `;
 
 const BlueButton = styled.button`

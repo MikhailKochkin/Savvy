@@ -205,6 +205,8 @@ const NewInteractive = (props) => {
                   user={el.user.id}
                   user_name={el.user}
                   next={el.next}
+                  isOrderOfAnswersImportant={el.isOrderOfAnswersImportant}
+                  shouldAnswerSizeMatchSample={el.shouldAnswerSizeMatchSample}
                   getData={updateArray}
                   exam={true}
                   story={true}

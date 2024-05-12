@@ -30,7 +30,7 @@ export default async function (req, res) {
       // model: "claude-3-sonnet-20240229",
       max_tokens: 1024,
       messages: [{ role: "user", content: prompt }],
-      temperature: 0.3,
+      temperature: 0.8,
     });
     // console.log("completion", completion.choices[0].message);
 

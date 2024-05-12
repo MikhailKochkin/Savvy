@@ -10,7 +10,7 @@ import smoothscroll from "smoothscroll-polyfill";
 import {
   guessAlphabet,
   autoResizeTextarea,
-} from "../SimulatorDevelopmentFunctions";
+} from "../../SimulatorDevelopmentFunctions";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -300,15 +300,20 @@ const Circle = styled.div`
   }
 `;
 
-const OpenQuestion = (props) => {
-  const { author, me, story, ifRight, ifWrong } = props;
-  const [answer, setAnswer] = useState(""); // The answer provided by the student
-  const [correct, setCorrect] = useState(""); // is the answer by the student correct?
-  const [sent, setSent] = useState(false);
+const Progress2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin: 10px;
+`;
+
+const Prompt = (props) => {
+  const { author, me, story, ifRight, ifWrong, name, image } = props;
+  const [text, setText] = useState(""); // The answer provided by the student
+  const [generating, setGenerating] = useState(false);
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
-  const [progress, setProgress] = useState("false");
-  const [recognition, setRecognition] = useState(null);
-  const [startSpeech, setStartSpeech] = useState(false);
+  const [recommendation, setRecommendation] = useState(null);
 
   useEffect(() => {
     // kick off the polyfill!
@@ -321,63 +326,51 @@ const OpenQuestion = (props) => {
     CREATE_QUIZRESULT_MUTATION
   );
 
-  const onSend = async (e) => {
-    if (!sent) {
-      createQuizResult({
-        variables: {
-          quiz: props.quizId,
-          lessonId: props.lessonId,
-          answer: answer,
-          correct: false,
-          comment: `Form question`,
+  const getFeedback = async (e) => {
+    e.preventDefault();
+    setGenerating(true);
+    let recom;
+    try {
+      const response = await fetch("/api/generates", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          prompt: `${text}`,
+        }),
       });
-      props.passResult("true");
-      setHidden(false);
-      setSent(true);
-    }
-  };
 
-  const startListening = () => {
-    const newRecognition = new (window.SpeechRecognition ||
-      window.webkitSpeechRecognition ||
-      window.mozSpeechRecognition ||
-      window.msSpeechRecognition)();
-
-    newRecognition.lang =
-      guessAlphabet(props.question) === "Cyrillic" ? "ru-RU" : "en-US";
-    newRecognition.interimResults = false;
-    newRecognition.maxAlternatives = 1;
-
-    newRecognition.start();
-    setStartSpeech(true);
-
-    newRecognition.onresult = function (event) {
-      setAnswer(answer + " " + event.results[0][0].transcript);
-    };
-
-    newRecognition.onspeechend = function () {
-      newRecognition.stop();
-    };
-
-    newRecognition.onerror = function (event) {
-      if (event.error === "no-speech") {
-        console.log("No speech detected.");
-        // Handle the "no-speech" error gracefully, if needed
-      } else {
-        console.error("Error occurred in recognition: " + event.error);
+      if (response.status !== 200) {
+        throw (
+          (await response.json()).error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
       }
-    };
-
-    setRecognition(newRecognition);
-  };
-
-  const stopListening = () => {
-    setStartSpeech(false);
-
-    if (recognition) {
-      recognition.stop();
+      const data = await response.json();
+      if (data.result.content) {
+        setRecommendation(data.result.content);
+        recom = data.result.content;
+      } else {
+        setRecommendation("Something does not work");
+        recom = "Something does not work";
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
+    setGenerating(false);
+    setHidden(false);
+    createQuizResult({
+      variables: {
+        quiz: props.quizId,
+        lessonId: props.lessonId,
+        answer: text,
+        correct: true,
+        explanation: recom,
+        comment: `This answer has been analyzed by AI.`,
+      },
+    });
   };
 
   return (
@@ -386,16 +379,23 @@ const OpenQuestion = (props) => {
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
         <IconBlock>
-          {author && author.image != null ? (
+          {image ? (
+            <img className="icon" src={image} />
+          ) : author && author.image != null ? (
             <img className="icon" src={author.image} />
           ) : (
             <img className="icon" src="../../static/hipster.svg" />
           )}{" "}
           <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
+            {name ? name : author && author.name ? author.name : "BeSavvy"}
           </div>
         </IconBlock>{" "}
       </div>
+      {generating && (
+        <Progress2>
+          <TailSpin width="50" color="#2E80EC" />
+        </Progress2>
+      )}
       {/* 2. Answer bubble part */}
       <>
         <div className="answer">
@@ -414,52 +414,45 @@ const OpenQuestion = (props) => {
           <Answer_text
             type="text"
             required
-            value={answer}
+            value={text}
             onChange={(e) => {
-              setAnswer(e.target.value);
+              setText(e.target.value);
               autoResizeTextarea(e);
             }}
             onInput={autoResizeTextarea}
             placeholder="..."
           />
         </div>
-        {startSpeech && <Group>{<p>📣 {t("start_speaking")}..</p>}</Group>}
-        <Group progress={progress} correct={correct}>
+        <Group>
           <Button1
             onClick={async (e) => {
               e.preventDefault();
-              const res1 = await onSend();
+              if (text == "") {
+                alert("No input found");
+              } else {
+                const res1 = await getFeedback(e);
+              }
             }}
           >
             {t("check")}
           </Button1>
-          <Circle onClick={startListening}>
-            <BiMicrophone
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-          </Circle>
-          <Circle onClick={stopListening} disabled={!recognition}>
-            <BiMicrophoneOff
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-          </Circle>
         </Group>
       </>
       {/* 3. Comment bubble */}
       <div id={`ideal_answer_${props.id}`}></div>
       {!hidden && (
         <div className="question_box" id={`ideal_answer_${props.id}`}>
-          <div className="question_text">{t("saved_answer")}</div>
+          <div className="question_text">{recommendation}</div>
           <IconBlock>
-            {author && author.image != null ? (
+            {image ? (
+              <img className="icon" src={image} />
+            ) : author && author.image != null ? (
               <img className="icon" src={author.image} />
             ) : (
               <img className="icon" src="../../static/hipster.svg" />
             )}{" "}
             <div className="name">
-              {author && author.name ? author.name : "BeSavvy"}
+              {name ? name : author && author.name ? author.name : "BeSavvy"}
             </div>
           </IconBlock>{" "}
         </div>
@@ -468,4 +461,4 @@ const OpenQuestion = (props) => {
   );
 };
 
-export default OpenQuestion;
+export default Prompt;

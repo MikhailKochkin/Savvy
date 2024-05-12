@@ -42,6 +42,8 @@ const Quiz = objectType({
     t.model.goalType();
     t.model.next();
     t.model.name();
+    t.model.isOrderOfAnswersImportant();
+    t.model.shouldAnswerSizeMatchSample();
     t.model.instructorName();
     t.model.image();
     t.model.complexity();

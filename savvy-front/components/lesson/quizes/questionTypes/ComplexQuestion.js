@@ -1,23 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import parse from "html-react-parser";
 import { useRouter } from "next/router";
+import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
-import PropTypes from "prop-types";
-
-import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 import {
-  IconBlock,
+  guessAlphabet,
+  autoResizeTextarea,
+  removeSpecialChars,
+} from "../../SimulatorDevelopmentFunctions";
+
+import {
   Question,
   Answer_text,
-  ResultCircle,
+  IconBlock,
   Button1,
-  Circle,
   Frame,
-} from "./QuestionStyles";
+  Circle,
+  ResultCircle,
+  PositionCircle,
+  CommentFrame,
+  MiniCircle,
+} from "../QuestionStyles";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -27,7 +33,6 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $correct: Boolean
     $comment: String
     $hint: String
-    $type: String
     $explanation: String
     $improvement: String
     $ideasList: QuizIdeas
@@ -39,7 +44,6 @@ const CREATE_QUIZRESULT_MUTATION = gql`
       correct: $correct
       comment: $comment
       hint: $hint
-      type: $type
       explanation: $explanation
       improvement: $improvement
       ideasList: $ideasList
@@ -48,7 +52,6 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     }
   }
 `;
-
 const Group = styled.div`
   flex-direction: row;
   justify-content: center;
@@ -61,7 +64,7 @@ const Group = styled.div`
 `;
 
 const Progress = styled.div`
-  display: ${(props) => (props.display === "true" ? "flex" : "none")};
+  display: flex;
   flex-direction: row;
   justify-content: center;
   width: 100%;
@@ -106,14 +109,34 @@ const Option = styled.div`
   }
 `;
 
-const FindAll = (props) => {
-  const { author, me, story, ifRight, ifWrong } = props;
+const AnswerRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  .buttonsColumn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+`;
 
+const ComplexQuestion = (props) => {
+  const {
+    author,
+    me,
+    story,
+    ifRight,
+    ifWrong,
+    quizId,
+    isOrderOfAnswersImportant,
+  } = props;
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
   const [correctIdeas, setCorrectIdeas] = useState([]); // ideas that match the correct answers
   const [overallResults, setOverallResults] = useState(null); // results of checking the ideas
 
-  const [progress, setProgress] = useState("false");
+  const [isAnswerBeingChecked, setIsAnswerBeingChecked] = useState(false);
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [generating, setGenerating] = useState(false);
 
@@ -121,28 +144,34 @@ const FindAll = (props) => {
   const [isAnswerCountShown, setIsAnswerCountShown] = useState(false);
   const [answerCountText, setAnswerCountText] = useState("");
   const [isFeedbackShown, setIsFeedbackShown] = useState(false);
-  const [AIhint, setAIHint] = useState(null);
+  const [hints, setHints] = useState([]);
   const [expectedAnswers, setExpectedAnswers] = useState(
     new Array(props.answers?.answerElements?.length).fill(null)
   );
+  const router = useRouter();
 
   const [createQuizResult, { data, loading, error }] = useMutation(
     CREATE_QUIZRESULT_MUTATION
   );
 
   useEffect(() => {
+    // kick off the polyfill!
     smoothscroll.polyfill();
   });
 
-  const { t } = useTranslation("lesson");
-  const router = useRouter();
+  // useEffect(() => {
+  //   setIdeas(new Array(props.answers.answerElements.length).fill(""));
+  // }, [props.answers.answerElements]);
 
-  // 1. Save all ideas put down by students in forms
+  const { t } = useTranslation("lesson");
+
   const handleIdeaChange = (event, index) => {
     // Copy the current state of ideas
     const updatedIdeas = [...ideas];
+
     // Update the idea at the specific index with the new value
     updatedIdeas[index] = event.target.value;
+
     // Update the state with the modified ideas array
     setIdeas(updatedIdeas);
   };
@@ -150,7 +179,7 @@ const FindAll = (props) => {
   // 2. Evaluate the ideas and find matching answers from the list of correct answers
   const getMatchingAnswers = async () => {
     let matchedAnswers = [];
-    setProgress("true");
+    setIsAnswerBeingChecked(true);
     // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
     // 2. Create a set to hold the indexes of matched answers
@@ -207,6 +236,7 @@ const FindAll = (props) => {
               newCorrectIdeas.push({
                 idea: idea,
                 matchedAnswer: answer,
+                result: res.res,
               });
               updatedExpectedAnswers[answer.index] = answer; // Accumulate changes
             }
@@ -229,24 +259,39 @@ const FindAll = (props) => {
       }
     });
 
+    const filteredIdeas = [...correctIdeas, ...newCorrectIdeas].reduce(
+      (acc, curr) => {
+        const existingAnswer = acc.find((obj) => obj.idea === curr.idea);
+        const currResult = parseFloat(curr.result);
+
+        if (!existingAnswer || currResult > parseFloat(existingAnswer.result)) {
+          if (existingAnswer) {
+            acc = acc.filter((obj) => obj.idea !== curr.idea);
+          }
+          acc.push({ ...curr, result: currResult });
+        }
+        return acc;
+      },
+      []
+    );
+
     setOverallResults(unique_values);
-    setProgress("false");
-    setCorrectIdeas([...correctIdeas, ...newCorrectIdeas]);
+    setIsAnswerBeingChecked(false);
+    setCorrectIdeas(filteredIdeas);
     setIsFeedbackShown(true);
     setExpectedAnswers(updatedExpectedAnswers); // Update state with accumulated changes
-
     createQuizResult({
       variables: {
         quiz: props.quizId,
         lessonId: props.lessonId,
-        hint: AIhint,
+        hint: hints[hints.length - 1],
         type: "answer",
         ideasList: { quizIdeas: unique_values },
         comment: ``,
       },
     });
     if (props.problemType === "ONLY_CORRECT") {
-      if (newCorrectIdeas.length >= props.answers.answerElements.length) {
+      if (filteredIdeas.length >= props.answers.answerElements.length) {
         props.passResult("true");
       }
     } else {
@@ -259,7 +304,9 @@ const FindAll = (props) => {
     e.preventDefault();
     setAreIdeasShown(false);
     let comment = `
-        <p>${t("number_of_correct_guesses")} – ${correctIdeas.length}.</p>
+        <p>You have written ${correctIdeas.length}/${
+      props.answers.answerElements.length
+    } of the correct answer.</p>
         <ol>
         ${expectedAnswers
           .map((an, i) => {
@@ -286,7 +333,7 @@ const FindAll = (props) => {
       variables: {
         quiz: props.quizId,
         lessonId: props.lessonId,
-        hint: AIhint,
+        hint: hints[hints.length - 1],
         type: "hint",
         ideasList: { quizIdeas: overallResults },
         comment: `Student asked for remaining options`,
@@ -308,8 +355,8 @@ const FindAll = (props) => {
     }
 
     let intro = `You are a law professor. 
-      You help your student answer this question ${props.question}
-      The correct answers are: ${props.answers.answerElements.join(", ")}`;
+      You help your student answer this question ${props.question}.
+        `;
 
     let recommendations = ` Answer in ${
       router.locale == "ru" ? "Russian" : "English"
@@ -320,25 +367,28 @@ const FindAll = (props) => {
       hintPrompt = ` The student has already given these correct answers: """ ${correctIdeas
         .map((el) => el.idea)
         .join(", ")} """. But struggles to find the rest.
-      Give a detailed hint to the student in a Socratic manner that will help them find these remaining answers: """${props.answers.answerElements
-        .filter(
-          (el) =>
-            correctIdeas.filter((c) => c.matchedAnswer.answer == el.answer)
-              .length == 0
-        )
-        .map((el) => el.answer)
-        .join(", ")}""".
-      Answer in the same language as the text of the question. Answer in second person.`;
+        Ask students questions in a Socratic manner that will help them find the remaining answers: """${props.answers.answerElements
+          .filter(
+            (el) =>
+              correctIdeas.filter((c) => c.matchedAnswer.answer == el.answer)
+                .length == 0
+          )
+          .map((el) => removeSpecialChars(el.answer))
+          .join(", ")}""".
+        DO NOT REVEAL THE ANSWER!!!`;
 
       // otherwise we give a hint for the first answer only
     } else {
-      hintPrompt = ` The student can't come up with any answers. 
-                    Give a detailed hint to the student that will help them find the first answer: ${props.answers.answerElements[0].answer}
+      hintPrompt = `The student can't come up with any answers. 
+                    Ask students questions in a Socratic manner that will help them find the first answer.
+                    The first answer is: """ ${removeSpecialChars(
+                      props.answers.answerElements[0].answer
+                    )} """.
+                    DO NOT REVEAL THE ANSWER!!!
                   `;
     }
 
     try {
-      setAIHint(null);
       event.preventDefault();
 
       const response = await fetch(url, {
@@ -350,6 +400,8 @@ const FindAll = (props) => {
           prompt: intro + hintPrompt + recommendations,
         }),
       });
+
+      console.log(intro + hintPrompt + recommendations);
 
       if (response.status !== 200) {
         throw (
@@ -366,8 +418,7 @@ const FindAll = (props) => {
       }
 
       if (result) {
-        setAIHint(result);
-        // if (!isFirstHint) {
+        setHints([...hints, result]);
         createQuizResult({
           variables: {
             quiz: props.quizId,
@@ -379,7 +430,7 @@ const FindAll = (props) => {
         });
         // }
       } else {
-        setAIHint("Sorry, you are on your own");
+        setHints([...hints, "Sorry, you are on your own"]);
       }
     } catch (error) {
       console.error(error);
@@ -389,9 +440,11 @@ const FindAll = (props) => {
     }
   };
 
+  console.log("props.answers.answerElements", props.answers.answerElements);
+
   return (
     <Question story={story}>
-      {/* 2 Question bubble */}
+      {/* 2.1 Question part */}
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
         <IconBlock>
@@ -405,10 +458,8 @@ const FindAll = (props) => {
           </div>
         </IconBlock>{" "}
       </div>
-
+      {/* 3.5. Generate ideas */}
       <>
-        {/* 3. Forms for writing down ideas / answers */}
-
         <div className="answer">
           <IconBlock>
             <div className="icon2">
@@ -424,7 +475,10 @@ const FindAll = (props) => {
           </IconBlock>{" "}
           <Ideas>
             {ideas.map((idea, index) => {
+              let answerPosition;
               let score = null;
+              let inputColor;
+              // 1. Calculate the score of the idea
               if (
                 overallResults &&
                 overallResults.find((res) => res.idea == idea)?.result
@@ -435,72 +489,127 @@ const FindAll = (props) => {
               } else {
                 score = "0";
               }
-              let inputColor;
-              if (props.goalType !== "ASSESS" && score > 65) {
+              // 2. Determine the number
+
+              if (props.goalType !== "ASSESS" && score > 64) {
                 inputColor = "#D0EADB";
               } else {
                 inputColor = "#F3F3F3";
               }
+              // 3. Determine the answer position.
+              if (correctIdeas.find((el) => el.idea == idea)) {
+                answerPosition =
+                  correctIdeas.find((el) => el.idea == idea).matchedAnswer
+                    .index + 1;
+              } else {
+                answerPosition = undefined;
+              }
+
               return (
-                <Frame inputColor={inputColor}>
-                  <Answer_text
-                    key={index}
-                    type="text"
-                    required
-                    disabled={parseInt(score) > 65 ? true : false}
-                    value={idea}
-                    onChange={(e) => {
-                      handleIdeaChange(e, index);
-                    }}
-                    onInput={autoResizeTextarea}
-                    placeholder="..."
-                  />
-                  {score && (
-                    <ResultCircle
-                      data-tooltip-id="my-tooltip"
-                      data-tooltip-content={t("answer_above_65")}
-                      data-tooltip-place="right"
-                      inputColor={inputColor}
-                    >
-                      {score}
-                    </ResultCircle>
-                  )}
-                </Frame>
+                <>
+                  <AnswerRow>
+                    {isOrderOfAnswersImportant && answerPosition && (
+                      <PositionCircle>{answerPosition}</PositionCircle>
+                    )}
+                    <Frame inputColor={inputColor}>
+                      <Answer_text
+                        key={index}
+                        type="text"
+                        required
+                        disabled={parseInt(score) > 65 ? true : false}
+                        value={idea}
+                        onChange={(e) => {
+                          handleIdeaChange(e, index);
+                        }}
+                        onInput={autoResizeTextarea}
+                        placeholder="..."
+                      />
+                      {score && (
+                        <ResultCircle
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content={t("answer_above_65")}
+                          data-tooltip-place="right"
+                          inputColor={inputColor}
+                        >
+                          {score}
+                        </ResultCircle>
+                      )}
+                    </Frame>
+                    <div className="buttonsColumn">
+                      {/* Click here to add another answerRow before this AnswerRow*/}
+                      <MiniCircle
+                        onClick={(e) => {
+                          let newIdeas = [...ideas];
+                          newIdeas.splice(index, 0, "");
+                          setIdeas(newIdeas);
+                        }}
+                      >
+                        ⬆
+                      </MiniCircle>
+                      <MiniCircle
+                        onClick={(e) => {
+                          let newIdeas = [...ideas];
+                          newIdeas.splice(index, 1);
+                          setIdeas(newIdeas);
+                        }}
+                      >
+                        X
+                      </MiniCircle>
+                      {/* Click here to add another answerRow after this AnswerRow*/}
+
+                      <MiniCircle
+                        onClick={(e) => {
+                          let newIdeas = [...ideas];
+                          newIdeas.splice(index + 1, 0, "");
+                          setIdeas(newIdeas);
+                        }}
+                      >
+                        ⬇
+                      </MiniCircle>
+                    </div>
+                  </AnswerRow>
+                </>
               );
             })}
           </Ideas>
         </div>
-        <Progress display={progress}>
-          <InfinitySpin width="200" color="#2E80EC" />
-        </Progress>
 
-        {/* 4. Answer and Hint buttons */}
-        <Group progress={progress}>
-          <Button1
-            inputColor={inputColor}
-            onClick={async (e) => {
-              e.preventDefault();
-              getMatchingAnswers();
-              setIsAnswerCountShown(false);
-            }}
-          >
-            {t("check")}
-          </Button1>
-          {props.goalType !== "ASSESS" && (
+        {isAnswerBeingChecked && (
+          <Progress>
+            <InfinitySpin width="200" color="#2E80EC" />
+          </Progress>
+        )}
+        {/* 4. Answer buttons */}
+        <Group>
+          {correctIdeas.length != props.answers.answerElements.length && (
             <Button1
               inputColor={inputColor}
               onClick={async (e) => {
                 e.preventDefault();
-                getHint(e);
+                getMatchingAnswers();
+                setIsAnswerCountShown(false);
               }}
             >
-              {overallResults && overallResults.length > 0
-                ? t("help_with_next_one")
-                : t("where_to_start")}
+              {t("check")}
             </Button1>
           )}
-          <Circle onClick={() => setIdeas(ideas.slice(0, -1))}>-1</Circle>
-          <Circle onClick={(e) => setIdeas([...ideas, ""])}>+1</Circle>
+          {props.goalType !== "ASSESS" &&
+            correctIdeas.length != props.answers.answerElements.length && (
+              <Button1
+                inputColor={inputColor}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  getHint(e);
+                }}
+              >
+                {hints?.length == 0 && overallResults == null
+                  ? t("where_to_start")
+                  : null}
+                {hints?.length > 0 || overallResults !== null
+                  ? t("help_with_next_one")
+                  : null}
+              </Button1>
+            )}
         </Group>
         {/* 4.1 loading sign while the answera are being checked*/}
         {generating && (
@@ -508,12 +617,11 @@ const FindAll = (props) => {
             <TailSpin width="50" color="#2E80EC" />
           </Progress2>
         )}
-
         {/* 5. The hint that helps find correct answers */}
-        {AIhint && (
+        {hints.length > 0 && (
           <div className="question_box">
             <div className="question_text">
-              <p>{AIhint}</p>
+              <p>{hints[hints.length - 1]}</p>
             </div>
             <IconBlock>
               {author && author.image != null ? (
@@ -536,8 +644,12 @@ const FindAll = (props) => {
                 <p>{correctIdeas.length > 0 && `🎉 ${t("great_job")}`}</p>
                 <p>{correctIdeas.length == 0 && `🤔 ${t("none_correct")}`}</p>
                 <p>
-                  {correctIdeas.length < props.answers.answerElements.length
-                    ? t("not_all_answers")
+                  {correctIdeas.length !== 0 &&
+                  correctIdeas.length < props.answers.answerElements.length
+                    ? "You are on the right track! But could you please structure you answer better and add more details?"
+                    : null}{" "}
+                  {correctIdeas.length == props.answers.answerElements.length
+                    ? "This is the correct answer. Well done!"
                     : null}{" "}
                   {t("what_are_we_doing_next")}
                 </p>
@@ -576,12 +688,12 @@ const FindAll = (props) => {
                   onClick={(e) => {
                     setIsAnswerCountShown(false);
                     setAreIdeasShown(true);
-                    setAIHint(null);
+
                     createQuizResult({
                       variables: {
                         quiz: props.quizId,
                         lessonId: props.lessonId,
-                        hint: AIhint,
+                        hint: hints[hints.length - 1],
                         ideasList: { quizIdeas: overallResults },
                         comment: `Student opened correct answer`,
                         type: "answerReveal",
@@ -619,7 +731,7 @@ const FindAll = (props) => {
               <p>{t("these_are_the_right_answers")}</p>
               <ul>
                 {props.answers.answerElements.map((idea) => (
-                  <li>{idea.answer}</li>
+                  <li>{removeSpecialChars(idea.answer)}</li>
                 ))}
               </ul>
             </div>
@@ -640,15 +752,4 @@ const FindAll = (props) => {
   );
 };
 
-FindAll.propTypes = {
-  author: PropTypes.object.isRequired, // Information about the author
-  me: PropTypes.object.isRequired, // Information about the current user
-  story: PropTypes.bool.isRequired, // Determine the format of the component
-  ifRight: PropTypes.string.isRequired, // Prompt to follow if the answer is correct
-  ifWrong: PropTypes.string.isRequired, // Prompt to follow if the answer is incorrect
-  passResult: PropTypes.func.isRequired, // Function to pass the result
-  quizId: PropTypes.string.isRequired, // ID of the quiz
-  lessonId: PropTypes.string.isRequired, // ID of the lesson
-};
-
-export default FindAll;
+export default ComplexQuestion;

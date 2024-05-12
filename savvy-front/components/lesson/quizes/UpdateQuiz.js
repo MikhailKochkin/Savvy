@@ -13,6 +13,8 @@ import {
   BlueButton,
 } from "../SimulatorDevelopmentStyles";
 
+import { MiniAIButton } from "./QuestionStyles";
+
 const UPDATE_QUIZ_MUTATION = gql`
   mutation UPDATE_QUIZ_MUTATION(
     $id: String!
@@ -28,6 +30,8 @@ const UPDATE_QUIZ_MUTATION = gql`
     $name: String
     $image: String
     $answers: ComplexAnswer
+    $isOrderOfAnswersImportant: Boolean
+    $shouldAnswerSizeMatchSample: Boolean
   ) {
     updateQuiz(
       id: $id
@@ -43,6 +47,8 @@ const UPDATE_QUIZ_MUTATION = gql`
       name: $name
       instructorName: $instructorName
       image: $image
+      isOrderOfAnswersImportant: $isOrderOfAnswersImportant
+      shouldAnswerSizeMatchSample: $shouldAnswerSizeMatchSample
     ) {
       id
       question
@@ -58,6 +64,8 @@ const UPDATE_QUIZ_MUTATION = gql`
       createdAt
       name
       image
+      isOrderOfAnswersImportant
+      shouldAnswerSizeMatchSample
       user {
         id
         name
@@ -208,6 +216,11 @@ const UpdateQuiz = (props) => {
   const [answers, setAnswers] = useState(
     props.answers ? props.answers.answerElements : []
   );
+  const [isOrderOfAnswersImportant, setIsOrderOfAnswersImportant] = useState(
+    props.isOrderOfAnswersImportant
+  );
+  const [shouldAnswerSizeMatchSample, setShouldAnswerSizeMatchSample] =
+    useState(props.shouldAnswerSizeMatchSample);
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -229,6 +242,8 @@ const UpdateQuiz = (props) => {
       name: name,
       image: image,
       goalType: goalType,
+      shouldAnswerSizeMatchSample: shouldAnswerSizeMatchSample,
+      isOrderOfAnswersImportant: isOrderOfAnswersImportant,
       answers: {
         answerElements: answers,
       },
@@ -286,11 +301,12 @@ const UpdateQuiz = (props) => {
         >
           <option value={null}>Undefined</option>
           <option value="TEST">Question</option>
+          <option value="FINDALL">Find All</option>
+          <option value="COMPLEX">Complex</option>
           <option value="FORM">Form</option>
           <option value="GENERATE">Generate Ideas</option>
           <option value="PROMPT">Check with AI</option>
-          <option value="FINDALL">Find All</option>
-          <option value="CALL">Call Simulation</option>
+          {/* <option value="CALL">Call Simulation</option> */}
         </select>
       </EditorInfoSection>
       <EditorInfoSection>
@@ -303,6 +319,40 @@ const UpdateQuiz = (props) => {
         >
           <option value="EDUCATE">Educate</option>
           <option value="ASSESS">Assess</option>
+        </select>
+      </EditorInfoSection>
+      {type === "COMPLEX" && (
+        <EditorInfoSection>
+          <h3 className="label">Order of ideas</h3>
+          <div className="comment">
+            Is order of ideas in the answer important?
+          </div>
+          <select
+            name="types"
+            id="types"
+            defaultValue={isOrderOfAnswersImportant}
+            onChange={(e) =>
+              setIsOrderOfAnswersImportant(e.target.value === "true")
+            }
+          >
+            <option value={"false"}>No</option>
+            <option value={"true"}>Yes</option>
+          </select>
+        </EditorInfoSection>
+      )}
+      <EditorInfoSection>
+        <h3 className="label">Size of answer</h3>
+        <div className="comment">
+          Should the size of the answer match the sample answer?
+        </div>
+        <select
+          name="types"
+          id="types"
+          defaultValue={shouldAnswerSizeMatchSample}
+          onChange={(e) => setShouldAnswerSizeMatchSample(e.target.value)}
+        >
+          <option value={false}>No</option>
+          <option value={true}>Yes</option>
         </select>
       </EditorInfoSection>
       <EditorInfoSection>
@@ -334,7 +384,7 @@ const UpdateQuiz = (props) => {
       </EditorInfoSection>
       <EditorInfoSection>
         <h3 className="label">The Sample Answer</h3>
-        {type !== "GENERATE" && type !== "FINDALL" && (
+        {type !== "GENERATE" && type !== "FINDALL" && type !== "COMPLEX" && (
           <textarea
             id="answer"
             name="answer"
@@ -343,7 +393,7 @@ const UpdateQuiz = (props) => {
             onChange={(e) => setAnswer(e.target.value)}
           />
         )}
-        {(type == "GENERATE" || type == "FINDALL") && (
+        {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && (
           <>
             <label for="types">Ideas</label>
             {answers.map((an, i) => (
@@ -421,9 +471,9 @@ const UpdateQuiz = (props) => {
             ))}
           </>
         )}
-        {(type == "GENERATE" || type == "FINDALL") && (
+        {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && (
           <>
-            <button
+            <MiniAIButton
               onClick={(e) => {
                 e.preventDefault();
                 return setAnswers([
@@ -438,8 +488,8 @@ const UpdateQuiz = (props) => {
               }}
             >
               +1
-            </button>
-            <button
+            </MiniAIButton>
+            <MiniAIButton
               onClick={(e) => {
                 e.preventDefault();
                 if (answers.length > 0) {
@@ -450,7 +500,7 @@ const UpdateQuiz = (props) => {
               }}
             >
               -1
-            </button>
+            </MiniAIButton>
           </>
         )}
       </EditorInfoSection>

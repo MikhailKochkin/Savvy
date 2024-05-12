@@ -11,10 +11,11 @@ import Document from "./documents/Document";
 // import Exams from "./exams/Exams";
 import Forum from "./forum/Forum";
 import Chat from "./chat/Chat";
+import SingleQuiz from "./quizes/SingleQuiz";
+
 import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
 import TestPractices from "./testblocks/TestPractices";
-import QuizGroup from "./quizes/QuizGroup";
 import ProblemGroup from "./problems/ProblemGroup";
 import NewProblem from "./problems/NewProblem";
 import ConstructorGroup from "./constructions/ConstructorGroup";
@@ -59,65 +60,6 @@ const SINGLE_LESSON_QUERY = gql`
       user {
         id
       }
-      # testResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   answer
-      #   test {
-      #     id
-      #   }
-      # }
-      # shotResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   shot {
-      #     id
-      #   }
-      #   answer
-      # }
-      # quizResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   quiz {
-      #     id
-      #   }
-      #   answer
-      # }
-      # problemResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   answer
-      #   problem {
-      #     id
-      #   }
-      # }
-      # textEditorResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   textEditor {
-      #     id
-      #   }
-      # }
-      # constructionResults {
-      #   id
-      #   answer
-      #   student {
-      #     id
-      #   }
-      #   construction {
-      #     id
-      #   }
-      # }
       coursePage {
         id
       }
@@ -550,327 +492,324 @@ const SingleLesson = (props) => {
   const getLink = (dataFromChild) => setPage(dataFromChild);
   const me = useUser();
   return (
-    <PleaseSignIn number={props.number}>
-      <Query
-        query={SINGLE_LESSON_QUERY}
-        variables={{
-          id: props.id,
-        }}
-        fetchPolicy="cache-first"
-      >
-        {({ data, error, loading }) => {
-          if (error) return <Error error={error} />;
-          if (loading) return <p>Loading...</p>;
-          if (data === null) return <p>Нет урока</p>;
-          const lesson = data.lesson;
-          return (
-            <>
-              <AreYouEnrolled
-                subject={lesson.coursePage.id}
-                openLesson={lesson.coursePage.openLesson}
-                lesson={lesson.id}
-              >
-                <Container>
-                  <ReactResizeDetector
-                    handleWidth
-                    handleHeight
-                    onResize={onResize}
-                  />
-                  {width < 800 && (
-                    <SingleLesson_MobileMenu
-                      lesson={lesson}
-                      getDataMob={getDataMob}
-                    />
-                  )}
+    <Query
+      query={SINGLE_LESSON_QUERY}
+      variables={{
+        id: props.id,
+      }}
+      fetchPolicy="cache-first"
+    >
+      {({ data, error, loading }) => {
+        if (error) return <Error error={error} />;
+        if (loading) return <p>Loading...</p>;
+        if (data === null) return <p>Нет урока</p>;
+        const lesson = data.lesson;
+        return (
+          <>
+            <Container>
+              <ReactResizeDetector
+                handleWidth
+                handleHeight
+                onResize={onResize}
+              />
+              {width < 800 && (
+                <SingleLesson_MobileMenu
+                  lesson={lesson}
+                  getDataMob={getDataMob}
+                />
+              )}
 
-                  <Head>
-                    {width > 800 ? (
+              <Head>
+                {width > 800 ? (
+                  <Link
+                    href={{
+                      pathname: "/course",
+                      query: {
+                        id: lesson.coursePage.id,
+                      },
+                    }}
+                  >
+                    <span>Back</span>
+                  </Link>
+                ) : (
+                  width < 800 && (
+                    <span onClick={(e) => openNav()}>Навигация</span>
+                  )
+                )}
+                <span>
+                  Урок {lesson.number}. {lesson.name}
+                </span>
+              </Head>
+              {me &&
+                (lesson.user.id === me.id ||
+                  me.permissions.includes("ADMIN")) && (
+                  <Head2>
+                    {lesson ? (
                       <Link
                         href={{
-                          pathname: "/course",
+                          pathname: "/lesson",
                           query: {
-                            id: lesson.coursePage.id,
+                            id: lesson.id,
+                            type: "story",
                           },
                         }}
                       >
-                        <span>Back</span>
+                        <span>{`История `}</span>
                       </Link>
                     ) : (
-                      width < 800 && (
-                        <span onClick={(e) => openNav()}>Навигация</span>
-                      )
+                      <span
+                        onClick={() =>
+                          alert(
+                            `Структура урока не задана, это можно сделать в настройках.`
+                          )
+                        }
+                      >
+                        {" "}
+                        История
+                      </span>
                     )}
-                    <span>
-                      Урок {lesson.number}. {lesson.name}
-                    </span>
-                  </Head>
-                  {me &&
-                    (lesson.user.id === me.id ||
-                      me.permissions.includes("ADMIN")) && (
-                      <Head2>
-                        {lesson ? (
-                          <Link
-                            href={{
-                              pathname: "/lesson",
-                              query: {
-                                id: lesson.id,
-                                type: "story",
-                              },
-                            }}
-                          >
-                            <span>{`История `}</span>
-                          </Link>
-                        ) : (
-                          <span
-                            onClick={() =>
-                              alert(
-                                `Структура урока не задана, это можно сделать в настройках.`
-                              )
-                            }
-                          >
-                            {" "}
-                            История
-                          </span>
-                        )}
-                        <>
-                          {" "}
-                          <span>{` |  `}</span>
-                        </>
-                        <Link
-                          href={{
-                            pathname: "/lesson",
-                            query: {
-                              id: lesson.id,
-                              type: "challenge",
-                            },
-                          }}
-                        >
-                          <span> Испытание</span>
-                        </Link>
-                      </Head2>
-                    )}
+                    <>
+                      {" "}
+                      <span>{` |  `}</span>
+                    </>
+                    <Link
+                      href={{
+                        pathname: "/lesson",
+                        query: {
+                          id: lesson.id,
+                          type: "challenge",
+                        },
+                      }}
+                    >
+                      <span> Испытание</span>
+                    </Link>
+                  </Head2>
+                )}
 
-                  {/* <Button onClick={(e) => setIsMenuShown(!isMenuShown)}>
+              {/* <Button onClick={(e) => setIsMenuShown(!isMenuShown)}>
                     {isMenuShown ? "Скрыть меню" : "Показать меню"}
                   </Button> */}
-                  <LessonStyles>
-                    <LessonPart>
-                      {page === "lesson" && (
-                        <TextBar>
-                          <HowTo getLink={getLink} />
-                          <Text>{parse(lesson.text)}</Text>
-                        </TextBar>
-                      )}
-                      {page === "note" &&
-                        [...lesson.notes]
-                          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
-                          .map((note) => (
-                            <Note
-                              text={note.text}
-                              me={me}
-                              clicks={note.link_clicks}
-                              user={lesson.user.id}
-                              note={note}
-                              id={note.id}
-                              complexity={note.complexity}
-                              next={note.next}
-                              quizes={lesson.quizes}
-                              notes={lesson.notes}
-                              tests={lesson.newTests}
-                              lessonID={lesson.id}
-                            />
-                          ))}
-                      {page === "chat" &&
-                        lesson.chats.map((c) => (
-                          <Chat
-                            name={c.name}
-                            me={me}
-                            isSecret={c.isSecret}
-                            user={lesson.user.id}
-                            messages={c.messages}
-                            id={c.id}
-                            lessonID={lesson.id}
-                          />
-                        ))}
-                      {page === "document" &&
-                        lesson.documents.map((doc) => (
-                          <Document
-                            clauses={doc.clauses}
-                            title={doc.title}
-                            me={me}
-                            documentID={doc.id}
-                            user={lesson.user.id}
-                            lessonID={lesson.id}
-                          />
-                        ))}
-                      {page === "shots" && (
-                        <ShotsGroup
-                          shots={lesson.shots}
+              <LessonStyles>
+                <LessonPart>
+                  {page === "lesson" && (
+                    <TextBar>
+                      <HowTo getLink={getLink} />
+                      <Text>{parse(lesson.text)}</Text>
+                    </TextBar>
+                  )}
+                  {page === "note" &&
+                    [...lesson.notes]
+                      .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+                      .map((note) => (
+                        <Note
+                          text={note.text}
                           me={me}
-                          lessonID={lesson.id}
-                          shotResults={lesson.shotResults}
-                        />
-                      )}
-                      {page === "test" && (
-                        <>
-                          {lesson.newTests.length > 0 ? (
-                            <TestGroup
-                              tests={lesson.newTests}
-                              me={me}
-                              lessonID={lesson.id}
-                              testResults={[]}
-                              quizes={lesson.quizes}
-                              notes={lesson.notes}
-                            />
-                          ) : (
-                            <Center>
-                              <h2>Тестов по этому уроку нет</h2>
-                            </Center>
-                          )}
-                        </>
-                      )}
-
-                      {page === "quiz" && (
-                        <>
-                          {lesson.quizes.length > 0 ? (
-                            <QuizGroup
-                              lessonID={lesson.id}
-                              quizResults={[]}
-                              me={me}
-                              quizes={lesson.quizes}
-                            />
-                          ) : (
-                            <Center>
-                              <h2>Вопросов по этому уроку нет</h2>
-                            </Center>
-                          )}
-                        </>
-                      )}
-                      {page === "testBlock" && (
-                        <TestPractices
-                          lessonID={lesson.id}
-                          quizResults={[]}
-                          testResults={[]}
-                          me={me}
-                          testPractices={lesson.testPractices}
+                          clicks={note.link_clicks}
+                          user={lesson.user.id}
+                          note={note}
+                          id={note.id}
+                          complexity={note.complexity}
+                          next={note.next}
                           quizes={lesson.quizes}
+                          notes={lesson.notes}
                           tests={lesson.newTests}
-                          lesson={lesson}
-                        />
-                      )}
-                      {page === "newProblem" && (
-                        <NewProblem lesson={lesson} me={me} />
-                      )}
-                      {page === "problem" && (
-                        <>
-                          {lesson.problems.length > 0 ? (
-                            <ProblemGroup
-                              lessonID={lesson.id}
-                              problems={lesson.problems}
-                              me={me}
-                              problemResults={[]}
-                              lesson={lesson}
-                            />
-                          ) : (
-                            <Center>
-                              <h2>Задач пока нет</h2>
-                            </Center>
-                          )}
-                        </>
-                      )}
-                      {page === "constructor" && (
-                        <>
-                          {" "}
-                          {lesson.constructions.length > 0 ? (
-                            <>
-                              <ConstructorGroup
-                                constructions={lesson.constructions}
-                                lessonID={lesson.id}
-                                me={me}
-                                constructionResults={[]}
-                              />
-                            </>
-                          ) : (
-                            <Center>
-                              <h2>Конструкторов документов пока нет</h2>
-                            </Center>
-                          )}{" "}
-                        </>
-                      )}
-                      {page === "textEditor" &&
-                        (lesson.texteditors.length > 0 ? (
-                          <TextEditorGroup
-                            lessonID={lesson.id}
-                            textEditors={lesson.texteditors}
-                            me={me}
-                            textEditorResults={[]}
-                          />
-                        ) : (
-                          <Center>
-                            <h2>Редакторов документов пока нет</h2>
-                          </Center>
-                        ))}
-                      {page === "createTest" && (
-                        <CreateNewTest lessonID={lesson.id} />
-                      )}
-                      {page === "createForum" && (
-                        <ChangeForum lesson={lesson.id} forum={lesson.forum} />
-                      )}
-                      {page === "createNote" && (
-                        <CreateNote lessonID={lesson.id} />
-                      )}
-                      {page === "createTestBlock" && (
-                        <CreateTestBlock lesson={lesson} lessonId={lesson.id} />
-                      )}
-                      {page === "createChat" && (
-                        <CreateChat lessonID={lesson.id} />
-                      )}
-                      {page === "createDocument" && (
-                        <CreateDocument lessonID={lesson.id} />
-                      )}
-                      {page === "createShot" && (
-                        <CreateShot lessonID={lesson.id} />
-                      )}
-                      {page === "createQuiz" && (
-                        <CreateQuiz lessonID={lesson.id} />
-                      )}
-                      {page === "createProblem" && (
-                        <CreateProblem lessonID={lesson.id} lesson={lesson} />
-                      )}
-                      {page === "createConstructor" && (
-                        <CreateConstructor lessonID={lesson.id} />
-                      )}
-                      {page === "createTextEditor" && (
-                        <CreateTextEditor lessonID={lesson.id} />
-                      )}
-                      {page === "updateLesson" && (
-                        <UpdateLesson
                           lessonID={lesson.id}
-                          description={lesson.description}
-                          lesson={lesson}
-                          change={lesson.change}
                         />
-                      )}
-                      {page === "updateShots" && (
-                        <UpdateShots lessonID={lesson.id} />
-                      )}
-                    </LessonPart>
-                    {width > 800 && isMenuShown && (
-                      <SingleLesson_Menu
-                        lesson={lesson}
-                        getData={getData}
+                      ))}
+                  {page === "chat" &&
+                    lesson.chats.map((c) => (
+                      <Chat
+                        name={c.name}
                         me={me}
+                        isSecret={c.isSecret}
+                        user={lesson.user.id}
+                        messages={c.messages}
+                        id={c.id}
+                        lessonID={lesson.id}
                       />
-                    )}
-                  </LessonStyles>
-                </Container>
-                <div id="root"></div>
-              </AreYouEnrolled>
-            </>
-          );
-        }}
-      </Query>
-    </PleaseSignIn>
+                    ))}
+                  {page === "document" &&
+                    lesson.documents.map((doc) => (
+                      <Document
+                        clauses={doc.clauses}
+                        title={doc.title}
+                        me={me}
+                        documentID={doc.id}
+                        user={lesson.user.id}
+                        lessonID={lesson.id}
+                      />
+                    ))}
+                  {page === "shots" && (
+                    <ShotsGroup
+                      shots={lesson.shots}
+                      me={me}
+                      lessonID={lesson.id}
+                      shotResults={lesson.shotResults}
+                    />
+                  )}
+                  {page === "test" && (
+                    <>
+                      {lesson.newTests.length > 0 ? (
+                        <TestGroup
+                          tests={lesson.newTests}
+                          me={me}
+                          lessonID={lesson.id}
+                          testResults={[]}
+                          quizes={lesson.quizes}
+                          notes={lesson.notes}
+                        />
+                      ) : (
+                        <Center>
+                          <h2>Тестов по этому уроку нет</h2>
+                        </Center>
+                      )}
+                    </>
+                  )}
+
+                  {page === "quiz" &&
+                    lesson.quizes.map((quiz) => {
+                      return (
+                        <SingleQuiz
+                          key={quiz.id}
+                          id={quiz.id}
+                          complexity={quiz.complexity}
+                          question={quiz.question}
+                          answer={quiz.answer}
+                          answers={quiz.answers}
+                          type={quiz.type}
+                          goalType={quiz.goalType}
+                          check={quiz.check}
+                          me={me}
+                          lesson={lesson}
+                          ifRight={quiz.ifRight}
+                          ifWrong={quiz.ifWrong}
+                          name={quiz.name}
+                          image={quiz.image}
+                          hidden={false}
+                          lessonID={lesson.id}
+                          quizID={quiz.id}
+                          user={quiz.user.id}
+                          story={false}
+                          user_name={quiz.user}
+                          author={lesson.user}
+                        />
+                      );
+                    })}
+                  {page === "testBlock" && (
+                    <TestPractices
+                      lessonID={lesson.id}
+                      quizResults={[]}
+                      testResults={[]}
+                      me={me}
+                      testPractices={lesson.testPractices}
+                      quizes={lesson.quizes}
+                      tests={lesson.newTests}
+                      lesson={lesson}
+                    />
+                  )}
+                  {page === "newProblem" && (
+                    <NewProblem lesson={lesson} me={me} />
+                  )}
+                  {page === "problem" && (
+                    <>
+                      {lesson.problems.length > 0 ? (
+                        <ProblemGroup
+                          lessonID={lesson.id}
+                          problems={lesson.problems}
+                          me={me}
+                          problemResults={[]}
+                          lesson={lesson}
+                        />
+                      ) : (
+                        <Center>
+                          <h2>Задач пока нет</h2>
+                        </Center>
+                      )}
+                    </>
+                  )}
+                  {page === "constructor" && (
+                    <>
+                      {" "}
+                      {lesson.constructions.length > 0 ? (
+                        <>
+                          <ConstructorGroup
+                            constructions={lesson.constructions}
+                            lessonID={lesson.id}
+                            me={me}
+                            constructionResults={[]}
+                          />
+                        </>
+                      ) : (
+                        <Center>
+                          <h2>Конструкторов документов пока нет</h2>
+                        </Center>
+                      )}{" "}
+                    </>
+                  )}
+                  {page === "textEditor" &&
+                    (lesson.texteditors.length > 0 ? (
+                      <TextEditorGroup
+                        lessonID={lesson.id}
+                        textEditors={lesson.texteditors}
+                        me={me}
+                        textEditorResults={[]}
+                      />
+                    ) : (
+                      <Center>
+                        <h2>Редакторов документов пока нет</h2>
+                      </Center>
+                    ))}
+                  {page === "createTest" && (
+                    <CreateNewTest lessonID={lesson.id} />
+                  )}
+                  {page === "createForum" && (
+                    <ChangeForum lesson={lesson.id} forum={lesson.forum} />
+                  )}
+                  {page === "createNote" && <CreateNote lessonID={lesson.id} />}
+                  {page === "createTestBlock" && (
+                    <CreateTestBlock lesson={lesson} lessonId={lesson.id} />
+                  )}
+                  {page === "createChat" && <CreateChat lessonID={lesson.id} />}
+                  {page === "createDocument" && (
+                    <CreateDocument lessonID={lesson.id} />
+                  )}
+                  {page === "createShot" && <CreateShot lessonID={lesson.id} />}
+                  {page === "createQuiz" && <CreateQuiz lessonID={lesson.id} />}
+                  {page === "createProblem" && (
+                    <CreateProblem lessonID={lesson.id} lesson={lesson} />
+                  )}
+                  {page === "createConstructor" && (
+                    <CreateConstructor lessonID={lesson.id} />
+                  )}
+                  {page === "createTextEditor" && (
+                    <CreateTextEditor lessonID={lesson.id} />
+                  )}
+                  {page === "updateLesson" && (
+                    <UpdateLesson
+                      lessonID={lesson.id}
+                      description={lesson.description}
+                      lesson={lesson}
+                      change={lesson.change}
+                    />
+                  )}
+                  {page === "updateShots" && (
+                    <UpdateShots lessonID={lesson.id} />
+                  )}
+                </LessonPart>
+                {width > 800 && isMenuShown && (
+                  <SingleLesson_Menu
+                    lesson={lesson}
+                    getData={getData}
+                    me={me}
+                  />
+                )}
+              </LessonStyles>
+            </Container>
+            <div id="root"></div>
+          </>
+        );
+      }}
+    </Query>
   );
 };
 

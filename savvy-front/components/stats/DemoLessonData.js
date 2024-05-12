@@ -669,23 +669,49 @@ const LessonData = (props) => {
       setGenerating(false);
 
       setReport(`
-                <p>The student completed the simulator with a total score of <b>60 out of 100</b>. This indicates that while the student has mastered some skills related to Due Diligence in M&amp;A, there are still areas that require improvement.</p>
-    <p>We would like to focus your attention on the following points:</p>
-    <ul>
-      <li>
-        <p><strong>Learning goal: Learn to find errors / typos / risks in a term sheet</strong></p>
-        <p>The student achieved a result of 65%, which is below the success threshold. Moreover, we see that the student has completed the exercises, made some mistakes, but have not paid enough attention to reflecting on these errors and trying to resolve them. This suggests that the student requires further assistance in learning how to find errors in a term sheet. We recommend either assigning more similar tasks to the student or seeking guidance from a senior lawyer.</p>
-      </li>
-      <li>
-        <p><strong>Learning goal: Learn to distinguish between different types of M&A deals</strong></p>
-        <p>The student achieved a result of 84%, indicating that the student has completed this part of the lesson with ease. They have made some mistakes, but we have seen them reflecting on these mistakes, asking for explanations and finally arriving to the correct answer. This suggests that the student is well aware of this topic and is ready for billable work related to it.</p>
-      </li>
-    </ul>
-    <p>The student's overall score is 60% out of 100. While they have successfully completed several tasks, <b>there are areas where further assistance is needed</b>. Specifically, the student should focus on improving their skills in finding errors in a term sheet. It might be a good idea to get help from a senior lawyer.</p>
-    <p>Taking into account the simulator's goal—to prepare the student for work on due diligence in M&amp;A projects—we believe that <b>additional training is needed before the student is ready for client work.</b></p>
+        <h3>Introduction</h3>
+        <p>Emily Thompson has completed the simulator called "M&A simulator" on 7th April 2024. 
+        The goal of the simulator is to <b>develop due diligence skills and deal structuring skills for M&A projects.</b></p>
+        <h3>Executive summary</h3>
+        <p>Emily has looked through all the materials in the simulator and has completed all exercises.
+        However, errors have not been reflected upon and worked on yet meaning that we can't be sure that they have developped the necessary skills.</p>
+        <p>It is recommended that Emily <b>focuses on reflecting on and correcting errors, especially, from the "Share deal vs Asset deal" part of the simulator</b>.
+        Only after that the student will have all the competencies to work on M&A projects.</p>
+        <h3>Task 1. Share deal vs Asset deal</h3>
+        <p>Result: <b>50%</b></p>
+        <p>The goal: to learn to distinguish between a share deal and an asset deal.<p>
+        <p>Insights: Emily has not practiced enough or analyzed provided feedback. 
+        They need to work more on understanding why a share deal is generally easier to structure, 
+        what is transferred in a share deal versus an asset deal, and how an asset deal may help to avoid historical risks associated with the target company.</p>
+        <p><b>Recommendation:</b> Emily does not yet have the necessary skills and should go through the simulator 
+         one more time to improve their understanding of share and asset deals.</p>
+        <h3>Task 2. Transaction structure</h3>
+        <p>Result: <b>58%</b></p>
+        <p>The goal: learn the details of an M&A deal structure, including understanding what agreements need to be signed and when they need to be signed.<p>
+        <p>Insights: while Emily has shown effort in solving the problem, there are areas that need improvement. 
+        Emily reflected on their errors in the completed exercises, which is a positive sign of growth. But they have not completed all necessary exercises.
+        Emily's weak points that need more attention include understanding the different types of due diligence in M&A transactions 
+        and identifying common types of preliminary agreements in M&A transactions. These areas require further study and practice.</p>
+        <p><b>Recommendation:</b> Continue learning and practicing. They do not yet have the necessary skills, so 
+        going through the simulator one more time would be beneficial for further improvement.</p>
+        <h3>Task 3. Minutes of a meeting of the board of directors</h3>
+        <p>Result: <b>78%</b></p>
+        <p>The goal: learn to find errors and key information in the Minutes of a meeting of the board of directors.<p>
+        <p>Insights: Emily has not managed to find the following errors:</p>
+        <ol>
+          <li>When was the most recent enactment of the Companies Act?</li>
+        </ol>
+        All other errors were found and corrected. Emily has shown good results in analyzing the document and correcting errros.</p>
+        <p><b>Recommendation:</b> Emily is ready to analyze the documents of this category on real projects.</p>
+        <h3>Overall Recommendations</h3>
+        <p>📊 Overall result: <b>62%</b></p>
+        <p>Emily has shown dedication to practicing in the M&A simulator, but there is room for improvement in reflecting on errors and feedback.
+         As a result, it seems that they have not yet fully achieved the goal of developing due diligence skills and deal structuring skills for M&A projects. 
+         We recommend that Emily carefully <b>reviews the exercises, pays attention to the feedback provided, and reflects on the errors to enhance her learning experience.</b></p>
+
   
   `);
-    }, 4000);
+    }, 500);
     // try {
     //   const response = await fetch("/api/generate", {
     //     method: "POST",

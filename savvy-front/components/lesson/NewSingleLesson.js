@@ -69,6 +69,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         image
         goalType
         next
+        isOrderOfAnswersImportant
+        shouldAnswerSizeMatchSample
         user {
           id
         }

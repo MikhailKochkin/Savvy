@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
 import styled from "styled-components";
-import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 // import { makeStyles, useTheme } from "@material-ui/core/styles";
 // import MobileStepper from "@material-ui/core/MobileStepper";
@@ -11,9 +10,7 @@ import AreYouEnrolled from "../auth/AreYouEnrolled";
 // import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { CSSTransitionGroup } from "react-transition-group";
 import StoryEx from "./StoryEx";
-import { useUser } from "../User";
 import Panel from "./Panel";
-import Reload from "./Reload";
 
 const Container = styled.div`
   display: flex;

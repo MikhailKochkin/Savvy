@@ -650,6 +650,8 @@ const LessonBlock = (props) => {
                   question={data.question}
                   answer={data.answer}
                   answers={data.answers}
+                  isOrderOfAnswersImportant={data.isOrderOfAnswersImportant}
+                  shouldAnswerSizeMatchSample={data.shouldAnswerSizeMatchSample}
                   type={data.type}
                   goalType={data.goalType}
                   check={data.check}

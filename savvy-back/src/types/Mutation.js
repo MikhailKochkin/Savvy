@@ -2242,6 +2242,8 @@ const Mutation = mutationType({
         instructorName: stringArg(),
         name: stringArg(),
         image: stringArg(),
+        isOrderOfAnswersImportant: booleanArg(),
+        shouldAnswerSizeMatchSample: booleanArg(),
         answers: arg({
           type: "ComplexAnswer",
         }),

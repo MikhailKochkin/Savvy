@@ -8,7 +8,7 @@ import smoothscroll from "smoothscroll-polyfill";
 import {
   guessAlphabet,
   autoResizeTextarea,
-} from "../SimulatorDevelopmentFunctions";
+} from "../../SimulatorDevelopmentFunctions";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(

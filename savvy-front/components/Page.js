@@ -85,7 +85,6 @@ const Page = ({ children }) => {
                 router.pathname !== "/build_your_simulator" &&
                 router.pathname !== "/connect" &&
                 router.pathname !== "/useful" && <DynamicNav />}
-              {router.pathname == "/useful" && <DynamicSpaceNav />}
               <Inner>{children}</Inner>
               {router.pathname !== "/lesson" &&
                 router.pathname !== "/demo" &&

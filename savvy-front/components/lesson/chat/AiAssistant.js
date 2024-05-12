@@ -1,8 +1,14 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-import Fuse from "fuse.js";
 import { gql, useMutation } from "@apollo/client";
+import {
+  getKeywords,
+  getAnswerFromSource,
+  searchForRelevantResults,
+  findRelevantTextInSource,
+  compareTexts,
+} from "./AIChatFunctions";
 
 const CREATE_CHATRESULT_MUTATION = gql`
   mutation CREATE_CHATRESULT_MUTATION(
@@ -31,7 +37,7 @@ import {
   Frame,
 } from "../quizes/QuestionStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
-import { set } from "lodash";
+
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -218,135 +224,75 @@ const AiAssistant = ({ id, lessonId, role, m, me, author, library }) => {
 
   const getResponseToStudent = async (e) => {
     setGeneratingAnswer(true);
-    let url;
+
+    // Initialize a new answer object
     let newAnswer = {
       question: currentQuestion,
       answer: "",
       sourceId: "",
       comment: "",
     };
-    let AItype = "openai";
-    let keywords;
+
+    // Define options for the Fuse search
     const options = {
       includeScore: true,
       keys: [
-        {
-          name: "text",
-          weight: 0.6,
-        },
-        {
-          name: "name",
-          weight: 0.7,
-        },
+        { name: "text", weight: 0.6 },
+        { name: "name", weight: 0.7 },
       ],
       threshold: 0.6,
-      //   ignoreLocation: true,
     };
-    let searchableLibrary = library;
-    let result;
-    if (AItype == "claude") {
-      url = "/api/generate2";
-    } else {
-      url = "/api/generate";
-    }
-    let canWeFindTheAnswer = true;
-    if (canWeFindTheAnswer) {
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            prompt: `Return only 2 key keywords from this string ${currentQuestion} so that I can use it in the text search.
-            Find professional terms. For example: Narrow AI, unsupervised learning, legal entity, Artificial General Intelligence.
-            Avoid generic terms that might confuse the search: AI, learning, entity, intelligence, attention. 
-            The result should look like this: "keyword1", "keyword2". If you find only generic terms, return "".
-`,
-          }),
-        });
 
-        if (response.status !== 200) {
-          throw (
-            (await response.json()).error ||
-            new Error(`Request failed with status ${response.status}`)
-          );
-        }
-        const data = await response.json();
-        if (AItype == "claude") {
-          result = data.result.content[0].text;
+    // Check if we can find an answer
+    try {
+      // Get keywords from the current question
+      const keywords = await getKeywords(currentQuestion);
+
+      if (keywords) {
+        // Search for relevant results using the keywords
+        const searchResults = searchForRelevantResults(
+          keywords,
+          library,
+          options
+        );
+
+        if (searchResults.length === 0) {
+          // Set a default answer if no relevant results found
+          newAnswer.answer =
+            "I'm sorry, but I couldn't find a relevant answer to your question in my current knowledge base. I will do my best to find the information and email you the answer as soon as possible.";
         } else {
-          result = data.result.content;
-        }
-        if (result) {
-          keywords = result.split(",").map((keyword) => keyword.trim());
-          const fuse = new Fuse(searchableLibrary, options);
-          let searchResult1 = fuse.search(keywords[0]);
-          let searchResult2 = fuse.search(
-            keywords[1] ? keywords[1] : keywords[0]
+          // Set the source ID and answer from the most relevant search result
+          newAnswer.sourceId = searchResults[0].item.id;
+          newAnswer.answer = await getAnswerFromSource(
+            currentQuestion,
+            searchResults[0].item.text
           );
-          let searchResult = [...searchResult1, ...searchResult2];
-          // Sort searchResult by relevance score in descending order
-          searchResult.sort((a, b) => a.score - b.score);
-          if (searchResult.length === 0) {
-            newAnswer.answer =
-              "I'm sorry, but I couldn't find a relevant answer to your question in my current knowledge base. I will do my best to find the information and email you the answer as soon as possible.";
-            setDialogue([...dialogue, newAnswer]);
-            createChatResult({
-              variables: {
-                dialogue: newAnswer,
-                lessonId: lessonId,
-                chatId: id,
-              },
-            });
-            setCurrentQuestion("");
-            setGeneratingAnswer(false);
-            return;
-          }
-          newAnswer.sourceId = searchResult[0].item.id;
-          try {
-            const response = await fetch(url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                prompt: `Asnswer this question in 2 sentences: ${currentQuestion} using this source: ${searchResult[0].item.text}. 
-                ONLY USE INFORMATION FROM THE SOURCE TO ANSWER THE QUESTION. MAKE EXPLANATIONS AS SIMPLE AS IF YOU SRE SPEAKING to a high school student.
-                If the source does not contain this information, return that you do no have this information right now.`,
-              }),
-            });
 
-            if (response.status !== 200) {
-              throw (
-                (await response.json()).error ||
-                new Error(`Request failed with status ${response.status}`)
-              );
-            }
-            const data = await response.json();
-            if (AItype == "claude") {
-              result = data.result.content[0].text;
-            } else {
-              result = data.result.content;
-            }
-            if (result) {
-              newAnswer.answer = result;
-            }
-          } catch (error) {
-            console.error(error);
-            alert(error.message);
+          let relevantText = await findRelevantTextInSource(
+            currentQuestion,
+            searchResults[0].item.text,
+            newAnswer.answer.length
+          );
+          let comparisonResult = await compareTexts(
+            newAnswer.answer,
+            relevantText
+          );
+          if (parseFloat(comparisonResult) < 80) {
+            newAnswer.comment = `The answer failed the comparisonResult (${comparisonResult}%) test and was not shown to the student: ${newAnswer.answer}`;
+            newAnswer.answer =
+              "I'm sorry, but I am not sure that I can provide you with the correct answer. I will do my best to find the information and email you the answer as soon as possible.";
           }
         }
-      } catch (error) {
-        console.error(error);
-        alert(error.message);
       }
-    } else {
-      newAnswer.answer =
-        "I am sorry, this question is out of the scope of this lesson.";
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
 
+    // Update the dialogue state with the new answer
     setDialogue([...dialogue, newAnswer]);
+
+    // Create a chat result with the new answer
     createChatResult({
       variables: {
         dialogue: newAnswer,
@@ -354,6 +300,8 @@ const AiAssistant = ({ id, lessonId, role, m, me, author, library }) => {
         chatId: id,
       },
     });
+
+    // Reset the current question and generating answer state
     setCurrentQuestion("");
     setGeneratingAnswer(false);
   };

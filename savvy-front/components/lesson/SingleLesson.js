@@ -114,6 +114,8 @@ const SINGLE_LESSON_QUERY = gql`
         ifWrong
         answer
         answers
+        isOrderOfAnswersImportant
+        shouldAnswerSizeMatchSample
         name
         image
         next

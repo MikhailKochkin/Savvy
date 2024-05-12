@@ -304,6 +304,8 @@ const StoryEx = (props) => {
           answers={el.answers}
           type={el.type}
           goalType={el.goalType}
+          isOrderOfAnswersImportant={el.isOrderOfAnswersImportant}
+          shouldAnswerSizeMatchSample={el.shouldAnswerSizeMatchSample}
           check={el.check}
           me={me}
           lesson={lesson}

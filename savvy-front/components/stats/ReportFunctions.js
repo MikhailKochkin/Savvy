@@ -118,12 +118,16 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
             question.type.toLowerCase() === "findall" ||
             question.type.toLowerCase() === "generate"
           ) {
-            let correctAnswers = question.results.filter(
-              (result) =>
-                result.ideasList.quizIdeas.filter(
-                  (idea) => parseFloat(idea.result) > 60
-                ).length > 0
-            );
+            let correctAnswers = question.results.filter((result) => {
+              if (result.ideasList && result.ideasList.quizIdeas) {
+                return (
+                  result.ideasList.quizIdeas.filter(
+                    (idea) => parseFloat(idea.result) > 60
+                  ).length > 0
+                );
+              }
+              return false;
+            });
             if (correctAnswers.length == 0) {
               criteria.weakQuestions.push(question);
             }

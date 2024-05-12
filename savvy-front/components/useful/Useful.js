@@ -18,7 +18,6 @@ const USEFUL_QUERY = gql`
 `;
 
 const Styles = styled.div`
-  padding: 50px 0;
   min-height: 100vh;
   width: 100vw;
   background-image: url("/static/space.svg");
@@ -26,7 +25,7 @@ const Styles = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   @media (max-width: 800px) {
     background-size: cover;
     background-repeat: no-repeat;

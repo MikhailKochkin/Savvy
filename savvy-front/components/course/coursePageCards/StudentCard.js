@@ -443,9 +443,9 @@ class StudentCard extends Component {
             </a>
           </button>
         )} */}
-        {/* {ratio > 85 && !my_certificate && (
+        {ratio > 85 && !my_certificate && (
           <CreateCertificate coursePageId={coursePage.id} studentId={me.id} />
-        )} */}
+        )}
       </Payment>
     );
   }

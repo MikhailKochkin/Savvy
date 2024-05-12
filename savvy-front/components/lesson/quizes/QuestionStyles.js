@@ -43,6 +43,7 @@ export const IconBlock = styled.div`
   }
   .name {
     font-size: 1.2rem;
+    line-height: 1.2;
     text-align: center;
     color: #8f93a3;
     max-width: 80px;
@@ -177,7 +178,7 @@ export const Question = styled.div`
 `;
 
 export const Answer_text = styled.textarea`
-  height: 120px;
+  height: 70px;
   width: 95%;
   outline: 0;
   border: none;
@@ -208,6 +209,23 @@ export const ResultCircle = styled.div`
   border: 2px solid;
   border-color: ${(props) => props.inputColor};
   margin: 10px; // Adjust margin to position the circle as desired
+`;
+
+export const PositionCircle = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  font-size: 1.4rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid;
+  border-color: #f3f3f3;
+  margin: 10px; // Adjust margin to position the circle as desired
+  margin-bottom: 20px;
 `;
 
 export const Button1 = styled.div`
@@ -271,14 +289,30 @@ export const Frame = styled.div`
   position: relative;
   min-width: 60%;
   max-width: 70%;
+  margin-bottom: 10px;
   border: 2px solid;
   border: ${(props) =>
     props.inputColor == "#D0EADB" ? "3px solid" : "2px solid"};
   border-color: ${(props) => props.inputColor};
-
   border-radius: 25px;
   background: #fff;
   padding: 0 2%;
+  /* margin: 15px 0; */
+  .com {
+    border-top: 1px solid #f3f3f3;
+  }
+`;
+
+export const CommentFrame = styled.div`
+  position: relative;
+  margin-bottom: 10px;
+  border: 2px solid #f3f3f3;
+  border-radius: 25px;
+  background: #fff;
+  padding: 15px 20px;
+  margin-left: 20px;
+  line-height: 1.6;
+  font-weight: 400;
   /* margin: 15px 0; */
   .com {
     border-top: 1px solid #f3f3f3;
@@ -314,9 +348,33 @@ export const MiniAIButton = styled.button`
   margin-right: 10px;
   margin-bottom: 10px;
   transition: 0.3s;
+  text-align: center;
   cursor: pointer;
   &:hover {
     box-shadow: rgb(66 133 244 / 15%) 0px 1px 3px 1px;
     background-color: #a4dbfe;
+  }
+`;
+
+export const MiniCircle = styled.div`
+  width: 23px;
+  height: 23px;
+  border-radius: 50px;
+  border: 1px solid #d0d0d0;
+  color: #d0d0d0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: ease-in 0.2s;
+  &:hover {
+    border: 1px solid #828282;
+    color: #828282;
+  }
+  @media (max-width: 800px) {
+    margin-left: 5px;
+    display: none;
   }
 `;

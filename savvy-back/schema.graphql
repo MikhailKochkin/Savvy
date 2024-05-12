@@ -2693,7 +2693,7 @@ type Mutation {
   updateProblem(complexity: Int, context: String, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String, type: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, next: NextType, question: String, type: String): Quiz
+  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, isOrderOfAnswersImportant: Boolean, lessonId: String, name: String, next: NextType, question: String, shouldAnswerSizeMatchSample: Boolean, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateScore(id: String, score: Int): User
   updateShot(comments: [String], id: String, name: String, parts: [String], title: String): Shot
@@ -3893,6 +3893,7 @@ type Quiz {
   ifWrong: String
   image: String
   instructorName: String
+  isOrderOfAnswersImportant: Boolean
   lesson: Lesson
   lessonID: String
   lessonId: String
@@ -3900,6 +3901,7 @@ type Quiz {
   next: Json
   question: String!
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int): [QuizResult!]!
+  shouldAnswerSizeMatchSample: Boolean
   type: String
   updatedAt: DateTime!
   user: User!
@@ -3940,6 +3942,7 @@ input QuizOrderByWithRelationInput {
   ifWrong: SortOrderInput
   image: SortOrderInput
   instructorName: SortOrderInput
+  isOrderOfAnswersImportant: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
@@ -3947,6 +3950,7 @@ input QuizOrderByWithRelationInput {
   next: SortOrderInput
   question: SortOrder
   quizResults: QuizResultOrderByRelationAggregateInput
+  shouldAnswerSizeMatchSample: SortOrderInput
   type: SortOrderInput
   updatedAt: SortOrder
   user: UserOrderByWithRelationInput
@@ -4081,6 +4085,7 @@ input QuizWhereInput {
   ifWrong: StringNullableFilter
   image: StringNullableFilter
   instructorName: StringNullableFilter
+  isOrderOfAnswersImportant: BoolNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -4088,6 +4093,7 @@ input QuizWhereInput {
   next: JsonNullableFilter
   question: StringFilter
   quizResults: QuizResultListRelationFilter
+  shouldAnswerSizeMatchSample: BoolNullableFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -4110,6 +4116,7 @@ input QuizWhereUniqueInput {
   ifWrong: StringNullableFilter
   image: StringNullableFilter
   instructorName: StringNullableFilter
+  isOrderOfAnswersImportant: BoolNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -4117,6 +4124,7 @@ input QuizWhereUniqueInput {
   next: JsonNullableFilter
   question: StringFilter
   quizResults: QuizResultListRelationFilter
+  shouldAnswerSizeMatchSample: BoolNullableFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput

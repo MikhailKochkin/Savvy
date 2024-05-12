@@ -7,14 +7,13 @@ import smoothscroll from "smoothscroll-polyfill";
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
 import NextQuestions from "./NextQuestions";
-import OpenQuestion from "./OpenQuestion";
-import Form from "./Form";
-import Generate from "./Generate";
-import Prompt from "./Prompt";
-import FindAll from "./FindAll";
-import CallSimulation from "./CallSimulation";
-import { set } from "lodash";
-
+import OpenQuestion from "./questionTypes/OpenQuestion";
+import Form from "./questionTypes/Form";
+import Generate from "./questionTypes/Generate";
+import Prompt from "./questionTypes/Prompt";
+import FindAll from "./questionTypes/FindAll";
+import CallSimulation from "./questionTypes/CallSimulation";
+import ComplexQuestion from "./questionTypes/ComplexQuestion";
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -96,6 +95,8 @@ const SingleQuiz = (props) => {
     author,
     answers,
     problemType,
+    isOrderOfAnswersImportant,
+    shouldAnswerSizeMatchSample,
     studentAnswerPassedFromAnotherComponent,
   } = props;
 
@@ -227,6 +228,27 @@ const SingleQuiz = (props) => {
               problemType={props.problemType}
             />
           )}
+          {props.type?.toLowerCase() == "complex" && (
+            <ComplexQuestion
+              question={props.question}
+              author={author}
+              me={me}
+              story={story}
+              goalType={props.goalType}
+              answer={props.answer}
+              answers={props.answers}
+              ifWrong={props.ifWrong}
+              ifRight={props.ifRight}
+              lessonId={props.lessonID}
+              quizId={props.quizID}
+              passResult={onMove}
+              name={props.name}
+              image={props.image}
+              problemType={props.problemType}
+              isOrderOfAnswersImportant={isOrderOfAnswersImportant}
+              shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
+            />
+          )}
           {props.type?.toLowerCase() == "call" && (
             <CallSimulation
               question={props.question}
@@ -267,6 +289,8 @@ const SingleQuiz = (props) => {
           name={props.name}
           image={props.image}
           type={props.type}
+          isOrderOfAnswersImportant={isOrderOfAnswersImportant}
+          shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
           goalType={props.goalType}
           complexity={complexity}
           ifRight={ifRight}
