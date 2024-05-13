@@ -3,7 +3,7 @@ import "react-phone-number-input/style.css";
 import { useQuery, gql } from "@apollo/client";
 
 import ContactForm from "./ContactForm";
-
+import Loading from "../Loading";
 const USEFUL_QUERY = gql`
   query USEFUL_QUERY($id: String!) {
     useful(where: { id: $id }) {
@@ -268,6 +268,7 @@ const Form = styled.div`
     flex-direction: column;
     border-radius: 0;
     padding: 6% 4%;
+    margin-top: 80px;
     #description {
       width: 100%;
       margin-bottom: 20px;
@@ -312,7 +313,7 @@ const Action = (props) => {
   const { data, loading, error } = useQuery(USEFUL_QUERY, {
     variables: { id: props.id },
   });
-  if (loading) return <p>Загрузка..</p>;
+  if (loading) return <Loading />;
   const useful = data.useful;
   const { me } = props;
   return (
