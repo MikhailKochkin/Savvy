@@ -373,8 +373,4 @@ export const MiniCircle = styled.div`
     border: 1px solid #828282;
     color: #828282;
   }
-  @media (max-width: 800px) {
-    margin-left: 5px;
-    display: none;
-  }
 `;

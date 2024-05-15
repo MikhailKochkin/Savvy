@@ -21,7 +21,6 @@ import {
   Circle,
   ResultCircle,
   PositionCircle,
-  CommentFrame,
   MiniCircle,
 } from "../QuestionStyles";
 
@@ -401,8 +400,6 @@ const ComplexQuestion = (props) => {
         }),
       });
 
-      console.log(intro + hintPrompt + recommendations);
-
       if (response.status !== 200) {
         throw (
           (await response.json()).error ||
@@ -439,8 +436,6 @@ const ComplexQuestion = (props) => {
       setGenerating(false);
     }
   };
-
-  console.log("props.answers.answerElements", props.answers.answerElements);
 
   return (
     <Question story={story}>

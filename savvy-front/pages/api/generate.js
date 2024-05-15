@@ -32,8 +32,8 @@ export default async function (req, res) {
         },
         // { role: "user", content: prompt },
       ],
+      // model: "gpt-4o",
       model: "gpt-3.5-turbo",
-      // model: "gpt-4-turbo-2024-04-09",
       max_tokens: 2048,
       temperature: 0.8,
     });
