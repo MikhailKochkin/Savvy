@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Router from "next/router";
 import { useTranslation } from "next-i18next";
-
+import { useRouter } from "next/router";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 
