@@ -124,12 +124,12 @@ export const generateHint = async (
   const hintAnswerRecommendations = `YOU HINT MUST BE AROUND 120 WORDS!!!! Answer in ${
     router.locale === "ru" ? "Russian" : "English"
   }. Always address student as "You" and NEVER address the student as "STUDENT".  
-  Break your hint into small paragraphs and return every paragraph in a <p> tag.`;
+  Break your hint into small paragraphs and return every paragraph in a <p> tag.
+  LIMIT YOUR RESPONSE TO 500 CHARACTERS.`;
   const hintPrompt = ` Give a hint to the student in a Socratic manner on what is the correct answer.
    Use this approach: ${hintingMethods[allHints.length]} 
   Do NOT USE the words from the correct answer. DO NOT reveal the correct answer. `;
   //    Use this approach: ${hintingMethods[allHints.length]}
-
   try {
     // Make a POST request to the API endpoint
     const response = await fetch(url, {
@@ -190,13 +190,13 @@ export const generateExplanation = async (
   ).toFixed(0);
 
   // Check if there is already more than one explanation
-  if (explanationsNum > 1) {
-    return {
-      newExplanation:
-        "Please try answering the question before asking for more explanations.",
-      type: "explanation",
-    };
-  }
+  // if (explanationsNum > 1) {
+  //   return {
+  //     newExplanation:
+  //       "Please try answering the question before asking for more explanations.",
+  //     type: "explanation",
+  //   };
+  // }
 
   const intro = `
       You are a an experienced senior lawyer advising juniors on how to implement legal projects better. You asked your student this question: """ ${question} """.
@@ -240,17 +240,17 @@ export const generateExplanation = async (
   };
 
   // 1. Check if the student's answer is too short and there are no previous explanations
-  if (proportion < 25 && allExplanantions.length === 0) {
-    const tooShortPrompt = `
-      The student's answer is too short. It is only "${proportion}" of the sample correct answer.
-      Ask the student very shortly (less than 150 chars) to provide a more detailed answer.`;
+  // if (proportion < 25 && allExplanantions.length === 0) {
+  //   const tooShortPrompt = `
+  //     The student's answer is too short. It is only "${proportion}" of the sample correct answer.
+  //     Ask the student very shortly (less than 150 chars) to provide a more detailed answer.`;
 
-    const result = await fetchExplanation(tooShortPrompt);
-    return {
-      newExplanation: result || simpleExplanation,
-      type: "explanation",
-    };
-  }
+  //   const result = await fetchExplanation(tooShortPrompt);
+  //   return {
+  //     newExplanation: result || simpleExplanation,
+  //     type: "explanation",
+  //   };
+  // }
 
   // 2. Generate the explanation prompt based on the correctness level
   const explanationPrompt =

@@ -12,6 +12,8 @@ import {
   removeSpecialChars,
 } from "../../SimulatorDevelopmentFunctions";
 
+// import { generateImprovement } from "../functions/AIQuestionFunctions";
+
 import {
   Question,
   Answer_text,
@@ -605,6 +607,17 @@ const ComplexQuestion = (props) => {
                   : null}
               </Button1>
             )}
+          {/* {ideas.filter((id) => id !== "").length > 0 && (
+            <Button1
+              inputColor={inputColor}
+              onClick={async (e) => {
+                e.preventDefault();
+                console.log("ideas", ideas);
+              }}
+            >
+              Improve answer
+            </Button1>
+          )} */}
         </Group>
         {/* 4.1 loading sign while the answera are being checked*/}
         {generating && (
