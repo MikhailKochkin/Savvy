@@ -143,7 +143,9 @@ const Programs = () => {
     data: data1,
   } = useQuery(PROGRAMS_QUERY);
 
-  const [tag, setTag] = useState(router.locale == "ru" ? "now" : "english_eng");
+  const [tag, setTag] = useState(
+    router.locale == "ru" ? "english" : "english_eng"
+  );
 
   useEffect(() => {
     // kick off the polyfill!
@@ -175,9 +177,9 @@ const Programs = () => {
         <>
           <div id="want">😏 Я хочу ...</div>
           <Tags>
-            <Option active={tag == "now"} onClick={(e) => move("now")}>
+            {/* <Option active={tag == "now"} onClick={(e) => move("now")}>
               Построить карьеру
-            </Option>
+            </Option> */}
             <Option active={tag == "english"} onClick={(e) => move("english")}>
               Выучить Legal English
             </Option>
@@ -196,9 +198,7 @@ const Programs = () => {
             >
               Работать с недвижимостью
             </Option>
-            {/* <Option onClick={(e) => setTag("real_estate")}>
-            Больше зарабатывать
-          </Option> */}
+
             <Option
               active={tag == "law_school"}
               onClick={(e) => move("law_school")}
@@ -220,6 +220,9 @@ const Programs = () => {
             <Option active={tag == "tech"} onClick={(e) => move("tech")}>
               Погрузиться в Legal Tech
             </Option>
+            <Option active={tag == "soft"} onClick={(e) => move("soft")}>
+              Soft Skills
+            </Option>
             <Option id="create">
               <a href="https://t.me/MikKochkin" target="_blank">
                 Создать свой курс на BeSavvy
@@ -233,7 +236,7 @@ const Programs = () => {
         id="course_container"
         moreThanOne={data.coursePages.length > 1 ? true : false}
       >
-        {filtered_programs.map((p, i) => (
+        {/* {filtered_programs.map((p, i) => (
           <Program
             key={i}
             img={p.image}
@@ -248,7 +251,7 @@ const Programs = () => {
             // conditions={p.conditions}
             id={p.id}
           />
-        ))}
+        ))} */}
         {filtered_courses
           .sort((a, b) => a.numInCareerTrack - b.numInCareerTrack)
           .map((p, i) => (

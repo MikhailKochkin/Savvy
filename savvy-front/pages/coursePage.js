@@ -8,6 +8,7 @@ export const getServerSideProps = async ({ locale }) => ({
       "nav",
       "auth",
       "create",
+      "course",
     ])),
   },
 });

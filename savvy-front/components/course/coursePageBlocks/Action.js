@@ -225,8 +225,18 @@ const Contact = styled.div`
     }
   }
   .details {
-    margin-top: 20px;
     width: 100%;
+    margin: 5px 0;
+    line-height: 1.4;
+    margin-left: 15px;
+    font-size: 1.4rem;
+
+    div {
+      margin-bottom: 8px;
+      span {
+        font-size: 1.2rem;
+      }
+    }
   }
   input {
     width: 100%;
@@ -258,7 +268,7 @@ const Contact = styled.div`
     height: auto;
 
     flex-direction: column;
-    padding: 4% 4%;
+    padding: 30px 20px;
     input {
       width: 100%;
       height: 50px;
@@ -272,9 +282,9 @@ const Contact = styled.div`
     #legal {
       width: 95%;
     }
-    #details {
-      width: 95%;
-      font-size: 1.9rem;
+    .details {
+      width: 100%;
+      font-size: 1.6rem;
     }
     form {
       width: 100%;
@@ -316,23 +326,6 @@ const Contact = styled.div`
   }
 `;
 
-const PriceBox = styled.div`
-  width: 292px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-  .price_small {
-    font-weight: 600;
-    font-size: 3.2rem;
-    /* text-align: left; */
-  }
-  div {
-    margin-right: 10px;
-  }
-`;
-
 const ButtonOpen = styled.a`
   display: flex;
   flex-direction: column;
@@ -357,6 +350,10 @@ const ButtonOpen = styled.a`
   &:hover {
     background-color: #0b44bf;
   }
+  @media (max-width: 800px) {
+    width: 100%;
+    margin-bottom: 25px;
+  }
 `;
 
 const ButtonBuy = styled.button`
@@ -374,42 +371,12 @@ const ButtonBuy = styled.button`
   &:hover {
     background-color: #e3e4ec;
   }
-`;
-
-const ButtonBuySmall = styled.button`
-  width: 292px;
-  height: 42px;
-  padding: 2%;
-  font-family: Montserrat;
-  border: 2px solid #252f3f;
-  background: none;
-  margin-bottom: 10px;
-  outline: 0;
-  cursor: pointer;
-  font-size: 1.4rem;
-  transition: ease-in 0.2s;
-  &:hover {
-    background-color: #e3e4ec;
+  @media (max-width: 800px) {
+    width: 100%;
+    margin-top: 25px;
   }
 `;
 
-const OpenCourse = styled.button`
-  width: 100%;
-  width: 292px;
-  height: 40px;
-  padding: 2%;
-  font-family: Montserrat;
-  border: 1px solid #aeaeae;
-  background: none;
-  margin-bottom: 10px;
-  outline: 0;
-  cursor: pointer;
-  font-size: 1.6rem;
-  transition: ease-in 0.2s;
-  &:hover {
-    background-color: #e2e2e2;
-  }
-`;
 const Action = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
@@ -501,70 +468,43 @@ const Action = (props) => {
       <Container>
         <Contact>
           {/* Part 1. Header. Price tag or discount offer */}
-          {props.coursePage.courseType == "FORMONEY" && (
-            <ButtonOpen
-              id="coursePage_to_demolesson"
-              onClick={(e) => {
-                e.preventDefault();
-                Router.push({
-                  pathname: "/lesson",
-                  query: {
-                    id: first_open_lesson.id,
-                    type: "story",
-                  },
-                });
-              }}
-            >
-              {t("start_open_lesson")}
-            </ButtonOpen>
-          )}
+          <ButtonOpen
+            id="coursePage_to_demolesson"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push({
+                pathname: "/subscription",
+                query: {
+                  courseId: coursePage.id,
+                },
+              });
+            }}
+          >
+            {t("open_acess")}
+          </ButtonOpen>
 
-          {props.coursePage.courseType == "PUBLIC" && (
-            <>
-              <div className="price">{t("free")}</div>
-              <ButtonOpen
-                id="coursePage_to_demolesson"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  if (!me) {
-                    alert(`Set up an account on BeSavvy`);
-                    toggleModal();
-                  } else {
-                    let enroll = await enrollOnCourse({
-                      variables: {
-                        id: me.id,
-                        coursePageId: coursePage.id,
-                      },
-                    });
-                    Router.push({
-                      pathname: "/course",
-                      query: {
-                        id: coursePage.id,
-                      },
-                    });
-                  }
-                }}
-              >
-                {enroll_loading ? "..." : t("enroll")}
-              </ButtonOpen>
-            </>
-          )}
           {/* Part 2. Course description and Purchase button */}
 
           <div className="details">
             <div className="">
-              ◼️ {coursePage.lessons.filter((l) => l.published).length}{" "}
-              {t("online_lessons")}
+              <span>✔️</span> 35+ курсов{" "}
+              {/* {coursePage.lessons.filter((l) => l.published).length}{" "}
+              {t("online_lessons")} */}
             </div>
-            {price > 4000 && <div className="">◼️ {t("webinars")}</div>}
-            <div className="">◼️ {t("access")}</div>
-            <div className="">◼️ {t("chat")}</div>
-            <div className="">◼️ {t("certificate")}</div>
+            <div className="">
+              <span>✔️</span> Помощь в подготовке к собеседованиям
+              {/* {t("access")} */}
+            </div>
+            <div className="">
+              <span>✔️</span> Чат с 100+ практикующими юристами
+            </div>
+            {/* <div className="">◼️ {t("certificate")}</div> */}
             <div className="price_div">
-              ◼️ {price ? `${price} ${currency_symbol}` : t("free")}
+              <span>✔️</span> От 1600 ₽
+              {/* {price ? `${price} ${currency_symbol}` : t("free")} */}
             </div>
 
-            {props.coursePage.currency == "ruble" &&
+            {/* {props.coursePage.currency == "ruble" &&
               props.coursePage.courseType == "FORMONEY" && (
                 <>
                   {props.coursePage.prices &&
@@ -602,69 +542,31 @@ const Action = (props) => {
                   >
                     {loading_data ? `...` : t("buy")}
                   </ButtonBuy>
-                  <ButtonBuySmall
+                  {/* <ButtonBuySmall
                     id="coursePage_buy_button"
                     onClick={(e) => getInstallments()}
                   >
                     Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
-                  </ButtonBuySmall>
+                  </ButtonBuySmall> 
                 </>
-              )}
+              )} */}
           </div>
 
-          {/* Part 3. Get access to course after purchase */}
-
-          {props.coursePage.currency == "ruble" &&
-            props.coursePage.courseType !== "PUBLIC" && (
-              <div className="open">
-                <div className="">{t("after")}</div>
-                <OpenCourse
-                  id="coursePage_open_course_button"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    let results = [];
-                    let checked_orders = await Promise.all(
-                      my_orders.map(async (o) => {
-                        let updated_res = await updateOrderAuto({
-                          variables: {
-                            userId: me.id,
-                            id: o.id,
-                          },
-                        });
-                        return updated_res;
-                      })
-                    );
-
-                    const checked_orders2 = checked_orders.filter(
-                      (c) =>
-                        c.data.updateOrderAuto !== null &&
-                        c.data.updateOrderAuto.isPaid == true
-                    );
-
-                    if (checked_orders2.length > 0) {
-                      let enroll = await enrollOnCourse({
-                        variables: {
-                          id: me.id,
-                          coursePageId: coursePage.id,
-                        },
-                      });
-                      Router.push({
-                        pathname: "/course",
-                        query: {
-                          id: coursePage.id,
-                        },
-                      });
-                    } else {
-                      alert("Payment not found.");
-                    }
-                  }}
-                >
-                  {updated_loading || enroll_loading
-                    ? t("check")
-                    : t("open_acess")}
-                </OpenCourse>
-              </div>
-            )}
+          <ButtonBuy
+            id="coursePage_to_demolesson"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push({
+                pathname: "/lesson",
+                query: {
+                  id: first_open_lesson.id,
+                  type: "story",
+                },
+              });
+            }}
+          >
+            {t("start_open_lesson")}
+          </ButtonBuy>
         </Contact>
       </Container>
     </Styles>

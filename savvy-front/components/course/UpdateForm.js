@@ -788,7 +788,8 @@ const UpdateForm = (props) => {
               className="number_button"
               onClick={(e) => {
                 e.preventDefault();
-                let new_goals = goals;
+                let new_goals = [...goals];
+                console.log("new_goals", new_goals);
                 new_goals.pop();
                 setGoals([...new_goals]);
               }}

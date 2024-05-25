@@ -223,9 +223,13 @@ const Landing = (props) => {
               </button>
               <button className="button2">
                 {" "}
-                <Link href="/build_your_simulator">
-                  ⚙️ Build your simulator
-                </Link>
+                {router && router.locale == "ru" ? (
+                  <Link href="/subscription">📚 Открыть курсы</Link>
+                ) : (
+                  <Link href="/build_your_simulator">
+                    ⚙️ Build your simulator
+                  </Link>
+                )}
               </button>
             </Buttons>
           </div>

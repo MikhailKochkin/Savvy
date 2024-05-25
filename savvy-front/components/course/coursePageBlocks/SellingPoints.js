@@ -6,7 +6,6 @@ import parse from "html-react-parser";
 
 const Styles = styled.div`
   width: 100%;
-  min-height: 100vh;
   /* background: #f4f8fc; */
   border-top: 1px solid #dce2e7;
   display: flex;

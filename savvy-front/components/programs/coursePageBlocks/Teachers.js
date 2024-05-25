@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import parse from 'html-react-parser';
-
+import parse from "html-react-parser";
 
 const Styles = styled.div`
   width: 100vw;
@@ -12,7 +11,6 @@ const Styles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 60px 0;
 `;
 
 const Container = styled.div`

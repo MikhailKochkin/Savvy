@@ -186,7 +186,13 @@ const NewCoursePage = (props) => {
           <ATF id={props.id} />
           {data && !loading && (
             <>
-              {width < 880 && <MobileAction coursePage={data.coursePage} />}
+              {width < 880 && (
+                <MobileAction
+                  promocode={props.promocode}
+                  me={me}
+                  coursePage={data.coursePage}
+                />
+              )}
               <Goal coursePage={data.coursePage} />
               <Syllabus
                 id={props.id}
@@ -203,7 +209,7 @@ const NewCoursePage = (props) => {
                 data.coursePage.prices.prices.length > 0 && (
                   <Prices coursePage={data.coursePage} />
                 )}
-              {width < 880 &&
+              {/* {width < 880 &&
                 (props.form == "lead" ? (
                   <MobileLeads me={me} coursePage={data.coursePage} />
                 ) : (
@@ -212,24 +218,19 @@ const NewCoursePage = (props) => {
                     me={me}
                     promocode={props.promocode}
                   />
-                ))}
+                ))} */}
               <Teachers coursePage={data.coursePage} />
             </>
           )}
         </Main>
         <Money>
-          {!loading &&
-            data &&
-            width > 880 &&
-            (props.form == "lead" ? (
-              <ActionLeads me={me} coursePage={data.coursePage} />
-            ) : (
-              <DynamicAction
-                promocode={props.promocode}
-                me={me}
-                coursePage={data.coursePage}
-              />
-            ))}
+          {!loading && data && width > 880 && (
+            <DynamicAction
+              promocode={props.promocode}
+              me={me}
+              coursePage={data.coursePage}
+            />
+          )}
         </Money>
       </Container>
     </Styles>

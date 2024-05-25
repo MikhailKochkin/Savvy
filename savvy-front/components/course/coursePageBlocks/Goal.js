@@ -4,11 +4,10 @@ import styled from "styled-components";
 
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const Styles = styled.div`
   width: 100%;
-  min-height: 70vh;
   background: #fff;
   display: flex;
   flex-direction: column;
@@ -58,7 +57,6 @@ const Container = styled.div`
   }
   #audience_id {
     width: 90%;
-    /* height: 150px; */
     font-size: 1.6rem;
     display: flex;
     flex-direction: column;
@@ -140,12 +138,8 @@ const Container = styled.div`
 `;
 
 const Blue = styled.div`
-  background: #171e2e;
-  background-image: url("/static/pattern.svg");
-  background-size: cover;
-  color: #dee1ec;
-  padding: 10px 30px;
-  border-radius: 15px;
+  border-top: 1px solid #171e2e;
+  padding: 10px 0;
   width: 85%;
   @media (max-width: 800px) {
     width: 100%;
@@ -169,32 +163,16 @@ const Goal = (props) => {
   return (
     <Styles>
       <Container>
-        <div id="goal_message"></div>
-        <div id="goal_examples">
-          {coursePage.goals.map((g) => (
-            <div>{parse(g)}</div>
-          ))}
-        </div>
-        <Blue>
-          <h2>
-            {/* {d.goal_header ? (
-              parse(d.goal_header)
-            ) : ( */}
-            {/* <>
-              {router.locale == "ru" ? (
-                <>Для кого этот курс?</>
-              ) : (
-                <>Who is this course for?</>
-              )}
-            </> */}
-            {/* )} */}
-          </h2>
-          <div id="audience_id">
-            <div className="audience">
-              {coursePage.audience && parse(coursePage.audience)}
+        <div id="goal_examples">{coursePage.goals.map((g) => parse(g))}</div>
+        {coursePage.audience && (
+          <Blue>
+            <div id="audience_id">
+              <div className="audience">
+                {coursePage.audience && parse(coursePage.audience)}
+              </div>
             </div>
-          </div>
-        </Blue>
+          </Blue>
+        )}
       </Container>
     </Styles>
   );

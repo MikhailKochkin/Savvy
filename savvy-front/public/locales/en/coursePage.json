@@ -68,5 +68,11 @@
   "course_result": "How will the students change after they complete the course?",
   "change": "Save",
   "changing": "Saving...",
-  "back": "Back to course page"
+  "back": "Back to course page",
+  "find": "Find",
+  "gallery": "Gallery",
+  "table": "Table",
+  "name": "Name",
+  "description": "Description",
+  "tags": "Tags"
 }

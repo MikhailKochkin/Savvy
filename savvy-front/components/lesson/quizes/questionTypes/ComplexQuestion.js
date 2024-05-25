@@ -218,7 +218,6 @@ const ComplexQuestion = (props) => {
             );
             // get the result
             const res = await response.json();
-
             let new_obj = {
               idea: idea,
               result: res.res,
