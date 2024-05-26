@@ -389,6 +389,56 @@ const Subscription = (props) => {
         <div className="plans">
           <Form>
             <Banner>
+              <div className="bannerFirst">Мини</div>
+              <div>Для студентов</div>
+            </Banner>
+            <div className="section">
+              <div className="comment">Стоимость</div>
+              <div className="label" for="mistakes">
+                1990 ₽ / мес
+              </div>
+            </div>
+            <div className="section">
+              <div className="comment">
+                Доступные курсы{" "}
+                <span
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-html={`Сразу после оплаты вы получите доступ к 1 курсу.<br/>
+                  Впоследствии каждый месяц вы сможете открывать еще один новый курс в случае продления подписки.<br/>
+                  Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
+                  data-tooltip-place="right"
+                >
+                  ?
+                </span>
+              </div>
+              <div className="label" for="mistakes">
+                1 новый курс в месяц
+              </div>
+            </div>
+            <div className="section">
+              <div className="comment">Карьерные сервисы</div>
+              <div className="label" for="mistakes">
+                X
+              </div>
+            </div>
+            <div className="section">
+              <div className="comment">Сообщество студентов и авторов</div>
+              <div className="label" for="mistakes">
+                ✔️
+              </div>
+            </div>
+            <div className="section">
+              <div className="comment">Количество студентов</div>
+              <div className="label" for="mistakes">
+                1
+              </div>
+            </div>
+            <ButtonBuy onClick={(e) => completePayment(1990)}>
+              {loading_data ? "..." : "Подписаться"}
+            </ButtonBuy>
+          </Form>
+          <Form>
+            <Banner>
               <div className="bannerFirst">Базовый</div>
               <div>Учитесь самостоятельно</div>
             </Banner>
@@ -494,7 +544,7 @@ const Subscription = (props) => {
               Оформить рассрочку
             </ButtonOpen>
           </Form>
-          <Form>
+          {/* <Form>
             <Banner>
               <div className="bannerFirst">Бизнес</div>
               <div>Обучайте сотрудников</div>
@@ -532,7 +582,7 @@ const Subscription = (props) => {
             <ButtonBuy onClick={(e) => completePayment(29990)}>
               {loading_data ? "..." : "Подписаться"}
             </ButtonBuy>
-          </Form>
+          </Form> */}
         </div>
         <Comment>
           <div>

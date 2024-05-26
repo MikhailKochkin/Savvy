@@ -169,6 +169,7 @@ const Programs = () => {
     slide();
   };
   const filtered_courses = data.coursePages.filter((c) => c.tags.includes(tag));
+  console.log(filtered_courses);
   const filtered_programs = data1.programs.filter((c) => c.tags.includes(tag));
 
   return (

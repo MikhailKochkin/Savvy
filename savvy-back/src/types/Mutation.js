@@ -1587,44 +1587,50 @@ const Mutation = mutationType({
 
         await Promise.all(
           originalLesson.problems.map(async (problem) => {
-            let newSteps = problem.steps.problemItems.map((step) => {
-              return {
-                ...step,
+            if (
+              problem.steps &&
+              problem.steps.problemItems &&
+              problem.steps.problemItems.length !== 0
+            ) {
+              let newSteps = problem.steps.problemItems.map((step) => {
+                return {
+                  ...step,
 
-                // Update id reference
-                id: newIdMapping[step.id] || step.id,
+                  // Update id reference
+                  id: newIdMapping[step.id] || step.id,
 
-                // Update next value
-                next: {
-                  true: {
-                    type: step.next.true.type,
-                    value:
-                      newIdMapping[step.next.true.value] ||
-                      step.next.true.value,
+                  // Update next value
+                  next: {
+                    true: {
+                      type: step.next.true.type,
+                      value:
+                        newIdMapping[step.next.true.value] ||
+                        step.next.true.value,
+                    },
+                    false: {
+                      type: step.next.false.type,
+                      value:
+                        newIdMapping[step.next.false.value] ||
+                        step.next.false.value,
+                    },
                   },
-                  false: {
-                    type: step.next.false.type,
-                    value:
-                      newIdMapping[step.next.false.value] ||
-                      step.next.false.value,
+                };
+              });
+              const createdProblem = await ctx.prisma.problem.create({
+                data: {
+                  text: problem.text,
+                  lessonID: newLesson.id,
+                  user: {
+                    connect: { id: userId },
                   },
+                  lesson: {
+                    connect: { id: newLesson.id },
+                  },
+                  steps: { problemItems: newSteps },
                 },
-              };
-            });
-            const createdProblem = await ctx.prisma.problem.create({
-              data: {
-                text: problem.text,
-                lessonID: newLesson.id,
-                user: {
-                  connect: { id: userId },
-                },
-                lesson: {
-                  connect: { id: newLesson.id },
-                },
-                steps: { problemItems: newSteps },
-              },
-            });
-            newIdMapping[problem.id] = createdProblem.id;
+              });
+              newIdMapping[problem.id] = createdProblem.id;
+            }
           })
         );
 
