@@ -200,34 +200,35 @@ const Teams = (props) => {
           <Container>
             <div className="h2">{t("my_teams")}</div>
             <div className="block">
-              {teams.map((t, i) => (
-                <div className="row">
-                  {i + 1}. {t.name}
-                  <div>
-                    {t.users.map((u) => (
-                      <div className="image_row">
-                        {u.image && <img src={u.image} />}
-                        <div>
-                          {u.name} {u.surname}
+              {teams &&
+                teams.map((t, i) => (
+                  <div className="row">
+                    {i + 1}. {t.name}
+                    <div>
+                      {t.users.map((u) => (
+                        <div className="image_row">
+                          {u.image && <img src={u.image} />}
+                          <div>
+                            {u.name} {u.surname}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <div className="link">
+                      Use this link to invite friends to your team:{" "}
+                      {`https://besavvy.app/teamInvite?id=${t.id}`}
+                      <button
+                        onClick={(e) =>
+                          navigator.clipboard.writeText(
+                            `https://besavvy.app/teamInvite?id=${t.id}`
+                          )
+                        }
+                      >
+                        Copy
+                      </button>
+                    </div>
                   </div>
-                  <div className="link">
-                    Use this link to invite friends to your team:{" "}
-                    {`https://besavvy.app/teamInvite?id=${t.id}`}
-                    <button
-                      onClick={(e) =>
-                        navigator.clipboard.writeText(
-                          `https://besavvy.app/teamInvite?id=${t.id}`
-                        )
-                      }
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
             <div className="h2">{t("create_new_team")}</div>
             <input

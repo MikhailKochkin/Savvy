@@ -1,44 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Mutation } from "@apollo/client/react/components";
+import { useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
 import { CURRENT_USER_QUERY } from "./User";
-import { Unis, Companies } from "../config";
-// import UserProgress from "./UserProgress";
-
-const UPDATE_USER_MUTATION = gql`
-  mutation UPDATE_USER_MUTATION(
-    $id: String!
-    $name: String
-    $surname: String
-    $email: String
-    $status: Status
-    $image: String
-    $work: String
-    $description: String
-    $isFamiliar: Boolean
-    $tags: [String]
-  ) {
-    updateUser(
-      id: $id
-      email: $email
-      name: $name
-      surname: $surname
-      status: $status
-      image: $image
-      description: $description
-      work: $work
-      isFamiliar: $isFamiliar
-      tags: $tags
-    ) {
-      id
-      name
-    }
-  }
-`;
 
 const Form = styled.div`
   display: flex;
@@ -179,14 +146,35 @@ const Img = styled.img`
   margin: 3% 0;
 `;
 
-const Green = styled.div`
-  background: #4dac44;
-  padding: 2%;
-  border-radius: 10px;
-  width: 45%;
-  color: white;
-  text-align: center;
-  display: ${(props) => (props.show ? "block" : "none")};
+const UPDATE_USER_MUTATION = gql`
+  mutation UPDATE_USER_MUTATION(
+    $id: String!
+    $name: String
+    $surname: String
+    $email: String
+    $status: Status
+    $image: String
+    $work: String
+    $description: String
+    $isFamiliar: Boolean
+    $tags: [String]
+  ) {
+    updateUser(
+      id: $id
+      email: $email
+      name: $name
+      surname: $surname
+      status: $status
+      image: $image
+      description: $description
+      work: $work
+      isFamiliar: $isFamiliar
+      tags: $tags
+    ) {
+      id
+      name
+    }
+  }
 `;
 
 const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
@@ -195,7 +183,6 @@ const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
 });
 
 const Account = (props) => {
-  const [show, setShow] = useState(false);
   const [status, setStatus] = useState(props.me.status);
   const [name, setName] = useState(props.me.name);
   const [surname, setSurname] = useState(props.me.surname);
@@ -204,14 +191,24 @@ const Account = (props) => {
   const [upload, setUpload] = useState(false);
   const [description, setDescription] = useState(props.me.description);
   const [work, setWork] = useState(props.me.work);
+  const [subscriptionType, setSubscriptionType] = useState(
+    props.me.subscriptionType ? props.me.subscriptionType : "None"
+  );
+  const [subscriptionLength, setSubscriptionLength] = useState(
+    props.me.subscriptionType ? props.me.subscriptionType : "None"
+  );
 
   const { t } = useTranslation("account");
 
-  const myCallback = (data) => {
+  const [updateUser, { error, loading }] = useMutation(UPDATE_USER_MUTATION, {
+    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+  });
+
+  const handleWorkChange = (data) => {
     setWork(data);
   };
 
-  const myCallback2 = (data) => {
+  const handleDescriptionChange = (data) => {
     setDescription(data);
   };
 
@@ -233,130 +230,116 @@ const Account = (props) => {
     setUpload(false);
   };
 
-  const { me } = props;
-  return (
-    <>
-      <Mutation
-        mutation={UPDATE_USER_MUTATION}
-        variables={{
-          id: props.me.id,
-          email,
-          name,
-          surname,
-          status,
-          image,
-          work,
-          description,
-          tags: props.me.tags,
-        }}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
-        {(updateUser, { error, loading }) => (
-          <Form>
-            <Fieldset disabled={loading} aria-busy={loading}>
-              <>
-                <div className="Title">{t("settings")}</div>
-                <Container>
-                  {/* <UserProgress me={me} /> */}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await updateUser({
+      variables: {
+        id: props.me.id,
+        email,
+        name,
+        surname,
+        status,
+        image,
+        work,
+        description,
+        tags: props.me.tags,
+      },
+    });
+  };
 
-                  <input
-                    className="second"
-                    type="text"
-                    placeholder={t("name")}
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                  <br />
-                  <input
-                    className="second"
-                    type="text"
-                    placeholder={t("surname")}
-                    required
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
-                  />
-                  {/* <Comment>
-                    Баланс: <span>{props.me.score}</span> Узнайте, как увеличить
-                    баланс и покупать курсы за бесплатно{" "}
-                    <a target="_blank" href="https://besavvy.app/navigator">
-                      по ссылке.
-                    </a>
-                  </Comment> */}
-                  <input
-                    className="second"
-                    type="text"
-                    placeholder={t("email")}
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <>
-                    <select
-                      defaultValue={me.status}
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                    >
-                      <option value="NAN">{t("not_chosen")}</option>
-                      <option value="STUDENT">{t("student")}</option>
-                      <option value="AUTHOR">{t("author")}</option>
-                      <option value="HR">HR</option>
-                    </select>
-                    <Comment>{t("choose_status")}</Comment>
-                  </>
-                  {status == "AUTHOR" && (
-                    <>
-                      <Frame>
-                        <DynamicLoadedEditor
-                          index={0}
-                          name="description"
-                          getEditorText={myCallback}
-                          value={work}
-                          placeholder="Your place of work and position"
-                        />
-                      </Frame>
-                      <Comment>{t("your_work")}</Comment>
-                      <Frame>
-                        <DynamicLoadedEditor
-                          index={0}
-                          name="description"
-                          getEditorText={myCallback2}
-                          value={description}
-                          placeholder="Tell us about your experience"
-                        />
-                      </Frame>
-                      <Comment>{t("your_experience")}</Comment>
-                    </>
-                  )}
-                  <input
-                    // style={{ display: "none" }}
-                    className="second"
-                    type="file"
-                    id="file"
-                    name="file"
-                    placeholder={t("upload_image")}
-                    onChange={uploadFile}
-                  />
-                  {upload && t("uploading")}
-                  <Img src={image} alt="Upload Preview" />
-                </Container>
-                <Buttons>
-                  <Button
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      const res = await updateUser();
-                      // this.setState({ show: true });
-                    }}
-                  >
-                    {loading ? t("updating..") : t("update")}
-                  </Button>
-                </Buttons>
-              </>
-            </Fieldset>
-          </Form>
-        )}
-      </Mutation>
-    </>
+  const handleCancelSubscription = async () => {
+    // await cancelSubscription({
+    //   variables: {
+    //     id: props.me.id,
+    //   },
+    // });
+  };
+
+  const { me } = props;
+
+  return (
+    <Form>
+      <Fieldset disabled={loading} aria-busy={loading}>
+        <div className="Title">{t("settings")}</div>
+        <Container>
+          <input
+            className="second"
+            type="text"
+            placeholder={t("name")}
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <br />
+          <input
+            className="second"
+            type="text"
+            placeholder={t("surname")}
+            required
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
+          />
+          <input
+            className="second"
+            type="text"
+            placeholder={t("email")}
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <select
+            defaultValue={me.status}
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="NAN">{t("not_chosen")}</option>
+            <option value="STUDENT">{t("student")}</option>
+            <option value="AUTHOR">{t("author")}</option>
+            <option value="HR">HR</option>
+          </select>
+          <Comment>{t("choose_status")}</Comment>
+          {status === "AUTHOR" && (
+            <>
+              <Frame>
+                <DynamicLoadedEditor
+                  index={0}
+                  name="description"
+                  getEditorText={handleWorkChange}
+                  value={work}
+                  placeholder="Your place of work and position"
+                />
+              </Frame>
+              <Comment>{t("your_work")}</Comment>
+              <Frame>
+                <DynamicLoadedEditor
+                  index={0}
+                  name="description"
+                  getEditorText={handleDescriptionChange}
+                  value={description}
+                  placeholder="Tell us about your experience"
+                />
+              </Frame>
+              <Comment>{t("your_experience")}</Comment>
+            </>
+          )}
+          <input
+            className="second"
+            type="file"
+            id="file"
+            name="file"
+            placeholder={t("upload_image")}
+            onChange={uploadFile}
+          />
+          {upload && t("uploading")}
+          <Img src={image} alt="Upload Preview" />
+        </Container>
+        <Buttons>
+          <Button onClick={handleSubmit}>
+            {loading ? t("updating..") : t("update")}
+          </Button>
+        </Buttons>
+      </Fieldset>
+    </Form>
   );
 };
 

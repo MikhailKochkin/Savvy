@@ -23,5 +23,17 @@
   "saving": "Saving...",
   "team_settings": "Teams settings",
   "my_teams": "My teams",
-  "create_new_team": "Create new team"
+  "create_new_team": "Create new team",
+  "subscription": "Subscription",
+  "subscription_settings": "Subscription settings",
+  "choose_subscription_type": "Your subscription type",
+  "choose_subscription_length": "Your subscription length",
+  "update_subscription": "Update subscription",
+  "cancel_subscription": "Cancel subscription",
+  "mini": "Mini",
+  "regular": "Regular",
+  "team": "Team",
+  "no_info": "No",
+  "monthly": "Monthly",
+  "annually": "Annually"
 }

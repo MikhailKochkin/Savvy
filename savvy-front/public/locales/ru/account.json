@@ -23,5 +23,17 @@
   "saving": "Сохраняю...",
   "team_settings": "Настройки команд",
   "my_teams": "Мои команды",
-  "create_new_team": "Создать новую команду"
+  "create_new_team": "Создать новую команду",
+  "subscription": "Подписка",
+  "subscription_settings": "Настройки подписки",
+  "choose_subscription_type": "Выберите тип подписки",
+  "choose_subscription_length": "Выберите длительность подписки",
+  "update_subscription": "Изменить условия подписки",
+  "cancel_subscription": "Отменить подписку",
+  "mini": "Мини",
+  "regular": "Базовый",
+  "team": "Командный",
+  "no_info": "Нет",
+  "monthly": "Ежемесячно",
+  "annually": "Ежегодно"
 }

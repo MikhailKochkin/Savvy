@@ -349,8 +349,7 @@ const NoteStyles = styled.div`
     overflow-x: scroll;
   }
   table {
-    width: 540px;
-    border: 1px solid green;
+    width: 640px;
     border-collapse: collapse;
     font-size: 1.4rem;
     tbody {
