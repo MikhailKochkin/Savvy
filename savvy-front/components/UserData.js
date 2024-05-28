@@ -650,6 +650,7 @@ const ClientData = (props) => {
               comment={c.comment}
               messages={c.messages}
               orders={c.orders}
+              subscriptions={c.subscriptions}
               new_subjects={c.new_subjects}
               traffic_sources={c.traffic_sources}
               lessonResults={c.lessonResults}

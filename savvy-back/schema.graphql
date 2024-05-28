@@ -2619,6 +2619,7 @@ type Mutation {
   createShot(comments: [String], lessonId: String, name: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
   createStatement(forumId: String, miniforumId: String, text: String): Statement
+  createSubscription(endDate: DateTime, paymentID: String, startDate: DateTime, term: String, type: String, userId: String): Subscription
   createTeam(name: String): Team
   createTeamQuest(introduction: String, lessonId: String, solution: String, tasks: QuestList): TeamQuest
   createTeamQuestResult(answer: String, lessonId: String, teamQuestId: String): TeamQuestResult
@@ -2699,6 +2700,7 @@ type Mutation {
   updateShot(comments: [String], id: String, name: String, parts: [String], title: String): Shot
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
+  updateSubscription(endDate: DateTime, id: String, isActive: Boolean, paymentID: String, renewals: Renewals, term: String, type: String): Subscription
   updateTextEditor(complexity: Int, context: String, goal: String, id: String, name: String, text: String, totalMistakes: Int): TextEditor
   updateUser(active: Boolean, comment: String, description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
   updateUserLevel(consumedContent: ConsumedContentList, id: String, isProgressPublic: Boolean, learningStreak: [DateTime], level: Float, myProgress: MyProgressList): UserLevel
@@ -4198,6 +4200,16 @@ input Reaction {
   reaction: String
 }
 
+input Renewal {
+  date: String
+  price: String
+  type: String
+}
+
+input Renewals {
+  Renewals: [Renewal]
+}
+
 input Review {
   image: String
   name: String
@@ -4548,6 +4560,67 @@ input StringNullableListFilter {
   hasEvery: [String!]
   hasSome: [String!]
   isEmpty: Boolean
+}
+
+type Subscription {
+  createdAt: DateTime!
+  endDate: DateTime
+  id: String!
+  isActive: Boolean!
+  paymentID: String
+  renewals: Json
+  startDate: DateTime
+  term: String
+  type: String
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+input SubscriptionListRelationFilter {
+  every: SubscriptionWhereInput
+  none: SubscriptionWhereInput
+  some: SubscriptionWhereInput
+}
+
+input SubscriptionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input SubscriptionWhereInput {
+  AND: [SubscriptionWhereInput!]
+  NOT: [SubscriptionWhereInput!]
+  OR: [SubscriptionWhereInput!]
+  createdAt: DateTimeFilter
+  endDate: DateTimeNullableFilter
+  id: StringFilter
+  isActive: BoolFilter
+  paymentID: StringNullableFilter
+  renewals: JsonNullableFilter
+  startDate: DateTimeNullableFilter
+  term: StringNullableFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
+input SubscriptionWhereUniqueInput {
+  AND: [SubscriptionWhereInput!]
+  NOT: [SubscriptionWhereInput!]
+  OR: [SubscriptionWhereInput!]
+  createdAt: DateTimeFilter
+  endDate: DateTimeNullableFilter
+  id: String
+  isActive: BoolFilter
+  paymentID: StringNullableFilter
+  renewals: JsonNullableFilter
+  startDate: DateTimeNullableFilter
+  term: StringNullableFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
 }
 
 input Syllabus {
@@ -5241,6 +5314,7 @@ type User {
   score: Int
   status: String
   studentFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
+  subscriptions(after: SubscriptionWhereUniqueInput, before: SubscriptionWhereUniqueInput, first: Int, last: Int): [Subscription!]!
   surname: String
   tags: [String!]!
   teacherFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
@@ -5414,6 +5488,7 @@ input UserOrderByWithRelationInput {
   status: SortOrderInput
   studentFeedback: FeedbackOrderByRelationAggregateInput
   subjects: SortOrder
+  subscriptions: SubscriptionOrderByRelationAggregateInput
   surname: SortOrderInput
   tags: SortOrder
   teacherFeedback: FeedbackOrderByRelationAggregateInput
@@ -5512,6 +5587,7 @@ input UserWhereInput {
   status: StringNullableFilter
   studentFeedback: FeedbackListRelationFilter
   subjects: StringNullableListFilter
+  subscriptions: SubscriptionListRelationFilter
   surname: StringNullableFilter
   tags: StringNullableListFilter
   teacherFeedback: FeedbackListRelationFilter
@@ -5610,6 +5686,7 @@ input UserWhereUniqueInput {
   status: StringNullableFilter
   studentFeedback: FeedbackListRelationFilter
   subjects: StringNullableListFilter
+  subscriptions: SubscriptionListRelationFilter
   surname: StringNullableFilter
   tags: StringNullableListFilter
   teacherFeedback: FeedbackListRelationFilter

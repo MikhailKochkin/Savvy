@@ -24,6 +24,18 @@ const CURRENT_USER_QUERY = gql`
       work
       score
       description
+      subscriptions {
+        id
+        isActive
+        type
+        term
+        startDate
+        paymentID
+        renewals
+        endDate
+        createdAt
+        updatedAt
+      }
       # teams {
       #   id
       #   name

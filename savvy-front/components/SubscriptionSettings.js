@@ -6,6 +6,22 @@ import { useTranslation } from "next-i18next";
 
 import { CURRENT_USER_QUERY } from "./User";
 
+const UPDATE_SUBSCRIPTION_MUTATION = gql`
+  mutation UPDATE_SUBSCRIPTION_MUTATION(
+    $id: String!
+    $isActive: Boolean
+    $type: String
+    $term: String
+  ) {
+    updateSubscription(id: $id, isActive: $isActive, type: $type, term: $term) {
+      id
+      isActive
+      type
+      term
+    }
+  }
+`;
+
 const Form = styled.div`
   display: flex;
   flex-direction: row;
@@ -171,12 +187,20 @@ const UPDATE_USER_MUTATION = gql`
   }
 `;
 const Account = (props) => {
+  const [isActive, setIsActive] = useState(
+    props.me.subscriptions[0].isActive
+      ? props.me.subscriptions[0].isActive
+      : false
+  );
   const [subscriptionType, setSubscriptionType] = useState(
-    props.me.subscriptionType ? props.me.subscriptionType : "None"
+    props.me.subscriptions[0].type ? props.me.subscriptions[0].type : "None"
   );
   const [subscriptionLength, setSubscriptionLength] = useState(
-    props.me.subscriptionType ? props.me.subscriptionType : "None"
+    props.me.subscriptions[0].term ? props.me.subscriptions[0].term : "None"
   );
+
+  console.log("subscriptionType", subscriptionType);
+  console.log("subscriptionLength", subscriptionLength);
 
   const { t } = useTranslation("account");
 
@@ -184,38 +208,42 @@ const Account = (props) => {
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
   });
 
+  const [updateSubscription, { error: subscriptionError }] = useMutation(
+    UPDATE_SUBSCRIPTION_MUTATION
+  );
+
   const handleUpdateSubscription = async (e) => {
     e.preventDefault();
-    // await updateUser({
-    //   variables: {
-    //     id: props.me.id,
-    //     email,
-    //     name,
-    //     surname,
-    //     status,
-    //     image,
-    //     work,
-    //     description,
-    //     tags: props.me.tags,
-    //   },
-    // });
-  };
-
-  const handleCancelSubscription = async () => {
-    // await cancelSubscription({
-    //   variables: {
-    //     id: props.me.id,
-    //   },
-    // });
+    await updateSubscription({
+      variables: {
+        id: props.me.subscriptions[0].id,
+        isActive: isActive,
+        type: subscriptionType,
+        term: subscriptionLength,
+      },
+    });
   };
 
   const { me } = props;
+  console.log(me.subscriptions);
 
   return (
     <Form>
       <Fieldset disabled={loading} aria-busy={loading}>
         <div className="Title">{t("subscription_settings")}</div>
         <Container>
+          <Comment>{t("isActive")}</Comment>
+          <select
+            value={isActive}
+            onChange={(e) =>
+              setIsActive(e.target.value == "true" ? true : false)
+            }
+          >
+            <option value={null}></option>
+            <option value={true}>{t("active")}</option>
+            <option value={false}>{t("inactive")}</option>
+          </select>
+
           <Comment>{t("choose_subscription_type")}</Comment>
 
           <select
@@ -223,9 +251,9 @@ const Account = (props) => {
             onChange={(e) => setSubscriptionType(e.target.value)}
           >
             <option value={null}>{t("no_info")}</option>
-            <option value="MINI">{t("mini")}</option>
-            <option value="REGULAR">{t("regular")}</option>
-            <option value="TEAM">{t("team")}</option>
+            <option value="mini">{t("mini")}</option>
+            <option value="regular">{t("regular")}</option>
+            <option value="team">{t("team")}</option>
           </select>
           <Comment>{t("choose_subscription_length")}</Comment>
 
@@ -234,16 +262,16 @@ const Account = (props) => {
             onChange={(e) => setSubscriptionLength(e.target.value)}
           >
             <option value={null}>{t("no_info")}</option>
-            <option value="MANUAL">{t("monthly")}</option>
-            <option value="ANNUAL">{t("annually")}</option>
+            <option value="monthly">{t("monthly")}</option>
+            <option value="annually">{t("annually")}</option>
           </select>
           <BlueButton onClick={handleUpdateSubscription}>
             {t("update_subscription")}
           </BlueButton>
           <br />
-          <SimpleButton onClick={handleCancelSubscription}>
+          {/* <SimpleButton onClick={handleCancelSubscription}>
             {t("cancel_subscription")}
-          </SimpleButton>
+          </SimpleButton> */}
         </Container>
       </Fieldset>
     </Form>

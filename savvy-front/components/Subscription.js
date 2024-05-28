@@ -418,7 +418,7 @@ const Subscription = (props) => {
             <div className="section">
               <div className="comment">Карьерные сервисы</div>
               <div className="label" for="mistakes">
-                X
+                ✔️
               </div>
             </div>
             <div className="section">
@@ -433,7 +433,7 @@ const Subscription = (props) => {
                 1
               </div>
             </div>
-            <ButtonBuy onClick={(e) => completePayment(1990)}>
+            <ButtonBuy onClick={(e) => completePayment(1)}>
               {loading_data ? "..." : "Подписаться"}
             </ButtonBuy>
           </Form>

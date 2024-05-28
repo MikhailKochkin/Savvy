@@ -67,6 +67,7 @@ async function getMessageOpens(serverToken, messageID) {
 
 const { exists } = require("fs");
 const { Dialogue, ChatResult } = require("./Results");
+const { Renewals } = require("./User");
 
 // const { Client } = require("whatsapp-web.js");
 // const wa_client = new Client();
@@ -3735,6 +3736,7 @@ const Mutation = mutationType({
           payment_method_data: {
             type: "bank_card",
           },
+          save_payment_method: true,
           receipt: {
             customer: {
               email: user.email,
@@ -3915,40 +3917,71 @@ const Mutation = mutationType({
           },
           `{ id, user { id, name, email}, coursePage {id, title}, paymentID }`
         );
+        console.log("order", order.id);
 
         // 2. check at yookassa if any order is paid
         if (order.paymentID) {
           const payment = await community_checkout.getPayment(order.paymentID);
+          console.log("payment", payment);
+          const createPayload = {
+            amount: {
+              value: 1,
+              currency: "RUB",
+            },
+            payment_method_id: payment.id,
+            receipt: {
+              customer: {
+                email: "mi.kochkin@ya.ru",
+              },
+              items: [
+                {
+                  description: "BeSavvy Plus",
+                  quantity: "1",
+                  amount: {
+                    value: 1,
+                    currency: "RUB",
+                  },
+                  vat_code: 1,
+                },
+              ],
+            },
+            capture: true,
+          };
 
-          if (payment.status == "succeeded") {
-            const notification = await client.sendEmail({
-              From: "Mikhail@besavvy.app",
-              To: order.user.email,
-              Subject: "🎆 BeSavvy: доступ к курсу открыт!",
-              HtmlBody: PurchaseEmail.PurchaseEmail(
-                order.user.name,
-                order.coursePage.title,
-                order.coursePage.id
-              ),
-            });
-            return ctx.prisma.order.update({
-              data: {
-                isPaid: true,
-              },
-              where: {
-                id: args.id,
-              },
-            });
-          } else {
-            return ctx.prisma.order.update({
-              data: {
-                isPaid: false,
-              },
-              where: {
-                id: args.id,
-              },
-            });
-          }
+          const newPayment = await community_checkout.createPayment(
+            createPayload
+          );
+
+          console.log("newPayment", newPayment);
+          // if (payment.status == "succeeded") {
+          //   const notification = await client.sendEmail({
+          //     From: "Mikhail@besavvy.app",
+          //     To: order.user.email,
+          //     Subject: "🎆 BeSavvy: доступ к курсу открыт!",
+          //     HtmlBody: PurchaseEmail.PurchaseEmail(
+          //       order.user.name,
+          //       order.coursePage.title,
+          //       order.coursePage.id
+          //     ),
+          //   });
+          //   return ctx.prisma.order.update({
+          //     data: {
+          //       isPaid: true,
+          //     },
+          //     where: {
+          //       id: args.id,
+          //     },
+          //   });
+          // } else {
+          //   return ctx.prisma.order.update({
+          //     data: {
+          //       isPaid: false,
+          //     },
+          //     where: {
+          //       id: args.id,
+          //     },
+          //   });
+          // }
         }
         // 3. give access
       },
@@ -5042,6 +5075,60 @@ const Mutation = mutationType({
       },
       resolve: async (_, { id, ...args }, ctx) => {
         return ctx.prisma.growthArea.update({ where: { id }, data: args });
+      },
+    });
+    t.field("createSubscription", {
+      type: "Subscription",
+      args: {
+        type: stringArg(),
+        startDate: arg({
+          type: "DateTime",
+        }),
+        endDate: arg({
+          type: "DateTime",
+        }),
+        paymentID: stringArg(),
+        userId: stringArg(),
+        term: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const userId = args.userId;
+        delete args.userId;
+        const Sub = await ctx.prisma.subscription.create({
+          data: {
+            user: {
+              connect: {
+                id: userId,
+              },
+            },
+            ...args,
+          },
+        });
+        return Sub;
+      },
+    });
+    t.field("updateSubscription", {
+      type: "Subscription",
+      args: {
+        id: stringArg(),
+        type: stringArg(),
+        isActive: booleanArg(),
+        endDate: arg({
+          type: "DateTime",
+        }),
+        term: stringArg(),
+        paymentID: stringArg(),
+        renewals: arg({
+          type: "Renewals",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        const subscriptionId = args.id;
+        delete args.id;
+        return ctx.prisma.subscription.update({
+          where: { id: subscriptionId },
+          data: args,
+        });
       },
     });
   },

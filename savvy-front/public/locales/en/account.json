@@ -35,5 +35,8 @@
   "team": "Team",
   "no_info": "No",
   "monthly": "Monthly",
-  "annually": "Annually"
+  "annually": "Annually",
+  "isActive": "Subscription status",
+  "active": "Active",
+  "inactive": "Inactive"
 }

@@ -16,6 +16,18 @@ const CLIENTS_QUERY = gql`
       email
       number
       tags
+      subscriptions {
+        id
+        isActive
+        type
+        term
+        startDate
+        paymentID
+        renewals
+        endDate
+        createdAt
+        updatedAt
+      }
       challengeResults {
         id
         wrong
@@ -50,6 +62,84 @@ const CLIENTS_QUERY = gql`
       orders {
         id
         price
+        paymentID
+        coursePage {
+          id
+          title
+        }
+        isPaid
+        createdAt
+      }
+      traffic_sources
+      createdAt
+      updatedAt
+      messages {
+        id
+        text
+        subject
+        createdAt
+      }
+    }
+  }
+`;
+
+const CLIENTS_EMAIL_QUERY = gql`
+  query CLIENTS_EMAIL_QUERY($email: String!) {
+    users(where: { email: { equals: $email } }) {
+      id
+      name
+      surname
+      country
+      comment
+      email
+      number
+      tags
+      subscriptions {
+        id
+        isActive
+        type
+        startDate
+        paymentID
+        renewals
+        endDate
+        createdAt
+        updatedAt
+      }
+      challengeResults {
+        id
+        wrong
+        correct
+        createdAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+            title
+          }
+        }
+      }
+      lessonResults {
+        id
+        progress
+        createdAt
+        updatedAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+          }
+        }
+      }
+      new_subjects {
+        id
+        title
+      }
+      orders {
+        id
+        price
+        paymentID
         coursePage {
           id
           title
@@ -73,13 +163,25 @@ const CLIENTS_QUERY = gql`
 const ClientData = () => {
   const [initialDate, setInitialDate] = useState("2024-01-01T14:16:28.154Z");
   const [lastDate, setLastDate] = useState("2024-05-01T14:16:28.154Z");
+  const [email, setEmail] = useState("");
   const [getUserData, { loading, error, data }] = useLazyQuery(CLIENTS_QUERY);
+
+  const [getUserData2, { loading: loading2, error: error2, data: data2 }] =
+    useLazyQuery(CLIENTS_EMAIL_QUERY);
 
   const handleButtonClick = () => {
     getUserData({
       variables: {
         initialDate: `${initialDate}:00.000Z`,
         lastDate: `${lastDate}:00.000Z`,
+      },
+    });
+  };
+
+  const handleButtonClick2 = () => {
+    getUserData2({
+      variables: {
+        email: email.toLowerCase(),
       },
     });
   };
@@ -95,7 +197,7 @@ const ClientData = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>; // Handle error here
 
-  let initialClients = data ? data.users : [];
+  let initialClients = data ? data.users : data2 ? data2.users : [];
   return (
     <div>
       <div>
@@ -118,6 +220,16 @@ const ClientData = () => {
         />
       </div>
       <button onClick={handleButtonClick}>Load Data</button>
+
+      <div>
+        <label htmlFor="lastDate">By Email</label>
+        <input
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <button onClick={handleButtonClick2}>Load Users By Email</button>
       {loading ? "Грузимся..." : ""}
       {initialClients && initialClients.length > 0 && (
         <UserData initial_clients={initialClients} />

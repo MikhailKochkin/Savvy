@@ -13,6 +13,7 @@ const User = objectType({
     t.model.email();
     t.model.comment();
     t.model.work();
+    t.model.subscriptions();
     t.model.password();
     t.model.referal();
     t.model.active();
@@ -204,6 +205,40 @@ const BotDialogue = objectType({
   },
 });
 
+const Subscription = objectType({
+  name: "Subscription",
+  definition(t) {
+    t.model.id();
+    t.model.isActive();
+    t.model.type();
+    t.model.term();
+    t.model.startDate();
+    t.model.endDate();
+    t.model.paymentID();
+    t.model.renewals();
+    t.model.userId();
+    t.model.user();
+    t.model.updatedAt();
+    t.model.createdAt();
+  },
+});
+
+const Renewals = inputObjectType({
+  name: "Renewals",
+  definition(t) {
+    t.list.field("Renewals", { type: "Renewal" });
+  },
+});
+
+const Renewal = inputObjectType({
+  name: "Renewal",
+  definition(t) {
+    t.string("date");
+    t.string("type");
+    t.string("price");
+  },
+});
+
 module.exports = {
   User,
   Feedback,
@@ -217,4 +252,7 @@ module.exports = {
   Team,
   BotDialogue,
   GrowthArea,
+  Subscription,
+  Renewals,
+  Renewal,
 };

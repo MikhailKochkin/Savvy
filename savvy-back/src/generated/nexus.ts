@@ -3029,6 +3029,14 @@ export interface NexusGenInputs {
     name?: string | null; // String
     reaction?: string | null; // String
   }
+  Renewal: { // input type
+    date?: string | null; // String
+    price?: string | null; // String
+    type?: string | null; // String
+  }
+  Renewals: { // input type
+    Renewals?: Array<NexusGenInputs['Renewal'] | null> | null; // [Renewal]
+  }
   Review: { // input type
     image?: string | null; // String
     name?: string | null; // String
@@ -3280,6 +3288,48 @@ export interface NexusGenInputs {
     hasEvery?: string[] | null; // [String!]
     hasSome?: string[] | null; // [String!]
     isEmpty?: boolean | null; // Boolean
+  }
+  SubscriptionListRelationFilter: { // input type
+    every?: NexusGenInputs['SubscriptionWhereInput'] | null; // SubscriptionWhereInput
+    none?: NexusGenInputs['SubscriptionWhereInput'] | null; // SubscriptionWhereInput
+    some?: NexusGenInputs['SubscriptionWhereInput'] | null; // SubscriptionWhereInput
+  }
+  SubscriptionOrderByRelationAggregateInput: { // input type
+    _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  SubscriptionWhereInput: { // input type
+    AND?: NexusGenInputs['SubscriptionWhereInput'][] | null; // [SubscriptionWhereInput!]
+    NOT?: NexusGenInputs['SubscriptionWhereInput'][] | null; // [SubscriptionWhereInput!]
+    OR?: NexusGenInputs['SubscriptionWhereInput'][] | null; // [SubscriptionWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    endDate?: NexusGenInputs['DateTimeNullableFilter'] | null; // DateTimeNullableFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    isActive?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
+    paymentID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    renewals?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    startDate?: NexusGenInputs['DateTimeNullableFilter'] | null; // DateTimeNullableFilter
+    term?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+  }
+  SubscriptionWhereUniqueInput: { // input type
+    AND?: NexusGenInputs['SubscriptionWhereInput'][] | null; // [SubscriptionWhereInput!]
+    NOT?: NexusGenInputs['SubscriptionWhereInput'][] | null; // [SubscriptionWhereInput!]
+    OR?: NexusGenInputs['SubscriptionWhereInput'][] | null; // [SubscriptionWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    endDate?: NexusGenInputs['DateTimeNullableFilter'] | null; // DateTimeNullableFilter
+    id?: string | null; // String
+    isActive?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
+    paymentID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    renewals?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    startDate?: NexusGenInputs['DateTimeNullableFilter'] | null; // DateTimeNullableFilter
+    term?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
   }
   Syllabus: { // input type
     modules?: Array<NexusGenInputs['ProgramModule'] | null> | null; // [ProgramModule]
@@ -3894,6 +3944,7 @@ export interface NexusGenInputs {
     status?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     studentFeedback?: NexusGenInputs['FeedbackOrderByRelationAggregateInput'] | null; // FeedbackOrderByRelationAggregateInput
     subjects?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    subscriptions?: NexusGenInputs['SubscriptionOrderByRelationAggregateInput'] | null; // SubscriptionOrderByRelationAggregateInput
     surname?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
     teacherFeedback?: NexusGenInputs['FeedbackOrderByRelationAggregateInput'] | null; // FeedbackOrderByRelationAggregateInput
@@ -3991,6 +4042,7 @@ export interface NexusGenInputs {
     status?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     studentFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
     subjects?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    subscriptions?: NexusGenInputs['SubscriptionListRelationFilter'] | null; // SubscriptionListRelationFilter
     surname?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teacherFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
@@ -4088,6 +4140,7 @@ export interface NexusGenInputs {
     status?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     studentFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
     subjects?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    subscriptions?: NexusGenInputs['SubscriptionListRelationFilter'] | null; // SubscriptionListRelationFilter
     surname?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teacherFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
@@ -4725,6 +4778,19 @@ export interface NexusGenObjects {
     testResults?: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
     textEditorResults?: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
   }
+  Subscription: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    endDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    isActive: boolean; // Boolean!
+    paymentID?: string | null; // String
+    renewals?: NexusGenScalars['Json'] | null; // Json
+    startDate?: NexusGenScalars['DateTime'] | null; // DateTime
+    term?: string | null; // String
+    type?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId: string; // String!
+  }
   Team: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -5339,6 +5405,7 @@ export interface NexusGenFieldTypes {
     createShot: NexusGenRootTypes['Shot'] | null; // Shot
     createShotResult: NexusGenRootTypes['ShotResult'] | null; // ShotResult
     createStatement: NexusGenRootTypes['Statement'] | null; // Statement
+    createSubscription: NexusGenRootTypes['Subscription'] | null; // Subscription
     createTeam: NexusGenRootTypes['Team'] | null; // Team
     createTeamQuest: NexusGenRootTypes['TeamQuest'] | null; // TeamQuest
     createTeamQuestResult: NexusGenRootTypes['TeamQuestResult'] | null; // TeamQuestResult
@@ -5419,6 +5486,7 @@ export interface NexusGenFieldTypes {
     updateShot: NexusGenRootTypes['Shot'] | null; // Shot
     updateStatement: NexusGenRootTypes['Statement'] | null; // Statement
     updateStatementChecked: NexusGenRootTypes['Statement'] | null; // Statement
+    updateSubscription: NexusGenRootTypes['Subscription'] | null; // Subscription
     updateTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     updateUser: NexusGenRootTypes['User'] | null; // User
     updateUserLevel: NexusGenRootTypes['UserLevel'] | null; // UserLevel
@@ -5772,6 +5840,20 @@ export interface NexusGenFieldTypes {
     testResults: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
     textEditorResults: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
   }
+  Subscription: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    endDate: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string; // String!
+    isActive: boolean; // Boolean!
+    paymentID: string | null; // String
+    renewals: NexusGenScalars['Json'] | null; // Json
+    startDate: NexusGenScalars['DateTime'] | null; // DateTime
+    term: string | null; // String
+    type: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User']; // User!
+    userId: string; // String!
+  }
   Team: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     founder: NexusGenRootTypes['User']; // User!
@@ -5936,6 +6018,7 @@ export interface NexusGenFieldTypes {
     score: number | null; // Int
     status: string | null; // String
     studentFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
+    subscriptions: NexusGenRootTypes['Subscription'][]; // [Subscription!]!
     surname: string | null; // String
     tags: string[]; // [String!]!
     teacherFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
@@ -6421,6 +6504,7 @@ export interface NexusGenFieldTypeNames {
     createShot: 'Shot'
     createShotResult: 'ShotResult'
     createStatement: 'Statement'
+    createSubscription: 'Subscription'
     createTeam: 'Team'
     createTeamQuest: 'TeamQuest'
     createTeamQuestResult: 'TeamQuestResult'
@@ -6501,6 +6585,7 @@ export interface NexusGenFieldTypeNames {
     updateShot: 'Shot'
     updateStatement: 'Statement'
     updateStatementChecked: 'Statement'
+    updateSubscription: 'Subscription'
     updateTextEditor: 'TextEditor'
     updateUser: 'User'
     updateUserLevel: 'UserLevel'
@@ -6854,6 +6939,20 @@ export interface NexusGenFieldTypeNames {
     testResults: 'TestResult'
     textEditorResults: 'TextEditorResult'
   }
+  Subscription: { // field return type name
+    createdAt: 'DateTime'
+    endDate: 'DateTime'
+    id: 'String'
+    isActive: 'Boolean'
+    paymentID: 'String'
+    renewals: 'Json'
+    startDate: 'DateTime'
+    term: 'String'
+    type: 'String'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+  }
   Team: { // field return type name
     createdAt: 'DateTime'
     founder: 'User'
@@ -7018,6 +7117,7 @@ export interface NexusGenFieldTypeNames {
     score: 'Int'
     status: 'String'
     studentFeedback: 'Feedback'
+    subscriptions: 'Subscription'
     surname: 'String'
     tags: 'String'
     teacherFeedback: 'Feedback'
@@ -7594,6 +7694,14 @@ export interface NexusGenArgTypes {
       miniforumId?: string | null; // String
       text?: string | null; // String
     }
+    createSubscription: { // args
+      endDate?: NexusGenScalars['DateTime'] | null; // DateTime
+      paymentID?: string | null; // String
+      startDate?: NexusGenScalars['DateTime'] | null; // DateTime
+      term?: string | null; // String
+      type?: string | null; // String
+      userId?: string | null; // String
+    }
     createTeam: { // args
       name?: string | null; // String
     }
@@ -8086,6 +8194,15 @@ export interface NexusGenArgTypes {
     updateStatementChecked: { // args
       answered?: boolean | null; // Boolean
       id?: string | null; // String
+    }
+    updateSubscription: { // args
+      endDate?: NexusGenScalars['DateTime'] | null; // DateTime
+      id?: string | null; // String
+      isActive?: boolean | null; // Boolean
+      paymentID?: string | null; // String
+      renewals?: NexusGenInputs['Renewals'] | null; // Renewals
+      term?: string | null; // String
+      type?: string | null; // String
     }
     updateTextEditor: { // args
       complexity?: number | null; // Int
@@ -8610,6 +8727,12 @@ export interface NexusGenArgTypes {
     studentFeedback: { // args
       after?: NexusGenInputs['FeedbackWhereUniqueInput'] | null; // FeedbackWhereUniqueInput
       before?: NexusGenInputs['FeedbackWhereUniqueInput'] | null; // FeedbackWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    subscriptions: { // args
+      after?: NexusGenInputs['SubscriptionWhereUniqueInput'] | null; // SubscriptionWhereUniqueInput
+      before?: NexusGenInputs['SubscriptionWhereUniqueInput'] | null; // SubscriptionWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }

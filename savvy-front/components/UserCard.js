@@ -9,6 +9,26 @@ import { useTranslation } from "next-i18next";
 import emailGroups from "../emailGroups";
 import wa_messages from "../wa_messages";
 
+const CREATE_SUBSCRIPTION_MUTATION = gql`
+  mutation CREATE_SUBSCRIPTION_MUTATION(
+    $userId: String!
+    $type: String!
+    $term: String!
+    $startDate: DateTime!
+    $endDate: DateTime!
+  ) {
+    createSubscription(
+      userId: $userId
+      type: $type
+      term: $term
+      startDate: $startDate
+      endDate: $endDate
+    ) {
+      id
+    }
+  }
+`;
+
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
     $userId: String!
@@ -65,6 +85,15 @@ const DELETE_CLIENT_MUTATION = gql`
   mutation DELETE_CLIENT_MUTATION($id: String!) {
     deleteClient(id: $id) {
       id
+    }
+  }
+`;
+
+const UPDATE_ORDER = gql`
+  mutation UPDATE_ORDER($id: String!, $userId: String!) {
+    updateOrderAuto(id: $id, userId: $userId) {
+      id
+      isPaid
     }
   }
 `;
@@ -226,8 +255,21 @@ const UserCard = memo((props) => {
   const [show, setShow] = useState(false);
   const [showLessonResults, setShowLessonResults] = useState(false);
   const [subject, setSubject] = useState(`Тренды в работе юриста`);
-
   const [editorText, setEditorText] = useState(null);
+  const [subscriptionType, setSubscriptionType] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [term, setTerm] = useState(null);
+
+  const [
+    updateOrderAuto,
+    { data: updated_data, loading: updated_loading, error: updated_error },
+  ] = useMutation(UPDATE_ORDER);
+
+  const [
+    createSubscription,
+    { data: data3, loading: loading3, error: error3 },
+  ] = useMutation(CREATE_SUBSCRIPTION_MUTATION);
 
   const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
     useMutation(SEND_MESSAGE_MUTATION);
@@ -324,6 +366,16 @@ const UserCard = memo((props) => {
     });
   };
 
+  const handleStartDate = (e) => {
+    console.log("e.target.value", e.target.value);
+    setStartDate(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+
+  const subscriptionTypes = ["mini", "regular", "team", "business"];
   // const wa_send = () => {
   //   let comment_for_wa = wa_message
   //     ? wa_message.replaceAll("</p>", "\n\n")
@@ -492,6 +544,54 @@ const UserCard = memo((props) => {
               ))}
           </div>
         )}
+        <div>
+          <select onChange={(e) => setSubscriptionType(e.target.value)}>
+            <option value="0">Выберите подписку</option>
+            {subscriptionTypes.map((type) => (
+              <option value={type}>{type}</option>
+            ))}
+          </select>
+          <select onChange={(e) => setTerm(e.target.value)}>
+            <option value="0">Выберите срок</option>
+            <option value="monthly">Monthly</option>
+            <option value="annually">Annually</option>
+          </select>
+          <div>
+            <label htmlFor="initialDate">Start Date:</label>
+            <input
+              type="datetime-local"
+              id="initialDate"
+              value={startDate}
+              onChange={handleStartDate}
+            />
+          </div>
+          <div>
+            <label htmlFor="lastDate">End Date:</label>
+            <input
+              type="datetime-local"
+              id="lastDate"
+              value={endDate}
+              onChange={handleEndDateChange}
+            />
+          </div>
+          {props.id}
+          <button
+            onClick={async (e) => {
+              const res = await createSubscription({
+                variables: {
+                  userId: props.id,
+                  type: subscriptionType,
+                  startDate: startDate + ":00.000Z",
+                  endDate: endDate + ":00.000Z",
+                  term: term,
+                },
+              });
+              alert("Subscription created");
+            }}
+          >
+            Create Subscription
+          </button>
+        </div>
       </div>
       <div className="tags">
         <h4>Курсы</h4>
@@ -510,6 +610,19 @@ const UserCard = memo((props) => {
             <li>{o.isPaid ? "Оплачен" : "Не оплачен"}</li>
             <li>{o.price}</li>
             <li>{o.createdAt}</li>
+            <button
+              onClick={(e) => {
+                console.log("updateOrderAuto", o.id, props.id);
+                updateOrderAuto({
+                  variables: {
+                    id: o.id,
+                    userId: props.id,
+                  },
+                });
+              }}
+            >
+              Check Payment
+            </button>
           </div>
         ))}
         <h4>Результаты уроков</h4>
