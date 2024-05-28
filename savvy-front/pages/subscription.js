@@ -14,7 +14,6 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const SubscriptionPage = (props) => {
-  console.log("props.query.courseId", props.query.courseId);
   const me = useUser();
   return <DynamicSubscription me={me} courseId={props.query.courseId} />;
 };

@@ -3743,7 +3743,9 @@ const Mutation = mutationType({
             },
             items: [
               {
-                description: coursePage.title,
+                description: coursePage.title
+                  ? coursePage.title
+                  : "BeSavvy Plus",
                 quantity: "1",
                 amount: {
                   value: args.price,

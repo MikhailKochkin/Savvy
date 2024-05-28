@@ -365,8 +365,6 @@ const Subscription = (props) => {
   };
 
   const completePayment = async (price) => {
-    console.log("props.courseId", props.courseId);
-
     if (!props.me) {
       router.push(`auth?pathname=subscription?courseId=${props.courseId}`);
       return;
@@ -433,7 +431,7 @@ const Subscription = (props) => {
                 1
               </div>
             </div>
-            <ButtonBuy onClick={(e) => completePayment(1)}>
+            <ButtonBuy onClick={(e) => completePayment(1990)}>
               {loading_data ? "..." : "Подписаться"}
             </ButtonBuy>
           </Form>
