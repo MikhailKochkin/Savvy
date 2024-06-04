@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import * as EmailValidator from "email-validator";
 import moment from "moment";
-import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 

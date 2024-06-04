@@ -1,8 +1,11 @@
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import tinkoff from "@tcb-web/create-credit";
 import { Tooltip } from "react-tooltip";
+import parse from "html-react-parser";
+import smoothscroll from "smoothscroll-polyfill";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -42,21 +45,19 @@ const Container = styled.div`
   display: flex;
   width: 80%;
   min-height: 80vh;
+  padding: 0 20px;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
   background: #ffffff;
   border-radius: 5px;
-  margin: 30px 50px;
-  h1 {
-    font-size: 2.6rem;
-    font-weight: 600;
-    line-height: 1.2;
-    margin: 35px 0;
-  }
+  margin-top: 50px;
   .plans {
+    width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
+    align-items: space-between;
   }
   @media (max-width: 1400px) {
     width: 90%;
@@ -94,6 +95,10 @@ const Form = styled.div`
     font-weight: 600;
     font-size: 1.8rem;
     color: #120944;
+    span {
+      font-size: 1.4rem;
+      text-decoration: line-through;
+    }
   }
   .section {
     margin: 20px 10px;
@@ -181,11 +186,12 @@ const Form = styled.div`
       color: #130944;
     }
   }
-  @media (max-width: 1400px) {
-    width: 320px;
+  @media (max-width: 1450px) {
+    width: 340px;
     height: 620px;
   }
-  @media (max-width: 1000px) {
+
+  @media (max-width: 1100px) {
     width: 400px;
     height: 620px;
     margin-bottom: 20px;
@@ -332,8 +338,113 @@ const Comment = styled.div`
   width: 100%;
 `;
 
+const TopBar = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 35px 0;
+    max-width: 400px;
+  }
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+`;
+
+const SliderContainer = styled.div`
+  display: flex;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 300px;
+  @media (max-width: 800px) {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+`;
+
+const SliderButton = styled.div`
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: ${({ active }) => (active ? "#333" : "#F8F8F8")};
+  color: ${({ active }) => (active ? "#F8F8F8" : "#333")};
+  transition: background-color 0.3s ease, color 0.3s ease;
+  width: ${(props) => (props.type === "short" ? "40%" : "60%")};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DiscountLabel = styled.div`
+  background-color: #d4edda;
+  color: #155724;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-left: 10px;
+  display: block;
+`;
+
+const IdeaContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  h2 {
+    text-align: center;
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    width: 90%;
+  }
+`;
+
+const ButtonBlock = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: center;
+  margin: 50px 0;
+`;
+
+const SimpleButton = styled.button`
+  flex: 1;
+  height: 40px;
+  background: none;
+  padding: 5px 0;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  margin-right: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  padding: 10px;
+
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
+
 const Subscription = (props) => {
   const router = useRouter();
+  const [plan, setPlan] = useState("monthly"); // State to manage the selected plan
+
+  useEffect(() => {
+    // kick off the polyfill!
+    smoothscroll.polyfill();
+  });
 
   const [
     createOrder,
@@ -380,168 +491,316 @@ const Subscription = (props) => {
     });
     location.href = res.data.createOrder.url;
   };
+
+  const slide = () => {
+    var my_element = document.getElementById("subscription_start");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+
   return (
     <Styles>
       <Container>
-        <h1 className="header">Выберите план и откройте доступ к 35+ курсам</h1>
+        <TopBar>
+          {" "}
+          <h1 className="header" id="subscription_start">
+            Выберите план и откройте доступ к 35+ курсам
+          </h1>
+          <SliderContainer>
+            <SliderButton
+              type="short"
+              active={plan === "monthly"}
+              onClick={() => setPlan("monthly")}
+            >
+              На месяц
+            </SliderButton>
+            <SliderButton
+              active={plan === "yearly"}
+              onClick={() => setPlan("yearly")}
+            >
+              {/* Yearly */}
+              На год
+              <DiscountLabel>-40%</DiscountLabel>
+            </SliderButton>
+          </SliderContainer>
+        </TopBar>
         <div className="plans">
-          <Form>
-            <Banner>
-              <div className="bannerFirst">Мини</div>
-              <div>Для студентов</div>
-            </Banner>
-            <div className="section">
-              <div className="comment">Стоимость</div>
-              <div className="label" for="mistakes">
-                1990 ₽ / мес
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">
-                Доступные курсы{" "}
-                <span
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-html={`Сразу после оплаты вы получите доступ к 1 курсу.<br/>
+          {plan === "monthly" ? (
+            <>
+              <Form>
+                <Banner>
+                  <div className="bannerFirst">Мини</div>
+                  <div>Чтобы попробовать</div>
+                </Banner>
+                <div className="section">
+                  <div className="comment">Стоимость</div>
+                  <div className="label" for="mistakes">
+                    1990 ₽ / мес
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Доступные курсы{" "}
+                    <span
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-html={`Сразу после оплаты вы получите доступ к 1 курсу.<br/>
                   Впоследствии каждый месяц вы сможете открывать еще один новый курс в случае продления подписки.<br/>
                   Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
-                  data-tooltip-place="right"
-                >
-                  ?
-                </span>
-              </div>
-              <div className="label" for="mistakes">
-                1 новый курс в месяц
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Карьерные сервисы</div>
-              <div className="label" for="mistakes">
-                ✔️
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Сообщество студентов и авторов</div>
-              <div className="label" for="mistakes">
-                ✔️
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Количество студентов</div>
-              <div className="label" for="mistakes">
-                1
-              </div>
-            </div>
-            <ButtonBuy onClick={(e) => completePayment(1990)}>
-              {loading_data ? "..." : "Подписаться"}
-            </ButtonBuy>
-          </Form>
-          <Form>
-            <Banner>
-              <div className="bannerFirst">Базовый</div>
-              <div>Учитесь самостоятельно</div>
-            </Banner>
-            <div className="section">
-              <div className="comment">Стоимость</div>
-              <div className="label" for="mistakes">
-                4990 ₽ / мес
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">
-                Доступные курсы{" "}
-                <span
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-html={`Сразу после оплаты вы получите доступ к 3 курсам.<br/>
+                      data-tooltip-place="right"
+                    >
+                      ?
+                    </span>
+                  </div>
+                  <div className="label" for="mistakes">
+                    1 новый курс в месяц
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Карьерные сервисы</div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Онлайн-встречи с авторами курсов
+                  </div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Количество студентов</div>
+                  <div className="label" for="mistakes">
+                    1
+                  </div>
+                </div>
+                <ButtonBuy onClick={(e) => completePayment(1990)}>
+                  {loading_data ? "..." : "Подписаться"}
+                </ButtonBuy>
+              </Form>
+              <Form>
+                <Banner>
+                  <div className="bannerFirst">Базовый</div>
+                  <div>Чтобы учиться быстрее</div>
+                </Banner>
+                <div className="section">
+                  <div className="comment">Стоимость</div>
+                  <div className="label" for="mistakes">
+                    4990 ₽ / мес
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Доступные курсы{" "}
+                    <span
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-html={`Сразу после оплаты вы получите доступ к 3 курсам.<br/>
                   Впоследствии каждый месяц вы сможете открывать по 3 новых курса в случае продления подписки.<br/>
                   Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
-                  data-tooltip-place="right"
-                >
-                  ?
-                </span>
-              </div>
-              <div className="label" for="mistakes">
-                3 новых курса в месяц
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Карьерные сервисы</div>
-              <div className="label" for="mistakes">
-                ✔️
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Сообщество студентов и авторов</div>
-              <div className="label" for="mistakes">
-                ✔️
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Количество студентов</div>
-              <div className="label" for="mistakes">
-                1
-              </div>
-            </div>
-            <ButtonBuy onClick={(e) => completePayment(4990)}>
-              {loading_data ? "..." : "Подписаться"}
-            </ButtonBuy>
-            <ButtonOpen onClick={(e) => getInstallments(4990)}>
-              Оформить рассрочку
-            </ButtonOpen>
-          </Form>
-          <Form>
-            <Banner>
-              <div className="bannerFirst">Командный</div>
-              <div>Экономьте вместе с друзьями</div>
-            </Banner>
-            <div className="section">
-              <div className="comment">Стоимость</div>
-              <div className="label" for="mistakes">
-                9990 ₽ / мес
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">
-                Доступные курсы{" "}
-                <span
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-html={`Сразу после оплаты вы получите доступ к 6 курсам.<br/>
+                      data-tooltip-place="right"
+                    >
+                      ?
+                    </span>
+                  </div>
+                  <div className="label" for="mistakes">
+                    3 новых курса в месяц
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Карьерные сервисы</div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Онлайн-встречи с авторами курсов
+                  </div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Количество студентов</div>
+                  <div className="label" for="mistakes">
+                    1
+                  </div>
+                </div>
+                <ButtonBuy onClick={(e) => completePayment(4990)}>
+                  {loading_data ? "..." : "Подписаться"}
+                </ButtonBuy>
+              </Form>
+              <Form>
+                <Banner>
+                  <div className="bannerFirst">Командный</div>
+                  <div>Чтобы сэкономить с друзьями</div>
+                </Banner>
+                <div className="section">
+                  <div className="comment">Стоимость</div>
+                  <div className="label" for="mistakes">
+                    9990 ₽ / мес
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Доступные курсы{" "}
+                    <span
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-html={`Сразу после оплаты вы получите доступ к 6 курсам.<br/>
                   Впоследствии каждый месяц вы сможете открывать по 6 новых курсов в случае продления подписки.<br/>
                   В подписку можно добавить до 4 студентов.<br/>
                   Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
-                  data-tooltip-place="right"
-                >
-                  ?
-                </span>
-              </div>
-              <div className="label" for="mistakes">
-                6 новых курсов в месяц
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Карьерные сервисы</div>
-              <div className="label" for="mistakes">
-                ✔️
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Сообщество студентов и авторов</div>
-              <div className="label" for="mistakes">
-                ✔️
-              </div>
-            </div>
-            <div className="section">
-              <div className="comment">Количество студентов</div>
-              <div className="label" for="mistakes">
-                До 4
-              </div>
-            </div>
-            <ButtonBuy onClick={(e) => completePayment(9990)}>
-              {loading_data ? "..." : "Подписаться"}
-            </ButtonBuy>
-            <ButtonOpen onClick={(e) => getInstallments(9990)}>
-              Оформить рассрочку
-            </ButtonOpen>
-          </Form>
+                      data-tooltip-place="right"
+                    >
+                      ?
+                    </span>
+                  </div>
+                  <div className="label" for="mistakes">
+                    6 новых курсов в месяц
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Карьерные сервисы</div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Онлайн-встречи с авторами курсов
+                  </div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Количество студентов</div>
+                  <div className="label" for="mistakes">
+                    До 4
+                  </div>
+                </div>
+                <ButtonBuy onClick={(e) => completePayment(9990)}>
+                  {loading_data ? "..." : "Подписаться"}
+                </ButtonBuy>
+              </Form>
+            </>
+          ) : (
+            <>
+              <Form>
+                <Banner>
+                  <div className="bannerFirst">Базовый</div>
+                  <div>Чтобы учиться быстрее</div>
+                </Banner>
+                <div className="section">
+                  <div className="comment">Стоимость</div>
+                  <div className="label" for="mistakes">
+                    <span>60 000</span> 35990 ₽ / год
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Доступные курсы{" "}
+                    <span
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-html={`Сразу после оплаты вы получите доступ ко всем курсам на платформе на 12 месяцев.<br/>
+                  Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
+                      data-tooltip-place="right"
+                    >
+                      ?
+                    </span>
+                  </div>
+                  <div className="label" for="mistakes">
+                    35+ курсов
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Карьерные сервисы</div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Онлайн-встречи с авторами курсов
+                  </div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Количество студентов</div>
+                  <div className="label" for="mistakes">
+                    1
+                  </div>
+                </div>
+                <ButtonBuy onClick={(e) => completePayment(35990)}>
+                  {loading_data ? "..." : "Подписаться"}
+                </ButtonBuy>
+                <ButtonOpen onClick={(e) => getInstallments(35990)}>
+                  Оформить рассрочку
+                </ButtonOpen>
+              </Form>
+              <Form>
+                <Banner>
+                  <div className="bannerFirst">Командный</div>
+                  <div>Чтобы сэкономить с друзьями</div>
+                </Banner>
+                <div className="section">
+                  <div className="comment">Стоимость</div>
+                  <div className="label" for="mistakes">
+                    <span>120 000</span> 71990 ₽ / год
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Доступные курсы{" "}
+                    <span
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-html={`Сразу после оплаты вы получите доступ ко всем курсам на платформе на 12 месяцев.<br/>
+                  В подписку можно добавить до 4 студентов.<br/>
+                  Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
+                      data-tooltip-place="right"
+                    >
+                      ?
+                    </span>
+                  </div>
+                  <div className="label" for="mistakes">
+                    35+ курсов
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Карьерные сервисы</div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Онлайн-встречи с авторами курсов
+                  </div>
+                  <div className="label" for="mistakes">
+                    ✔️
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">Количество студентов</div>
+                  <div className="label" for="mistakes">
+                    До 4
+                  </div>
+                </div>
+                <ButtonBuy onClick={(e) => completePayment(71990)}>
+                  {loading_data ? "..." : "Подписаться"}
+                </ButtonBuy>
+                <ButtonOpen onClick={(e) => getInstallments(71990)}>
+                  Оформить рассрочку
+                </ButtonOpen>
+              </Form>
+            </>
+          )}
           {/* <Form>
             <Banner>
               <div className="bannerFirst">Бизнес</div>
@@ -566,7 +825,7 @@ const Subscription = (props) => {
               </div>
             </div>
             <div className="section">
-              <div className="comment">Сообщество студентов и авторов</div>
+              <div className="comment">Онлайн-встречи с авторами курсов</div>
               <div className="label" for="mistakes">
                 ✔️
               </div>
@@ -584,10 +843,9 @@ const Subscription = (props) => {
         </div>
         <Comment>
           <div>
-            <span>Важно:</span> Подписка оформляется на месяц. Через 30 дней мы
-            свяжемся с вами для продления подписки.
+            <span>Важно:</span> Подписка оформляется на месяц или на год. По
+            всем вопросам обращайтесь на почту: mikhail@besavvy.app
           </div>
-          <div>По всем вопросам обращайтесь на почту: mikhail@besavvy.app</div>
         </Comment>
         <MovingRow>
           <div className="moving-row">
@@ -666,11 +924,131 @@ const Subscription = (props) => {
               <div>Узнайте об основах права интеллектуальной собственности</div>
               <div className="itemLength">Срок: 3 недели</div>
             </div>
+            <div className="item">
+              <div className="itemTitle">Лексика из Legal English</div>
+              <div>
+                Запомните ключевые понятия, связывая их с интересными кейсами и
+                историями.
+              </div>
+              <div className="itemLength">Срок: 2 недели</div>
+            </div>
           </div>
         </MovingRow>
+        <IdeaContainer>
+          <h2>🇬🇧 Как выстроить изучение Legal English?</h2>
+          <div>
+            <CustomComponent
+              number="1"
+              label="Месяц"
+              subtext={`
+             <p>В первый месяц повторите <b>базовую грамматику</b> на подготовительном модуле.</p>
+              <p>Задавайте вопросы в чате участников, чтобы быть уверенными, что все поняли.</p>
+            `}
+            />
+            <CustomComponent
+              number="2"
+              label="Месяц"
+              subtext={`
+            Во второй – выучите <b>ключевую лексику</b> и начните применять ее в упражнениях
+            `}
+            />
+            <CustomComponent
+              number="3"
+              label="Месяц"
+              subtext={`Затем начните отрабатывать навыки <b>юр письма</b>: напишите свое первое письмо и текст по модели IRAC`}
+            />
+            <CustomComponent
+              number="4"
+              label="Месяц"
+              subtext={`На базе этих новых знаний научитесь составлять <b>договоры на английском</b>. Получите обратную связь по вашим письменным работам.`}
+            />
+            <CustomComponent
+              number="5"
+              label="Месяц"
+              subtext={`Напоследок отработайте навыки <b>спикинга</b>.`}
+            />
+          </div>
+        </IdeaContainer>
+        <ButtonBlock>
+          <SimpleButton onClick={(e) => slide()}>Выбрать тариф</SimpleButton>
+        </ButtonBlock>
         <Tooltip id="my-tooltip" />
       </Container>
     </Styles>
+  );
+};
+
+const MarkContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin: 40px 0;
+  .circleBlock {
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  position: relative; /* Added position relative */
+  p {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+  @media (max-width: 800px) {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  .circleBlock {
+    width: 25%;
+  }
+`;
+
+const Circle = styled.div`
+  width: 40px; /* Circle diameter */
+  height: 40px;
+  background-color: #1c4490; /* Blue color */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 2rem;
+  z-index: 1; /* Ensure circle is above the line */
+  margin-left: 10px; /* Adjust to space from line */
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+`;
+
+const Label = styled.div`
+  font-weight: bold;
+`;
+
+const Subtext = styled.div`
+  margin-left: 20px;
+  line-height: 1.6;
+  width: 500px;
+  @media (max-width: 800px) {
+    width: 75%;
+    line-height: 1.4;
+  }
+`;
+
+const CustomComponent = (props) => {
+  return (
+    <MarkContainer>
+      <div className="circleBlock">
+        <Circle>{props.number}</Circle>
+        <TextContainer>
+          <Label>Месяц</Label>
+        </TextContainer>
+      </div>
+      <Subtext>{parse(props.subtext)}</Subtext>
+    </MarkContainer>
   );
 };
 

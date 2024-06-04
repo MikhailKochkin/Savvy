@@ -135,27 +135,6 @@ const BlueButton = styled.button`
   }
 `;
 
-const SimpleButton = styled.button`
-  flex: 1;
-  height: 40px;
-  background: none;
-  padding: 5px 0;
-  border: 2px solid #69696a;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #323334;
-  margin-right: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-  padding: 10px;
-
-  &:hover {
-    background: #f4f4f4;
-  }
-`;
-
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION(
     $id: String!
