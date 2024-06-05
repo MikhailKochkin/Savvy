@@ -1,5 +1,3 @@
-import validUrl from "valid-url";
-
 export default function handler(req, res) {
   const { simulatorId } = req.query;
   console.log("simulatorId", simulatorId, req.query);
@@ -15,7 +13,7 @@ export default function handler(req, res) {
     provider_name: "BeSavvy",
     provider_url: "https://besavvy.app",
     cache_age: "86400", // Cache age in seconds
-    html: `<iframe src="https://besavvy.app/embeddedPage?id=${simulatorId}" width="800" height="600"></iframe>`, // Replace with your embed code
+    html: `<iframe src="https://besavvy.app/embedPage?id=${simulatorId}" width="800" height="600"></iframe>`, // Replace with your embed code
   };
 
   res.setHeader("Content-Type", "application/json");
