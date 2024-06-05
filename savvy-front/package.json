@@ -94,7 +94,8 @@
     "styled-components": "^5.2.0",
     "styled-react-modal": "^3.0.1",
     "universal-cookie": "^4.0.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "valid-url": "^1.0.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.1",

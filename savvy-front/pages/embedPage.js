@@ -1,7 +1,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import SingleLesson from "../components/lesson/SingleLesson";
+import { useRouter } from "next/router";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
@@ -16,7 +16,15 @@ const DynamicNewSingleLesson = dynamic(
   }
 );
 
-const embeddedPage = (props) => {
+const embedPage = (props) => {
+  const router = useRouter();
+  const { url, referrer } = router.query;
+
+  // Handle the case when url or referrer is not provided
+  if (!simulatorId || !referrer) {
+    return <div>Invalid simulatorId or referrer</div>;
+  }
+
   return (
     <DynamicNewSingleLesson
       id={props.query.id}
@@ -26,4 +34,4 @@ const embeddedPage = (props) => {
   );
 };
 
-export default embeddedPage;
+export default embedPage;
