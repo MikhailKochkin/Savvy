@@ -19,10 +19,12 @@ const DynamicNewSingleLesson = dynamic(
 const embedPage = (props) => {
   const router = useRouter();
   const { url, referrer } = router.query;
+  console.log("URL received:", url);
+  console.log("Referrer received:", referrer);
 
   // Handle the case when url or referrer is not provided
-  if (!simulatorId || !referrer) {
-    return <div>Invalid simulatorId or referrer</div>;
+  if (!url || !referrer) {
+    return <div>Invalid url or referrer</div>;
   }
 
   return (

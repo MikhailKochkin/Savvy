@@ -1,29 +1,39 @@
 export default function handler(req, res) {
   try {
     const { url } = req.query;
-    const urlParams = new URLSearchParams(url.replace(/\?/g, "&")); // Convert query string to URLSearchParams
-    const simulatorId = urlParams.get("simulatorId");
-    console.log("Request query:", req.query);
-    console.log("Extracted simulatorId:", simulatorId);
 
-    // Check if the requested simulatorId is valid
-    if (!simulatorId) {
-      console.log("Invalid simulatorId");
-      return res.status(404).send({ error: "Invalid simulatorId" });
+    console.log("URL received:", url);
+
+    if (!url) {
+      console.log("URL parameter is missing");
+      return res.status(400).send({ error: "URL parameter is missing" });
     }
 
-    console.log("Valid simulatorId:", simulatorId);
+    // Decode the incoming URL parameter
+    const decodedUrl = decodeURIComponent(url);
+    console.log("Decoded URL:", decodedUrl);
+
+    // Check if the decoded URL is valid (optional, uncomment if needed)
+    // if (!validUrl.isUri(decodedUrl)) {
+    //   console.log("Invalid URL");
+    //   return res.status(404).send({ error: "Invalid URL" });
+    // }
+
+    console.log("Valid URL:", decodedUrl);
 
     // Prepare the oEmbed response object
     const oEmbedResponse = {
-      type: "rich",
       version: "1.0",
+      type: "rich", // or 'video', 'photo', etc.
       title: "BeSavvy Simulator",
-      author_name: "Mike",
+      author_name: "BeSavvy",
+      author_url: "https://besavvy.app",
       provider_name: "BeSavvy",
       provider_url: "https://besavvy.app",
-      cache_age: "86400",
-      html: `<iframe src="https://besavvy.app/embeddedPage?id=${simulatorId}" width="800" height="600"></iframe>`,
+      cache_age: "86400", // Cache age in seconds
+      html: `<iframe src="${decodedUrl}" width="800" height="600"></iframe>`, // Replace with your embed code
+      width: 800,
+      height: 600,
     };
 
     console.log("oEmbedResponse:", oEmbedResponse);
