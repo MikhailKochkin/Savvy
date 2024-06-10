@@ -15,7 +15,6 @@ const User = objectType({
     t.model.work();
     t.model.subscriptions();
     t.model.password();
-    t.model.referal();
     t.model.active();
     t.model.score();
     t.model.ratings();
@@ -161,6 +160,20 @@ const ConfUser = objectType({
   },
 });
 
+const Referral = objectType({
+  name: "Referral",
+  definition(t) {
+    t.model.id();
+    t.model.createdAt();
+    t.model.updatedAt();
+    t.model.isCounted();
+    t.model.referrerId();
+    t.model.refereeId();
+    t.model.referrer();
+    t.model.referee();
+  },
+});
+
 const CommunityMember = objectType({
   name: "CommunityMember",
   definition(t) {
@@ -255,4 +268,5 @@ module.exports = {
   Subscription,
   Renewals,
   Renewal,
+  Referral,
 };

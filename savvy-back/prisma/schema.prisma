@@ -117,14 +117,14 @@ model Chat {
 
 model ChatResult {
   id          String   @id @default(cuid())
-  chatId      String
-  dialogue   Json?
+  dialogue    Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  chatId      String   @db.VarChar(30)
   userId      String   @db.VarChar(30)
   lessonId    String   @db.VarChar(30)
   chat        Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  lesson      Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lesson      Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
@@ -1153,7 +1153,6 @@ model User {
   traffic_sources    Json?
   active             Boolean?             @default(false)
   score              Int?                 @default(0)
-  referal            String?
   subscriptions      Subscription[]
   certificates       Certificate[]
   challengeResults   ChallengeResult[]
@@ -1212,6 +1211,19 @@ model User {
   level              UserLevel?           @relation(fields: [levelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   uni                Uni?                 @relation(fields: [uniId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   co_coursePages     CoursePage[]         @relation("AuthorsCoursePage")
+  userIsReferrer     Referral[]           @relation("ReferrerInReferral")
+  userIsReferee      Referral[]           @relation("RefereeInReferral")
+}
+
+model Referral {
+  id        String   @id @default(cuid())
+  isCounted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  referrerId  String
+  refereeId   String
+  referrer  User     @relation("ReferrerInReferral", fields: [referrerId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  referee   User     @relation("RefereeInReferral", fields: [refereeId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Subscription {

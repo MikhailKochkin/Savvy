@@ -1998,6 +1998,74 @@ const Mutation = mutationType({
         return newTP;
       },
     });
+    t.field("updateTestPractice", {
+      type: "TestPractice",
+      args: {
+        id: stringArg(),
+        // text: stringArg(),
+        tasksNum: intArg(),
+        intro: stringArg(),
+        successText: stringArg(),
+        failureText: stringArg(),
+        tasks: list(stringArg()),
+        // lessonId: stringArg(),
+        // goal: stringArg(),
+      },
+      resolve: async (
+        _,
+        {
+          id, // New argument
+          // lessonId,
+          tasks,
+          tasksNum,
+          // text,
+          intro,
+          successText,
+          failureText,
+          // goal,
+        },
+        ctx
+      ) => {
+        // Optionally, check if the user has permission to update this TestPractice
+        const testPractice = await ctx.prisma.testPractice.findUnique({
+          where: { id },
+          include: { user: true },
+        });
+
+        if (!testPractice) {
+          throw new Error("TestPractice not found");
+        }
+
+        // if (testPractice.user.id !== ctx.res.req.userId) {
+        //   throw new Error(
+        //     "You don't have permission to update this TestPractice"
+        //   );
+        // }
+
+        const update_data = {
+          // lesson: lessonId ? { connect: { id: lessonId } } : undefined,
+          tasks: tasks ? { set: [...tasks] } : undefined,
+          tasksNum: tasksNum ?? undefined,
+          // text: text ?? undefined,
+          successText: successText ?? undefined,
+          failureText: failureText ?? undefined,
+          intro: intro ?? undefined,
+          // goal: goal ?? undefined,
+        };
+
+        // Remove undefined fields
+        const cleanedData = Object.fromEntries(
+          Object.entries(update_data).filter(([_, v]) => v !== undefined)
+        );
+
+        const updatedTP = await ctx.prisma.testPractice.update({
+          where: { id },
+          data: cleanedData,
+        });
+
+        return updatedTP;
+      },
+    });
     t.field("createTeamQuest", {
       type: "TeamQuest",
       args: {
@@ -3925,36 +3993,36 @@ const Mutation = mutationType({
         if (order.paymentID) {
           const payment = await community_checkout.getPayment(order.paymentID);
           console.log("payment", payment);
-          const createPayload = {
-            amount: {
-              value: 1,
-              currency: "RUB",
-            },
-            payment_method_id: payment.id,
-            receipt: {
-              customer: {
-                email: "mi.kochkin@ya.ru",
-              },
-              items: [
-                {
-                  description: "BeSavvy Plus",
-                  quantity: "1",
-                  amount: {
-                    value: 1,
-                    currency: "RUB",
-                  },
-                  vat_code: 1,
-                },
-              ],
-            },
-            capture: true,
-          };
+          // const createPayload = {
+          //   amount: {
+          //     value: 1,
+          //     currency: "RUB",
+          //   },
+          //   payment_method_id: payment.id,
+          //   receipt: {
+          //     customer: {
+          //       email: "mi.kochkin@ya.ru",
+          //     },
+          //     items: [
+          //       {
+          //         description: "BeSavvy Plus",
+          //         quantity: "1",
+          //         amount: {
+          //           value: 1,
+          //           currency: "RUB",
+          //         },
+          //         vat_code: 1,
+          //       },
+          //     ],
+          //   },
+          //   capture: true,
+          // };
 
-          const newPayment = await community_checkout.createPayment(
-            createPayload
-          );
+          // const newPayment = await community_checkout.createPayment(
+          //   createPayload
+          // );
 
-          console.log("newPayment", newPayment);
+          // console.log("newPayment", newPayment);
           // if (payment.status == "succeeded") {
           //   const notification = await client.sendEmail({
           //     From: "Mikhail@besavvy.app",

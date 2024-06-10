@@ -221,6 +221,25 @@ const ChatResult = objectType({
   },
 });
 
+const DialogueHistory = inputObjectType({
+  name: "DialogueHistory",
+  definition(t) {
+    t.list.field("steps", { type: "DialogueStep" });
+  },
+});
+
+const DialogueStep = inputObjectType({
+  name: "DialogueStep",
+  definition(t) {
+    t.int("number");
+    t.string("text");
+    t.string("name");
+    t.string("image");
+    t.string("startTime");
+    t.string("sourceId");
+  },
+});
+
 module.exports = {
   TestResult,
   QuizResult,
@@ -234,4 +253,6 @@ module.exports = {
   TeamQuestResult,
   ChatResult,
   Dialogue,
+  DialogueHistory,
+  DialogueStep,
 };

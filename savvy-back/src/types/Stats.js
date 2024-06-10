@@ -27,6 +27,10 @@ const Stats = objectType({
       type: "Feedback",
       ordering: true,
     });
+    t.list.field("testPracticeResults", {
+      type: "TestPracticeResult",
+      ordering: true,
+    });
   },
 });
 

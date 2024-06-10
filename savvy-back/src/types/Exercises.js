@@ -354,6 +354,7 @@ const Chat = objectType({
     t.model.lessonId();
     t.model.lesson();
     t.model.user();
+    t.model.chatResults();
     t.model.createdAt();
     t.model.updatedAt();
   },

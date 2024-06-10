@@ -979,6 +979,17 @@ export interface NexusGenInputs {
     question?: string | null; // String
     sourceId?: string | null; // String
   }
+  DialogueHistory: { // input type
+    steps?: Array<NexusGenInputs['DialogueStep'] | null> | null; // [DialogueStep]
+  }
+  DialogueStep: { // input type
+    image?: string | null; // String
+    name?: string | null; // String
+    number?: number | null; // Int
+    sourceId?: string | null; // String
+    startTime?: string | null; // String
+    text?: string | null; // String
+  }
   DocumentListRelationFilter: { // input type
     every?: NexusGenInputs['DocumentWhereInput'] | null; // DocumentWhereInput
     none?: NexusGenInputs['DocumentWhereInput'] | null; // DocumentWhereInput
@@ -3029,6 +3040,27 @@ export interface NexusGenInputs {
     name?: string | null; // String
     reaction?: string | null; // String
   }
+  ReferralListRelationFilter: { // input type
+    every?: NexusGenInputs['ReferralWhereInput'] | null; // ReferralWhereInput
+    none?: NexusGenInputs['ReferralWhereInput'] | null; // ReferralWhereInput
+    some?: NexusGenInputs['ReferralWhereInput'] | null; // ReferralWhereInput
+  }
+  ReferralOrderByRelationAggregateInput: { // input type
+    _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  ReferralWhereInput: { // input type
+    AND?: NexusGenInputs['ReferralWhereInput'][] | null; // [ReferralWhereInput!]
+    NOT?: NexusGenInputs['ReferralWhereInput'][] | null; // [ReferralWhereInput!]
+    OR?: NexusGenInputs['ReferralWhereInput'][] | null; // [ReferralWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    isCounted?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
+    referee?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    refereeId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    referrer?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    referrerId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
   Renewal: { // input type
     date?: string | null; // String
     price?: string | null; // String
@@ -3931,7 +3963,6 @@ export interface NexusGenInputs {
     quizResults?: NexusGenInputs['QuizResultOrderByRelationAggregateInput'] | null; // QuizResultOrderByRelationAggregateInput
     quizes?: NexusGenInputs['QuizOrderByRelationAggregateInput'] | null; // QuizOrderByRelationAggregateInput
     ratings?: NexusGenInputs['RatingOrderByRelationAggregateInput'] | null; // RatingOrderByRelationAggregateInput
-    referal?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     resetToken?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     resetTokenExpiry?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     resume?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -3962,6 +3993,8 @@ export interface NexusGenInputs {
     uniID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     uniId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    userIsReferee?: NexusGenInputs['ReferralOrderByRelationAggregateInput'] | null; // ReferralOrderByRelationAggregateInput
+    userIsReferrer?: NexusGenInputs['ReferralOrderByRelationAggregateInput'] | null; // ReferralOrderByRelationAggregateInput
     work?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
   }
   UserWhereInput: { // input type
@@ -4029,7 +4062,6 @@ export interface NexusGenInputs {
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
     ratings?: NexusGenInputs['RatingListRelationFilter'] | null; // RatingListRelationFilter
-    referal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     resetToken?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     resetTokenExpiry?: NexusGenInputs['DecimalNullableFilter'] | null; // DecimalNullableFilter
     resume?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -4060,6 +4092,8 @@ export interface NexusGenInputs {
     uniID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     uniId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    userIsReferee?: NexusGenInputs['ReferralListRelationFilter'] | null; // ReferralListRelationFilter
+    userIsReferrer?: NexusGenInputs['ReferralListRelationFilter'] | null; // ReferralListRelationFilter
     work?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   UserWhereUniqueInput: { // input type
@@ -4127,7 +4161,6 @@ export interface NexusGenInputs {
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
     ratings?: NexusGenInputs['RatingListRelationFilter'] | null; // RatingListRelationFilter
-    referal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     resetToken?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     resetTokenExpiry?: NexusGenInputs['DecimalNullableFilter'] | null; // DecimalNullableFilter
     resume?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -4158,6 +4191,8 @@ export interface NexusGenInputs {
     uniID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     uniId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    userIsReferee?: NexusGenInputs['ReferralListRelationFilter'] | null; // ReferralListRelationFilter
+    userIsReferrer?: NexusGenInputs['ReferralListRelationFilter'] | null; // ReferralListRelationFilter
     work?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   Visit: { // input type
@@ -4733,6 +4768,14 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
   }
+  Referral: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    isCounted: boolean; // Boolean!
+    refereeId: string; // String!
+    referrerId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Shot: { // root type
     comments: string[]; // [String!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -4775,6 +4818,7 @@ export interface NexusGenObjects {
     problemResults?: Array<NexusGenRootTypes['ProblemResult'] | null> | null; // [ProblemResult]
     quizResults?: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
     shotResults?: Array<NexusGenRootTypes['ShotResult'] | null> | null; // [ShotResult]
+    testPracticeResults?: Array<NexusGenRootTypes['TestPracticeResult'] | null> | null; // [TestPracticeResult]
     testResults?: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
     textEditorResults?: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
   }
@@ -4913,7 +4957,6 @@ export interface NexusGenObjects {
     number?: string | null; // String
     password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
-    referal?: string | null; // String
     resume?: string | null; // String
     score?: number | null; // Int
     status?: string | null; // String
@@ -5027,7 +5070,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     dialogue: NexusGenScalars['Json'] | null; // Json
     id: string; // String!
-    lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lesson: NexusGenRootTypes['Lesson']; // Lesson!
     lessonId: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
@@ -5487,6 +5530,7 @@ export interface NexusGenFieldTypes {
     updateStatement: NexusGenRootTypes['Statement'] | null; // Statement
     updateStatementChecked: NexusGenRootTypes['Statement'] | null; // Statement
     updateSubscription: NexusGenRootTypes['Subscription'] | null; // Subscription
+    updateTestPractice: NexusGenRootTypes['TestPractice'] | null; // TestPractice
     updateTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     updateUser: NexusGenRootTypes['User'] | null; // User
     updateUserLevel: NexusGenRootTypes['UserLevel'] | null; // UserLevel
@@ -5787,6 +5831,16 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
+  Referral: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    isCounted: boolean; // Boolean!
+    referee: NexusGenRootTypes['User']; // User!
+    refereeId: string; // String!
+    referrer: NexusGenRootTypes['User']; // User!
+    referrerId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Shot: { // field return type
     comments: string[]; // [String!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -5837,6 +5891,7 @@ export interface NexusGenFieldTypes {
     problemResults: Array<NexusGenRootTypes['ProblemResult'] | null> | null; // [ProblemResult]
     quizResults: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
     shotResults: Array<NexusGenRootTypes['ShotResult'] | null> | null; // [ShotResult]
+    testPracticeResults: Array<NexusGenRootTypes['TestPracticeResult'] | null> | null; // [TestPracticeResult]
     testResults: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
     textEditorResults: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
   }
@@ -6013,7 +6068,6 @@ export interface NexusGenFieldTypes {
     password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
     ratings: NexusGenRootTypes['Rating'][]; // [Rating!]!
-    referal: string | null; // String
     resume: string | null; // String
     score: number | null; // Int
     status: string | null; // String
@@ -6586,6 +6640,7 @@ export interface NexusGenFieldTypeNames {
     updateStatement: 'Statement'
     updateStatementChecked: 'Statement'
     updateSubscription: 'Subscription'
+    updateTestPractice: 'TestPractice'
     updateTextEditor: 'TextEditor'
     updateUser: 'User'
     updateUserLevel: 'UserLevel'
@@ -6886,6 +6941,16 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  Referral: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    isCounted: 'Boolean'
+    referee: 'User'
+    refereeId: 'String'
+    referrer: 'User'
+    referrerId: 'String'
+    updatedAt: 'DateTime'
+  }
   Shot: { // field return type name
     comments: 'String'
     createdAt: 'DateTime'
@@ -6936,6 +7001,7 @@ export interface NexusGenFieldTypeNames {
     problemResults: 'ProblemResult'
     quizResults: 'QuizResult'
     shotResults: 'ShotResult'
+    testPracticeResults: 'TestPracticeResult'
     testResults: 'TestResult'
     textEditorResults: 'TextEditorResult'
   }
@@ -7112,7 +7178,6 @@ export interface NexusGenFieldTypeNames {
     password: 'String'
     permissions: 'Permission'
     ratings: 'Rating'
-    referal: 'String'
     resume: 'String'
     score: 'Int'
     status: 'String'
@@ -8203,6 +8268,14 @@ export interface NexusGenArgTypes {
       renewals?: NexusGenInputs['Renewals'] | null; // Renewals
       term?: string | null; // String
       type?: string | null; // String
+    }
+    updateTestPractice: { // args
+      failureText?: string | null; // String
+      id?: string | null; // String
+      intro?: string | null; // String
+      successText?: string | null; // String
+      tasks?: Array<string | null> | null; // [String]
+      tasksNum?: number | null; // Int
     }
     updateTextEditor: { // args
       complexity?: number | null; // Int

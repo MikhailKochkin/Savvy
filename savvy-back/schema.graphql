@@ -470,7 +470,7 @@ type ChatResult {
   createdAt: DateTime!
   dialogue: Json
   id: String!
-  lesson: Lesson
+  lesson: Lesson!
   lessonId: String!
   updatedAt: DateTime!
   user: User!
@@ -1295,6 +1295,19 @@ input Dialogue {
   comment: String
   question: String
   sourceId: String
+}
+
+input DialogueHistory {
+  steps: [DialogueStep]
+}
+
+input DialogueStep {
+  image: String
+  name: String
+  number: Int
+  sourceId: String
+  startTime: String
+  text: String
 }
 
 type Document {
@@ -2701,6 +2714,7 @@ type Mutation {
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateSubscription(endDate: DateTime, id: String, isActive: Boolean, paymentID: String, renewals: Renewals, term: String, type: String): Subscription
+  updateTestPractice(failureText: String, id: String, intro: String, successText: String, tasks: [String], tasksNum: Int): TestPractice
   updateTextEditor(complexity: Int, context: String, goal: String, id: String, name: String, text: String, totalMistakes: Int): TextEditor
   updateUser(active: Boolean, comment: String, description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
   updateUserLevel(consumedContent: ConsumedContentList, id: String, isProgressPublic: Boolean, learningStreak: [DateTime], level: Float, myProgress: MyProgressList): UserLevel
@@ -4200,6 +4214,41 @@ input Reaction {
   reaction: String
 }
 
+type Referral {
+  createdAt: DateTime!
+  id: String!
+  isCounted: Boolean!
+  referee: User!
+  refereeId: String!
+  referrer: User!
+  referrerId: String!
+  updatedAt: DateTime!
+}
+
+input ReferralListRelationFilter {
+  every: ReferralWhereInput
+  none: ReferralWhereInput
+  some: ReferralWhereInput
+}
+
+input ReferralOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ReferralWhereInput {
+  AND: [ReferralWhereInput!]
+  NOT: [ReferralWhereInput!]
+  OR: [ReferralWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  isCounted: BoolFilter
+  referee: UserWhereInput
+  refereeId: StringFilter
+  referrer: UserWhereInput
+  referrerId: StringFilter
+  updatedAt: DateTimeFilter
+}
+
 input Renewal {
   date: String
   price: String
@@ -4511,6 +4560,7 @@ type Stats {
   problemResults: [ProblemResult]
   quizResults: [QuizResult]
   shotResults: [ShotResult]
+  testPracticeResults: [TestPracticeResult]
   testResults: [TestResult]
   textEditorResults: [TextEditorResult]
 }
@@ -5309,7 +5359,6 @@ type User {
   password: String!
   permissions: [Permission!]!
   ratings(after: RatingWhereUniqueInput, before: RatingWhereUniqueInput, first: Int, last: Int): [Rating!]!
-  referal: String
   resume: String
   score: Int
   status: String
@@ -5475,7 +5524,6 @@ input UserOrderByWithRelationInput {
   quizResults: QuizResultOrderByRelationAggregateInput
   quizes: QuizOrderByRelationAggregateInput
   ratings: RatingOrderByRelationAggregateInput
-  referal: SortOrderInput
   resetToken: SortOrderInput
   resetTokenExpiry: SortOrderInput
   resume: SortOrderInput
@@ -5506,6 +5554,8 @@ input UserOrderByWithRelationInput {
   uniID: SortOrderInput
   uniId: SortOrderInput
   updatedAt: SortOrder
+  userIsReferee: ReferralOrderByRelationAggregateInput
+  userIsReferrer: ReferralOrderByRelationAggregateInput
   work: SortOrderInput
 }
 
@@ -5574,7 +5624,6 @@ input UserWhereInput {
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
   ratings: RatingListRelationFilter
-  referal: StringNullableFilter
   resetToken: StringNullableFilter
   resetTokenExpiry: DecimalNullableFilter
   resume: StringNullableFilter
@@ -5605,6 +5654,8 @@ input UserWhereInput {
   uniID: StringNullableFilter
   uniId: StringNullableFilter
   updatedAt: DateTimeFilter
+  userIsReferee: ReferralListRelationFilter
+  userIsReferrer: ReferralListRelationFilter
   work: StringNullableFilter
 }
 
@@ -5673,7 +5724,6 @@ input UserWhereUniqueInput {
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
   ratings: RatingListRelationFilter
-  referal: StringNullableFilter
   resetToken: StringNullableFilter
   resetTokenExpiry: DecimalNullableFilter
   resume: StringNullableFilter
@@ -5704,6 +5754,8 @@ input UserWhereUniqueInput {
   uniID: StringNullableFilter
   uniId: StringNullableFilter
   updatedAt: DateTimeFilter
+  userIsReferee: ReferralListRelationFilter
+  userIsReferrer: ReferralListRelationFilter
   work: StringNullableFilter
 }
 
