@@ -120,6 +120,15 @@ const LESSONS_QUERY = gql`
         type
         goal
       }
+      testPractices {
+        id
+        tasks
+        goal
+        tasksNum
+        intro
+        successText
+        failureText
+      }
       forum {
         rating {
           id

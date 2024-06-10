@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import moment from "moment";
 import parse from "html-react-parser";
@@ -9,6 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   font-size: 1.6rem;
+  margin: 20px 0;
   h2 {
     margin: 15px 0;
   }

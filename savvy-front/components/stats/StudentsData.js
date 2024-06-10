@@ -176,6 +176,15 @@ const LESSONS_QUERY = gql`
           id
         }
       }
+      testPractices {
+        id
+        tasks
+        goal
+        tasksNum
+        intro
+        successText
+        failureText
+      }
       problems {
         id
         text

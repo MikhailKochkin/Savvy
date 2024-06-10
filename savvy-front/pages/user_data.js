@@ -160,14 +160,95 @@ const CLIENTS_EMAIL_QUERY = gql`
   }
 `;
 
+const CLIENTS_TAGS_QUERY = gql`
+  query CLIENTS_TAGS_QUERY($tag: [String!]!) {
+    users(where: { tags: { hasSome: $tag } }) {
+      id
+      name
+      surname
+      country
+      comment
+      email
+      number
+      tags
+      subscriptions {
+        id
+        isActive
+        type
+        startDate
+        paymentID
+        renewals
+        endDate
+        createdAt
+        updatedAt
+      }
+      challengeResults {
+        id
+        wrong
+        correct
+        createdAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+            title
+          }
+        }
+      }
+      lessonResults {
+        id
+        progress
+        createdAt
+        updatedAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+          }
+        }
+      }
+      new_subjects {
+        id
+        title
+      }
+      orders {
+        id
+        price
+        paymentID
+        coursePage {
+          id
+          title
+        }
+        isPaid
+        createdAt
+      }
+      traffic_sources
+      createdAt
+      updatedAt
+      messages {
+        id
+        text
+        subject
+        createdAt
+      }
+    }
+  }
+`;
+
 const ClientData = () => {
   const [initialDate, setInitialDate] = useState("2024-01-01T14:16:28.154Z");
   const [lastDate, setLastDate] = useState("2024-05-01T14:16:28.154Z");
   const [email, setEmail] = useState("");
+  const [tag, setTag] = useState("");
   const [getUserData, { loading, error, data }] = useLazyQuery(CLIENTS_QUERY);
 
   const [getUserData2, { loading: loading2, error: error2, data: data2 }] =
     useLazyQuery(CLIENTS_EMAIL_QUERY);
+
+  const [getUserData3, { loading: loading3, error: error3, data: data3 }] =
+    useLazyQuery(CLIENTS_TAGS_QUERY);
 
   const handleButtonClick = () => {
     getUserData({
@@ -186,6 +267,14 @@ const ClientData = () => {
     });
   };
 
+  const handleButtonClick3 = () => {
+    getUserData3({
+      variables: {
+        tag: [tag.toLowerCase()],
+      },
+    });
+  };
+
   const handleInitialDateChange = (e) => {
     setInitialDate(e.target.value);
   };
@@ -197,7 +286,15 @@ const ClientData = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>; // Handle error here
 
-  let initialClients = data ? data.users : data2 ? data2.users : [];
+  let initialClients = data
+    ? data.users
+    : data2
+    ? data2.users
+    : data3
+    ? data3.users
+    : [];
+
+  console.log("data3.users", data3);
   return (
     <div>
       <div>
@@ -230,6 +327,16 @@ const ClientData = () => {
         />
       </div>
       <button onClick={handleButtonClick2}>Load Users By Email</button>
+      <div>
+        <label htmlFor="lastDate">By Tag</label>
+        <input
+          id="email"
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+        />
+      </div>
+      <button onClick={handleButtonClick3}>Load Users By Tag</button>
+
       {loading ? "Грузимся..." : ""}
       {initialClients && initialClients.length > 0 && (
         <UserData initial_clients={initialClients} />

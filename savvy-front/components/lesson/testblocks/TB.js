@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
 import Block from "./Block";
-
+import UpdateQuestionsChain from "./UpdateQuestionsChain";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -61,6 +61,7 @@ const shuffle = (array) => {
 };
 
 const TestPractice = (props) => {
+  const [isUpdated, setIsUpdated] = useState(false);
   let tests = [...props.tests];
   let quizes = [...props.quizes];
   const passResult = (val) => {
@@ -117,6 +118,15 @@ const TestPractice = (props) => {
             testResults={props.testResults}
           />
         </Container>
+      )}
+      <button onClick={(e) => setIsUpdated(!isUpdated)}>Update</button>
+      {isUpdated && (
+        <UpdateQuestionsChain
+          testPractice={props.testPractice}
+          lesson={props.lesson}
+          isUpdated={isUpdated}
+          lessonId={props.lesson.id}
+        />
       )}
     </>
   );

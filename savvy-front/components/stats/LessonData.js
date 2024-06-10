@@ -15,18 +15,10 @@ import TexteditorResult from "./results/TexteditorResult";
 import QuizResult from "./results/QuizResult";
 import ProblemResult from "./results/ProblemResult";
 import ConstructionResult from "./results/ConstructionResult";
+import TestPractice from "./results/TestPracticeResult";
 import DocumentResult from "./results/DocumentResult";
 import Feedback from "./Feedback";
-import {
-  findProblems,
-  populateProblemsWithQuestions,
-  populateQuizzesWithResults,
-  analyzeStudentPerformance,
-  getFeedbackOnTasks,
-  generateReportIntro,
-  generateOverAllResults,
-  generateRecommendation,
-} from "./ReportFunctions";
+import ReportGenerator from "./ReportGenerator";
 
 const GET_RESULTS = gql`
   query stats($lessonId: String!, $userId: String!) {
@@ -46,6 +38,16 @@ const GET_RESULTS = gql`
           surname
         }
         createdAt
+      }
+      testPracticeResults {
+        id
+        testPractice {
+          id
+        }
+        correct
+        tasks
+        createdAt
+        updatedAt
       }
       shotResults {
         id
@@ -267,54 +269,6 @@ const SimpleButton = styled.button`
     background: #f4f4f4;
   }
 `;
-
-const Report = styled.div`
-  width: 100%;
-  border: 2px solid #f2f6f9;
-  border-radius: 20px;
-  padding: 15px;
-  background: #fff;
-`;
-
-const Progress = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 200px;
-  margin: 0 0 2% 0;
-`;
-
-const IntroData = styled.div`
-  width: 60%;
-  margin: 30px 0;
-  font-size: 1.6rem;
-  h4 {
-    font-size: 2rem;
-    margin: 20px 0;
-  }
-  button {
-    width: 200px;
-    height: 35px;
-    background: none;
-    padding: 5px 0;
-    margin: 30px 0;
-
-    border: 2px solid #69696a;
-    border-radius: 5px;
-    font-family: Montserrat;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: #323334;
-    cursor: pointer;
-    transition: 0.3s;
-    &:hover {
-      background: #f4f4f4;
-    }
-  }
-`;
-
 const SimpleButton2 = styled.button`
   width: 55px;
   height: 35px;
@@ -358,66 +312,6 @@ const LessonData = (props) => {
   if (loading) return <Loading />;
   if (error) return `Error! ${error.message}`;
 
-  const generateReport = async (event) => {
-    event.preventDefault();
-    setReport("");
-    setGenerating(true);
-    console.log("start report");
-    // 1. Find all problems
-    let availableData = findProblems(lesson);
-
-    // 2. Populate problems with questions
-    populateProblemsWithQuestions(availableData, lesson);
-
-    // 3. Populate all quizzes with quizResults
-    populateQuizzesWithResults(availableData, data.stats.quizResults);
-
-    // 4. Analyze student performance
-    analyzeStudentPerformance(availableData, res, data);
-    console.log("availableData", availableData);
-    // 5. Prepare initial report draft.
-
-    // 6. Generate the final report
-
-    // Report consists of the following sections:
-    // 1. Introduction: the goal of the smulator
-    // 2. Overall results: how many tasks the student has completed
-    // 3. Feedback on separate tasks
-    // 3.1. Task 1
-    // 3.2. Task 2
-    // 3.3. ...
-    // 4. Conclusion
-    // 5. Recommendations
-
-    // 6.1 Generate the introduction
-    let intro = await generateReportIntro(student, lesson, props.date);
-
-    let overall = {
-      learning: [],
-      practiced: [],
-      feedback: [],
-      reflection: [],
-      marks: [],
-    };
-    availableData.map((el) => {
-      overall.learning.push(el.totalResults.hasLearnt);
-      overall.practiced.push(el.totalResults.hasPracticed);
-      overall.feedback.push(el.totalResults.hasReceivedFeedback);
-      overall.reflection.push(el.totalResults.hasReflected);
-      overall.marks.push(el.totalResults.mark);
-    });
-    // 6.2. Overall results: how many tasks the student has completed
-    let overallResults = await generateOverAllResults(student, overall);
-    // 6.3. Feedback on separate tasks
-    let feedbackOnTasks = await getFeedbackOnTasks(availableData, student);
-    // 6.4. Recommendations
-    let recommendation = await generateRecommendation(student, lesson, overall);
-    setReport(
-      intro + overallResults + feedbackOnTasks.join("") + recommendation
-    );
-    setGenerating(false);
-  };
-
   let challenge_result =
     student.challengeResults.filter((ch) => ch.lesson.id == lesson.id).length >
     0
@@ -432,12 +326,18 @@ const LessonData = (props) => {
           </div>
           <div className="div2">
             {res[0].lesson.structure &&
-              res[0].lesson.structure.lessonItems &&
-              parseInt(
-                (
-                  res[0].progress / res[0].lesson.structure.lessonItems.length
-                ).toFixed(2) * 100
-              )}
+            res[0].lesson.structure.lessonItems &&
+            parseInt(
+              (
+                res[0].progress / res[0].lesson.structure.lessonItems.length
+              ).toFixed(2) * 100
+            ) > 100
+              ? 100
+              : parseInt(
+                  (
+                    res[0].progress / res[0].lesson.structure.lessonItems.length
+                  ).toFixed(2) * 100
+                )}
             %{" "}
           </div>
           <div className="div3">
@@ -529,52 +429,22 @@ const LessonData = (props) => {
       )}
       {show && data !== undefined && (
         <LessonContent>
-          <IntroData>
-            <h4>How to use the analytics page?</h4>
-            <div>
-              At analytics page you can:
-              <ul>
-                {lesson.goal && (
-                  <li>
-                    get recommendations based on the simulator goals and student
-                    results (press the "Generate report" button for that)
-                  </li>
-                )}
-                <li>
-                  take a look at how the student was going through the
-                  simulator. (scroll down to the "Lesson Results" section){" "}
-                </li>
-              </ul>
-            </div>
-            <div>Lesson goal: {lesson.goal}</div>
-            {lesson.goal && (
-              <button onClick={(e) => generateReport(e)}>
-                Generate report
-              </button>
-            )}
-            {generating ? (
-              <Progress>
-                <TailSpin
-                  height="60"
-                  width="60"
-                  color="#2E80EC"
-                  ariaLabel="tail-spin-loading"
-                  radius="1"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                  visible={true}
-                />
-              </Progress>
-            ) : (
-              ""
-            )}
-            {report && report.length > 0 && <Report>{parse(report)}</Report>}
-          </IntroData>
+          <ReportGenerator
+            student={student}
+            lesson={lesson}
+            lessonData={{
+              stats: { quizResults: data.stats.quizResults },
+              res,
+              data,
+            }}
+            date={props.date}
+          />
           <div>
             <h2>Lesson results</h2>
           </div>
-
+          {console.log("Hello")}
           {lesson?.structure?.lessonItems.map((l) => {
+            console.log("l", l.type);
             if (l.type.toLowerCase() == "shot") {
               let shot = lesson.shots.filter((n) => n.id === l.id)[0];
               return (
@@ -612,6 +482,21 @@ const LessonData = (props) => {
                   newTests={lesson.newTests.filter((t) => t.id === l.id)}
                   results={data.stats.testResults}
                   student={student}
+                />
+              );
+            }
+            if (l.type.toLowerCase() == "testpractice") {
+              let testPractice = lesson.testPractices.filter(
+                (n) => n.id === l.id
+              )[0];
+              return (
+                <TestPractice
+                  lesson={lesson}
+                  testPractice={testPractice}
+                  student={student}
+                  results={data.stats.testPracticeResults}
+                  quizResults={data.stats.quizResults}
+                  testResults={data.stats.testResults}
                 />
               );
             }

@@ -10,44 +10,145 @@ export const findProblems = (lesson) => {
       goal: problem.goal,
       name: problem.name,
       type: problem.__typename.toLowerCase(),
+      __typename: problem.__typename.toLowerCase(),
       questions: [],
-      steps: problem.steps.problemItems,
+      steps: problem.steps,
     });
   });
   return availableData;
 };
 
+export const findTextEditors = (lesson) => {
+  let availableData = [];
+  lesson?.texteditors?.forEach((t) => {
+    availableData.push({
+      id: t.id,
+      goal: t.goal,
+      text: t.text,
+      type: t.__typename.toLowerCase(),
+      questions: [],
+    });
+  });
+  return availableData;
+};
+
+export const extractElementInfoFromTextEditors = (text) => {
+  const regex = /type="([^"]+)"[^>]*elementId="([^"]+)"/g;
+  const matches = text.matchAll(regex);
+  const elementInfoArray = [];
+
+  for (const match of matches) {
+    const [, type, elementId] = match;
+    if (elementId !== "null") {
+      elementInfoArray.push({ type, elementId });
+    }
+  }
+
+  return elementInfoArray;
+};
+
 export const populateProblemsWithQuestions = (availableData, lesson) => {
-  availableData.forEach((el) => {
-    if (el.type.toLowerCase() === "problem") {
+  let updatedData = availableData.map((el) => {
+    let updatedProblem = { ...el };
+    updatedProblem.questions = [];
+    if (updatedProblem.__typename.toLowerCase() === "problem") {
       let activeQuizzes = [];
       lesson.quizes.forEach((quiz) => {
-        el.steps.forEach((step) => {
+        el.steps.problemItems.forEach((step) => {
           if (step.id === quiz.id) {
             activeQuizzes.push(quiz);
           }
         });
       });
-      el.questions.push(...activeQuizzes);
+      updatedProblem.questions.push(...activeQuizzes);
     }
+    return updatedProblem;
   });
+  return updatedData;
 };
 
-export const populateQuizzesWithResults = (availableData, quizResults) => {
-  availableData.forEach((el) => {
-    el.questions = el.questions.map((question) => {
-      let activeResults = [];
-      quizResults.forEach((result) => {
-        if (result.quiz.id === question.id) {
-          activeResults.push(result);
+export const populateTextEditorsWithQuestions = (
+  availableTextEditors,
+  lesson,
+  quizResults
+) => {
+  availableTextEditors.forEach((el) => {
+    let textEditorData = extractElementInfoFromTextEditors(el.text);
+    textEditorData.map((element) => {
+      let tasks = [];
+      if (element.type === "error") {
+        let foundOpenQuestion = lesson.quizes.find(
+          (quiz) => quiz.id === element.elementId
+        );
+
+        if (foundOpenQuestion) {
+          let foundOpenQuestionResults = quizResults.filter(
+            (result) => result.quiz.id === element.elementId
+          );
+          foundOpenQuestion = { ...foundOpenQuestion };
+          foundOpenQuestion.results = foundOpenQuestionResults
+            ? foundOpenQuestionResults
+            : [];
+          tasks.push(foundOpenQuestion);
         }
-      });
-      return {
-        ...question,
-        results: activeResults,
-        completionDate:
-          activeResults.length > 0 ? activeResults[0]?.createdAt : undefined,
-      };
+      } else if (element.type === "problem") {
+        let foundProblem = lesson.problems.find(
+          (problem) => problem.id === element.elementId
+        );
+        if (foundProblem) {
+          foundProblem = populateProblemsWithQuestions([foundProblem], lesson);
+          tasks.push(foundProblem[0]);
+        }
+      }
+      el.questions.push(...tasks);
+    });
+  });
+  return availableTextEditors;
+};
+
+export const populateQuizWithResults = (quiz, quizResults) => {
+  let updatedQuiz = { ...quiz };
+  let activeResults = [];
+  quizResults.forEach((result) => {
+    if (result.quiz.id === updatedQuiz.id) {
+      activeResults.push(result);
+    }
+  });
+  return {
+    ...updatedQuiz,
+    results: activeResults,
+    completionDate:
+      activeResults.length > 0 ? activeResults[0]?.createdAt : undefined,
+  };
+};
+
+export const populateTextEditorsWithResults = (
+  availableTextEditors,
+  quizResults,
+  lesson
+) => {
+  availableTextEditors.forEach((textEditor) => {
+    textEditor.questions.forEach((el) => {
+      if (el.__typename.toLowerCase() === "quiz") {
+        el.questions = el.questions.map((question) => {
+          let activeResults = [];
+          quizResults.forEach((result) => {
+            if (result.quiz.id === question.id) {
+              activeResults.push(result);
+            }
+          });
+          return {
+            ...question,
+            results: activeResults,
+            completionDate:
+              activeResults.length > 0
+                ? activeResults[0]?.createdAt
+                : undefined,
+          };
+        });
+      } else if (el.__typename.toLowerCase() === "problem") {
+        // let updatedProblem = populateProblemsWithQuestions([el], lesson);
+      }
     });
   });
 };

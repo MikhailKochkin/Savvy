@@ -213,6 +213,7 @@ const UserCard = memo((props) => {
             email={props.email}
             name={props.name}
             firm={props.firm}
+            comment={props.comment}
             connection={props.connection}
             subject={props.subject}
           />

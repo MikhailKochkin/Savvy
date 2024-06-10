@@ -342,250 +342,201 @@ const Editor = styled.div`
   }
 `;
 
-const Person = (props) => {
-  const [secret, setSecret] = useState(true);
-  const [tags, setTags] = useState(props.student.tags);
-  const [tag, setTag] = useState("");
-  const [message, setMessage] = useState("");
-
-  const [page, setPage] = useState("results");
-  const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
-    useMutation(SEND_MESSAGE_MUTATION);
-  const [updateUser, { updated_data2 }] = useMutation(UPDATE_USER_MUTATION);
-
-  const { student, lessons, courseVisit, coursePageID, coursePage, results } =
-    props;
-
-  moment.locale("ru");
-  let mail = `mailto:${student.email}`;
-
-  const handleDoubleClick = (val) => {
-    let newTags = [...tags];
-    setTags(newTags.filter((nt) => nt !== val));
-    let updated_client = updateUser({
-      variables: {
-        id: student.id,
-        tags: newTags.filter((nt) => nt !== val),
-      },
-    });
-  };
-
-  // let feedback_num = student.studentFeedback.filter(
-  //   (f) => f.lesson.coursePage.id == coursePageID
-  // ).length;
-
-  // find recent students
-  let two_months_ago = new Date();
-  two_months_ago.setMonth(two_months_ago.getMonth() - 2);
-
-  // 1. Get all lesson results
-  const sorted_lessons = results
-    .slice()
-    .sort((a, b) => a.lesson.number - b.lesson.number);
-
-  // 2. group all lesson results by lesson
-  let new_array = [];
-  sorted_lessons.forEach((l) => {
-    let lessonId = l.lesson.id;
-    if (new_array.find((x) => x.lessonId === lessonId)) {
-      let obj = new_array.find((x) => x.lessonId === lessonId);
-      let new_results_list = [...obj.results, l];
-      return (obj.results = new_results_list);
-    } else {
-      let new_obj = {
-        lessonId: lessonId,
-        results: [l],
-      };
-      return new_array.push(new_obj);
-    }
-  });
-
-  // 3. leave only lesson results with the highest progress
-
-  let new_array_2 = new_array.map((el) => {
-    const max = el.results.reduce((prev, current) =>
-      prev.progress > current.progress ? prev : current
-    );
-    el["max"] = max;
-    return el;
-  });
-
-  // 4. Leave only maxes
-  let maxes = [];
-  new_array_2.forEach((el) => maxes.push(el.max));
-
-  let lesResults = [];
-  maxes.forEach((lr) => {
-    let new_obj = {
-      progress: lr.progress,
-      lesson_number: lr.lesson.number,
-      lesson_size: lr.lesson.structure?.lessonItems
-        ? lr.lesson.structure.lessonItems.length
-        : 1,
-      lesson_name: lr.lesson.name,
-      visits: lr.visitsNumber,
-    };
-    lesResults.push(new_obj);
-  });
-
-  let color;
-  let total = 0;
-  maxes.map((l) => {
-    let s;
-    if (l.lesson.type === "STORY") {
-      s = l.progress / l.lesson.structure.lessonItems.length;
-    } else if (l.lesson.type === "CHALLENGE") {
-      if (
-        student.challengeResults.filter((cr) => cr.lesson.id === l.lesson.id)
-          .length > 0
-      ) {
-        s = 1;
-        return s;
-      } else {
-        s = 0;
-        return s;
-      }
-    } else {
-      s = 0;
-    }
-    if (s < 0.3) {
-      total += 0;
-    } else if (s >= 0.3 && s < 0.75) {
-      total += 0.5;
-    } else if (s >= 0.75) {
-      total += 1;
-    }
-  });
-
-  let active_lessons = [];
-  lessons.map((l) => {
-    if (l.published) {
-      active_lessons.push(l);
-    }
-  });
-  if (total / active_lessons.length <= 0.2) {
-    color = "#e97573";
-  } else if (
-    total / active_lessons.length > 0.2 &&
-    total / active_lessons.length < 0.75
-  ) {
-    color = "#FDF3C8";
-  } else if (total / active_lessons.length >= 0.75) {
-    color = "#84BC9C";
+// Helper functions
+const checkPhoneNumber = (phoneNumber) => {
+  phoneNumber = phoneNumber.replace(/[\D\s\-\(\)]/g, "");
+  if (phoneNumber.length < 9) return;
+  if (phoneNumber.startsWith("8")) {
+    phoneNumber = "+7" + phoneNumber.substring(1);
+  } else if (phoneNumber.startsWith("7")) {
+    phoneNumber = "+" + phoneNumber;
+  } else if (!phoneNumber.startsWith("+")) {
+    phoneNumber = "+7" + phoneNumber;
   }
+  return phoneNumber;
+};
 
-  function checkPhoneNumber(phoneNumber) {
-    // Remove any non-numeric characters, brackets, and blank spaces
-    phoneNumber = phoneNumber.replace(/[\D\s\-\(\)]/g, "");
+const calculateLessonStats = (
+  lessons,
+  results,
+  student,
+  coursePage,
+  grouped_results,
+  maxes
+) => {
+  const lesResults = maxes.map((lr) => ({
+    progress: lr.progress,
+    lesson_number: lr.lesson.number,
+    lesson_size: lr.lesson.structure?.lessonItems?.length || 1,
+    lesson_name: lr.lesson.name,
+    visits: lr.visitsNumber,
+  }));
 
-    // Check if the phone number has less than 9 digits
-    if (phoneNumber.length < 9) {
-      // alert("Error: Phone number must have at least 9 digits");
-      return;
-    }
+  const active_lessons = lessons.filter((l) => l.published);
+  const total = maxes.reduce((acc, l) => {
+    let s =
+      l.lesson.type === "STORY"
+        ? l.progress / l.lesson.structure.lessonItems.length
+        : l.lesson.type === "CHALLENGE"
+        ? student.challengeResults.some((cr) => cr.lesson.id === l.lesson.id)
+          ? 1
+          : 0
+        : 0;
+    return acc + (s < 0.3 ? 0 : s >= 0.75 ? 1 : 0.5);
+  }, 0);
 
-    // Normalize the phone number to the +7 format
-    if (phoneNumber.startsWith("8")) {
-      phoneNumber = "+7" + phoneNumber.substring(1);
-    } else if (phoneNumber.startsWith("7")) {
-      phoneNumber = "+" + phoneNumber;
-    } else if (!phoneNumber.startsWith("+")) {
-      phoneNumber = "+7" + phoneNumber;
-    }
+  const color =
+    total / active_lessons.length <= 0.2
+      ? "#e97573"
+      : total / active_lessons.length < 0.75
+      ? "#FDF3C8"
+      : "#84BC9C";
 
-    return phoneNumber;
-  }
-
-  let emailInfo = {
+  const emailInfo = {
     course_name: coursePage,
     student_name: student.name,
     lessons_number: lessons.length,
     completed_lessons_number: Math.round(total),
-    lesResultsList: { lesResults: lesResults },
+    lesResultsList: { lesResults },
   };
 
-  const myCallback = (dataFromChild) => {
-    setMessage(dataFromChild);
+  return { active_lessons, total, color, lesResults, emailInfo, maxes }; // Added maxes here
+};
+
+const Person = ({
+  student,
+  lessons,
+  courseVisit,
+  coursePageID,
+  coursePage,
+  results,
+  type,
+}) => {
+  const [secret, setSecret] = useState(true);
+  const [tags, setTags] = useState(student.tags);
+  const [tag, setTag] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [sendMessage, { loading: sendMessageLoading }] = useMutation(
+    SEND_MESSAGE_MUTATION
+  );
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+  const [sendEmailToStudent] = useMutation(UPDATE_COURSE_VISIT_MUTATION);
+
+  moment.locale("ru");
+
+  const sorted_lessons = results
+    .slice()
+    .sort((a, b) => a.lesson.number - b.lesson.number);
+  const grouped_results = sorted_lessons.reduce((acc, l) => {
+    const existingGroup = acc.find((x) => x.lessonId === l.lesson.id);
+    if (existingGroup) {
+      existingGroup.results.push(l);
+    } else {
+      acc.push({ lessonId: l.lesson.id, results: [l] });
+    }
+    return acc;
+  }, []);
+
+  const maxes = grouped_results.map((el) =>
+    el.results.reduce((prev, current) =>
+      prev.progress > current.progress ? prev : current
+    )
+  );
+
+  const handleDoubleClick = (val) => {
+    const newTags = tags.filter((nt) => nt !== val);
+    setTags(newTags);
+    updateUser({ variables: { id: student.id, tags: newTags } });
+  };
+
+  const handleAddTag = async (e) => {
+    e.preventDefault();
+    const newTags = [...tags, tag];
+    setTags(newTags);
+    setTag("");
+    await updateUser({ variables: { id: student.id, tags: newTags } });
+  };
+
+  const { active_lessons, total, color, lesResults, emailInfo } =
+    calculateLessonStats(
+      lessons,
+      results,
+      student,
+      coursePage,
+      grouped_results,
+      maxes
+    );
+
+  const handleSendMessage = async () => {
+    await sendMessage({ variables: { userId: student.id, text: message } });
+  };
+
+  const handleSendEmail = async (comment) => {
+    const newReminders = courseVisit.reminders
+      ? [...courseVisit.reminders, new Date()]
+      : [new Date()];
+    await sendEmailToStudent({
+      variables: {
+        id: courseVisit.id,
+        reminders: newReminders,
+        comment,
+        info: emailInfo,
+      },
+    });
+    alert("Email has been sent!");
   };
 
   return (
     <Styles>
       <Header>
         <Name className="div1">
-          <div className="name">
-            {student.surname
-              ? `${student.name} ${student.surname}`
-              : student.name}{" "}
-          </div>
+          <div className="name">{`${student.name} ${
+            student.surname || ""
+          }`}</div>
           <div className="email">{student.email}</div>
         </Name>
         <Tags className="div2">
-          {" "}
           {tags.slice(0, 3).map((t) => (
-            <Tag onDoubleClick={(e) => handleDoubleClick(t)}>{t}</Tag>
+            <Tag key={t} onDoubleClick={() => handleDoubleClick(t)}>
+              {t}
+            </Tag>
           ))}
-          <Mutation
-            mutation={UPDATE_USER_MUTATION}
-            variables={{
-              id: student.id,
-              tags: [...tags, tag],
-            }}
-          >
-            {(updateUser, { loading, error }) => {
-              return (
-                <form
-                  method="POST"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    let new_arr = [...tags, tag];
-                    setTags(new_arr);
-                    setTag("");
-                    const res = await updateUser();
-                  }}
-                >
-                  <input
-                    type="text"
-                    name=""
-                    value={tag}
-                    onChange={(e) => setTag(e.target.value)}
-                    placeholder="..."
-                  />
-                </form>
-              );
-            }}
-          </Mutation>
+          <form onSubmit={handleAddTag}>
+            <input
+              type="text"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+              placeholder="..."
+            />
+          </form>
         </Tags>
-
         <Square className="div3" inputColor={color}>
           <div>
-            {props.type !== "lesson_analytics"
+            {type !== "lesson_analytics"
               ? ((total / active_lessons.length) * 100).toFixed(0)
               : Math.min(
-                  (
-                    (maxes[0].progress /
-                      maxes[0].lesson.structure.lessonItems.length) *
-                    100
-                  ).toFixed(0),
+                  (results[0].progress /
+                    results[0].lesson.structure.lessonItems.length) *
+                    100,
                   100
-                )}
+                ).toFixed(0)}
             %
           </div>
         </Square>
-
         <ButtonBox>
-          <SimpleButton className="div4" onClick={(e) => setSecret(!secret)}>
+          <SimpleButton className="div4" onClick={() => setSecret(!secret)}>
             {secret ? "Open" : "Close"}
           </SimpleButton>
         </ButtonBox>
         <RegDate
           className="div5"
           date={
-            courseVisit
-              ? courseVisit.createdAt > moment(two_months_ago).format()
-              : false
+            courseVisit &&
+            courseVisit.createdAt > moment().subtract(2, "months").format()
           }
         >
-          {props.lesson_analytics
+          {type === "lesson_analytics"
             ? results.length > 0
               ? moment(results[0].createdAt).format("Do MMMM YYYY")
               : "Undefined"
@@ -595,150 +546,65 @@ const Person = (props) => {
         </RegDate>
       </Header>
       <Open secret={secret}>
-        {props.type !== "lesson_analytics" && (
+        {type !== "lesson_analytics" && (
           <EmailBlock>
             <h2>Connect</h2>
-            {/* <div>{student.number}</div> */}
             <Editor className="editor">
               <DynamicLoadedEditor
-                getEditorText={myCallback}
+                getEditorText={setMessage}
                 value={""}
                 name="text"
               />
             </Editor>
-            <SendEmailButton
-              onClick={async (e) => {
-                const res = await sendMessage({
-                  variables: {
-                    userId: student.id,
-                    text: message,
-                  },
-                });
-              }}
-            >
-              {loading1 ? "Sending..." : "Send Email"}
+            <SendEmailButton onClick={handleSendMessage}>
+              {sendMessageLoading ? "Sending..." : "Send Email"}
             </SendEmailButton>
             <Buttons>
               {student.number && (
-                <SendButton>
-                  <a
-                    target="_blank"
-                    href={`https://wa.me/${checkPhoneNumber(
-                      student.number
-                    )}?text=Добрый!`}
-                  >
-                    {/* Написать в Wh */}
-                    WhatsApp
-                  </a>
-                </SendButton>
-              )}
-              {student.number && (
-                <SendButton>
-                  <a
-                    target="_blank"
-                    href={`https://t.me/${checkPhoneNumber(student.number)}`}
-                  >
-                    {/* Написать в Tg */}
-                    Telegram
-                  </a>
-                </SendButton>
+                <>
+                  <SendButton>
+                    <a
+                      target="_blank"
+                      href={`https://wa.me/${checkPhoneNumber(
+                        student.number
+                      )}?text=Добрый!`}
+                    >
+                      WhatsApp
+                    </a>
+                  </SendButton>
+                  <SendButton>
+                    <a
+                      target="_blank"
+                      href={`https://t.me/${checkPhoneNumber(student.number)}`}
+                    >
+                      Telegram
+                    </a>
+                  </SendButton>
+                </>
               )}
               {courseVisit && (
-                <Mutation
-                  mutation={UPDATE_COURSE_VISIT_MUTATION}
-                  variables={{
-                    id: courseVisit.id,
-                    reminders: courseVisit.reminders
-                      ? [...courseVisit.reminders, new Date()]
-                      : [new Date()],
-                    comment: "hello",
-                    info: emailInfo,
-                  }}
-                >
-                  {(sendEmailToStudent, { loading, error }) => {
-                    return (
-                      <SendButton
-                        onClick={(e) => {
-                          const data = sendEmailToStudent();
-                          alert("Отправлено!");
-                        }}
-                        name="CV"
-                      >
-                        {/* Приветствие */}
-                        Welcome Email
-                      </SendButton>
-                    );
-                  }}
-                </Mutation>
-              )}
-              {courseVisit && (
-                <Mutation
-                  mutation={UPDATE_COURSE_VISIT_MUTATION}
-                  variables={{
-                    id: courseVisit.id,
-                    reminders: courseVisit.reminders
-                      ? [...courseVisit.reminders, new Date()]
-                      : [new Date()],
-                    comment: "problem",
-                    info: emailInfo,
-                  }}
-                >
-                  {(sendEmailToStudent, { loading, error }) => {
-                    return (
-                      <SendButton
-                        onClick={(e) => {
-                          const data = sendEmailToStudent();
-                          // alert("Отправлено!");
-                          alert("Email has been sent!");
-                        }}
-                        name="CV"
-                      >
-                        {/* Проблемное */}
-                        Problem Email
-                      </SendButton>
-                    );
-                  }}
-                </Mutation>
-              )}
-              {courseVisit && (
-                <Mutation
-                  mutation={UPDATE_COURSE_VISIT_MUTATION}
-                  variables={{
-                    id: courseVisit.id,
-                    reminders: courseVisit.reminders
-                      ? [...courseVisit.reminders, new Date()]
-                      : [new Date()],
-                    comment: "motivation",
-                    info: emailInfo,
-                  }}
-                >
-                  {(sendEmailToStudent, { loading, error }) => {
-                    return (
-                      <SendButton
-                        onClick={(e) => {
-                          const data = sendEmailToStudent();
-                          alert("Отправлено!");
-                        }}
-                        name="CV"
-                      >
-                        {/* Мотивационнное */}
-                        Motivation Email
-                      </SendButton>
-                    );
-                  }}
-                </Mutation>
+                <>
+                  <SendButton onClick={() => handleSendEmail("hello")}>
+                    Welcome Email
+                  </SendButton>
+                  <SendButton onClick={() => handleSendEmail("problem")}>
+                    Problem Email
+                  </SendButton>
+                  <SendButton onClick={() => handleSendEmail("motivation")}>
+                    Motivation Email
+                  </SendButton>
+                </>
               )}
             </Buttons>
             {courseVisit &&
               courseVisit.reminders &&
               courseVisit.reminders.map((r) => (
-                <li>{moment(r).format("LLL")}</li>
+                <li key={r}>{moment(r).format("LLL")}</li>
               ))}
           </EmailBlock>
         )}
         <Block>
-          {/* <h2>Lesson stats</h2> */}
-          {props.type !== "lesson_analytics" && (
+          {type !== "lesson_analytics" && (
             <Journey
               student={student}
               maxes={maxes}
@@ -746,48 +612,41 @@ const Person = (props) => {
               lessons={lessons}
             />
           )}
-          {page === "results" && (
-            <>
-              <>
-                <TopBox>
-                  <div className="div1">Simulator Name</div>
-                  <div className="div2">Progress</div>
-                  <div className="div3">Result</div>
-                  <div className="div4">Visits</div>
-                  <div className="div5">First action</div>
-                  <div className="div6">Last action</div>
-                  <div className="div7"></div>
-                </TopBox>
-              </>
-              {[...lessons]
-                .filter((l) => l.published)
-                .sort((a, b) => (a.number > b.number ? 1 : -1))
-                .map((lesson, index) => {
-                  let res = maxes.filter((r) => r.lesson.id === lesson.id);
-                  return (
-                    <LessonData
-                      lesson={lesson}
-                      index={index}
-                      coursePageID={coursePageID}
-                      student={student}
-                      type={props.type}
-                      res={res}
-                      date={
-                        props.lesson_analytics
-                          ? courseVisit
-                            ? moment(courseVisit.createdAt).format(
-                                "Do MMMM YYYY"
-                              )
-                            : "Undefined"
-                          : results.length > 0
-                          ? moment(results[0].createdAt).format("Do MMMM YYYY")
-                          : "Undefined"
-                      }
-                    />
-                  );
-                })}
-            </>
-          )}
+          <TopBox>
+            <div className="div1">Simulator Name</div>
+            <div className="div2">Progress</div>
+            <div className="div3">Result</div>
+            <div className="div4">Visits</div>
+            <div className="div5">First action</div>
+            <div className="div6">Last action</div>
+            <div className="div7"></div>
+          </TopBox>
+          {lessons
+            .filter((l) => l.published)
+            .sort((a, b) => a.number - b.number)
+            .map((lesson, index) => {
+              let res = maxes.filter((r) => r.lesson.id === lesson.id);
+              return (
+                <LessonData
+                  key={lesson.id}
+                  lesson={lesson}
+                  index={index}
+                  coursePageID={coursePageID}
+                  student={student}
+                  type={type}
+                  res={res}
+                  date={
+                    type === "lesson_analytics"
+                      ? courseVisit
+                        ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
+                        : "Undefined"
+                      : results.length > 0
+                      ? moment(results[0].createdAt).format("Do MMMM YYYY")
+                      : "Undefined"
+                  }
+                />
+              );
+            })}
         </Block>
       </Open>
     </Styles>
