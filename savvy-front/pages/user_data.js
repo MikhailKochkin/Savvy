@@ -294,7 +294,6 @@ const ClientData = () => {
     ? data3.users
     : [];
 
-  console.log("data3.users", data3);
   return (
     <div>
       <div>

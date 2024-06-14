@@ -117,7 +117,8 @@ model Chat {
 
 model ChatResult {
   id          String   @id @default(cuid())
-  dialogue    Json?
+  name        String?
+  text        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   chatId      String   @db.VarChar(30)
@@ -1218,6 +1219,7 @@ model User {
 model Referral {
   id        String   @id @default(cuid())
   isCounted Boolean  @default(false)
+  isPaid    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   referrerId  String

@@ -15,7 +15,14 @@ export const getServerSideProps = async ({ locale }) => ({
 
 const SubscriptionPage = (props) => {
   const me = useUser();
-  return <DynamicSubscription me={me} courseId={props.query.courseId} />;
+  return (
+    <DynamicSubscription
+      me={me}
+      courseId={props.query.courseId}
+      referrerId={props.query.referrerId}
+      referrerName={props.query.referrerName}
+    />
+  );
 };
 
 export default SubscriptionPage;

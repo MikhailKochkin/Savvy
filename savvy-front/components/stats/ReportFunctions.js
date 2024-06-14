@@ -159,6 +159,7 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
       let practice = 0;
       let correctAnswersNum = 0;
       let questionResultsWithReflectionNum = 0;
+      console.log("el", el);
 
       // 1. Set the criteria by which you analyze how well the student has coped with the problem
       let criteria = {
@@ -176,11 +177,11 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
       // How do we use these criteria?
 
       // – if the student has looked through all the lesson we assume that they have learnt something. Student gets 20 total points
-      // – if the student has given asnwers to exercises we assume that they have practiced and has received feedback. Student can get up to 20 total points. The final points depend on how many exercises have the student completed.
+      // – if the student has given answers to exercises we assume that they have practiced and has received feedback. Student can get up to 20 total points. The final points depend on how many exercises have the student completed.
       // – if the student has given correct asnwers to exercises we assume that they have received feedback. They now know which answer is correct. Student can get up to 20 total points. The final points depend on how many exercises have the student completed.
       // - if the student has used additional functions (like hints, explanations, etc) we assume that they have reflected on the feedback. Student gets 40 total points. The final points depend on how many exercises have the student completed.
 
-      // 2. Has the student learnt something?
+      // 2. Has the student learnt something (looked through all the matrials in the lesson)?
 
       let completion_rate =
         (res[0].progress / res[0].lesson.structure.lessonItems.length).toFixed(
@@ -196,101 +197,104 @@ export const analyzeStudentPerformance = (availableData, res, data) => {
         criteria.hasLearnt = false;
       }
 
-      // 3. Has the student practiced. received feedback and reflected?
-      el.questions.forEach((question) => {
-        // 3.1 the student gets a point for every question which has saved results
-        if (question.results.length > 0) {
-          practice += 1;
-        }
-        // 3.2 the student gets a point for every question that has saved results with correct answers
+      console.log("completion_rate", completion_rate);
+      console.log("criteria", criteria);
 
-        if (question.__typename === "Quiz") {
-          if (question.type.toLowerCase() === "test") {
-            let correctAnswers = question.results.filter(
-              (result) => result.correct && parseFloat(result.comment) > 65
-            );
-            if (correctAnswers.length == 0) {
-              criteria.weakQuestions.push(question);
-            }
-            if (correctAnswers.length > 0) {
-              correctAnswersNum += 1;
-            }
-          } else if (
-            question.type.toLowerCase() === "findall" ||
-            question.type.toLowerCase() === "generate"
-          ) {
-            let correctAnswers = question.results.filter((result) => {
-              if (result.ideasList && result.ideasList.quizIdeas) {
-                return (
-                  result.ideasList.quizIdeas.filter(
-                    (idea) => parseFloat(idea.result) > 60
-                  ).length > 0
-                );
-              }
-              return false;
-            });
-            if (correctAnswers.length == 0) {
-              criteria.weakQuestions.push(question);
-            }
-            if (correctAnswers.length > 0) {
-              correctAnswersNum += 1;
-            }
-          }
-        }
+      //   // 3. Has the student practiced. received feedback and reflected?
+      //   el.questions.forEach((question) => {
+      //     // 3.1 the student gets a point for every question which has saved results
+      //     if (question.results.length > 0) {
+      //       practice += 1;
+      //     }
+      //     // 3.2 the student gets a point for every question that has saved results with correct answers
 
-        // 3.3. Has the student reflected on the feedback?
-        let questionResultsWithReflection = question.results.filter(
-          (result) => result.improvement !== "" || result.explanation !== ""
-        );
-        if (questionResultsWithReflection.length == 0) {
-          criteria.unreflectedQuestions.push(question);
-        }
-        if (questionResultsWithReflection.length > 0) {
-          questionResultsWithReflectionNum += 1;
-        }
-      });
+      //     if (question.__typename === "Quiz") {
+      //       if (question.type.toLowerCase() === "test") {
+      //         let correctAnswers = question.results.filter(
+      //           (result) => result.correct && parseFloat(result.comment) > 65
+      //         );
+      //         if (correctAnswers.length == 0) {
+      //           criteria.weakQuestions.push(question);
+      //         }
+      //         if (correctAnswers.length > 0) {
+      //           correctAnswersNum += 1;
+      //         }
+      //       } else if (
+      //         question.type.toLowerCase() === "findall" ||
+      //         question.type.toLowerCase() === "generate"
+      //       ) {
+      //         let correctAnswers = question.results.filter((result) => {
+      //           if (result.ideasList && result.ideasList.quizIdeas) {
+      //             return (
+      //               result.ideasList.quizIdeas.filter(
+      //                 (idea) => parseFloat(idea.result) > 60
+      //               ).length > 0
+      //             );
+      //           }
+      //           return false;
+      //         });
+      //         if (correctAnswers.length == 0) {
+      //           criteria.weakQuestions.push(question);
+      //         }
+      //         if (correctAnswers.length > 0) {
+      //           correctAnswersNum += 1;
+      //         }
+      //       }
+      //     }
 
-      // Practice rate calculation
-      if ((practice / el.questions.length) * 100 > 90) {
-        criteria.mark += 20;
-      } else if (
-        (practice / el.questions.length) * 100 > 50 &&
-        (practice / el.questions.length) * 100 <= 90
-      ) {
-        criteria.mark += 10;
-      }
+      //     // 3.3. Has the student reflected on the feedback?
+      //     let questionResultsWithReflection = question.results.filter(
+      //       (result) => result.improvement !== "" || result.explanation !== ""
+      //     );
+      //     if (questionResultsWithReflection.length == 0) {
+      //       criteria.unreflectedQuestions.push(question);
+      //     }
+      //     if (questionResultsWithReflection.length > 0) {
+      //       questionResultsWithReflectionNum += 1;
+      //     }
+      //   });
 
-      // Feedback rate calculation
-      criteria.feedbackRate =
-        (correctAnswersNum / el.questions.length).toFixed(2) * 100;
-      if (criteria.feedbackRate > 90) {
-        criteria.hasReceivedFeedback = true;
-        criteria.mark += 20;
-      } else if (criteria.feedbackRate > 50 && criteria.feedbackRate <= 90) {
-        criteria.hasReceivedFeedback = true;
-        criteria.mark += 10;
-      }
+      //   // Practice rate calculation
+      //   if ((practice / el.questions.length) * 100 > 90) {
+      //     criteria.mark += 20;
+      //   } else if (
+      //     (practice / el.questions.length) * 100 > 50 &&
+      //     (practice / el.questions.length) * 100 <= 90
+      //   ) {
+      //     criteria.mark += 10;
+      //   }
 
-      // Reflection check
-      if (questionResultsWithReflectionNum / el.questions.length > 0.9) {
-        criteria.hasReflected = true;
-        criteria.mark += 40;
-      } else if (
-        questionResultsWithReflectionNum / el.questions.length > 0.5 &&
-        questionResultsWithReflectionNum / el.questions.length <= 0.9
-      ) {
-        criteria.hasReflected = true;
-        criteria.mark += 20;
-      } else if (
-        questionResultsWithReflectionNum / el.questions.length > 0.1 &&
-        questionResultsWithReflectionNum / el.questions.length <= 0.5
-      ) {
-        criteria.hasReflected = true;
-        criteria.mark += 10;
-      }
+      //   // Feedback rate calculation
+      //   criteria.feedbackRate =
+      //     (correctAnswersNum / el.questions.length).toFixed(2) * 100;
+      //   if (criteria.feedbackRate > 90) {
+      //     criteria.hasReceivedFeedback = true;
+      //     criteria.mark += 20;
+      //   } else if (criteria.feedbackRate > 50 && criteria.feedbackRate <= 90) {
+      //     criteria.hasReceivedFeedback = true;
+      //     criteria.mark += 10;
+      //   }
 
-      // Assigning total results to the problem
-      el.totalResults = criteria;
+      //   // Reflection check
+      //   if (questionResultsWithReflectionNum / el.questions.length > 0.9) {
+      //     criteria.hasReflected = true;
+      //     criteria.mark += 40;
+      //   } else if (
+      //     questionResultsWithReflectionNum / el.questions.length > 0.5 &&
+      //     questionResultsWithReflectionNum / el.questions.length <= 0.9
+      //   ) {
+      //     criteria.hasReflected = true;
+      //     criteria.mark += 20;
+      //   } else if (
+      //     questionResultsWithReflectionNum / el.questions.length > 0.1 &&
+      //     questionResultsWithReflectionNum / el.questions.length <= 0.5
+      //   ) {
+      //     criteria.hasReflected = true;
+      //     criteria.mark += 10;
+      //   }
+
+      //   // Assigning total results to the problem
+      //   el.totalResults = criteria;
     }
   });
 };

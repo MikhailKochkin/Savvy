@@ -85,6 +85,26 @@ const WaveAnimation = styled.div`
   z-index: 1; /* Ensure animation is displayed behind the image */
 `;
 
+const SimpleButton = styled.button`
+  flex: 1;
+  height: 40px;
+  background: none;
+  padding: 5px 10px;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
+
 const CallSimulation = (props) => {
   const [waves, setWaves] = useState(false);
   const [speaking, setSpeaking] = useState(false); // Track if speech is currently being spoken
@@ -189,17 +209,17 @@ const CallSimulation = (props) => {
           {author.name} {author.surname}
         </div>
         <div className="question">
-          <button onClick={speakQuestion}>Speak Question</button>
-          {speaking && (
-            <button onClick={stopSpeaking}>Stop Speaking</button>
-          )}{" "}
           {/* Display stop button only when speaking */}
-          <button onClick={(e) => startListening()} disabled={listening}>
+          <SimpleButton onClick={(e) => startListening()} disabled={listening}>
             Start Listening
-          </button>
-          <button onClick={(e) => stopListening()} disabled={!listening}>
+          </SimpleButton>
+          <SimpleButton onClick={(e) => stopListening()} disabled={!listening}>
             Stop Listening
-          </button>
+          </SimpleButton>
+          <SimpleButton onClick={speakQuestion}>Start Answering</SimpleButton>
+          {speaking && (
+            <SimpleButton onClick={stopSpeaking}>Stop Speaking</SimpleButton>
+          )}{" "}
           <div>Answer: {answer}</div>
         </div>
       </Container>

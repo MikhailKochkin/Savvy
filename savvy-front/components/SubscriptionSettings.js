@@ -50,8 +50,7 @@ const Fieldset = styled.fieldset`
     box-sizing: border-box;
     border-radius: 5px;
     padding: 1%;
-    margin-left: 2%;
-    margin-bottom: 2%;
+    margin-top: 10px;
     font-size: 1.4rem;
     outline: 0;
   }
@@ -114,6 +113,10 @@ const Comment = styled.div`
 
 const Container = styled.div`
   padding: 10px;
+  .explainer_text {
+    line-height: 1.4;
+    font-size: 1.4rem;
+  }
 `;
 
 const BlueButton = styled.button`
@@ -178,9 +181,6 @@ const Account = (props) => {
     props.me.subscriptions[0].term ? props.me.subscriptions[0].term : "None"
   );
 
-  console.log("subscriptionType", subscriptionType);
-  console.log("subscriptionLength", subscriptionLength);
-
   const { t } = useTranslation("account");
 
   const [updateUser, { error, loading }] = useMutation(UPDATE_USER_MUTATION, {
@@ -204,13 +204,23 @@ const Account = (props) => {
   };
 
   const { me } = props;
-  console.log(me.subscriptions);
 
   return (
     <Form>
       <Fieldset disabled={loading} aria-busy={loading}>
         <div className="Title">{t("subscription_settings")}</div>
         <Container>
+          <Comment>Реферальная ссылка</Comment>
+          <div className="explainer_text">
+            Вы можете поделиться реферальной ссылкой со своими друзьями,
+            знакомыми и подписчиками. Они получат скидку -20% на свою первую
+            подписку. А вы -20% за каждого, кто воспользуется ссылкой.
+            Максимальная скидка за 1 месяц – 40%. Неиспользованные проценты
+            перенесутся на следующий месяц.
+          </div>
+          <input
+            value={`https://besavvy.app/ru/subscription?referrerId=${me.id}`}
+          />
           <Comment>{t("isActive")}</Comment>
           <select
             value={isActive}

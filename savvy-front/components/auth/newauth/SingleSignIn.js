@@ -103,6 +103,8 @@ const SingleSignIn = (props) => {
     skip: !data,
   });
 
+  let url = props.pathname ? props.pathname : "/";
+  props.referrerId ? (url = url + "&referrerId=" + props.referrerId) : null;
   useEffect(() => {
     if (users_data?.users?.length > 0) {
       const fetchData = async () => {
@@ -114,7 +116,7 @@ const SingleSignIn = (props) => {
             refetchQueries: [{ query: CURRENT_USER_QUERY }],
           });
           if (props.type == "main") {
-            router.push(props.pathname ? props.pathname : "/");
+            router.push(url);
           }
         }
       };
@@ -133,7 +135,7 @@ const SingleSignIn = (props) => {
             refetchQueries: [{ query: CURRENT_USER_QUERY }],
           });
           if (props.type == "main") {
-            router.push(props.pathname ? props.pathname : "/");
+            router.push(url);
           }
         }
       };

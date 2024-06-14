@@ -468,10 +468,11 @@ type ChatResult {
   chat: Chat!
   chatId: String!
   createdAt: DateTime!
-  dialogue: Json
   id: String!
   lesson: Lesson!
   lessonId: String!
+  name: String
+  text: String
   updatedAt: DateTime!
   user: User!
   userId: String!
@@ -487,6 +488,20 @@ input ChatResultOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input ChatResultOrderByWithRelationInput {
+  chat: ChatOrderByWithRelationInput
+  chatId: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrder
+  name: SortOrderInput
+  text: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
 input ChatResultWhereInput {
   AND: [ChatResultWhereInput!]
   NOT: [ChatResultWhereInput!]
@@ -494,10 +509,11 @@ input ChatResultWhereInput {
   chat: ChatWhereInput
   chatId: StringFilter
   createdAt: DateTimeFilter
-  dialogue: JsonNullableFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
+  name: StringNullableFilter
+  text: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -510,10 +526,11 @@ input ChatResultWhereUniqueInput {
   chat: ChatWhereInput
   chatId: StringFilter
   createdAt: DateTimeFilter
-  dialogue: JsonNullableFilter
   id: String
   lesson: LessonWhereInput
   lessonId: StringFilter
+  name: StringNullableFilter
+  text: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -2597,7 +2614,7 @@ type Mutation {
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
-  createChatResult(chatId: String, dialogue: Dialogue, lessonId: String): ChatResult
+  createChatResult(chatId: String, lessonId: String, name: String, text: String): ChatResult
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createCommunityMember(email: String, name: String, number: String, subscription: String, surname: String): PaymentInfo2
   createConfUser(conf_number: Int, email: String): ConfUser
@@ -2629,6 +2646,7 @@ type Mutation {
   createQuiz(answer: String, answers: ComplexAnswer, goalType: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: String, type: String): Quiz
   createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeas, improvement: String, lessonId: String, quiz: String, result: String, type: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
+  createReferral(referrerId: String): Referral
   createShot(comments: [String], lessonId: String, name: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
   createStatement(forumId: String, miniforumId: String, text: String): Statement
@@ -3824,6 +3842,8 @@ type Query {
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByWithRelationInput!], where: CertificateWhereInput): [Certificate!]!
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int, orderBy: [ChallengeResultOrderByWithRelationInput!], where: ChallengeResultWhereInput): [ChallengeResult!]!
   chat(where: ChatWhereUniqueInput!): Chat
+  chatResult(where: ChatResultWhereUniqueInput!): ChatResult
+  chatResults(after: ChatResultWhereUniqueInput, before: ChatResultWhereUniqueInput, first: Int, last: Int, orderBy: [ChatResultOrderByWithRelationInput!], where: ChatResultWhereInput): [ChatResult!]!
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByWithRelationInput!], where: ChatWhereInput): [Chat!]!
   constructionResult(where: ConstructionResultWhereUniqueInput!): ConstructionResult
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int, orderBy: [ConstructionResultOrderByWithRelationInput!], where: ConstructionResultWhereInput): [ConstructionResult!]!
@@ -3860,6 +3880,8 @@ type Query {
   quizzes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int, orderBy: [QuizOrderByWithRelationInput!], where: QuizWhereInput): [Quiz!]!
   rating(where: RatingWhereUniqueInput!): Rating
   ratings(after: RatingWhereUniqueInput, before: RatingWhereUniqueInput, first: Int, last: Int, orderBy: [RatingOrderByWithRelationInput!], where: RatingWhereInput): [Rating!]!
+  referral(where: ReferralWhereUniqueInput!): Referral
+  referrals(after: ReferralWhereUniqueInput, before: ReferralWhereUniqueInput, first: Int, last: Int, orderBy: [ReferralOrderByWithRelationInput!], where: ReferralWhereInput): [Referral!]!
   stats(lessonId: String, userId: String): Stats
   team(where: TeamWhereUniqueInput!): Team
   teams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int, orderBy: [TeamOrderByWithRelationInput!], where: TeamWhereInput): [Team!]!
@@ -4235,6 +4257,18 @@ input ReferralOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input ReferralOrderByWithRelationInput {
+  createdAt: SortOrder
+  id: SortOrder
+  isCounted: SortOrder
+  isPaid: SortOrder
+  referee: UserOrderByWithRelationInput
+  refereeId: SortOrder
+  referrer: UserOrderByWithRelationInput
+  referrerId: SortOrder
+  updatedAt: SortOrder
+}
+
 input ReferralWhereInput {
   AND: [ReferralWhereInput!]
   NOT: [ReferralWhereInput!]
@@ -4242,6 +4276,22 @@ input ReferralWhereInput {
   createdAt: DateTimeFilter
   id: StringFilter
   isCounted: BoolFilter
+  isPaid: BoolFilter
+  referee: UserWhereInput
+  refereeId: StringFilter
+  referrer: UserWhereInput
+  referrerId: StringFilter
+  updatedAt: DateTimeFilter
+}
+
+input ReferralWhereUniqueInput {
+  AND: [ReferralWhereInput!]
+  NOT: [ReferralWhereInput!]
+  OR: [ReferralWhereInput!]
+  createdAt: DateTimeFilter
+  id: String
+  isCounted: BoolFilter
+  isPaid: BoolFilter
   referee: UserWhereInput
   refereeId: StringFilter
   referrer: UserWhereInput

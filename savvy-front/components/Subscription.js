@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql, useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import tinkoff from "@tcb-web/create-credit";
 import { Tooltip } from "react-tooltip";
@@ -27,6 +27,23 @@ const CREATE_ORDER_MUTATION = gql`
         paymentID
       }
       url
+    }
+  }
+`;
+
+const CREATE_REFERRAL_MUTATION = gql`
+  mutation CREATE_REFERRAL($referrerId: String!) {
+    createReferral(referrerId: $referrerId) {
+      id
+    }
+  }
+`;
+
+const GET_REFERRER = gql`
+  query GET_REFERRER($id: String!) {
+    users(where: { id: { equals: $id } }) {
+      id
+      name
     }
   }
 `;
@@ -348,8 +365,21 @@ const TopBar = styled.div`
     font-size: 2.6rem;
     font-weight: 600;
     line-height: 1.2;
-    margin: 35px 0;
     max-width: 400px;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.2;
+    max-width: 400px;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+  .headers {
+    display: flex;
+    flex-direction: column;
   }
   @media (max-width: 800px) {
     flex-direction: column;
@@ -440,6 +470,8 @@ const SimpleButton = styled.button`
 const Subscription = (props) => {
   const router = useRouter();
   const [plan, setPlan] = useState("monthly"); // State to manage the selected plan
+  const [referrerName, setReferrerName] = useState(null);
+  const { me } = props;
 
   useEffect(() => {
     // kick off the polyfill!
@@ -451,12 +483,45 @@ const Subscription = (props) => {
     { data: order_data, loading: loading_data, error: error_data },
   ] = useMutation(CREATE_ORDER_MUTATION);
 
+  const [
+    getReferrer,
+    { data: referrer_data, loading: loading_referrer, error: error_referrer },
+  ] = useLazyQuery(GET_REFERRER);
+
+  const [createReferral] = useMutation(CREATE_REFERRAL_MUTATION);
+
+  let isReferralDiscountAvailable = false;
+  if (!me && props.referrerId && referrerName) {
+    isReferralDiscountAvailable = true;
+  } else if (
+    me &&
+    me.id !== props.referrerId &&
+    referrerName &&
+    me.subscriptions.length === 0
+  ) {
+    isReferralDiscountAvailable = true;
+  }
+  useEffect(() => {
+    const fetchReferrer = async () => {
+      if (props.referrerId) {
+        const res = await getReferrer({
+          variables: { id: props.referrerId },
+        });
+        if (res.data.users[0]?.name) {
+          setReferrerName(res.data.users[0]?.name);
+        }
+      }
+    };
+
+    fetchReferrer();
+  }, [props.referrerId]);
+
   const getInstallments = (price) => {
     tinkoff.create({
       shopId: process.env.NEXT_PUBLIC_SHOP_ID,
       showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
       items: [
-        { name: "Первая подписка на BeSavvy+", price: price, quantity: 1 },
+        { name: "Годовая подписка на BeSavvy+", price: price, quantity: 1 },
       ],
       sum: price,
       promoCode: "installment_0_0_3_4,34",
@@ -477,7 +542,9 @@ const Subscription = (props) => {
 
   const completePayment = async (price) => {
     if (!props.me) {
-      router.push(`auth?pathname=subscription?courseId=${props.courseId}`);
+      router.push(
+        `auth?pathname=subscription?courseId=${props.courseId}&referrerId=${props.referrerId}`
+      );
       return;
     }
     const res = await createOrder({
@@ -489,6 +556,13 @@ const Subscription = (props) => {
         userId: props.me.id,
       },
     });
+    if (isReferralDiscountAvailable) {
+      createReferral({
+        variables: {
+          referrerId: props.referrerId,
+        },
+      });
+    }
     location.href = res.data.createOrder.url;
   };
 
@@ -505,10 +579,16 @@ const Subscription = (props) => {
     <Styles>
       <Container>
         <TopBar>
-          {" "}
-          <h1 className="header" id="subscription_start">
-            Выберите план и откройте доступ к 35+ курсам
-          </h1>
+          <div className="headers">
+            {" "}
+            <h1 className="header" id="subscription_start">
+              Выберите план и откройте доступ к 35+ курсам
+            </h1>
+            <h3>
+              {isReferralDiscountAvailable &&
+                `A ${referrerName} даст вам скидку -20% (🔥) на первую подписку!`}
+            </h3>
+          </div>
           <SliderContainer>
             <SliderButton
               type="short"
@@ -538,7 +618,11 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    1990 ₽ / мес
+                    {!isReferralDiscountAvailable && "1990 ₽ / мес"}
+                    {isReferralDiscountAvailable ? (
+                      <span>1990</span>
+                    ) : null}{" "}
+                    {isReferralDiscountAvailable ? "1590 ₽ / мес" : null}
                   </div>
                 </div>
                 <div className="section">
@@ -578,7 +662,11 @@ const Subscription = (props) => {
                     1
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(1990)}>
+                <ButtonBuy
+                  onClick={(e) =>
+                    completePayment(isReferralDiscountAvailable ? 1590 : 1990)
+                  }
+                >
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
               </Form>
@@ -590,7 +678,11 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    4990 ₽ / мес
+                    {!isReferralDiscountAvailable && "4990 ₽ / мес"}
+                    {isReferralDiscountAvailable ? (
+                      <span>4990</span>
+                    ) : null}{" "}
+                    {isReferralDiscountAvailable ? "3990 ₽ / мес" : null}
                   </div>
                 </div>
                 <div className="section">
@@ -630,7 +722,11 @@ const Subscription = (props) => {
                     1
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(4990)}>
+                <ButtonBuy
+                  onClick={(e) =>
+                    completePayment(isReferralDiscountAvailable ? 3990 : 4990)
+                  }
+                >
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
               </Form>

@@ -64,6 +64,10 @@ const Query = queryType({
     t.crud.growthAreas({ ordering: true, filtering: true });
     t.crud.userLevel({ filtering: true });
     t.crud.userLevels({ ordering: true, filtering: true });
+    t.crud.referral();
+    t.crud.referrals({ ordering: true, filtering: true });
+    t.crud.chatResults({ ordering: true, filtering: true });
+    t.crud.chatResult();
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {

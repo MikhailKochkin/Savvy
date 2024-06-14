@@ -111,7 +111,15 @@ const PasswordSignIn = (props) => {
       utm_source: getCookie("traffic_source"),
     },
   ];
+  // Construct the URL correctly
+  let url = props.pathname ? props.pathname : "/";
+  if (props.referrerId) {
+    // Check if there are already query parameters in the URL
+    const separator = url.includes("?") ? "&" : "?";
+    url = `${url}${separator}referrerId=${props.referrerId}`;
+  }
 
+  // Log the constructed URL
   return (
     <>
       <Form
@@ -126,7 +134,7 @@ const PasswordSignIn = (props) => {
             refetchQueries: [{ query: CURRENT_USER_QUERY }],
           });
           if (props.type == "main") {
-            router.push(props.pathname ? props.pathname : "/");
+            router.push(url);
           }
         }}
       >

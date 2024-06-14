@@ -72,7 +72,7 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
   const generateReport = async (event) => {
     event.preventDefault();
     setReport("");
-    setGenerating(true);
+    // setGenerating(true);
     console.log("start report");
 
     // 1. Find all problems / texteditors
@@ -113,14 +113,16 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
     console.log("availableProblems", availableProblems);
     console.log("availableTextEditors", availableTextEditors);
 
-    return;
-
     // 4. Analyze student performance
-    analyzeStudentPerformance(
+    let problemAnalysis = analyzeStudentPerformance(
       availableProblems,
       lessonData.res,
       lessonData.data
     );
+
+    console.log("problemAnalysis", problemAnalysis);
+
+    return;
 
     // 5. Generate report sections
     let intro = await generateReportIntro(student, lesson, date);

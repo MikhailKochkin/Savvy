@@ -200,6 +200,14 @@ const PasswordSignup = (props) => {
   const { t } = useTranslation("auth");
   const router = useRouter();
 
+  // Construct the URL correctly
+  let url = props.pathname ? props.pathname : "/";
+  if (props.referrerId) {
+    // Check if there are already query parameters in the URL
+    const separator = url.includes("?") ? "&" : "?";
+    url = `${url}${separator}referrerId=${props.referrerId}`;
+  }
+
   let visits = [
     {
       date: new Date(),
@@ -226,19 +234,19 @@ const PasswordSignup = (props) => {
       method="post"
       onSubmit={async (e) => {
         e.preventDefault();
-        if (surname === "") {
-          alert(t("give_surname"));
-          return;
-        } else if (!EmailValidator.validate(email)) {
-          alert(t("give_email"));
-          return;
-        } else if (number === "" || number.length < 7) {
-          alert(t("give_number"));
-          return;
-        }
-        const res = await signup();
+        // if (surname === "") {
+        //   alert(t("give_surname"));
+        //   return;
+        // } else if (!EmailValidator.validate(email)) {
+        //   alert(t("give_email"));
+        //   return;
+        // } else if (number === "" || number.length < 7) {
+        //   alert(t("give_number"));
+        //   return;
+        // }
+        // const res = await signup();
         if (props.type == "main") {
-          router.push(props.pathname ? props.pathname : "/");
+          router.push(url);
         }
         setEmail("");
         setName("");

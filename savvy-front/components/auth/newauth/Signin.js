@@ -61,9 +61,17 @@ const Signin = (props) => {
   return (
     <Container>
       <Title>👋 {t("c2a2")}</Title>
-      <PasswordSignIn pathname={props.pathname} type={props.type} />
+      <PasswordSignIn
+        pathname={props.pathname}
+        type={props.type}
+        referrerId={props.referrerId}
+      />
       <div id="sign_or"> {t("or")}</div>
-      <SingleSignIn pathname={props.pathname} type={props.type} />
+      <SingleSignIn
+        pathname={props.pathname}
+        type={props.type}
+        referrerId={props.referrerId}
+      />
       <Transit>
         <div>
           <span name="reset" onClick={change}>

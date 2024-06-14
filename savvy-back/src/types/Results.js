@@ -209,7 +209,8 @@ const ChatResult = objectType({
   name: "ChatResult",
   definition(t) {
     t.model.id();
-    t.model.dialogue();
+    t.model.text();
+    t.model.name();
     t.model.createdAt();
     t.model.updatedAt();
     t.model.chatId();

@@ -794,13 +794,11 @@ const updateComment = (editor, modalData, setModalOpen, notePath) => {
 const wrapComment = (editor, data) => {
   const { selection } = editor;
   const isCollapsed = selection && Range.isCollapsed(selection);
-  console.log("data", data);
   const com = {
     type: "note",
     elementId: data,
     children: isCollapsed ? [{ text: data }] : [],
   };
-  console.log("com", com);
 
   if (isCollapsed) {
     Transforms.insertNodes(editor, com);

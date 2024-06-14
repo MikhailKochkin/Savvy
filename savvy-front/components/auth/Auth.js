@@ -36,6 +36,7 @@ const Auth = (props) => {
             getData={changeState}
             pathname={props.pathname}
             type={props.type}
+            referrerId={props.referrerId}
           />
         )}
         {auth === "signup" && (
@@ -44,6 +45,7 @@ const Auth = (props) => {
             getData={changeState}
             pathname={props.pathname}
             type={props.type}
+            referrerId={props.referrerId}
           />
         )}
         {auth === "reset" && <RequestReset getData={changeState} />}

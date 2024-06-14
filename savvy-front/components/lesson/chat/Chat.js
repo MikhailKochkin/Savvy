@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { useMutation, gql } from "@apollo/client";
@@ -14,6 +14,24 @@ import AiAssistant from "./AiAssistant";
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
     updateChat(id: $id, link_clicks: $link_clicks) {
+      id
+    }
+  }
+`;
+
+const CREATE_CHATRESULT_MUTATION = gql`
+  mutation CREATE_CHATRESULT_MUTATION(
+    $text: String!
+    $name: String!
+    $lessonId: String!
+    $chatId: String
+  ) {
+    createChatResult(
+      text: $text
+      name: $name
+      lessonId: $lessonId
+      chatId: $chatId
+    ) {
       id
     }
   }
@@ -246,10 +264,16 @@ const Chat = (props) => {
   const [isRevealed, setIsRevealed] = useState(!props.isSecret);
   const [shiver, setShiver] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [hasCreatedInitialResult, setHasCreatedInitialResult] = useState(false); // State to ensure function runs only once
 
+  const chatRef = useRef(null);
   const { t } = useTranslation("lesson");
   const [updateChat, { data, loading, error }] =
     useMutation(UPDATE_CHAT_MUTATION);
+
+  const [createChatResult, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(CREATE_CHATRESULT_MUTATION);
+
   const getResult = (data) => {
     props.getResult(data);
   };
@@ -293,11 +317,47 @@ const Chat = (props) => {
       let name = me.name;
       element.innerHTML = name;
     });
+
     // document.addEventListener("keydown", detectKeyDown, true);
     // return () => {
     //   document.removeEventListener("click", detectKeyDown);
     // };
   }, []);
+  console.log("messages", messages.messagesList);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (props.story && entry.isIntersecting && !hasCreatedInitialResult) {
+          setHasCreatedInitialResult(true);
+          const res = createChatResult({
+            variables: {
+              text: messages.messagesList[0].text,
+              name: messages.messagesList[0].name
+                ? messages.messagesList[0].name
+                : messages.messagesList[0].author,
+              lessonId: lessonId,
+              chatId: id,
+            },
+          });
+          // Perform any actions you need when the component becomes visible
+        }
+      },
+      {
+        root: null,
+        threshold: 0.1, // Trigger when 10% of the component is visible
+      }
+    );
+
+    if (chatRef.current) {
+      observer.observe(chatRef.current);
+    }
+
+    return () => {
+      if (chatRef.current) {
+        observer.unobserve(chatRef.current);
+      }
+    };
+  }, [chatRef, hasCreatedInitialResult]);
 
   // const detectKeyDown = (e) => {
   //   if (e.key === "n") {
@@ -321,6 +381,7 @@ const Chat = (props) => {
     <Styles
       id={id}
       width={width}
+      ref={chatRef}
       onClick={async (e) => {
         if (e.target.className === "button") {
           const res = await updateChat({
@@ -366,6 +427,8 @@ const Chat = (props) => {
                       author_image={m.image}
                       author_name={m.name}
                       initialQuestion={m.text}
+                      lessonId={lessonId}
+                      chatId={id}
                     />
                   )}
                   {m.isAiAssistantOn && (
@@ -401,10 +464,19 @@ const Chat = (props) => {
       {showButton && !update && num < messages.messagesList.length && (
         <Next>
           <button
-            onClick={(e) => {
-              // if (num == messages.messagesList.length - 1) {
-              //   props.getShowArrow(true);
-              // }
+            onClick={async (e) => {
+              if (props.story) {
+                createChatResult({
+                  variables: {
+                    text: messages.messagesList[num].text,
+                    name: messages.messagesList[num].name
+                      ? messages.messagesList[num].name
+                      : messages.messagesList[num].author,
+                    lessonId: lessonId,
+                    chatId: id,
+                  },
+                });
+              }
 
               if (num == messages.messagesList.length - 1 && props.moveNext)
                 props.moveNext(props.id);

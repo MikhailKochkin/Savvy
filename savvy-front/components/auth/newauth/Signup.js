@@ -61,7 +61,11 @@ const Signup = (props) => {
         {/* 👋 {props.page == "lesson" ? t("signin_lesson_page") : t("c2a2")} */}
         👋 {t("c2a2")}
       </Title>
-      <PasswordSignup redirect={props.pathname} type={props.type} />
+      <PasswordSignup
+        pathname={props.pathname}
+        type={props.type}
+        referrerId={props.referrerId}
+      />
       <div id="sign_or">{t("or")}</div>
       <SingleSignIn redirect={props.pathname} type={props.type} />
       <Transit>

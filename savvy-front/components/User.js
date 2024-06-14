@@ -138,6 +138,9 @@ const CURRENT_USER_QUERY = gql`
       lessons {
         id
       }
+      subscriptions {
+        id
+      }
       # careerTrack {
       #   id
       # }

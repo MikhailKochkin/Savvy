@@ -68,6 +68,7 @@ async function getMessageOpens(serverToken, messageID) {
 const { exists } = require("fs");
 const { Dialogue, ChatResult } = require("./Results");
 const { Renewals } = require("./User");
+const { text } = require("body-parser");
 
 // const { Client } = require("whatsapp-web.js");
 // const wa_client = new Client();
@@ -2634,9 +2635,8 @@ const Mutation = mutationType({
       args: {
         chatId: stringArg(),
         lessonId: stringArg(),
-        dialogue: arg({
-          type: "Dialogue",
-        }),
+        name: stringArg(),
+        text: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const chatId = args.chatId;
@@ -3811,7 +3811,7 @@ const Mutation = mutationType({
             },
             items: [
               {
-                description: coursePage.title
+                description: coursePage?.title
                   ? coursePage.title
                   : "BeSavvy Plus",
                 quantity: "1",
@@ -3825,7 +3825,7 @@ const Mutation = mutationType({
           },
           confirmation: {
             type: "redirect",
-            return_url: `https://besavvy.app/onboarding?id=${coursePage.id}`,
+            return_url: `https://besavvy.app/onboarding?id=${coursePage?.id}`,
           },
           capture: true,
         };
@@ -3833,7 +3833,6 @@ const Mutation = mutationType({
         const payment = await community_checkout.createPayment(createPayload);
 
         const url = payment.confirmation.confirmation_url;
-
         const order = await ctx.prisma.order.create({
           data: {
             price: args.price,
@@ -3845,7 +3844,9 @@ const Mutation = mutationType({
               connect: { id: args.userId },
             },
             coursePage: {
-              connect: { id: args.coursePageId },
+              connect: {
+                id: "clwl0no8h00002xuxtmyq8778",
+              },
             },
           },
         });
@@ -3861,7 +3862,7 @@ const Mutation = mutationType({
             user.name,
             user.surname,
             user.email,
-            coursePage.title,
+            coursePage?.title ? coursePage.title : "BeSavvy Plus",
             args.price
           ),
         });
@@ -5199,6 +5200,25 @@ const Mutation = mutationType({
           where: { id: subscriptionId },
           data: args,
         });
+      },
+    });
+    t.field("createReferral", {
+      type: "Referral",
+      args: {
+        referrerId: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const Referral = await ctx.prisma.referral.create({
+          data: {
+            referrer: {
+              connect: { id: args.referrerId },
+            },
+            referee: { connect: { id: ctx.res.req.userId } },
+            isCounted: false,
+            isPaid: false,
+          },
+        });
+        return Referral;
       },
     });
   },

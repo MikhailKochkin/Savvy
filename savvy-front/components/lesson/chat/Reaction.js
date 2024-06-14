@@ -1,9 +1,26 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-
-import { initial } from "lodash";
+import { useMutation, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
+
+const CREATE_CHATRESULT_MUTATION = gql`
+  mutation CREATE_CHATRESULT_MUTATION(
+    $text: String!
+    $name: String!
+    $lessonId: String!
+    $chatId: String
+  ) {
+    createChatResult(
+      text: $text
+      name: $name
+      lessonId: $lessonId
+      chatId: $chatId
+    ) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   .stage {
@@ -208,6 +225,10 @@ const Reaction = (props) => {
   const [leftReactions, setLeftReactions] = useState(props.reactions);
   const { me, author, m } = props;
   const { t } = useTranslation("lesson");
+
+  const [createChatResult, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(CREATE_CHATRESULT_MUTATION);
+
   return (
     <Styles>
       <>
@@ -253,28 +274,6 @@ const Reaction = (props) => {
         ))}
         {leftReactions.length > 0 && (
           <>
-            {/* {usedReactions.length > 0 && (
-              <Message className="author">
-                <div className="author_text">{t("more_explain")}</div>
-                <IconBlock>
-                  {m && m.image ? (
-                    <img className="icon" src={m.image} />
-                  ) : author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}
-
-                  <div className="name">
-                    {m
-                      ? m.name
-                      : author && author.name
-                      ? author.name
-                      : "BeSavvy"}
-                  </div>
-                </IconBlock>
-              </Message>
-            )} */}
             <Message className="student">
               <IconBlock>
                 <Icon className="icon2" background={m.author}>
@@ -295,6 +294,14 @@ const Reaction = (props) => {
                 {leftReactions.map((lr, i) => (
                   <StyledButton
                     onClick={(e) => {
+                      createChatResult({
+                        variables: {
+                          text: lr.reaction,
+                          name: me.name,
+                          lessonId: props.lessonId,
+                          chatId: props.chatId,
+                        },
+                      });
                       setUsedReactions([
                         ...usedReactions,
                         {
@@ -302,6 +309,16 @@ const Reaction = (props) => {
                           reaction: lr.reaction,
                         },
                       ]);
+                      createChatResult({
+                        variables: {
+                          text: lr.comment,
+                          name: props.author_name
+                            ? props.author_name
+                            : author && (author.name ? author.name : "BeSavvy"),
+                          lessonId: props.lessonId,
+                          chatId: props.chatId,
+                        },
+                      });
                       setLeftReactions(
                         [...leftReactions].filter(
                           (r) => r.comment !== lr.comment

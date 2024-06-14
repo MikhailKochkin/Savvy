@@ -9,7 +9,12 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 const auth = (props) => {
   return (
-    <Auth pathname={props.query.pathname} id={props.query.id} type="main" />
+    <Auth
+      pathname={props.query.pathname}
+      referrerId={props.query.referrerId}
+      id={props.query.id}
+      type="main"
+    />
   );
 };
 
