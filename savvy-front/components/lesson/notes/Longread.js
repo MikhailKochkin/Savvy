@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 const Container = styled.div`
   width: ${(props) => props.width};
   font-size: 1.6rem;
-  margin-bottom: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;

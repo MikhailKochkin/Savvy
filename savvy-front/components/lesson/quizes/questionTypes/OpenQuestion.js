@@ -110,87 +110,114 @@ const OpenQuestion = (props) => {
     setIsAnswerBeingChecked(true);
     setExplanationsNum(0);
     setImprovementsNum(0);
-    try {
-      const { result, correctnessLevel, color, comment } = await checkAnswer(
-        e,
-        removeSpecialChars(props.answer),
-        answer,
-        props.check
+
+    const processResult = (
+      result,
+      correctnessLevel,
+      color,
+      comment,
+      isCorrect
+    ) => {
+      setResult(result);
+      if (goalType !== "ASSESS") setInputColor(color);
+      setServerComment(comment.length > 5 ? comment : null);
+      passResult(isCorrect ? "true" : "false");
+
+      createQuizResult({
+        variables: {
+          quiz: props.quizId,
+          lessonId: props.lessonId,
+          answer: answer,
+          correct: isCorrect,
+          type: "answer",
+          hint: hints.length > 0 ? hints[hints.length - 1] : null,
+          result: result.toString(),
+          explanation:
+            explanations.length > 0
+              ? explanations[explanations.length - 1]
+              : null,
+          improvement:
+            improvements.length > 0
+              ? improvements[improvements.length - 1]
+              : null,
+          comment: `${comment}. ${
+            isCorrect ? "Looks true" : "Result"
+          }: ${result}%`,
+        },
+      });
+    };
+
+    const handleCorrectnessLevel = (
+      correctnessLevel,
+      result,
+      color,
+      comment
+    ) => {
+      switch (correctnessLevel) {
+        case "correct":
+          processResult(
+            result,
+            correctnessLevel,
+            "rgba(50, 172, 102, 0.25)",
+            comment,
+            true
+          );
+          break;
+        case "looks_true":
+        case "has_flaws":
+          processResult(result, correctnessLevel, color, comment, true);
+          break;
+        default:
+          processResult(result, correctnessLevel, color, comment, false);
+          break;
+      }
+    };
+
+    const evaluateAnswers = async (answers) => {
+      let results = [];
+
+      await Promise.all(
+        answers.map(async (el) => {
+          const { result, correctnessLevel, color, comment } =
+            await checkAnswer(
+              e,
+              removeSpecialChars2(el.answer),
+              answer,
+              props.check
+            );
+          results.push({ result, correctnessLevel, color, comment });
+        })
       );
 
-      setCorrectnessLevel(correctnessLevel, () => {
-        // console.log("correctnessLevel after setState", correctnessLevel);
-      });
+      const highestResult = results.reduce((max, current) =>
+        current.result > max.result ? current : max
+      );
 
-      if (correctnessLevel === "correct") {
-        // if (!isExperienced) {
-        //   if (props.getResults) props.getResults(2);
-        //   setIsExperienced(true);
-        // }
-        setResult(result);
-        if (goalType !== "ASSESS") setInputColor("rgba(50, 172, 102, 0.25)");
-        passResult("true");
-      } else if (
-        correctnessLevel === "looks_true" ||
-        correctnessLevel === "has_flaws"
-      ) {
-        setResult(result);
-        if (goalType !== "ASSESS") setInputColor(color);
-        passResult("true");
-        createQuizResult({
-          variables: {
-            quiz: props.quizId,
-            lessonId: props.lessonId,
-            answer: answer,
-            correct: true,
-            type: "answer",
-            hint: hints.length > 0 ? hints[hints.length - 1] : null,
-            result: result.toString(),
-            explanation:
-              explanations.length > 0
-                ? explanations[explanations.length - 1]
-                : null,
-            improvement:
-              improvements.length > 0
-                ? improvements[improvements.length - 1]
-                : null,
-            comment: `${comment}. Looks true: ${result}%`,
-          },
-        });
-      } else {
-        setResult(result);
-        setServerComment(comment.length > 5 ? comment : null);
+      const { result, correctnessLevel, color, comment } = highestResult;
+      setCorrectnessLevel(correctnessLevel);
+      handleCorrectnessLevel(correctnessLevel, result, color, comment);
+    };
 
-        if (goalType !== "ASSESS") setInputColor(color);
-        createQuizResult({
-          variables: {
-            quiz: props.quizId,
-            lessonId: props.lessonId,
-            answer: answer,
-            correct: false,
-            hint: hints.length > 0 ? hints[hints.length - 1] : null,
-            type: "answer",
-            result: result.toString(),
-            explanation:
-              explanations.length > 0
-                ? explanations[explanations.length - 1]
-                : null,
-            improvement:
-              improvements.length > 0
-                ? improvements[improvements.length - 1]
-                : null,
-            comment: `${comment}. Result: ${result}%`,
-          },
-        });
-        passResult("false");
+    if (props.answers?.answerElements?.length > 0) {
+      await evaluateAnswers(props.answers.answerElements);
+    } else {
+      try {
+        const { result, correctnessLevel, color, comment } = await checkAnswer(
+          e,
+          removeSpecialChars(props.answer),
+          answer,
+          props.check
+        );
+
+        setCorrectnessLevel(correctnessLevel);
+        handleCorrectnessLevel(correctnessLevel, result, color, comment);
+      } catch (error) {
+        console.error(error);
       }
-
-      setIsAnswerBeingChecked(false);
-    } catch (error) {
-      console.error(error);
-      setIsAnswerBeingChecked(false);
+      setPreviousAnswers([...previousAnswers, answer]);
     }
-    setPreviousAnswers([...previousAnswers, answer]);
+
+    setIsAnswerBeingChecked(false);
   };
 
   // 3. Provide hints to the student

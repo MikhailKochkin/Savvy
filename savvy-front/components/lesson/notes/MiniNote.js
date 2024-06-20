@@ -7,7 +7,6 @@ import parse from "html-react-parser";
 const Container = styled.div`
   width: 100%;
   font-size: 1.5rem;
-  /* margin-bottom: 100px; */
   display: flex;
   flex-direction: column;
   align-items: center;

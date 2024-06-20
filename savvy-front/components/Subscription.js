@@ -293,6 +293,17 @@ const MovingRow = styled.div`
   }
 `;
 
+const CommentBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 42px;
+  font-weight: 600;
+  font-size: 1.6rem;
+`;
+
 const ButtonBuy = styled.button`
   display: flex;
   flex-direction: column;
@@ -643,17 +654,19 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Карьерные сервисы</div>
+                  <div className="comment">
+                    Карьерные сервисы и пробные интервью
+                  </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    X
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Онлайн-встречи с авторами курсов
+                    Проверка заданий и индивидуальные консультации
                   </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    X
                   </div>
                 </div>
                 <div className="section">
@@ -678,11 +691,11 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    {!isReferralDiscountAvailable && "4990 ₽ / мес"}
+                    {!isReferralDiscountAvailable && "3990 ₽ / мес"}
                     {isReferralDiscountAvailable ? (
-                      <span>4990</span>
+                      <span>3990</span>
                     ) : null}{" "}
-                    {isReferralDiscountAvailable ? "3990 ₽ / мес" : null}
+                    {isReferralDiscountAvailable ? "2990 ₽ / мес" : null}
                   </div>
                 </div>
                 <div className="section">
@@ -703,17 +716,19 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Карьерные сервисы</div>
+                  <div className="comment">
+                    Карьерные сервисы и пробные интервью
+                  </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    ✅
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Онлайн-встречи с авторами курсов
+                    Проверка заданий и индивидуальные консультации
                   </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    ✅
                   </div>
                 </div>
                 <div className="section">
@@ -724,11 +739,12 @@ const Subscription = (props) => {
                 </div>
                 <ButtonBuy
                   onClick={(e) =>
-                    completePayment(isReferralDiscountAvailable ? 3990 : 4990)
+                    completePayment(isReferralDiscountAvailable ? 2990 : 3990)
                   }
                 >
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
+                <CommentBlock>Самый популярный 🎉</CommentBlock>
               </Form>
               <Form>
                 <Banner>
@@ -738,7 +754,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    9990 ₽ / мес
+                    7990 ₽ / мес
                   </div>
                 </div>
                 <div className="section">
@@ -747,7 +763,7 @@ const Subscription = (props) => {
                     <span
                       data-tooltip-id="my-tooltip"
                       data-tooltip-html={`Сразу после оплаты вы получите доступ к 6 курсам.<br/>
-                  Впоследствии каждый месяц вы сможете открывать по 6 новых курсов в случае продления подписки.<br/>
+                  Впоследствии каждый месяц вы сможете открывать по 5 новых курсов в случае продления подписки.<br/>
                   В подписку можно добавить до 4 студентов.<br/>
                   Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
                       data-tooltip-place="right"
@@ -756,21 +772,23 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    6 новых курсов в месяц
-                  </div>
-                </div>
-                <div className="section">
-                  <div className="comment">Карьерные сервисы</div>
-                  <div className="label" for="mistakes">
-                    ✔️
+                    5 новых курсов в месяц
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Онлайн-встречи с авторами курсов
+                    Карьерные сервисы и пробные интервью
                   </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    ✅
+                  </div>
+                </div>
+                <div className="section">
+                  <div className="comment">
+                    Проверка заданий и индивидуальные консультации
+                  </div>
+                  <div className="label" for="mistakes">
+                    ✅
                   </div>
                 </div>
                 <div className="section">
@@ -779,7 +797,7 @@ const Subscription = (props) => {
                     До 4
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(9990)}>
+                <ButtonBuy onClick={(e) => completePayment(7990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
               </Form>
@@ -814,14 +832,16 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Карьерные сервисы</div>
+                  <div className="comment">
+                    Карьерные сервисы и пробные интервью
+                  </div>
                   <div className="label" for="mistakes">
                     ✔️
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Онлайн-встречи с авторами курсов
+                    Проверка заданий и индивидуальные консультации
                   </div>
                   <div className="label" for="mistakes">
                     ✔️
@@ -869,17 +889,19 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Карьерные сервисы</div>
+                  <div className="comment">
+                    Карьерные сервисы и пробные интервью
+                  </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    ✅
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Онлайн-встречи с авторами курсов
+                    Проверка заданий и индивидуальные консультации
                   </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    ✅
                   </div>
                 </div>
                 <div className="section">
@@ -921,7 +943,7 @@ const Subscription = (props) => {
               </div>
             </div>
             <div className="section">
-              <div className="comment">Онлайн-встречи с авторами курсов</div>
+              <div className="comment">Проверка заданий и индивидуальные консультации</div>
               <div className="label" for="mistakes">
                 ✔️
               </div>

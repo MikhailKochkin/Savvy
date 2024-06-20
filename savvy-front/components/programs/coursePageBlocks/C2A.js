@@ -356,7 +356,7 @@ const Headline = (props) => {
                         const res = await createOrder({
                           variables: {
                             coursePageId: props.coursePageId,
-                            price: 4990,
+                            price: 3990,
                             userId: props.me.id,
                             // promocode: props.promocode,
                             comment: asPath,

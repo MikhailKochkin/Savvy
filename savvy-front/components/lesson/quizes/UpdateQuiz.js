@@ -393,25 +393,25 @@ const UpdateQuiz = (props) => {
             onChange={(e) => setAnswer(e.target.value)}
           />
         )}
-        {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && (
-          <>
-            <label for="types">Ideas</label>
-            {answers.map((an, i) => (
-              <AnswerOption key={i}>
-                <label className="answerOptionLabel">Idea №{i + 1}</label>
-                <textarea
-                  value={an.answer}
-                  placeholder={`Answer`}
-                  onChange={(e) => {
-                    const newAnswers = [...answers];
-                    newAnswers[i] = {
-                      ...newAnswers[i],
-                      answer: e.target.value,
-                    }; // Create a new object for the specific element and update its property
-                    setAnswers(newAnswers);
-                  }}
-                />
-                <div className="answerRow">
+        {/* {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && ( */}
+        <>
+          {/* <label for="types">Ideas</label> */}
+          {answers.map((an, i) => (
+            <AnswerOption key={i}>
+              {/* <label className="answerOptionLabel">{i + 1}</label> */}
+              <textarea
+                value={an.answer}
+                placeholder={`Answer`}
+                onChange={(e) => {
+                  const newAnswers = [...answers];
+                  newAnswers[i] = {
+                    ...newAnswers[i],
+                    answer: e.target.value,
+                  }; // Create a new object for the specific element and update its property
+                  setAnswers(newAnswers);
+                }}
+              />
+              {/* <div className="answerRow">
                   <div className="row1">
                     <label className="answerOptionLabel">Next task type</label>
                     <br />
@@ -464,45 +464,45 @@ const UpdateQuiz = (props) => {
                       newAnswers[i].next_id = e.target.value;
                       setAnswers(newAnswers);
                     }}
-                  /> */}
+                  /> 
                   </div>
-                </div>
-              </AnswerOption>
-            ))}
-          </>
-        )}
-        {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && (
-          <>
-            <MiniAIButton
-              onClick={(e) => {
-                e.preventDefault();
-                return setAnswers([
-                  ...answers,
-                  {
-                    answer: ``,
-                    next_id: "",
-                    next_type: "",
-                    index: answers.length,
-                  },
-                ]);
-              }}
-            >
-              +1
-            </MiniAIButton>
-            <MiniAIButton
-              onClick={(e) => {
-                e.preventDefault();
-                if (answers.length > 0) {
-                  // Remove the last item from the answers array
-                  const newAnswers = answers.slice(0, -1);
-                  setAnswers(newAnswers);
-                }
-              }}
-            >
-              -1
-            </MiniAIButton>
-          </>
-        )}
+                </div> */}
+            </AnswerOption>
+          ))}
+        </>
+        {/* )} */}
+        {/* {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && ( */}
+        <>
+          <MiniAIButton
+            onClick={(e) => {
+              e.preventDefault();
+              return setAnswers([
+                ...answers,
+                {
+                  answer: ``,
+                  next_id: "",
+                  next_type: "",
+                  index: answers.length,
+                },
+              ]);
+            }}
+          >
+            +1
+          </MiniAIButton>
+          <MiniAIButton
+            onClick={(e) => {
+              e.preventDefault();
+              if (answers.length > 0) {
+                // Remove the last item from the answers array
+                const newAnswers = answers.slice(0, -1);
+                setAnswers(newAnswers);
+              }
+            }}
+          >
+            -1
+          </MiniAIButton>
+        </>
+        {/* )} */}
       </EditorInfoSection>
       <Comment>
         <DynamicLoadedEditor

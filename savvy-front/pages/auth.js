@@ -14,6 +14,7 @@ const auth = (props) => {
       referrerId={props.query.referrerId}
       id={props.query.id}
       type="main"
+      authSource={props.query.authSource}
     />
   );
 };

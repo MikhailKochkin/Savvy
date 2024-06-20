@@ -547,6 +547,19 @@ const UserCard = memo((props) => {
               ))}
           </div>
         )}
+        {props.subscriptions.length > 0 && (
+          <>
+            <div>
+              <b>Type</b>:{props.subscriptions[0].type}
+            </div>
+            <div>
+              <b>Start Date</b>: {props.subscriptions[0].startDate}
+            </div>
+            <div>
+              <b>End Date</b>: {props.subscriptions[0].endDate}
+            </div>
+          </>
+        )}
         <div>
           <select onChange={(e) => setSubscriptionType(e.target.value)}>
             <option value="0">Выберите подписку</option>
@@ -596,6 +609,7 @@ const UserCard = memo((props) => {
           </button>
         </div>
       </div>
+      {console.log("props.subscriptions", props.subscriptions)}
       <div className="tags">
         <h4>Курсы</h4>
         <ol>

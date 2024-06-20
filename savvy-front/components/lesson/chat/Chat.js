@@ -323,7 +323,6 @@ const Chat = (props) => {
     //   document.removeEventListener("click", detectKeyDown);
     // };
   }, []);
-  console.log("messages", messages.messagesList);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {

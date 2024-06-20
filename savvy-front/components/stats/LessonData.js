@@ -69,6 +69,7 @@ const GET_RESULTS = gql`
       quizResults {
         id
         correct
+        result
         comment
         type
         hint

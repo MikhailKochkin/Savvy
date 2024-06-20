@@ -145,6 +145,7 @@ const SingleQuiz = (props) => {
               story={story}
               goalType={props.goalType}
               answer={props.answer}
+              answers={props.answers}
               ifWrong={props.ifWrong}
               ifRight={props.ifRight}
               lessonId={props.lessonID}

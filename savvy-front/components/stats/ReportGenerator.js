@@ -13,6 +13,7 @@ import {
   populateProblemsWithQuestions,
   populateQuizWithResults,
   analyzeStudentPerformance,
+  analyzeTextEditorStudentPerformance,
   getFeedbackOnTasks,
   generateReportIntro,
   generateOverAllResults,
@@ -110,17 +111,20 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
       lessonData.stats.quizResults
     );
 
-    console.log("availableProblems", availableProblems);
-    console.log("availableTextEditors", availableTextEditors);
-
     // 4. Analyze student performance
-    let problemAnalysis = analyzeStudentPerformance(
+    availableProblems = analyzeStudentPerformance(
       availableProblems,
       lessonData.res,
       lessonData.data
     );
 
-    console.log("problemAnalysis", problemAnalysis);
+    availableTextEditors = analyzeTextEditorStudentPerformance(
+      availableTextEditors,
+      lessonData.res,
+      lesson
+    );
+
+    console.log("availableTextEditors", availableTextEditors);
 
     return;
 
@@ -134,7 +138,7 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
       reflection: [],
       marks: [],
     };
-    availableData.forEach((el) => {
+    [...availableProblems, ...availableTextEditors].forEach((el) => {
       overall.learning.push(el.totalResults.hasLearnt);
       overall.practiced.push(el.totalResults.hasPracticed);
       overall.feedback.push(el.totalResults.hasReceivedFeedback);
@@ -143,11 +147,15 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
     });
 
     let overallResults = await generateOverAllResults(student, overall);
-    let feedbackOnTasks = await getFeedbackOnTasks(availableData, student);
-    let recommendation = await generateRecommendation(student, lesson, overall);
+    let feedbackOnTasks = await getFeedbackOnTasks(
+      [...availableProblems, ...availableTextEditors],
+      student
+    );
+    // let recommendation = await generateRecommendation(student, lesson, overall);
 
     setReport(
-      intro + overallResults + feedbackOnTasks.join("") + recommendation
+      intro + overallResults + feedbackOnTasks.join("")
+      // + recommendation
     );
     setGenerating(false);
   };

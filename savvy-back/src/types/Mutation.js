@@ -1383,6 +1383,7 @@ const Mutation = mutationType({
         const originalLessonId = args.id;
         const userId = ctx.res.req.userId;
         const newIdMapping = {};
+
         // Fetch the original lesson
         const originalLesson = await ctx.prisma.lesson.findUnique({
           where: { id: originalLessonId },
@@ -1517,26 +1518,6 @@ const Mutation = mutationType({
         );
 
         await Promise.all(
-          originalLesson.texteditors.map(async (texteditor) => {
-            const createdEditor = await ctx.prisma.textEditor.create({
-              data: {
-                text: texteditor.text,
-                totalMistakes: texteditor.totalMistakes,
-                name: texteditor.name,
-                user: {
-                  connect: { id: userId },
-                },
-                lesson: {
-                  connect: { id: newLesson.id },
-                },
-                lessonID: newLesson.id,
-              },
-            });
-            newIdMapping[texteditor.id] = createdEditor.id;
-          })
-        );
-
-        await Promise.all(
           originalLesson.shots.map(async (shot) => {
             const createdShot = await ctx.prisma.shot.create({
               data: {
@@ -1556,34 +1537,6 @@ const Mutation = mutationType({
               },
             });
             newIdMapping[shot.id] = createdShot.id;
-          })
-        );
-
-        await Promise.all(
-          originalLesson.constructions.map(async (construction) => {
-            const createdConstruction = await ctx.prisma.construction.create({
-              data: {
-                type: construction.type,
-                name: construction.name,
-                text: construction.text,
-                hasText: construction.hasText,
-                columnsNum: construction.columnsNum,
-                elements: construction.elements,
-                variants: {
-                  set: [...construction.variants],
-                },
-                answer: {
-                  set: [...construction.answer],
-                },
-                user: {
-                  connect: { id: userId },
-                },
-                lesson: {
-                  connect: { id: newLesson.id },
-                },
-              },
-            });
-            newIdMapping[construction.id] = createdConstruction.id;
           })
         );
 
@@ -1635,6 +1588,69 @@ const Mutation = mutationType({
             }
           })
         );
+
+        await Promise.all(
+          originalLesson.constructions.map(async (construction) => {
+            const createdConstruction = await ctx.prisma.construction.create({
+              data: {
+                type: construction.type,
+                name: construction.name,
+                text: construction.text,
+                hasText: construction.hasText,
+                columnsNum: construction.columnsNum,
+                elements: construction.elements,
+                variants: {
+                  set: [...construction.variants],
+                },
+                answer: {
+                  set: [...construction.answer],
+                },
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+                lessonID: newLesson.id,
+              },
+            });
+            newIdMapping[construction.id] = createdConstruction.id;
+          })
+        );
+
+        await Promise.all(
+          originalLesson.texteditors.map(async (texteditor) => {
+            const replaceElementIds = (text, newIdMapping) => {
+              return text.replace(/elementId="([^"]+)"/g, (match, p1) => {
+                // Find the new ID in newIdMapping
+                const newId = newIdMapping[p1] || p1;
+                return `elementId="${newId}"`;
+              });
+            };
+            const updatedText = replaceElementIds(
+              texteditor.text,
+              newIdMapping
+            );
+
+            const createdEditor = await ctx.prisma.textEditor.create({
+              data: {
+                text: updatedText,
+                totalMistakes: texteditor.totalMistakes,
+                name: texteditor.name,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+                lessonID: newLesson.id,
+              },
+            });
+            newIdMapping[texteditor.id] = createdEditor.id;
+          })
+        );
+
+        console.log("newIdMapping", newIdMapping);
 
         const originalStructure = originalLesson.structure;
         const updatedStructure = originalStructure.lessonItems.map((item) => ({

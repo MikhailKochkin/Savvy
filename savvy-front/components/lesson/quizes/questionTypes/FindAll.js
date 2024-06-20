@@ -438,6 +438,12 @@ const FindAll = (props) => {
               let inputColor;
               if (props.goalType !== "ASSESS" && score > 65) {
                 inputColor = "#D0EADB";
+              } else if (
+                props.goalType !== "ASSESS" &&
+                score < 65 &&
+                score > 58
+              ) {
+                inputColor = "#ffd166";
               } else {
                 inputColor = "#F3F3F3";
               }

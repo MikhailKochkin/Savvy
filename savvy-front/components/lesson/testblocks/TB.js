@@ -119,7 +119,9 @@ const TestPractice = (props) => {
           />
         </Container>
       )}
-      <button onClick={(e) => setIsUpdated(!isUpdated)}>Update</button>
+      {!props.story && (
+        <button onClick={(e) => setIsUpdated(!isUpdated)}>Update</button>
+      )}
       {isUpdated && (
         <UpdateQuestionsChain
           testPractice={props.testPractice}

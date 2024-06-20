@@ -37,6 +37,7 @@ const Auth = (props) => {
             pathname={props.pathname}
             type={props.type}
             referrerId={props.referrerId}
+            authSource={props.authSource}
           />
         )}
         {auth === "signup" && (

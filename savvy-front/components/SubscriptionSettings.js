@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 import { CURRENT_USER_QUERY } from "./User";
 
@@ -170,16 +171,17 @@ const UPDATE_USER_MUTATION = gql`
 `;
 const Account = (props) => {
   const [isActive, setIsActive] = useState(
-    props.me.subscriptions[0].isActive
+    props.me.subscriptions[0]?.isActive
       ? props.me.subscriptions[0].isActive
       : false
   );
   const [subscriptionType, setSubscriptionType] = useState(
-    props.me.subscriptions[0].type ? props.me.subscriptions[0].type : "None"
+    props.me.subscriptions[0]?.type ? props.me.subscriptions[0].type : "None"
   );
   const [subscriptionLength, setSubscriptionLength] = useState(
-    props.me.subscriptions[0].term ? props.me.subscriptions[0].term : "None"
+    props.me.subscriptions[0]?.term ? props.me.subscriptions[0].term : "None"
   );
+  const router = useRouter();
 
   const { t } = useTranslation("account");
 
@@ -193,14 +195,21 @@ const Account = (props) => {
 
   const handleUpdateSubscription = async (e) => {
     e.preventDefault();
-    await updateSubscription({
-      variables: {
-        id: props.me.subscriptions[0].id,
-        isActive: isActive,
-        type: subscriptionType,
-        term: subscriptionLength,
-      },
-    });
+    if (props.me.subscriptions[0]?.id) {
+      await updateSubscription({
+        variables: {
+          id: props.me.subscriptions[0].id,
+          isActive: isActive,
+          type: subscriptionType,
+          term: subscriptionLength,
+        },
+      });
+      alert("Subscription updated");
+    } else {
+      router.push("/subscription", {
+        locale: "ru",
+      });
+    }
   };
 
   const { me } = props;

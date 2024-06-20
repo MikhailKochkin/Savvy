@@ -4,6 +4,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import SingleSignIn from "./SingleSignIn";
+import CustomerSignIn from "./CustomerSignIn";
 import PasswordSignIn from "./PasswordSignIn";
 
 const Title = styled.div`
@@ -57,21 +58,32 @@ const Legal = styled.div`
 const Signin = (props) => {
   const { t } = useTranslation("auth");
   const change = (e) => props.getData(e.target.getAttribute("name"));
-
   return (
     <Container>
       <Title>👋 {t("c2a2")}</Title>
-      <PasswordSignIn
-        pathname={props.pathname}
-        type={props.type}
-        referrerId={props.referrerId}
-      />
-      <div id="sign_or"> {t("or")}</div>
-      <SingleSignIn
-        pathname={props.pathname}
-        type={props.type}
-        referrerId={props.referrerId}
-      />
+      {!props.authSource && (
+        <>
+          <PasswordSignIn
+            pathname={props.pathname}
+            type={props.type}
+            referrerId={props.referrerId}
+          />
+          <div id="sign_or"> {t("or")}</div>
+          <SingleSignIn
+            pathname={props.pathname}
+            type={props.type}
+            referrerId={props.referrerId}
+          />
+        </>
+      )}
+      {props.authSource && (
+        <CustomerSignIn
+          pathname={props.pathname}
+          type={props.type}
+          referrerId={props.referrerId}
+          authSource={props.authSource}
+        />
+      )}
       <Transit>
         <div>
           <span name="reset" onClick={change}>
