@@ -106,9 +106,11 @@ const Container = styled.div`
   }
 
   .text {
-    /* display: flex;
+    display: flex;
     flex-direction: column;
-    align-items: center; */
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     /* border: 1px solid red; */
     /* font-weight: 500;
     padding: 1% 2%;
@@ -255,6 +257,7 @@ const NoteStyles = styled.div`
     object-fit: cover;
   }
   @media (max-width: 800px) {
+    width: 95%;
     .video-container {
       width: 350px;
     }
@@ -262,8 +265,6 @@ const NoteStyles = styled.div`
       width: 350px;
       height: 100%;
     }
-  }
-  @media (max-width: 800px) {
     font-size: 1.6rem;
     width: 100%;
     order: 3;
@@ -347,6 +348,7 @@ const NoteStyles = styled.div`
     border-radius: 10px;
     overflow-x: scroll;
   }
+
   table {
     width: 640px;
     border-collapse: collapse;
@@ -376,6 +378,16 @@ const NoteStyles = styled.div`
       padding: 0% 2.5%;
       position: relative;
       padding: 15px 15px;
+    }
+  }
+  @media (max-width: 800px) {
+    .table-wrapper {
+      border: 1px solid #d6d6d6;
+      width: 100%;
+      overflow-x: scroll;
+    }
+    table {
+      width: 380px;
     }
   }
 `;
@@ -432,6 +444,15 @@ const Note = (props) => {
     }
   });
 
+  // Function to wrap tables with class table-wrapper
+  const wrapTables = (html) => {
+    const wrappedHtml = html.replace(
+      /<table/g,
+      '<div className="table-wrapper"><table'
+    );
+    return wrappedHtml.replace(/<\/table>/g, "</table></div>");
+  };
+
   const { story, text, id, getData, isFinal } = props;
   let width;
   if (props.problem) {
@@ -450,7 +471,7 @@ const Note = (props) => {
             <>
               {isRevealed && (
                 <NoteStyles story={story} isRevealed={isRevealed}>
-                  {parse(text)}
+                  {parse(wrapTables(text))}
                 </NoteStyles>
               )}
               {!isRevealed && (
