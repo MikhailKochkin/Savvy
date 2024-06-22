@@ -198,7 +198,10 @@ const OpenQuestion = (props) => {
       handleCorrectnessLevel(correctnessLevel, result, color, comment);
     };
 
-    if (props.answers?.answerElements?.length > 0) {
+    if (
+      props.answers?.answerElements?.length > 0 &&
+      props.answers?.answerElements[0].answer !== ""
+    ) {
       await evaluateAnswers(props.answers.answerElements);
     } else {
       try {
@@ -274,7 +277,6 @@ const OpenQuestion = (props) => {
     );
 
     let answerToReflectOn = explanationGenerationResult.newExplanation;
-    console.log("answerToReflectOn", answerToReflectOn);
 
     // for (let i = 0; i < loopsNum; i++) {
     //   answerToReflectOn = await reflectOnExplanation(answerToReflectOn);
