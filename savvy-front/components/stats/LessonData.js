@@ -440,10 +440,10 @@ const LessonData = (props) => {
             }}
             date={props.date}
           />
-          {/* <div>
+          <div>
             <h2>Lesson results</h2>
-          </div> */}
-          {/* {lesson?.structure?.lessonItems.map((l) => {
+          </div>
+          {lesson?.structure?.lessonItems.map((l) => {
             console.log("l", l.type);
             if (l.type.toLowerCase() == "shot") {
               let shot = lesson.shots.filter((n) => n.id === l.id)[0];
@@ -576,7 +576,7 @@ const LessonData = (props) => {
                 />
               );
             }
-          })} */}
+          })}
           <Feedback feedback={data.stats.feedbacks} lesson={lesson.id} />
           <CreateFeedback
             coursePage={coursePageID}

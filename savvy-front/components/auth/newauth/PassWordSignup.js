@@ -234,17 +234,17 @@ const PasswordSignup = (props) => {
       method="post"
       onSubmit={async (e) => {
         e.preventDefault();
-        // if (surname === "") {
-        //   alert(t("give_surname"));
-        //   return;
-        // } else if (!EmailValidator.validate(email)) {
-        //   alert(t("give_email"));
-        //   return;
-        // } else if (number === "" || number.length < 7) {
-        //   alert(t("give_number"));
-        //   return;
-        // }
-        // const res = await signup();
+        if (surname === "") {
+          alert(t("give_surname"));
+          return;
+        } else if (!EmailValidator.validate(email)) {
+          alert(t("give_email"));
+          return;
+        } else if (number === "" || number.length < 7) {
+          alert(t("give_number"));
+          return;
+        }
+        const res = await signup();
         if (props.type == "main") {
           router.push(url);
         }
