@@ -489,6 +489,7 @@ model Lesson {
   updatedAt           DateTime             @updatedAt
   name                String
   number              Int?
+  banner              String?
   tags                String[]
   published           Boolean?             @default(false)
   open                Boolean?             @default(false)

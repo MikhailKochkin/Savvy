@@ -40,7 +40,7 @@ const PleaseSignIn = (props) => {
             </>
           )}
         </Title>
-        <Auth />
+        <Auth authSource={props.authSource} />
       </Styles>
     );
   return props.children;

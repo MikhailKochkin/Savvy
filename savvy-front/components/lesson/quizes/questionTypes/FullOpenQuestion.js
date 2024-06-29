@@ -119,6 +119,7 @@ const FullOpenQuestion = (props) => {
       behavior: "smooth",
     });
   };
+
   return (
     <Question story={story}>
       {/* 1. Question part */}
@@ -200,7 +201,6 @@ const FullOpenQuestion = (props) => {
             ) : null}
           </Frame>
         </div>
-        {/* {startSpeech && <Group>{<p>📣 {t("start_speaking")}..</p>}</Group>} */}
         {isAnswerBeingChecked && (
           <Progress>
             <InfinitySpin width="200" color="#2E80EC" />
@@ -246,7 +246,6 @@ const FullOpenQuestion = (props) => {
           </Circle> */}
         </Group>
       </>
-
       {/* 4. Reaction to answer immediately after it is checked */}
       {/* 4.1 If true / looks true */}
       {(correctnessLevel === "correct" || correctnessLevel === "looks_true") &&
@@ -310,9 +309,7 @@ const FullOpenQuestion = (props) => {
           </div>
         </>
       )}
-
       {/* 5. Show explanation and improvement buttons and the text */}
-
       {!challenge && goalType !== "ASSESS" && (
         <>
           {previousAnswers.length > 0 && (
@@ -348,6 +345,7 @@ const FullOpenQuestion = (props) => {
                         : t("more_explanations")}
                     </Button1>
                   )}
+
                   {(correctnessLevel === "looks_true" ||
                     correctnessLevel === "has_flaws") && (
                     <Button1
@@ -434,7 +432,6 @@ const FullOpenQuestion = (props) => {
           )}
         </>
       )}
-
       {/* 6. Show correct answer bubble */}
       <div id={`ideal_answer_${id}`}></div>
       {!hidden && (

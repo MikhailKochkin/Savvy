@@ -586,6 +586,7 @@ const StoryEx = (props) => {
           i_am_student={props.i_am_student}
           stats_data={stats_data}
           textToBeTranslated={textToBeTranslated}
+          authSource={props.authSource}
         />
       )}
     </Container>

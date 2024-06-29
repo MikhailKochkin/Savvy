@@ -2118,6 +2118,7 @@ input LesResultsList {
 
 type Lesson {
   assignment: Boolean
+  banner: String
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
   challenge_num: Int
   change: String
@@ -2190,6 +2191,7 @@ input LessonOrderByRelationAggregateInput {
 
 input LessonOrderByWithRelationInput {
   assignment: SortOrderInput
+  banner: SortOrderInput
   challengeResults: ChallengeResultOrderByRelationAggregateInput
   challenge_num: SortOrderInput
   change: SortOrderInput
@@ -2328,6 +2330,7 @@ input LessonWhereInput {
   NOT: [LessonWhereInput!]
   OR: [LessonWhereInput!]
   assignment: BoolNullableFilter
+  banner: StringNullableFilter
   challengeResults: ChallengeResultListRelationFilter
   challenge_num: IntNullableFilter
   change: StringNullableFilter
@@ -2392,6 +2395,7 @@ input LessonWhereUniqueInput {
   NOT: [LessonWhereInput!]
   OR: [LessonWhereInput!]
   assignment: BoolNullableFilter
+  banner: StringNullableFilter
   challengeResults: ChallengeResultListRelationFilter
   challenge_num: IntNullableFilter
   change: StringNullableFilter
@@ -2606,7 +2610,7 @@ type Mutation {
   addToTeam(id: String): User
   addUserToCourse(coursePageId: String, email: String): User
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
-  botSignup(email: String, name: String, number: String, password: String): AuthPayload
+  botSignup(email: String, name: String, number: String, password: String, surname: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
   copyLesson(coursePageId: String!, id: String!): Lesson
   createBotDialogue(journey: [String], source: String): BotDialogue
@@ -2713,7 +2717,7 @@ type Mutation {
   updateEmailReminder(emailsSent: [String], id: String): EmailReminder
   updateForum(id: String, text: String): Forum
   updateGrowthArea(id: String!, marks: MarksList, maxProgress: Int, name: String): GrowthArea
-  updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
+  updateLesson(assignment: Boolean, audience: String, banner: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextType, question: [String], type: String): NewTest

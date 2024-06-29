@@ -610,7 +610,11 @@ const Feed = (props) => {
   if (props.me.id == "clkvdew14837181f13vcbbcw0x") {
     lessonElements = [
       ...props.components.slice(0, openSize),
-      <Auth id="buy_section" type="inside_lesson" />,
+      <Auth
+        id="buy_section"
+        type="inside_lesson"
+        authSource={props.authSource}
+      />,
     ];
     next_lesson = false;
   } else {
@@ -623,7 +627,7 @@ const Feed = (props) => {
   const [result, setResult] = useState(
     props.my_result ? props.my_result : null
   );
-  const [open, setOpen] = useState(width < 500 ? false : true);
+  const [open, setOpen] = useState(false);
   const [openNavigation, setOpenNavigation] = useState(false);
   const [openTranslation, setOpenTranslation] = useState(false);
   const [translationMode, setTranslationMode] = useState(false);
@@ -683,9 +687,9 @@ const Feed = (props) => {
 
   // 4. Determine screen width
 
-  useEffect(() => {
-    setOpen(width < 500 ? false : true);
-  }, [width]);
+  // useEffect(() => {
+  //   setOpen(width < 500 ? false : true);
+  // }, [width]);
 
   // 6. Find the place where the student has stopped last time and navigate to it
 

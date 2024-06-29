@@ -171,12 +171,14 @@ const Icon = styled.div`
 `;
 
 const Message = ({ id, key, role, m, me, author, lessonId }) => {
+  const modifiedText = m.text.replace("[name]", me.name);
+
   return (
     <Styles id={id} key={key}>
       <MessageRow role={role}>
         {role === "author" && (
           <>
-            <div className="author_text">{parse(m.text)}</div>
+            <div className="author_text">{parse(modifiedText)}</div>
             <IconBlock>
               {m.image && <img className="icon" src={m.image} />}
               {!m.image &&

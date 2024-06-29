@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UserData from "../components/UserData";
 import { useLazyQuery, gql } from "@apollo/client";
-
+import NewUserCreate from "../components/NewUserCreate";
 const CLIENTS_QUERY = gql`
   query CLIENTS_QUERY($initialDate: DateTime!, $lastDate: DateTime!) {
     users(
@@ -243,6 +243,7 @@ const ClientData = () => {
   const [email, setEmail] = useState("");
   const [tag, setTag] = useState("");
   const [getUserData, { loading, error, data }] = useLazyQuery(CLIENTS_QUERY);
+  const [newUsersNumber, setNewUsersNumber] = useState(0);
 
   const [getUserData2, { loading: loading2, error: error2, data: data2 }] =
     useLazyQuery(CLIENTS_EMAIL_QUERY);
@@ -340,6 +341,19 @@ const ClientData = () => {
       {initialClients && initialClients.length > 0 && (
         <UserData initial_clients={initialClients} />
       )}
+      <div>
+        <button onClick={(e) => setNewUsersNumber(newUsersNumber - 1)}>
+          -1
+        </button>
+        <button onClick={(e) => setNewUsersNumber(newUsersNumber + 1)}>
+          +1
+        </button>
+      </div>
+      <div>
+        {Array.from({ length: newUsersNumber }, (_, index) => (
+          <NewUserCreate key={index + "sdfsdf"} index={index + 1} />
+        ))}
+      </div>
     </div>
   );
 };

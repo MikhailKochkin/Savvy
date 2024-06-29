@@ -169,13 +169,11 @@ const CustomerSingleSignIn = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       if (props.authSource) {
-        console.log("authSource", props.authSource);
         const customUsers = await getCustomUsers({
           variables: {
             tag: [props.authSource.toLowerCase()],
           },
         });
-        console.log("customUsers", customUsers.data.users);
         setCustomUsers([...customUsers.data.users]);
       }
     };
@@ -196,7 +194,6 @@ const CustomerSingleSignIn = (props) => {
       return;
     } else {
       let auth_seeking_user = customUsers.find((user) => user.email === email);
-      console.log("auth_seeking_user", auth_seeking_user);
 
       if (!auth_seeking_user) {
         alert("No user found with this email address");

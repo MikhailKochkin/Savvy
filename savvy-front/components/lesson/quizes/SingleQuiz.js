@@ -47,6 +47,7 @@ const SingleQuiz = (props) => {
   // this function is responsible for moving through the problem
   const onMove = (result) => {
     // helper function to handle getData
+    console.log("result", result);
     if (props.passResultToTextEditor) {
       props.passResultToTextEditor(result);
     }

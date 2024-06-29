@@ -278,11 +278,12 @@ const SingleConstructor = (props) => {
   const { me, lessonID, construction, story, complexity } = props;
   return (
     <>
-      {me.id === construction.user.id && !story && (
-        <button onClick={(e) => setUpdate(!update)}>
-          {!update ? t("update") : t("back")}
-        </button>
-      )}
+      {(me.id === construction.user.id || me.permissions.includes("ADMIN")) &&
+        !story && (
+          <button onClick={(e) => setUpdate(!update)}>
+            {!update ? t("update") : t("back")}
+          </button>
+        )}
       {!update && (
         <Styles id={construction.id} story={story}>
           <Answers className="answer" id="answers">

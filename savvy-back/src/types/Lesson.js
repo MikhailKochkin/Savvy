@@ -12,6 +12,7 @@ const Lesson = objectType({
     t.model.description();
     t.model.open();
     t.model.tags();
+    t.model.banner();
     t.model.hasSecret();
     t.model.totalPoints();
     t.model.coursePageID();

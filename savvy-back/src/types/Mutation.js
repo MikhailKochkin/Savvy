@@ -356,11 +356,14 @@ const Mutation = mutationType({
       type: "AuthPayload",
       args: {
         name: stringArg(),
+        surname: stringArg(),
         email: stringArg(),
         password: stringArg(),
         number: stringArg(),
       },
-      resolve: async (_, { name, email, password, number }, ctx) => {
+      resolve: async (_, { name, email, password, number, surname }, ctx) => {
+        console.log("password", password);
+
         const hashed_password = await bcrypt.hash(password, 10);
         const valid = await bcrypt.compare(password, hashed_password);
 
@@ -374,11 +377,13 @@ const Mutation = mutationType({
         const user = await ctx.prisma.user.create({
           data: {
             name,
+            surname,
             number,
             email: email.toLowerCase(),
             permissions: { set: ["USER"] },
             password: hashed_password,
             isFamiliar: true,
+            tags: { set: ["wealthbrite"] },
           },
         });
 
@@ -391,29 +396,29 @@ const Mutation = mutationType({
           },
         });
 
-        let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
-          expiresIn: 1000 * 60 * 60 * 24 * 365,
-        });
-        if (process.env.NODE_ENV === "production") {
-          ctx.res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "None",
-            maxAge: 31557600000,
-          });
-        } else {
-          ctx.res.cookie("token", token, {
-            httpOnly: true,
-            maxAge: 31557600000,
-          });
-        }
+        // let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+        //   expiresIn: 1000 * 60 * 60 * 24 * 365,
+        // });
+        // if (process.env.NODE_ENV === "production") {
+        //   ctx.res.cookie("token", token, {
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === "production",
+        //     sameSite: "None",
+        //     maxAge: 31557600000,
+        //   });
+        // } else {
+        //   ctx.res.cookie("token", token, {
+        //     httpOnly: true,
+        //     maxAge: 31557600000,
+        //   });
+        // }
 
-        const newEmailRus = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
-          To: email,
-          Subject: "Расскажу о возможностях BeSavvy",
-          HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
-        });
+        // const newEmailRus = await client.sendEmail({
+        //   From: "Mikhail@besavvy.app",
+        //   To: email,
+        //   Subject: "Расскажу о возможностях BeSavvy",
+        //   HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
+        // });
 
         // if (referal) {
         //   const old_user = await ctx.prisma.user.findUnique({
@@ -430,7 +435,7 @@ const Mutation = mutationType({
         //   });
         // }
 
-        return { user, token };
+        return { user };
       },
     });
     t.field("advancedSignup", {
@@ -1842,6 +1847,7 @@ const Mutation = mutationType({
         id: stringArg(),
         number: intArg(),
         name: stringArg(),
+        banner: stringArg(),
         audience: stringArg(),
         text: stringArg(),
         description: stringArg(),
@@ -4004,42 +4010,42 @@ const Mutation = mutationType({
           },
           `{ id, user { id, name, email}, coursePage {id, title}, paymentID }`
         );
-        console.log("order", order.id);
+        console.log("order", order.user.email);
 
         // 2. check at yookassa if any order is paid
         if (order.paymentID) {
           const payment = await community_checkout.getPayment(order.paymentID);
           console.log("payment", payment);
-          // const createPayload = {
-          //   amount: {
-          //     value: 1,
-          //     currency: "RUB",
-          //   },
-          //   payment_method_id: payment.id,
-          //   receipt: {
-          //     customer: {
-          //       email: "mi.kochkin@ya.ru",
-          //     },
-          //     items: [
-          //       {
-          //         description: "BeSavvy Plus",
-          //         quantity: "1",
-          //         amount: {
-          //           value: 1,
-          //           currency: "RUB",
-          //         },
-          //         vat_code: 1,
-          //       },
-          //     ],
-          //   },
-          //   capture: true,
-          // };
+          const createPayload = {
+            amount: {
+              value: 3990,
+              currency: "RUB",
+            },
+            payment_method_id: payment.id,
+            receipt: {
+              customer: {
+                email: order.user.email,
+              },
+              items: [
+                {
+                  description: "BeSavvy Plus",
+                  quantity: "1",
+                  amount: {
+                    value: 1,
+                    currency: "RUB",
+                  },
+                  vat_code: 1,
+                },
+              ],
+            },
+            capture: true,
+          };
 
-          // const newPayment = await community_checkout.createPayment(
-          //   createPayload
-          // );
+          const newPayment = await community_checkout.createPayment(
+            createPayload
+          );
 
-          // console.log("newPayment", newPayment);
+          console.log("newPayment", newPayment);
           // if (payment.status == "succeeded") {
           //   const notification = await client.sendEmail({
           //     From: "Mikhail@besavvy.app",

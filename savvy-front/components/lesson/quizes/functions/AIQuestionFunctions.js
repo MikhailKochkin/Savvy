@@ -35,7 +35,7 @@ export const checkAnswer = async (
     return {
       result,
       correctnessLevel: determineCorrectness(result),
-      color: result === 90 ? "rgba(50, 172, 102, 0.7)" : "#ff6b6b",
+      color: result === 90 ? "rgba(50, 172, 102, 0.7)" : "#EFB8A9",
     };
   } else {
     try {
@@ -120,7 +120,7 @@ export const generateHint = async (
   }
 
   // Construct the hint prompt
-  const hintIntro = `You are a an experienced senior lawyer advising juniors on how to implement legal projects better. You help your student answer this question ${question}. The correct answer is: ${correctAnswer}`;
+  const hintIntro = `You are a an experienced professional advising juniors on how to implement projects better. You help your student answer this question ${question}. The correct answer is: ${correctAnswer}`;
   const hintAnswerRecommendations = `YOU HINT MUST BE AROUND 120 WORDS!!!! Answer in ${
     router.locale === "ru" ? "Russian" : "English"
   }. Always address student as "You" and NEVER address the student as "STUDENT".  
@@ -199,7 +199,7 @@ export const generateExplanation = async (
   // }
 
   const intro = `
-      You are a an experienced senior lawyer advising juniors on how to implement legal projects better. You asked your student this question: """ ${question} """.
+      You are a an experienced professional advising juniors on how to implement their projects better. You asked your student this question: """ ${question} """.
       You expect to recieve an answer that sounds like this (correct answer): """ ${correctAnswer} """. 
     `;
 
@@ -349,7 +349,7 @@ export const generateImprovement = async (
   console.log(studentAnswer);
   // Define the improvement introduction and recommendations
   const improvementIntro = `
-    You are a an experienced senior lawyer advising juniors on how to implememnt legal projects better. You asked your student this question: "${question}".
+    You are a an experienced professional advising juniors on how to implememnt their projects better. You asked your student this question: "${question}".
     You expect to receive an answer that sounds like this (correct answer): "${correctAnswer}".
     Your student's answer is: "${studentAnswer}".
     It is partly correct. But the student wants to make it even better.

@@ -120,7 +120,7 @@ const OpenQuestion = (props) => {
     ) => {
       setResult(result);
       if (goalType !== "ASSESS") setInputColor(color);
-      setServerComment(comment.length > 5 ? comment : null);
+      comment ? setServerComment(comment.length > 5 ? comment : null) : null;
       passResult(isCorrect ? "true" : "false");
 
       createQuizResult({
@@ -185,7 +185,16 @@ const OpenQuestion = (props) => {
               answer,
               props.check
             );
-          results.push({ result, correctnessLevel, color, comment });
+
+          // Ensure correctnessLevel is resolved
+          const resolvedCorrectnessLevel = await correctnessLevel;
+
+          results.push({
+            result,
+            correctnessLevel: resolvedCorrectnessLevel,
+            color,
+            comment,
+          });
         })
       );
 
@@ -197,7 +206,6 @@ const OpenQuestion = (props) => {
       setCorrectnessLevel(correctnessLevel);
       handleCorrectnessLevel(correctnessLevel, result, color, comment);
     };
-
     if (
       props.answers?.answerElements?.length > 0 &&
       props.answers?.answerElements[0].answer !== ""
@@ -212,13 +220,21 @@ const OpenQuestion = (props) => {
           props.check
         );
 
-        setCorrectnessLevel(correctnessLevel);
-        handleCorrectnessLevel(correctnessLevel, result, color, comment);
+        // Resolve correctnessLevel if it's a Promise
+        const resolvedCorrectnessLevel = await correctnessLevel;
+
+        setCorrectnessLevel(resolvedCorrectnessLevel);
+        handleCorrectnessLevel(
+          resolvedCorrectnessLevel,
+          result,
+          color,
+          comment
+        );
       } catch (error) {
         console.error(error);
       }
-      setPreviousAnswers([...previousAnswers, answer]);
     }
+    setPreviousAnswers([...previousAnswers, answer]);
 
     setIsAnswerBeingChecked(false);
   };

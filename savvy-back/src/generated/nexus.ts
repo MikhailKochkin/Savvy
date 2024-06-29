@@ -1636,6 +1636,7 @@ export interface NexusGenInputs {
   }
   LessonOrderByWithRelationInput: { // input type
     assignment?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    banner?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     challengeResults?: NexusGenInputs['ChallengeResultOrderByRelationAggregateInput'] | null; // ChallengeResultOrderByRelationAggregateInput
     challenge_num?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     change?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -1755,6 +1756,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
     OR?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
     assignment?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    banner?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     challenge_num?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     change?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1818,6 +1820,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
     OR?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
     assignment?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    banner?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     challenge_num?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     change?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -4547,6 +4550,7 @@ export interface NexusGenObjects {
   }
   Lesson: { // root type
     assignment?: boolean | null; // Boolean
+    banner?: string | null; // String
     challenge_num?: number | null; // Int
     change?: string | null; // String
     coursePageID: string; // String!
@@ -5359,6 +5363,7 @@ export interface NexusGenFieldTypes {
   }
   Lesson: { // field return type
     assignment: boolean | null; // Boolean
+    banner: string | null; // String
     challengeResults: NexusGenRootTypes['ChallengeResult'][]; // [ChallengeResult!]!
     challenge_num: number | null; // Int
     change: string | null; // String
@@ -6475,6 +6480,7 @@ export interface NexusGenFieldTypeNames {
   }
   Lesson: { // field return type name
     assignment: 'Boolean'
+    banner: 'String'
     challengeResults: 'ChallengeResult'
     challenge_num: 'Int'
     change: 'String'
@@ -7525,6 +7531,7 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       number?: string | null; // String
       password?: string | null; // String
+      surname?: string | null; // String
     }
     checkAssignment: { // args
       checked?: boolean | null; // Boolean
@@ -8159,6 +8166,7 @@ export interface NexusGenArgTypes {
     updateLesson: { // args
       assignment?: boolean | null; // Boolean
       audience?: string | null; // String
+      banner?: string | null; // String
       challenge_num?: number | null; // Int
       change?: string | null; // String
       description?: string | null; // String

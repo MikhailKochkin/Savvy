@@ -432,7 +432,12 @@ const NewSingleLesson = (props) => {
   }
 
   if (!lesson.open && (!me || me.id == "clkvdew14837181f13vcbbcw0x")) {
-    return <PleaseSignIn coursePageId={lesson.coursePage.id} />;
+    return (
+      <PleaseSignIn
+        authSource={props.authSource}
+        coursePageId={lesson.coursePage.id}
+      />
+    );
   }
 
   if (
@@ -475,6 +480,7 @@ const NewSingleLesson = (props) => {
                   openLesson={lesson.open}
                   i_am_author={i_am_author}
                   i_am_student={i_am_student}
+                  authSource={props.authSource}
                 />
               </LessonPart>
             </Container>{" "}

@@ -125,6 +125,7 @@ class Interactive extends Component {
           problem={true}
           author={this.props.author}
           getResults={this.getResults}
+          story={true}
         />
       );
 
@@ -169,6 +170,7 @@ class Interactive extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
+          story={true}
           problem={true}
           author={this.props.author}
           getResults={this.getResults}

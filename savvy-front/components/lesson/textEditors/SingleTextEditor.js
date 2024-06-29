@@ -547,7 +547,10 @@ const SingleTextEditor = (props) => {
   const onShow = () => {
     const elements = document
       .getElementById(props.textEditor.id + 1)
-      .querySelectorAll(".editor_note, .editor_error, .editor_problem");
+      .querySelectorAll(
+        ".editor_note, .editor_error, [error_data], .editor_problem"
+      );
+    console.log(elements);
     if (mistakesShown) {
       elements.forEach((element) => {
         element.classList.remove("edit");
@@ -583,6 +586,7 @@ const SingleTextEditor = (props) => {
 
   const passResultToTextEditor = (val) => {
     setResult(val);
+    console.log(val);
     let editedText = document.querySelector(`[errorId=${errorId}]`);
     if (val == "true") {
       editedText.style.backgroundColor = "rgba(50, 172, 102, 0.3)";
@@ -778,6 +782,7 @@ const SingleTextEditor = (props) => {
                   </div>
                   <div className="answerBox">
                     <Comment>
+                      {console.log(miniNote)}
                       {miniNote && miniNote.text ? (
                         <Note
                           text={miniNote.text}

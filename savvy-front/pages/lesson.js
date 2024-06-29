@@ -29,6 +29,7 @@ const LessonPage = (props) => (
         size={props.query.size}
         add={props.query.add}
         step={props.query.step}
+        authSource={props.query.authSource}
       />
     )}
     {props.query.type === "stats" && <LessonStats id={props.query.id} />}
