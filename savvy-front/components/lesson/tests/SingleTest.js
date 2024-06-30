@@ -648,26 +648,28 @@ const SingleTest = (props) => {
           {/* 3. Кнопка ответа  */}
 
           <Group>
-            <MiniButton
-              className="button"
-              id="but1"
-              onClick={async (e) => {
-                // Stop the form from submitting
-                e.preventDefault();
-                // call the mutation
-                if (answer.length < 1) {
-                  setZero(true);
-                } else {
-                  if (props.type === "FORM") {
-                    const res1 = await onSend();
+            {!showAnswer && (
+              <MiniButton
+                className="button"
+                id="but1"
+                onClick={async (e) => {
+                  // Stop the form from submitting
+                  e.preventDefault();
+                  // call the mutation
+                  if (answer.length < 1) {
+                    setZero(true);
                   } else {
-                    const res = await onCheck();
+                    if (props.type === "FORM") {
+                      const res1 = await onSend();
+                    } else {
+                      const res = await onCheck();
+                    }
                   }
-                }
-              }}
-            >
-              {t("check")}
-            </MiniButton>
+                }}
+              >
+                {t("check")}
+              </MiniButton>
+            )}
           </Group>
 
           {/* 4. Верный ответ. Поздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}

@@ -250,6 +250,9 @@ const Element = (props) => {
 
   let item;
   let task = tasks[activeStep];
+  console.log("props.results", props.results);
+  console.log("props.completed", props.completed);
+
   if (tasks.length === activeStep) {
     item = (
       <Final
@@ -374,9 +377,12 @@ const Element = (props) => {
             {t("next")}
           </button>
         )}
-        {activeStep == props.tasksNum && (
-          <button onClick={(e) => props.restart(false)}>{t("restart")}</button>
-        )}
+        {activeStep == props.tasksNum &&
+          answers.filter((a) => a !== false).length / props.tasksNum < 0.8 && (
+            <button onClick={(e) => props.restart(false)}>
+              {t("restart")}
+            </button>
+          )}
       </LessonPart>
     </Container>
   );

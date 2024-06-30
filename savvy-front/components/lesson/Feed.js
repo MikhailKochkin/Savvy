@@ -1059,7 +1059,7 @@ const Feed = (props) => {
               </Block>
             ))}
           </Border>
-          {props.me.id !== "clkvdew14837181f13vcbbcw0x" && (
+          {/* {props.me.id !== "clkvdew14837181f13vcbbcw0x" && (
             <Stepper>
               {" "}
               {props.me &&
@@ -1083,7 +1083,7 @@ const Feed = (props) => {
                   </Link>
                 )}
             </Stepper>
-          )}
+          )} */}
         </Content>
       </Styles>
     </>
