@@ -424,14 +424,14 @@ const SingleTest = (props) => {
     }
 
     addComments(answerNums);
-    // createTestResult({
-    //   variables: {
-    //     testID: props.id,
-    //     lessonID: props.lessonID,
-    //     answer: answer.join(", "),
-    //     answerArray: answer,
-    //   },
-    // });
+    createTestResult({
+      variables: {
+        testID: props.id,
+        lessonID: props.lessonID,
+        answer: answer.join(", "),
+        answerArray: answer,
+      },
+    });
   };
 
   const onCheck = async () => {
