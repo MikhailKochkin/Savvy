@@ -2703,6 +2703,7 @@ type Mutation {
   singleSignup(email: String, image: String, isFamiliar: Boolean, name: String, password: String, surname: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
   textUser(comment: String, id: String): User
+  unenrollFromCourse(coursePageId: String, id: String): User
   updateActiveUser(active: Boolean, email: String): User
   updateBotDialogue(id: String, journey: [String], rating: Int): BotDialogue
   updateBusinessClient(comment: String, communication_history: ClientMessages, id: String, number: String, sales_cycle: SalesCycle, tags: [String]): BusinessClient

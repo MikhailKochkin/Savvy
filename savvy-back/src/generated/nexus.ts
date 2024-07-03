@@ -5546,6 +5546,7 @@ export interface NexusGenFieldTypes {
     singleSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     textBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     textUser: NexusGenRootTypes['User'] | null; // User
+    unenrollFromCourse: NexusGenRootTypes['User'] | null; // User
     updateActiveUser: NexusGenRootTypes['User'] | null; // User
     updateBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
     updateBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
@@ -6663,6 +6664,7 @@ export interface NexusGenFieldTypeNames {
     singleSignup: 'AuthPayload'
     textBusinessClient: 'BusinessClient'
     textUser: 'User'
+    unenrollFromCourse: 'User'
     updateActiveUser: 'User'
     updateBotDialogue: 'BotDialogue'
     updateBusinessClient: 'BusinessClient'
@@ -8057,6 +8059,10 @@ export interface NexusGenArgTypes {
     }
     textUser: { // args
       comment?: string | null; // String
+      id?: string | null; // String
+    }
+    unenrollFromCourse: { // args
+      coursePageId?: string | null; // String
       id?: string | null; // String
     }
     updateActiveUser: { // args

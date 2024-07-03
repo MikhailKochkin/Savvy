@@ -1129,6 +1129,29 @@ const Mutation = mutationType({
         return enrolledUser;
       },
     });
+    t.field("unenrollFromCourse", {
+      type: "User",
+      args: {
+        coursePageId: stringArg(),
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const coursePageId = args.coursePageId;
+        delete args.coursePageId;
+        const unenrolledUser = await ctx.prisma.user.update({
+          data: {
+            new_subjects: {
+              disconnect: { id: coursePageId },
+            },
+          },
+          where: {
+            id: args.id,
+          },
+        });
+
+        return unenrolledUser;
+      },
+    });
 
     t.field("signout", {
       type: "SignOut",

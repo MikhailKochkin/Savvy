@@ -98,6 +98,22 @@ const UPDATE_ORDER = gql`
   }
 `;
 
+const ENROLL_COURSE_MUTATION = gql`
+  mutation ENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
+    enrollOnCourse(id: $id, coursePageId: $coursePageId) {
+      id
+    }
+  }
+`;
+
+const UNENROLL_COURSE_MUTATION = gql`
+  mutation UNENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
+    unenrollFromCourse(id: $id, coursePageId: $coursePageId) {
+      id
+    }
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -164,23 +180,14 @@ const Row = styled.div`
     flex-direction: column;
     align-items: center;
   }
-  .time {
-    width: 15%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
   .name {
-    width: 15%;
+    width: 23%;
   }
   .email {
-    width: 20%;
-  }
-  .number {
     width: 10%;
   }
   .comment {
-    width: 45%;
+    width: 50%;
     padding: 0 2%;
     h4 {
       margin: 0;
@@ -216,7 +223,7 @@ const Row = styled.div`
     }
   }
   .tags {
-    min-width: 380px;
+    width: 35%;
     padding-left: 20px;
     li {
       width: 100%;
@@ -234,11 +241,29 @@ const Row = styled.div`
   }
 `;
 
-const Message = styled.div`
+const SubscriptionBlock = styled.div`
   margin-bottom: 20px;
-  border-bottom: 1px solid grey;
-  p {
-    margin: 0px 0;
+  padding: 20px 0;
+  border-bottom: 1px solid lightgrey;
+  border-top: 1px solid lightgrey;
+  select {
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+  .miniblock {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .main {
+      margin-right: 10px;
+      border: 1px solid lightgrey;
+      width: 85%;
+    }
+    .second {
+      width: 15%;
+      border: 1px solid lightgrey;
+    }
   }
 `;
 
@@ -263,6 +288,7 @@ const UserCard = memo((props) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [term, setTerm] = useState(null);
+  const [areCourseSettingsOpen, setAreCourseSettingsOpen] = useState(false);
 
   const [
     updateOrderAuto,
@@ -314,6 +340,16 @@ const UserCard = memo((props) => {
   const [updateUser, { updated_data2 }] = useMutation(UPDATE_USER_MUTATION2);
 
   const [textUser, { updated_data3 }] = useMutation(TEXT_CLIENT_MUTATION);
+
+  const [
+    enrollOnCourse,
+    { data: enroll_data, loading: enroll_loading, error: enroll_error },
+  ] = useMutation(ENROLL_COURSE_MUTATION);
+
+  const [
+    unenrollFromCourse,
+    { data: unenroll_data, loading: unenroll_loading, error: unenroll_error },
+  ] = useMutation(UNENROLL_COURSE_MUTATION);
 
   const myCallback = (dataFromChild) => {
     setComment(dataFromChild);
@@ -370,7 +406,6 @@ const UserCard = memo((props) => {
   };
 
   const handleStartDate = (e) => {
-    console.log("e.target.value", e.target.value);
     setStartDate(e.target.value);
   };
 
@@ -428,11 +463,7 @@ const UserCard = memo((props) => {
   return (
     <Row id={props.id}>
       <div className="index">{props.index + 1}.</div>
-      <div className="time">
-        cre: {moment(props.createdAt).format("DD-MM-YYYY HH:mm")}
-        <br />
-        upd: {moment(props.updatedAt).format("DD-MM-YYYY HH:mm")}
-      </div>
+
       <div className="name">
         <div>{props.name}</div>
         <div>{props.surname}</div>
@@ -479,6 +510,9 @@ const UserCard = memo((props) => {
             placeholder="..."
           />
         </form>
+        cre: {moment(props.createdAt).format("DD-MM-YYYY HH:mm")}
+        <br />
+        upd: {moment(props.updatedAt).format("DD-MM-YYYY HH:mm")}
         {number && (
           <button>
             <a target="_blank" href={`https://t.me/${number}`}>
@@ -495,6 +529,70 @@ const UserCard = memo((props) => {
         )}
       </div>
       <div className="comment">
+        <SubscriptionBlock>
+          <h3>Управление подпиской</h3>
+          {props.subscriptions.length > 0 && (
+            <>
+              <div>
+                <b>Type</b>:{props.subscriptions[0].type}
+              </div>
+              <div>
+                <b>Start Date</b>: {props.subscriptions[0].startDate}
+              </div>
+              <div>
+                <b>End Date</b>: {props.subscriptions[0].endDate}
+              </div>
+            </>
+          )}
+          <div>
+            <select onChange={(e) => setSubscriptionType(e.target.value)}>
+              <option value="0">Выберите подписку</option>
+              {subscriptionTypes.map((type) => (
+                <option value={type}>{type}</option>
+              ))}
+            </select>
+            <select onChange={(e) => setTerm(e.target.value)}>
+              <option value="0">Выберите срок</option>
+              <option value="monthly">Monthly</option>
+              <option value="annually">Annually</option>
+            </select>
+            <div>
+              <label htmlFor="initialDate">Start Date:</label>
+              <input
+                type="datetime-local"
+                id="initialDate"
+                value={startDate}
+                onChange={handleStartDate}
+              />
+            </div>
+            <div>
+              <label htmlFor="lastDate">End Date:</label>
+              <input
+                type="datetime-local"
+                id="lastDate"
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+            </div>
+            <div>User ID: {props.id}</div>
+            <button
+              onClick={async (e) => {
+                const res = await createSubscription({
+                  variables: {
+                    userId: props.id,
+                    type: subscriptionType,
+                    startDate: startDate + ":00.000Z",
+                    endDate: endDate + ":00.000Z",
+                    term: term,
+                  },
+                });
+                alert("Subscription created");
+              }}
+            >
+              Create Subscription
+            </button>
+          </div>
+        </SubscriptionBlock>
         <h4>Комментарий</h4>
         {/* <div>{comment}</div> */}
         <div className="editor">
@@ -526,9 +624,8 @@ const UserCard = memo((props) => {
         >
           {loading1 ? "Sending..." : "Send"}
         </button>
-        <br />
 
-        <button onClick={(e) => setShow(!show)}>Show</button>
+        <button onClick={(e) => setShow(!show)}>Show previous emails</button>
         {show && (
           <div>
             {[...props.messages]
@@ -547,69 +644,74 @@ const UserCard = memo((props) => {
               ))}
           </div>
         )}
-        {props.subscriptions.length > 0 && (
-          <>
-            <div>
-              <b>Type</b>:{props.subscriptions[0].type}
-            </div>
-            <div>
-              <b>Start Date</b>: {props.subscriptions[0].startDate}
-            </div>
-            <div>
-              <b>End Date</b>: {props.subscriptions[0].endDate}
-            </div>
-          </>
-        )}
-        <div>
-          <select onChange={(e) => setSubscriptionType(e.target.value)}>
-            <option value="0">Выберите подписку</option>
-            {subscriptionTypes.map((type) => (
-              <option value={type}>{type}</option>
-            ))}
-          </select>
-          <select onChange={(e) => setTerm(e.target.value)}>
-            <option value="0">Выберите срок</option>
-            <option value="monthly">Monthly</option>
-            <option value="annually">Annually</option>
-          </select>
-          <div>
-            <label htmlFor="initialDate">Start Date:</label>
-            <input
-              type="datetime-local"
-              id="initialDate"
-              value={startDate}
-              onChange={handleStartDate}
-            />
-          </div>
-          <div>
-            <label htmlFor="lastDate">End Date:</label>
-            <input
-              type="datetime-local"
-              id="lastDate"
-              value={endDate}
-              onChange={handleEndDateChange}
-            />
-          </div>
-          {props.id}
+        <SubscriptionBlock>
+          <h3>Управление курсами</h3>
           <button
-            onClick={async (e) => {
-              const res = await createSubscription({
-                variables: {
-                  userId: props.id,
-                  type: subscriptionType,
-                  startDate: startDate + ":00.000Z",
-                  endDate: endDate + ":00.000Z",
-                  term: term,
-                },
-              });
-              alert("Subscription created");
-            }}
+            onClick={(e) => setAreCourseSettingsOpen(!areCourseSettingsOpen)}
           >
-            Create Subscription
+            Открыть настройки курсов
           </button>
-        </div>
+          {areCourseSettingsOpen && (
+            <div>
+              <h4>Курсы</h4>
+              {props.coursePages.map((c) => {
+                console.log("props.new_subjects", props.new_subjects);
+                const ids = props.new_subjects.map((course) => course.id);
+                console.log(ids, c.id, ids.includes(c.id));
+                return (
+                  <div className="miniblock">
+                    <div className="main">
+                      {c.title}
+                      <br />
+                      {ids.includes(c.id) ? (
+                        <button
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            let unenroll = await unenrollFromCourse({
+                              variables: {
+                                id: props.id,
+                                coursePageId: c.id,
+                              },
+                            });
+                            alert("Закрыли доступ!");
+                          }}
+                        >
+                          Закрыть
+                        </button>
+                      ) : (
+                        <button
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            let enroll = await enrollOnCourse({
+                              variables: {
+                                id: props.id,
+                                coursePageId: c.id,
+                              },
+                            });
+                            alert("Открыли доступ!");
+                          }}
+                        >
+                          Открыть
+                        </button>
+                      )}
+                    </div>
+                    <div className="second">
+                      <div class="enrollment-status">
+                        <input
+                          checked={ids.includes(c.id)}
+                          type="checkbox"
+                          id="enrolled"
+                          class="checkbox"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </SubscriptionBlock>
       </div>
-      {console.log("props.subscriptions", props.subscriptions)}
       <div className="tags">
         <h4>Курсы</h4>
         <ol>

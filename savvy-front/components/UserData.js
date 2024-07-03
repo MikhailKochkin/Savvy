@@ -341,6 +341,36 @@ const ClientData = (props) => {
     );
   };
 
+  const sortSubscriptions = () => {
+    const today = new Date();
+
+    // Helper function to calculate the difference in days between two dates
+    const getDaysDifference = (date1, date2) => {
+      const diffTime = date2 - date1;
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    };
+
+    const sortedClients = [...clients].sort((a, b) => {
+      const aEndDate = new Date(a.subscriptions[0].endDate);
+      const bEndDate = new Date(b.subscriptions[0].endDate);
+
+      const aDiff = getDaysDifference(today, aEndDate);
+      const bDiff = getDaysDifference(today, bEndDate);
+
+      // If both dates are in the future or both in the past, sort by difference
+      if (aDiff >= 0 && bDiff >= 0) {
+        return aDiff - bDiff;
+      } else if (aDiff < 0 && bDiff < 0) {
+        return bDiff - aDiff;
+      } else {
+        // Move past dates to the end
+        return aDiff >= 0 ? -1 : 1;
+      }
+    });
+
+    setClients(sortedClients);
+  };
+
   const sortClientsByActivity2 = () => {
     setClients(
       [...clients].sort((a, b) => {
@@ -538,6 +568,9 @@ const ClientData = (props) => {
         <button onClick={(e) => searchWithPhones(clients)}>
           Показать с номером
         </button>
+        <button onClick={(e) => sortSubscriptions(clients)}>
+          Показать по дате окончания подписки
+        </button>
         <br />
         <button onClick={(e) => sortByOrders()}>Показать с заказами</button>
         <div>
@@ -651,6 +684,7 @@ const ClientData = (props) => {
               messages={c.messages}
               orders={c.orders}
               subscriptions={c.subscriptions}
+              coursePages={props.coursePages}
               new_subjects={c.new_subjects}
               traffic_sources={c.traffic_sources}
               lessonResults={c.lessonResults}
