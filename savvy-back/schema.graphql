@@ -2696,6 +2696,7 @@ type Mutation {
   sendClientEmail(connection: String, email: String, firm: String, name: String, personalTouch: String, subject: String, type: String): User
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
   sendMessage(comment: String, coursePageId: String, link: String, subject: String, text: String, userId: String): Message
+  sendWelcomeEmail(courseId: String, email: String, name: String): CoursePage
   signin(email: String, password: String, traffic_sources: Visits): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, referal: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload

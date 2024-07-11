@@ -29,6 +29,19 @@ const CREATE_SUBSCRIPTION_MUTATION = gql`
   }
 `;
 
+const UPDATE_SUBSCRIPTION_MUTATION = gql`
+  mutation UPDATE_SUBSCRIPTION_MUTATION(
+    $id: String!
+    $type: String!
+    $term: String!
+    $endDate: DateTime!
+  ) {
+    updateSubscription(id: $id, type: $type, term: $term, endDate: $endDate) {
+      id
+    }
+  }
+`;
+
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
     $userId: String!
@@ -37,26 +50,6 @@ const SEND_MESSAGE_MUTATION = gql`
   ) {
     sendMessage(userId: $userId, text: $text, subject: $subject) {
       id
-    }
-  }
-`;
-
-const SEND_MESSAGE2_MUTATION = gql`
-  mutation SEND_MESSAGE2_MUTATION(
-    $subject: String
-    $name: String
-    $email: String
-    $connection: String
-    $type: String
-  ) {
-    sendClientEmail(
-      subject: $subject
-      name: $name
-      email: $email
-      connection: $connection
-      type: $type
-    ) {
-      name
     }
   }
 `;
@@ -76,14 +69,6 @@ const UPDATE_USER_MUTATION2 = gql`
 const TEXT_CLIENT_MUTATION = gql`
   mutation TEXT_CLIENT_MUTATION($id: String!, $comment: String) {
     textUser(id: $id, comment: $comment) {
-      id
-    }
-  }
-`;
-
-const DELETE_CLIENT_MUTATION = gql`
-  mutation DELETE_CLIENT_MUTATION($id: String!) {
-    deleteClient(id: $id) {
       id
     }
   }
@@ -109,6 +94,18 @@ const ENROLL_COURSE_MUTATION = gql`
 const UNENROLL_COURSE_MUTATION = gql`
   mutation UNENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
     unenrollFromCourse(id: $id, coursePageId: $coursePageId) {
+      id
+    }
+  }
+`;
+
+const UPDATE_COURSE_VISIT_MUTATION = gql`
+  mutation UPDATE_COURSE_VISIT_MUTATION(
+    $name: String!
+    $email: String!
+    $courseId: String!
+  ) {
+    sendWelcomeEmail(name: $name, email: $email, courseId: $courseId) {
       id
     }
   }
@@ -272,7 +269,8 @@ const UserCard = memo((props) => {
   const [message, setMessage] = useState(
     // `<p>${props.name}, привет!</p><p>Я Михаил, директор BeSavvy. Я увидел, что вы проходили уроки на платформе по: ... И решил узнать, как у вас дела? Какие впечатления от работы на симуляторах?</p><p>Я хотел бы порекомендовать вам еще один открытый симулятор. Обратите внимание на:</p><p>На самом деле, в BeSavvy скрыта тонна бесплатных полезных материалов, но часто пользователи просто не знают, как их найти и как с ними работать. А еще не понимают, как их встроить в свой рабочий календарь.</p><p><b>Давайте я вам сделаю индивидуальную подборку? И расскажу, как создать идеальную рабочую среду, в которой ничто не потеряется?</p><p>Если интересно, просто ответьте на это письмо (чтобы я знал,  что их кто-то читает). И я пришлю.</p><p>Михаил из BeSavvy</p>`
     // `<p>${props.name}, привет!</p><p>Я Михаил, директор BeSavvy. Я увидел, что вы в феврале проходили тестовое собеседование на английском языке. И решил узнать, как у вас дела? Какие впечатления от работы на симуляторах?</p><p>На самом деле, в BeSavvy скрыта тонна бесплатных полезных материалов, но часто пользователи просто не знают, как их найти и как с ними работать.</p><p><b>Хотите я вам открою доступ к нашей системе старта изучения юр английского?</b>Она содержит не только сами симуляторы, но еще и <b>автоматические напоминания, календари, шпаргалки и советы.</b></p><p>Это поможет не бросить обучение на второй день и получить понятный результат через неделю.</p><p>Если интересно, просто ответьте на это письмо. И я вам отправлю всю информацию.</p><p>На связи,</p><p>Михаил из BeSavvy</p>`
-    `<p>${props.name}, привет!</p><p>Это Михаил, директор BeSavvy.</p><p>Я заметил, что вы смотрели наши курсы по праву, и решил написать.</p><p>А вы знаете, что мы перешли на формат подписки? И что теперь любой курс по корпе, ГП или английскому можно проходить всего <b>за 1990 рублей в месяц</b>?</p><p>Если интересно, то можете узнать больше о подписке <a href="https://besavvy.app/ru/subscription" target="_blank">по этой ссылке</a>.</p><p>На связи,</p>`
+    // `<p>${props.name}, привет!</p><p>Это Михаил, директор BeSavvy.</p><p>Я заметил, что вы смотрели наши курсы по праву, и решил написать.</p><p>А вы знаете, что мы перешли на формат подписки? И что теперь любой курс по корпе, ГП или английскому можно проходить всего <b>за 1990 рублей в месяц</b>?</p><p>Если интересно, то можете узнать больше о подписке <a href="https://besavvy.app/ru/subscription" target="_blank">по этой ссылке</a>.</p><p>На связи,</p>`
+    `<p>${props.name}, здравствуйте!</p><p>Это Михаил, директор BeSavvy.</p><p>Я рад, что вы зарегистрировались на сайте и даже прошли уже несколько уроков.</p><p>Не против, если расскажу вам, как у нас все устроено? Только будет удобнее это сделать в телеграм (<a href="https://www.t.me/mikkochkin" target="_blank">ссылка</a>) или вотсап (<a href="https://wa.me/+79031624158" target="_blank">ссылка</a>).</p><p>Пишите, буду рад познакомиться и помочь с изучением английского.</p><p>На связи,</p><p>Михаил</p>`
   );
   const [wa_message, setWa_message] = useState("");
   const [tags, setTags] = useState(props.tags);
@@ -281,7 +279,8 @@ const UserCard = memo((props) => {
   const [show, setShow] = useState(false);
   const [showLessonResults, setShowLessonResults] = useState(false);
   const [subject, setSubject] = useState(
-    `${props.name}, для вас спец предложение от BeSavvy!`
+    // `${props.name}, для вас спец предложение от BeSavvy!`
+    `Рады видеть вас в BeSavvy!`
   );
   const [editorText, setEditorText] = useState(null);
   const [subscriptionType, setSubscriptionType] = useState(null);
@@ -300,8 +299,15 @@ const UserCard = memo((props) => {
     { data: data3, loading: loading3, error: error3 },
   ] = useMutation(CREATE_SUBSCRIPTION_MUTATION);
 
+  const [
+    updateSubscription,
+    { data: updateData, loading: updateLoading, error: updateError },
+  ] = useMutation(UPDATE_SUBSCRIPTION_MUTATION);
+
   const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
     useMutation(SEND_MESSAGE_MUTATION);
+
+  const [sendWelcomeEmail] = useMutation(UPDATE_COURSE_VISIT_MUTATION);
 
   function earliestObjectsByDate(objects) {
     let grouped = {};
@@ -414,51 +420,17 @@ const UserCard = memo((props) => {
   };
 
   const subscriptionTypes = ["mini", "regular", "team", "business"];
-  // const wa_send = () => {
-  //   let comment_for_wa = wa_message
-  //     ? wa_message.replaceAll("</p>", "\n\n")
-  //     : "";
-  //   comment_for_wa = comment_for_wa.replaceAll("<p>", "");
-  //   let date = new Date();
 
-  //   let day = date.getDate(); // Get current date
-  //   let month = date.getMonth(); // Get current month
-  //   let year = date.getFullYear(); // Get current year
-
-  //   // Array of month names
-  //   let monthNames = [
-  //     "January",
-  //     "February",
-  //     "March",
-  //     "April",
-  //     "May",
-  //     "June",
-  //     "July",
-  //     "August",
-  //     "September",
-  //     "October",
-  //     "November",
-  //     "December",
-  //   ];
-
-  // let formattedDate = day + " " + monthNames[month] + " " + year; // Format the date
-  // let wa_comment = `<p>WhatsApp Message, ${formattedDate}</p>`;
-  // // console.log("wa_comment", comment + wa_comment);
-  // setComment(comment + wa_comment);
-  // updateUser({
-  //   variables: {
-  //     id: props.id,
-  //     tags: [...tags, `wa_message${formattedDate}`],
-  //     comment: comment + wa_comment,
-  //   },
-  // });
-  // textUser({
-  //   variables: {
-  //     id: props.id,
-  //     comment: comment_for_wa,
-  //   },
-  // });
-  // };
+  const handleSendEmail = async (name, email, courseId) => {
+    await sendWelcomeEmail({
+      variables: {
+        name: name,
+        email: email,
+        courseId: courseId,
+      },
+    });
+    alert("Email has been sent!");
+  };
 
   return (
     <Row id={props.id}>
@@ -592,6 +564,67 @@ const UserCard = memo((props) => {
               Create Subscription
             </button>
           </div>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const now = moment();
+              let end;
+              const existingSubscription = props.subscriptions[0];
+
+              if (term === "month") {
+                end = moment(existingSubscription.endDate).add(1, "month");
+              } else if (term === "year") {
+                end = moment(existingSubscription.endDate).add(1, "year");
+              }
+              const variables = {
+                userId: props.id,
+                type: subscriptionType,
+                term: term,
+                // startDate: existingSubscription.startDate,
+                endDate: end.toISOString(),
+              };
+
+              await updateSubscription({
+                variables: {
+                  id: existingSubscription.id,
+                  ...variables,
+                },
+              });
+              // if (existingSubscription) {
+              //   console.log("1");
+
+              //   await updateSubscription({
+              //     variables: {
+              //       id: existingSubscription.id,
+              //       ...variables,
+              //     },
+              //   });
+              // } else {
+              //   console.log("2");
+              //   await createSubscription({ variables });
+              // }
+            }}
+          >
+            <div className="radio-buttons">
+              {subscriptionTypes.map((type) => (
+                <label key={type}>
+                  <input
+                    type="radio"
+                    value={type}
+                    checked={subscriptionType === type}
+                    onChange={(e) => setSubscriptionType(e.target.value)}
+                  />
+                  {type}
+                </label>
+              ))}
+            </div>
+            <select onChange={(e) => setTerm(e.target.value)}>
+              <option>Choose term</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+            </select>
+            <button type="submit">Обновить</button>
+          </form>
         </SubscriptionBlock>
         <h4>Комментарий</h4>
         {/* <div>{comment}</div> */}
@@ -655,7 +688,6 @@ const UserCard = memo((props) => {
             <div>
               <h4>Курсы</h4>
               {props.coursePages.map((c) => {
-                console.log("props.new_subjects", props.new_subjects);
                 const ids = props.new_subjects.map((course) => course.id);
                 console.log(ids, c.id, ids.includes(c.id));
                 return (
@@ -679,20 +711,29 @@ const UserCard = memo((props) => {
                           Закрыть
                         </button>
                       ) : (
-                        <button
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            let enroll = await enrollOnCourse({
-                              variables: {
-                                id: props.id,
-                                coursePageId: c.id,
-                              },
-                            });
-                            alert("Открыли доступ!");
-                          }}
-                        >
-                          Открыть
-                        </button>
+                        <>
+                          <button
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              let enroll = await enrollOnCourse({
+                                variables: {
+                                  id: props.id,
+                                  coursePageId: c.id,
+                                },
+                              });
+                              alert("Открыли доступ!");
+                            }}
+                          >
+                            Открыть
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleSendEmail(props.name, props.email, c.id)
+                            }
+                          >
+                            Welcome Email
+                          </button>
+                        </>
                       )}
                     </div>
                     <div className="second">
@@ -731,7 +772,6 @@ const UserCard = memo((props) => {
             <li>{o.createdAt}</li>
             <button
               onClick={(e) => {
-                console.log("updateOrderAuto", o.id, props.id);
                 updateOrderAuto({
                   variables: {
                     id: o.id,

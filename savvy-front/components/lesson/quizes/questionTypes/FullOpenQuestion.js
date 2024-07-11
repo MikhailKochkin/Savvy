@@ -120,6 +120,8 @@ const FullOpenQuestion = (props) => {
     });
   };
 
+  console.log("result", result);
+
   return (
     <Question story={story}>
       {/* 1. Question part */}
@@ -362,8 +364,7 @@ const FullOpenQuestion = (props) => {
                         : t("more_improvements")}
                     </Button1>
                   )}
-                  {(correctnessLevel === "correct" ||
-                    explanations.length > 1) && (
+                  {true && (
                     <Button1
                       onClick={async (e) => {
                         e.preventDefault();

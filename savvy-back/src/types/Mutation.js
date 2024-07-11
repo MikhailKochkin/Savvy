@@ -4022,29 +4022,27 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         // 1. find all orders for our user
-
-        const order = await ctx.prisma.order.findUnique(
-          {
-            where: { id: args.id },
-            include: {
-              user: true,
-              coursePage: true,
-            },
+        const order = await ctx.prisma.order.findUnique({
+          where: { id: args.id },
+          include: {
+            user: true,
+            coursePage: true,
           },
-          `{ id, user { id, name, email}, coursePage {id, title}, paymentID }`
-        );
+        });
+
         console.log("order", order.user.email);
 
         // 2. check at yookassa if any order is paid
         if (order.paymentID) {
           const payment = await community_checkout.getPayment(order.paymentID);
-          console.log("payment", payment);
+          console.log("payment 1", payment);
+
           const createPayload = {
             amount: {
-              value: 3990,
+              value: "3990.00",
               currency: "RUB",
             },
-            payment_method_id: payment.id,
+            payment_method_id: payment.payment_method.id,
             receipt: {
               customer: {
                 email: order.user.email,
@@ -4054,7 +4052,7 @@ const Mutation = mutationType({
                   description: "BeSavvy Plus",
                   quantity: "1",
                   amount: {
-                    value: 1,
+                    value: "3990.00",
                     currency: "RUB",
                   },
                   vat_code: 1,
@@ -4064,42 +4062,25 @@ const Mutation = mutationType({
             capture: true,
           };
 
-          const newPayment = await community_checkout.createPayment(
-            createPayload
-          );
+          // Log the payload
+          console.log("createPayload", JSON.stringify(createPayload, null, 2));
 
-          console.log("newPayment", newPayment);
-          // if (payment.status == "succeeded") {
-          //   const notification = await client.sendEmail({
-          //     From: "Mikhail@besavvy.app",
-          //     To: order.user.email,
-          //     Subject: "🎆 BeSavvy: доступ к курсу открыт!",
-          //     HtmlBody: PurchaseEmail.PurchaseEmail(
-          //       order.user.name,
-          //       order.coursePage.title,
-          //       order.coursePage.id
-          //     ),
-          //   });
-          //   return ctx.prisma.order.update({
-          //     data: {
-          //       isPaid: true,
-          //     },
-          //     where: {
-          //       id: args.id,
-          //     },
-          //   });
-          // } else {
-          //   return ctx.prisma.order.update({
-          //     data: {
-          //       isPaid: false,
-          //     },
-          //     where: {
-          //       id: args.id,
-          //     },
-          //   });
-          // }
+          try {
+            const newPayment = await community_checkout.createPayment(
+              createPayload
+            );
+            console.log("newPayment", newPayment);
+          } catch (error) {
+            console.error("Error creating new payment:", error.message, error);
+          }
+
+          console.log("finish?");
+
+          const payment2 = await community_checkout.getPayment(
+            payment.payment_method.id
+          );
+          console.log("payment2", payment2);
         }
-        // 3. give access
       },
     });
     t.field("deleteOrder", {
@@ -4562,6 +4543,37 @@ const Mutation = mutationType({
         return { name: name };
       },
     });
+    t.field("sendWelcomeEmail", {
+      type: "CoursePage",
+      args: {
+        name: stringArg(),
+        email: stringArg(),
+        courseId: stringArg(),
+      },
+      resolve: async (_, { name, email, courseId }, ctx) => {
+        const course = await ctx.prisma.coursePage.findUnique({
+          where: { id: courseId },
+        });
+
+        const NextWeek = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: email,
+          Subject: "Привет от директора BeSavvy 😁",
+          HtmlBody: NextWeekEmail.NextWeekEmail(
+            name,
+            `<p>Это Миша, основатель BeSavvy.</p>
+        <p>Рад приветствовать тебя среди участников курса "${course.title}".</p>
+        <p>Главное, запомни, что ты занимаешься не в одиночку. Я всегда буду рад помочь тебе с любым учебным или техническим вопросом. </p>
+        <p>Со мной можно связаться, написав в наше сообщество в ТГ или ответив на это письмо.</p>
+        <p><a href="https://t.me/+ZKc7m_C8TslkNTEy" target="_blank">Вот ссылка</a> на наше сообщество по английскому.</p>
+        `,
+            course.title,
+            courseId
+          ),
+        });
+        return course;
+      },
+    });
     t.field("sendClientEmail", {
       type: "User",
       args: {
@@ -4619,6 +4631,7 @@ const Mutation = mutationType({
               communication_history.messages.length - 1
             ].message
           ),
+          MessageStream: "international-law-firms",
         });
 
         return bc;

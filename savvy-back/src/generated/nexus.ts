@@ -5539,6 +5539,7 @@ export interface NexusGenFieldTypes {
     sendClientEmail: NexusGenRootTypes['User'] | null; // User
     sendEmailToStudent: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     sendMessage: NexusGenRootTypes['Message'] | null; // Message
+    sendWelcomeEmail: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -6657,6 +6658,7 @@ export interface NexusGenFieldTypeNames {
     sendClientEmail: 'User'
     sendEmailToStudent: 'CourseVisit'
     sendMessage: 'Message'
+    sendWelcomeEmail: 'CoursePage'
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
@@ -8021,6 +8023,11 @@ export interface NexusGenArgTypes {
       subject?: string | null; // String
       text?: string | null; // String
       userId?: string | null; // String
+    }
+    sendWelcomeEmail: { // args
+      courseId?: string | null; // String
+      email?: string | null; // String
+      name?: string | null; // String
     }
     signin: { // args
       email?: string | null; // String

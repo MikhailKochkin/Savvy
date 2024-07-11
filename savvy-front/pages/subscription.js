@@ -9,7 +9,7 @@ const DynamicSubscription = dynamic(import("../components/Subscription"), {
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["nav", "blog"])),
+    ...(await serverSideTranslations(locale, ["nav", "blog", "landing"])),
   },
 });
 

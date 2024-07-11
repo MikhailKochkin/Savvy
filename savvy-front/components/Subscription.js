@@ -6,6 +6,7 @@ import tinkoff from "@tcb-web/create-credit";
 import { Tooltip } from "react-tooltip";
 import parse from "html-react-parser";
 import smoothscroll from "smoothscroll-polyfill";
+import Programs from "./landing/Programs";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -402,7 +403,7 @@ const SliderContainer = styled.div`
   background-color: #f0f0f0;
   border-radius: 8px;
   overflow: hidden;
-  width: 300px;
+  width: 330px;
   @media (max-width: 800px) {
     margin-bottom: 20px;
     width: 100%;
@@ -415,7 +416,7 @@ const SliderButton = styled.div`
   background-color: ${({ active }) => (active ? "#333" : "#F8F8F8")};
   color: ${({ active }) => (active ? "#F8F8F8" : "#333")};
   transition: background-color 0.3s ease, color 0.3s ease;
-  width: ${(props) => (props.type === "short" ? "40%" : "60%")};
+  width: ${(props) => (props.type === "short" ? "35%" : "65%")};
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -478,6 +479,33 @@ const SimpleButton = styled.button`
   }
 `;
 
+const MiniButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  font-family: Montserrat;
+  cursor: pointer;
+  padding: 2px 5px;
+  margin-left: 5px;
+
+  background: none;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
+
+const AllCoursesBlock = styled.div`
+  width: 100vw;
+  display: flex;
+  margin-top: 50px;
+`;
+
 const Subscription = (props) => {
   const router = useRouter();
   const [plan, setPlan] = useState("monthly"); // State to manage the selected plan
@@ -532,10 +560,14 @@ const Subscription = (props) => {
       shopId: process.env.NEXT_PUBLIC_SHOP_ID,
       showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
       items: [
-        { name: "Годовая подписка на BeSavvy+", price: price, quantity: 1 },
+        {
+          name: "Подписка на BeSavvy+ на 6 месяцев",
+          price: price,
+          quantity: 1,
+        },
       ],
       sum: price,
-      promoCode: "installment_0_0_3_4,34",
+      promoCode: "installment_0_0_6_7",
     });
     if (props.me) {
       createOrder({
@@ -586,6 +618,16 @@ const Subscription = (props) => {
     });
   };
 
+  const slideToCourses = () => {
+    var my_element = document.getElementById("course_search");
+    console.log(my_element);
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+
   return (
     <Styles>
       <Container>
@@ -613,8 +655,8 @@ const Subscription = (props) => {
               onClick={() => setPlan("yearly")}
             >
               {/* Yearly */}
-              На год
-              <DiscountLabel>-40%</DiscountLabel>
+              На 6 месяцев
+              <DiscountLabel>-25%</DiscountLabel>
             </SliderButton>
           </SliderContainer>
         </TopBar>
@@ -650,15 +692,18 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    1 новый курс в месяц
+                    1 новый курс в месяц{" "}
+                    <MiniButton onClick={(e) => slideToCourses()}>
+                      Выбрать
+                    </MiniButton>
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Карьерные сервисы и пробные интервью
+                    Сообщество юристов и студентов BeSavvy
                   </div>
                   <div className="label" for="mistakes">
-                    X
+                    ✅
                   </div>
                 </div>
                 <div className="section">
@@ -712,12 +757,15 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    3 новых курса в месяц
+                    3 новых курса в месяц{" "}
+                    <MiniButton onClick={(e) => slideToCourses()}>
+                      Выбрать
+                    </MiniButton>
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Карьерные сервисы и пробные интервью
+                    Сообщество юристов и студентов BeSavvy
                   </div>
                   <div className="label" for="mistakes">
                     ✅
@@ -772,12 +820,15 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    5 новых курсов в месяц
+                    5 новых курсов в месяц{" "}
+                    <MiniButton onClick={(e) => slideToCourses()}>
+                      Выбрать
+                    </MiniButton>
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Карьерные сервисы и пробные интервью
+                    Сообщество юристов и студентов BeSavvy
                   </div>
                   <div className="label" for="mistakes">
                     ✅
@@ -812,7 +863,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    <span>60 000</span> 35990 ₽ / год
+                    <span>24 000</span> 17 990 ₽ / 6 месяцев
                   </div>
                 </div>
                 <div className="section">
@@ -828,15 +879,18 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    35+ курсов
+                    Все 35+ курсов{" "}
+                    <MiniButton onClick={(e) => slideToCourses()}>
+                      Выбрать
+                    </MiniButton>
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Карьерные сервисы и пробные интервью
+                    Сообщество юристов и студентов BeSavvy
                   </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    ✅
                   </div>
                 </div>
                 <div className="section">
@@ -844,7 +898,7 @@ const Subscription = (props) => {
                     Проверка заданий и индивидуальные консультации
                   </div>
                   <div className="label" for="mistakes">
-                    ✔️
+                    ✅
                   </div>
                 </div>
                 <div className="section">
@@ -853,11 +907,11 @@ const Subscription = (props) => {
                     1
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(35990)}>
+                <ButtonBuy onClick={(e) => completePayment(17990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(35990)}>
-                  Оформить рассрочку
+                <ButtonOpen onClick={(e) => getInstallments(17990)}>
+                  Оформить рассрочку за 2990 в месяц
                 </ButtonOpen>
               </Form>
               <Form>
@@ -868,7 +922,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    <span>120 000</span> 71990 ₽ / год
+                    <span>48 000</span> 35 990 ₽ / 6 месяцев
                   </div>
                 </div>
                 <div className="section">
@@ -885,12 +939,12 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    35+ курсов
+                    Все 35+ курсов
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Карьерные сервисы и пробные интервью
+                    Сообщество юристов и студентов BeSavvy
                   </div>
                   <div className="label" for="mistakes">
                     ✅
@@ -910,11 +964,11 @@ const Subscription = (props) => {
                     До 4
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(71990)}>
+                <ButtonBuy onClick={(e) => completePayment(35990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(71990)}>
-                  Оформить рассрочку
+                <ButtonOpen onClick={(e) => getInstallments(35990)}>
+                  Оформить рассрочку за 5990 в месяц
                 </ButtonOpen>
               </Form>
             </>
@@ -965,7 +1019,10 @@ const Subscription = (props) => {
             всем вопросам обращайтесь на почту: mikhail@besavvy.app
           </div>
         </Comment>
-        <MovingRow>
+        <AllCoursesBlock id="course_search">
+          <Programs isSubscriptionPage={true} />
+        </AllCoursesBlock>
+        {/* <MovingRow>
           <div className="moving-row">
             <div className="item">
               <div className="itemTitle">
@@ -1051,7 +1108,7 @@ const Subscription = (props) => {
               <div className="itemLength">Срок: 2 недели</div>
             </div>
           </div>
-        </MovingRow>
+        </MovingRow> */}
         <IdeaContainer>
           <h2>🇬🇧 Как выстроить изучение Legal English?</h2>
           <div>

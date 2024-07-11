@@ -131,9 +131,10 @@ const Option = styled.div`
   }
 `;
 
-const Programs = () => {
+const Programs = (props) => {
+  console.log("Programs");
   const router = useRouter();
-  if (router.locale !== "ru") {
+  if (router.locale !== "ru" && props.isSubscriptionPage == false) {
     return;
   }
   const { loading, error, data } = useQuery(COURSES_QUERY);
@@ -144,7 +145,9 @@ const Programs = () => {
   } = useQuery(PROGRAMS_QUERY);
 
   const [tag, setTag] = useState(
-    router.locale == "ru" ? "english" : "english_eng"
+    router.locale == "ru" || props.isSubscriptionPage
+      ? "english"
+      : "english_eng"
   );
 
   useEffect(() => {

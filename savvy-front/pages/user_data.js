@@ -266,8 +266,6 @@ const ClientData = () => {
     data: data4,
   } = useQuery(ACTIVE_COURSES_QUERY);
 
-  console.log("data4", data4?.coursePages);
-
   const handleButtonClick = () => {
     getUserData({
       variables: {

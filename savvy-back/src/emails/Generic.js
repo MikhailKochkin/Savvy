@@ -438,16 +438,6 @@ const GenericEmail = (text) => `
             cellspacing="0"
             role="presentation"
           >
-            <tr>
-              <td class="email-masthead">
-                <a
-                  href="https://besavvy.app"
-                  class="f-fallback email-masthead_name"
-                >
-                  BeSavvy
-                </a>
-              </td>
-            </tr>
             <!-- Email Body -->
             <tr>
               <td
@@ -471,26 +461,6 @@ const GenericEmail = (text) => `
                           ${text}
                         <!-- Sub copy -->
                       </div>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <table
-                  class="email-footer"
-                  align="center"
-                  width="570"
-                  cellpadding="0"
-                  cellspacing="0"
-                  role="presentation"
-                >
-                  <tr>
-                    <td class="content-cell" align="center">
-                      <p class="f-fallback sub align-center">
-                        &copy; 2024 BeSavvy
-                      </p>
                     </td>
                   </tr>
                 </table>

@@ -500,7 +500,7 @@ const Action = (props) => {
             </div>
             {/* <div className="">◼️ {t("certificate")}</div> */}
             <div className="price_div">
-              <span>✔️</span> От 1600 ₽
+              <span>✔️</span> От 1990 ₽
               {/* {price ? `${price} ${currency_symbol}` : t("free")} */}
             </div>
 

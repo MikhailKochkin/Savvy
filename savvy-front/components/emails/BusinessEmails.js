@@ -6,13 +6,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Company from "./Company";
 import BusinessEmailCard from "./BusinessEmailCard";
-// import {
-//   companyList,
-//   emailList,
-//   company_tags,
-// } from "../../businessEmailList.js";
-// import { uniList, emailUniList } from "../../lawschool.js";
-// import emailSQEList from "../../sqeList.js";
+import CreateClient from "../CreateClient.js";
+import {
+  companyList,
+  emailList,
+  company_tags,
+} from "../../businessEmailList.js";
+import { uniList, emailUniList } from "../../lawschool.js";
+import emailSQEList from "../../sqeList.js";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -202,6 +203,7 @@ const ClientData = (props) => {
 
   return (
     <Styles>
+      <CreateClient />
       <div className="total">
         <div className="floating">
           <div>Всего: {clients.length}</div>
