@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import UserData from "../components/UserData";
 import { useLazyQuery, useQuery, gql } from "@apollo/client";
 import NewUserCreate from "../components/NewUserCreate";
+
 const CLIENTS_QUERY = gql`
   query CLIENTS_QUERY($initialDate: DateTime!, $lastDate: DateTime!) {
     users(
@@ -237,6 +238,83 @@ const CLIENTS_TAGS_QUERY = gql`
   }
 `;
 
+const CLIENTS_ACTIVE_QUERY = gql`
+  query CLIENTS_ACTIVE_QUERY($date: DateTime!) {
+    users(where: { lessonResults: { some: { updatedAt: { gte: $date } } } }) {
+      id
+      name
+      surname
+      country
+      comment
+      email
+      number
+      tags
+      subscriptions {
+        id
+        isActive
+        type
+        startDate
+        paymentID
+        renewals
+        endDate
+        createdAt
+        updatedAt
+      }
+      challengeResults {
+        id
+        wrong
+        correct
+        createdAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+            title
+          }
+        }
+      }
+      lessonResults {
+        id
+        progress
+        createdAt
+        updatedAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+          }
+        }
+      }
+      new_subjects {
+        id
+        title
+      }
+      orders {
+        id
+        price
+        paymentID
+        coursePage {
+          id
+          title
+        }
+        isPaid
+        createdAt
+      }
+      traffic_sources
+      createdAt
+      updatedAt
+      messages {
+        id
+        text
+        subject
+        createdAt
+      }
+    }
+  }
+`;
+
 const ACTIVE_COURSES_QUERY = gql`
   query ACTIVE_COURSES_QUERY {
     coursePages(where: { published: { equals: true } }) {
@@ -260,10 +338,13 @@ const ClientData = () => {
   const [getUserData3, { loading: loading3, error: error3, data: data3 }] =
     useLazyQuery(CLIENTS_TAGS_QUERY);
 
+  const [getUserData4, { loading: loading4, error: error4, data: data4 }] =
+    useLazyQuery(CLIENTS_ACTIVE_QUERY);
+
   const {
-    loading: loading4,
-    error: error4,
-    data: data4,
+    loading: loading5,
+    error: error5,
+    data: data5,
   } = useQuery(ACTIVE_COURSES_QUERY);
 
   const handleButtonClick = () => {
@@ -289,12 +370,46 @@ const ClientData = () => {
     });
   };
 
+  const handleButtonClick4 = () => {
+    getUserData4({
+      variables: {
+        date: `${initialDate}:00.000Z`,
+      },
+    });
+  };
+
   const handleInitialDateChange = (e) => {
     setInitialDate(e.target.value);
   };
 
   const handleLastDateChange = (e) => {
     setLastDate(e.target.value);
+  };
+
+  const sortClientsByActivity = (clients) => {
+    let sorted_clients = [...clients].sort((a, b) => {
+      // Get the updatedAt property of the latest lessonResult for client A
+      const latestUpdatedAtA = a.lessonResults.reduce(
+        (latest, lessonResult) => {
+          const updatedAt = new Date(lessonResult.updatedAt).getTime();
+          return updatedAt > latest ? updatedAt : latest;
+        },
+        0
+      );
+
+      // Get the updatedAt property of the latest lessonResult for client B
+      const latestUpdatedAtB = b.lessonResults.reduce(
+        (latest, lessonResult) => {
+          const updatedAt = new Date(lessonResult.updatedAt).getTime();
+          return updatedAt > latest ? updatedAt : latest;
+        },
+        0
+      );
+
+      // Compare the latest updatedAt properties of clients A and B
+      return latestUpdatedAtB - latestUpdatedAtA;
+    });
+    return sorted_clients;
   };
 
   if (loading) return <p>Loading...</p>;
@@ -306,7 +421,11 @@ const ClientData = () => {
     ? data2.users
     : data3
     ? data3.users
+    : data4
+    ? sortClientsByActivity(data4.users)
     : [];
+
+  console.log("initialClients", initialClients);
 
   return (
     <div>
@@ -352,6 +471,9 @@ const ClientData = () => {
       <button onClick={handleButtonClick3}>
         Load Users with Subscriptions
       </button>
+      <br />
+      <button onClick={handleButtonClick4}>Load Active users</button>
+
       <div>
         <button onClick={(e) => setNewUsersNumber(newUsersNumber - 1)}>
           -1
@@ -366,11 +488,11 @@ const ClientData = () => {
         ))}
       </div>
 
-      {loading ? "Грузимся..." : ""}
+      {loading || loading2 || loading3 || loading4 ? "Грузимся..." : ""}
       {initialClients && initialClients.length > 0 && (
         <UserData
           initial_clients={initialClients}
-          coursePages={data4?.coursePages}
+          coursePages={data5?.coursePages}
         />
       )}
     </div>

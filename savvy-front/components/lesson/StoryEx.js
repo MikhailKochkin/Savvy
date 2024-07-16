@@ -213,7 +213,25 @@ const StoryEx = (props) => {
 
   let components = [];
   let move_statuses = [];
-  tasks.map((task) => {
+  let updatedTasks = [...tasks];
+  let updatedStructure = [...lesson.structure.lessonItems];
+
+  console.log("props.i_am_student", props.i_am_student);
+
+  if (!props.i_am_student) {
+    // Determine the middle index
+    let middleIndex = Math.floor(updatedTasks.length / 2);
+
+    // Create the new object to be inserted
+    let newObject = { id: "offer_id", type: "Offer" };
+
+    // Insert the new object into the middle of the array
+    updatedTasks.splice(middleIndex, 0, newObject);
+    updatedStructure.splice(middleIndex, 0, newObject);
+  }
+
+  console.log("updatedStructure", updatedStructure);
+  updatedTasks.map((task) => {
     let el;
     let item;
     // Render different components based on the task type
@@ -238,20 +256,19 @@ const StoryEx = (props) => {
       components.push(item);
       move_statuses.push(true);
     } else if (task.type.toLowerCase() === "offer") {
-      el = lesson.offers.find((t) => t.id === task.id);
-      if (!el) return;
+      // el = lesson.offers.find((t) => t.id === task.id);
       item = (
         <BannerOffer
-          key={el.id}
-          id={el.id}
-          offer={el}
-          me={me}
-          coursePage={lesson.coursePage}
-          coursePageId={lesson.coursePage.id}
-          lessonId={lesson.id}
-          user={el.user.id}
-          story={true}
-          getResults={getResults}
+          key={"offer_id"}
+          id={"offer_id"}
+          // offer={el}
+          // me={me}
+          // coursePage={lesson.coursePage}
+          // coursePageId={lesson.coursePage.id}
+          // lessonId={lesson.id}
+          // user={el.user.id}
+          // story={true}
+          // getResults={getResults}
         />
       );
       components.push(item);
@@ -553,6 +570,7 @@ const StoryEx = (props) => {
   const passStep = (num) => {
     props.passStep(num);
   };
+  console.log("components", components);
   return (
     <Container>
       {me && (
@@ -563,12 +581,12 @@ const StoryEx = (props) => {
           total={total}
           next={next}
           step={props.step}
-          number_of_tasks={tasks.length}
+          number_of_tasks={updatedTasks.length}
           coursePageID={coursePageID}
           coursePageId={coursePageID}
           coursePage={coursePage}
           me={me}
-          lesson_structure={lesson.structure.lessonItems}
+          lesson_structure={updatedStructure}
           openLesson={props.openLesson}
           move={false}
           notes={lesson.notes}

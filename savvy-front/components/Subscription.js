@@ -111,7 +111,7 @@ const Form = styled.div`
   }
   .label {
     font-weight: 600;
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     color: #120944;
     span {
       font-size: 1.4rem;
@@ -911,7 +911,7 @@ const Subscription = (props) => {
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
                 <ButtonOpen onClick={(e) => getInstallments(17990)}>
-                  Оформить рассрочку за 2990 в месяц
+                  Оформить рассрочку за 2990/мес
                 </ButtonOpen>
               </Form>
               <Form>
@@ -939,7 +939,10 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    Все 35+ курсов
+                    Все 35+ курсов{" "}
+                    <MiniButton onClick={(e) => slideToCourses()}>
+                      Выбрать
+                    </MiniButton>
                   </div>
                 </div>
                 <div className="section">
@@ -968,7 +971,7 @@ const Subscription = (props) => {
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
                 <ButtonOpen onClick={(e) => getInstallments(35990)}>
-                  Оформить рассрочку за 5990 в месяц
+                  Оформить рассрочку за 5990/мес
                 </ButtonOpen>
               </Form>
             </>

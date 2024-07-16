@@ -397,6 +397,17 @@ const ClientData = (props) => {
       })
     );
   };
+
+  const removeSubscribers = () => {
+    setClients(
+      clients.filter(
+        (client) =>
+          client.subscriptions.length == 0 ||
+          client.subscriptions.filter((sub) => sub.isActive).length == 0
+      )
+    );
+  };
+
   function findNewestItem(array) {
     if (array.length === 0) {
       return null;
@@ -537,48 +548,55 @@ const ClientData = (props) => {
     <Styles>
       <div className="total">
         <div>Всего пользователей: {props.initial_clients.length}</div>
-        <div>IQL: {IQL_clients.length}</div>
+        {/* <div>IQL: {IQL_clients.length}</div>
         <div>MQL: {MQL_clients.length}</div>
-        <div>SQL: {SQL_clients.length}</div>
-        <button
+        <div>SQL: {SQL_clients.length}</div> */}
+        {/* <button
           onClick={(e) => addTagToClient("ck4n47a2j01jg0790gspxqxju", "ГП")}
         >
           Add tag to client
-        </button>
-        <button onClick={(e) => setShowTags(!showTags)}>Show Tags</button>
-        {showTags && (
-          <div>
-            <li>
-              По предметам: английский, corp, ГП, Школа, Арбитражный_процесс
-            </li>
-            <li>По активности: Active, Email_Inactive</li>
-            <li>По развитию: Talk, July_Week1</li>
-          </div>
-        )}
+        </button> */}
         <button onClick={(e) => sortClientsByActivity()}>
           Сортировать по последней активности
         </button>
         <button onClick={(e) => sortClientsByActivity2()}>
           Сортировать по последней активности в уроках
         </button>
+        <button onClick={(e) => removeSubscribers()}>
+          Убрать с подписками
+        </button>
+        <br />
         <br />
         <button onClick={(e) => setClients(props.initial_clients)}>
           Показать всех пользователей
         </button>
-        <button onClick={(e) => searchWithPhones(clients)}>
+        {/* <button onClick={(e) => searchWithPhones(clients)}>
           Показать с номером
-        </button>
+        </button> */}
         <button onClick={(e) => sortSubscriptions(clients)}>
           Показать по дате окончания подписки
         </button>
-        <br />
         <button onClick={(e) => sortByOrders()}>Показать с заказами</button>
+        <br />
+
+        <br />
         <div>
           <input onChange={(e) => setTag(e.target.value)} />
-          <button onClick={(e) => search(tag)}>Искать по тегам</button> <br />
+          <button onClick={(e) => search(tag)}>Искать по тегам</button>
           <button onClick={(e) => searchWithoutTags()}>
             Показать без тегов
           </button>{" "}
+          <button onClick={(e) => setShowTags(!showTags)}>Show Tags</button>
+          {showTags && (
+            <div>
+              <li>
+                По предметам: английский, corp, ГП, Школа, Арбитражный_процесс
+              </li>
+              <li>По активности: Active, Email_Inactive</li>
+              <li>По развитию: Talk, July_Week1</li>
+            </div>
+          )}
+          <br />
           <br />
           <input onChange={(e) => setStartTime(e.target.value)} />
           <input onChange={(e) => setEndTime(e.target.value)} />
@@ -591,16 +609,15 @@ const ClientData = (props) => {
             Искать по номеру
           </button>{" "}
           <br />
-          <input onChange={(e) => setCampaignName(e.target.value)} />
-          <button onClick={(e) => search6(campaignName)}>
+          {/* <input onChange={(e) => setCampaignName(e.target.value)} /> */}
+          {/* <button onClick={(e) => search6(campaignName)}>
             Искать по email кампании
-          </button>{" "}
-          <br />
+          </button>{" "} */}
+          {/* <br />
           <input onChange={(e) => setCampaign(e.target.value)} />
           <button onClick={(e) => search4(campaign)}>
             Искать по рекламным кампаниям
-          </button>{" "}
-          <br />
+          </button>{" "} */}
           <input
             onChange={(e) => setEmail(e.target.value)}
             value={email}
@@ -609,7 +626,7 @@ const ClientData = (props) => {
             placeholder="..."
           />
           <button onClick={(e) => search2(email)}>Искать по почте</button>
-          <br />
+          {/* <br />
           <input
             onChange={(e) => setCourseId(e.target.value)}
             value={courseId}
@@ -619,7 +636,7 @@ const ClientData = (props) => {
           />
           <button onClick={(e) => search3(courseId)}>
             Искать по курсу (EmailReminder)
-          </button>
+          </button> */}
           <br />
           <input
             onChange={(e) => setCourseId(e.target.value)}

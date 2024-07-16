@@ -120,8 +120,6 @@ const FullOpenQuestion = (props) => {
     });
   };
 
-  console.log("result", result);
-
   return (
     <Question story={story}>
       {/* 1. Question part */}
