@@ -4523,7 +4523,7 @@ const Mutation = mutationType({
             HtmlBody: FollowUpEmailOne.FollowUpEmailOne(name, connection),
             MessageStream: "international-law-firms",
           });
-        } else if (type == "general") {
+        } else if (type == "internal") {
           const newEmail1 = await client.sendEmail({
             From: '"Mike Kochkin" <Mike@besavvy.app>',
             To: email,
@@ -4620,7 +4620,7 @@ const Mutation = mutationType({
           },
         });
         const newEmail3 = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
+          From: "Mike@besavvy.app",
           To: bc.email,
           Subject:
             communication_history.messages[
@@ -4679,15 +4679,15 @@ const Mutation = mutationType({
         }
 
         // if (args.comment == "consult") {
-        const newEmail = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
-          To: "Mikhail@besavvy.app",
-          Subject: "Новая заявка на курс",
-          Tag: "internal_business_email",
-          HtmlBody: makeANiceEmail(
-            `Новая заявка на курс. Вот данные: ${args.name}, ${args.email}, ${args.number}`
-          ),
-        });
+        // const newEmail = await client.sendEmail({
+        //   From: "Mikhail@besavvy.app",
+        //   To: "Mikhail@besavvy.app",
+        //   Subject: "Новая заявка на курс",
+        //   Tag: "internal_business_email",
+        //   HtmlBody: makeANiceEmail(
+        //     `Новая заявка на курс. Вот данные: ${args.name}, ${args.email}, ${args.number}`
+        //   ),
+        // });
         // }
 
         return new_client;

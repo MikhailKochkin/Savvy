@@ -132,7 +132,6 @@ const Option = styled.div`
 `;
 
 const Programs = (props) => {
-  console.log("Programs");
   const router = useRouter();
   if (router.locale !== "ru" && props.isSubscriptionPage == false) {
     return;

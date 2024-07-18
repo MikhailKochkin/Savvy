@@ -212,8 +212,8 @@ const DeleteClient = (props) => {
 
 const Client = (props) => {
   const [comment, setComment] = useState(props.comment);
-  const [message, setMessage] = useState("");
-  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState(`<p>Hi ${props.name},</p>`);
+  const [subject, setSubject] = useState(`Birketts: New Way to Train Talents`);
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
   const [selectedGroup, setSelectedGroup] = useState(null);

@@ -176,10 +176,10 @@ const Account = (props) => {
       : false
   );
   const [subscriptionType, setSubscriptionType] = useState(
-    props.me.subscriptions[0]?.type ? props.me.subscriptions[0].type : "None"
+    props.me.subscriptions[0]?.type ? props.me.subscriptions[0].type : "regular"
   );
   const [subscriptionLength, setSubscriptionLength] = useState(
-    props.me.subscriptions[0]?.term ? props.me.subscriptions[0].term : "None"
+    props.me.subscriptions[0]?.term ? props.me.subscriptions[0].term : "monthly"
   );
   const router = useRouter();
 
@@ -237,7 +237,6 @@ const Account = (props) => {
               setIsActive(e.target.value == "true" ? true : false)
             }
           >
-            <option value={null}></option>
             <option value={true}>{t("active")}</option>
             <option value={false}>{t("inactive")}</option>
           </select>
@@ -248,7 +247,7 @@ const Account = (props) => {
             value={subscriptionType}
             onChange={(e) => setSubscriptionType(e.target.value)}
           >
-            <option value={null}>{t("no_info")}</option>
+            {/* <option value={null}>{t("no_info")}</option> */}
             <option value="mini">{t("mini")}</option>
             <option value="regular">{t("regular")}</option>
             <option value="team">{t("team")}</option>
@@ -259,7 +258,6 @@ const Account = (props) => {
             value={subscriptionLength}
             onChange={(e) => setSubscriptionLength(e.target.value)}
           >
-            <option value={null}>{t("no_info")}</option>
             <option value="monthly">{t("monthly")}</option>
             <option value="annually">{t("annually")}</option>
           </select>

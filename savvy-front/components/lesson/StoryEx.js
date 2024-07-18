@@ -215,10 +215,7 @@ const StoryEx = (props) => {
   let move_statuses = [];
   let updatedTasks = [...tasks];
   let updatedStructure = [...lesson.structure.lessonItems];
-
-  console.log("props.i_am_student", props.i_am_student);
-
-  if (!props.i_am_student) {
+  if (!props.i_am_student && coursePage?.courseType === "FORMONEY") {
     // Determine the middle index
     let middleIndex = Math.floor(updatedTasks.length / 2);
 
@@ -230,7 +227,6 @@ const StoryEx = (props) => {
     updatedStructure.splice(middleIndex, 0, newObject);
   }
 
-  console.log("updatedStructure", updatedStructure);
   updatedTasks.map((task) => {
     let el;
     let item;
@@ -570,7 +566,6 @@ const StoryEx = (props) => {
   const passStep = (num) => {
     props.passStep(num);
   };
-  console.log("components", components);
   return (
     <Container>
       {me && (

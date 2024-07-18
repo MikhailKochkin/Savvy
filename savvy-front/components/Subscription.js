@@ -49,6 +49,28 @@ const GET_REFERRER = gql`
   }
 `;
 
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION(
+    $subject: String
+    $name: String
+    $email: String
+    $firm: String
+    $connection: String
+    $type: String
+  ) {
+    sendBusinessEmail(
+      subject: $subject
+      name: $name
+      email: $email
+      firm: $firm
+      connection: $connection
+      type: $type
+    ) {
+      name
+    }
+  }
+`;
+
 const Styles = styled.div`
   background: #ffffff; /* fallback for old browsers */
   min-height: 100vh;
@@ -509,6 +531,7 @@ const AllCoursesBlock = styled.div`
 const Subscription = (props) => {
   const router = useRouter();
   const [plan, setPlan] = useState("monthly"); // State to manage the selected plan
+  const [isEmailSent, setIsEmailSent] = useState(false); // State to manage if the email is sent
   const [referrerName, setReferrerName] = useState(null);
   const { me } = props;
 
@@ -516,6 +539,33 @@ const Subscription = (props) => {
     // kick off the polyfill!
     smoothscroll.polyfill();
   });
+
+  useEffect(
+    (e) => {
+      if (
+        props.me &&
+        props.me.email &&
+        !isEmailSent &&
+        props.me.email !== "mi.kochkin@ya.ru"
+      ) {
+        const res = sendBusinessEmail({
+          variables: {
+            subject: "New Subscription Page Visit",
+            email: "mikhail@besavvy.app",
+            type: "internal",
+            name: "Mikhail",
+            connection: `I noticed ${props.me.name} ${props.me.surname} (${props.me.email}) visited the subscription page.`,
+          },
+        });
+        setIsEmailSent(true);
+      }
+    },
+    [props.me]
+  );
+
+  const [sendBusinessEmail, { data, loading, error }] = useMutation(
+    SEND_MESSAGE_MUTATION
+  );
 
   const [
     createOrder,

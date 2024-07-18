@@ -371,6 +371,26 @@ const ClientData = (props) => {
     setClients(sortedClients);
   };
 
+  const sortSubscriptionsActive = () => {
+    const activeClients = props.initial_clients.filter((client) => {
+      const activeSubscriptions = client.subscriptions.filter(
+        (sub) => sub.isActive
+      );
+      return activeSubscriptions.length > 0;
+    });
+    return setClients(activeClients);
+  };
+
+  const sortSubscriptionsInactive = () => {
+    const inactiveClients = props.initial_clients.filter((client) => {
+      const inactiveSubscriptions = client.subscriptions.filter(
+        (sub) => !sub.isActive
+      );
+      return inactiveSubscriptions.length > 0;
+    });
+    return setClients(inactiveClients);
+  };
+
   const sortClientsByActivity2 = () => {
     setClients(
       [...clients].sort((a, b) => {
@@ -575,6 +595,12 @@ const ClientData = (props) => {
         </button> */}
         <button onClick={(e) => sortSubscriptions(clients)}>
           Показать по дате окончания подписки
+        </button>
+        <button onClick={(e) => sortSubscriptionsActive(clients)}>
+          Показать активные подписки
+        </button>
+        <button onClick={(e) => sortSubscriptionsInactive(clients)}>
+          Показать неактивные подписки
         </button>
         <button onClick={(e) => sortByOrders()}>Показать с заказами</button>
         <br />

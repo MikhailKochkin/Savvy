@@ -506,6 +506,9 @@ const UserCard = memo((props) => {
           {props.subscriptions.length > 0 && (
             <>
               <div>
+                <b>Status</b>: {props.subscriptions[0].isActive ? "✅" : "❌"}
+              </div>
+              <div>
                 <b>Type</b>:{props.subscriptions[0].type}
               </div>
               <div>
