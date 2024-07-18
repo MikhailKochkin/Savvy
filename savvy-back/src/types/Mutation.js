@@ -4529,7 +4529,7 @@ const Mutation = mutationType({
             To: email,
             Subject: subject,
             HtmlBody: GeneralEmail.GeneralEmail(name, connection),
-            MessageStream: "international-law-firms",
+            MessageStream: "outbound",
           });
         } else {
           const newEmail3 = await client.sendEmail({
