@@ -289,7 +289,7 @@ const FullOpenQuestion = (props) => {
               {correctnessLevel === "has_flaws" &&
                 goalType !== "ASSESS" &&
                 "🔎  " +
-                  "You may be on right track but your answer has some flaws. Remove these flaws to find the correct answer."}
+                  "You are on the right track but can you be more specific? Have a go at rewriting that answer to see if you can get closer to the correct answer"}
 
               {serverComment && goalType !== "ASSESS" && (
                 <p>{t(serverComment)}</p>

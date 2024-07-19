@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -44,6 +44,28 @@ const CREATE_CLIENT = gql`
       coursePageId: $coursePageId
     ) {
       id
+    }
+  }
+`;
+
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION(
+    $subject: String
+    $name: String
+    $email: String
+    $firm: String
+    $connection: String
+    $type: String
+  ) {
+    sendBusinessEmail(
+      subject: $subject
+      name: $name
+      email: $email
+      firm: $firm
+      connection: $connection
+      type: $type
+    ) {
+      name
     }
   }
 `;
@@ -222,7 +244,14 @@ const BannerOffer = (props) => {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [isEmailSent, setIsEmailSent] = useState(false); // State to manage if the email is sent
+
   const router = useRouter();
+  const bannerRef = useRef(null);
+
+  const [sendBusinessEmail, { data: d1, loading: l1, error: er1 }] =
+    useMutation(SEND_MESSAGE_MUTATION);
+
   const addDays = (numOfDays, date = new Date()) => {
     date.setDate(date.getDate() + numOfDays);
     return date;
@@ -266,34 +295,44 @@ const BannerOffer = (props) => {
 
     return () => clearInterval(interval);
   }, []);
-  const getEngNoun = (number, one, two) => {
-    let n = Math.abs(number);
-    if (n == 1) {
-      return one;
-    }
-    if (n > 1) {
-      return two;
-    }
-  };
 
-  const getNoun = (number, one, two, five) => {
-    let n = Math.abs(number);
-    n %= 100;
-    if (n == 0 || (n >= 5 && n <= 20)) {
-      return five;
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (isEmailSent || !props.me) return;
+            const res = sendBusinessEmail({
+              variables: {
+                subject: "New Offer Banner Reach",
+                email: "mikhail@besavvy.app",
+                type: "internal",
+                name: "Mikhail",
+                connection: `I noticed ${props.me.name} ${props.me.surname} (${props.me.email}) reached the offer banner.`,
+              },
+            });
+            setIsEmailSent(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 } // Adjust the threshold as needed
+    );
+
+    if (bannerRef.current) {
+      observer.observe(bannerRef.current);
     }
-    n %= 10;
-    if (n === 1) {
-      return one;
-    }
-    if (n >= 2 && n <= 4) {
-      return two;
-    }
-    return five;
-  };
+
+    return () => {
+      if (bannerRef.current) {
+        observer.unobserve(bannerRef.current);
+      }
+    };
+  }, []);
+
   router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
   return (
-    <Styles id="offer_id">
+    <Styles id="offer_id" ref={bannerRef}>
       <BiggerBlock>
         <Block>
           <Inner>

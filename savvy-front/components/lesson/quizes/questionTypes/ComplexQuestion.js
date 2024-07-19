@@ -653,7 +653,7 @@ const ComplexQuestion = (props) => {
                 <p>
                   {correctIdeas.length !== 0 &&
                   correctIdeas.length < props.answers.answerElements.length
-                    ? "You are on the right track! But could you please structure you answer better and add more details?"
+                    ? "You are on the right track but can you be more specific? Have a go at rewriting that answer to see if you can get closer to the correct answer"
                     : null}{" "}
                   {correctIdeas.length == props.answers.answerElements.length
                     ? "This is the correct answer. Well done!"

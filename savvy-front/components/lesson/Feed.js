@@ -655,9 +655,7 @@ const Feed = (props) => {
     setNum(num + 1);
     // this search returns
     setTimeout(() => {
-      console.log("id", id);
       const my_element = document.getElementById(id);
-      console.log("my_element", my_element);
       if (!my_element) return;
 
       const elementPosition = my_element.getBoundingClientRect().top;
@@ -676,9 +674,7 @@ const Feed = (props) => {
     setNum(num + 1);
     // Postpone the execution of the following code by 0.5 seconds (500 milliseconds)
     setTimeout(() => {
-      console.log("id", id);
       var my_element = document.getElementById(id);
-      console.log("my_element", my_element);
       if (my_element) {
         my_element.scrollIntoView({
           behavior: "smooth",
@@ -1010,7 +1006,6 @@ const Feed = (props) => {
             passMenuChange={passMenuChange}
             page="simulator"
           />
-          {console.log("lessonElements", lessonElements)}
           <Border>
             {lessonElements.slice(0, num + 2).map((c, i) => (
               <Block
@@ -1029,7 +1024,6 @@ const Feed = (props) => {
                           id="arrow_box"
                           className="arrow_box"
                           onClick={async (e) => {
-                            console.log("move forward", lessonElements[i + 1]);
                             let res2 = move(lessonElements[i + 1]?.props?.id);
                             if (result) {
                               let res = await updateLessonResult({

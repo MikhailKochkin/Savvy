@@ -670,7 +670,6 @@ const Subscription = (props) => {
 
   const slideToCourses = () => {
     var my_element = document.getElementById("course_search");
-    console.log(my_element);
     my_element.scrollIntoView({
       behavior: "smooth",
       block: "start",
