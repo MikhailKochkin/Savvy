@@ -227,7 +227,7 @@ const Form = styled.div`
     }
   }
   @media (max-width: 1450px) {
-    width: 340px;
+    width: 360px;
     height: 620px;
   }
 
@@ -756,17 +756,15 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">
-                    Проверка заданий и индивидуальные консультации
-                  </div>
+                  <div className="comment">Проверка заданий</div>
                   <div className="label" for="mistakes">
                     X
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Количество студентов</div>
+                  <div className="comment">Индивидуальные занятия</div>
                   <div className="label" for="mistakes">
-                    1
+                    X
                   </div>
                 </div>
                 <ButtonBuy
@@ -821,17 +819,15 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">
-                    Проверка заданий и индивидуальные консультации
-                  </div>
+                  <div className="comment">Проверка заданий</div>
                   <div className="label" for="mistakes">
                     ✅
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Количество студентов</div>
+                  <div className="comment">Индивидуальные занятия</div>
                   <div className="label" for="mistakes">
-                    1
+                    X
                   </div>
                 </div>
                 <ButtonBuy
@@ -845,13 +841,13 @@ const Subscription = (props) => {
               </Form>
               <Form>
                 <Banner>
-                  <div className="bannerFirst">Командный</div>
-                  <div>Чтобы сэкономить с друзьями</div>
+                  <div className="bannerFirst">Индивидуальный</div>
+                  <div>Чтобы изучать английский 1-на-1</div>
                 </Banner>
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    7990 ₽ / мес
+                    8990 ₽ / мес
                   </div>
                 </div>
                 <div className="section">
@@ -869,7 +865,7 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    5 новых курсов в месяц{" "}
+                    9 курсов по Legal English{" "}
                     <MiniButton onClick={(e) => slideToCourses()}>
                       Выбрать
                     </MiniButton>
@@ -884,20 +880,18 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">
-                    Проверка заданий и индивидуальные консультации
-                  </div>
+                  <div className="comment">Проверка заданий</div>
                   <div className="label" for="mistakes">
                     ✅
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Количество студентов</div>
+                  <div className="comment">Индивидуальные занятия</div>
                   <div className="label" for="mistakes">
-                    До 4
+                    3️⃣ занятия в месяц
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(7990)}>
+                <ButtonBuy onClick={(e) => completePayment(8990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
               </Form>
@@ -943,17 +937,15 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">
-                    Проверка заданий и индивидуальные консультации
-                  </div>
+                  <div className="comment">Проверка заданий</div>
                   <div className="label" for="mistakes">
                     ✅
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Количество студентов</div>
+                  <div className="comment">Индивидуальные занятия</div>
                   <div className="label" for="mistakes">
-                    1
+                    X
                   </div>
                 </div>
                 <ButtonBuy onClick={(e) => completePayment(17990)}>
@@ -965,13 +957,13 @@ const Subscription = (props) => {
               </Form>
               <Form>
                 <Banner>
-                  <div className="bannerFirst">Командный</div>
-                  <div>Чтобы сэкономить с друзьями</div>
+                  <div className="bannerFirst">Индивидуальный</div>
+                  <div>Чтобы выучить английский 1-на-1</div>
                 </Banner>
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    <span>48 000</span> 35 990 ₽ / 6 месяцев
+                    <span>54 990</span> 40 990 ₽ / 6 месяцев
                   </div>
                 </div>
                 <div className="section">
@@ -1003,24 +995,22 @@ const Subscription = (props) => {
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">
-                    Проверка заданий и индивидуальные консультации
-                  </div>
+                  <div className="comment">Проверка заданий</div>
                   <div className="label" for="mistakes">
                     ✅
                   </div>
                 </div>
                 <div className="section">
-                  <div className="comment">Количество студентов</div>
+                  <div className="comment">Индивидуальные занятия</div>
                   <div className="label" for="mistakes">
-                    До 4
+                    1️⃣ 5️⃣ занятий
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(35990)}>
+                <ButtonBuy onClick={(e) => completePayment(40990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(35990)}>
-                  Оформить рассрочку за 5990/мес
+                <ButtonOpen onClick={(e) => getInstallments(40990)}>
+                  Оформить рассрочку за 6800/мес
                 </ButtonOpen>
               </Form>
             </>
@@ -1055,7 +1045,7 @@ const Subscription = (props) => {
               </div>
             </div>
             <div className="section">
-              <div className="comment">Количество студентов</div>
+              <div className="comment">Индивидуальные занятия</div>
               <div className="label" for="mistakes">
                 До 10
               </div>
@@ -1067,8 +1057,8 @@ const Subscription = (props) => {
         </div>
         <Comment>
           <div>
-            <span>Важно:</span> Подписка оформляется на месяц или на год. По
-            всем вопросам обращайтесь на почту: mikhail@besavvy.app
+            <span>Важно:</span> Подписка оформляется на 1 месяц или на 6
+            месяцев. По всем вопросам обращайтесь на почту: mikhail@besavvy.app
           </div>
         </Comment>
         <AllCoursesBlock id="course_search">

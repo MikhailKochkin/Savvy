@@ -808,6 +808,16 @@ const UserCard = memo((props) => {
                 </div>
                 <li>{l.progress}</li>
                 <li>{l.updatedAt}</li>
+                <li>
+                  <button>
+                    <a
+                      href={`https://www.besavvy.app/ru/lesson?id=${l.lesson.id}&type=stats`}
+                      target="_blank"
+                    >
+                      Перейти
+                    </a>
+                  </button>
+                </li>
               </div>
             ))}
         <h4>Результаты испытаний</h4>
