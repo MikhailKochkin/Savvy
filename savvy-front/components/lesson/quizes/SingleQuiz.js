@@ -134,9 +134,10 @@ const SingleQuiz = (props) => {
           />
         </Buttons>
       ) : null}
+      {console.log("props", props.type)}
       {!update && (
         <>
-          {props.type?.toLowerCase() == "test" && (
+          {(props.type?.toLowerCase() == "test" || props.type === null) && (
             <OpenQuestion
               id={props.quizID}
               question={props.question}

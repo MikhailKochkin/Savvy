@@ -408,7 +408,7 @@ const SingleTest = (props) => {
       )}{" "}
       {!update && me && (
         <>
-          {type == "TEST" && (
+          {(type == "TEST" || type == null) && (
             <Test
               story={story}
               me={me}

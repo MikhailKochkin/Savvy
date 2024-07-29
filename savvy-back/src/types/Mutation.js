@@ -4046,7 +4046,7 @@ const Mutation = mutationType({
 
           const createPayload = {
             amount: {
-              value: "1990.00",
+              value: "3990.00",
               currency: "RUB",
             },
             payment_method_id: payment.payment_method.id,
@@ -4059,7 +4059,7 @@ const Mutation = mutationType({
                   description: "BeSavvy Plus",
                   quantity: "1",
                   amount: {
-                    value: "1990.00",
+                    value: "3990.00",
                     currency: "RUB",
                   },
                   vat_code: 1,
