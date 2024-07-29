@@ -1926,6 +1926,9 @@ const Mutation = mutationType({
       args: {
         lessonId: stringArg(),
         answers: list(stringArg()),
+        complexTestAnswers: arg({
+          type: "ComplexTestAnswers",
+        }),
         correct: list(booleanArg()),
         comments: list(stringArg()),
         question: list(stringArg()),
@@ -2254,6 +2257,9 @@ const Mutation = mutationType({
         question: list(stringArg()),
         comments: list(stringArg()),
         type: stringArg(),
+        complexTestAnswers: arg({
+          type: "ComplexTestAnswers",
+        }),
         ifRight: stringArg(),
         ifWrong: stringArg(),
         complexity: intArg(),
@@ -2354,6 +2360,7 @@ const Mutation = mutationType({
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
+        isScoringShown: booleanArg(),
         ifRight: stringArg(),
         type: stringArg(),
         ifWrong: stringArg(),
@@ -4565,7 +4572,7 @@ const Mutation = mutationType({
         <p>Рад приветствовать тебя среди участников курса "${course.title}".</p>
         <p>Главное, запомни, что ты занимаешься не в одиночку. Я всегда буду рад помочь тебе с любым учебным или техническим вопросом. </p>
         <p>Со мной можно связаться, написав в наше сообщество в ТГ или ответив на это письмо.</p>
-        <p><a href="https://t.me/+ZKc7m_C8TslkNTEy" target="_blank">Вот ссылка</a> на наше сообщество по английскому.</p>
+        <p><a href="https://t.me/+ZKc7m_C8TslkNTEy" target="_blank">Вот ссылка</a> на наше сообщество по английскому и <a href="https://t.me/+gmqzbUWeqlc5N2Qy" target="_blank">ссылка</a> на наше карьерное сообщество.</p>
         `,
             course.title,
             courseId

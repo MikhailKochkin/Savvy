@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { useDrag, useDrop } from "react-dnd";
@@ -35,8 +35,7 @@ const Styles = styled.div`
 
 const MessageStyles = styled.div`
   padding: 10px;
-  width: 220px;
-  height: 260px;
+  width: 280px;
   background: #fff;
   border: 2px solid #eff1f4;
   border-radius: 10px;
@@ -111,438 +110,397 @@ const QuestionButtons = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    .quiz_text {
+      width: 80%;
+      display: flex;
+      flex-direction: row;
+      p {
+        margin: 4px 0;
+      }
+    }
     .circle_connector {
       background-color: #a5a5a5;
       width: 12px;
       height: 12px;
+      margin-left: 20px;
       border-radius: 50%;
     }
   }
 `;
 
-const CanvasProblemBuilder = (props) => {
-  const canvasWidth = 500; // You can adjust this
-  const canvasHeight = 500; // You can adjust this
-  const centerX = canvasWidth / 2;
-  const centerY = canvasHeight / 2;
-  const radius = Math.min(canvasWidth, canvasHeight) / 2.5; // Adjust the division factor to control the distance from the center
+const InformationSection = styled.div`
+  height: 150px;
+`;
 
-  const positionMessage = (index, total) => {
-    // This function returns the x and y coordinates for a message given its index and total number of messages
-
-    const angleStep = (2 * Math.PI) / total;
-    const angle = index * angleStep - Math.PI / 2; // Subtracting π/2 to start from top
-
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
-
-    return { x, y };
-  };
-  const [messages, setMessages] = useState(
-    props.items.length > 0
-      ? props.items.map((item, index) => {
-          const { x, y } = positionMessage(index, props.items.length);
-          return {
-            id: item.id,
-            content: "",
-            position: { x, y },
-            type: item.type,
-            next: {
-              true: {
-                value: item.next.true.value,
-                type: item.next.true.type,
-              },
-              false: {
-                value: item.next.false.value,
-                type: item.next.true.type, // Note: This seems like an error. Maybe it should be item.next.false.type?
-              },
-            },
-          };
-        })
-      : []
-  );
-  const [zoomLevel, setZoomLevel] = useState(1); // State to handle zoom level
-  const [newMessage, setNewMessage] = useState("");
-  const [activeId, setActiveId] = useState("");
-  const [activeMessage, setActiveMessage] = useState();
-  const [foundElement, setFoundElement] = useState();
-  const { t } = useTranslation("lesson");
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
-
-  const [{ isOver }, dropCanvas] = useDrop({
-    accept: "MESSAGE",
-    drop: (item, monitor) => {
-      const delta = monitor.getDifferenceFromInitialOffset();
-      const x = Math.round(item.position.x + delta.x);
-      const y = Math.round(item.position.y + delta.y);
-
-      moveMessage(item.id, x, y);
-      return undefined;
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
-
-  const deleteMessage = (messageId) => {
-    setMessages((prevMessages) => {
-      // Filter out the deleted message
-      const newMessages = prevMessages.filter((msg) => msg.id !== messageId);
-
-      // Update connections for any message that was connected to the deleted message
-      newMessages.forEach((msg) => {
-        ["true", "false"].forEach((key) => {
-          if (msg.next[key].value === messageId) {
-            msg.next[key].value = null;
-            msg.next[key].type = null; // This line makes the type null
-          }
-        });
-      });
-      props.getSteps([...newMessages]);
-
-      return newMessages;
-    });
-  };
-
-  const moveMessage = (id, x, y) => {
-    setMessages((prevMessages) => {
-      const newMessages = [...prevMessages];
-      const targetMessage = newMessages.find((message) => message.id === id);
-      if (targetMessage) {
-        targetMessage.position.x = x;
-        targetMessage.position.y = y;
-      }
-      return newMessages;
-    });
-  };
-
-  const connectMessages = (sourceId, destId, type) => {
-    // Prevent self-connection
-    if (sourceId === destId) return;
-
-    setMessages((prevMessages) => {
-      const newMessages = [...prevMessages];
-      const sourceMessage = newMessages.find((msg) => msg.id === sourceId);
-      const destMessage = newMessages.find((msg) => msg.id === destId);
-
-      if (
-        sourceMessage &&
-        destMessage &&
-        sourceMessage.next &&
-        (type === "true" || type === "false")
-      ) {
-        sourceMessage.next[type].value = destId;
-        sourceMessage.next[type].type = destMessage.type; // setting the type of the destination message
-      }
-      props.getSteps([...newMessages]);
-
-      return newMessages;
-    });
-  };
-
-  const breakConnection = (sourceId, destId, connectionType) => {
-    setMessages((prevMessages) => {
-      const newMessages = [...prevMessages];
-      const sourceMessage = newMessages.find((msg) => msg.id === sourceId);
-
-      if (
-        sourceMessage &&
-        sourceMessage.next &&
-        (connectionType === "true" || connectionType === "false") &&
-        sourceMessage.next[connectionType].value === destId
-      ) {
-        sourceMessage.next[connectionType].value = null;
-        sourceMessage.next[connectionType].type = null;
-      }
-      props.getSteps([...newMessages]);
-
-      return newMessages;
-    });
-  };
-
-  const developElement = (val) => {
-    setActiveId(val);
-    let copiedMesages = [...messages];
-    let chosen_element = copiedMesages.find((el) => el.id == val);
-    setActiveMessage(chosen_element);
-    let found_data = [
-      ...props.lesson.notes,
-      ...props.lesson.quizes,
-      ...props.lesson.newTests,
-      ...props.lesson.chats,
-    ].find((el) => el.id == val);
-    setFoundElement(found_data);
-    setModalOpen(true);
-  };
-
+const SVGConnections = ({ messages, breakConnection }) => {
   const getControlPoint = (x1, y1, x2, y2) => {
     const dx = x2 - x1;
     const dy = y2 - y1;
     const length = Math.sqrt(dx * dx + dy * dy);
-
     const cx = x1 + dx / 2;
-    const cy = y1 + dy / 2 - length * 0.3; // This factor will determine how much the curve deviates
-
+    const cy = y1 + dy / 2 - length * 0.3;
     return { cx, cy };
-  };
-
-  const getData = (newId, type) => {
-    let copy_messages = [...messages];
-    const updatedArray = copy_messages.map((obj) => {
-      if (obj.id === activeMessage.id) {
-        return { ...obj, id: newId };
-      }
-      return obj;
-    });
-
-    props.getSteps([...updatedArray]);
-    setMessages([...updatedArray]);
   };
 
   const squareSize = 20;
 
   return (
+    <svg
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+      }}
+    >
+      <defs>
+        <marker
+          id="arrowhead"
+          markerWidth="10"
+          markerHeight="7"
+          refX="0"
+          refY="3.5"
+          orient="auto"
+        >
+          <polygon points="0 0, 10 3.5, 0 7" />
+        </marker>
+      </defs>
+      {messages.flatMap((message) => {
+        if (!message.next.branches || message.next.branches.length == 0) {
+          return ["true", "false"].map((key) => {
+            const targetId = message.next[key].value;
+            const target = messages.find((m) => m.id === targetId);
+            if (!target) return null;
+            const x1 =
+              key === "true"
+                ? message.position.x + 280 - 50
+                : message.position.x + 280 - 50;
+            const y1 =
+              key === "true"
+                ? message.position.y + 150 + 40
+                : message.position.y + 150 + 80;
+
+            const x2 =
+              key === "true"
+                ? target.position.x - 5
+                : target.position.x + squareSize / 2 - 15;
+            const y2 =
+              key === "true"
+                ? target.position.y + squareSize / 2 + 15
+                : target.position.y + 50;
+
+            const controlPointOffset = 50;
+            let { cx, cy } = getControlPoint(x1, y1, x2, y2);
+            cy =
+              key === "true"
+                ? cy - controlPointOffset
+                : cy + controlPointOffset;
+
+            const t = 0.5;
+            const mt = 1 - t;
+            const midpointX = mt * mt * x1 + 2 * mt * t * cx + t * t * x2;
+            const midpointY = mt * mt * y1 + 2 * mt * t * cy + t * t * y2;
+            return (
+              <g key={`${message.id}-${key}`}>
+                <path
+                  d={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
+                  fill="none"
+                  stroke={key === "true" ? "#72D47F" : "#EB5E55"}
+                  markerEnd="url(#arrowhead)"
+                  onClick={() => breakConnection(message.id, targetId, key)}
+                  style={{ pointerEvents: "visiblePainted" }}
+                  strokeDasharray="5,5"
+                />
+                <circle
+                  cx={midpointX}
+                  cy={midpointY}
+                  r={5}
+                  fill={key === "true" ? "#72D47F" : "#EB5E55"}
+                  onClick={() => breakConnection(message.id, targetId, key)}
+                  style={{ pointerEvents: "auto" }}
+                />
+              </g>
+            );
+          });
+        } else {
+          return message.next.branches.map((branch, i) => {
+            const targetId = branch.value;
+            const target = messages.find((m) => m.id === targetId);
+            if (!target) return null;
+            const x1 = message.position.x + 280 - 50;
+            const y1 = message.position.y + 150 + 40 + (i * 45 + 5 * i);
+
+            const x2 = target.position.x - 5;
+
+            const y2 = target.position.y + 50;
+
+            const controlPointOffset = 50;
+            let { cx, cy } = getControlPoint(x1, y1, x2, y2);
+            cy = cy - controlPointOffset;
+
+            const t = 0.5;
+            const mt = 1 - t;
+            const midpointX = mt * mt * x1 + 2 * mt * t * cx + t * t * x2;
+            const midpointY = mt * mt * y1 + 2 * mt * t * cy + t * t * y2;
+
+            return (
+              <g key={`${message.id}-${branch}`}>
+                <path
+                  d={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
+                  fill="none"
+                  stroke={"#ECD444"}
+                  markerEnd="url(#arrowhead)"
+                  onClick={() =>
+                    breakConnection(message.id, targetId, "branch")
+                  }
+                  style={{ pointerEvents: "visiblePainted" }}
+                  strokeDasharray="5,5"
+                />
+                <circle
+                  cx={midpointX}
+                  cy={midpointY}
+                  r={5}
+                  fill={"#ECD444"}
+                  onClick={() =>
+                    breakConnection(message.id, targetId, "branch")
+                  }
+                  style={{ pointerEvents: "auto" }}
+                />
+              </g>
+            );
+          });
+        }
+      })}
+    </svg>
+  );
+};
+
+const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
+  const { t } = useTranslation("lesson");
+  const initializeMessages = (items) => {
+    return items.map((item) => {
+      return {
+        id: item.id,
+        content: "",
+        position: item.position || { x: 100, y: 100 }, // Use saved position or default
+        type: item.type,
+        next: {
+          true: {
+            value: item.next.true.value,
+            type: item.next.true.type,
+          },
+          false: {
+            value: item.next.false.value,
+            type: item.next.false.type,
+          },
+          branches: item.next?.branches ? item.next.branches : [],
+        },
+      };
+    });
+  };
+  console.log("items", items);
+  const [messages, setMessages] = useState(initializeMessages(items));
+  const [activeMessage, setActiveMessage] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [{ isOver }, dropCanvas] = useDrop({
+    accept: "MESSAGE",
+    drop: (item, monitor) => {
+      const delta = monitor.getDifferenceFromInitialOffset();
+      moveMessage(
+        item.id,
+        Math.round(item.position.x + delta.x),
+        Math.round(item.position.y + delta.y)
+      );
+    },
+    collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  });
+
+  useEffect(() => {
+    getSteps(messages);
+  }, [messages]);
+
+  const addMessage = (type) => {
+    const id = `message-${messages.length + 1}`;
+    const newMessage = {
+      id,
+      content: type,
+      position: { x: 100, y: (messages.length + 1) * 60 },
+      next: {
+        true: { value: null, type: null },
+        false: { value: null, type: null },
+      },
+      type,
+    };
+    setMessages([...messages, newMessage]);
+  };
+
+  const deleteMessage = (messageId) => {
+    setMessages((prevMessages) => {
+      const newMessages = prevMessages.filter((msg) => msg.id !== messageId);
+      newMessages.forEach((msg) => {
+        ["true", "false"].forEach((key) => {
+          if (msg.next[key].value === messageId) {
+            msg.next[key] = { value: null, type: null };
+          }
+        });
+      });
+      return newMessages;
+    });
+  };
+
+  const moveMessage = (id, x, y) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        msg.id === id ? { ...msg, position: { x, y } } : msg
+      )
+    );
+  };
+
+  const connectMessages = (sourceId, destId, type, sourceAnswerId) => {
+    if (sourceId === destId) return;
+    setMessages((prevMessages) => {
+      if (sourceAnswerId) {
+        const newMessages = [...prevMessages];
+        const sourceMessage = newMessages.find((msg) => msg.id === sourceId);
+        const destMessage = newMessages.find((msg) => msg.id === destId);
+        if (sourceMessage && destMessage) {
+          if (!sourceMessage.next.branches) {
+            sourceMessage.next.branches = [
+              {
+                source: sourceAnswerId,
+                type: destMessage.type,
+                value: destId,
+              },
+            ];
+          } else {
+            sourceMessage.next.branches.push({
+              source: sourceAnswerId,
+              type: destMessage.type,
+              value: destId,
+            });
+          }
+        }
+        return newMessages;
+      } else {
+        const newMessages = [...prevMessages];
+        const sourceMessage = newMessages.find((msg) => msg.id === sourceId);
+        const destMessage = newMessages.find((msg) => msg.id === destId);
+        if (
+          sourceMessage &&
+          destMessage &&
+          (type === "true" || type === "false")
+        ) {
+          sourceMessage.next[type] = { value: destId, type: destMessage.type };
+        }
+        return newMessages;
+      }
+    });
+  };
+
+  const breakConnection = (sourceId, destId, connectionType) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) => {
+        if (msg.id === sourceId) {
+          if (connectionType === "branch") {
+            // For branch connections, we need to remove only one connection at a time
+            const branchIndex = msg.next.branches.findIndex(
+              (branch) => branch.value === destId
+            );
+            if (branchIndex !== -1) {
+              const newBranches = [...msg.next.branches];
+              newBranches.splice(branchIndex, 1);
+              return {
+                ...msg,
+                next: {
+                  ...msg.next,
+                  branches: newBranches,
+                },
+              };
+            }
+          } else if (msg.next[connectionType]?.value === destId) {
+            return {
+              ...msg,
+              next: {
+                ...msg.next,
+                [connectionType]: { value: null, type: null },
+              },
+            };
+          }
+        }
+        return msg;
+      })
+    );
+  };
+  const developElement = (id) => {
+    const chosenElement = messages.find((el) => el.id === id);
+    const foundData = [
+      ...lesson.notes,
+      ...lesson.quizes,
+      ...lesson.newTests,
+      ...lesson.chats,
+    ].find((el) => el.id === id);
+    setActiveMessage({ ...chosenElement, foundData });
+    setModalOpen(true);
+  };
+
+  const getData = (newId, type) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        msg.id === activeMessage.id ? { ...msg, id: newId } : msg
+      )
+    );
+  };
+
+  return (
     <Styles>
-      {activeMessage && activeMessage.type && (
+      {activeMessage && (
         <StyledModal
           isOpen={modalOpen}
-          onBackgroundClick={handleCloseModal}
-          onEscapeKeydown={handleCloseModal}
+          onBackgroundClick={() => setModalOpen(false)}
+          onEscapeKeydown={() => setModalOpen(false)}
         >
           <DevWindowStyles>
-            <div>ID: {activeId}</div>
+            <div>ID: {activeMessage.id}</div>
             <NewBlock
               type={activeMessage.type}
               getData={getData}
-              lesson={props.lesson}
-              me={props.me}
-              data={foundElement}
-              library={props.lesson.notes}
+              lesson={lesson}
+              me={me}
+              data={activeMessage.foundData}
+              library={lesson.notes}
             />
-            <button onClick={(e) => setModalOpen(false)}>Close</button>
+            <button onClick={() => setModalOpen(false)}>Close</button>
           </DevWindowStyles>
         </StyledModal>
       )}
       <h2>{t("guiding_questions")}</h2>
       <div className="toolbar">
-        <SimpleButton
-          onClick={() => {
-            const id = `message-${messages.length + 1}`;
-            const newMessages = [
-              ...messages,
-              {
-                id: id,
-                content: newMessage || "Note",
-                position: { x: 100, y: (messages.length + 1) * 60 },
-                next: {
-                  true: { value: null, type: null },
-                  false: { value: null, type: null },
-                },
-                type: "Note", // Added type as Note here
-              },
-            ];
-            setMessages(newMessages);
-            setNewMessage("");
-          }}
-        >
-          {t("add_note")}
-        </SimpleButton>
-        <SimpleButton
-          onClick={() => {
-            const id = `message-${messages.length + 1}`;
-            const newMessages = [
-              ...messages,
-              {
-                id: id,
-                content: newMessage || "NewTest",
-                position: { x: 100, y: (messages.length + 1) * 60 },
-                next: {
-                  true: { value: null, type: null },
-                  false: { value: null, type: null },
-                },
-                type: "NewTest", // Added type as Note here
-              },
-            ];
-            setMessages(newMessages);
-            setNewMessage("");
-          }}
-        >
-          {t("add_test")}
-        </SimpleButton>
-        <SimpleButton
-          onClick={() => {
-            const id = `message-${messages.length + 1}`;
-            const newMessages = [
-              ...messages,
-              {
-                id: id,
-                content: newMessage || "Quiz",
-                position: { x: 100, y: (messages.length + 1) * 60 },
-                next: {
-                  true: { value: null, type: null },
-                  false: { value: null, type: null },
-                },
-                type: "Quiz", // Added type as Note here
-              },
-            ];
-            setMessages(newMessages);
-            setNewMessage("");
-          }}
-        >
-          {t("add_quiz")}
-        </SimpleButton>
-        <SimpleButton
-          onClick={() => {
-            const id = `message-${messages.length + 1}`;
-            const newMessages = [
-              ...messages,
-              {
-                id: id,
-                content: newMessage || "Chat",
-                position: { x: 100, y: (messages.length + 1) * 60 },
-                next: {
-                  true: { value: null, type: null },
-                  false: { value: null, type: null },
-                },
-                type: "Chat", // Added type as Note here
-              },
-            ];
-            setMessages(newMessages);
-            setNewMessage("");
-          }}
-        >
-          Add chat
-        </SimpleButton>
+        {["Note", "NewTest", "Quiz", "Chat"].map((type) => (
+          <SimpleButton key={type} onClick={() => addMessage(type)}>
+            {t(`add_${type.toLowerCase()}`)}
+          </SimpleButton>
+        ))}
       </div>
       <div
         className="canvasArea"
         ref={dropCanvas}
         style={{ backgroundColor: "#f9f9fb" }}
       >
-        <g
-        // transform={`scale(${zoomLevel})`}
-        >
-          {messages.map((message, index) => (
-            <Message
-              key={index}
-              number={index + 1}
-              id={message.id}
-              content={message.content}
-              type={message.type}
-              position={message.position}
-              onConnect={connectMessages}
-              developElement={developElement}
-              onRemove={deleteMessage}
-              lesson={props.lesson}
-              // ... other props
-            />
-          ))}
-        </g>
-        <svg
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
-          }}
-          transform={`scale(${zoomLevel})`}
-        >
-          {/* Arrowhead marker definition */}
-          <defs>
-            <marker
-              id="arrowhead"
-              markerWidth="10"
-              markerHeight="7"
-              refX="0"
-              refY="3.5"
-              orient="auto"
-            >
-              <polygon points="0 0, 10 3.5, 0 7" />
-            </marker>
-          </defs>
-          {messages.flatMap((message) =>
-            ["true", "false"].map((key) => {
-              const targetId = message.next[key].value; // Update this line
-              const target = messages.find((m) => m.id === targetId);
-              if (!target) return null;
-
-              // For "true" key, start from right-middle of the message and end at left-middle of the target
-              // For "false" key, start from bottom-middle of the message and end at top-middle of the target
-
-              const x1 =
-                key === "true"
-                  ? message.position.x + squareSize + 170
-                  : message.position.x + squareSize / 2 + 177;
-              const y1 =
-                key === "true"
-                  ? message.position.y + squareSize / 2 + 170
-                  : message.position.y + squareSize + 213;
-
-              const x2 =
-                key === "true"
-                  ? target.position.x - 5
-                  : target.position.x + squareSize / 2 - 15;
-              const y2 =
-                key === "true"
-                  ? target.position.y + squareSize / 2 + 15
-                  : target.position.y + 50;
-
-              // Check if the path intersects with the bounding box of the message element
-
-              // Calculate control points using our function
-              // Control point offset
-              const controlPointOffset = 50;
-
-              // Calculate control points using our function
-              let { cx, cy } = getControlPoint(x1, y1, x2, y2);
-
-              // Adjust control points based on the key
-              if (key === "true") {
-                cy = cy - controlPointOffset;
-              } else {
-                cy = cy + controlPointOffset;
-              }
-              // Calculate the midpoint of the curve using t=0.5
-              const t = 0.5;
-              const mt = 1 - t;
-
-              const midpointX = mt * mt * x1 + 2 * mt * t * cx + t * t * x2;
-              const midpointY = mt * mt * y1 + 2 * mt * t * cy + t * t * y2;
-
-              return (
-                <g key={`${message.id}-${key}`}>
-                  <path
-                    d={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
-                    fill="none"
-                    stroke={key === "true" ? "#72D47F" : "#EB5E55"}
-                    markerEnd="url(#arrowhead)"
-                    onClick={() => breakConnection(message.id, targetId, key)}
-                    style={{ pointerEvents: "visiblePainted" }}
-                    stroke-dasharray="5,5"
-                  />
-                  <circle
-                    cx={midpointX} // Place circle at midpoint
-                    cy={midpointY} // Place circle at midpoint
-                    r={5}
-                    fill={key === "true" ? "#72D47F" : "#EB5E55"}
-                    onClick={() => breakConnection(message.id, targetId, key)}
-                    style={{ pointerEvents: "auto" }}
-                  />
-                </g>
-              );
-            })
-          )}
-        </svg>
+        {messages.map((message, index) => (
+          <Message
+            key={index}
+            {...message}
+            number={index + 1}
+            onConnect={connectMessages}
+            developElement={developElement}
+            onRemove={deleteMessage}
+            lesson={lesson}
+          />
+        ))}
+        <SVGConnections messages={messages} breakConnection={breakConnection} />
       </div>
     </Styles>
   );
@@ -558,6 +516,7 @@ const Message = ({
   developElement,
   type,
   onRemove,
+  foundElement,
 }) => {
   const { t } = useTranslation("lesson");
 
@@ -573,7 +532,7 @@ const Message = ({
     accept: "CONNECTOR",
     drop: (item) => {
       if (onConnect) {
-        onConnect(item.sourceId, id, item.connectorType); // pass the connectorType
+        onConnect(item.sourceId, id, item.connectorType, item.sourceAnswerId); // pass the connectorType
       }
     },
   });
@@ -610,66 +569,106 @@ const Message = ({
         opacity: isDragging ? 0.5 : 1,
       }}
     >
-      <div className="type">
-        {number}. {type.toLowerCase() == "newtest" ? t("NewTest") : null}
-        {type.toLowerCase() == "quiz" ? t("Quiz") : null}
-        {type.toLowerCase() == "note" ? t("Note") : null}
-        {type.toLowerCase() == "chat" ? t("Chat") : null}
-      </div>
-      <div className="id_info">ID: {id}</div>
-
-      <div className="question">
-        {type.toLowerCase() == "quiz" && lesson.quizes.find((el) => el.id == id)
-          ? parse(
-              lesson.quizes.find((el) => el.id == id).question.substring(0, 100)
-            )
-          : null}
-        {type.toLowerCase() == "newtest" &&
-        lesson.newTests.find((el) => el.id == id)
-          ? parse(
-              lesson.newTests
-                .find((el) => el.id == id)
-                .question[0].substring(0, 100)
-            )
-          : null}
-        {type.toLowerCase() == "note" && lesson.notes.find((el) => el.id == id)
-          ? parse(lesson.notes.find((el) => el.id == id).text.substring(0, 100))
-          : null}
-
-        {type.toLowerCase() == "chat" && lesson.chats.find((el) => el.id == id)
-          ? parse(
-              lesson.chats
-                .find((el) => el.id == id)
-                .messages.messagesList[0].text?.substring(0, 100)
-            )
-          : null}
-      </div>
-      <button onClick={handleRemove}>X</button>
-      <QuestionButtons>
-        <div
-          className="directionButton"
-          ref={dragConnectorTrue}
-          style={{ position: "absolute", bottom: "50px" }}
-        >
-          <div>
-            {type.toLowerCase() == "newtest" || type.toLowerCase() == "quiz"
-              ? "True Answer"
-              : "Next"}
-          </div>
-          <div className="circle_connector"></div>
+      <InformationSection>
+        <div className="type">
+          {number}. {type.toLowerCase() == "newtest" ? t("NewTest") : null}
+          {type.toLowerCase() == "quiz" ? t("Quiz") : null}
+          {type.toLowerCase() == "note" ? t("Note") : null}
+          {type.toLowerCase() == "chat" ? t("Chat") : null}
         </div>
-        {(type.toLowerCase() == "newtest" || type.toLowerCase() == "quiz") && (
-          <div
-            className="directionButton"
-            ref={dragConnectorFalse}
-            style={{ position: "absolute", bottom: 0 }}
-          >
-            <div>False Answer</div>
-            <div className="circle_connector"></div>
-          </div>
+        <div className="id_info">ID: {id}</div>
+
+        <div className="question">
+          {type.toLowerCase() == "quiz" &&
+          lesson.quizes.find((el) => el.id == id)
+            ? parse(
+                lesson.quizes
+                  .find((el) => el.id == id)
+                  .question.substring(0, 100)
+              )
+            : null}
+          {type.toLowerCase() == "newtest" &&
+          lesson.newTests.find((el) => el.id == id)
+            ? parse(
+                lesson.newTests
+                  .find((el) => el.id == id)
+                  .question[0].substring(0, 100)
+              )
+            : null}
+          {type.toLowerCase() == "note" &&
+          lesson.notes.find((el) => el.id == id)
+            ? parse(
+                lesson.notes.find((el) => el.id == id).text.substring(0, 100)
+              )
+            : null}
+
+          {type.toLowerCase() == "chat" &&
+          lesson.chats.find((el) => el.id == id)
+            ? parse(
+                lesson.chats
+                  .find((el) => el.id == id)
+                  .messages.messagesList[0].text?.substring(0, 100)
+              )
+            : null}
+        </div>
+        <button onClick={handleRemove}>X</button>
+      </InformationSection>
+      <QuestionButtons>
+        {type.toLowerCase() == "newtest" &&
+          lesson.newTests.find((el) => el.id == id)?.complexTestAnswers &&
+          lesson.newTests
+            .find((el) => el.id == id)
+            ?.complexTestAnswers.complexTestAnswers.map((el, index) => (
+              <DraggableAnswer
+                answerId={el.id}
+                key={index}
+                el={el}
+                sourceId={id}
+              />
+            ))}
+        {type.toLowerCase() == "quiz" && (
+          <>
+            <div className="directionButton" ref={dragConnectorTrue}>
+              <div>True Answer</div>
+              <div className="circle_connector"></div>
+            </div>
+            <div className="directionButton" ref={dragConnectorFalse}>
+              <div>False Answer</div>
+              <div className="circle_connector"></div>
+            </div>
+          </>
+        )}
+        {(type.toLowerCase() == "chat" || type.toLowerCase() == "note") && (
+          <>
+            <div className="directionButton" ref={dragConnectorTrue}>
+              <div>True Answer</div>
+              <div className="circle_connector"></div>
+            </div>
+          </>
         )}
       </QuestionButtons>
     </MessageStyles>
+  );
+};
+
+const DraggableAnswer = ({ el, sourceId, answerId }) => {
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "CONNECTOR",
+    item: {
+      sourceId: sourceId,
+      connectorType: "branch",
+      sourceAnswerId: el.id,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
+  return (
+    <div className="directionButton" ref={dragRef} id={sourceId + "_" + el.id}>
+      <div className="quiz_text">{parse(el.answer.substring(0, 25))}</div>
+      <div className="circle_connector"></div>
+    </div>
   );
 };
 

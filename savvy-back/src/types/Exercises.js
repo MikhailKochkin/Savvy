@@ -18,6 +18,7 @@ const NewTest = objectType({
     t.model.comments();
     t.model.question();
     t.model.answers();
+    t.model.complexTestAnswers();
     t.model.correct();
     t.model.userId();
     t.model.lessonId();
@@ -44,6 +45,7 @@ const Quiz = objectType({
     t.model.name();
     t.model.isOrderOfAnswersImportant();
     t.model.shouldAnswerSizeMatchSample();
+    t.model.isScoringShown();
     t.model.instructorName();
     t.model.image();
     t.model.complexity();

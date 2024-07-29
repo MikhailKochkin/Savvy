@@ -141,6 +141,12 @@ input BotDialogueWhereUniqueInput {
   updatedAt: DateTimeFilter
 }
 
+input BranchItem {
+  source: String
+  type: String
+  value: String
+}
+
 type BusinessClient {
   comment: String
   communication_history: Json
@@ -684,6 +690,15 @@ input CompanyWhereInput {
 
 input ComplexAnswer {
   answerElements: [AnswerElement]
+}
+
+input ComplexTestAnswer {
+  answer: String
+  id: String
+}
+
+input ComplexTestAnswers {
+  complexTestAnswers: [ComplexTestAnswer]
 }
 
 type ConfUser {
@@ -2638,7 +2653,7 @@ type Mutation {
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
   createMiniForum(lessonId: String, type: String, value: String): MiniForum
   createMiniStatement(miniforumId: String, text: String): Statement
-  createNewTest(answers: [String], comments: [String], correct: [Boolean], goal: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: [String], type: String): NewTest
+  createNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswers, correct: [Boolean], goal: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: [String], type: String): NewTest
   createNote(lessonId: String, name: String, text: String): Note
   createOffer(courseId: String, discountPrice: Int, header: String, lessonId: String, price: Int, text: String, type: String): Offer
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
@@ -2722,7 +2737,7 @@ type Mutation {
   updateLesson(assignment: Boolean, audience: String, banner: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
-  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextType, question: [String], type: String): NewTest
+  updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswers, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextType, question: [String], type: String): NewTest
   updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextType, text: String, type: String): Note
   updateOffer(courseId: String, discountPrice: Int, header: String, id: String, price: Int, text: String, type: String): Offer
   updateOrder(id: String, isPaid: Boolean): Order
@@ -2731,7 +2746,7 @@ type Mutation {
   updateProblem(complexity: Int, context: String, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String, type: String): Problem
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, isOrderOfAnswersImportant: Boolean, lessonId: String, name: String, next: NextType, question: String, shouldAnswerSizeMatchSample: Boolean, type: String): Quiz
+  updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, isOrderOfAnswersImportant: Boolean, isScoringShown: Boolean, lessonId: String, name: String, next: NextType, question: String, shouldAnswerSizeMatchSample: Boolean, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateScore(id: String, score: Int): User
   updateShot(comments: [String], id: String, name: String, parts: [String], title: String): Shot
@@ -2870,6 +2885,7 @@ input NestedStringNullableFilter {
 type NewTest {
   answers: [String!]!
   comments: [String!]!
+  complexTestAnswers: Json
   complexity: Int
   correct: [Boolean!]!
   createdAt: DateTime!
@@ -2906,6 +2922,7 @@ input NewTestOrderByRelationAggregateInput {
 input NewTestOrderByWithRelationInput {
   answers: SortOrder
   comments: SortOrder
+  complexTestAnswers: SortOrderInput
   complexity: SortOrderInput
   correct: SortOrder
   createdAt: SortOrder
@@ -2935,6 +2952,7 @@ input NewTestWhereInput {
   OR: [NewTestWhereInput!]
   answers: StringNullableListFilter
   comments: StringNullableListFilter
+  complexTestAnswers: JsonNullableFilter
   complexity: IntNullableFilter
   correct: BoolNullableListFilter
   createdAt: DateTimeFilter
@@ -2964,6 +2982,7 @@ input NewTestWhereUniqueInput {
   OR: [NewTestWhereInput!]
   answers: StringNullableListFilter
   comments: StringNullableListFilter
+  complexTestAnswers: JsonNullableFilter
   complexity: IntNullableFilter
   correct: BoolNullableListFilter
   createdAt: DateTimeFilter
@@ -2998,6 +3017,7 @@ input NextTrueType {
 }
 
 input NextType {
+  branches: [BranchItem]
   false: NextFalseType
   true: NextTrueType
 }
@@ -3342,6 +3362,11 @@ input PointAWhereInput {
   userId: StringFilter
 }
 
+input Position {
+  x: Int
+  y: Int
+}
+
 type Post {
   coursePage: CoursePage
   createdAt: DateTime!
@@ -3482,6 +3507,7 @@ input ProblemItem {
   id: String
   index: Int
   next: NextType
+  position: Position
   type: String
 }
 
@@ -3938,6 +3964,7 @@ type Quiz {
   image: String
   instructorName: String
   isOrderOfAnswersImportant: Boolean
+  isScoringShown: Boolean
   lesson: Lesson
   lessonID: String
   lessonId: String
@@ -3987,6 +4014,7 @@ input QuizOrderByWithRelationInput {
   image: SortOrderInput
   instructorName: SortOrderInput
   isOrderOfAnswersImportant: SortOrderInput
+  isScoringShown: SortOrderInput
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
   lessonId: SortOrderInput
@@ -4130,6 +4158,7 @@ input QuizWhereInput {
   image: StringNullableFilter
   instructorName: StringNullableFilter
   isOrderOfAnswersImportant: BoolNullableFilter
+  isScoringShown: BoolNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter
@@ -4161,6 +4190,7 @@ input QuizWhereUniqueInput {
   image: StringNullableFilter
   instructorName: StringNullableFilter
   isOrderOfAnswersImportant: BoolNullableFilter
+  isScoringShown: BoolNullableFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
   lessonId: StringNullableFilter

@@ -602,7 +602,9 @@ const SingleTextEditor = (props) => {
   return (
     <>
       {me &&
-        (me.id === textEditor.user.id || me.permissions.includes("ADMIN")) &&
+        (me.id === textEditor.user.id ||
+          me.permissions.includes("ADMIN") ||
+          lesson.user.id == me.id) &&
         !story && (
           <>
             <button onClick={(e) => setUpdate(!update)}>

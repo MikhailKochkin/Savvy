@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import _, { add } from "lodash";
-import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
-
-import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
-import { CURRENT_USER_QUERY } from "../../User";
-import Chat from "../questions/Chat";
+import Test from "./types/Test";
+import Form from "./types/Form";
+import Branch from "./types/Branch";
 
 const CREATE_TESTRESULT_MUTATION = gql`
   mutation CREATE_TESTRESULT_MUTATION(
@@ -31,68 +29,6 @@ const CREATE_TESTRESULT_MUTATION = gql`
   }
 `;
 
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 65px;
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .icon2 {
-    margin: 5px;
-    border-radius: 50%;
-    background: #cb2d3e; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-    line-height: 1.4rem;
-  }
-`;
-
-const Options = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  min-width: 60%;
-  max-width: 80%;
-  p {
-  }
-`;
-
 const Styles = styled.div`
   /* max-width: 650px;
   min-width: 510px; */
@@ -102,212 +38,6 @@ const Styles = styled.div`
   font-weight: 500;
   @media (max-width: 800px) {
     width: 100%;
-  }
-`;
-
-const TextBar = styled.div`
-  width: ${(props) => (props.story ? "100%" : "100%")};
-  font-size: 1.6rem;
-  padding-bottom: 2%;
-  ul {
-    list-style-type: none;
-    padding-left: 0px;
-  }
-  a {
-    border-bottom: 2px solid #26ba8d;
-    padding: 0;
-    transition: 0.3s;
-    cursor: pointer;
-  }
-  .video {
-    /* border: 1px solid #000000;
-    background: #000000;
-    border-radius: 10px;
-    overflow: hidden;
-    z-index: 1; */
-    height: 489px;
-    width: 275px;
-    iframe {
-      width: 100%;
-      border: none;
-      height: 100%;
-      border-radius: 15px;
-    }
-  }
-  .question_box {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-  }
-  .question_name {
-    margin-left: 5px;
-    background: #00204e;
-    color: white;
-    border-radius: 50%;
-    padding: 2%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .question_text {
-    background: #f3f3f3;
-    color: black;
-    border-radius: 25px;
-    padding: 2% 5%;
-    min-width: 40%;
-    max-width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    p {
-      margin: 5px 0;
-    }
-    img {
-      width: 100%;
-    }
-  }
-  .answer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-  .answer_name {
-    margin-right: 10px;
-    background: #00204e;
-    color: white;
-    border-radius: 50%;
-    padding: 2%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .answer_test {
-    width: 50%;
-    border: 2px solid;
-    border-color: #f3f3f3;
-    border-radius: 25px;
-    padding: 2% 5%;
-    margin-bottom: 20px;
-  }
-  @media (max-width: 800px) {
-    width: 100%;
-    padding-left: 5px;
-    font-size: 1.6rem;
-    .video {
-      height: 356px;
-      width: 200px;
-    }
-  }
-`;
-
-const Question = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-  .question_name {
-    margin-left: 5px;
-    background: #00204e;
-    color: white;
-    border-radius: 50%;
-    padding: 2%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .question_text {
-    background: #f3f3f3;
-    border: 2px solid;
-    border-color: ${(props) => props.inputColor};
-    color: black;
-    border-radius: 25px;
-    padding: 2% 5%;
-    min-width: 40%;
-    max-width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    p {
-      margin: 5px 0;
-    }
-    img {
-      width: 100%;
-    }
-  }
-`;
-
-const Group = styled.div`
-  display: ${(props) => (props.answerState === "right" ? "none" : "flex")};
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  padding: 0.5%;
-  margin: 0;
-  margin-bottom: 3%;
-`;
-
-const MiniButton = styled.div`
-  pointer-events: ${(props) =>
-    props.answerState === "right" ? "none" : "auto"};
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 60%;
-  text-align: center;
-  background: #d2edfd;
-  border-radius: 5px;
-  color: #000a60;
-  border: none;
-  padding: 0.5% 0;
-  margin-top: 20px;
-  font-size: 1.6rem;
-  display: ${(props) => (props.answerState === "right" ? "none" : "block")};
-  &:hover {
-    background: #a5dcfe;
-  }
-`;
-
-const OptionsGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  min-width: 60%;
-  max-width: 80%;
-  margin-bottom: 20px;
-`;
-
-const Option = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  border: 1px solid #c4c4c4;
-  padding: 10px 15px;
-  background: #fff;
-  cursor: pointer;
-  margin-right: 3%;
-  margin-bottom: 2%;
-  /* height: 50px; */
-  transition: 0.3s;
-  &:hover {
-    border: 1px solid #3f51b5;
   }
 `;
 
@@ -324,6 +54,8 @@ const SingleTest = (props) => {
     instructorName,
     name,
     image,
+    next,
+    type,
   } = props;
   const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
   const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
@@ -335,10 +67,8 @@ const SingleTest = (props) => {
   const [update, setUpdate] = useState(false); // change quiz view to update view
   const [sent, setSent] = useState(false);
   const [zero, setZero] = useState(false); // zero – no answers have been provided by the student wheck clicking answer
-  const [hidden, setHidden] = useState(true); // the correct answer is hidden
-  const [revealExplainer, setRevealExplainer] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [branchSourceId, setBranchSourceId] = useState(null);
 
   const { t } = useTranslation("lesson");
 
@@ -346,9 +76,16 @@ const SingleTest = (props) => {
     CREATE_TESTRESULT_MUTATION
   );
 
-  const getTestData = (number, answer) => {
-    handleAnswerSelected(number, answer);
-    setAnswerState("think");
+  const getTestData = (number, answer, sourceId) => {
+    if (type == "TEST" && answerState == "right") return;
+    if (type == "FORM" && answerState != "think") return;
+    if (type == "BRANCH") {
+      handleAnswerSelectedinBranch(number, answer);
+      setBranchSourceId(sourceId);
+    } else {
+      handleAnswerSelected(number, answer);
+      setAnswerState("think");
+    }
   };
 
   const handleAnswerSelected = async (number, student_answer) => {
@@ -380,9 +117,32 @@ const SingleTest = (props) => {
     if (answerVar.includes(true)) {
       setZero(false);
     }
-
     setAnswerOptions(answerVar);
     setAnswer(answerText);
+  };
+
+  const handleAnswerSelectedinBranch = async (number, student_answer) => {
+    // 1. Create a new array with false values
+    let newAnswerOptions = new Array(answerOptions.length).fill(false);
+    // 2. Which option did the student choose?
+    let int = parseInt(number);
+
+    // 3. Set the chosen option to true
+    newAnswerOptions[int] = true;
+
+    // 4. Update answerNums to include only the chosen option
+    let newAnswerNums = [int];
+
+    // 5. Get the array of all the answers of the student
+    let newAnswerText = [student_answer];
+
+    // 6. Save the results
+    setZero(false);
+
+    // 7. Update the state with the new answer options, answer text, and answer numbers
+    setAnswerOptions(newAnswerOptions);
+    setAnswer(newAnswerText);
+    setAnswerNums(newAnswerNums);
   };
 
   // this function adds comments to test options after the student has given an answer
@@ -395,6 +155,7 @@ const SingleTest = (props) => {
   };
 
   const onSend = async () => {
+    if (answerState !== "think") return;
     if (props.moveNext) props.moveNext(props.id);
 
     if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
@@ -422,6 +183,21 @@ const SingleTest = (props) => {
         );
       }
     }
+    addComments(answerNums);
+    createTestResult({
+      variables: {
+        testID: props.id,
+        lessonID: props.lessonID,
+        answer: answer.join(", "),
+        answerArray: answer,
+      },
+    });
+  };
+
+  const onMoveBranch = async () => {
+    if (answerState !== "think") return;
+    if (props.moveNext) props.moveNext(props.id);
+    props.getData ? props.getData([true, branchSourceId], "branch") : null;
 
     addComments(answerNums);
     createTestResult({
@@ -430,6 +206,29 @@ const SingleTest = (props) => {
         lessonID: props.lessonID,
         answer: answer.join(", "),
         answerArray: answer,
+      },
+    });
+    setAnswerState("right");
+  };
+
+  const passTestData = (type) => {
+    if (type === "TEST") {
+      onCheck();
+    } else if (type === "FORM") {
+      onSend();
+    } else if (type === "BRANCH") {
+      onMoveBranch();
+    }
+  };
+
+  const revealCorrectAnswer = () => {
+    createTestResult({
+      variables: {
+        testID: props.id,
+        lessonID: props.lessonID,
+        answer: answer.join(", "),
+        answerArray: answer,
+        result: "Reveal correct answer",
       },
     });
   };
@@ -448,9 +247,12 @@ const SingleTest = (props) => {
     // 2.2. # of attempts to answer the question
     // 2.3. type of the problem
 
-    // the logic is: if the type of the problem is "ONLY_CORRECT", than the student can give as many aspossible wrong answers, but only one correct answer.
+    // the logic is: if the type of the problem is "ONLY_CORRECT", than the student can give as many as possible wrong answers, but only one correct answer.
     // getData is fired only once when the student gives correct answer
-
+    if (answerOptions.every((el) => el == false)) {
+      setZero(true);
+      return;
+    }
     if (props.problemType === "ONLY_CORRECT") {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
         setAnswerState("right");
@@ -465,7 +267,6 @@ const SingleTest = (props) => {
             "true"
           );
         }
-        setShowAnswer(true);
         // save answers until you get the right one
         if (!isExperienced) {
           setIsExperienced(true);
@@ -565,12 +366,21 @@ const SingleTest = (props) => {
   const passUpdated = () => {
     props.passUpdated(true);
   };
-
-  const mes = _.zip(
-    props.answers,
-    props.true,
-    comments ? comments : new Array(props.answers.length).fill("")
-  );
+  let mes;
+  if (type == "BRANCH") {
+    mes = _.zip(
+      props.complexTestAnswers.complexTestAnswers.map((el) => el.answer),
+      props.true,
+      comments ? comments : new Array(props.answers.length).fill(""),
+      props.complexTestAnswers.complexTestAnswers.map((el) => el.id)
+    );
+  } else {
+    mes = _.zip(
+      props.answers,
+      props.true,
+      comments ? comments : new Array(props.answers.length).fill("")
+    );
+  }
   let width;
   if (props.problem) {
     width = "50%";
@@ -579,6 +389,9 @@ const SingleTest = (props) => {
   } else {
     width = "100%";
   }
+
+  let correctAnswers = props.answers.filter((el, i) => props.true[i]);
+
   return (
     <Styles width={width} id={props.id}>
       {!exam && story !== true && (
@@ -593,220 +406,90 @@ const SingleTest = (props) => {
           lessonId={props.lessonID}
         />
       )}{" "}
-      {/* 1. Вопрос студенту и варианты ответа */}
       {!update && me && (
-        <TextBar className="Test" story={story}>
-          <div className="question_box">
-            <div className="question_text">{parse(props.question[0])}</div>
-            <IconBlockElement
+        <>
+          {type == "TEST" && (
+            <Test
+              story={story}
+              me={me}
               image={image}
               instructorName={instructorName}
               author={author}
+              question={props.question}
+              true={props.true}
+              type={type}
+              answerState={answerState}
+              challenge={props.challenge}
+              problemType={props.problemType}
+              getData={props.getData}
+              next={props.next}
+              id={props.id}
+              lessonID={props.lessonID}
+              mes={mes}
+              getTestData={getTestData}
+              zero={zero}
+              passTestData={passTestData}
+              inputColor={inputColor}
+              commentsList={commentsList}
+              ifRight={ifRight}
+              ifWrong={ifWrong}
+              revealCorrectAnswer={revealCorrectAnswer}
+              correctAnswers={correctAnswers}
+              answerOptions={answerOptions}
             />
-          </div>
-          <div className="answer">
-            <IconBlock>
-              <div className="icon2">
-                {me &&
-                  (me.image ? (
-                    <img className="icon" src={me.image} />
-                  ) : me.surname ? (
-                    `${me.name[0]}${me.surname[0]}`
-                  ) : (
-                    `${me.name[0]}${me.name[1]}`
-                  ))}
-              </div>
-              <div className="name">{me?.name}</div>
-            </IconBlock>
-            <Options>
-              {mes.map((answer, index) => (
-                <AnswerOption
-                  true={props.true[index]}
-                  hidden={!showAnswer}
-                  key={index}
-                  answer={answer[0]}
-                  correct={answer[1]}
-                  number={index}
-                  onAnswerSelected={getTestData}
-                />
-              ))}
-            </Options>
-          </div>
-          {/* 2. Студент не выбрал ни одного из вариантов. Просим дать ответ  */}
-
-          {zero && (
-            <div className="question_box">
-              <div className="question_text">{t("choose_option")}</div>
-              <IconBlockElement
-                image={image}
-                instructorName={instructorName}
-                author={author}
-              />
-            </div>
           )}
-
-          {/* 3. Кнопка ответа  */}
-
-          <Group>
-            {!showAnswer && (
-              <MiniButton
-                className="button"
-                id="but1"
-                onClick={async (e) => {
-                  // Stop the form from submitting
-                  e.preventDefault();
-                  // call the mutation
-                  if (answer.length < 1) {
-                    setZero(true);
-                  } else {
-                    if (props.type === "FORM") {
-                      const res1 = await onSend();
-                    } else {
-                      const res = await onCheck();
-                    }
-                  }
-                }}
-              >
-                {t("check")}
-              </MiniButton>
-            )}
-          </Group>
-
-          {/* 4. Верный ответ. Поздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}
-
-          {props.type !== "FORM" && answerState === "right" && (
-            <Question inputColor={inputColor}>
-              <div className="question_text">
-                {"🎉" + "  " + t("correct") + "!"}
-                {commentsList.length > 0 &&
-                  commentsList.map((com, i) => {
-                    return com ? parse(com) : null;
-                  })}
-                {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
-              </div>
-              <IconBlockElement
-                image={image}
-                instructorName={instructorName}
-                author={author}
-              />
-            </Question>
+          {type == "FORM" && (
+            <Form
+              story={story}
+              me={me}
+              image={image}
+              instructorName={instructorName}
+              author={author}
+              question={props.question}
+              true={props.true}
+              type={type}
+              answerState={answerState}
+              challenge={props.challenge}
+              problemType={props.problemType}
+              getData={props.getData}
+              next={props.next}
+              id={props.id}
+              lessonID={props.lessonID}
+              mes={mes}
+              getTestData={getTestData}
+              passTestData={passTestData}
+              zero={zero}
+              commentsList={commentsList}
+              answerOptions={answerOptions}
+            />
           )}
-
-          {/* 5. Неправильный ответ. Говорим об этом, даем комментарии к неправильным вариантам*/}
-
-          {props.type != "FORM" && answerState === "wrong" && (
-            <Question inputColor={inputColor}>
-              <div className="question_text">
-                {"🔎 " + "  " + t("wrong") + "..."}
-                {commentsList.length > 0 &&
-                  commentsList.map((com, i) => {
-                    return com ? parse(com) : null;
-                  })}
-              </div>
-              <IconBlockElement
-                image={image}
-                instructorName={instructorName}
-                author={author}
-              />
-            </Question>
+          {type == "BRANCH" && (
+            <Branch
+              story={story}
+              me={me}
+              image={image}
+              instructorName={instructorName}
+              author={author}
+              question={props.question}
+              true={props.true}
+              type={type}
+              answerState={answerState}
+              challenge={props.challenge}
+              problemType={props.problemType}
+              getData={props.getData}
+              next={props.next}
+              id={props.id}
+              lessonID={props.lessonID}
+              mes={mes}
+              getTestData={getTestData}
+              passTestData={passTestData}
+              zero={zero}
+              commentsList={commentsList}
+              answerOptions={answerOptions}
+            />
           )}
-
-          {/* 6. Работаем с формами */}
-          {props.type == "FORM" &&
-            (answerState === "wrong" || answerState === "right") &&
-            (ifWrong || ifRight || commentsList.length > 0) && (
-              <Question inputColor={inputColor}>
-                <div className="question_text">
-                  {commentsList.length > 0 &&
-                    commentsList.map((com, i) => {
-                      return com ? parse(com) : null;
-                    })}
-                  {answerState === "wrong" && parse(ifWrong)}
-                  {answerState === "right" && parse(ifRight)}
-                </div>
-                <IconBlockElement
-                  image={image}
-                  instructorName={instructorName}
-                  author={author}
-                />
-              </Question>
-            )}
-
-          {/* 7. Неправильный ответ. Спрашиваем показать ли правильный вариант?*/}
-
-          {!props.challenge &&
-            answerState == "wrong" &&
-            props.type !== "FORM" && (
-              <>
-                <div className="question_box">
-                  <div className="question_text">{t("show_correct")}</div>
-                  <IconBlockElement
-                    image={image}
-                    instructorName={instructorName}
-                    author={author}
-                  />
-                </div>
-
-                <div className="answer">
-                  <IconBlock>
-                    {/* <img className="icon" src="../../static/flash.svg" /> */}
-                    <div className="icon2">
-                      {me &&
-                        (me.image ? (
-                          <img className="icon" src={me.image} />
-                        ) : me.surname ? (
-                          `${me.name[0]}${me.surname[0]}`
-                        ) : (
-                          `${me.name[0]}${me.name[1]}`
-                        ))}
-                    </div>
-                    <div className="name">{me?.name}</div>
-                  </IconBlock>{" "}
-                  <OptionsGroup>
-                    <Option
-                      onClick={(e) => {
-                        setShowAnswer(true);
-                        setIsExperienced(true);
-                        setAnswerState("think");
-
-                        if (props.problemType === "ONLY_CORRECT") {
-                          props.getData(
-                            props.next && props.next.true
-                              ? [true, props.next.true]
-                              : [true, { type: "finish" }],
-                            "true"
-                          );
-                        }
-                        createTestResult({
-                          variables: {
-                            testID: props.id,
-                            lessonID: props.lessonID,
-                            answer: answer.join(", "),
-                            answerArray: answer,
-                            result: "answerOpened",
-                          },
-                        });
-                      }}
-                    >
-                      {t("yes")}
-                    </Option>
-                  </OptionsGroup>
-                </div>
-                {showAnswer && (
-                  <div className="question_box">
-                    <div className="question_text">{t("outline_color")}</div>
-                    <IconBlockElement
-                      image={image}
-                      instructorName={instructorName}
-                      author={author}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-        </TextBar>
+        </>
       )}
-      {miniforum && <Chat me={me} miniforum={miniforum} />}
       {update && (
         <UpdateTest
           testID={props.id}
@@ -816,11 +499,12 @@ const SingleTest = (props) => {
           question={props.question}
           comments={props.comments}
           answers={props.answers}
+          complexTestAnswers={props.complexTestAnswers}
           correct={props.true}
           name={props.name}
           image={props.image}
           mes={mes}
-          type={props.type}
+          type={type}
           next={props.next}
           goal={props.goal}
           ifRight={ifRight}
@@ -830,34 +514,10 @@ const SingleTest = (props) => {
           getResult={getResult}
           switchUpdate={switchUpdate}
           passUpdated={passUpdated}
+          answer={answer}
         />
       )}
     </Styles>
-  );
-};
-
-const IconBlockElement = ({ image, instructorName, author }) => {
-  return (
-    <IconBlock className="icon-block">
-      {image ? (
-        <img className="icon" src={image} alt="Icon" />
-      ) : author && author.image != null ? (
-        <img className="icon" src={author.image} alt="Author Icon" />
-      ) : (
-        <img
-          className="icon"
-          src="../../static/hipster.svg"
-          alt="Default Icon"
-        />
-      )}
-      <div className="name">
-        {instructorName
-          ? instructorName
-          : author && author.name
-          ? author.name
-          : "BeSavvy"}
-      </div>
-    </IconBlock>
   );
 };
 

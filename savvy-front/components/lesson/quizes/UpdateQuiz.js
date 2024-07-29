@@ -27,6 +27,7 @@ const UPDATE_QUIZ_MUTATION = gql`
     $ifRight: String
     $ifWrong: String
     $instructorName: String
+    $isScoringShown: Boolean
     $name: String
     $image: String
     $answers: ComplexAnswer
@@ -46,6 +47,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       answers: $answers
       name: $name
       instructorName: $instructorName
+      isScoringShown: $isScoringShown
       image: $image
       isOrderOfAnswersImportant: $isOrderOfAnswersImportant
       shouldAnswerSizeMatchSample: $shouldAnswerSizeMatchSample
@@ -66,6 +68,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       image
       isOrderOfAnswersImportant
       shouldAnswerSizeMatchSample
+      isScoringShown
       user {
         id
         name
@@ -224,6 +227,7 @@ const UpdateQuiz = (props) => {
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
+  const [isScoringShown, setIsScoringShown] = useState(props.isScoringShown);
   const [check, setCheck] = useState(props.check);
 
   const { t } = useTranslation("lesson");
@@ -244,6 +248,7 @@ const UpdateQuiz = (props) => {
       goalType: goalType,
       shouldAnswerSizeMatchSample: shouldAnswerSizeMatchSample,
       isOrderOfAnswersImportant: isOrderOfAnswersImportant,
+      isScoringShown: isScoringShown,
       answers: {
         answerElements: answers,
       },
@@ -319,6 +324,16 @@ const UpdateQuiz = (props) => {
         >
           <option value="EDUCATE">Educate</option>
           <option value="ASSESS">Assess</option>
+        </select>
+      </EditorInfoSection>
+      <EditorInfoSection>
+        <h3 className="label">Is Scoring Shown</h3>
+        <select
+          defaultValue={isScoringShown ? "true" : "false"}
+          onChange={(e) => setIsScoringShown(e.target.value == "true")}
+        >
+          <option value={"true"}>True</option>
+          <option value={"false"}>False</option>
         </select>
       </EditorInfoSection>
       {type === "COMPLEX" && (

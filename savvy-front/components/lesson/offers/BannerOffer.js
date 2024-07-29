@@ -308,7 +308,7 @@ const BannerOffer = (props) => {
                 email: "mikhail@besavvy.app",
                 type: "internal",
                 name: "Mikhail",
-                connection: `I noticed ${props.me.name} ${props.me.surname} (${props.me.email}) reached the offer banner.`,
+                connection: `I noticed ${props.me.name} ${props.me.surname} (${props.me.email}) reached the offer banner in ${props.coursePage?.title}`,
               },
             });
             setIsEmailSent(true);

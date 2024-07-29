@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import parse from "html-react-parser";
+import styled from "styled-components";
 
 const StyledButton = styled.div`
   display: inline-block;
@@ -27,41 +27,51 @@ const StyledButton = styled.div`
   }
 `;
 
-class AnswerOption extends Component {
-  state = {
-    choose: false,
+const AnswerOption = ({
+  onAnswerSelected,
+  number,
+  answer,
+  sourceId,
+  answerState,
+  hidden,
+  correct,
+  true: isTrue,
+  answerOption,
+  stop,
+  type,
+}) => {
+  const [choose, setChoose] = useState(answerOption);
+
+  const handleChange = () => {
+    if (stop) return;
+    onAnswerSelected(number, answer, sourceId);
+    setChoose((prevChoose) => !prevChoose);
   };
 
-  change = (e) => {
-    this.props.onAnswerSelected(this.props.number, this.props.answer);
-    this.setState((prev) => ({
-      choose: !prev.choose,
-    }));
-  };
-
-  render() {
-    let color;
-    if (!this.props.hidden && this.props.true) {
+  let color;
+  if (type === "BRANCH") {
+    color = answerOption ? "#122A62" : "#c4c4c4";
+  } else {
+    if (!hidden && isTrue) {
       color = "rgba(50, 172, 102, 0.25)";
-    } else if (this.props.hidden && this.state.choose) {
+    } else if (hidden && choose) {
       color = "#122A62";
     } else {
       color = "#c4c4c4";
     }
-    return (
-      <StyledButton
-        type="checkbox"
-        value={this.props.correct}
-        answer={this.props.answer}
-        number={this.props.number}
-        choose={this.state.choose}
-        onClick={this.change}
-        color={color}
-      >
-        {this.props.answer && parse(this.props.answer)}
-      </StyledButton>
-    );
   }
-}
+
+  return (
+    <StyledButton
+      type="checkbox"
+      value={correct}
+      choose={choose}
+      onClick={handleChange}
+      color={color}
+    >
+      {answer && parse(answer)}
+    </StyledButton>
+  );
+};
 
 export default AnswerOption;

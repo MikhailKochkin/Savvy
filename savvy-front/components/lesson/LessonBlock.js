@@ -604,6 +604,7 @@ const LessonBlock = (props) => {
               <SingleTest
                 key={data.id}
                 id={data.id}
+                complexTestAnswers={data.complexTestAnswers}
                 getResults={getResults}
                 testID={data.id}
                 author={lesson.user}
@@ -652,6 +653,7 @@ const LessonBlock = (props) => {
                   answers={data.answers}
                   isOrderOfAnswersImportant={data.isOrderOfAnswersImportant}
                   shouldAnswerSizeMatchSample={data.shouldAnswerSizeMatchSample}
+                  isScoringShown={data.isScoringShown}
                   type={data.type}
                   goalType={data.goalType}
                   check={data.check}

@@ -121,7 +121,7 @@ const UpdateProblem = (props) => {
         context,
         steps: {
           problemItems: [...updatedSteps].map(
-            ({ position, content, ...keepAttrs }) => keepAttrs
+            ({ content, ...keepAttrs }) => keepAttrs
           ),
         },
       },
@@ -140,6 +140,10 @@ const UpdateProblem = (props) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    console.log(
+      "updatedSteps",
+      [...updatedSteps].map(({ content, ...keepAttrs }) => keepAttrs)
+    );
     const res = await updateProblem();
     props.getResult(res);
   };

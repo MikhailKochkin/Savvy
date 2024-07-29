@@ -4,6 +4,7 @@ import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
 import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
+import IconBlockElement from "../IconBlockElement";
 
 import {
   guessAlphabet,
@@ -94,7 +95,12 @@ const FullOpenQuestion = (props) => {
     getImprovements,
     previousAnswers,
     serverComment,
+    isScoringShown,
+    image,
+    instructorName,
   } = props;
+
+  console.log("instructorName", instructorName);
 
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
   const [recognition, setRecognition] = useState(null); // used for voice recognition
@@ -125,16 +131,11 @@ const FullOpenQuestion = (props) => {
       {/* 1. Question part */}
       <div className="question_box">
         <div className="question_text">{parse(question)}</div>
-        <IconBlock>
-          {author && author.image != null ? (
-            <img className="icon" src={author.image} />
-          ) : (
-            <img className="icon" src="../../static/hipster.svg" />
-          )}{" "}
-          <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
-          </div>
-        </IconBlock>{" "}
+        <IconBlockElement
+          image={image}
+          instructorName={instructorName}
+          author={author}
+        />
       </div>
       {/* 2 AI hints */}
       {hints.length > 0 &&
@@ -181,7 +182,6 @@ const FullOpenQuestion = (props) => {
             <Answer_text
               type="text"
               required
-              //   value={answer}
               onChange={(e) => {
                 passAnswer(e.target.value);
                 autoResizeTextarea(e);
@@ -189,7 +189,7 @@ const FullOpenQuestion = (props) => {
               onInput={autoResizeTextarea}
               placeholder="..."
             />
-            {result ? (
+            {result && isScoringShown ? (
               <ResultCircle
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={t("answer_above_65")}

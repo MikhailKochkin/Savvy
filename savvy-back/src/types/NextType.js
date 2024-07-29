@@ -16,11 +16,29 @@ const NextFalseType = inputObjectType({
   },
 });
 
+const BranchItem = inputObjectType({
+  name: "BranchItem",
+  definition(t) {
+    t.string("source");
+    t.string("type");
+    t.string("value");
+  },
+});
+
 const NextType = inputObjectType({
   name: "NextType",
   definition(t) {
     t.field("true", { type: "NextTrueType" });
     t.field("false", { type: "NextFalseType" });
+    t.list.field("branches", { type: "BranchItem" });
+  },
+});
+
+const Position = inputObjectType({
+  name: "Position",
+  definition(t) {
+    t.int("x");
+    t.int("y");
   },
 });
 
@@ -31,6 +49,7 @@ const ProblemItem = inputObjectType({
     t.string("id");
     t.int("index");
     t.field("next", { type: "NextType" });
+    t.field("position", { type: "Position" });
   },
 });
 
@@ -38,6 +57,21 @@ const ProblemStructure = inputObjectType({
   name: "ProblemStructure",
   definition(t) {
     t.list.field("problemItems", { type: "ProblemItem" });
+  },
+});
+
+const ComplexTestAnswer = inputObjectType({
+  name: "ComplexTestAnswer",
+  definition(t) {
+    t.string("id");
+    t.string("answer");
+  },
+});
+
+const ComplexTestAnswers = inputObjectType({
+  name: "ComplexTestAnswers",
+  definition(t) {
+    t.list.field("complexTestAnswers", { type: "ComplexTestAnswer" });
   },
 });
 
@@ -417,4 +451,8 @@ module.exports = {
   ComplexAnswer,
   QuizIdeas,
   QuizIdea,
+  ComplexTestAnswers,
+  ComplexTestAnswer,
+  BranchItem,
+  Position,
 };

@@ -5,10 +5,23 @@ import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
+import { useRouter } from "next/router";
 import {
   guessAlphabet,
   autoResizeTextarea,
 } from "../../SimulatorDevelopmentFunctions";
+import {
+  IconBlock,
+  Question,
+  Answer_text,
+  ResultCircle,
+  Button1,
+  Circle,
+  Frame,
+  Option,
+  OptionsGroup,
+} from "../QuestionStyles";
+import { generateHint2 } from "../functions/AIQuestionFunctions";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -38,201 +51,6 @@ const CREATE_QUIZRESULT_MUTATION = gql`
   }
 `;
 
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 55px;
-    width: 55px;
-    display: flex;
-    object-fit: cover;
-
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .icon2 {
-    margin: 5px;
-    border-radius: 50%;
-    background: #cb2d3e; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-  }
-`;
-
-const Question = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 50%;
-  margin-bottom: 3%;
-  margin-top: ${(props) => (props.story ? "2%" : "0%")};
-  p {
-    margin: 5px 0;
-  }
-  a {
-    border-bottom: 2px solid #26ba8d;
-    padding: 0%;
-    transition: 0.3s;
-    cursor: pointer;
-  }
-  .video {
-    height: 489px;
-    width: 275px;
-    iframe {
-      width: 100%;
-      border: none;
-      height: 100%;
-      border-radius: 15px;
-    }
-  }
-  .question_box {
-    display: flex;
-    background: #ffffff;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-
-    /* Add slide-in animation from bottom */
-    opacity: 0;
-    transform: translateY(30px); /* Start below */
-
-    animation: animate-slide-in-from-bottom 0.8s forwards;
-
-    /* Animation from the bottom */
-    @keyframes animate-slide-in-from-bottom {
-      0% {
-        opacity: 0;
-        transform: translateY(50px); /* Start below */
-      }
-      50% {
-        transform: translateY(-10px); /* Move up */
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0); /* Rest position */
-      }
-    }
-  }
-  .question_name {
-    margin-left: 5px;
-    background: #00204e;
-    color: white;
-    border-radius: 50%;
-    padding: 2% 3%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .question_text {
-    background: #f3f3f3;
-    color: black;
-    border-radius: 25px;
-    padding: 2% 5%;
-    min-width: 40%;
-    max-width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-  }
-  .answer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-  .answer_name {
-    margin-right: 10px;
-    background: #00204e;
-    color: white;
-    border-radius: 50%;
-    padding: 2%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .answer_test {
-    width: 50%;
-    border: 2px solid;
-    border-color: #f3f3f3;
-    border-radius: 25px;
-    padding: 2% 5%;
-    margin-bottom: 20px;
-  }
-  button {
-    width: 30%;
-    padding: 2%;
-    margin-top: 5%;
-  }
-  @media (max-width: 800px) {
-    padding: 0%;
-    margin-bottom: 5%;
-    button {
-      width: 50%;
-      padding: 3%;
-    }
-    .video {
-      height: 356px;
-      width: 200px;
-    }
-  }
-`;
-
-const Answer_text = styled.textarea`
-  height: 120px;
-  min-width: 60%;
-  max-width: 70%;
-  border: 2px solid;
-  border: ${(props) =>
-    props.inputColor == "#D0EADB" ? "3px solid" : "2px solid"};
-  border-color: ${(props) => props.inputColor};
-  outline: 0;
-  resize: none;
-  border-radius: 25px;
-  padding: 3% 4%;
-  line-height: 1.8;
-  font-family: Montserrat;
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-`;
-
 const Group = styled.div`
   flex-direction: row;
   justify-content: center;
@@ -242,42 +60,6 @@ const Group = styled.div`
   display: ${(props) => (props.correct === "true" ? "none" : "flex")};
   padding: 0.5% 0;
   margin-bottom: 20px;
-`;
-
-const Button1 = styled.div`
-  min-width: 200px;
-  line-height: 1.6;
-  margin-right: 20px;
-  text-align: left;
-  background: #d2edfd;
-  border-radius: 5px;
-  padding: 10px 30px;
-  margin-bottom: 15px;
-  /* height: 45px; */
-  cursor: pointer;
-  color: #000a60;
-  border: none;
-  white-space: nowrap;
-  font-size: 1.6rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  display: ${(props) => (props.correct === "true" ? "none" : "flex")};
-  pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  &:hover {
-    background: #a5dcfe;
-  }
-  @media (max-width: 800px) {
-    min-width: 100px;
-    margin-right: 10px;
-    padding: 10px 15px;
-    height: auto;
-
-    white-space: normal;
-    text-align: left;
-  }
 `;
 
 const Progress = styled.div`
@@ -302,54 +84,8 @@ const Ideas = styled.div`
   width: 500px;
 `;
 
-const Circle = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50px;
-  border: 1px solid gray;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: 15px;
-  cursor: pointer;
-  transition: ease-in 0.4s;
-  &:hover {
-    border: 1px solid blue;
-  }
-  @media (max-width: 800px) {
-    margin-left: 5px;
-    display: none;
-  }
-`;
-
-const OptionsGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  min-width: 60%;
-  max-width: 80%;
-  margin-bottom: 20px;
-`;
-
-const Option = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  border: 1px solid #c4c4c4;
-  padding: 10px 15px;
-  background: #fff;
-  cursor: pointer;
-  margin-right: 3%;
-  margin-bottom: 2%;
-  height: 50px;
-  transition: 0.3s;
-  &:hover {
-    border: 1px solid #3f51b5;
-  }
-`;
-
 const Generate = (props) => {
-  const { author, me, story, ifRight, ifWrong, quizId } = props;
+  const { author, me, story, ifRight, ifWrong, quizId, isScoringShown } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [ideas, setIdeas] = useState([""]);
   const [nextQuestions, setNextQuestions] = useState();
@@ -358,6 +94,12 @@ const Generate = (props) => {
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [generating, setGenerating] = useState(false);
   const [areIdeasShown, setAreIdeasShown] = useState(false);
+  const [overallResults, setOverallResults] = useState(null); // results of checking the ideas
+  const [expectedAnswers, setExpectedAnswers] = useState(
+    new Array(props.answers?.answerElements?.length).fill(null)
+  );
+  const [isFeedbackShown, setIsFeedbackShown] = useState(false);
+  const [AIhint, setAIHint] = useState(null);
 
   const [createQuizResult, { data, loading, error }] = useMutation(
     CREATE_QUIZRESULT_MUTATION
@@ -369,6 +111,7 @@ const Generate = (props) => {
   });
 
   const { t } = useTranslation("lesson");
+  const router = useRouter();
 
   function handleIdeaChange(event, index) {
     // Copy the current state of ideas
@@ -386,88 +129,105 @@ const Generate = (props) => {
     setProgress("true");
     // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
-
     // 2. Create a set to hold the indexes of matched answers
-    //           an array to list the ideas that are more than 65
-    //           a result array to store the results of checking student's every idea
+    //    an array to list the ideas that are more than 65
+    //    a result array to store the results of checking student's every idea
     let matchedIndexes = new Set();
-    let correctIdeasList = [];
-    let results = [];
+    let newCorrectIdeas = [];
+    let new_results = [];
+    let old_results = [];
+    let updatedExpectedAnswers = [...expectedAnswers]; // Initialize temporary array
 
     // 3. Iterate over each idea
     for (let idea of ideas) {
-      // For each idea, iterate over each answer
-      for (let answer of answers) {
-        let data1 = {
-          answer1: answer.answer,
-          answer2: idea,
-        };
-
-        try {
-          const response = await fetch(
-            "https://arcane-refuge-67529.herokuapp.com/checker",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data1),
-            }
-          );
-          // get the result
-          const res = await response.json();
-
-          let new_obj = {
-            idea: idea,
-            result: res.res,
-            next_id: parseFloat(res.res) > 60 ? answer.next_id : null,
-            next_type: parseFloat(res.res) > 60 ? answer.next_type : null,
+      // if the idea has already been evaluated, we skip it and save its old evaluation
+      if (overallResults && overallResults.find((res) => res.idea === idea)) {
+        old_results.push(overallResults.find((res) => res.idea === idea));
+        continue;
+      } else {
+        // For each not evaulated idea, iterate over each answer
+        for (let answer of answers) {
+          let data1 = {
+            answer1: answer.answer,
+            answer2: idea,
           };
-          // save the results to the array with all other results
-          results.push(new_obj);
+          try {
+            const response = await fetch(
+              "https://arcane-refuge-67529.herokuapp.com/checker",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data1),
+              }
+            );
+            // get the result
+            const res = await response.json();
 
-          // If res.res is more than 60 and the answer's index is not in the set, add the answer to the matchedAnswers array
-          if (res.res > 60 && !matchedIndexes.has(answer.index)) {
-            matchedAnswers.push(answer);
-            matchedIndexes.add(answer.index);
+            let new_obj = {
+              idea: idea,
+              result: res.res,
+              next_id: parseFloat(res.res) > 57 ? answer.next_id : null,
+              next_type: parseFloat(res.res) > 57 ? answer.next_type : null,
+            };
+            // save the results to the array with all other results
+            new_results.push(new_obj);
+
+            // If res.res is more than 60 and the answer's index is not in the set, add the answer to the matchedAnswers array
+            if (res.res > 57 && !matchedIndexes.has(answer.index)) {
+              matchedAnswers.push(answer);
+              matchedIndexes.add(answer.index);
+            }
+            if (res.res > 57) {
+              newCorrectIdeas.push({
+                idea: idea,
+                matchedAnswer: answer,
+              });
+              updatedExpectedAnswers[answer.index] = answer; // Accumulate changes
+            }
+          } catch (error) {
+            console.error("There was an error:", error);
           }
-          if (res.res > 60) {
-            correctIdeasList.push(idea);
-          }
-        } catch (error) {
-          console.error("There was an error:", error);
         }
       }
     }
+
     let unique_values = [];
-    results.forEach((item) => {
+    [...old_results, ...new_results].forEach((item) => {
       const existingItem = unique_values.find((uv) => uv.idea === item.idea);
       if (!existingItem) {
-        let new_item = item;
-        unique_values.push(new_item);
+        unique_values.push({ ...item }); // Add a copy of the item if it doesn't exist
       } else if (parseFloat(item.result) > parseFloat(existingItem.result)) {
-        if (item.next_id && item.next_type) {
-          existingItem.next_id = item.next_id;
-          existingItem.result = item.result;
-          existingItem.next_type = item.next_type;
-        }
+        existingItem.result = item.result;
+        existingItem.next_id = item.next_id;
+        existingItem.next_type = item.next_type;
       }
     });
 
-    setNextQuestions(matchedAnswers);
-    setCorrectIdeas(correctIdeasList);
+    setOverallResults(unique_values);
     setProgress("false");
+    setCorrectIdeas([...correctIdeas, ...newCorrectIdeas]);
+    setIsFeedbackShown(true);
+    setExpectedAnswers(updatedExpectedAnswers); // Update state with accumulated changes
+
     createQuizResult({
       variables: {
         quiz: props.quizId,
         lessonId: props.lessonId,
+        hint: AIhint,
+        type: "answer",
         ideasList: { quizIdeas: unique_values },
         comment: ``,
       },
     });
-    props.passResult("true");
-
-    return matchedAnswers;
+    if (props.problemType === "ONLY_CORRECT") {
+      if (newCorrectIdeas.length >= props.answers.answerElements.length) {
+        props.passResult("true");
+      }
+    } else {
+      props.passResult("true");
+    }
   };
 
   const hasNonEmptyNextIdAndType = (array) => {
@@ -514,24 +274,55 @@ const Generate = (props) => {
           </IconBlock>{" "}
           <Ideas>
             {ideas.map((idea, index) => {
-              let inputColor;
-
-              if (props.goalType !== "ASSESS" && correctIdeas.includes(idea)) {
-                inputColor = "#D0EADB";
+              let score = null;
+              if (
+                overallResults &&
+                overallResults.find((res) => res.idea == idea)?.result
+              ) {
+                score = parseFloat(
+                  overallResults.find((res) => res.idea == idea)?.result
+                ).toFixed(0);
               } else {
-                inputColor = "#f3f3f3";
+                score = "0";
               }
+              let inputColor;
+              console.log("score", score);
+              console.log("props.goalType", props.goalType);
+              if (props.goalType !== "ASSESS" && score >= 65) {
+                inputColor = "#D0EADB";
+              } else if (
+                props.goalType !== "ASSESS" &&
+                score < 65 &&
+                score > 58
+              ) {
+                inputColor = "#ffd166";
+              } else {
+                inputColor = "#F3F3F3";
+              }
+              console.log("inputColor", inputColor);
               return (
-                <Answer_text
-                  key={index}
-                  type="text"
-                  required
-                  inputColor={inputColor}
-                  value={idea}
-                  onChange={(e) => handleIdeaChange(e, index)}
-                  onInput={autoResizeTextarea}
-                  placeholder="..."
-                />
+                <Frame inputColor={inputColor}>
+                  <Answer_text
+                    key={index}
+                    type="text"
+                    required
+                    inputColor={inputColor}
+                    value={idea}
+                    onChange={(e) => handleIdeaChange(e, index)}
+                    onInput={autoResizeTextarea}
+                    placeholder="..."
+                  />
+                  {score && isScoringShown && (
+                    <ResultCircle
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-content={t("answer_above_65")}
+                      data-tooltip-place="right"
+                      inputColor={inputColor}
+                    >
+                      {score}
+                    </ResultCircle>
+                  )}
+                </Frame>
               );
             })}
           </Ideas>
@@ -550,9 +341,145 @@ const Generate = (props) => {
           >
             {t("evaluate_ideas")}
           </Button1>
+          {props.goalType !== "ASSESS" && (
+            <Button1
+              inputColor={inputColor}
+              onClick={async (e) => {
+                e.preventDefault();
+                // getHint(e);
+                setGenerating(true);
+                setAIHint(null);
+                const res = await generateHint2(
+                  router.locale,
+                  props.question,
+                  props.answers,
+                  overallResults,
+                  correctIdeas
+                );
+                console.log("res", res);
+                setAIHint(res);
+                setGenerating(false);
+                createQuizResult({
+                  variables: {
+                    quiz: props.quizId,
+                    lessonId: props.lessonId,
+                    hint: res,
+                    type: "hint",
+                    comment: `Student asked for a hint`,
+                  },
+                });
+              }}
+            >
+              {overallResults && overallResults.length > 0
+                ? t("help_with_next_one")
+                : t("where_to_start")}
+            </Button1>
+          )}
           <Circle onClick={() => setIdeas(ideas.slice(0, -1))}>-1</Circle>
           <Circle onClick={(e) => setIdeas([...ideas, ""])}>+1</Circle>
         </Group>
+        {/* 5. The hint that helps find correct answers */}
+        {AIhint && (
+          <div className="question_box">
+            <div className="question_text">
+              <p>{AIhint}</p>
+            </div>
+            <IconBlock>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
+            </IconBlock>
+          </div>
+        )}
+        {/* 6. Bubble with buttons for additional questions available to the student  */}
+        {isFeedbackShown && (
+          <>
+            <div className="question_box">
+              <div className="question_text">
+                <p>{correctIdeas.length > 0 && `🎉 ${t("great_job")}`}</p>
+                <p>{correctIdeas.length == 0 && `🤔 ${t("none_correct")}`}</p>
+                {/* <p>
+                  {correctIdeas.length < props.answers.answerElements.length
+                    ? t("not_all_answers")
+                    : null}{" "}
+                  {t("what_are_we_doing_next")}
+                </p> */}
+              </div>
+              <IconBlock>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
+              </IconBlock>
+            </div>
+            <div className="answer">
+              <IconBlock>
+                <div className="icon2">
+                  {me && me.image ? (
+                    <img className="icon" src={me.image} />
+                  ) : me.surname ? (
+                    `${me.name[0]}${me.surname[0]}`
+                  ) : (
+                    `${me.name[0]}${me.name[1]}`
+                  )}
+                </div>{" "}
+                <div className="name">{me.name}</div>
+              </IconBlock>
+              <OptionsGroup>
+                <Option
+                  onClick={(e) => {
+                    setAreIdeasShown(true);
+                    setAIHint(null);
+                    createQuizResult({
+                      variables: {
+                        quiz: props.quizId,
+                        lessonId: props.lessonId,
+                        hint: AIhint,
+                        ideasList: { quizIdeas: overallResults },
+                        comment: `Student opened correct answer`,
+                        type: "answerReveal",
+                      },
+                    });
+                  }}
+                >
+                  {t("show_other_answers")}
+                </Option>
+              </OptionsGroup>
+            </div>
+          </>
+        )}
+        {areIdeasShown && (
+          <div className="question_box">
+            <div className="question_text">
+              <p>These are my ideas:</p>
+              <ul>
+                {props.answers.answerElements.map((idea) => (
+                  <li>{idea.answer}</li>
+                ))}
+              </ul>
+            </div>
+            <IconBlock>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
+            </IconBlock>
+          </div>
+        )}
+
         {nextQuestions &&
           nextQuestions.length > 0 &&
           (hasNonEmptyNextIdAndType(nextQuestions) ? (
@@ -616,28 +543,6 @@ const Generate = (props) => {
                   </Option>
                 </OptionsGroup>
               </div>
-              {areIdeasShown && (
-                <div className="question_box">
-                  <div className="question_text">
-                    <p>These are my ideas:</p>
-                    <ul>
-                      {props.answers.answerElements.map((idea) => (
-                        <li>{idea.answer}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <IconBlock>
-                    {author && author.image != null ? (
-                      <img className="icon" src={author.image} />
-                    ) : (
-                      <img className="icon" src="../../static/hipster.svg" />
-                    )}{" "}
-                    <div className="name">
-                      {author && author.name ? author.name : "BeSavvy"}
-                    </div>
-                  </IconBlock>
-                </div>
-              )}
             </>
           ))}
       </>

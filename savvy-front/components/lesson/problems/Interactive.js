@@ -101,6 +101,7 @@ class Interactive extends Component {
       let el = this.props.lesson.quizes.filter(
         (q) => q.id === data[1].value
       )[0];
+      console.log(el, el.isScoringShown);
       newQuiz = (
         <SingleQuiz
           key={el.id}
@@ -126,6 +127,7 @@ class Interactive extends Component {
           author={this.props.author}
           getResults={this.getResults}
           story={true}
+          isScoringShown={el.isScoringShown}
         />
       );
 
@@ -156,6 +158,7 @@ class Interactive extends Component {
           testID={el.id}
           question={el.question}
           answers={el.answers}
+          complexTestAnswers={el.complexTestAnswers}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           comments={el.comments}

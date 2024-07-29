@@ -183,6 +183,7 @@ const NewBlock = (props) => {
             type={data.type}
             answers={data.answers}
             name={data.name}
+            complexTestAnswers={data.complexTestAnswers}
             image={data.image}
             true={data.correct}
             comments={data.comments}
@@ -194,6 +195,7 @@ const NewBlock = (props) => {
             user_name={data.user}
             me={me}
             lessonID={lesson.id}
+            length={Array(data.correct.length).fill(false)}
             getResult={getResult}
             passUpdated={passUpdated}
           />
@@ -222,6 +224,7 @@ const NewBlock = (props) => {
           ifWrong={data.ifWrong}
           name={data.name}
           instructorName={data.instructorName}
+          isScoringShown={data.isScoringShown}
           image={data.image}
           next={data.next}
           user={data.user.id}

@@ -120,6 +120,11 @@ export interface NexusGenInputs {
     source?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
+  BranchItem: { // input type
+    source?: string | null; // String
+    type?: string | null; // String
+    value?: string | null; // String
+  }
   BusinessClientListRelationFilter: { // input type
     every?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
     none?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
@@ -520,6 +525,13 @@ export interface NexusGenInputs {
   }
   ComplexAnswer: { // input type
     answerElements?: Array<NexusGenInputs['AnswerElement'] | null> | null; // [AnswerElement]
+  }
+  ComplexTestAnswer: { // input type
+    answer?: string | null; // String
+    id?: string | null; // String
+  }
+  ComplexTestAnswers: { // input type
+    complexTestAnswers?: Array<NexusGenInputs['ComplexTestAnswer'] | null> | null; // [ComplexTestAnswer]
   }
   ConstructionAnswers: { // input type
     answers?: Array<NexusGenInputs['AnswerItem'] | null> | null; // [AnswerItem]
@@ -2105,6 +2117,7 @@ export interface NexusGenInputs {
   NewTestOrderByWithRelationInput: { // input type
     answers?: NexusGenEnums['SortOrder'] | null; // SortOrder
     comments?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    complexTestAnswers?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     correct?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -2133,6 +2146,7 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['NewTestWhereInput'][] | null; // [NewTestWhereInput!]
     answers?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     comments?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    complexTestAnswers?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     correct?: NexusGenInputs['BoolNullableListFilter'] | null; // BoolNullableListFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -2161,6 +2175,7 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['NewTestWhereInput'][] | null; // [NewTestWhereInput!]
     answers?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     comments?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    complexTestAnswers?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     correct?: NexusGenInputs['BoolNullableListFilter'] | null; // BoolNullableListFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -2192,6 +2207,7 @@ export interface NexusGenInputs {
     value?: string | null; // String
   }
   NextType: { // input type
+    branches?: Array<NexusGenInputs['BranchItem'] | null> | null; // [BranchItem]
     false?: NexusGenInputs['NextFalseType'] | null; // NextFalseType
     true?: NexusGenInputs['NextTrueType'] | null; // NextTrueType
   }
@@ -2436,6 +2452,10 @@ export interface NexusGenInputs {
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
   }
+  Position: { // input type
+    x?: number | null; // Int
+    y?: number | null; // Int
+  }
   PostListRelationFilter: { // input type
     every?: NexusGenInputs['PostWhereInput'] | null; // PostWhereInput
     none?: NexusGenInputs['PostWhereInput'] | null; // PostWhereInput
@@ -2527,6 +2547,7 @@ export interface NexusGenInputs {
     id?: string | null; // String
     index?: number | null; // Int
     next?: NexusGenInputs['NextType'] | null; // NextType
+    position?: NexusGenInputs['Position'] | null; // Position
     type?: string | null; // String
   }
   ProblemListRelationFilter: { // input type
@@ -2852,6 +2873,7 @@ export interface NexusGenInputs {
     image?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     instructorName?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     isOrderOfAnswersImportant?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    isScoringShown?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
     lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
@@ -2965,6 +2987,7 @@ export interface NexusGenInputs {
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     instructorName?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     isOrderOfAnswersImportant?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    isScoringShown?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2995,6 +3018,7 @@ export interface NexusGenInputs {
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     instructorName?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     isOrderOfAnswersImportant?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    isScoringShown?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -4609,6 +4633,7 @@ export interface NexusGenObjects {
   NewTest: { // root type
     answers: string[]; // [String!]!
     comments: string[]; // [String!]!
+    complexTestAnswers?: NexusGenScalars['Json'] | null; // Json
     complexity?: number | null; // Int
     correct: boolean[]; // [Boolean!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -4776,6 +4801,7 @@ export interface NexusGenObjects {
     image?: string | null; // String
     instructorName?: string | null; // String
     isOrderOfAnswersImportant?: boolean | null; // Boolean
+    isScoringShown?: boolean | null; // Boolean
     lessonID?: string | null; // String
     lessonId?: string | null; // String
     name?: string | null; // String
@@ -5589,6 +5615,7 @@ export interface NexusGenFieldTypes {
   NewTest: { // field return type
     answers: string[]; // [String!]!
     comments: string[]; // [String!]!
+    complexTestAnswers: NexusGenScalars['Json'] | null; // Json
     complexity: number | null; // Int
     correct: boolean[]; // [Boolean!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -5840,6 +5867,7 @@ export interface NexusGenFieldTypes {
     image: string | null; // String
     instructorName: string | null; // String
     isOrderOfAnswersImportant: boolean | null; // Boolean
+    isScoringShown: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
@@ -6708,6 +6736,7 @@ export interface NexusGenFieldTypeNames {
   NewTest: { // field return type name
     answers: 'String'
     comments: 'String'
+    complexTestAnswers: 'Json'
     complexity: 'Int'
     correct: 'Boolean'
     createdAt: 'DateTime'
@@ -6959,6 +6988,7 @@ export interface NexusGenFieldTypeNames {
     image: 'String'
     instructorName: 'String'
     isOrderOfAnswersImportant: 'Boolean'
+    isScoringShown: 'Boolean'
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
@@ -7708,6 +7738,7 @@ export interface NexusGenArgTypes {
     createNewTest: { // args
       answers?: Array<string | null> | null; // [String]
       comments?: Array<string | null> | null; // [String]
+      complexTestAnswers?: NexusGenInputs['ComplexTestAnswers'] | null; // ComplexTestAnswers
       correct?: Array<boolean | null> | null; // [Boolean]
       goal?: string | null; // String
       ifRight?: string | null; // String
@@ -8209,6 +8240,7 @@ export interface NexusGenArgTypes {
     updateNewTest: { // args
       answers?: Array<string | null> | null; // [String]
       comments?: Array<string | null> | null; // [String]
+      complexTestAnswers?: NexusGenInputs['ComplexTestAnswers'] | null; // ComplexTestAnswers
       complexity?: number | null; // Int
       correct?: Array<boolean | null> | null; // [Boolean]
       goal?: string | null; // String
@@ -8309,6 +8341,7 @@ export interface NexusGenArgTypes {
       image?: string | null; // String
       instructorName?: string | null; // String
       isOrderOfAnswersImportant?: boolean | null; // Boolean
+      isScoringShown?: boolean | null; // Boolean
       lessonId?: string | null; // String
       name?: string | null; // String
       next?: NexusGenInputs['NextType'] | null; // NextType

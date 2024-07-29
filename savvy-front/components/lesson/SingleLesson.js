@@ -110,6 +110,7 @@ const SINGLE_LESSON_QUERY = gql`
         goalType
         complexity
         check
+        isScoringShown
         ifRight
         ifWrong
         answer
@@ -118,6 +119,7 @@ const SINGLE_LESSON_QUERY = gql`
         shouldAnswerSizeMatchSample
         name
         image
+        instructorName
         next
         createdAt
         user {
@@ -214,6 +216,7 @@ const SINGLE_LESSON_QUERY = gql`
       newTests {
         id
         answers
+        complexTestAnswers
         correct
         goal
         goalType

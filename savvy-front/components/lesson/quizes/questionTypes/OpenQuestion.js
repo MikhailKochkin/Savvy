@@ -65,6 +65,9 @@ const OpenQuestion = (props) => {
     challenge,
     openQuestionType,
     studentAnswerPassedFromAnotherComponent,
+    isScoringShown,
+    instructorName,
+    image,
   } = props;
 
   const [answer, setAnswer] = useState(""); // The answer provided by the student
@@ -102,6 +105,8 @@ const OpenQuestion = (props) => {
 
   const passAnswer = (val) => {
     setAnswer(val);
+    setInputColor("#f3f3f3");
+    setResult(null);
   };
 
   // 2. Check student's answer
@@ -409,6 +414,7 @@ const OpenQuestion = (props) => {
       }
       explanationsNum={explanationsNum}
       improvementsNum={improvementsNum}
+      isScoringShown={isScoringShown}
     />
   ) : (
     <FullOpenQuestion
@@ -436,6 +442,9 @@ const OpenQuestion = (props) => {
       challenge={challenge}
       revealCorrectAnswer={revealCorrectAnswer}
       serverComment={serverComment}
+      isScoringShown={isScoringShown}
+      image={image}
+      instructorName={instructorName}
     />
   );
 };

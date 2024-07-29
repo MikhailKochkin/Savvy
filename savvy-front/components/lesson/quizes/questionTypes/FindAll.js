@@ -7,6 +7,7 @@ import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
 import PropTypes from "prop-types";
+import { generateHint2 } from "../functions/AIQuestionFunctions";
 
 import { autoResizeTextarea } from "../../SimulatorDevelopmentFunctions";
 import {
@@ -17,6 +18,8 @@ import {
   Button1,
   Circle,
   Frame,
+  OptionsGroup,
+  Option,
 } from "../QuestionStyles";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
@@ -82,32 +85,8 @@ const Ideas = styled.div`
   width: 500px;
 `;
 
-const OptionsGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  min-width: 60%;
-  max-width: 80%;
-  margin-bottom: 20px;
-`;
-
-const Option = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  border: 1px solid #c4c4c4;
-  padding: 10px 15px;
-  background: #fff;
-  cursor: pointer;
-  margin-right: 3%;
-  margin-bottom: 2%;
-  transition: 0.3s;
-  &:hover {
-    border: 1px solid #3f51b5;
-  }
-`;
-
 const FindAll = (props) => {
-  const { author, me, story, ifRight, ifWrong } = props;
+  const { author, me, story, ifRight, ifWrong, isScoringShown } = props;
 
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
   const [correctIdeas, setCorrectIdeas] = useState([]); // ideas that match the correct answers
@@ -295,99 +274,6 @@ const FindAll = (props) => {
   };
 
   // 4. Generate a hint for the student
-  const getHint = async (event) => {
-    setGenerating(true);
-    let hintPrompt;
-    let url;
-    let result;
-    let AItype = "openai";
-    if (AItype == "claude") {
-      url = "/api/generate2";
-    } else {
-      url = "/api/generate";
-    }
-
-    let intro = `You are a law professor. 
-      You help your student answer this question ${props.question}
-      The correct answers are: ${props.answers.answerElements.join(", ")}`;
-
-    let recommendations = ` Answer in ${
-      router.locale == "ru" ? "Russian" : "English"
-    }. Answer in second person. Address the student as "You"! Limit your hint to 3 sentences.`;
-
-    // if the student has already given some correct answers, we focus only on the ansers that have not yet been found
-    if (overallResults && overallResults.length > 0) {
-      hintPrompt = ` The student has already given these correct answers: """ ${correctIdeas
-        .map((el) => el.idea)
-        .join(", ")} """. But struggles to find the rest.
-      Give a detailed hint to the student in a Socratic manner that will help them find these remaining answers: """${props.answers.answerElements
-        .filter(
-          (el) =>
-            correctIdeas.filter((c) => c.matchedAnswer.answer == el.answer)
-              .length == 0
-        )
-        .map((el) => el.answer)
-        .join(", ")}""".
-      Answer in the same language as the text of the question. Answer in second person.`;
-
-      // otherwise we give a hint for the first answer only
-    } else {
-      hintPrompt = ` The student can't come up with any answers. 
-                    Give a detailed hint to the student that will help them find the first answer: ${props.answers.answerElements[0].answer}
-                  `;
-    }
-
-    try {
-      setAIHint(null);
-      event.preventDefault();
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: intro + hintPrompt + recommendations,
-        }),
-      });
-
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-
-      const data = await response.json();
-      if (AItype == "claude") {
-        result = data.result.content[0].text;
-      } else {
-        result = data.result.content;
-      }
-
-      if (result) {
-        setAIHint(result);
-        // if (!isFirstHint) {
-        createQuizResult({
-          variables: {
-            quiz: props.quizId,
-            lessonId: props.lessonId,
-            hint: result,
-            type: "hint",
-            comment: `Student asked for a hint`,
-          },
-        });
-        // }
-      } else {
-        setAIHint("Sorry, you are on your own");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    } finally {
-      setGenerating(false);
-    }
-  };
 
   return (
     <Question story={story}>
@@ -461,7 +347,7 @@ const FindAll = (props) => {
                     onInput={autoResizeTextarea}
                     placeholder="..."
                   />
-                  {score && (
+                  {score && isScoringShown && (
                     <ResultCircle
                       data-tooltip-id="my-tooltip"
                       data-tooltip-content={t("answer_above_65")}
@@ -497,7 +383,28 @@ const FindAll = (props) => {
               inputColor={inputColor}
               onClick={async (e) => {
                 e.preventDefault();
-                getHint(e);
+                // getHint(e);
+                setGenerating(true);
+                setAIHint(null);
+                const res = await generateHint2(
+                  router.locale,
+                  props.question,
+                  props.answers,
+                  overallResults,
+                  correctIdeas
+                );
+                console.log("res", res);
+                setAIHint(res);
+                setGenerating(false);
+                createQuizResult({
+                  variables: {
+                    quiz: props.quizId,
+                    lessonId: props.lessonId,
+                    hint: res,
+                    type: "hint",
+                    comment: `Student asked for a hint`,
+                  },
+                });
               }}
             >
               {overallResults && overallResults.length > 0

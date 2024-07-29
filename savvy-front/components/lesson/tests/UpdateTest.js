@@ -4,8 +4,17 @@ import { gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
+import { v4 as uuidv4 } from "uuid";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { set } from "lodash";
+
+import {
+  EditorInfoSection,
+  NameInput,
+  SimpleButton,
+  BlueButton,
+} from "../SimulatorDevelopmentStyles";
 
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION(
@@ -14,6 +23,7 @@ const UPDATE_TEST_MUTATION = gql`
     $answers: [String!]
     $correct: [Boolean!]
     $comments: [String!]
+    $complexTestAnswers: ComplexTestAnswers
     $goal: String
     $complexity: Int
     $type: String
@@ -29,6 +39,7 @@ const UPDATE_TEST_MUTATION = gql`
       answers: $answers
       correct: $correct
       comments: $comments
+      complexTestAnswers: $complexTestAnswers
       goal: $goal
       complexity: $complexity
       ifRight: $ifRight
@@ -43,6 +54,7 @@ const UPDATE_TEST_MUTATION = gql`
       correct
       type
       goal
+      complexTestAnswers
       comments
       complexity
       ifRight
@@ -60,16 +72,31 @@ const UPDATE_TEST_MUTATION = gql`
   }
 `;
 
-const Styles = styled.div`
-  margin: 20px 0;
+const Container = styled.div`
+  width: 100%;
+  margin: 5% 0;
+  h4 {
+    padding: 0% 5%;
+  }
+  p > a {
+    font-weight: 700;
+  }
+  p > a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+  }
   textarea {
-    padding: 10px;
-    font-size: 1.6rem;
+    padding: 1.5% 2%;
+    margin-bottom: 1.5%;
+    width: 100%;
+    height: 100px;
+    outline: 0;
     font-family: Montserrat;
-    line-height: 1.4;
-    width: 80%;
-    border: 1px solid #c4c4c4;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3.5px;
+    font-size: 1.5rem;
   }
 `;
 
@@ -220,17 +247,6 @@ const Input = styled.input`
   }
 `;
 
-const NameInput = styled.input`
-  width: 100%;
-  height: 40px;
-  font-weight: 500;
-  font-size: 2rem;
-  font-family: Montserrat;
-  margin-bottom: 20px;
-  border: none;
-  outline: none;
-`;
-
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -239,6 +255,11 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 const UpdateTest = (props) => {
   const [options, setOptions] = useState(props.mes);
   const [answers, setAnswers] = useState(props.answers);
+  const [complexAnswers, setComplexAnswers] = useState(
+    props.complexTestAnswers?.complexTestAnswers
+      ? props.complexTestAnswers.complexTestAnswers
+      : props.answers.map((an) => ({ id: uuidv4(), answer: an }))
+  );
   const [comments, setComments] = useState(
     props.comments ? props.comments : new Array(props.answers.length).fill("")
   );
@@ -261,7 +282,10 @@ const UpdateTest = (props) => {
   const handleArray = (val, name, i) => {
     let arr = [...answers];
     arr[i - 1] = val;
-    return setAnswers(arr);
+    let complex_arr = [...complexAnswers];
+    complex_arr[i - 1] = { id: complex_arr[i - 1].id, answer: val };
+    setAnswers(arr);
+    setComplexAnswers(complex_arr);
   };
 
   const handleArray2 = (val, name, i) => {
@@ -290,31 +314,50 @@ const UpdateTest = (props) => {
 
   const { testID, mes, lessonID } = props;
   return (
-    <Styles>
-      <NameInput
-        onChange={(e) => setName(e.target.value)}
-        defaultValue={name}
-        placeholder="Untitled"
-      />
-      <h3>Type</h3>
-      <select
-        name="types"
-        id="types"
-        defaultValue={type}
-        onChange={(e) => setType(e.target.value)}
-      >
-        <option value="TEST">{t("test")}</option>
-        <option value="FORM">{t("form")}</option>
-      </select>
-      <h3>Goal</h3>
-      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
-      <h3>Instructor Name</h3>
-      <Input
-        defaultValue={instructorName}
-        onChange={(e) => setInstructorName(e.target.value)}
-      />
-      <h3>Image</h3>
-      <Input defaultValue={image} onChange={(e) => setImage(e.target.value)} />
+    <Container>
+      <EditorInfoSection>
+        <h3 className="label">ID: {testID}</h3>
+      </EditorInfoSection>
+      <EditorInfoSection>
+        <h3 className="label">Name</h3>
+        <div className="comment">The name will be used for navigation</div>
+        <NameInput
+          onChange={(e) => setName(e.target.value)}
+          defaultValue={name}
+          placeholder="Untitled"
+        />
+      </EditorInfoSection>
+      <EditorInfoSection>
+        <h3>Type</h3>
+        <select
+          name="types"
+          id="types"
+          defaultValue={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value="TEST">{t("test")}</option>
+          <option value="FORM">{t("form")}</option>
+          <option value="BRANCH">{t("Branch")}</option>
+        </select>
+      </EditorInfoSection>
+      <EditorInfoSection>
+        <h3>Goal</h3>
+        <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
+      </EditorInfoSection>
+      <EditorInfoSection>
+        <h3 className="label">Instructor Name</h3>
+        <input
+          defaultValue={name}
+          onChange={(e) => setInstructorName(e.target.value)}
+        />
+      </EditorInfoSection>
+      <EditorInfoSection>
+        <h3 className="label">Instructor Image</h3>
+        <input
+          defaultValue={image}
+          onChange={(e) => setImage(e.target.value)}
+        />
+      </EditorInfoSection>
       <Comment>
         <DynamicLoadedEditor
           id="question"
@@ -324,7 +367,7 @@ const UpdateTest = (props) => {
           getEditorText={setIf}
         />
       </Comment>
-      <Complexity>
+      {/* <Complexity>
         <select
           value={complexity}
           onChange={(e) => setComplexity(parseInt(e.target.value))}
@@ -336,7 +379,7 @@ const UpdateTest = (props) => {
           <option value={4}>4</option>
           <option value={5}>5</option>
         </select>
-      </Complexity>
+      </Complexity> */}
       <Answers>
         {options.map((answer, i) => {
           let an = `answer${i + 1}`;
@@ -384,6 +427,9 @@ const UpdateTest = (props) => {
             old_correct.pop();
             let old_comments = [...comments];
             old_comments.pop();
+            let old_complexAnswers = [...complexAnswers];
+            old_complexAnswers.pop();
+            setComplexAnswers([...old_complexAnswers]);
             setAnswers([...old_answers]);
             setCorrect([...old_correct]);
             setComments([...old_comments]);
@@ -435,6 +481,9 @@ const UpdateTest = (props) => {
           correct: correct,
           comments: comments,
           complexity,
+          complexTestAnswers: {
+            complexTestAnswers: complexAnswers,
+          },
           type,
           goal,
           name,
@@ -448,6 +497,7 @@ const UpdateTest = (props) => {
             onClick={async (e) => {
               // Stop the form from submitting
               e.preventDefault();
+              console.log("complexAnswers", complexAnswers, answers);
               const res = await updateNewTest();
               props.getResult(res);
               props.switchUpdate();
@@ -458,7 +508,7 @@ const UpdateTest = (props) => {
           </ButtonTwo>
         )}
       </Mutation>
-    </Styles>
+    </Container>
   );
 };
 

@@ -598,6 +598,7 @@ model NewTest {
   ifWrong     String?
   question    String[]
   answers     String[]
+  complexTestAnswers Json?
   correct     Boolean[]
   userId      String       @db.VarChar(30)
   lessonId    String?      @db.VarChar(30)
@@ -809,6 +810,7 @@ model Quiz {
   answers     Json?
   isOrderOfAnswersImportant Boolean? @default(false)
   shouldAnswerSizeMatchSample Boolean? @default(false)
+  isScoringShown Boolean? @default(true)
   goal        String?
   lessonID    String?      @db.VarChar(30)
   createdAt   DateTime     @default(now())

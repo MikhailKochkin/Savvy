@@ -259,7 +259,7 @@ const StoryEx = (props) => {
           id={"offer_id"}
           // offer={el}
           me={me}
-          // coursePage={lesson.coursePage}
+          coursePage={lesson.coursePage}
           // coursePageId={lesson.coursePage.id}
           // lessonId={lesson.id}
           // user={el.user.id}

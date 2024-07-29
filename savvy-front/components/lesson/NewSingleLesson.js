@@ -74,9 +74,13 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         user {
           id
         }
+        isScoringShown
+        instructorName
       }
       newTests {
+        id
         answers
+        complexTestAnswers
         type
         correct
         comments

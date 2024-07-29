@@ -511,3 +511,102 @@ export const editLLMText = async (generatedText) => {
     throw error;
   }
 };
+
+export const generateHint2 = async (
+  lang,
+  question,
+  answers,
+  overallResults,
+  correctIdeas
+) => {
+  // setGenerating(true);
+  let hintPrompt;
+  let url;
+  let result;
+  let AItype = "openai";
+  if (AItype == "claude") {
+    url = "/api/generate2";
+  } else {
+    url = "/api/generate";
+  }
+
+  let intro = `You are a law professor. 
+      You help your student answer this question ${question}
+      The correct answers are: ${answers.answerElements.join(", ")}`;
+
+  let recommendations = ` Answer in ${
+    lang == "ru" ? "Russian" : "English"
+  }. Answer in second person. Address the student as "You"! Limit your hint to 3 sentences.`;
+
+  // if the student has already given some correct answers, we focus only on the ansers that have not yet been found
+  if (overallResults && overallResults.length > 0) {
+    hintPrompt = ` The student has already given these correct answers: """ ${correctIdeas
+      .map((el) => el.idea)
+      .join(", ")} """. But struggles to find the rest.
+      Give a detailed hint to the student in a Socratic manner that will help them find these remaining answers: """${answers.answerElements
+        .filter(
+          (el) =>
+            correctIdeas.filter((c) => c.matchedAnswer.answer == el.answer)
+              .length == 0
+        )
+        .map((el) => el.answer)
+        .join(", ")}""".
+      Answer in the same language as the text of the question. Answer in second person.`;
+
+    // otherwise we give a hint for the first answer only
+  } else {
+    hintPrompt = ` The student can't come up with any answers. 
+                    Give a detailed hint to the student that will help them find the first answer: ${answers.answerElements[0].answer}
+                  `;
+  }
+
+  try {
+    event.preventDefault();
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: intro + hintPrompt + recommendations,
+      }),
+    });
+
+    if (response.status !== 200) {
+      throw (
+        (await response.json()).error ||
+        new Error(`Request failed with status ${response.status}`)
+      );
+    }
+
+    const data = await response.json();
+    if (AItype == "claude") {
+      result = data.result.content[0].text;
+    } else {
+      result = data.result.content;
+    }
+
+    return result;
+
+    if (result) {
+      // setAIHint(result);
+      // if (!isFirstHint) {
+      // createQuizResult({
+      //   variables: {
+      //     quiz: props.quizId,
+      //     lessonId: props.lessonId,
+      //     hint: result,
+      //     type: "hint",
+      //     comment: `Student asked for a hint`,
+      //   },
+      // });
+      // }
+    } else {
+      return "Sorry, you are on your own";
+    }
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+};

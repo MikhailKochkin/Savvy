@@ -374,3 +374,27 @@ export const MiniCircle = styled.div`
     color: #828282;
   }
 `;
+
+export const OptionsGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-width: 60%;
+  max-width: 80%;
+  margin-bottom: 20px;
+`;
+
+export const Option = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid #c4c4c4;
+  padding: 10px 15px;
+  background: #fff;
+  cursor: pointer;
+  margin-right: 3%;
+  margin-bottom: 2%;
+  transition: 0.3s;
+  &:hover {
+    border: 1px solid #3f51b5;
+  }
+`;

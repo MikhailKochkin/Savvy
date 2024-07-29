@@ -154,10 +154,12 @@ const SingleQuiz = (props) => {
               passResult={onMove}
               name={props.name}
               image={props.image}
+              instructorName={props.instructorName}
               openQuestionType={props.openQuestionType}
               studentAnswerPassedFromAnotherComponent={
                 studentAnswerPassedFromAnotherComponent
               }
+              isScoringShown={props.isScoringShown}
             />
           )}
           {props.type?.toLowerCase() == "form" && (
@@ -175,6 +177,7 @@ const SingleQuiz = (props) => {
               passResult={onMove}
               name={props.name}
               image={props.image}
+              isScoringShown={props.isScoringShown}
             />
           )}
           {props.type?.toLowerCase() == "generate" && (
@@ -191,6 +194,7 @@ const SingleQuiz = (props) => {
               lessonId={props.lessonID}
               quizId={props.quizID}
               passResult={onMove}
+              isScoringShown={props.isScoringShown}
             />
           )}
           {props.type?.toLowerCase() == "prompt" && (
@@ -209,6 +213,7 @@ const SingleQuiz = (props) => {
               passResult={onMove}
               name={props.name}
               image={props.image}
+              isScoringShown={props.isScoringShown}
             />
           )}
           {props.type?.toLowerCase() == "findall" && (
@@ -228,6 +233,7 @@ const SingleQuiz = (props) => {
               name={props.name}
               image={props.image}
               problemType={props.problemType}
+              isScoringShown={props.isScoringShown}
             />
           )}
           {props.type?.toLowerCase() == "complex" && (
@@ -249,6 +255,7 @@ const SingleQuiz = (props) => {
               problemType={props.problemType}
               isOrderOfAnswersImportant={isOrderOfAnswersImportant}
               shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
+              isScoringShown={props.isScoringShown}
             />
           )}
           {props.type?.toLowerCase() == "call" && (
@@ -268,6 +275,7 @@ const SingleQuiz = (props) => {
               name={props.name}
               image={props.image}
               problemType={props.problemType}
+              isScoringShown={props.isScoringShown}
             />
           )}
         </>
@@ -278,6 +286,7 @@ const SingleQuiz = (props) => {
           lesson={lesson}
           me={me}
           author={author}
+          isScoringShown={props.isScoringShown}
         />
       )}
       {update && (
@@ -293,6 +302,7 @@ const SingleQuiz = (props) => {
           type={props.type}
           isOrderOfAnswersImportant={isOrderOfAnswersImportant}
           shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
+          isScoringShown={props.isScoringShown}
           goalType={props.goalType}
           complexity={complexity}
           ifRight={ifRight}

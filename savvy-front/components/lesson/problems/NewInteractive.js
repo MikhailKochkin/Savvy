@@ -111,13 +111,24 @@ const NewInteractive = (props) => {
   const findUnconnectedItems = (arr) => {
     // Step 1: Create a set of all item IDs
     const ids = new Set(arr.map((item) => item.id));
+
     // Step 2: Iterate over the array and remove connected IDs from the set
     arr.forEach((item) => {
+      // Check true and false connections
       if (item.next.true && item.next.true.value) {
         ids.delete(item.next.true.value);
       }
       if (item.next.false && item.next.false.value) {
         ids.delete(item.next.false.value);
+      }
+
+      // Check branch connections
+      if (item.next.branches && Array.isArray(item.next.branches)) {
+        item.next.branches.forEach((branch) => {
+          if (branch.value) {
+            ids.delete(branch.value);
+          }
+        });
       }
     });
 
@@ -125,19 +136,53 @@ const NewInteractive = (props) => {
     return arr.filter((item) => ids.has(item.id));
   };
 
-  const updateArray = (data) => {
-    // Use optional chaining to safely access properties
-    let nextTrueValue = componentList.at(-1)?.next?.true?.value;
-    let nextFalseValue = componentList.at(-1)?.next?.false?.value;
-    // Set nextValue based on the value of data
-    let nextValue = data[0] ? nextTrueValue : nextFalseValue;
-    let next_el = problem.steps.problemItems.find((el) => el.id == nextValue);
+  const updateArray = (data, type) => {
+    console.log(data, type);
 
-    if (props.type === "ONLY_CORRECT") {
-      if (data[0]) {
+    if (type === "branch") {
+      console.log(componentList.at(-1));
+      let nextValue = componentList
+        .at(-1)
+        .next.branches.find((branch) => branch.source === data[1]);
+      console.log("nextValue", nextValue);
+      let next_el = problem.steps.problemItems.find(
+        (el) => el.id === nextValue.value
+      );
+      console.log("next_el", next_el);
+      if (next_el) {
+        setComponentList([...componentList, next_el]);
+      }
+    } else {
+      // Use optional chaining to safely access properties
+      let nextTrueValue = componentList.at(-1)?.next?.true?.value;
+      let nextFalseValue = componentList.at(-1)?.next?.false?.value;
+      // Set nextValue based on the value of data
+      let nextValue = data[0] ? nextTrueValue : nextFalseValue;
+      let next_el = problem.steps.problemItems.find((el) => el.id == nextValue);
+
+      if (props.type === "ONLY_CORRECT") {
+        if (data[0]) {
+          if (next_el) {
+            setComponentList([...componentList, next_el]);
+            // slide(next_el.id);
+          } else {
+            props.onFinish(true, "new");
+          }
+
+          let last_value = [...componentList, next_el][
+            [...componentList, next_el].length - 1
+          ];
+          if (!last_value || !last_value.next.true.value) {
+            props.onFinish(true, "new");
+            return;
+          }
+        } else {
+          return;
+        }
+      } else {
         if (next_el) {
           setComponentList([...componentList, next_el]);
-          slide(next_el.id);
+          // slide(next_el.id);
         } else {
           props.onFinish(true, "new");
         }
@@ -149,25 +194,9 @@ const NewInteractive = (props) => {
           props.onFinish(true, "new");
           return;
         }
-      } else {
-        return;
-      }
-    } else {
-      if (next_el) {
-        setComponentList([...componentList, next_el]);
-        slide(next_el.id);
-      } else {
-        props.onFinish(true, "new");
-      }
-
-      let last_value = [...componentList, next_el][
-        [...componentList, next_el].length - 1
-      ];
-      if (!last_value || !last_value.next.true.value) {
-        props.onFinish(true, "new");
-        return;
       }
     }
+
     // If nextValue is undefined or null, then exit early
   };
 
@@ -183,6 +212,7 @@ const NewInteractive = (props) => {
             let el;
             if (com.type.toLowerCase() === "quiz") {
               el = lesson.quizes.find((quiz) => quiz.id === com.id);
+              console.log("el", el);
               return (
                 <SingleQuiz
                   id={el.id}
@@ -198,6 +228,7 @@ const NewInteractive = (props) => {
                   ifWrong={el.ifWrong}
                   me={me}
                   problemType={props.type}
+                  instructorName={el.instructorName}
                   hidden={true}
                   userData={[]}
                   lessonID={lesson.id}
@@ -207,6 +238,7 @@ const NewInteractive = (props) => {
                   next={el.next}
                   isOrderOfAnswersImportant={el.isOrderOfAnswersImportant}
                   shouldAnswerSizeMatchSample={el.shouldAnswerSizeMatchSample}
+                  isScoringShown={el.isScoringShown}
                   getData={updateArray}
                   exam={true}
                   story={true}
@@ -230,6 +262,7 @@ const NewInteractive = (props) => {
                   user_name={el.user}
                   name={el.name}
                   image={el.image}
+                  complexTestAnswers={el.complexTestAnswers}
                   comments={el.comments}
                   type={el.type}
                   goalType={el.goalType}
@@ -239,7 +272,6 @@ const NewInteractive = (props) => {
                   length={Array(el.correct.length).fill(false)}
                   userData={[]}
                   getData={updateArray}
-                  next={el.next}
                   story={true}
                   exam={true}
                   author={author}
