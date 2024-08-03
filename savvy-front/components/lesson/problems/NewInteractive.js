@@ -137,18 +137,13 @@ const NewInteractive = (props) => {
   };
 
   const updateArray = (data, type) => {
-    console.log(data, type);
-
     if (type === "branch") {
-      console.log(componentList.at(-1));
       let nextValue = componentList
         .at(-1)
         .next.branches.find((branch) => branch.source === data[1]);
-      console.log("nextValue", nextValue);
       let next_el = problem.steps.problemItems.find(
         (el) => el.id === nextValue.value
       );
-      console.log("next_el", next_el);
       if (next_el) {
         setComponentList([...componentList, next_el]);
       }
@@ -212,7 +207,6 @@ const NewInteractive = (props) => {
             let el;
             if (com.type.toLowerCase() === "quiz") {
               el = lesson.quizes.find((quiz) => quiz.id === com.id);
-              console.log("el", el);
               return (
                 <SingleQuiz
                   id={el.id}

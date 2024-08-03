@@ -94,7 +94,6 @@ const ProblemBuilder = (props) => {
     if (id) {
       let el = props.elements.filter((l) => l.id === id)[0];
       let source = props.elements.filter((l) => l.id === root)[0];
-      // console.log(source.color, colors.indexOf(source.color));
       el.source = source.id;
       el.color = colors[colors.indexOf(source.color) + 1];
       el.sourceColor = source.color;

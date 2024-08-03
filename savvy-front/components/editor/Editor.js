@@ -342,7 +342,7 @@ const serialize = (node) => {
     case "paragraph":
       return `<p>${children}</p>`;
     case "numbered-list":
-      return `<ol>${children}</ol>`;
+      return `<ol type="${node.listType || "1"}">${children}</ol>`;
     case "bulleted-list":
       return `<ul>${children}</ul>`;
     case "list-item":
@@ -546,7 +546,14 @@ const deserialize = (el) => {
     case "UL":
       return jsx("element", { type: "bulleted-list" }, children);
     case "OL":
-      return jsx("element", { type: "numbered-list" }, children);
+      return jsx(
+        "element",
+        {
+          type: "numbered-list",
+          listType: el.getAttribute("type") || "1",
+        },
+        children
+      );
     case "LI":
       return jsx("element", { type: "list-item" }, children);
     case "H2":
@@ -707,10 +714,9 @@ const CustomEditor = {
     });
   },
 
-  makeList(editor, format) {
+  makeList(editor, format, listType = "1") {
     const isActive = isBlockActive(editor, format);
     const isList = LIST_TYPES.includes(format);
-    // const isList = true
 
     Transforms.unwrapNodes(editor, {
       match: (n) =>
@@ -726,7 +732,11 @@ const CustomEditor = {
     Transforms.setNodes(editor, newProperties);
 
     if (!isActive && isList) {
-      const block = { type: format, children: [] };
+      const block = {
+        type: format,
+        children: [],
+        ...(format === "numbered-list" ? { listType } : {}),
+      };
       Transforms.wrapNodes(editor, block);
     }
   },
@@ -1596,7 +1606,11 @@ const NoteElement = ({
       {...props.attributes}
       onMouseDown={(event) => {
         event.preventDefault(); // prevent Slate's default mouse down handling
-        setModalData(props.element.note);
+        setModalData(
+          props.element.note && props.element.note !== "undefined"
+            ? props.element.note
+            : props.element.elementId
+        );
         setModalOpen(true);
         const path = ReactEditor.findPath(editor, props.element);
         setNotePath(path); // store the path
@@ -1726,7 +1740,11 @@ const ListElement = (props) => {
 };
 
 const OrderedListElement = (props) => {
-  return <ol {...props.attributes}>{props.children}</ol>;
+  return (
+    <ol type={props.element.listType || "1"} {...props.attributes}>
+      {props.children}
+    </ol>
+  );
 };
 
 const ListItem = (props) => {

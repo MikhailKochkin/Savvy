@@ -61,11 +61,7 @@ const OuterContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: blue;
-  @media (max-width: 800px) {
-    flex-direction: column;
-    align-items: center;
-  }
+  align-items: center;
   /* align-items: stretch; // Stretch to match tallest child */
 `;
 
@@ -114,8 +110,11 @@ const Block = styled.div`
     height: 100px;
   }
   grid-template-rows: auto;
-  @media (max-width: 800px) {
-    width: 100%;
+  @media (max-width: 950px) {
+    flex-direction: column;
+    align-items: center;
+    overflow-x: auto;
+    width: 95%;
   }
 `;
 
@@ -126,9 +125,6 @@ const Element = styled.div`
   border: 1px dashed #c4c4c4;
   display: ${(props) => (props.display ? "flex" : "none")};
   flex-direction: column;
-  /* justify-content: flex-start;
-  align-items: flex-start; */
-  font-size: 1.6rem;
   .comment_yellow {
     border: 2px solid #f3cf95;
     border-radius: 5px;
@@ -527,8 +523,12 @@ const InputBlock = styled.div`
   font-size: 1.6rem;
   line-height: 1.8;
   margin-right: 15px;
+  margin-top: 15px;
   cursor: pointer;
   margin-bottom: 10px;
+  @media (max-width: 800px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const ConElement = (props) => {

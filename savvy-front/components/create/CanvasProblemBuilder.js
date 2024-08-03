@@ -300,7 +300,6 @@ const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
       };
     });
   };
-  console.log("items", items);
   const [messages, setMessages] = useState(initializeMessages(items));
   const [activeMessage, setActiveMessage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -363,39 +362,45 @@ const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
     if (sourceId === destId) return;
     setMessages((prevMessages) => {
       if (sourceAnswerId) {
-        const newMessages = [...prevMessages];
-        const sourceMessage = newMessages.find((msg) => msg.id === sourceId);
-        const destMessage = newMessages.find((msg) => msg.id === destId);
-        if (sourceMessage && destMessage) {
-          if (!sourceMessage.next.branches) {
-            sourceMessage.next.branches = [
-              {
+        const newMessages = prevMessages.map((msg) => {
+          if (msg.id === sourceId) {
+            const destMessage = prevMessages.find((m) => m.id === destId);
+            if (destMessage) {
+              const newBranch = {
                 source: sourceAnswerId,
                 type: destMessage.type,
                 value: destId,
-              },
-            ];
-          } else {
-            sourceMessage.next.branches.push({
-              source: sourceAnswerId,
-              type: destMessage.type,
-              value: destId,
-            });
+              };
+              return {
+                ...msg,
+                next: {
+                  ...msg.next,
+                  branches: msg.next.branches
+                    ? [...msg.next.branches, newBranch]
+                    : [newBranch],
+                },
+              };
+            }
           }
-        }
+          return msg;
+        });
         return newMessages;
       } else {
-        const newMessages = [...prevMessages];
-        const sourceMessage = newMessages.find((msg) => msg.id === sourceId);
-        const destMessage = newMessages.find((msg) => msg.id === destId);
-        if (
-          sourceMessage &&
-          destMessage &&
-          (type === "true" || type === "false")
-        ) {
-          sourceMessage.next[type] = { value: destId, type: destMessage.type };
-        }
-        return newMessages;
+        return prevMessages.map((msg) => {
+          if (msg.id === sourceId && (type === "true" || type === "false")) {
+            const destMessage = prevMessages.find((m) => m.id === destId);
+            if (destMessage) {
+              return {
+                ...msg,
+                next: {
+                  ...msg.next,
+                  [type]: { value: destId, type: destMessage.type },
+                },
+              };
+            }
+          }
+          return msg;
+        });
       }
     });
   };

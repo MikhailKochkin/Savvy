@@ -125,14 +125,11 @@ const CallSimulation = (props) => {
   // Function to speak out the question
   const speakQuestion = () => {
     const cleanedQuestion = removeHtmlTags(question);
-    console.log("removeHtmlTags", cleanedQuestion);
     const speech = new SpeechSynthesisUtterance(cleanedQuestion);
     const availableVoices = window.speechSynthesis.getVoices();
     const englishVoices = availableVoices.filter(
       (voice) => voice.lang === lang
     );
-    console.log("englishVoices", englishVoices);
-
     if (englishVoices.length > 0) {
       const activeVoice = englishVoices.filter(
         (voice) => voice.name === "Aaron"
@@ -175,7 +172,6 @@ const CallSimulation = (props) => {
     // setStartSpeech(true);
 
     newRecognition.onresult = function (event) {
-      console.log("event", event.results[0][0]);
       setAnswer(answer + " " + event.results[0][0].transcript);
     };
 

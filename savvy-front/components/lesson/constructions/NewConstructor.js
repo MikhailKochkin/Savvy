@@ -1,13 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import parse from "html-react-parser";
-import { v4 as uuidv4 } from "uuid";
-import { htmlToText } from "html-to-text";
-import dynamic from "next/dynamic";
-import { useMutation, gql, useQuery } from "@apollo/client";
-import smoothscroll from "smoothscroll-polyfill";
-// import Button from "@material-ui/core/Button";
-// import { withStyles } from "@material-ui/core/styles";
+import { gql, useQuery } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 
 import UpdateNewConstructor from "./UpdateNewConstructor";
@@ -31,12 +24,18 @@ const CONSTRUCTION_RESULT_QUERY = gql`
 `;
 
 const Styles = styled.div`
-  width: ${(props) => (props.story ? "85vw" : "100%")};
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const Container = styled.div`
+  width: ${(props) => (props.story ? "95vw" : "100%")};
   max-width: 1350px;
   display: flex;
   margin-bottom: 4%;
   font-size: 1.4rem;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   background: #f8f9fa;
@@ -85,41 +84,41 @@ const NewConstructor = (props) => {
   };
 
   return (
-    <div id={props.construction.id}>
-      {story !== true && (
-        <Buttons>
-          <button onClick={(e) => setUpdate(!update)}>
-            {!update ? t("update") : t("back")}
-          </button>
-        </Buttons>
-      )}
-      {!update && construction.type == "SUMMARY" ? (
-        <Summary
-          key={props.key}
-          lessonID={props.lessonID}
-          construction={props.construction}
-          complexity={props.complexity}
-          me={props.me}
-          story={props.story}
-          elements={elements}
-          constructionResults={queryData}
-          // getResults={getResults}
-        />
-      ) : null}
-      {!update && construction.type != "SUMMARY" ? (
-        <Document
-          key={props.key}
-          lessonID={props.lessonID}
-          construction={props.construction}
-          complexity={props.complexity}
-          me={props.me}
-          story={props.story}
-          elements={elements}
-          getResult={getResult}
-        />
-      ) : null}
+    <Styles id={props.construction.id}>
+      <Container id={"construction_" + construction.id}>
+        {story !== true && (
+          <Buttons>
+            <button onClick={(e) => setUpdate(!update)}>
+              {!update ? t("update") : t("back")}
+            </button>
+          </Buttons>
+        )}
+        {!update && construction.type == "SUMMARY" ? (
+          <Summary
+            key={props.key}
+            lessonID={props.lessonID}
+            construction={props.construction}
+            complexity={props.complexity}
+            me={props.me}
+            story={props.story}
+            elements={elements}
+            constructionResults={queryData}
+            // getResults={getResults}
+          />
+        ) : null}
+        {!update && construction.type != "SUMMARY" ? (
+          <Document
+            key={props.key}
+            lessonID={props.lessonID}
+            construction={props.construction}
+            complexity={props.complexity}
+            me={props.me}
+            story={props.story}
+            elements={elements}
+            getResult={getResult}
+          />
+        ) : null}
 
-      <Styles id={"construction_" + construction.id}>
         {update && (
           <UpdateNewConstructor
             key={construction.id}
@@ -133,8 +132,8 @@ const NewConstructor = (props) => {
             passUpdated={passUpdated}
           />
         )}
-      </Styles>
-    </div>
+      </Container>
+    </Styles>
   );
 };
 

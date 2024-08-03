@@ -250,9 +250,6 @@ const Element = (props) => {
 
   let item;
   let task = tasks[activeStep];
-  console.log("props.results", props.results);
-  console.log("props.completed", props.completed);
-
   if (tasks.length === activeStep) {
     item = (
       <Final

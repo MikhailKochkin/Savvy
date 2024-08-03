@@ -497,7 +497,6 @@ const UpdateTest = (props) => {
             onClick={async (e) => {
               // Stop the form from submitting
               e.preventDefault();
-              console.log("complexAnswers", complexAnswers, answers);
               const res = await updateNewTest();
               props.getResult(res);
               props.switchUpdate();

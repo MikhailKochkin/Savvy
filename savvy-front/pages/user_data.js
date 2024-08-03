@@ -425,8 +425,6 @@ const ClientData = () => {
     ? sortClientsByActivity(data4.users)
     : [];
 
-  console.log("initialClients", initialClients);
-
   return (
     <div>
       <div>

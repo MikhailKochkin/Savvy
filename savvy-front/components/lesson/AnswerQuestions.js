@@ -175,7 +175,6 @@ const AnswerQuestions = (props) => {
 
       // Check if stemmedQuestion is empty before calling findSource
       if ([...arr].length > 0) {
-        console.log(1);
         info_source = findSource(arr, notes, chats);
       }
     } catch (error) {

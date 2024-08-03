@@ -13,6 +13,7 @@ import {
   generateImprovement,
   checkAnswer,
   reflectOnExplanation,
+  checkNewWording,
 } from "../functions/AIQuestionFunctions";
 import {
   removeSpecialChars,
@@ -71,14 +72,13 @@ const OpenQuestion = (props) => {
   } = props;
 
   const [answer, setAnswer] = useState(""); // The answer provided by the student
-  const [previousAnswers, setPreviousAnswers] = useState([]); // The answer provided by the student
+  const [previousAnswers, setPreviousAnswers] = useState([]); // The answers provided by the student
   // const [correct, setCorrect] = useState(""); // is the answer by the student correct? Used to communicate with the student
   const [correctnessLevel, setCorrectnessLevel] = useState(); // more deep understanding of the correctness. Used to generate prompts
   const [result, setResult] = useState(null); // student's grade
   const [isAnswerBeingChecked, setIsAnswerBeingChecked] = useState(false);
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [serverComment, setServerComment] = useState(null);
-  // const [isExperienced, setIsExperienced] = useState(false); // set to false once we get the student answer
 
   const [hints, setHints] = useState([]); // all AI generated hints
 
@@ -385,6 +385,55 @@ const OpenQuestion = (props) => {
       },
     });
   };
+
+  // 7. Double check
+  const doubleCheck = async (value) => {
+    let results = [];
+    let new_wording = await checkNewWording(value, props.answer);
+    let new_result;
+    if (
+      props.answers?.answerElements?.length > 0 &&
+      props.answers?.answerElements[0].answer !== ""
+    ) {
+      await Promise.all(
+        props.answers.answerElements.map(async (el) => {
+          const { result, correctnessLevel, color, comment } =
+            await checkAnswer(
+              true,
+              removeSpecialChars2(el.answer),
+              new_wording,
+              props.check
+            );
+
+          // Ensure correctnessLevel is resolved
+          const resolvedCorrectnessLevel = await correctnessLevel;
+
+          results.push({
+            result,
+            correctnessLevel: resolvedCorrectnessLevel,
+            color,
+            comment,
+          });
+        })
+      );
+
+      const new_result = results.reduce((max, current) =>
+        current.result > max.result ? current : max
+      );
+      return new_result;
+    } else {
+      new_result = await checkAnswer(
+        value,
+        removeSpecialChars(props.answer),
+        new_wording,
+        props.check
+      );
+    }
+    return {
+      new_result: new_result,
+      new_wording: new_wording,
+    };
+  };
   return openQuestionType == "mini" ? (
     <MiniQuestion
       id={id}
@@ -419,6 +468,7 @@ const OpenQuestion = (props) => {
   ) : (
     <FullOpenQuestion
       id={id}
+      lessonId={props.lessonId}
       author={author}
       question={question}
       story={story}
@@ -445,6 +495,7 @@ const OpenQuestion = (props) => {
       isScoringShown={isScoringShown}
       image={image}
       instructorName={instructorName}
+      doubleCheck={doubleCheck}
     />
   );
 };

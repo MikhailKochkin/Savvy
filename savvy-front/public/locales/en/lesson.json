@@ -194,5 +194,8 @@
   "answer_above_65": "Answers above 64 are correct, while those from 58 to 64 are partially correct.",
   "more_detailed_response_recommended": "Try giving a more detailed answer. That might help me better understand your answer and evaluate it better.",
   "more_concise_response_recommended": "Try giving a shorter, more concise answer. That might help me better understand your answer and evaluate it better.",
-  "make_changes_to_the_text": "Make changes to this text in the document:"
+  "make_changes_to_the_text": "Make changes to this text in the document:",
+  "go_to_answer_form": "Return to Answer Form",
+  "i_will_review_your_asnwer": "I'll review your answer once more and get back to you via email once I've made a decision.",
+  "i_believe_my_answer_is_correct": "I believe my answer is correct"
 }

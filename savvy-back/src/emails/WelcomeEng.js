@@ -483,7 +483,7 @@ const WelcomeEmailEng = (name, password, email) => `
                       <div class="f-fallback">
                         <h1>${name}, hello!</h1>
                         <p>
-                            Thanks for creating an account on BeSavvy. Let me explain how BeSavvy works.
+                          Thanks for creating an account on BeSavvy. Let me explain how BeSavvy works.
 
                         </p>
                         <!-- Action -->

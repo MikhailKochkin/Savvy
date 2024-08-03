@@ -444,7 +444,6 @@ const LessonData = (props) => {
             <h2>Lesson results</h2>
           </div>
           {lesson?.structure?.lessonItems.map((l) => {
-            console.log("l", l.type);
             if (l.type.toLowerCase() == "shot") {
               let shot = lesson.shots.filter((n) => n.id === l.id)[0];
               return (
@@ -453,7 +452,6 @@ const LessonData = (props) => {
                   comments={shot.comments}
                   parts={shot.parts}
                   shotUser={shot.user.id}
-                  // me={me}
                   shotID={shot.id}
                   lessonID={lesson.id}
                   title={shot.title}

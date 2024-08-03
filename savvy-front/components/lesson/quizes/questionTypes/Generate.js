@@ -286,8 +286,6 @@ const Generate = (props) => {
                 score = "0";
               }
               let inputColor;
-              console.log("score", score);
-              console.log("props.goalType", props.goalType);
               if (props.goalType !== "ASSESS" && score >= 65) {
                 inputColor = "#D0EADB";
               } else if (
@@ -299,7 +297,6 @@ const Generate = (props) => {
               } else {
                 inputColor = "#F3F3F3";
               }
-              console.log("inputColor", inputColor);
               return (
                 <Frame inputColor={inputColor}>
                   <Answer_text
@@ -356,7 +353,6 @@ const Generate = (props) => {
                   overallResults,
                   correctIdeas
                 );
-                console.log("res", res);
                 setAIHint(res);
                 setGenerating(false);
                 createQuizResult({

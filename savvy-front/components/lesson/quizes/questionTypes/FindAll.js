@@ -393,7 +393,6 @@ const FindAll = (props) => {
                   overallResults,
                   correctIdeas
                 );
-                console.log("res", res);
                 setAIHint(res);
                 setGenerating(false);
                 createQuizResult({

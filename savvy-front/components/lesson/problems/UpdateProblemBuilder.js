@@ -36,7 +36,6 @@ const UpdateProblemBuilder = (props) => {
 
   const getData = (id, type, index) => {
     if (values.find((v) => v.id == id)) {
-      console.log("found");
     } else {
       let new_values = values.map((obj, idx) => {
         let newObj = deepCopy(obj); // Deep copy the object

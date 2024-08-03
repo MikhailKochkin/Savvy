@@ -14,7 +14,7 @@ const EducatorPage = () => {
 
   return (
     <>
-      {!me && <div>Загружаем...</div>}
+      {!me && <div>Loading...</div>}
 
       {me && <Educator me={me} />}
     </>

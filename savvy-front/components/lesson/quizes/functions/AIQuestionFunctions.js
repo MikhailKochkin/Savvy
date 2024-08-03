@@ -346,7 +346,6 @@ export const generateImprovement = async (
   // Set the AI type and URL based on the AIType parameter
   const AItype = "openai";
   const url = AItype === "claude" ? "/api/generate2" : "/api/generate";
-  console.log(studentAnswer);
   // Define the improvement introduction and recommendations
   const improvementIntro = `
     You are a an experienced professional advising juniors on how to implememnt their projects better. You asked your student this question: "${question}".
@@ -608,5 +607,70 @@ export const generateHint2 = async (
   } catch (error) {
     console.error(error);
     alert(error.message);
+  }
+};
+
+export const changeWording = async (old_wording, sample_answer) => {
+  const AItype = "openai";
+  const url = AItype === "claude" ? "/api/generate2" : "/api/generate";
+  const targetLength = sample_answer.length;
+  const lowerBound = Math.floor(targetLength * 0.9);
+  const upperBound = Math.ceil(targetLength * 1.1);
+
+  const prompt = `Rewrite the following text, adhering strictly to these rules:
+
+1. The new text MUST be between ${lowerBound} and ${upperBound} characters long. This is crucial.
+2. Maintain the core meaning and ideas of the original text.
+3. Do not add new concepts or information not present in the original.
+4. If necessary, simplify or expand existing ideas to meet the length requirement.
+5. Ensure the rewrite is coherent and flows well.
+
+Original text: "${old_wording}"
+
+Provide only the rewritten text in your response, with no additional comments or explanations.`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    const result =
+      AItype === "claude" ? data.result.content[0].text : data.result.content;
+
+    return result.trim() || null;
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+};
+
+export const checkNewWording = async (
+  old_wording,
+  sample_answer,
+  maxAttempts = 5
+) => {
+  if (maxAttempts <= 0) {
+    // console.log("Max attempts reached, returning null");
+    return null;
+  }
+
+  let new_wording = await changeWording(old_wording, sample_answer);
+  const ratio = new_wording.length / sample_answer.length;
+
+  if (ratio > 1.1 || ratio < 0.9) {
+    // console.log(`Attempt failed. Ratio: ${ratio}. Trying again...`);
+    return checkNewWording(old_wording, sample_answer, maxAttempts - 1);
+  } else {
+    // console.log(`Success! Ratio: ${ratio}`);
+    return new_wording;
   }
 };

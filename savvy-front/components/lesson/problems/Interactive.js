@@ -101,7 +101,6 @@ class Interactive extends Component {
       let el = this.props.lesson.quizes.filter(
         (q) => q.id === data[1].value
       )[0];
-      console.log(el, el.isScoringShown);
       newQuiz = (
         <SingleQuiz
           key={el.id}

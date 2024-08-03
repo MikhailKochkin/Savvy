@@ -237,29 +237,29 @@ const Mutation = mutationType({
             maxAge: 31557600000,
           });
         }
-        if (
-          country == null ||
-          country.toLowerCase() == "ru" ||
-          country.toLowerCase() == "kz" ||
-          country.toLowerCase() == "by" ||
-          country.toLowerCase() == "am" ||
-          country.toLowerCase() == "tj" ||
-          country.toLowerCase() == "uz"
-        ) {
-          const newEmailRus = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
-            To: email,
-            Subject: "Расскажу о возможностях BeSavvy",
-            HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
-          });
-        } else {
-          const newEmailEng = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
-            To: email,
-            Subject: "Hello from BeSavvy",
-            HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
-          });
-        }
+        // if (
+        //   country == null ||
+        //   country.toLowerCase() == "ru" ||
+        //   country.toLowerCase() == "kz" ||
+        //   country.toLowerCase() == "by" ||
+        //   country.toLowerCase() == "am" ||
+        //   country.toLowerCase() == "tj" ||
+        //   country.toLowerCase() == "uz"
+        // ) {
+        //   const newEmailRus = await client.sendEmail({
+        //     From: "Mikhail@besavvy.app",
+        //     To: email,
+        //     Subject: "Расскажу о возможностях BeSavvy",
+        //     HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
+        //   });
+        // } else {
+        const newEmailEng = await client.sendEmail({
+          From: "Mike@besavvy.app",
+          To: email,
+          Subject: "Hello from BeSavvy",
+          HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
+        });
+        // }
 
         if (referal) {
           const old_user = await ctx.prisma.user.findUnique({
@@ -309,9 +309,6 @@ const Mutation = mutationType({
             password: hashed_password,
             authType: "google",
             image: image,
-            // uni: { connect: { id: uniID } },
-            // company: { connect: { id: company } },
-            // careerTrack: { connect: { id: careerTrackID } },
             isFamiliar: true,
           },
         });
@@ -343,7 +340,7 @@ const Mutation = mutationType({
         }
 
         const newEmailEng = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
+          From: "Mike@besavvy.app",
           To: email,
           Subject: "Hello from BeSavvy",
           HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
@@ -362,8 +359,6 @@ const Mutation = mutationType({
         number: stringArg(),
       },
       resolve: async (_, { name, email, password, number, surname }, ctx) => {
-        console.log("password", password);
-
         const hashed_password = await bcrypt.hash(password, 10);
         const valid = await bcrypt.compare(password, hashed_password);
 
@@ -395,46 +390,6 @@ const Mutation = mutationType({
             level: 1,
           },
         });
-
-        // let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
-        //   expiresIn: 1000 * 60 * 60 * 24 * 365,
-        // });
-        // if (process.env.NODE_ENV === "production") {
-        //   ctx.res.cookie("token", token, {
-        //     httpOnly: true,
-        //     secure: process.env.NODE_ENV === "production",
-        //     sameSite: "None",
-        //     maxAge: 31557600000,
-        //   });
-        // } else {
-        //   ctx.res.cookie("token", token, {
-        //     httpOnly: true,
-        //     maxAge: 31557600000,
-        //   });
-        // }
-
-        // const newEmailRus = await client.sendEmail({
-        //   From: "Mikhail@besavvy.app",
-        //   To: email,
-        //   Subject: "Расскажу о возможностях BeSavvy",
-        //   HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
-        // });
-
-        // if (referal) {
-        //   const old_user = await ctx.prisma.user.findUnique({
-        //     where: { id: referal },
-        //   });
-
-        //   const updated_user = await ctx.prisma.user.update({
-        //     data: {
-        //       score: old_user.score + 100,
-        //     },
-        //     where: {
-        //       id: referal,
-        //     },
-        //   });
-        // }
-
         return { user };
       },
     });
@@ -532,28 +487,28 @@ const Mutation = mutationType({
               maxAge: 31557600000,
             });
           }
-          if (
-            country.toLowerCase() == "ru" ||
-            country.toLowerCase() == "kz" ||
-            country.toLowerCase() == "by" ||
-            country.toLowerCase() == "am" ||
-            country.toLowerCase() == "tj" ||
-            country.toLowerCase() == "uz"
-          ) {
-            const newEmailRus = await client.sendEmail({
-              From: "Mikhail@besavvy.app",
-              To: email,
-              Subject: "Расскажу о возможностях BeSavvy",
-              HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
-            });
-          } else {
-            const newEmailEng = await client.sendEmail({
-              From: "Mikhail@besavvy.app",
-              To: email,
-              Subject: "Hello from BeSavvy",
-              HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
-            });
-          }
+          // if (
+          //   country.toLowerCase() == "ru" ||
+          //   country.toLowerCase() == "kz" ||
+          //   country.toLowerCase() == "by" ||
+          //   country.toLowerCase() == "am" ||
+          //   country.toLowerCase() == "tj" ||
+          //   country.toLowerCase() == "uz"
+          // ) {
+          //   const newEmailRus = await client.sendEmail({
+          //     From: "Mikhail@besavvy.app",
+          //     To: email,
+          //     Subject: "Расскажу о возможностях BeSavvy",
+          //     HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
+          //   });
+          // } else {
+          const newEmailEng = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: email,
+            Subject: "Hello from BeSavvy",
+            HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
+          });
+          // }
 
           return { user, token };
         }
@@ -1677,8 +1632,6 @@ const Mutation = mutationType({
             newIdMapping[texteditor.id] = createdEditor.id;
           })
         );
-
-        console.log("newIdMapping", newIdMapping);
 
         const originalStructure = originalLesson.structure;
         const updatedStructure = originalStructure.lessonItems.map((item) => ({
@@ -4569,10 +4522,10 @@ const Mutation = mutationType({
           HtmlBody: NextWeekEmail.NextWeekEmail(
             name,
             `<p>Это Миша, основатель BeSavvy.</p>
-        <p>Рад приветствовать тебя среди участников курса "${course.title}".</p>
-        <p>Главное, запомни, что ты занимаешься не в одиночку. Я всегда буду рад помочь тебе с любым учебным или техническим вопросом. </p>
-        <p>Со мной можно связаться, написав в наше сообщество в ТГ или ответив на это письмо.</p>
-        <p><a href="https://t.me/+ZKc7m_C8TslkNTEy" target="_blank">Вот ссылка</a> на наше сообщество по английскому и <a href="https://t.me/+gmqzbUWeqlc5N2Qy" target="_blank">ссылка</a> на наше карьерное сообщество.</p>
+              <p>Рад приветствовать тебя среди участников курса "${course.title}".</p>
+              <p>Главное, запомни, что ты занимаешься не в одиночку. Я всегда буду рад помочь тебе с любым учебным или техническим вопросом. </p>
+              <p>Со мной можно связаться, написав в наше сообщество в ТГ или ответив на это письмо.</p>
+              <p><a href="https://t.me/+ZKc7m_C8TslkNTEy" target="_blank">Вот ссылка</a> на наше сообщество по английскому и <a href="https://t.me/+gmqzbUWeqlc5N2Qy" target="_blank">ссылка</a> на наше карьерное сообщество.</p>
         `,
             course.title,
             courseId

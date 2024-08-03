@@ -9,7 +9,7 @@ const Element = styled.div`
   height: 100%;
   border: 1px dashed #c4c4c4;
   display: ${(props) => (props.display ? "flex" : "none")};
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   font-size: 1.6rem;
@@ -230,6 +230,7 @@ const Construction = (props) => {
     <>
       <div className="time">{moment(s.createdAt).format("LLL")} </div>
       <Block id={id} columns={construction.columnsNum}>
+        {console.log(elems)}
         {elems.map((t, i) => {
           if (t) {
             return (
