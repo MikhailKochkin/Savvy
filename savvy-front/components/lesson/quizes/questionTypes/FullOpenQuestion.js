@@ -415,6 +415,7 @@ const FullOpenQuestion = (props) => {
                           },
                         });
                         setIsAnswerChallenged(true);
+                        slideTo(`answer_challenge_${id}`);
                       }}
                     >
                       {t("i_believe_my_answer_is_correct")}
@@ -497,7 +498,7 @@ const FullOpenQuestion = (props) => {
               );
             })}
           {isAnswerChallenged && (
-            <div className="question_box">
+            <div id={`answer_challenge_${id}`} className="question_box">
               <div className="question_text">
                 <p>{t("i_will_review_your_asnwer")}</p>
               </div>
