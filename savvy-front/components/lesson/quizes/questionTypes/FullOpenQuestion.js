@@ -497,23 +497,25 @@ const FullOpenQuestion = (props) => {
                 </div>
               );
             })}
-          {isAnswerChallenged && (
-            <div id={`answer_challenge_${id}`} className="question_box">
-              <div className="question_text">
-                <p>{t("i_will_review_your_asnwer")}</p>
-              </div>
-              <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
+          <div id={`answer_challenge_${id}`}>
+            {isAnswerChallenged && (
+              <div id={`answer_challenge_${id}`} className="question_box">
+                <div className="question_text">
+                  <p>{t("i_will_review_your_asnwer")}</p>
                 </div>
-              </IconBlock>
-            </div>
-          )}
+                <IconBlock>
+                  {author && author.image != null ? (
+                    <img className="icon" src={author.image} />
+                  ) : (
+                    <img className="icon" src="../../static/hipster.svg" />
+                  )}{" "}
+                  <div className="name">
+                    {author && author.name ? author.name : "BeSavvy"}
+                  </div>
+                </IconBlock>
+              </div>
+            )}
+          </div>
           <div id={`last_improvement_${id}`}></div>
           {generatingImprovement && (
             <Progress2>
