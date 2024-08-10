@@ -72,6 +72,7 @@ const Box = styled.div`
       .block {
         padding: 15px;
         outline: 0;
+        font-size: 1.4rem;
         background: #f8f8f8;
         border-radius: 15px;
         margin-bottom: 20px;
@@ -140,7 +141,7 @@ const QuizResult = (props) => {
             </div>
             <div className="column">
               <div className="quizAnswer">
-                <b>Received answers:</b>
+                <h2>Received answers</h2>
                 {results && results.length > 0 ? (
                   results
                     .filter((r) => r.quiz.id == q.id)
@@ -148,24 +149,25 @@ const QuizResult = (props) => {
                       <div className="block">
                         {q.type?.toLowerCase() !== "generate" && (
                           <>
-                            <div className="standard">
+                            <b>Student answer:</b>{" "}
+                            <span className="standard">
                               {q.type !== "FORM" &&
                                 q.type !== "PROMPT" &&
-                                (t.correct && t.correct == true
-                                  ? "✅ Marked as correct"
-                                  : "❌ Marked as wrong")}
-                            </div>
-                            {q.type == "PROMPT" && console.log("t", t)}
-                            <b>Student answer:</b> {t.answer}
+                                (t.correct && t.correct == true ? "✅" : "❌")}
+                            </span>{" "}
+                            – {t.answer}
                             <div className="standard">
                               <b>Comment:</b> {t.comment}
                             </div>
                             <div className="standard">
+                              <b>Type:</b> {q.type}
+                            </div>
+                            {/* <div className="standard">
                               <b>Hint:</b> {t.hint}
                             </div>
                             <div className="standard">
                               <b>Explanantion:</b> {t.explanation}
-                            </div>
+                            </div> */}
                           </>
                         )}
                         {q.type?.toLowerCase() == "generate" && (

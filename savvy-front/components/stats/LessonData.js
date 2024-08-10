@@ -536,6 +536,13 @@ const LessonData = (props) => {
                   results={data.stats.textEditorResults.filter(
                     (t) => t.textEditor.id === l.id
                   )}
+                  all_quizes={lesson.quizes}
+                  all_tests={lesson.newTests}
+                  all_notes={lesson.notes}
+                  all_chats={lesson.chats}
+                  all_problems={lesson.problems}
+                  all_quiz_results={data.stats.quizResults}
+                  all_test_results={data.stats.testResults}
                 />
               );
             }

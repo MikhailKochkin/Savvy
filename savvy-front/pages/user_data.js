@@ -330,7 +330,8 @@ const ClientData = () => {
   const [email, setEmail] = useState("");
   const [tag, setTag] = useState("");
   const [getUserData, { loading, error, data }] = useLazyQuery(CLIENTS_QUERY);
-  const [newUsersNumber, setNewUsersNumber] = useState(0);
+  const [file, setFile] = useState(null);
+  const [users, setUsers] = useState([]);
 
   const [getUserData2, { loading: loading2, error: error2, data: data2 }] =
     useLazyQuery(CLIENTS_EMAIL_QUERY);
@@ -472,19 +473,7 @@ const ClientData = () => {
       <br />
       <button onClick={handleButtonClick4}>Load Active users</button>
 
-      <div>
-        <button onClick={(e) => setNewUsersNumber(newUsersNumber - 1)}>
-          -1
-        </button>
-        <button onClick={(e) => setNewUsersNumber(newUsersNumber + 1)}>
-          +1
-        </button>
-      </div>
-      <div>
-        {Array.from({ length: newUsersNumber }, (_, index) => (
-          <NewUserCreate key={index + "sdfsdf"} index={index + 1} />
-        ))}
-      </div>
+      <NewUserCreate users={users} />
 
       {loading || loading2 || loading3 || loading4 ? "Грузимся..." : ""}
       {initialClients && initialClients.length > 0 && (

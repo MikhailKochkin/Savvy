@@ -472,7 +472,7 @@ const ProgressBarContainer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 45px;
+  height: 30px;
   z-index: 10;
   display: flex;
   flex-direction: row;
@@ -1110,13 +1110,13 @@ const CustomProgressBar = ({ myResult, lessonItems }) => {
         <div className="container">
           <ProgressBar progress={progress + "%"} />
         </div>
-        <div className="timeLeft">
+        {/* <div className="timeLeft">
           {time_left > 0
             ? router.locale == "ru"
               ? `Осталось ${time_left} мин.`
               : `${time_left} mins left`
             : t("lesson_is_done")}
-        </div>
+        </div> */}
       </div>
     </ProgressBarContainer>
   );

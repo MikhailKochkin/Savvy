@@ -516,8 +516,8 @@ const Person = ({
             {type !== "lesson_analytics"
               ? ((total / active_lessons.length) * 100).toFixed(0)
               : Math.min(
-                  (results[0].progress /
-                    results[0].lesson.structure.lessonItems.length) *
+                  (maxes[0].progress /
+                    maxes[0].lesson.structure.lessonItems.length) *
                     100,
                   100
                 ).toFixed(0)}
@@ -636,7 +636,7 @@ const Person = ({
                   type={type}
                   res={res}
                   date={
-                    type === "lesson_analytics"
+                    type !== "lesson_analytics"
                       ? courseVisit
                         ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
                         : "Undefined"

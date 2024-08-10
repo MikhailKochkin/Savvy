@@ -25,6 +25,13 @@ const TexteditorResult = (props) => {
             texteditor={texteditor}
             student={student}
             results={results}
+            all_quizes={props.all_quizes}
+            all_tests={props.all_tests}
+            all_notes={props.all_notes}
+            all_chats={props.all_chats}
+            all_problems={props.all_problems}
+            all_quiz_results={props.all_quiz_results}
+            all_test_results={props.all_test_results}
           />
         ))}
     </Container>

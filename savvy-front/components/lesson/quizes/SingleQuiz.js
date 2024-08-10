@@ -255,6 +255,7 @@ const SingleQuiz = (props) => {
               isOrderOfAnswersImportant={isOrderOfAnswersImportant}
               shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
               isScoringShown={props.isScoringShown}
+              check={props.check}
             />
           )}
           {props.type?.toLowerCase() == "call" && (

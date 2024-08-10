@@ -220,7 +220,7 @@ const OpenQuestion = (props) => {
       try {
         const { result, correctnessLevel, color, comment } = await checkAnswer(
           e,
-          removeSpecialChars(props.answer),
+          removeSpecialChars2(props.answer),
           answer,
           props.check
         );
@@ -424,7 +424,7 @@ const OpenQuestion = (props) => {
     } else {
       new_result = await checkAnswer(
         value,
-        removeSpecialChars(props.answer),
+        removeSpecialChars2(props.answer),
         new_wording,
         props.check
       );

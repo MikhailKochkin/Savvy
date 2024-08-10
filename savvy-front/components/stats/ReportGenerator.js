@@ -68,18 +68,19 @@ const Report = styled.div`
 
 const ReportGenerator = ({ student, lesson, lessonData, date }) => {
   const [report, setReport] = useState("");
+  const [reportData, setReportData] = useState([]);
   const [generating, setGenerating] = useState(false);
 
   const generateReport = async (event) => {
     event.preventDefault();
     setReport("");
-    // setGenerating(true);
+    setGenerating(true);
     console.log("start report");
 
     // 1. Find all problems / texteditors
     let availableProblems = findProblems(lesson);
     let availableTextEditors = findTextEditors(lesson);
-
+    console.log("availableTextEditors", availableTextEditors);
     // 2. Populate with questions
     availableProblems = populateProblemsWithQuestions(
       availableProblems,
@@ -91,74 +92,154 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
       lessonData.stats.quizResults
     );
 
+    console.log("availableTextEditors with quizzes", availableTextEditors);
     // 3. Populate all tasks with results
-    const updateQuestions = (items, quizResults) =>
-      items.map((item) => ({
-        ...item,
-        questions: item.questions.map((question) =>
-          question.__typename.toLowerCase() === "quiz"
-            ? populateQuizWithResults(question, quizResults)
-            : question
-        ),
-      }));
+    const updateQuestions = (problems, quizResults) => {
+      let updatedProblems = problems.map((problem) => {
+        // Create a new object to avoid modifying the original problem
+        let updatedProblem = { ...problem };
+        let newQuestions = problem.questions.map((question) => {
+          if (question.__typename.toLowerCase() === "quiz") {
+            return populateQuizWithResults(question, quizResults);
+          }
+          return question;
+        });
+        updatedProblem.populatedQuestions = newQuestions;
+        return updatedProblem;
+      });
+      return updatedProblems;
+    };
 
-    availableProblems = updateQuestions(
+    const updateTextEditors = (texteditors, quizResults) => {
+      let updatedTextEditors = texteditors.map((t) => {
+        let populatedQuestions = [];
+        t.questions.map((question) => {
+          if (question.__typename.toLowerCase() === "quiz") {
+            let populatedQuiz = populateQuizWithResults(question, quizResults);
+            populatedQuestions.push(populatedQuiz);
+          } else if (question.__typename.toLowerCase() === "problem") {
+            return;
+            // updatedProblem.populatedQuestions = question.questions.map((q) => {
+            //   if (q.__typename.toLowerCase() === "quiz") {
+            //     return populateQuizWithResults(q, quizResults);
+            //   }
+            //   return q;
+            // });
+            // populatedQuestions.push(updatedProblem);
+          }
+          return question;
+        });
+        t.populatedQuestions = populatedQuestions;
+        return t;
+      });
+      return updatedTextEditors;
+    };
+
+    let availableProblems2 = updateQuestions(
       availableProblems,
       lessonData.stats.quizResults
     );
-    availableTextEditors = updateQuestions(
+
+    // Log after update
+
+    let availableTextEditors2 = updateTextEditors(
       availableTextEditors,
       lessonData.stats.quizResults
     );
 
     // 4. Analyze student performance
-    availableProblems = analyzeStudentPerformance(
-      availableProblems,
+    let availableProblems3 = analyzeStudentPerformance(
+      availableProblems2,
       lessonData.res,
       lessonData.data
     );
 
-    availableTextEditors = analyzeTextEditorStudentPerformance(
-      availableTextEditors,
+    let availableTextEditors3 = analyzeTextEditorStudentPerformance(
+      availableTextEditors2,
       lessonData.res,
       lesson
     );
 
-    console.log("availableTextEditors", availableTextEditors);
-
-    return;
-
     // 5. Generate report sections
     let intro = await generateReportIntro(student, lesson, date);
 
-    let overall = {
-      learning: [],
-      practiced: [],
-      feedback: [],
-      reflection: [],
-      marks: [],
-    };
-    [...availableProblems, ...availableTextEditors].forEach((el) => {
-      overall.learning.push(el.totalResults.hasLearnt);
-      overall.practiced.push(el.totalResults.hasPracticed);
-      overall.feedback.push(el.totalResults.hasReceivedFeedback);
-      overall.reflection.push(el.totalResults.hasReflected);
-      overall.marks.push(el.totalResults.mark);
-    });
+    // let overall = {
+    //   learning: [],
+    //   practiced: [],
+    //   feedback: [],
+    //   reflection: [],
+    //   marks: [],
+    // };
+    // [...availableProblems, ...availableTextEditors].forEach((el) => {
+    //   overall.learning.push(el.totalResults.hasLearnt);
+    //   overall.practiced.push(el.totalResults.hasPracticed);
+    //   overall.feedback.push(el.totalResults.hasReceivedFeedback);
+    //   overall.reflection.push(el.totalResults.hasReflected);
+    //   overall.marks.push(el.totalResults.mark);
+    // });
 
-    let overallResults = await generateOverAllResults(student, overall);
+    // let overallResults = await generateOverAllResults(student, overall);
     let feedbackOnTasks = await getFeedbackOnTasks(
-      [...availableProblems, ...availableTextEditors],
+      [...availableProblems3, ...availableTextEditors],
       student
     );
+
+    console.log("feedbackOnTasks", feedbackOnTasks);
+    setReportData(feedbackOnTasks);
     // let recommendation = await generateRecommendation(student, lesson, overall);
 
-    setReport(
-      intro + overallResults + feedbackOnTasks.join("")
-      // + recommendation
-    );
+    // setReport(
+    //   intro +
+    //     // overallResults +
+    //     feedbackOnTasks.map((el) => el.text).join(" ")
+    //   // + recommendation
+    // );
     setGenerating(false);
   };
+
+  function generateHtmlTable(data) {
+    const {
+      totalNumberOfAttempts,
+      totalNumberOfCorrectAnswers,
+      totalNumberOfQuestions,
+      totalNumberOfHintsUsed,
+    } = data;
+
+    const tableRows = `
+    <tr>
+      <td>Total Number of Attempts</td>
+      <td>${totalNumberOfAttempts}</td>
+    </tr>
+    <tr>
+      <td>Total Number of Correct Answers</td>
+      <td>${totalNumberOfCorrectAnswers}</td>
+    </tr>
+    <tr>
+      <td>Total Number of Questions</td>
+      <td>${totalNumberOfQuestions}</td>
+    </tr>
+    <tr>
+      <td>Total Number of Hints Used</td>
+      <td>${totalNumberOfHintsUsed}</td>
+    </tr>
+  `;
+
+    const tableHtml = `
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+  `;
+
+    return tableHtml;
+  }
 
   return (
     <IntroData>
@@ -179,7 +260,7 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
         </ul>
       </div>
       <div>Lesson goal: {lesson.goal}</div>
-      {lesson.goal && <button onClick={generateReport}>Generate report</button>}
+      {<button onClick={generateReport}>Generate report</button>}
       {generating ? (
         <Progress>
           <TailSpin
@@ -196,6 +277,17 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
       ) : (
         ""
       )}
+      {console.log("reportData", reportData)}
+      {reportData.length > 0
+        ? reportData.map((item, index) => {
+            return (
+              <div key={index}>
+                <h4>{item.name}</h4>
+                {parse(generateHtmlTable(item.data))}
+              </div>
+            );
+          })
+        : null}
       {report && report.length > 0 && <Report>{parse(report)}</Report>}
     </IntroData>
   );

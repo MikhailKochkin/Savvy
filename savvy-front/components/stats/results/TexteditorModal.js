@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-
-import Modal from "styled-react-modal";
+import ProblemModal from "./ProblemModal";
+import QuizResult from "./QuizResult";
 
 const Box = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const TextBox = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0;
-  width: 60%;
+  width: 100%;
   #id {
     background: #ffe2e1;
     color: #3e3e3e;
@@ -46,6 +46,10 @@ const TextBox = styled.div`
     background: #f2cc8f;
     padding: 3px;
   }
+  .editor_problem {
+    background: #f2cc8f;
+    padding: 3px;
+  }
 `;
 
 const Text = styled.div`
@@ -54,10 +58,11 @@ const Text = styled.div`
 
 const TexteditorModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [caseStudiesList, setCaseStudiesList] = useState([]);
+  const [quizesList, setQuizesList] = useState([]);
   const { texteditor, student, results } = props;
   useEffect(() => {
     let res;
-
     if (results.filter((t) => t.textEditor.id === texteditor.id).length > 0) {
       res = results.filter((t) => t.textEditor.id === texteditor.id);
       const error_elements = document
@@ -121,9 +126,28 @@ const TexteditorModal = (props) => {
         element.innerHTML = `${element.innerHTML}. <b>Student Answers:</b> ${[
           ...new Set(guesses_arr),
         ].join(", ")}`;
-        // }
       });
     }
+
+    const problem_elements = document
+      .getElementById("check_" + texteditor.id)
+      .querySelectorAll(".editor_problem");
+
+    const question_elements = document
+      .getElementById("check_" + texteditor.id)
+      .querySelectorAll(".editor_error");
+
+    let caseStudies = [];
+    let quizes = [];
+
+    problem_elements.forEach((element) => {
+      caseStudies.push(element.getAttribute("elementid"));
+    });
+    question_elements.forEach((element) => {
+      quizes.push(element.getAttribute("elementid"));
+    });
+    setCaseStudiesList(caseStudies);
+    setQuizesList(quizes);
   }, [0]);
   return (
     <Box>
@@ -131,6 +155,35 @@ const TexteditorModal = (props) => {
         <Text>
           <h2>Doc Editor </h2>
           {parse(texteditor.text)}
+          {quizesList.length > 0 &&
+            quizesList.map((id) => {
+              return (
+                <QuizResult
+                  quizes={props.all_quizes.filter((t) => t.id === id)}
+                  student={student}
+                  results={props.all_quiz_results.filter(
+                    (r) => r.quiz.id === id
+                  )}
+                  all_quizes={props.all_quizes}
+                  all_tests={props.all_tests}
+                  all_notes={props.all_notes}
+                />
+              );
+            })}
+          {caseStudiesList.length > 0 &&
+            caseStudiesList.map((problem) => (
+              <ProblemModal
+                problem={props.all_problems.filter((p) => p.id == problem)[0]}
+                student={student} // +++
+                results={[]}
+                newTests={props.all_tests}
+                quizes={props.all_quizes}
+                chats={props.all_chats}
+                notes={props.all_notes}
+                testResults={props.all_test_results}
+                quizResults={props.all_quiz_results}
+              />
+            ))}
         </Text>
       </TextBox>
     </Box>

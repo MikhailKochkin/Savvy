@@ -11,6 +11,7 @@ import {
   autoResizeTextarea,
   removeSpecialChars,
 } from "../../SimulatorDevelopmentFunctions";
+import { checkAnswer } from "../functions/AIQuestionFunctions";
 
 // import { generateImprovement } from "../functions/AIQuestionFunctions";
 
@@ -19,7 +20,6 @@ import {
   Answer_text,
   IconBlock,
   Button1,
-  Frame,
   Circle,
   ResultCircle,
   PositionCircle,
@@ -84,6 +84,7 @@ const Ideas = styled.div`
   display: flex;
   flex-direction: column;
   width: 500px;
+  margin-bottom: 20px;
 `;
 
 const OptionsGroup = styled.div`
@@ -123,6 +124,29 @@ const AnswerRow = styled.div`
   }
 `;
 
+const Frame = styled.div`
+  position: relative;
+  min-width: 60%;
+  max-width: 70%;
+  border: 2px solid;
+  border: ${(props) =>
+    props.inputColor == "#D0EADB" ? "3px solid" : "2px solid"};
+  border-color: ${(props) => props.inputColor};
+  background: #fff;
+  padding: 0 2%;
+  border-top-left-radius: ${(props) => (props.first ? "25px" : "0")};
+  border-top-right-radius: ${(props) => (props.first ? "25px" : "0")};
+  border-bottom-left-radius: ${(props) => (props.last ? "25px" : "0")};
+  border-bottom-right-radius: ${(props) => (props.last ? "25px" : "0")};
+  border-bottom: ${(props) =>
+    props.last ? "1px solid #F3F3F3" : "1px solid #fff"};
+
+  /* margin: 15px 0; */
+  .com {
+    border-top: 1px solid #f3f3f3;
+  }
+`;
+
 const ComplexQuestion = (props) => {
   const {
     author,
@@ -133,6 +157,7 @@ const ComplexQuestion = (props) => {
     quizId,
     isOrderOfAnswersImportant,
   } = props;
+  const [answersNum, setAnswersNum] = useState(0);
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
   const [correctIdeas, setCorrectIdeas] = useState([]); // ideas that match the correct answers
   const [overallResults, setOverallResults] = useState(null); // results of checking the ideas
@@ -146,6 +171,7 @@ const ComplexQuestion = (props) => {
   const [answerCountText, setAnswerCountText] = useState("");
   const [isFeedbackShown, setIsFeedbackShown] = useState(false);
   const [hints, setHints] = useState([]);
+  const [explanation, setExplanation] = useState();
   const [expectedAnswers, setExpectedAnswers] = useState(
     new Array(props.answers?.answerElements?.length).fill(null)
   );
@@ -175,6 +201,25 @@ const ComplexQuestion = (props) => {
 
     // Update the state with the modified ideas array
     setIdeas(updatedIdeas);
+  };
+
+  const runInitialCheck = async () => {
+    const { result, correctnessLevel, color, comment } = await checkAnswer(
+      null,
+      props.answer,
+      ideas[0],
+      false
+    );
+
+    setOverallResults([
+      {
+        idea: ideas[0],
+        result: result,
+        next_id: null,
+        next_type: null,
+      },
+    ]);
+    console.log("result", result, comment, color);
   };
 
   // 2. Evaluate the ideas and find matching answers from the list of correct answers
@@ -276,6 +321,12 @@ const ComplexQuestion = (props) => {
     );
 
     setOverallResults(unique_values);
+    if (unique_values.filter((el) => el.result > 65).length == 0) {
+      setIdeas([
+        ...ideas,
+        ...Array(props.answers.answerElements.length - ideas.length).fill(""),
+      ]);
+    }
     setIsAnswerBeingChecked(false);
     setCorrectIdeas(filteredIdeas);
     setIsFeedbackShown(true);
@@ -438,6 +489,77 @@ const ComplexQuestion = (props) => {
     }
   };
 
+  const generateExplanationForComplexQuestion = async (event) => {
+    event.preventDefault();
+    setGenerating(true);
+    let url;
+    let result;
+    let AItype = "openai";
+    if (AItype == "claude") {
+      url = "/api/generate2";
+    } else {
+      url = "/api/generate";
+    }
+    try {
+      event.preventDefault();
+      let answers = [];
+      props.answers.answerElements.map((el, i) => {
+        answers.push(`${i + 1}` + el.answer);
+      });
+
+      console.log(answers);
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `
+            You are trying to explain the correct answer to the student. The answer consists of${props.answers.answerElements.length} parts.
+            The answer parts are: ${answers}.
+            Give a very short explanantion of every part of the answer without revealing the answer itself. Return every explanation as a separate paragraph wrapped in p tags.
+           `,
+        }),
+      });
+
+      if (response.status !== 200) {
+        throw (
+          (await response.json()).error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
+      }
+
+      const data = await response.json();
+      if (AItype == "claude") {
+        result = data.result.content[0].text;
+      } else {
+        result = data.result.content;
+      }
+
+      if (result) {
+        setExplanation(result);
+        console.log("result", result);
+        //  createQuizResult({
+        //    variables: {
+        //      quiz: props.quizId,
+        //      lessonId: props.lessonId,
+        //      hint: result,
+        //      type: "hint",
+        //      comment: `Student asked for a hint`,
+        //    },
+        //  });
+        // }
+      } else {
+        setExplanation("Sorry, you are on your own");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   return (
     <Question story={story}>
       {/* 2.1 Question part */}
@@ -500,14 +622,17 @@ const ComplexQuestion = (props) => {
               } else {
                 answerPosition = undefined;
               }
-
               return (
                 <>
                   <AnswerRow>
                     {isOrderOfAnswersImportant && answerPosition && (
                       <PositionCircle>{answerPosition}</PositionCircle>
                     )}
-                    <Frame inputColor={inputColor}>
+                    <Frame
+                      inputColor={inputColor}
+                      last={index == ideas.length - 1}
+                      first={index == 0}
+                    >
                       <Answer_text
                         key={index}
                         type="text"
@@ -531,8 +656,7 @@ const ComplexQuestion = (props) => {
                         </ResultCircle>
                       )}
                     </Frame>
-                    <div className="buttonsColumn">
-                      {/* Click here to add another answerRow before this AnswerRow*/}
+                    {/* <div className="buttonsColumn">
                       <MiniCircle
                         onClick={(e) => {
                           let newIdeas = [...ideas];
@@ -551,8 +675,6 @@ const ComplexQuestion = (props) => {
                       >
                         X
                       </MiniCircle>
-                      {/* Click here to add another answerRow after this AnswerRow*/}
-
                       <MiniCircle
                         onClick={(e) => {
                           let newIdeas = [...ideas];
@@ -562,7 +684,7 @@ const ComplexQuestion = (props) => {
                       >
                         ⬇
                       </MiniCircle>
-                    </div>
+                    </div> */}
                   </AnswerRow>
                 </>
               );
@@ -582,14 +704,21 @@ const ComplexQuestion = (props) => {
               inputColor={inputColor}
               onClick={async (e) => {
                 e.preventDefault();
-                getMatchingAnswers();
+                if (answersNum == 0) {
+                  runInitialCheck();
+                } else {
+                  runInitialCheck();
+                  // getMatchingAnswers();
+                }
                 setIsAnswerCountShown(false);
+
+                setAnswersNum(answersNum + 1);
               }}
             >
               {t("check")}
             </Button1>
           )}
-          {props.goalType !== "ASSESS" &&
+          {/* {props.goalType !== "ASSESS" &&
             correctIdeas.length != props.answers.answerElements.length && (
               <Button1
                 inputColor={inputColor}
@@ -605,7 +734,7 @@ const ComplexQuestion = (props) => {
                   ? t("help_with_next_one")
                   : null}
               </Button1>
-            )}
+            )} */}
           {/* {ideas.filter((id) => id !== "").length > 0 && (
             <Button1
               inputColor={inputColor}
@@ -648,7 +777,7 @@ const ComplexQuestion = (props) => {
           <>
             <div className="question_box">
               <div className="question_text">
-                <p>{correctIdeas.length > 0 && `🎉 ${t("great_job")}`}</p>
+                {/* <p>{correctIdeas.length > 0 && `🎉 ${t("great_job")}`}</p>
                 <p>{correctIdeas.length == 0 && `🤔 ${t("none_correct")}`}</p>
                 <p>
                   {correctIdeas.length !== 0 &&
@@ -659,6 +788,10 @@ const ComplexQuestion = (props) => {
                     ? "This is the correct answer. Well done!"
                     : null}{" "}
                   {t("what_are_we_doing_next")}
+                </p> */}
+                <p>
+                  Your answer should consist of three parts. Think about what
+                  parts they should be or ask for hints.
                 </p>
               </div>
               <IconBlock>
@@ -687,8 +820,11 @@ const ComplexQuestion = (props) => {
               </IconBlock>
               <OptionsGroup>
                 {correctIdeas.length < props.answers.answerElements.length && (
-                  <Option onClick={(e) => generateAnswerCountComment(e)}>
-                    {t("how_many_options_are_left")}
+                  <Option
+                    onClick={(e) => generateExplanationForComplexQuestion(e)}
+                  >
+                    {/* {t("how_many_options_are_left")} */}
+                    Could you help?
                   </Option>
                 )}
                 <Option
@@ -717,9 +853,9 @@ const ComplexQuestion = (props) => {
 
         {/* 7. Additional information bubbles  */}
 
-        {isAnswerCountShown && (
+        {explanation && explanation.length > 1 && (
           <div className="question_box">
-            <div className="question_text">{parse(answerCountText)}</div>
+            <div className="question_text">{parse(explanation)}</div>
             <IconBlock>
               {author && author.image != null ? (
                 <img className="icon" src={author.image} />

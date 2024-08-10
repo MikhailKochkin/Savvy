@@ -88,6 +88,35 @@ const TextBar = styled.div`
       height: auto;
     }
   }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    tbody {
+      width: 100%;
+    }
+    tr {
+      border: 1px solid #edefed;
+    }
+    thead {
+      background: #36304a;
+      color: #fff;
+    }
+    th {
+      border: 1px solid #edefed;
+      padding: 15px 0;
+    }
+    td {
+      border: 1px solid #edefed;
+      border-top: none;
+      border-bottom: none;
+      border-right: none;
+      padding: 0% 2.5%;
+      position: relative;
+      padding: 15px 15px;
+    }
+  }
   iframe {
     width: 100%;
     height: 400px;

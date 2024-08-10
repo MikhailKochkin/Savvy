@@ -23,7 +23,19 @@ const Box = styled.div`
     }
     &.column {
       padding: 0 30px;
+      font-size: 1.4rem;
       border-left: 1px solid #edefed;
+      p {
+        max-width: 90%;
+      }
+      .block {
+        padding: 15px;
+        outline: 0;
+        font-size: 1.4rem;
+        background: #f8f8f8;
+        border-radius: 15px;
+        margin-bottom: 20px;
+      }
     }
   }
   img {
@@ -35,36 +47,6 @@ const Box = styled.div`
   .answer_box {
     background: #e8e8e4;
     width: 95%;
-  }
-`;
-
-const StyledModal = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  overflow: scroll;
-  padding: 3% 2%;
-  width: 50%;
-  @media (max-width: 800px) {
-    width: 90%;
-  }
-`;
-
-const Button = styled.button`
-  text-align: center;
-  background: #ffffff;
-  border: 1px solid #112a62;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: 0;
-  margin: 1% 0;
-  color: #112a62;
-  font-size: 1.6rem;
-  a {
-    color: #112a62;
   }
 `;
 
@@ -207,9 +189,6 @@ const ProblemModal = (props) => {
         )}
       </div>
       <div className="column">
-        <div>
-          <b>Step-by-step solution:</b>
-        </div>
         {mergedData.length > 0
           ? mergedData.map((m) => {
               let stepType = m.type.toLowerCase();
@@ -232,7 +211,6 @@ const ProblemModal = (props) => {
                           <b>Quiz</b>
                         </div>
                         <div>{parse(el.question[0])}</div>
-                        {/* <div>⬇️</div> */}
                         <>
                           {m.results.map((result) =>
                             result.answerArray ? (
@@ -279,7 +257,7 @@ const ProblemModal = (props) => {
                     {m.type.toLowerCase() == "quiz" && (
                       <div className="question">
                         <div>
-                          <b>Open Question:</b>
+                          <h2>🔷 Open Question:</h2>
                         </div>
                         <div className="question_text">
                           {parse(el.question)}
@@ -287,9 +265,9 @@ const ProblemModal = (props) => {
                         <div className="standard">
                           <b>Type:</b> {subtype}
                         </div>
-                        <div>
+                        {/* <div>
                           <b>Answers:</b>
-                        </div>
+                        </div> */}
                         <div>
                           {!results || results.length == 0
                             ? "🛑 No answers provided"
@@ -297,12 +275,10 @@ const ProblemModal = (props) => {
                           {results.map((result) => (
                             <div className="result">
                               {subtype == "test" ? (
-                                <>
+                                <div className="block">
                                   <div className="standard"></div>
-                                  <b>Student answer: </b>
-                                  {result.answer}
-                                  <div className="standard">
-                                    <b>Comment: </b> {result.comment}{" "}
+                                  <b>
+                                    Student answer:{" "}
                                     {result?.comment ==
                                     "Student asked for explanations"
                                       ? "🤔"
@@ -331,8 +307,13 @@ const ProblemModal = (props) => {
                                         ? "✅"
                                         : "❌"
                                       : null}
-                                    <br />
-                                    <b>Hint:</b> {result.hint}
+                                  </b>{" "}
+                                  – {result.answer}
+                                  <div className="standard">
+                                    <b>Comment: </b> {result.comment}{" "}
+                                    {/* <br />
+                                    <b>Hint:</b>{" "}
+                                    {result?.hint ? parse(result?.hint) : null}
                                     <br />
                                     <b>Explanation:</b>{" "}
                                     {result?.explanation
@@ -342,9 +323,9 @@ const ProblemModal = (props) => {
                                     <b>Improvement:</b>{" "}
                                     {result?.improvement
                                       ? parse(result.improvement)
-                                      : null}
+                                      : null} */}
                                   </div>
-                                </>
+                                </div>
                               ) : null}
 
                               {subtype == "form" ? (
@@ -361,15 +342,15 @@ const ProblemModal = (props) => {
                                   {result.ideasList?.quizIdeas?.map(
                                     (item, i) => (
                                       <div>
-                                        <b>Type:</b>{" "}
+                                        {/* <b>Type:</b>{" "}
                                         {result.type ? result.type : null}
-                                        <br />
-                                        <b>Comment:</b>{" "}
-                                        {result.comment ? result.comment : null}
+                                        <br /> */}
+                                        {/* <b>Comment:</b>{" "}
+                                        {result.comment ? result.comment : null} */}
                                         <div>
                                           {i + 1}. {item.idea} –{" "}
                                           <b>{item.result}%</b>{" "}
-                                          {parseFloat(item.result) > 60
+                                          {parseFloat(item.result) > 58
                                             ? "✅"
                                             : "❌"}
                                         </div>
@@ -422,7 +403,7 @@ const ProblemModal = (props) => {
                     {m.type.toLowerCase() == "chat" && (
                       <Block className="question">
                         <div>
-                          <b>Chat:</b>
+                          <h2>🔶 Chat:</h2>
                         </div>
                         {props.chats
                           .find((ch) => ch.id == m.id)

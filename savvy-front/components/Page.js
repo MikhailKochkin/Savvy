@@ -79,7 +79,7 @@ const Page = ({ children }) => {
             <ModalProvider>
               <Header />
               {router.pathname !== "/conf" &&
-                router.pathname !== "/embeddedPage" &&
+                router.pathname !== "/embedPage" &&
                 router.pathname !== "/recommend" &&
                 router.pathname !== "/" &&
                 router.pathname !== "/build_your_simulator" &&
@@ -88,7 +88,7 @@ const Page = ({ children }) => {
               <Inner>{children}</Inner>
               {router.pathname !== "/lesson" &&
                 router.pathname !== "/demo" &&
-                router.pathname !== "/embeddedPage" &&
+                router.pathname !== "/embedPage" &&
                 router.pathname !== "/build_your_simulator" && <Footer />}
             </ModalProvider>
           </Layout>

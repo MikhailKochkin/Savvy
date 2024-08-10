@@ -93,40 +93,13 @@ const Container = styled.div`
   @media (max-width: 600px) {
     width: 100%;
   }
-  textarea {
-    padding: 1.5% 2%;
-    margin-bottom: 1.5%;
-    width: 100%;
-    height: 100px;
-    outline: 0;
-    font-family: Montserrat;
-    border: 1px solid #ccc;
-    border-radius: 3.5px;
-    font-size: 1.5rem;
-  }
-`;
-
-const Button = styled.button`
-  padding: 1% 2%;
-  background: ${(props) => props.theme.green};
-  width: 20%;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin: 2% 0;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    background-color: ${(props) => props.theme.darkGreen};
-  }
 `;
 
 const Comment = styled.div`
   margin: 3% 0;
   border-radius: 5px;
-  border: 1px solid #c4c4c4;
-  width: 100%;
+  border: 2px solid #dddddd;
+  width: 90%;
   min-height: 100px;
   padding: 1.5%;
   font-size: 1.4rem;
@@ -136,20 +109,6 @@ const Comment = styled.div`
   }
   &#ifWrong {
     border: 1px solid #de6b48;
-  }
-`;
-
-const Complexity = styled.div`
-  select,
-  option {
-    width: 80%;
-    border-radius: 5px;
-    margin-top: 3%;
-    border: 1px solid #c4c4c4;
-    font-family: Montserrat;
-    font-size: 1.4rem;
-    outline: 0;
-    padding: 1.5%;
   }
 `;
 
@@ -398,19 +357,29 @@ const UpdateQuiz = (props) => {
         </Comment>
       </EditorInfoSection>
       <EditorInfoSection>
-        <h3 className="label">The Sample Answer</h3>
-        {type !== "GENERATE" && type !== "FINDALL" && type !== "COMPLEX" && (
-          <textarea
-            id="answer"
-            name="answer"
-            placeholder={"Answer"}
-            defaultValue={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
+        {type !== "GENERATE" && type !== "FINDALL" && (
+          <>
+            <h3 className="label">Sample Answer</h3>
+
+            <div className="comment">
+              The answer below will be used as a sample answer
+            </div>
+            <textarea
+              id="answer"
+              name="answer"
+              placeholder={"Answer"}
+              defaultValue={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+            />
+          </>
         )}
         {/* {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && ( */}
         <>
-          {/* <label for="types">Ideas</label> */}
+          <h3 className="label">Semantic Cloud</h3>
+
+          <div className="comment">
+            The answers below comprise the samantic cloud of the question
+          </div>
           {answers.map((an, i) => (
             <AnswerOption key={i}>
               {/* <label className="answerOptionLabel">{i + 1}</label> */}

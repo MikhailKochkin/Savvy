@@ -303,6 +303,10 @@ const Comment = styled.div`
   padding: 7px 10px;
   border-radius: 10px;
   border-color: #f3f3f3;
+  p {
+    margin: 0px;
+    margin-bottom: 10px;
+  }
 `;
 
 const IconBlock = styled.div`

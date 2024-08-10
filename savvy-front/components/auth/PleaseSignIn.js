@@ -30,7 +30,7 @@ const PleaseSignIn = (props) => {
   if (!me)
     return (
       <Styles>
-        <Title>
+        {/* <Title>
           {router.locale == "en" ? (
             <>Something went wrong? Just log in or create an account 😉</>
           ) : (
@@ -39,7 +39,7 @@ const PleaseSignIn = (props) => {
               аккаунт и все заработает! 😉
             </>
           )}
-        </Title>
+        </Title> */}
         <Auth authSource={props.authSource} />
       </Styles>
     );
