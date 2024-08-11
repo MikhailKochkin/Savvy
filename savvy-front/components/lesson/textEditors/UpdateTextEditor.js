@@ -13,13 +13,6 @@ import {
 } from "../SimulatorDevelopmentStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 
-import {
-  BiCommentAdd,
-  BiCommentError,
-  BiCommentCheck,
-  BiCommentMinus,
-} from "react-icons/bi";
-
 const UPDATE_TEXTEDITOR_MUTATION = gql`
   mutation UPDATE_TEXTEDITOR_MUTATION(
     $id: String!
@@ -183,6 +176,7 @@ const UpdateTextEditor = (props) => {
               getEditorText={getText}
               value={text}
               complex={true}
+              lessonId={lessonID}
             />
           )}
         </EditorInfoSection>

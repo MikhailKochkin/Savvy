@@ -906,7 +906,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    <span>24 000</span> 17 990 ₽ / 6 месяцев
+                    <span>24 000</span> 12 990 ₽ / 6 месяцев
                   </div>
                 </div>
                 <div className="section">
@@ -914,7 +914,7 @@ const Subscription = (props) => {
                     Доступные курсы{" "}
                     <span
                       data-tooltip-id="my-tooltip"
-                      data-tooltip-html={`Сразу после оплаты вы получите доступ ко всем курсам на платформе на 12 месяцев.<br/>
+                      data-tooltip-html={`Сразу после оплаты вы получите доступ ко всем курсам на платформе на 6 месяцев.<br/>
                   Если подписка не продляется, доступ ко всем курсам будет закрыт.`}
                       data-tooltip-place="right"
                     >
@@ -948,11 +948,11 @@ const Subscription = (props) => {
                     X
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(17990)}>
+                <ButtonBuy onClick={(e) => completePayment(12990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(17990)}>
-                  Оформить рассрочку за 2990/мес
+                <ButtonOpen onClick={(e) => getInstallments(12990)}>
+                  Оформить рассрочку за 2165/мес
                 </ButtonOpen>
               </Form>
               <Form>

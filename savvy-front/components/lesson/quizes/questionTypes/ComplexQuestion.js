@@ -128,23 +128,41 @@ const Frame = styled.div`
   position: relative;
   min-width: 60%;
   max-width: 70%;
-  border: 2px solid;
-  border: ${(props) =>
-    props.inputColor == "#D0EADB" ? "3px solid" : "2px solid"};
+  border-width: ${(props) => (props.inputColor === "#D0EADB" ? "3px" : "2px")};
+  border-style: solid;
   border-color: ${(props) => props.inputColor};
+
   background: #fff;
   padding: 0 2%;
   border-top-left-radius: ${(props) => (props.first ? "25px" : "0")};
-  border-top-right-radius: ${(props) => (props.first ? "25px" : "0")};
+  /* border-top-right-radius: ${(props) => (props.first ? "25px" : "0")}; */
   border-bottom-left-radius: ${(props) => (props.last ? "25px" : "0")};
-  border-bottom-right-radius: ${(props) => (props.last ? "25px" : "0")};
-  border-bottom: ${(props) =>
-    props.last ? "1px solid #F3F3F3" : "1px solid #fff"};
-
-  /* margin: 15px 0; */
+  /* border-bottom-right-radius: ${(props) => (props.last ? "25px" : "0")}; */
+  /* border-top-right-radius: ${(props) => (props.first ? "25px" : "0")}; */
+  border-bottom-width: ${(props) =>
+    props.last && props.inputColor === "#D0EADB" ? "3px" : "1px"};
+  border-bottom: ${(props) => (props.last ? "2px solid #f3f3f3;" : "none")};
+  border-bottom-color: ${(props) =>
+    props.last && props.inputColor === "#D0EADB"
+      ? props.inputColor
+      : "#F3F3F3"};
+  /* border-bottom-style: solid; */
   .com {
     border-top: 1px solid #f3f3f3;
   }
+`;
+
+const CommentFrame = styled.div`
+  background: #fff;
+  padding: 22px 10px;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  border-top: 2px solid #f3f3f3;
+  border-bottom: ${(props) => (props.last ? "2px solid #f3f3f3;" : "none")};
+  border-bottom-right-radius: ${(props) => (props.last ? "25px" : "0")};
+  border-top-right-radius: ${(props) => (props.first ? "25px" : "0")};
+  border-right: 2px solid #f3f3f3;
+  font-weight: 400;
 `;
 
 const ComplexQuestion = (props) => {
@@ -161,6 +179,9 @@ const ComplexQuestion = (props) => {
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
   const [correctIdeas, setCorrectIdeas] = useState([]); // ideas that match the correct answers
   const [overallResults, setOverallResults] = useState(null); // results of checking the ideas
+  const [feedbackList, setFeedbackList] = useState(
+    new Array(props.answers.answerElements.length).fill(" ")
+  );
 
   const [isAnswerBeingChecked, setIsAnswerBeingChecked] = useState(false);
   const [inputColor, setInputColor] = useState("#f3f3f3");
@@ -186,9 +207,9 @@ const ComplexQuestion = (props) => {
     smoothscroll.polyfill();
   });
 
-  // useEffect(() => {
-  //   setIdeas(new Array(props.answers.answerElements.length).fill(""));
-  // }, [props.answers.answerElements]);
+  useEffect(() => {
+    setIdeas(new Array(props.answers.answerElements.length).fill(""));
+  }, [props.answers.answerElements]);
 
   const { t } = useTranslation("lesson");
 
@@ -203,29 +224,9 @@ const ComplexQuestion = (props) => {
     setIdeas(updatedIdeas);
   };
 
-  const runInitialCheck = async () => {
-    const { result, correctnessLevel, color, comment } = await checkAnswer(
-      null,
-      props.answer,
-      ideas[0],
-      false
-    );
-
-    setOverallResults([
-      {
-        idea: ideas[0],
-        result: result,
-        next_id: null,
-        next_type: null,
-      },
-    ]);
-    console.log("result", result, comment, color);
-  };
-
   // 2. Evaluate the ideas and find matching answers from the list of correct answers
   const getMatchingAnswers = async () => {
     let matchedAnswers = [];
-    setIsAnswerBeingChecked(true);
     // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
     // 2. Create a set to hold the indexes of matched answers
@@ -273,11 +274,11 @@ const ComplexQuestion = (props) => {
             new_results.push(new_obj);
 
             // If res.res is more than 60 and the answer's index is not in the set, add the answer to the matchedAnswers array
-            if (res.res > 65 && !matchedIndexes.has(answer.index)) {
+            if (res.res > 60 && !matchedIndexes.has(answer.index)) {
               matchedAnswers.push(answer);
               matchedIndexes.add(answer.index);
             }
-            if (res.res > 65) {
+            if (res.res > 60) {
               newCorrectIdeas.push({
                 idea: idea,
                 matchedAnswer: answer,
@@ -321,13 +322,12 @@ const ComplexQuestion = (props) => {
     );
 
     setOverallResults(unique_values);
-    if (unique_values.filter((el) => el.result > 65).length == 0) {
-      setIdeas([
-        ...ideas,
-        ...Array(props.answers.answerElements.length - ideas.length).fill(""),
-      ]);
-    }
-    setIsAnswerBeingChecked(false);
+    // if (unique_values.filter((el) => el.result > 65).length == 0) {
+    //   setIdeas([
+    //     ...ideas,
+    //     ...Array(props.answers.answerElements.length - ideas.length).fill(""),
+    //   ]);
+    // }
     setCorrectIdeas(filteredIdeas);
     setIsFeedbackShown(true);
     setExpectedAnswers(updatedExpectedAnswers); // Update state with accumulated changes
@@ -393,7 +393,7 @@ const ComplexQuestion = (props) => {
   };
 
   // 4. Generate a hint for the student
-  const getHint = async (event) => {
+  const generateHint = async (event) => {
     setGenerating(true);
     let hintPrompt;
     let url;
@@ -487,6 +487,86 @@ const ComplexQuestion = (props) => {
     } finally {
       setGenerating(false);
     }
+  };
+
+  const generateExplainer = async (event, sampleAnswer, studentAnswer) => {
+    setGenerating(true); // Assuming this is a state-setting function
+
+    let explainerPrompt;
+    let url;
+    let result;
+    const AItype = "openai"; // Consider making AItype dynamic if needed
+
+    // Determine the API URL based on AItype
+    if (AItype === "claude") {
+      url = "/api/generate2";
+    } else {
+      url = "/api/generate";
+    }
+
+    // Create the prompt for the explainer
+    const hintPrompt = `You are a law professor. 
+    You help your student find this answer: ${sampleAnswer}.
+    The student has given this answer ${studentAnswer} which is not correct.
+    Write a 3 sentence explainer to help them find the answer.`;
+    console.log("hintPrompt", hintPrompt);
+
+    // Prevent default behavior if event is passed
+    if (event && event.preventDefault) {
+      event.preventDefault();
+    }
+
+    try {
+      // Make the API request
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: hintPrompt }),
+      });
+
+      // Check if the response is OK
+      if (response.status !== 200) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || `Request failed with status ${response.status}`
+        );
+      }
+
+      // Parse the response data
+      const data = await response.json();
+      if (AItype === "claude") {
+        result = data.result.content[0].text;
+      } else {
+        result = data.result.content;
+      }
+
+      // Return the result or a default message
+      return result || "No feedback generated ...";
+    } catch (error) {
+      // Optionally handle errors here if needed
+      throw error; // Re-throwing the error if not handling
+    } finally {
+      // Ensure that the generating state is reset regardless of success or failure
+      setGenerating(false);
+    }
+  };
+
+  const getFeedbackOnIdeas = (event) => {
+    let newFeedbackList = [];
+    ideas.map(async (idea, i) => {
+      console.log("idea", idea, props.answers.answerElements[i].answer);
+      let res = await generateExplainer(
+        event,
+        props.answers.answerElements[i].answer,
+        idea
+      );
+      console.log(res);
+      newFeedbackList.push(res);
+    });
+    console.log("newFeedbackList", newFeedbackList);
+    setFeedbackList(newFeedbackList);
   };
 
   const generateExplanationForComplexQuestion = async (event) => {
@@ -596,6 +676,8 @@ const ComplexQuestion = (props) => {
               let answerPosition;
               let score = null;
               let inputColor;
+              let feedback = feedbackList[index];
+
               // 1. Calculate the score of the idea
               if (
                 overallResults &&
@@ -604,12 +686,13 @@ const ComplexQuestion = (props) => {
                 score = parseFloat(
                   overallResults.find((res) => res.idea == idea)?.result
                 ).toFixed(0);
+                // feedback = newfeedback;
               } else {
                 score = "0";
               }
               // 2. Determine the number
 
-              if (props.goalType !== "ASSESS" && score > 64) {
+              if (props.goalType !== "ASSESS" && score > 60) {
                 inputColor = "#D0EADB";
               } else {
                 inputColor = "#F3F3F3";
@@ -625,9 +708,9 @@ const ComplexQuestion = (props) => {
               return (
                 <>
                   <AnswerRow>
-                    {isOrderOfAnswersImportant && answerPosition && (
+                    {/* {isOrderOfAnswersImportant && answerPosition && (
                       <PositionCircle>{answerPosition}</PositionCircle>
-                    )}
+                    )} */}
                     <Frame
                       inputColor={inputColor}
                       last={index == ideas.length - 1}
@@ -656,6 +739,13 @@ const ComplexQuestion = (props) => {
                         </ResultCircle>
                       )}
                     </Frame>
+                    <CommentFrame
+                      inputColor={inputColor}
+                      last={index == ideas.length - 1}
+                      first={index == 0}
+                    >
+                      {feedback ? feedback : "..."}
+                    </CommentFrame>
                     {/* <div className="buttonsColumn">
                       <MiniCircle
                         onClick={(e) => {
@@ -704,15 +794,19 @@ const ComplexQuestion = (props) => {
               inputColor={inputColor}
               onClick={async (e) => {
                 e.preventDefault();
-                if (answersNum == 0) {
-                  runInitialCheck();
-                } else {
-                  runInitialCheck();
-                  // getMatchingAnswers();
-                }
-                setIsAnswerCountShown(false);
+                setIsAnswerBeingChecked(true);
 
+                // if (answersNum == 0) {
+                //   const res1 = await runInitialCheck();
+                // } else {
+                //   const res2 = await runInitialCheck();
+                //   // getMatchingAnswers();
+                // }
+                const res = await getMatchingAnswers();
+                setIsAnswerCountShown(false);
+                setIsAnswerBeingChecked(false);
                 setAnswersNum(answersNum + 1);
+                getFeedbackOnIdeas(e);
               }}
             >
               {t("check")}

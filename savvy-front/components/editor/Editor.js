@@ -61,6 +61,7 @@ import { FaQuoteLeft } from "react-icons/fa";
 import { withTable, TableEditor } from "slate-table";
 import Modal from "styled-react-modal";
 import isHotkey from "is-hotkey";
+import CreateQuiz from "../create/CreateQuiz";
 
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
@@ -1199,6 +1200,9 @@ const App = (props) => {
     TableEditor.split(editor);
   };
 
+  const getResult = (res) => {
+    setModalData(res.data.createQuiz.id);
+  };
   return (
     <>
       {/* <button onClick={handleOpenModal}>Open Modal</button> */}
@@ -1214,6 +1218,10 @@ const App = (props) => {
           {type === "createError" && "Write down the ID of the target question"}
           {type === "createProblem" &&
             "Write down the ID of the target casestudy"}
+          {props.lessonId}
+          {type === "createError" && (
+            <CreateQuiz getResult={getResult} lessonID={props.lessonId} />
+          )}
         </div>
         <textarea
           type="text"
