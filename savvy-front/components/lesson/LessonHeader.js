@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
 import Link from "next/link";
@@ -327,10 +327,25 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
+  let maxResult = null;
+  let completionRate = 0;
+  let color;
+
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
     variables: { lessonId: props.lesson.id, userId: props.me.id },
   });
-  if (error) return <p>Error</p>;
+  // if (error) return <p>Error</p>;
+
+  useEffect(() => {
+    if (data?.lessonResults.length > 0 && lesson?.structure?.lessonItems) {
+      maxResult = getLessonWithHighestProgress(data.lessonResults);
+      completionRate = (
+        (maxResult.progress / lesson.structure.lessonItems.length) *
+        100
+      ).toFixed(0);
+    }
+  }, [props.me, data]);
+  console.log("maxResult", maxResult);
   const { lesson, name, author, me, i_am_author } = props;
 
   const myCallback = (data) => {
@@ -349,17 +364,6 @@ const LessonHeader = (props) => {
       return current.progress > highest.progress ? current : highest;
     });
   };
-
-  let maxResult = null;
-  let completionRate = 0;
-  let color;
-  if (data?.lessonResults.length > 0 && lesson?.structure?.lessonItems) {
-    maxResult = getLessonWithHighestProgress(data.lessonResults);
-    completionRate = (
-      (maxResult.progress / lesson.structure.lessonItems.length) *
-      100
-    ).toFixed(0);
-  }
 
   if (completionRate > 80) {
     color = "#32AC66";

@@ -139,6 +139,7 @@ const ToolsBox = (props) => {
   }, [me]);
   if (loading) return <Loading />;
   if (stats_loading) return <Loading />;
+  if (!data || !data.coursePage) return <p></p>;
   // 4. prepare for data analysis
   const coursePage = data.coursePage;
   let lessons = coursePage.lessons;

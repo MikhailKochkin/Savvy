@@ -342,9 +342,21 @@ const FindAll = (props) => {
                     disabled={parseInt(score) > 65 ? true : false}
                     value={idea}
                     onChange={(e) => {
-                      handleIdeaChange(e, index);
+                      if (e.target.value.length <= 200) {
+                        handleIdeaChange(e, index);
+                      }
                     }}
-                    onInput={autoResizeTextarea}
+                    onInput={(e) => {
+                      autoResizeTextarea(e);
+                      if (e.target.value.length >= 200) {
+                        e.target.setCustomValidity(
+                          "Maximum 200 characters allowed"
+                        );
+                        e.target.reportValidity();
+                      } else {
+                        e.target.setCustomValidity("");
+                      }
+                    }}
                     placeholder="..."
                   />
                   {score && isScoringShown && (

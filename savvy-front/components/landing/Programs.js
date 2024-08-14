@@ -156,6 +156,8 @@ const Programs = (props) => {
 
   if (loading) return <LoadingDummy />;
   if (loading1) return <LoadingDummy />;
+  if (!data || !data.coursePages)
+    return <p>Failed to load the courses. Please reload the page.</p>;
 
   const slide = () => {
     var my_element = document.getElementById("course_container");

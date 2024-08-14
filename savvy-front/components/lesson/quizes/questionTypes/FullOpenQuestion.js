@@ -208,11 +208,22 @@ const FullOpenQuestion = (props) => {
             <Answer_text
               type="text"
               required
+              maxLength={500}
               onChange={(e) => {
-                passAnswer(e.target.value);
-                autoResizeTextarea(e);
+                if (e.target.value.length <= 500) {
+                  passAnswer(e.target.value);
+                  autoResizeTextarea(e);
+                }
               }}
-              onInput={autoResizeTextarea}
+              onInput={(e) => {
+                autoResizeTextarea(e);
+                if (e.target.value.length >= 500) {
+                  e.target.setCustomValidity("Maximum 500 characters allowed");
+                  e.target.reportValidity();
+                } else {
+                  e.target.setCustomValidity("");
+                }
+              }}
               placeholder="..."
             />
             {result && isScoringShown ? (

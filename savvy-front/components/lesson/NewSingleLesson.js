@@ -341,6 +341,17 @@ const LessonPart = styled.div`
   }
 `;
 
+const ErrorMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-direction: center;
+  width: 400px;
+  p {
+    width: 300px;
+  }
+`;
+
 const NewSingleLesson = (props) => {
   const { t } = useTranslation("lesson");
   // const onResize = (width) => setWidth(width);
@@ -406,6 +417,18 @@ const NewSingleLesson = (props) => {
     fetchPolicy: "no-cache",
   });
   if (loading) return <LoadingText />;
+  if (!data || !data.lesson)
+    return (
+      <ErrorMessage>
+        <p>Unfortunately, no simulator has been found or loaded.</p>
+        <p>Check the link or internet connection please.</p>
+        <p>
+          Or send us an email at mike@besavvy.app.
+          <br />
+          We will help you in 30 minutes, you'll see.
+        </p>
+      </ErrorMessage>
+    );
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
     (l) => l.number === lesson.number + 1

@@ -42,7 +42,7 @@ const CoursePage = (props) => {
               <CourseData id={props.id} />
               <ToolsBox me={me} id={props.id} />
             </CourseInfo>
-            <LessonSearch me={me} id={props.id} />
+            {/* <LessonSearch me={me} id={props.id} /> */}
             <LessonsData me={me} id={props.id} />
           </LessonStyles>
         </Container>

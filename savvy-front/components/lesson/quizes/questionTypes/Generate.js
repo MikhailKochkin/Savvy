@@ -305,10 +305,25 @@ const Generate = (props) => {
                     required
                     inputColor={inputColor}
                     value={idea}
-                    onChange={(e) => handleIdeaChange(e, index)}
-                    onInput={autoResizeTextarea}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 200) {
+                        handleIdeaChange(e, index);
+                      }
+                    }}
+                    onInput={(e) => {
+                      autoResizeTextarea(e);
+                      if (e.target.value.length >= 200) {
+                        e.target.setCustomValidity(
+                          "Maximum 200 characters allowed"
+                        );
+                        e.target.reportValidity();
+                      } else {
+                        e.target.setCustomValidity("");
+                      }
+                    }}
                     placeholder="..."
                   />
+
                   {score && isScoringShown && (
                     <ResultCircle
                       data-tooltip-id="my-tooltip"

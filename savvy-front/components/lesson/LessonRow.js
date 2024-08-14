@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, useQuery, useLazyQuery, gql } from "@apollo/client";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import CompletionRate from "./CompletionRate";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION(
@@ -65,7 +66,7 @@ const Box = styled.div`
     line-height: 1.4;
   }
   .div3 {
-    width: 40%;
+    width: 36%;
     p {
       margin: 0;
       margin-bottom: 5px;
@@ -74,13 +75,16 @@ const Box = styled.div`
     margin-right: 2px;
   }
   .div4 {
-    width: 13%;
+    width: 12%;
     margin-right: 2px;
   }
   .div5 {
-    width: 20%;
+    width: 18%;
+    margin-right: 2px;
   }
-
+  .div6 {
+    width: 7%;
+  }
   @media (max-width: 850px) {
     display: flex;
     .div1 {
@@ -97,6 +101,9 @@ const Box = styled.div`
     }
     .div5 {
       min-width: 200px;
+    }
+    .div6 {
+      min-width: 80px;
     }
   }
 `;
@@ -277,7 +284,6 @@ const LessonRow = (props) => {
       });
     }
   };
-
   return (
     <Box>
       <div
@@ -446,6 +452,11 @@ const LessonRow = (props) => {
           </form>
         ) : null}
       </Tags>
+      <div className="cell div6">
+        {props.me && props.lesson && (
+          <CompletionRate me={props.me} lesson={props.lesson} />
+        )}
+      </div>
     </Box>
   );
 };

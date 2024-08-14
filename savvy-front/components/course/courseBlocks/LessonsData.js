@@ -168,19 +168,18 @@ const Box = styled.div`
     justify-content: flex-start;
     line-height: 1.4;
     margin-right: 2px;
+    border: none;
   }
   .div2 {
     width: 22%;
     display: flex;
-
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
     line-height: 1.4;
   }
   .div3 {
-    width: 40%;
-
+    width: 36%;
     p {
       margin: 0;
       margin-bottom: 5px;
@@ -188,10 +187,13 @@ const Box = styled.div`
     }
   }
   .div4 {
-    width: 13%;
+    width: 12%;
   }
   .div5 {
-    width: 20%;
+    width: 18%;
+  }
+  .div6 {
+    width: 7%;
   }
   @media (max-width: 850px) {
     .div1 {
@@ -209,6 +211,9 @@ const Box = styled.div`
     .div5 {
       min-width: 200px;
     }
+    .div6 {
+      min-width: 80px;
+    }
   }
 `;
 
@@ -225,6 +230,7 @@ const LessonsData = (props) => {
   });
 
   if (loading) return <Loading />;
+  if (!data || !data.coursePage) return <p></p>;
 
   const coursePage = data.coursePage;
 
@@ -318,6 +324,7 @@ const LessonsData = (props) => {
                   <div className="div3">{t("description")}</div>
                   <div className="div4"></div>
                   <div className="div5">{t("tags")}</div>
+                  <div className="div6">{t("%")}</div>
                 </Box>
                 {broken_lessons.map((lesson, index) => (
                   <>

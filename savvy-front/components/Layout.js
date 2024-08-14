@@ -2,14 +2,15 @@ import React from "react";
 import { initGA, logPageView } from "../utils/analytics";
 import { YMInitializer } from "react-yandex-metrika";
 import { setCookie, getCookie } from "cookies-next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export default class Layout extends React.Component {
   componentDidMount() {
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
+    // if (!window.GA_INITIALIZED) {
+    //   initGA();
+    //   window.GA_INITIALIZED = true;
+    // }
+    // logPageView();
     let url = new URL(window.location.href);
     let search_params;
 
@@ -45,6 +46,7 @@ export default class Layout extends React.Component {
           options={{ webvisor: true }}
           version="2"
         />
+        <GoogleAnalytics gaId="G-YH6N45QPFR" />
         {this.props.children}
       </div>
     );

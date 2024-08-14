@@ -95,6 +95,17 @@ const Data = styled.div`
   }
 `;
 
+const ErrorMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-direction: center;
+  width: 400px;
+  p {
+    width: 300px;
+  }
+`;
+
 const Header = styled.span`
   font-size: 2.4rem;
   margin: 1% 0;
@@ -116,6 +127,17 @@ const CourseData = (props) => {
     variables: { id: props.id },
   });
   if (loading) return <Loading />;
+  if (!data || !data.coursePage)
+    return (
+      <ErrorMessage>
+        <p>Unfortunately, no course has been found or loaded.</p>
+        <p>Check the link or internet connection.</p>
+        <p>
+          Or send us a message via the widget in the bottom-right corner. We
+          will help you immediately.
+        </p>
+      </ErrorMessage>
+    );
   // const { t } = useTranslation("course");
 
   const coursePage = data.coursePage;

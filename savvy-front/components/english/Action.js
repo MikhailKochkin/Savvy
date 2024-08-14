@@ -5,8 +5,6 @@ import * as EmailValidator from "email-validator";
 import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
-import ReactGA from "react-ga";
-
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
     $email: String!
@@ -299,10 +297,7 @@ const Action = () => {
                         number: number,
                       },
                     });
-                    ReactGA.event({
-                      category: "English Apply Button Click",
-                      action: "Click",
-                    });
+
                     const res = await createBusinessClient({
                       variables: {
                         type: asPath ? asPath : "English",
