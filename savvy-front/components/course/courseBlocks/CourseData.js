@@ -3,8 +3,9 @@ import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
 
 import styled from "styled-components";
-import Loading from "../../Loading";
 import parse from "html-react-parser";
+import Loading from "../../Loading";
+import LoadingErrorMessage from "../../LoadingErrorMessage";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -169,24 +170,18 @@ const CourseData = (props) => {
     variables: { id: props.id },
   });
   if (loading) return <Loading />;
-  if (!data || !data.coursePage)
-    return (
-      <ErrorMessage>
-        <img
-          src="/static/404.png"
-          // onClick={(e) => props.passMenuChange()}
-        />
-        <p>Unfortunately, no course has been found or loaded.</p>
-        <p>Check the link or internet connection. And reload the page.</p>
-        <p>
-          Or send us a message via the widget in the bottom-right corner. We
-          will help you immediately.
-        </p>
-        <SimpleButton>
-          <Link href="/">Homepage</Link>
-        </SimpleButton>
-      </ErrorMessage>
-    );
+  if (!data || !data.coursePage) {
+    let errorData = {
+      type: "course",
+      page: "course",
+      id: props.id,
+      error: error
+        ? error
+        : "For some reason data or data.coursePage have not been loaded.",
+    };
+
+    return <LoadingErrorMessage errorData={errorData} />;
+  }
   // const { t } = useTranslation("course");
 
   const coursePage = data.coursePage;

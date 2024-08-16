@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useQuery, useMutation, gql } from "@apollo/client";
-import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
 import LoadingText from "../LoadingText";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import PleaseSignIn from "../auth/PleaseSignIn";
-import { useSendErrorNotification } from "../../utils/sendErrorNotification";
+import LoadingErrorMessage from "../LoadingErrorMessage";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -289,26 +288,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
   }
 `;
 
-const SEND_MESSAGE_MUTATION = gql`
-  mutation SEND_MESSAGE_MUTATION(
-    $subject: String
-    $name: String
-    $email: String
-    $connection: String
-    $type: String
-  ) {
-    sendBusinessEmail(
-      subject: $subject
-      name: $name
-      email: $email
-      connection: $connection
-      type: $type
-    ) {
-      name
-    }
-  }
-`;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -362,60 +341,8 @@ const LessonPart = styled.div`
   }
 `;
 
-const SimpleButton = styled.button`
-  width: 230px;
-  height: 40px;
-  background: #000000;
-  padding: 5px 0;
-  border: 2px solid #000000;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: 0.3s;
-  a {
-    color: #fff;
-  }
-  &:hover {
-    background: #f4f4f4;
-    color: #000000;
-    a {
-      color: #000000;
-    }
-  }
-`;
-
-const ErrorMessage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-direction: center;
-  width: 100vw;
-  padding: 5% 0;
-  img {
-    width: 400px;
-  }
-  p {
-    width: 380px;
-    text-align: center;
-  }
-  @media (max-width: 600px) {
-    width: 100%;
-    img {
-      width: 80%;
-    }
-    p {
-      width: 80%;
-    }
-  }
-`;
-
 const NewSingleLesson = (props) => {
   const { t } = useTranslation("lesson");
-  const [isErrorMessageSent, setIsErrorMessageSent] = useState(false);
   // const onResize = (width) => setWidth(width);
   let loadedMe = useUser();
 
@@ -478,7 +405,6 @@ const NewSingleLesson = (props) => {
     variables: { id: props.id },
     fetchPolicy: "no-cache",
   });
-  const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
 
   if (loadedMe) {
     me = loadedMe;
@@ -486,37 +412,15 @@ const NewSingleLesson = (props) => {
 
   if (loading) return <LoadingText />;
   if (!data || !data.lesson) {
-    if (!isErrorMessageSent) {
-      const res = sendBusinessEmail({
-        variables: {
-          subject: "Application Error Occurred",
-          email: "mike@besavvy.app", // Your email address
-          type: "internal",
-          name: "Mikhail",
-          connection: `An error occurred in the application. Data loading error on lesson page. Id: ${props.id}, me: ${loadedMe?.id}: error: ${error}`,
-        },
-      });
-      setIsErrorMessageSent(true);
-    }
-    return (
-      <ErrorMessage>
-        <img src="/static/404.png" />
-        <p>Unfortunately, no simulator has been found or loaded.</p>
-        <p>
-          Check the link or internet connection please. And reload the page.
-        </p>
-        <p>
-          Or send us an email at{" "}
-          <a href="mailto:mike@besavvy.app">mike@besavvy.app</a>
-          .
-          <br />
-          We will help you in 30 minutes, you'll see.
-        </p>
-        <SimpleButton>
-          <Link href="/">Homepage</Link>
-        </SimpleButton>
-      </ErrorMessage>
-    );
+    let errorData = {
+      type: "simulator",
+      page: "lesson",
+      id: props.id,
+      error: error
+        ? error
+        : "For some reason data or data.lesson have not been loaded.",
+    };
+    return <LoadingErrorMessage errorData={errorData} />;
   }
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
