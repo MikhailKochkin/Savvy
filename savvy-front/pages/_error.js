@@ -1,13 +1,18 @@
-import React from "react";
+import { useEffect } from "react";
 import { useSendErrorNotification } from "../utils/sendErrorNotification";
 
 const Error = ({ statusCode }) => {
+  useEffect(() => {
+    sendErrorEmail(err, { statusCode: res ? res.statusCode : 404 });
+  }, []);
+
   return (
     <div>
+      <p>Hm... Something went wrong...</p>
+      <p>Could you reload the page please?</p>
       <p>
-        {statusCode
-          ? `An error ${statusCode} occurred on server`
-          : "An error occurred on client"}
+        No worries. Your data is safe. Probably just a small bug that we already
+        working on.
       </p>
     </div>
   );
