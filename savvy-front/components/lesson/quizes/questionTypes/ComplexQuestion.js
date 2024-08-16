@@ -1,25 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import parse from "html-react-parser";
-import { InfinitySpin, TailSpin } from "react-loader-spinner";
+import { InfinitySpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
-import { removeSpecialChars } from "../../SimulatorDevelopmentFunctions";
-import { checkAnswer } from "../functions/AIQuestionFunctions";
-
-// import { generateImprovement } from "../functions/AIQuestionFunctions";
-
 import {
-  Question,
-  IconBlock,
-  Button1,
-  Circle,
-  ResultCircle,
-  PositionCircle,
-  MiniCircle,
-} from "../QuestionStyles";
+  removeSpecialChars,
+  autoResizeTextarea,
+} from "../../SimulatorDevelopmentFunctions";
+
+import { Question, IconBlock, Button1, ResultCircle } from "../QuestionStyles";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -29,6 +21,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $correct: Boolean
     $comment: String
     $hint: String
+    $type: String
     $explanation: String
     $improvement: String
     $ideasList: QuizIdeas
@@ -40,6 +33,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
       correct: $correct
       comment: $comment
       hint: $hint
+      type: $type
       explanation: $explanation
       improvement: $improvement
       ideasList: $ideasList
@@ -65,14 +59,6 @@ const Progress = styled.div`
   justify-content: center;
   width: 100%;
   margin-bottom: 10px;
-`;
-
-const Progress2 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  margin: 10px;
 `;
 
 const Ideas = styled.div`
@@ -152,16 +138,13 @@ const HeadAnswerRow = styled.div`
 
 const Frame = styled.div`
   position: relative;
-  /* width: ${(props) => (props.width ? "200px" : "320px")}; */
   width: 200px;
   border-width: ${(props) => (props.inputColor === "#D0EADB" ? "3px" : "2px")};
   border-style: solid;
   border-color: ${(props) => props.inputColor};
   padding: 10px 15px;
   line-height: 1.6;
-
   background: #fff;
-  /* border-top-left-radius: ${(props) => (props.first ? "25px" : "0")}; */
   border-bottom-left-radius: ${(props) => (props.last ? "25px" : "0")};
   border-bottom-width: ${(props) =>
     props.last && props.inputColor === "#D0EADB" ? "3px" : "1px"};
@@ -183,11 +166,9 @@ const CommentFrame = styled.div`
   border-top: 2px solid #f3f3f3;
   border-bottom: ${(props) => (props.last ? "2px solid #f3f3f3;" : "none")};
   border-bottom-right-radius: ${(props) => (props.last ? "25px" : "0")};
-  /* border-top-right-radius: ${(props) => (props.first ? "25px" : "0")}; */
   border-right: 2px solid #f3f3f3;
   font-weight: 400;
   color: #000000;
-  /* width: ${(props) => (props.width ? "250px" : "auto")}; */
   width: 250px;
 `;
 
@@ -204,22 +185,8 @@ const Answer_text = styled.textarea`
   }
 `;
 
-const autoResizeTextarea = (event) => {
-  event.target.style.height = "auto";
-  event.target.style.height = event.target.scrollHeight + "px";
-};
-
 const ComplexQuestion = (props) => {
-  const {
-    author,
-    me,
-    story,
-    ifRight,
-    ifWrong,
-    quizId,
-    isOrderOfAnswersImportant,
-  } = props;
-  const [answersNum, setAnswersNum] = useState(0);
+  const { author, me, story } = props;
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
   const [correctIdeas, setCorrectIdeas] = useState([]); // ideas that match the correct answers
   const [overallResults, setOverallResults] = useState(null); // results of checking the ideas
@@ -228,16 +195,9 @@ const ComplexQuestion = (props) => {
   );
 
   const [isAnswerBeingChecked, setIsAnswerBeingChecked] = useState(false);
-  const [inputColor, setInputColor] = useState("#f3f3f3");
-  const [generating, setGenerating] = useState(false);
-
   const [areIdeasShown, setAreIdeasShown] = useState(false);
-  const [isAnswerCountShown, setIsAnswerCountShown] = useState(false);
   const [isFeedbackShown, setIsFeedbackShown] = useState(false);
-  const [hints, setHints] = useState([]);
-  const [explanation, setExplanation] = useState();
 
-  const router = useRouter();
   const [createQuizResult, { data, loading, error }] = useMutation(
     CREATE_QUIZRESULT_MUTATION
   );
@@ -304,12 +264,19 @@ const ComplexQuestion = (props) => {
     setOverallResults(new_results.sort((a, b) => a.index - b.index));
     setIsFeedbackShown(true);
     props.passResult("true");
+    createQuizResult({
+      variables: {
+        quiz: props.quizId,
+        lessonId: props.lessonId,
+        type: "answer",
+        ideasList: { quizIdeas: new_results.map(({ index, ...rest }) => rest) },
+        comment: ``,
+      },
+    });
     return new_results; // Return the results if needed
   };
 
   const generateExplainer = async (event, sampleAnswer, studentAnswer) => {
-    setGenerating(true); // Assuming this is a state-setting function
-
     let explainerPrompt;
     let url;
     let result;
@@ -323,10 +290,11 @@ const ComplexQuestion = (props) => {
     }
 
     // Create the prompt for the explainer
-    explainerPrompt = `You are a law professor. 
-    You help your student find this answer: ${sampleAnswer}.
-    The student has given this answer ${studentAnswer} which is not correct.
-    Write a 2 sentence explainer to help them find the answer. Use simple language. Use this information as the foundation of your comments: ${props.ifWrong}`;
+    explainerPrompt = `You are an experienced professional helping a student answer a question.
+      The student has provided the following incorrect answer: "${studentAnswer}". 
+      The correct answer is: "${sampleAnswer}".
+      In 2 sentences, guide the student toward the correct answer using clear and simple language. 
+      Focus on addressing where they went wrong based on this information: ${props.ifWrong}.`;
     // Prevent default behavior if event is passed
     if (event && event.preventDefault) {
       event.preventDefault();
@@ -365,16 +333,18 @@ const ComplexQuestion = (props) => {
       throw error; // Re-throwing the error if not handling
     } finally {
       // Ensure that the generating state is reset regardless of success or failure
-      setGenerating(false);
     }
   };
 
   const getFeedbackOnIdeas = async (event, allResults) => {
     event.preventDefault(); // Ensure event.preventDefault is called if necessary
-    setGenerating(true);
     // Use map to create an array of promises
     const feedbackPromises = ideas.map(async (idea, i) => {
-      if (idea == "") return;
+      if (idea == "") {
+        let res =
+          "Please break down your answer into several parts and complete this form as well.";
+        return res;
+      }
       if (allResults && parseFloat(allResults[i].result) > 65) {
         let res = `Part ${i + 1} is complete.`;
         return res;
@@ -382,7 +352,8 @@ const ComplexQuestion = (props) => {
       let res = await generateExplainer(
         event,
         props.answers.answerElements[i].answer,
-        idea
+        idea,
+        i + 1
       );
       return res; // Return the result from generateExplainer
     });
@@ -397,7 +368,6 @@ const ComplexQuestion = (props) => {
       console.error("Error fetching feedback:", error);
       // Optionally handle errors
     } finally {
-      setGenerating(false);
     }
   };
 
@@ -470,9 +440,6 @@ const ComplexQuestion = (props) => {
               return (
                 <>
                   <AnswerRow>
-                    {/* {isOrderOfAnswersImportant && answerPosition && (
-                      <PositionCircle>{answerPosition}</PositionCircle>
-                    )} */}
                     <Frame
                       inputColor={inputColor}
                       last={index == ideas.length - 1}
@@ -483,7 +450,6 @@ const ComplexQuestion = (props) => {
                         key={index}
                         type="text"
                         required
-                        disabled={parseInt(score) > 65 ? true : false}
                         analyzed={
                           feedbackList.filter((f) => f !== " ").length > 0
                         }
@@ -513,35 +479,6 @@ const ComplexQuestion = (props) => {
                     >
                       {feedbackList[index]}
                     </CommentFrame>
-                    {/* <div className="buttonsColumn">
-                      <MiniCircle
-                        onClick={(e) => {
-                          let newIdeas = [...ideas];
-                          newIdeas.splice(index, 0, "");
-                          setIdeas(newIdeas);
-                        }}
-                      >
-                        ⬆
-                      </MiniCircle>
-                      <MiniCircle
-                        onClick={(e) => {
-                          let newIdeas = [...ideas];
-                          newIdeas.splice(index, 1);
-                          setIdeas(newIdeas);
-                        }}
-                      >
-                        X
-                      </MiniCircle>
-                      <MiniCircle
-                        onClick={(e) => {
-                          let newIdeas = [...ideas];
-                          newIdeas.splice(index + 1, 0, "");
-                          setIdeas(newIdeas);
-                        }}
-                      >
-                        ⬇
-                      </MiniCircle>
-                    </div> */}
                   </AnswerRow>
                 </>
               );
@@ -558,14 +495,11 @@ const ComplexQuestion = (props) => {
         <Group>
           {correctIdeas.length != props.answers.answerElements.length && (
             <Button1
-              inputColor={inputColor}
               onClick={async (e) => {
                 e.preventDefault();
                 setIsAnswerBeingChecked(true);
                 const results = await getMatchingAnswers();
-                setTimeout(() => {
-                  getFeedbackOnIdeas(e, results);
-                }, 500);
+                const results2 = await getFeedbackOnIdeas(e, results);
                 setIsAnswerBeingChecked(false);
               }}
             >
@@ -573,24 +507,6 @@ const ComplexQuestion = (props) => {
             </Button1>
           )}
         </Group>
-        {/* 5. The hint that helps find correct answers */}
-        {hints.length > 0 && (
-          <div className="question_box">
-            <div className="question_text">
-              <p>{hints[hints.length - 1]}</p>
-            </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </div>
-        )}
 
         {/* 6. Bubble with buttons for additional questions available to the student  */}
         {isFeedbackShown && (
@@ -611,18 +527,21 @@ const ComplexQuestion = (props) => {
               <OptionsGroup>
                 <Option
                   onClick={(e) => {
-                    setIsAnswerCountShown(false);
                     setAreIdeasShown(true);
-                    // createQuizResult({
-                    //   variables: {
-                    //     quiz: props.quizId,
-                    //     lessonId: props.lessonId,
-                    //     hint: hints[hints.length - 1],
-                    //     ideasList: { quizIdeas: overallResults },
-                    //     comment: `Student opened correct answer`,
-                    //     type: "answerReveal",
-                    //   },
-                    // });
+                    createQuizResult({
+                      variables: {
+                        quiz: props.quizId,
+                        lessonId: props.lessonId,
+                        ideasList: {
+                          quizIdeas: overallResults.map(
+                            ({ index, ...rest }) => rest
+                          ),
+                        },
+                        // comment: `Student opened correct answer`,
+                        type: "answerReveal",
+                        comment: `Student opened correct answer`,
+                      },
+                    });
                   }}
                 >
                   {t("show_correct_answers")}
@@ -634,21 +553,6 @@ const ComplexQuestion = (props) => {
 
         {/* 7. Additional information bubbles  */}
 
-        {explanation && explanation.length > 1 && (
-          <div className="question_box">
-            <div className="question_text">{parse(explanation)}</div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </div>
-        )}
         {areIdeasShown && (
           <div className="question_box">
             <div className="question_text">

@@ -12,7 +12,7 @@ const Courses = () => {
     <>
       <NewLanding4 />
       {router.locale !== "ru" && <UseCases />}
-      <Programs />
+      {router.locale == "ru" && <Programs />}
       <Reviews />
       <ContactForm />
     </>

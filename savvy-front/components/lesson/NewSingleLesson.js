@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
-import ReactResizeDetector from "react-resize-detector";
+import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
@@ -341,14 +341,54 @@ const LessonPart = styled.div`
   }
 `;
 
+const SimpleButton = styled.button`
+  width: 230px;
+  height: 40px;
+  background: #000000;
+  padding: 5px 0;
+  border: 2px solid #000000;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
+  a {
+    color: #fff;
+  }
+  &:hover {
+    background: #f4f4f4;
+    color: #000000;
+    a {
+      color: #000000;
+    }
+  }
+`;
+
 const ErrorMessage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-direction: center;
-  width: 400px;
+  width: 100vw;
+  padding: 5% 0;
+  img {
+    width: 400px;
+  }
   p {
-    width: 300px;
+    width: 380px;
+    text-align: center;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+    img {
+      width: 80%;
+    }
+    p {
+      width: 80%;
+    }
   }
 `;
 
@@ -420,13 +460,21 @@ const NewSingleLesson = (props) => {
   if (!data || !data.lesson)
     return (
       <ErrorMessage>
+        <img src="/static/404.png" />
         <p>Unfortunately, no simulator has been found or loaded.</p>
-        <p>Check the link or internet connection please.</p>
         <p>
-          Or send us an email at mike@besavvy.app.
+          Check the link or internet connection please. And reload the page.
+        </p>
+        <p>
+          Or send us an email at{" "}
+          <a href="mailto:mike@besavvy.app">mike@besavvy.app</a>
+          .
           <br />
           We will help you in 30 minutes, you'll see.
         </p>
+        <SimpleButton>
+          <Link href="/">Homepage</Link>
+        </SimpleButton>
       </ErrorMessage>
     );
   let lesson = data.lesson;

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
+import Link from "next/link";
 
 import styled from "styled-components";
 import Loading from "../../Loading";
@@ -94,15 +95,56 @@ const Data = styled.div`
     width: 100%;
   }
 `;
+const SimpleButton = styled.button`
+  width: 230px;
+  height: 40px;
+  background: #000000;
+  padding: 5px 0;
+  border: 2px solid #000000;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
+  a {
+    color: #fff;
+  }
+  &:hover {
+    background: #f4f4f4;
+    color: #000000;
+    a {
+      color: #000000;
+    }
+  }
+`;
 
 const ErrorMessage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-direction: center;
-  width: 400px;
+  width: 100vw;
+  padding: 5% 0;
+  img {
+    width: 400px;
+    border-radius: 25px;
+    margin-bottom: 10px;
+  }
   p {
-    width: 300px;
+    width: 380px;
+    text-align: center;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+    img {
+      width: 80%;
+    }
+    p {
+      width: 80%;
+    }
   }
 `;
 
@@ -130,12 +172,19 @@ const CourseData = (props) => {
   if (!data || !data.coursePage)
     return (
       <ErrorMessage>
+        <img
+          src="/static/404.png"
+          // onClick={(e) => props.passMenuChange()}
+        />
         <p>Unfortunately, no course has been found or loaded.</p>
-        <p>Check the link or internet connection.</p>
+        <p>Check the link or internet connection. And reload the page.</p>
         <p>
           Or send us a message via the widget in the bottom-right corner. We
           will help you immediately.
         </p>
+        <SimpleButton>
+          <Link href="/">Homepage</Link>
+        </SimpleButton>
       </ErrorMessage>
     );
   // const { t } = useTranslation("course");

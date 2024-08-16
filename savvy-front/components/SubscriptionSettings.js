@@ -139,6 +139,16 @@ const BlueButton = styled.button`
   }
 `;
 
+const Message = styled.div`
+  background: #def2d6;
+  color: #5a7052;
+  font-size: 1.3rem;
+  padding: 10px 15px;
+  border-radius: 15px;
+  width: 90%;
+  margin: 10px 0;
+`;
+
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION(
     $id: String!
@@ -181,6 +191,8 @@ const Account = (props) => {
   const [subscriptionLength, setSubscriptionLength] = useState(
     props.me.subscriptions[0]?.term ? props.me.subscriptions[0].term : "monthly"
   );
+
+  const [isSpecialOfferShown, setIsSpecialOfferShown] = useState(false);
   const router = useRouter();
 
   const { t } = useTranslation("account");
@@ -219,30 +231,44 @@ const Account = (props) => {
       <Fieldset disabled={loading} aria-busy={loading}>
         <div className="Title">{t("subscription_settings")}</div>
         <Container>
-          <Comment>Реферальная ссылка</Comment>
+          {/* <Comment>Реферальная ссылка</Comment>
           <div className="explainer_text">
             Вы можете поделиться реферальной ссылкой со своими друзьями,
             знакомыми и подписчиками. Они получат скидку -20% на свою первую
             подписку. А вы -20% за каждого, кто воспользуется ссылкой.
             Максимальная скидка за 1 месяц – 40%. Неиспользованные проценты
             перенесутся на следующий месяц.
-          </div>
+          </div> */}
           <input
             value={`https://besavvy.app/ru/subscription?referrerId=${me.id}`}
           />
           <Comment>{t("isActive")}</Comment>
           <select
             value={isActive}
-            onChange={(e) =>
-              setIsActive(e.target.value == "true" ? true : false)
-            }
+            onChange={(e) => {
+              if (isSpecialOfferShown) {
+                setIsActive(e.target.value === "true" ? true : false);
+              }
+              if (e.target.value !== "true") {
+                setIsSpecialOfferShown(true);
+                setSubscriptionType("special");
+              }
+            }}
           >
             <option value={true}>{t("active")}</option>
             <option value={false}>{t("inactive")}</option>
           </select>
-
+          {isSpecialOfferShown ? (
+            <Message>
+              Продлите подписку на специальных условиях.
+              <br /> Всего за 990 рублей сохраните доступ ко всем курсам еще на
+              1 месяц.
+              <br />
+              Нажмите на кнопку ниже, чтобы воспользоваться специальным
+              предложением.
+            </Message>
+          ) : null}
           <Comment>{t("choose_subscription_type")}</Comment>
-
           <select
             value={subscriptionType}
             onChange={(e) => setSubscriptionType(e.target.value)}
@@ -251,9 +277,9 @@ const Account = (props) => {
             <option value="mini">{t("mini")}</option>
             <option value="regular">{t("regular")}</option>
             <option value="team">{t("team")}</option>
+            <option value="special">Специальный тариф – 990 / мес</option>
           </select>
           <Comment>{t("choose_subscription_length")}</Comment>
-
           <select
             value={subscriptionLength}
             onChange={(e) => setSubscriptionLength(e.target.value)}

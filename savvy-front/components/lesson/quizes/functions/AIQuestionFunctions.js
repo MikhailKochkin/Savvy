@@ -68,10 +68,10 @@ export const checkAnswer = async (
         color = "#EFB8A9";
       }
       return {
-        result,
-        correctnessLevel,
-        color,
-        comment,
+        result: result ? result : 0,
+        correctnessLevel: correctnessLevel ? correctnessLevel : "wrong",
+        color: color ? color : "#EFB8A9",
+        comment: comment ? comment : "",
       };
     } catch (error) {
       console.error(error);

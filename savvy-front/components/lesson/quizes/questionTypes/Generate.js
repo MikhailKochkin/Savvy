@@ -31,6 +31,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $correct: Boolean
     $comment: String
     $hint: String
+    $type: String
     $explanation: String
     $improvement: String
     $ideasList: QuizIdeas
@@ -42,6 +43,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
       correct: $correct
       comment: $comment
       hint: $hint
+      type: $type
       explanation: $explanation
       improvement: $improvement
       ideasList: $ideasList

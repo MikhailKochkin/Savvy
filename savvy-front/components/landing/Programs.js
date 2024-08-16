@@ -130,6 +130,32 @@ const Option = styled.div`
     font-size: 1.3rem;
   }
 `;
+const ErrorMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-direction: center;
+  width: 100vw;
+  padding: 5% 0;
+  img {
+    width: 400px;
+    border-radius: 25px;
+    margin-bottom: 10px;
+  }
+  p {
+    width: 380px;
+    text-align: center;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+    img {
+      width: 80%;
+    }
+    p {
+      width: 80%;
+    }
+  }
+`;
 
 const Programs = (props) => {
   const router = useRouter();
@@ -157,7 +183,11 @@ const Programs = (props) => {
   if (loading) return <LoadingDummy />;
   if (loading1) return <LoadingDummy />;
   if (!data || !data.coursePages)
-    return <p>Failed to load the courses. Please reload the page.</p>;
+    return (
+      <ErrorMessage>
+        <p>Failed to load the courses. Please reload the page.</p>
+      </ErrorMessage>
+    );
 
   const slide = () => {
     var my_element = document.getElementById("course_container");

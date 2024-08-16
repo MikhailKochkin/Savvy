@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useMutation, useQuery, useLazyQuery, gql } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
@@ -21,10 +19,12 @@ const LESSON_RESULTS_QUERY = gql`
 `;
 
 const CompletionRate = (props) => {
-  const { lesson } = props;
+  const { lesson, me } = props;
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
-    variables: { lessonId: props.lesson.id, userId: props.me.id },
+    variables: { lessonId: lesson?.id, userId: me?.id },
   });
+  if (loading) return <div></div>;
+  if (error) return <div></div>;
   const getLessonWithHighestProgress = (lessonResults) => {
     return lessonResults.reduce((highest, current) => {
       return current.progress > highest.progress ? current : highest;
@@ -33,7 +33,6 @@ const CompletionRate = (props) => {
 
   let maxResult = null;
   let completionRate = 0;
-  let color;
   if (data?.lessonResults.length > 0 && lesson?.structure?.lessonItems) {
     maxResult = getLessonWithHighestProgress(data.lessonResults);
     completionRate = (
@@ -41,8 +40,7 @@ const CompletionRate = (props) => {
       100
     ).toFixed(0);
   }
-
-  return <div>{completionRate}%</div>;
+  return <div>{completionRate <= 100 ? completionRate : 100}%</div>;
 };
 
 export default CompletionRate;
