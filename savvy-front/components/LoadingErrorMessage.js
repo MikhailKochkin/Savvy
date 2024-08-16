@@ -87,7 +87,29 @@ const LoadingErrorMessage = (props) => {
         email: "mike@besavvy.app", // Your email address
         type: "internal",
         name: "Mikhail",
-        connection: `An error occurred in the application. Data loading error on "${errorData.page}" page. Id: ${errorData.id}, error: ${errorData.error}`,
+        connection: `
+        An error occurred in the application. 
+        Data loading error on "${errorData.page}" page. 
+        Id: ${errorData.id}, error: ${errorData.error}
+        Browser: ${navigator.userAgent}
+        URL: ${window.location.href}
+        Referrer: ${document.referrer || "N/A"}
+        Viewport Size: ${window.innerWidth}x${window.innerHeight}
+        Screen Resolution: ${window.screen.width}x${window.screen.height}
+        Device Type: ${
+          navigator.userAgent.includes("Mobi") ? "Mobile" : "Desktop"
+        }
+        Network Connection: ${navigator.connection.effectiveType} / ${
+          navigator.connection.type
+        }
+        Network Type: ${navigator.connection.type}
+        Network DownLink: ${navigator.connection.downlink}
+        Network RTT: ${navigator.connection.rtt}
+
+        Cookies: ${document.cookie}
+        Local Storage: ${JSON.stringify(localStorage)}
+        Time: ${new Date().toLocaleString()}
+        `,
       },
     });
     setIsErrorMessageSent(true);

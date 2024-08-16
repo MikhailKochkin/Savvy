@@ -86,7 +86,28 @@ const Error = ({ statusCode }) => {
           email: "mike@besavvy.app",
           type: "internal",
           name: "Mikhail",
-          connection: `An error occurred in the application on the _error page. Please investigate.`,
+          connection: `
+          An error occurred in the application on the _error page. Please investigate.
+           Browser: ${navigator.userAgent}
+           URL: ${window.location.href}
+           Referrer: ${document.referrer || "N/A"}
+           Viewport Size: ${window.innerWidth}x${window.innerHeight}
+           Time: ${new Date().toLocaleString()}
+           Screen Resolution: ${window.screen.width}x${window.screen.height}
+        Device Type: ${
+          navigator.userAgent.includes("Mobi") ? "Mobile" : "Desktop"
+        }
+        Network Connection: ${navigator.connection.effectiveType} / ${
+            navigator.connection.type
+          }
+        Network Type: ${navigator.connection.type}
+        Network DownLink: ${navigator.connection.downlink}
+        Network RTT: ${navigator.connection.rtt}
+
+        Cookies: ${document.cookie}
+        Local Storage: ${JSON.stringify(localStorage)}
+        Time: ${new Date().toLocaleString()}
+          `,
         },
       }).catch((error) => {
         console.error("Error sending email:", error);
