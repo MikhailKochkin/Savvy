@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import Link from "next/link";
 
 const SEND_MESSAGE_MUTATION = gql`

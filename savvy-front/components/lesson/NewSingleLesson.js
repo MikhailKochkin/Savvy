@@ -415,7 +415,7 @@ const NewSingleLesson = (props) => {
     let errorData = {
       type: "simulator",
       page: "lesson",
-      id: props.id,
+      id: props.id ? props.id : null,
       error: error
         ? error
         : "For some reason data or data.lesson have not been loaded.",

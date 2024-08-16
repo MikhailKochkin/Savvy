@@ -34,6 +34,9 @@ const LessonPage = (props) => (
     )}
     {props.query.type === "stats" && <LessonStats id={props.query.id} />}
     {props.query.type === "challenge" && <Challenge id={props.query.id} />}
+    {!props.query.type && (
+      <div>The link is incorrect. Please check the URL and try again.</div>
+    )}
   </div>
 );
 
