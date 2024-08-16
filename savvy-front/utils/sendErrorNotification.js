@@ -8,7 +8,6 @@ const SEND_MESSAGE_MUTATION = gql`
     $subject: String
     $name: String
     $email: String
-    $firm: String
     $connection: String
     $type: String
   ) {
@@ -16,7 +15,6 @@ const SEND_MESSAGE_MUTATION = gql`
       subject: $subject
       name: $name
       email: $email
-      firm: $firm
       connection: $connection
       type: $type
     ) {
@@ -37,11 +35,7 @@ export const useSendErrorNotification = () => {
           email: "mike@besavvy.app", // Your email address
           type: "internal",
           name: "Mikhail",
-          connection: `An error occurred in the application.\n\nError message: ${
-            error.message
-          }\nStack trace: ${error.stack}\n\nContext: ${JSON.stringify(
-            context
-          )}`,
+          connection: `An error occurred in the application.`,
         },
       });
       console.log("Error email sent successfully");

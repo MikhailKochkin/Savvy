@@ -1,8 +1,44 @@
 import { useEffect } from "react";
 import { useSendErrorNotification } from "../utils/sendErrorNotification";
+import { useQuery, useMutation, gql } from "@apollo/client";
+
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION(
+    $subject: String
+    $name: String
+    $email: String
+    $connection: String
+    $type: String
+  ) {
+    sendBusinessEmail(
+      subject: $subject
+      name: $name
+      email: $email
+      connection: $connection
+      type: $type
+    ) {
+      name
+    }
+  }
+`;
 
 const Error = ({ statusCode }) => {
+  const [isErrorMessageSent, setIsErrorMessageSent] = useState(false);
+  const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
+
   useEffect(() => {
+    if (!isErrorMessageSent) {
+      const res = sendBusinessEmail({
+        variables: {
+          subject: "Application Error Occurred",
+          email: "mike@besavvy.app", // Your email address
+          type: "internal",
+          name: "Mikhail",
+          connection: `An error occurred in the application. statusCode: ${statusCode} `,
+        },
+      });
+      setIsErrorMessageSent(true);
+    }
     sendErrorEmail(err, { statusCode: res ? res.statusCode : 404 });
   }, []);
 

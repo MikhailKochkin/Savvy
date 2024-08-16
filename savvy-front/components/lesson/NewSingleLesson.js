@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import StoryEx from "./StoryEx";
@@ -8,6 +8,7 @@ import { useUser } from "../User";
 import LoadingText from "../LoadingText";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import PleaseSignIn from "../auth/PleaseSignIn";
+import { useSendErrorNotification } from "../../utils/sendErrorNotification";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -288,6 +289,26 @@ const NEW_SINGLE_LESSON_QUERY = gql`
   }
 `;
 
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION(
+    $subject: String
+    $name: String
+    $email: String
+    $connection: String
+    $type: String
+  ) {
+    sendBusinessEmail(
+      subject: $subject
+      name: $name
+      email: $email
+      connection: $connection
+      type: $type
+    ) {
+      name
+    }
+  }
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -394,6 +415,7 @@ const ErrorMessage = styled.div`
 
 const NewSingleLesson = (props) => {
   const { t } = useTranslation("lesson");
+  const [isErrorMessageSent, setIsErrorMessageSent] = useState(false);
   // const onResize = (width) => setWidth(width);
   let loadedMe = useUser();
 
@@ -456,8 +478,26 @@ const NewSingleLesson = (props) => {
     variables: { id: props.id },
     fetchPolicy: "no-cache",
   });
+  const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
+
+  if (loadedMe) {
+    me = loadedMe;
+  }
+
   if (loading) return <LoadingText />;
-  if (!data || !data.lesson)
+  if (!data || !data.lesson) {
+    if (!isErrorMessageSent) {
+      const res = sendBusinessEmail({
+        variables: {
+          subject: "Application Error Occurred",
+          email: "mike@besavvy.app", // Your email address
+          type: "internal",
+          name: "Mikhail",
+          connection: `An error occurred in the application. Data loading error on lesson page. Id: ${props.id}, me: ${loadedMe?.id}: error: ${error}`,
+        },
+      });
+      setIsErrorMessageSent(true);
+    }
     return (
       <ErrorMessage>
         <img src="/static/404.png" />
@@ -477,15 +517,11 @@ const NewSingleLesson = (props) => {
         </SimpleButton>
       </ErrorMessage>
     );
+  }
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
     (l) => l.number === lesson.number + 1
   );
-
-  if (loadedMe) {
-    me = loadedMe;
-  }
-
   // 4. Check if I am the student or the author
 
   let i_am_author = false;
