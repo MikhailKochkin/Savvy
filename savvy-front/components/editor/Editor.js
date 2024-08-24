@@ -62,6 +62,7 @@ import { withTable, TableEditor } from "slate-table";
 import Modal from "styled-react-modal";
 import isHotkey from "is-hotkey";
 import CreateQuiz from "../create/CreateQuiz";
+import SingleQuiz from "../lesson/quizes/SingleQuiz";
 
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
@@ -1203,6 +1204,7 @@ const App = (props) => {
   const getResult = (res) => {
     setModalData(res.data.createQuiz.id);
   };
+
   return (
     <>
       {/* <button onClick={handleOpenModal}>Open Modal</button> */}
@@ -1212,34 +1214,92 @@ const App = (props) => {
         onBackgroundClick={handleCloseModal}
         onEscapeKeydown={handleCloseModal}
       >
-        <div>
-          Element type: {type}. <br />
-          {type === "note" && "Write down the ID of the target note"}
-          {type === "createError" && "Write down the ID of the target question"}
-          {type === "createProblem" &&
-            "Write down the ID of the target casestudy"}
-          {props.lessonId}
+        <div className="scrollable_block">
+          <div className="info_board">
+            <div className="row">
+              <div>Element Type</div>
+              <div className="type">{type}</div>
+            </div>
+            <div className="row">
+              <div>Element Id</div>
+              <input
+                type="text"
+                placeholder={""}
+                value={modalData}
+                onChange={(e) => setModalData(e.target.value)}
+              />
+            </div>
+            {type === "note" && "Write down the ID of the target note"}
+            {type === "createError" &&
+              "Write down the ID of the target question"}
+            {type === "createProblem" &&
+              "Write down the ID of the target casestudy"}
+          </div>
+
           {type === "createError" && (
             <CreateQuiz getResult={getResult} lessonID={props.lessonId} />
           )}
+          {type === "error" && (
+            <SingleQuiz
+              key={modalData}
+              id={modalData}
+              me={props.me}
+              quizId={modalData}
+              lessonID={
+                props.lesson?.quizes.find((q) => q.id == modalData).lessonId
+              }
+              answer={
+                props.lesson?.quizes.find((q) => q.id == modalData).answer
+              }
+              answers={
+                props.lesson?.quizes.find((q) => q.id == modalData).answers
+              }
+              lesson={props.lesson}
+              question={
+                props.lesson?.quizes.find((q) => q.id == modalData).question
+              }
+              name={props.lesson?.quizes.find((q) => q.id == modalData).name}
+              image={props.lesson?.quizes.find((q) => q.id == modalData).image}
+              type={props.lesson?.quizes.find((q) => q.id == modalData).type}
+              isOrderOfAnswersImportant={
+                props.lesson?.quizes.find((q) => q.id == modalData)
+                  .isOrderOfAnswersImportant
+              }
+              shouldAnswerSizeMatchSample={
+                props.lesson?.quizes.find((q) => q.id == modalData)
+                  .shouldAnswerSizeMatchSample
+              }
+              isScoringShown={
+                props.lesson?.quizes.find((q) => q.id == modalData)
+                  .isScoringShown
+              }
+              goalType={
+                props.lesson?.quizes.find((q) => q.id == modalData).goalType
+              }
+              complexity={
+                props.lesson?.quizes.find((q) => q.id == modalData).complexity
+              }
+              ifRight={
+                props.lesson?.quizes.find((q) => q.id == modalData).ifRight
+              }
+              ifWrong={
+                props.lesson?.quizes.find((q) => q.id == modalData).ifWrong
+              }
+              next={props.lesson?.quizes.find((q) => q.id == modalData).next}
+              check={props.lesson?.quizes.find((q) => q.id == modalData).check}
+            />
+          )}
+          <button
+            onClick={(e) => {
+              handleSubmitModal(type);
+              // if (modalData.trim() !== "") {
+              //   insertComment(editor, modalData, setModalData, setModalOpen);
+              // }
+            }}
+          >
+            Update
+          </button>
         </div>
-        <textarea
-          type="text"
-          placeholder={""}
-          value={modalData}
-          onChange={(e) => setModalData(e.target.value)}
-        />
-        <div>Type: {type}</div>
-        <button
-          onClick={(e) => {
-            handleSubmitModal(type);
-            // if (modalData.trim() !== "") {
-            //   insertComment(editor, modalData, setModalData, setModalOpen);
-            // }
-          }}
-        >
-          Update
-        </button>
       </StyledModal>
 
       <Slate
@@ -1668,7 +1728,7 @@ const ErrorElement = ({
       {...props.attributes}
       onMouseDown={(event) => {
         event.preventDefault(); // prevent Slate's default mouse down handling
-        setModalData(props.element.error_data);
+        setModalData(props.element.error_data || props.element.elementId);
         setModalOpen(true);
         const path = ReactEditor.findPath(editor, props.element);
         setNotePath(path); // store the path
@@ -1830,7 +1890,7 @@ const StyledModal = Modal.styled`
   border: 1px solid grey;
   border-radius: 10px;
   max-width: 40%;
-  min-width: 400px;
+  min-width: 650px;
   padding: 2%;
   textarea {
     width: 80%;
@@ -1838,10 +1898,53 @@ const StyledModal = Modal.styled`
     font-family: Montserrat;
     margin: 15px 0;
   }
-  button {
-        width: 80%;
+  .scrollable_block {
+    width: 100%;
+    height: 600px;
+      overflow-y: scroll;
 
   }
+  .info_board {
+    width: 90%;
+  }
+  .row {
+    display: flex;
+    flex-direction: row;
+    margin:10px 0;
+    .type {
+       width: 70%;
+
+    }
+    div {
+      width: 30%
+    }
+    input {
+      width: 70%;
+      font-family: Montserrat;
+      outline: 0;
+    }
+  }
+  /* button {
+ background: #3b5bb3;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  width: 100%;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 15px 0;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  } */
+/* } */
+
+  
   .top_message {
     padding-bottom: 2%;
     border-bottom: 1px solid grey;
@@ -1854,14 +1957,14 @@ const StyledModal = Modal.styled`
   }
   @media (max-width: 1300px) {
     max-width: 70%;
-    min-width: 200px;
+    min-width: 650px;
     margin: 10px;
     max-height: 100vh;
     overflow-y: scroll;
   }
   @media (max-width: 800px) {
     max-width: 90%;
-    min-width: 200px;
+    min-width: 340px;
     margin: 10px;
     max-height: 100vh;
     overflow-y: scroll;

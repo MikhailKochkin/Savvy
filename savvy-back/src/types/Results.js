@@ -7,6 +7,8 @@ const TestResult = objectType({
     t.model.answer();
     t.model.answerArray();
     t.model.attempts();
+    t.model.hint();
+    t.model.type();
     t.model.lessonID();
     t.model.testID();
     t.model.studentId();

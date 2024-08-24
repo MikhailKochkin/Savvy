@@ -345,7 +345,6 @@ const LessonHeader = (props) => {
       ).toFixed(0);
     }
   }, [props.me, data]);
-  console.log("maxResult", maxResult);
   const { lesson, name, author, me, i_am_author } = props;
 
   const myCallback = (data) => {

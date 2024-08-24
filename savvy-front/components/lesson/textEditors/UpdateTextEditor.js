@@ -103,7 +103,6 @@ const UpdateTextEditor = (props) => {
       ],
       onCompleted: () => {
         props.switchUpdate();
-        props.passUpdated();
       },
     }
   );
@@ -177,6 +176,8 @@ const UpdateTextEditor = (props) => {
               value={text}
               complex={true}
               lessonId={lessonID}
+              lesson={props.lesson}
+              me={props.me}
             />
           )}
         </EditorInfoSection>

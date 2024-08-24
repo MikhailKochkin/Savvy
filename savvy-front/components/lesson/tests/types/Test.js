@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
+import { TailSpin } from "react-loader-spinner";
 
 import {
   IconBlock,
@@ -16,8 +18,19 @@ import IconBlockElement from "../IconBlockElement";
 import AnswerOption from "../AnswerOption";
 const removePTags = (str) => str.replace(/<\/?p>/g, "");
 
+const Progress2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin: 10px;
+`;
+
 const Test = (props) => {
   const [isAnswerShown, setIsAnswerShown] = useState(false); // is the answer shown?
+  const [generatingHint, setGeneratingHint] = useState(false); // is the AI generating a hint?
+  const [hints, setHints] = useState([]);
+
   const { t } = useTranslation("lesson");
   const {
     me,
@@ -37,7 +50,9 @@ const Test = (props) => {
     ifWrong,
     correctAnswers,
     answerOptions,
+    context,
   } = props;
+
   return (
     <TextBar className="Test" story={story}>
       <div className="question_box">
@@ -48,6 +63,27 @@ const Test = (props) => {
           author={author}
         />
       </div>
+      {/* 2 AI hints */}
+      {hints.length > 0 &&
+        hints.map((hint, index) => {
+          return (
+            <div className="question_box">
+              <div className="question_text">
+                <p>{parse(hint)}</p>
+              </div>
+              <IconBlock>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
+              </IconBlock>
+            </div>
+          );
+        })}
       <div className="answer">
         <IconBlock>
           <div className="icon2">
@@ -93,24 +129,43 @@ const Test = (props) => {
       {/* 3. Кнопка ответа  */}
       <Group>
         {!isAnswerShown && answerState !== "right" && (
-          <MiniButton
-            className="button"
-            id="but1"
-            onClick={async (e) => {
-              // Stop the form from submitting
-              e.preventDefault();
-              props.passTestData("TEST");
-              // if (answer.length < 1) {
-              //   setZero(true);
-              // } else {
-              //   passTestData();
-              // }
-            }}
-          >
-            {t("check")}
-          </MiniButton>
+          <>
+            <MiniButton
+              className="button"
+              id="but1"
+              onClick={async (e) => {
+                // Stop the form from submitting
+                e.preventDefault();
+                props.passTestData("TEST");
+                // if (answer.length < 1) {
+                //   setZero(true);
+                // } else {
+                //   passTestData();
+                // }
+              }}
+            >
+              {t("check")}
+            </MiniButton>
+            <MiniButton
+              onClick={async (e) => {
+                e.preventDefault();
+                setGeneratingHint(true);
+                let res = await props.provideHint();
+                setHints([...hints, res.newHint]);
+                setGeneratingHint(false);
+              }}
+              // correct={correct}
+            >
+              {hints.length > 0 ? t("i_need_another_hint") : t("i_need_a_hint")}
+            </MiniButton>
+          </>
         )}
       </Group>
+      {generatingHint && (
+        <Progress2>
+          <TailSpin width="50" color="#2E80EC" />
+        </Progress2>
+      )}
       {/* 4. Верный ответ. Поздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}
       {answerState === "right" && (
         <Question inputColor={inputColor}>

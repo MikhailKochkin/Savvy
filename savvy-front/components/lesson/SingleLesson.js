@@ -15,6 +15,7 @@ const SINGLE_LESSON_QUERY = gql`
       name
       number
       description
+      context
       open
       goal
       type

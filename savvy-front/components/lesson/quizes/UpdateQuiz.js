@@ -146,18 +146,6 @@ const AnswerOption = styled.div`
   }
 `;
 
-const Input = styled.input`
-  border: 1px solid #c4c4c4;
-  border-radius: 5px;
-  width: 100%;
-  padding: 10px;
-  font-family: Montserrat;
-  font-weight: 500;
-  .com {
-    border-top: 1px solid #c4c4c4;
-  }
-`;
-
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -212,12 +200,6 @@ const UpdateQuiz = (props) => {
         answerElements: answers,
       },
     },
-    refetchQueries: [
-      {
-        query: SINGLE_LESSON_QUERY,
-        variables: { id: lessonID },
-      },
-    ],
   });
 
   const handleUpdate = async (e) => {
@@ -226,7 +208,6 @@ const UpdateQuiz = (props) => {
       const res = await updateQuiz();
       props.getResult(res);
       props.switchUpdate();
-      props.passUpdated();
     } catch (err) {
       console.error(err);
     }
@@ -457,7 +438,7 @@ const UpdateQuiz = (props) => {
         {/* )} */}
         {/* {(type == "GENERATE" || type == "FINDALL" || type == "COMPLEX") && ( */}
         <>
-          <MiniAIButton
+          <SimpleButton
             onClick={(e) => {
               e.preventDefault();
               return setAnswers([
@@ -472,8 +453,8 @@ const UpdateQuiz = (props) => {
             }}
           >
             +1
-          </MiniAIButton>
-          <MiniAIButton
+          </SimpleButton>
+          <SimpleButton
             onClick={(e) => {
               e.preventDefault();
               if (answers.length > 0) {
@@ -484,7 +465,7 @@ const UpdateQuiz = (props) => {
             }}
           >
             -1
-          </MiniAIButton>
+          </SimpleButton>
         </>
         {/* )} */}
       </EditorInfoSection>

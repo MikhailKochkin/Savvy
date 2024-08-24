@@ -14,6 +14,7 @@ import Prompt from "./questionTypes/Prompt";
 import FindAll from "./questionTypes/FindAll";
 import CallSimulation from "./questionTypes/CallSimulation";
 import ComplexQuestion from "./questionTypes/ComplexQuestion";
+
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,14 +51,12 @@ const SingleQuiz = (props) => {
     if (props.passResultToTextEditor) {
       props.passResultToTextEditor(result);
     }
+
     const handleGetData = (resultBool) => {
-      if (props.getData) {
-        props.getData(
-          props.next && props.next[resultBool]
-            ? [resultBool, props.next[resultBool]]
-            : [resultBool, { type: "finish" }]
-        );
-      }
+      if (!props.getData) return;
+
+      const nextStep = props.next?.[resultBool] || "finish";
+      props.getData([resultBool, nextStep]);
     };
 
     if (isMoveMade) {
@@ -99,19 +98,13 @@ const SingleQuiz = (props) => {
     shouldAnswerSizeMatchSample,
     studentAnswerPassedFromAnotherComponent,
   } = props;
-
   const getResult = (data) => {
     props.getResult(data);
-  };
-
-  const passUpdated = () => {
-    props.passUpdated(true);
   };
 
   const switchUpdate = () => {
     setUpdate(!update);
   };
-
   let width;
   if (props.questionFormat == "mini") {
     width = "100%";
@@ -152,6 +145,7 @@ const SingleQuiz = (props) => {
               quizId={props.quizID}
               passResult={onMove}
               name={props.name}
+              context={props.context}
               image={props.image}
               instructorName={props.instructorName}
               openQuestionType={props.openQuestionType}
@@ -311,7 +305,6 @@ const SingleQuiz = (props) => {
           check={check}
           getResult={getResult}
           switchUpdate={switchUpdate}
-          passUpdated={passUpdated}
         />
       )}
     </Styles>

@@ -219,27 +219,43 @@ export const Group = styled.div`
   width: 100%;
   padding: 0.5%;
   margin: 0;
+  margin-top: 20px;
   margin-bottom: 3%;
 `;
 
 export const MiniButton = styled.div`
-  pointer-events: ${(props) =>
-    props.answerState === "right" ? "none" : "auto"};
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 60%;
-  text-align: center;
+  min-width: 120px;
+  line-height: 1.6;
+  margin-right: 20px;
+  text-align: left;
   background: #d2edfd;
   border-radius: 5px;
+  padding: 10px 30px;
+  margin-bottom: 15px;
+  /* height: 45px; */
+  cursor: pointer;
   color: #000a60;
   border: none;
-  padding: 0.5% 0;
-  margin-top: 20px;
+  white-space: nowrap;
   font-size: 1.6rem;
-  display: ${(props) => (props.answerState === "right" ? "none" : "block")};
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: ${(props) => (props.correct === "true" ? "none" : "flex")};
+  pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   &:hover {
     background: #a5dcfe;
+  }
+  @media (max-width: 800px) {
+    min-width: 100px;
+    margin-right: 10px;
+    padding: 10px 15px;
+    height: auto;
+
+    white-space: normal;
+    text-align: left;
   }
 `;
 

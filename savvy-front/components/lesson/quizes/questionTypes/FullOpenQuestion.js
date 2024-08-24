@@ -132,6 +132,10 @@ const FullOpenQuestion = (props) => {
   const [generatingExplanation, setGeneratingExplanation] = useState(false); // loading new explanation
   const [generatingImprovement, seGeneratingImprovement] = useState(false); // loading new improvement
   const [isAnswerChallenged, setIsAnswerChallenged] = useState(false); // is the answer challenged?
+  const [isChallengeBeingProcessed, setIsChallengeBeingProcessed] =
+    useState(false); // is the answer challenged?
+  const [challengeResult, setChallengeResult] = useState(null);
+  const [newWording, setNewWording] = useState(null);
 
   const { t } = useTranslation("lesson");
 
@@ -191,7 +195,7 @@ const FullOpenQuestion = (props) => {
       )}
       {/* 3. Student answer bubble part */}
       <>
-        <div className="answer">
+        <div className="answer" id={"answer_form_" + id}>
           <IconBlock>
             <div className="icon2">
               {me && me.image ? (
@@ -213,6 +217,7 @@ const FullOpenQuestion = (props) => {
                 if (e.target.value.length <= 500) {
                   passAnswer(e.target.value);
                   autoResizeTextarea(e);
+                  setIsAnswerChallenged(false);
                 }
               }}
               onInput={(e) => {
@@ -412,26 +417,33 @@ const FullOpenQuestion = (props) => {
                     </Button1>
                   )}
                   {(correctnessLevel === "wrong" ||
-                    correctnessLevel === "completely_wrong") && (
-                    <Button1
-                      onClick={async (e) => {
-                        // let newResult = await props.doubleCheck(props.answer);
-                        const res = sendBusinessEmail({
-                          variables: {
-                            subject: "System Assessment Challenged",
-                            email: "mikhail@besavvy.app",
-                            type: "internal",
-                            name: "Mikhail",
-                            connection: `${props.me.name} ${props.me.surname} claims that their answer (${props.answer}) in question with id: ${id} was not checked correctly. <a href="https://besavvy.app/lesson?id=${lessonId}&type=stats">Lesson Link</a>`,
-                          },
-                        });
-                        setIsAnswerChallenged(true);
-                        slideTo(`answer_challenge_${id}`);
-                      }}
-                    >
-                      {t("i_believe_my_answer_is_correct")}
-                    </Button1>
-                  )}
+                    correctnessLevel === "completely_wrong") &&
+                    props.answer?.length / props.sampleAnswer?.length > 0.2 && (
+                      <Button1
+                        onClick={async (e) => {
+                          // let newResult = await props.doubleCheck(props.answer);
+                          // const res = sendBusinessEmail({
+                          //   variables: {
+                          //     subject: "System Assessment Challenged",
+                          //     email: "mikhail@besavvy.app",
+                          //     type: "internal",
+                          //     name: "Mikhail",
+                          //     connection: `${props.me.name} ${props.me.surname} claims that their answer (${props.answer}) in question with id: ${id} was not checked correctly. <a href="https://besavvy.app/lesson?id=${lessonId}&type=stats">Lesson Link</a>`,
+                          //   },
+                          // });
+                          setIsChallengeBeingProcessed(true);
+                          setIsAnswerChallenged(true);
+                          const newChallengeResult =
+                            await props.challengeAnswer();
+                          setChallengeResult(newChallengeResult.result);
+                          setNewWording(newChallengeResult.new_wording);
+                          slideTo(`answer_challenge_${id}`);
+                          setIsChallengeBeingProcessed(false);
+                        }}
+                      >
+                        {t("i_believe_my_answer_is_correct")}
+                      </Button1>
+                    )}
                 </Group2>
               </Options>
             </div>
@@ -473,7 +485,7 @@ const FullOpenQuestion = (props) => {
                         <Button1
                           onClick={async (e) => {
                             e.preventDefault();
-                            slideTo(`question_box_${id}`);
+                            slideTo(`answer_form_${id}`);
                           }}
                         >
                           {t("go_to_answer_form")}
@@ -510,21 +522,72 @@ const FullOpenQuestion = (props) => {
             })}
           <div id={`answer_challenge_${id}`}>
             {isAnswerChallenged && (
-              <div id={`answer_challenge_${id}`} className="question_box">
-                <div className="question_text">
-                  <p>{t("i_will_review_your_asnwer")}</p>
-                </div>
-                <IconBlock>
-                  {author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}{" "}
-                  <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
+              <>
+                {!challengeResult ? (
+                  <div id={`answer_challenge_${id}`} className="question_box">
+                    <div className="question_text">
+                      {/* <p>{t("i_will_review_your_asnwer")}</p> */}
+                      <p>Hm .. Let me think about your answer ..</p>
+                    </div>
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
                   </div>
-                </IconBlock>
-              </div>
+                ) : null}
+                {challengeResult ? (
+                  <div className="question_box">
+                    <div className="question_text">
+                      {/* <p>{t("i_will_review_your_asnwer")}</p> */}
+                      {challengeResult < 58 ? (
+                        <>
+                          <p>{t("still_not_expected_answer")}</p>
+                          <p>{t("try_challenging_again")}</p>
+                        </>
+                      ) : null}
+                      {challengeResult >= 58 && challengeResult < 65 ? (
+                        <>
+                          <p>{t("rephrased_answer")}</p>
+                          <p>
+                            <i>{newWording}</i>
+                          </p>
+                          <p>{t("going_in_right_direction")}</p>
+                        </>
+                      ) : null}
+                      {challengeResult > 65 ? (
+                        <>
+                          <p>{t("rephrased_answer")}</p>
+                          <p>
+                            <i>{newWording}</i>
+                          </p>
+                          <p>{t("answer_is_correct")}</p>
+                        </>
+                      ) : null}
+                    </div>
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
+                  </div>
+                ) : null}
+              </>
+            )}
+            {isChallengeBeingProcessed && (
+              <Progress2>
+                <TailSpin width="50" color="#2E80EC" />
+              </Progress2>
             )}
           </div>
           <div id={`last_improvement_${id}`}></div>

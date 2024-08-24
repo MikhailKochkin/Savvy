@@ -89,7 +89,8 @@ export const generateHint = async (
   correctAnswer,
   comment,
   allHints,
-  router
+  router,
+  context
 ) => {
   event.preventDefault();
 
@@ -130,6 +131,10 @@ export const generateHint = async (
    Use this approach: ${hintingMethods[allHints.length]} 
   Do NOT USE the words from the correct answer. DO NOT reveal the correct answer. `;
   //    Use this approach: ${hintingMethods[allHints.length]}
+  console.log(
+    "prompt",
+    hintIntro + hintPrompt + hintAnswerRecommendations + context
+  );
   try {
     // Make a POST request to the API endpoint
     const response = await fetch(url, {
@@ -138,7 +143,7 @@ export const generateHint = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: hintIntro + hintPrompt + hintAnswerRecommendations,
+        prompt: context + hintIntro + hintPrompt + hintAnswerRecommendations,
       }),
     });
 
@@ -179,7 +184,8 @@ export const generateExplanation = async (
   allExplanantions,
   router,
   simpleExplanation,
-  explanationsNum
+  explanationsNum,
+  context
 ) => {
   event.preventDefault();
   const AItype = "claude";
@@ -279,7 +285,7 @@ export const generateExplanation = async (
 
   // Generate the explanation using the generated prompt
 
-  const result = await fetchExplanation(intro + explanationPrompt);
+  const result = await fetchExplanation(context + intro + explanationPrompt);
 
   // Rewrite the explanantion in a more concise way.
 
@@ -339,7 +345,8 @@ export const generateImprovement = async (
   correctnessLevel,
   commentForCorrectAnswer,
   AllImprovements,
-  router
+  router,
+  context
 ) => {
   event.preventDefault();
 
@@ -382,7 +389,10 @@ export const generateImprovement = async (
       },
       body: JSON.stringify({
         prompt:
-          improvementIntro + improvementPrompt + improvementRecommendations,
+          context +
+          improvementIntro +
+          improvementPrompt +
+          improvementRecommendations,
       }),
     });
 
@@ -672,5 +682,48 @@ export const checkNewWording = async (
   } else {
     // console.log(`Success! Ratio: ${ratio}`);
     return new_wording;
+  }
+};
+
+const countWords = (str) => str.trim().split(/\s+/).length;
+
+export const rephraseAnswer = async (old_wording, sample_answer) => {
+  const AItype = "openai";
+  const url = AItype === "claude" ? "/api/generate2" : "/api/generate";
+  let new_wording;
+  let challenge_prompt = `
+    Find the subject in this sentence: '${sample_answer}'
+    Then rewrite the sentence: '${old_wording}' and:
+
+    1. Make it around ${countWords(sample_answer)} words,
+    2. Make it semantically structured similarly to '${sample_answer}'. 
+    3. Use the subject from the first sentence in the new rewritten sentence
+
+    Return only the rewritten sentence.
+  `;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt: challenge_prompt }),
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    new_wording =
+      AItype === "claude" ? data.result.content[0].text : data.result.content;
+
+    // Check if the edited text is wrapped in <p> tags
+
+    return new_wording;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };

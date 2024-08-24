@@ -226,10 +226,6 @@ const Element = (props) => {
     CREATE_TEST_PRACTICE_RESULT_MUTATION
   );
 
-  const getResults = (res) => {
-    return;
-  };
-
   let tasks_array = props.tasks.map((t) => t.id);
   useInterval(() => {
     // Your custom logic here
@@ -286,7 +282,6 @@ const Element = (props) => {
         question={task.question}
         answers={task.answers}
         true={task.correct}
-        getResults={getResults}
         author={props.lesson.user}
         type={task.type}
         test={task}
@@ -296,13 +291,13 @@ const Element = (props) => {
         user={props.lesson.user.id}
         comments={task.comments}
         user_name={props.lesson.user}
-        // userData={props.lesson.testResults}
         lessonID={props.lesson.id}
         length={Array(task.correct.length).fill(false)}
         userData={props.testResults}
         story={true}
         exam={false}
         getData={update}
+        context={props.context}
       />
     );
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "Quiz") {
@@ -314,7 +309,6 @@ const Element = (props) => {
         answer={task.answer}
         answers={task.answers}
         me={props.me}
-        getResults={getResults}
         type={task.type}
         check={task.check}
         hidden={true}
@@ -327,6 +321,7 @@ const Element = (props) => {
         story={true}
         exam={false}
         getData={update}
+        context={props.context}
       />
     );
   }

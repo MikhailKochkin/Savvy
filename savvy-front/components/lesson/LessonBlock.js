@@ -148,7 +148,7 @@ const LessonBlock = (props) => {
 
   let d;
 
-  if (el.type && el.type.toLowerCase() == "note" && !el.data && !updated) {
+  if (el.type && el.type.toLowerCase() == "note" && !el.data) {
     d = lesson.notes.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "newtest" && !el.data) {
     d = lesson.newTests.find((n) => n.id == el.id);
@@ -202,14 +202,6 @@ const LessonBlock = (props) => {
 
   const addBlock = (type) => {
     setType(type);
-  };
-
-  const getResults = (el) => {
-    return null;
-  };
-
-  const passUpdated = () => {
-    setUpdated(true);
   };
 
   const getOldResult = (name, value, i) => {
@@ -522,7 +514,6 @@ const LessonBlock = (props) => {
                 lessonID={lesson.id}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
                 getResult={getResult}
-                passUpdated={passUpdated}
               />
             )}
           </>
@@ -556,7 +547,6 @@ const LessonBlock = (props) => {
                   userData={[]}
                   story={false}
                   getResult={getResult}
-                  passUpdated={passUpdated}
                 />
               </>
             )}
@@ -577,14 +567,13 @@ const LessonBlock = (props) => {
                 key={data.id}
                 problem={data}
                 complexity={data.complexity}
-                context={data.context}
+                // context={data.context}
                 lessonID={lesson.id}
                 name={lesson.name}
+                context={lesson.context}
                 me={me}
                 lesson={lesson}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
-                getResults={getResults}
-                passUpdated={passUpdated}
                 getResult={getResult}
               />
             )}
@@ -605,9 +594,9 @@ const LessonBlock = (props) => {
                 key={data.id}
                 id={data.id}
                 complexTestAnswers={data.complexTestAnswers}
-                getResults={getResults}
                 testID={data.id}
                 author={lesson.user}
+                context={lesson.context}
                 complexity={data.complexity}
                 question={data.question}
                 answers={data.answers}
@@ -628,7 +617,6 @@ const LessonBlock = (props) => {
                 story={false}
                 miniforum={lesson.miniforums.find((m) => m.value == el.id)}
                 getResult={getResult}
-                passUpdated={passUpdated}
               />
             )}
           </>
@@ -643,40 +631,37 @@ const LessonBlock = (props) => {
               />
             )}
             {(isSaved || d != null) && data && data.__typename == "Quiz" && (
-              <>
-                <SingleQuiz
-                  key={data.id}
-                  id={data.id}
-                  complexity={data.complexity}
-                  question={data.question}
-                  answer={data.answer}
-                  answers={data.answers}
-                  isOrderOfAnswersImportant={data.isOrderOfAnswersImportant}
-                  shouldAnswerSizeMatchSample={data.shouldAnswerSizeMatchSample}
-                  isScoringShown={data.isScoringShown}
-                  type={data.type}
-                  goalType={data.goalType}
-                  check={data.check}
-                  me={me}
-                  ifRight={data.ifRight}
-                  ifWrong={data.ifWrong}
-                  name={data.name}
-                  instructorName={data.instructorName}
-                  image={data.image}
-                  hidden={true}
-                  lesson={lesson}
-                  lessonID={lesson.id}
-                  quizID={data.id}
-                  user={data.user.id}
-                  story={false}
-                  user_name={data.user}
-                  author={lesson.user}
-                  miniforum={lesson.miniforums.find((m) => m.value == el.id)}
-                  getResults={getResults}
-                  passUpdated={passUpdated}
-                  getResult={getResult}
-                />
-              </>
+              <SingleQuiz
+                key={data.id}
+                id={data.id}
+                complexity={data.complexity}
+                question={data.question}
+                answer={data.answer}
+                answers={data.answers}
+                context={lesson.context}
+                isOrderOfAnswersImportant={data.isOrderOfAnswersImportant}
+                shouldAnswerSizeMatchSample={data.shouldAnswerSizeMatchSample}
+                isScoringShown={data.isScoringShown}
+                type={data.type}
+                goalType={data.goalType}
+                check={data.check}
+                me={me}
+                ifRight={data.ifRight}
+                ifWrong={data.ifWrong}
+                name={data.name}
+                instructorName={data.instructorName}
+                image={data.image}
+                hidden={true}
+                lesson={lesson}
+                lessonID={lesson.id}
+                quizID={data.id}
+                user={data.user.id}
+                story={false}
+                user_name={data.user}
+                author={lesson.user}
+                miniforum={lesson.miniforums.find((m) => m.value == el.id)}
+                getResult={getResult}
+              />
             )}
           </>
         )}
@@ -702,8 +687,6 @@ const LessonBlock = (props) => {
                 user={data.user.id}
                 story={false}
                 updateMode={true}
-                getResults={getResults}
-                passUpdated={passUpdated}
                 getResult={getResult}
               />
             )}
@@ -726,8 +709,8 @@ const LessonBlock = (props) => {
                 <TestPractice
                   key={data.id}
                   lessonID={lesson.id}
-                  getResults={getResults}
                   me={me}
+                  context={lesson.context}
                   testPractice={data}
                   quizes={lesson.quizes}
                   tests={lesson.newTests}
@@ -754,7 +737,6 @@ const LessonBlock = (props) => {
                 <TeamQuest
                   key={data.id}
                   lessonID={lesson.id}
-                  // getResults={getResults}
                   me={me}
                   teamQuest={data}
                   quizes={lesson.quizes}
@@ -793,7 +775,6 @@ const LessonBlock = (props) => {
                 messages={data.messages}
                 id={data.id}
                 lessonId={lesson.id}
-                passUpdated={passUpdated}
                 getResult={getResult}
                 library={lesson.notes}
               />
@@ -825,9 +806,7 @@ const LessonBlock = (props) => {
                     me={me}
                     story={false}
                     lessonID={lesson.id}
-                    getResults={getResults}
                     getResult={getResult}
-                    passUpdated={passUpdated}
                   />
                 </>
               )}
@@ -879,7 +858,6 @@ const LessonBlock = (props) => {
                       key={data.id}
                       lessonID={lesson.id}
                       complexity={data.complexity}
-                      getResults={getResults}
                       construction={data}
                       context={data.context}
                       variants={data.variants}
@@ -896,9 +874,7 @@ const LessonBlock = (props) => {
                       complexity={data.complexity}
                       me={me}
                       story={false}
-                      getResults={getResults}
                       getResult={getResult}
-                      passUpdated={passUpdated}
                     />
                   )}
                 </>

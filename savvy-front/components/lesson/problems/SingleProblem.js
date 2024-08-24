@@ -349,10 +349,6 @@ const SingleProblem = (props) => {
     props.getResult(data);
   };
 
-  const passUpdated = () => {
-    props.passUpdated(true);
-  };
-
   const getSteps = (val) => {
     props.getSteps(val);
   };
@@ -391,6 +387,7 @@ const SingleProblem = (props) => {
               type={problem.type}
               author={author}
               onFinish={onFinish}
+              context={lesson.context ? lesson.context : ""}
             />
           )}
           {(!problem.steps || problem.steps.problemItems.length == 0) && (
@@ -425,7 +422,6 @@ const SingleProblem = (props) => {
                           // call the mutation
                           if (answer !== "") {
                             const res = await createProblemResult();
-                            props.getResults(3);
                             setShowAnswerButton(true);
                             setRevealAnswer(true);
                           } else {
@@ -489,7 +485,6 @@ const SingleProblem = (props) => {
                             // call the mutation
                             if (answer !== "") {
                               const res = await createProblemResult();
-                              props.getResults(3);
                               setShowAnswerButton(true);
                               setRevealAnswer(true);
                             } else {
@@ -537,7 +532,6 @@ const SingleProblem = (props) => {
             name={problem.name}
             getResult={getResult}
             switchUpdate={switchUpdate}
-            passUpdated={passUpdated}
             steps={problem.steps}
             lesson={lesson}
             problem={problem}

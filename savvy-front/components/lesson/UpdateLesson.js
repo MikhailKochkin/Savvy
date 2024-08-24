@@ -15,6 +15,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $name: String
     $text: String
     $goal: String
+    $context: String
     $description: String
     $type: String
     $change: String
@@ -30,6 +31,7 @@ const UPDATE_LESSON_MUTATION = gql`
       name: $name
       text: $text
       goal: $goal
+      context: $context
       description: $description
       type: $type
       change: $change
@@ -83,6 +85,16 @@ const Container = styled.div`
     font-size: 1.4rem;
     font-family: Montserrat;
   }
+  textarea {
+    width: 100%;
+    min-height: 70px;
+    border: none;
+    outline: 0;
+    font-size: 1.4rem;
+    font-family: Montserrat;
+    padding: 10px;
+    font-weight: 500;
+  }
   select {
     width: 100%;
     font-size: 1.4rem;
@@ -109,22 +121,6 @@ const Container = styled.div`
   }
   .green {
     border: 2px solid #6a994e;
-  }
-`;
-
-const Button = styled.button`
-  padding: 1% 2%;
-  background: ${(props) => props.theme.green};
-  width: 20%;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin: 2% 0;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -267,6 +263,9 @@ const UpdateLesson = (props) => {
   const [hasSecret, setHasSecret] = useState(props.lesson.hasSecret);
   const [totalPoints, setTotalPoints] = useState(props.lesson.totalPoints);
   const [coursePageId, setCoursePageId] = useState(props.coursePageId);
+  const [context, setContext] = useState(
+    props.lesson.context ? props.lesson.context : ""
+  );
   const [copyLesson, { data: copyData }] = useMutation(COPY_LESSON_MUTATION);
 
   const { t } = useTranslation("lesson");
@@ -480,6 +479,17 @@ const UpdateLesson = (props) => {
             />
           </Frame> */}
         <Row>
+          <div className="description">Context</div>
+          <div className="input">
+            <Frame>
+              <textarea
+                value={context}
+                onChange={(e) => setContext(e.target.value)}
+              />
+            </Frame>
+          </div>
+        </Row>
+        <Row>
           <div className="description">{t("comments")}</div>
           <div className="input">
             <Frame>
@@ -506,6 +516,7 @@ const UpdateLesson = (props) => {
             name,
             text,
             description,
+            context,
             type,
             change,
             goal,

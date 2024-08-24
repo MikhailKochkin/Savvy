@@ -202,11 +202,6 @@ const Shots = (props) => {
     // console.log("shots", data);
   };
 
-  const passUpdated = () => {
-    props.passUpdated(true);
-    // console.log("passUpdated");
-  };
-
   const switchUpdate = () => {
     setUpdate(!update);
     // console.log("update");
@@ -316,7 +311,6 @@ const Shots = (props) => {
             name={name}
             getResult={getResult}
             switchUpdate={switchUpdate}
-            passUpdated={passUpdated}
           />
         </>
       )}

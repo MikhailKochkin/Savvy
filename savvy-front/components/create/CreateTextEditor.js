@@ -244,6 +244,7 @@ const CreateTextEditor = (props) => {
         getEditorText={myCallback}
         complex={true}
         value={router.locale == "ru" ? rus_placeholder : eng_placeholder}
+        lessonId={lessonID}
       />
 
       <Mutation

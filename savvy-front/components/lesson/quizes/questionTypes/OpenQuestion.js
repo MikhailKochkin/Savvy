@@ -14,6 +14,7 @@ import {
   checkAnswer,
   reflectOnExplanation,
   checkNewWording,
+  rephraseAnswer,
 } from "../functions/AIQuestionFunctions";
 import {
   removeSpecialChars,
@@ -68,6 +69,7 @@ const OpenQuestion = (props) => {
     studentAnswerPassedFromAnotherComponent,
     isScoringShown,
     instructorName,
+    context,
     image,
   } = props;
 
@@ -244,6 +246,43 @@ const OpenQuestion = (props) => {
     setIsAnswerBeingChecked(false);
   };
 
+  const challengeAnswer = async (e) => {
+    let new_wording = await rephraseAnswer(answer, props.answer);
+
+    // console.log("props.answer", props.answer);
+    // console.log("student answer", answer);
+    // console.log("new_wording", new_wording);
+
+    const { result, correctnessLevel, color, comment } = await checkAnswer(
+      e,
+      removeSpecialChars2(props.answer),
+      new_wording,
+      props.check
+    );
+
+    // console.log("result", result);
+    setInputColor(color);
+    setResult(result);
+    createQuizResult({
+      variables: {
+        quiz: props.quizId,
+        lessonId: props.lessonId,
+        answer: new_wording,
+        correct: result > 58 ? true : false,
+        type: "challenge",
+        hint: null,
+        result: result.toString(),
+        explanation: null,
+        improvement: null,
+        comment: `The student challenged the answer.`,
+      },
+    });
+    return {
+      result,
+      new_wording,
+    };
+  };
+
   // 3. Provide hints to the student
 
   const getHint = async (event) => {
@@ -254,7 +293,8 @@ const OpenQuestion = (props) => {
       removeSpecialChars(props.answer),
       ifWrong,
       hints,
-      router
+      router,
+      context
     );
     setHints([...hints, hintGenerationResult.newHint]);
     createQuizResult({
@@ -294,7 +334,8 @@ const OpenQuestion = (props) => {
       explanations,
       router,
       t("simple_explanation"),
-      explanationsNum
+      explanationsNum,
+      context
     );
 
     let answerToReflectOn = explanationGenerationResult.newExplanation;
@@ -337,7 +378,8 @@ const OpenQuestion = (props) => {
       correctnessLevel,
       ifRight,
       improvements,
-      router
+      router,
+      context
     );
     setImprovementsNum(improvementsNum + 1);
     setImprovements([
@@ -476,6 +518,7 @@ const OpenQuestion = (props) => {
       correctAnswer={props.answer}
       answer={answer}
       previousAnswers={previousAnswers}
+      sampleAnswer={props.answer}
       onAnswer={onAnswer}
       passAnswer={passAnswer}
       me={me}
@@ -496,6 +539,7 @@ const OpenQuestion = (props) => {
       image={image}
       instructorName={instructorName}
       doubleCheck={doubleCheck}
+      challengeAnswer={challengeAnswer}
     />
   );
 };

@@ -25,11 +25,9 @@ const Container = styled.div`
 
 const TestPracticeResult = (props) => {
   const [areQuestionsShown, setAreQuestionsShown] = useState(false);
-  console.log("TestPracticeResult props", props);
   const { lesson, results, testPractice, student, quizResults, testResults } =
     props;
   let allTasks = [...lesson.newTests, ...lesson.quizes];
-  console.log("testPractice", testPractice);
 
   return (
     <Container>
@@ -37,7 +35,6 @@ const TestPracticeResult = (props) => {
         let activeTasks = allTasks.filter((task) =>
           result.tasks.includes(task.id)
         );
-        console.log("result", result);
         return (
           <div key={index}>
             <h2>Chain of questions</h2>
@@ -49,7 +46,6 @@ const TestPracticeResult = (props) => {
             </button>
             {areQuestionsShown &&
               activeTasks.map((task, index) => {
-                console.log("task", task.type.toLowerCase());
                 if (task.type.toLowerCase() == "test") {
                   return (
                     <TestResult

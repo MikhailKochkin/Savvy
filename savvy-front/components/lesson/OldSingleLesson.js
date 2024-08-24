@@ -17,10 +17,8 @@ import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
 import TestPractices from "./testblocks/TestPractices";
 import ProblemGroup from "./problems/ProblemGroup";
-import NewProblem from "./problems/NewProblem";
 import ConstructorGroup from "./constructions/ConstructorGroup";
 import TextEditorGroup from "./textEditors/TextEditorGroup";
-import PleaseSignIn from "../auth/PleaseSignIn";
 import CreateNewTest from "../create/CreateNewTest";
 import CreateQuiz from "../create/CreateQuiz";
 import CreateTestBlock from "./testblocks/CreateTestBlock";
@@ -706,9 +704,6 @@ const SingleLesson = (props) => {
                       tests={lesson.newTests}
                       lesson={lesson}
                     />
-                  )}
-                  {page === "newProblem" && (
-                    <NewProblem lesson={lesson} me={me} />
                   )}
                   {page === "problem" && (
                     <>

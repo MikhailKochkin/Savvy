@@ -197,10 +197,6 @@ const Tasks = (props) => {
     }
   }, 1000);
 
-  const getResults = () => {
-    return;
-  };
-
   const getFinished = (val) => {
     props.passStep("finish_challenge");
   };
@@ -260,12 +256,12 @@ const Tasks = (props) => {
         test={task}
         me={props.me}
         userData={props.lesson.testResults}
+        context={props.lesson.context}
         lessonID={props.lesson.id}
         length={Array(task.correct.length).fill(false)}
         story={true}
         exam={false}
         getData={update}
-        getResults={getResults}
         challenge={true}
       />
     );
@@ -278,6 +274,7 @@ const Tasks = (props) => {
         answer={task.answer}
         answers={task.answers}
         me={props.me}
+        context={props.lesson.context}
         type={task.type}
         check={task.check}
         hidden={true}
@@ -288,7 +285,6 @@ const Tasks = (props) => {
         story={true}
         exam={false}
         getData={update}
-        getResults={getResults}
         challenge={true}
       />
     );

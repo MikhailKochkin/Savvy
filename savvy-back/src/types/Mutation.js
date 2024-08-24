@@ -1825,6 +1825,7 @@ const Mutation = mutationType({
         name: stringArg(),
         banner: stringArg(),
         audience: stringArg(),
+        context: stringArg(),
         text: stringArg(),
         description: stringArg(),
         type: stringArg(),
@@ -2102,6 +2103,8 @@ const Mutation = mutationType({
       type: "TestResult",
       args: {
         answer: stringArg(),
+        hint: stringArg(),
+        type: stringArg(),
         testID: stringArg(),
         lessonID: stringArg(),
         result: stringArg(),
@@ -3999,7 +4002,7 @@ const Mutation = mutationType({
 
           const createPayload = {
             amount: {
-              value: "3990.00",
+              value: "1990.00",
               currency: "RUB",
             },
             payment_method_id: payment.payment_method.id,
@@ -4012,7 +4015,7 @@ const Mutation = mutationType({
                   description: "BeSavvy Plus",
                   quantity: "1",
                   amount: {
-                    value: "3990.00",
+                    value: "1990.00",
                     currency: "RUB",
                   },
                   vat_code: 1,

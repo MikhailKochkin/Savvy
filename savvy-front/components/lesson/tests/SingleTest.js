@@ -8,6 +8,8 @@ import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import Test from "./types/Test";
 import Form from "./types/Form";
 import Branch from "./types/Branch";
+import { generateHint } from "./functions/AiFunctions";
+import { useRouter } from "next/router";
 
 const CREATE_TESTRESULT_MUTATION = gql`
   mutation CREATE_TESTRESULT_MUTATION(
@@ -16,6 +18,8 @@ const CREATE_TESTRESULT_MUTATION = gql`
     $testID: String
     $lessonID: String
     $result: String
+    $type: String
+    $hint: String
   ) {
     createTestResult(
       answer: $answer
@@ -23,6 +27,8 @@ const CREATE_TESTRESULT_MUTATION = gql`
       lessonID: $lessonID
       answerArray: $answerArray
       result: $result
+      type: $type
+      hint: $hint
     ) {
       id
     }
@@ -69,8 +75,11 @@ const SingleTest = (props) => {
   const [zero, setZero] = useState(false); // zero – no answers have been provided by the student wheck clicking answer
   const [commentsList, setCommentsList] = useState([]);
   const [branchSourceId, setBranchSourceId] = useState(null);
+  const [hints, setHints] = useState([]);
 
+  const router = useRouter();
   const { t } = useTranslation("lesson");
+  let correctAnswers = props.answers.filter((el, i) => props.true[i]);
 
   const [createTestResult, { data, loading, error }] = useMutation(
     CREATE_TESTRESULT_MUTATION
@@ -157,32 +166,11 @@ const SingleTest = (props) => {
   const onSend = async () => {
     if (answerState !== "think") return;
     if (props.moveNext) props.moveNext(props.id);
-
-    if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
-      setAnswerState("right");
-      // 1. if the data is sent for the first time
-      if (props.getData) {
-        // 2. and if this quiz is a part of an exam
-        props.getData(
-          props.next && props.next.true
-            ? [true, props.next.true]
-            : [true, { type: "finish" }],
-          "true"
-        );
-        document.querySelector(".button").disabled = true;
-      }
-    } else {
-      setAnswerState("wrong");
-      // 1. if the data is sent for the first time
-      if (props.getData) {
-        // 2. and if this quiz is a part of an exam
-        props.getData(
-          props.next && props.next.false
-            ? [false, props.next.false]
-            : [false, { type: "finish" }]
-        );
-      }
+    if (props.getData) {
+      const nextStep = props.next?.[resultBool] || undefined;
+      props.getData([true, nextStep], "form");
     }
+
     addComments(answerNums);
     createTestResult({
       variables: {
@@ -192,6 +180,32 @@ const SingleTest = (props) => {
         answerArray: answer,
       },
     });
+  };
+
+  const provideHint = async (e) => {
+    let res = await generateHint(
+      "openai",
+      props.question[0],
+      correctAnswers.join(", "),
+      ifWrong,
+      hints, // allHints
+      router,
+      props.context
+    );
+    setHints([...hints, res.newHint]);
+
+    createTestResult({
+      variables: {
+        testID: props.id,
+        lessonID: props.lessonID,
+        answer: answer.join(", "),
+        answerArray: answer,
+        type: "hint",
+        hint: res.newHint,
+      },
+    });
+
+    return res;
   };
 
   const onMoveBranch = async () => {
@@ -209,6 +223,55 @@ const SingleTest = (props) => {
       },
     });
     setAnswerState("right");
+  };
+
+  const onCheck = async () => {
+    // Move forward if this is part of a lesson
+    if (props.moveNext) props.moveNext(props.id);
+
+    // Check if no answers are selected
+    if (answerOptions.every((el) => el === false)) {
+      setZero(true);
+      return;
+    }
+
+    const isCorrect =
+      JSON.stringify(answerOptions) === JSON.stringify(props.true);
+    const result = isCorrect ? "true" : "false";
+    const inputColor = isCorrect
+      ? "rgba(50, 172, 102, 0.25)"
+      : "rgba(222, 107, 72, 0.5)";
+    const nextData =
+      props.next && props.next[isCorrect]
+        ? [isCorrect, props.next[isCorrect]]
+        : [isCorrect, undefined];
+
+    setAnswerState(isCorrect ? "right" : "wrong");
+    setInputColor(inputColor);
+
+    // Handle data submission for the first attempt
+    if (props.getData && (!isExperienced || attempts === 0)) {
+      props.getData(nextData, "test");
+    }
+
+    // Save the result if not already experienced
+    if (!isExperienced) {
+      setIsExperienced(true);
+      createTestResult({
+        variables: {
+          testID: props.id,
+          lessonID: props.lessonID,
+          answer: answer.join(", "),
+          answerArray: answer,
+          result,
+        },
+      });
+    }
+
+    // Additional actions
+    addComments(answerNums);
+    if (props.problemType !== "ONLY_CORRECT") setAttempts(attempts + 1);
+    setSent(true);
   };
 
   const passTestData = (type) => {
@@ -233,128 +296,6 @@ const SingleTest = (props) => {
     });
   };
 
-  const onCheck = async () => {
-    // 1. if this test is a part of a lesson, move forward when you get an answer
-    // There are 2 types of movement funcitions:
-    // 1.1 moveNext - move through the lesson
-    // 1.2 getData - move through the problem
-
-    if (props.moveNext) props.moveNext(props.id);
-
-    // 2. Here starts the logic that defines how the test is checked and what follows after that
-    // Criteria for that:
-    // 2.1. answer is correct
-    // 2.2. # of attempts to answer the question
-    // 2.3. type of the problem
-
-    // the logic is: if the type of the problem is "ONLY_CORRECT", than the student can give as many as possible wrong answers, but only one correct answer.
-    // getData is fired only once when the student gives correct answer
-    if (answerOptions.every((el) => el == false)) {
-      setZero(true);
-      return;
-    }
-    if (props.problemType === "ONLY_CORRECT") {
-      if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
-        setAnswerState("right");
-        setInputColor("rgba(50, 172, 102, 0.25)");
-        // 1. if the data is sent for the first time
-        if (props.getData && !isExperienced) {
-          // 2. and if this quiz is a part of an exam
-          props.getData(
-            props.next && props.next.true
-              ? [true, props.next.true]
-              : [true, { type: "finish" }],
-            "true"
-          );
-        }
-        // save answers until you get the right one
-        if (!isExperienced) {
-          setIsExperienced(true);
-          createTestResult({
-            variables: {
-              testID: props.id,
-              lessonID: props.lessonID,
-              answer: answer.join(", "),
-              answerArray: answer,
-              result: "true",
-            },
-          });
-        }
-      } else {
-        setAnswerState("wrong");
-        setInputColor("rgba(222, 107, 72, 0.5)");
-        createTestResult({
-          variables: {
-            testID: props.id,
-            lessonID: props.lessonID,
-            answer: answer.join(", "),
-            answerArray: answer,
-            result: "false",
-          },
-        });
-        // for this type of problems we allow to give as many incorrect answers as needed without moving forward in the problem
-      }
-    } else {
-      // this scenario is fired if we have another type of the problem or the test is not a part of the problem at all
-      if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
-        setAnswerState("right");
-        setInputColor("rgba(50, 172, 102, 0.25)");
-        // 1. if the data is sent for the first time
-        if (props.getData && attempts == 0) {
-          props.getData(
-            props.next && props.next.true
-              ? [true, props.next.true]
-              : [true, { type: "finish" }],
-            "true"
-          );
-        }
-        if (!isExperienced) {
-          setIsExperienced(true);
-          createTestResult({
-            variables: {
-              testID: props.id,
-              lessonID: props.lessonID,
-              answer: answer.join(", "),
-              answerArray: answer,
-              result: "true",
-            },
-          });
-        }
-      } else {
-        setAnswerState("wrong");
-        setInputColor("rgba(222, 107, 72, 0.5)");
-        // 1. if the data is sent for the first time
-        if (props.getData && attempts == 0) {
-          props.getData(
-            props.next && props.next.false
-              ? [false, props.next.false]
-              : [false, { type: "finish" }]
-          );
-        }
-        if (!isExperienced) {
-          setIsExperienced(true);
-          createTestResult({
-            variables: {
-              testID: props.id,
-              lessonID: props.lessonID,
-              answer: answer.join(", "),
-              answerArray: answer,
-              result: "false",
-            },
-          });
-        }
-      }
-    }
-
-    // 3. prepare comments
-    addComments(answerNums);
-
-    if (props.problemType !== "ONLY_CORRECT") {
-      setAttempts(attempts + 1);
-    }
-    setSent(true);
-  };
-
   const switchUpdate = () => {
     setUpdate(!update);
   };
@@ -363,9 +304,6 @@ const SingleTest = (props) => {
     props.getResult(data);
   };
 
-  const passUpdated = () => {
-    props.passUpdated(true);
-  };
   let mes;
   if (type == "BRANCH") {
     mes = _.zip(
@@ -389,8 +327,6 @@ const SingleTest = (props) => {
   } else {
     width = "100%";
   }
-
-  let correctAnswers = props.answers.filter((el, i) => props.true[i]);
 
   return (
     <Styles width={width} id={props.id}>
@@ -436,6 +372,8 @@ const SingleTest = (props) => {
               revealCorrectAnswer={revealCorrectAnswer}
               correctAnswers={correctAnswers}
               answerOptions={answerOptions}
+              context={props.context}
+              provideHint={provideHint}
             />
           )}
           {type == "FORM" && (
@@ -513,7 +451,6 @@ const SingleTest = (props) => {
           tests={props.tests}
           getResult={getResult}
           switchUpdate={switchUpdate}
-          passUpdated={passUpdated}
           answer={answer}
         />
       )}

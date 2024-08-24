@@ -453,9 +453,7 @@ const SingleTextEditor = (props) => {
     if (containsOnlyNumbers(answer1) && containsOnlyNumbers(answer2)) {
       const comparisonResult = compareStrings(answer1, answer2);
       setResult(comparisonResult);
-      if (comparisonResult) {
-        props.getResults(1);
-      }
+
       setChekingAnswer(false);
 
       return comparisonResult;
@@ -572,10 +570,6 @@ const SingleTextEditor = (props) => {
 
   const getResult = (data) => {
     props.getResult(data);
-  };
-
-  const passUpdated = () => {
-    props.passUpdated(true);
   };
 
   const slide = (id) => {
@@ -799,7 +793,6 @@ const SingleTextEditor = (props) => {
                           lessonID={lesson.id}
                           miniforum={null}
                           getResult={null}
-                          passUpdated={null}
                           story={true}
                         />
                       ) : note ? (
@@ -913,8 +906,6 @@ const SingleTextEditor = (props) => {
                         user_name={miniQuiz.user}
                         author={lesson.user}
                         miniforum={null}
-                        getResults={null}
-                        passUpdated={null}
                         getResult={null}
                         passResultToTextEditor={passResultToTextEditor}
                         openQuestionType="mini"
@@ -932,6 +923,7 @@ const SingleTextEditor = (props) => {
       {update && (
         <UpdateTextEditor
           lessonID={lessonID}
+          lesson={lesson}
           id={props.textEditor.id}
           goal={props.textEditor.goal}
           text={text}
@@ -941,7 +933,7 @@ const SingleTextEditor = (props) => {
           totalMistakes={total}
           getResult={getResult}
           switchUpdate={switchUpdate}
-          passUpdated={passUpdated}
+          me={me}
         />
       )}
       {type == "problem" && problemId && (
@@ -1019,7 +1011,6 @@ SingleTextEditor.propTypes = {
   }),
   context: PropTypes.string, // A string representing the context of the text editor
   getResult: PropTypes.func, // A function to handle the result of the text editor
-  passUpdated: PropTypes.func, // A function to handle the update of the text editor
 };
 
 export default SingleTextEditor;

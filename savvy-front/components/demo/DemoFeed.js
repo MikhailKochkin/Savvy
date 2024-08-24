@@ -832,7 +832,7 @@ const Feed = (props) => {
                 </div>
                 {translationMode && (
                   <div className="translationBlockRow">
-                    Now just select any text in the lesson and it willl be
+                    Now just select any text in the lesson and it will be
                     translated below.
                   </div>
                 )}

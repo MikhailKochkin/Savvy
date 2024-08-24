@@ -54,10 +54,6 @@ const NewBlock = (props) => {
     props.add(props.obj.id, props.obj.index);
   };
 
-  const passUpdated = () => {
-    // setSaved(false);
-  };
-
   useEffect(() => {
     setData(props.data);
     setSaved(props.data ? true : false);
@@ -144,7 +140,6 @@ const NewBlock = (props) => {
           complexity={data.complexity}
           lessonID={lesson.id}
           getResult={getResult}
-          passUpdated={passUpdated}
         />
       )}
       {type == "Note" && (
@@ -164,7 +159,6 @@ const NewBlock = (props) => {
           complexity={data.complexity}
           lessonId={lesson.id}
           getResult={getResult}
-          passUpdated={passUpdated}
           library={props.library}
         />
       )}
@@ -175,31 +169,28 @@ const NewBlock = (props) => {
         <CreateNewTest lessonID={lesson.id} getResult={getResult} />
       )}
       {saved && type == "NewTest" && data && (
-        <>
-          <SingleTest
-            id={data.id}
-            testID={data.id}
-            question={data.question}
-            type={data.type}
-            answers={data.answers}
-            name={data.name}
-            complexTestAnswers={data.complexTestAnswers}
-            image={data.image}
-            true={data.correct}
-            comments={data.comments}
-            complexity={data.complexity}
-            ifRight={data.ifRight}
-            ifWrong={data.ifWrong}
-            next={data.next}
-            user={data.user.id}
-            user_name={data.user}
-            me={me}
-            lessonID={lesson.id}
-            length={Array(data.correct.length).fill(false)}
-            getResult={getResult}
-            passUpdated={passUpdated}
-          />
-        </>
+        <SingleTest
+          id={data.id}
+          testID={data.id}
+          question={data.question}
+          type={data.type}
+          answers={data.answers}
+          name={data.name}
+          complexTestAnswers={data.complexTestAnswers}
+          image={data.image}
+          true={data.correct}
+          comments={data.comments}
+          complexity={data.complexity}
+          ifRight={data.ifRight}
+          ifWrong={data.ifWrong}
+          next={data.next}
+          user={data.user.id}
+          user_name={data.user}
+          me={me}
+          lessonID={lesson.id}
+          length={Array(data.correct.length).fill(false)}
+          getResult={getResult}
+        />
       )}
       {type == "NewTest" && (
         <Block getOldResult={getOldResult} tests={lesson.newTests} />
@@ -233,7 +224,6 @@ const NewBlock = (props) => {
           me={me}
           lessonID={lesson.id}
           getResult={getResult}
-          passUpdated={passUpdated}
         />
       )}
       {type == "Quiz" && (

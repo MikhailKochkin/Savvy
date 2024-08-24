@@ -483,6 +483,7 @@ model Lesson {
   id                  String               @id @default(cuid()) @db.VarChar(30)
   text                String
   goal                String?
+  context             String?
   openSize            Int?                 @default(2)
   coursePageID        String               @db.VarChar(30)
   createdAt           DateTime             @default(now())
@@ -1050,6 +1051,8 @@ model TestResult {
   answer     String?
   attempts   Int?
   result     String?
+  type       String?
+  hint       String?
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
   lessonID   String?  @db.VarChar(30)

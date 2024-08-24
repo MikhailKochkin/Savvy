@@ -71,7 +71,7 @@ const Progress = styled.div`
 `;
 
 const StoryEx = (props) => {
-  const { tasks, me, lesson, next, coursePageID, coursePage } = props;
+  const { tasks, me, lesson, next, coursePageID, coursePage, context } = props;
   const [experience, setExperience] = useState(0); // User's experience points
   const [textToBeTranslated, setTextToBeTranslated] = useState(""); // Text selected for translation
   const [solved, setSolved] = useState([]); // List of solved task IDs
@@ -116,9 +116,9 @@ const StoryEx = (props) => {
 
   // Function to update user experience points
 
-  const getResults = (res, id) => {
-    setExperience((prevExperience) => prevExperience + res);
-  };
+  // const getResults = (res, id) => {
+  //   setExperience((prevExperience) => prevExperience + res);
+  // };
 
   const prevSelection = useRef("");
 
@@ -264,7 +264,6 @@ const StoryEx = (props) => {
           // lessonId={lesson.id}
           // user={el.user.id}
           // story={true}
-          // getResults={getResults}
         />
       );
       components.push(item);
@@ -278,7 +277,6 @@ const StoryEx = (props) => {
           key={el.id}
           id={el.id}
           moveNext={moveNext}
-          getResults={getResults}
           testID={el.id}
           author={lesson.user}
           complexity={el.complexity}
@@ -295,6 +293,7 @@ const StoryEx = (props) => {
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           me={me}
+          context={context}
           lessonID={lesson.id}
           length={Array(el.correct.length).fill(false)}
           story={true}
@@ -311,7 +310,6 @@ const StoryEx = (props) => {
           key={el.id}
           id={el.id}
           complexity={el.complexity}
-          getResults={getResults}
           question={el.question}
           answer={el.answer}
           answers={el.answers}
@@ -331,6 +329,7 @@ const StoryEx = (props) => {
           quizID={el.id}
           user={el.user.id}
           story={true}
+          context={context}
           user_name={el.user}
           author={lesson.user}
           miniforum={lesson.miniforums.find((m) => m.value == el.id)}
@@ -347,13 +346,13 @@ const StoryEx = (props) => {
           key={el.id}
           id={el.id}
           lessonID={lesson.id}
-          getResults={getResults}
           me={me}
           testPractice={el}
           quizes={lesson.quizes}
           tests={lesson.newTests}
           lesson={lesson}
           story={true}
+          context={context}
         />
       );
       components.push(item);
@@ -448,18 +447,17 @@ const StoryEx = (props) => {
           id={el.id}
           problem={el}
           complexity={el.complexity}
-          getResults={getResults}
           lessonID={lesson.id}
           me={me}
-          context={el.context}
+          // context={el.context}
           story={true}
           lesson={lesson}
           author={lesson.user}
           moveNext={moveNext}
+          context={context}
         />
       );
       components.push(item);
-      // move_statuses.push(true);
       move_statuses.push(solved.includes(el.id) ? true : false);
     } else if (task.type.toLowerCase() === "texteditor") {
       el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);
@@ -469,10 +467,9 @@ const StoryEx = (props) => {
           id={el.id}
           lessonID={lesson.id}
           text={el.text}
-          context={el.context}
+          context={context}
           complexity={el.complexity}
           lesson={lesson}
-          getResults={getResults}
           textEditor={el}
           me={me}
           story={true}
@@ -496,7 +493,6 @@ const StoryEx = (props) => {
             context={el.context}
             story={true}
             elements={el.elements.elements}
-            getResults={getResults}
           />
         ) : (
           <SingleConstructor
@@ -504,7 +500,6 @@ const StoryEx = (props) => {
             id={el.id}
             lessonID={lesson.id}
             complexity={el.complexity}
-            getResults={getResults}
             construction={el}
             variants={el.variants}
             me={me}

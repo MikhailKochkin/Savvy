@@ -207,12 +207,6 @@ const StoryEx = (props) => {
     };
   }, [handleSelection]);
 
-  const getResults = (res) => {
-    // if (experience <= total) {
-    setExperience(experience + res);
-    // }
-  };
-
   const prevSelection = useRef("");
 
   const [
@@ -308,7 +302,6 @@ const StoryEx = (props) => {
           lessonId={lesson.id}
           user={el.user.id}
           story={true}
-          getResults={getResults}
         />
       );
       components.push(item);
@@ -322,7 +315,6 @@ const StoryEx = (props) => {
           key={el.id}
           id={el.id}
           moveNext={moveNext}
-          getResults={getResults}
           testID={el.id}
           author={lesson.user}
           complexity={el.complexity}
@@ -355,7 +347,6 @@ const StoryEx = (props) => {
           key={el.id}
           id={el.id}
           complexity={el.complexity}
-          getResults={getResults}
           question={el.question}
           answer={el.answer}
           answers={el.answers}
@@ -389,7 +380,6 @@ const StoryEx = (props) => {
           key={el.id}
           id={el.id}
           lessonID={lesson.id}
-          getResults={getResults}
           me={me}
           testPractice={el}
           quizes={lesson.quizes}
@@ -490,7 +480,6 @@ const StoryEx = (props) => {
           id={el.id}
           problem={el}
           complexity={el.complexity}
-          getResults={getResults}
           lessonID={lesson.id}
           me={me}
           story={true}
@@ -512,7 +501,6 @@ const StoryEx = (props) => {
           text={el.text}
           complexity={el.complexity}
           lesson={lesson}
-          getResults={getResults}
           textEditor={el}
           me={me}
           story={true}
@@ -535,7 +523,6 @@ const StoryEx = (props) => {
             me={me}
             story={true}
             elements={el.elements.elements}
-            getResults={getResults}
           />
         ) : (
           <SingleConstructor
@@ -543,7 +530,6 @@ const StoryEx = (props) => {
             id={el.id}
             lessonID={lesson.id}
             complexity={el.complexity}
-            getResults={getResults}
             construction={el}
             variants={el.variants}
             me={me}

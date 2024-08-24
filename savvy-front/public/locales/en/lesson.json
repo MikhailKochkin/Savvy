@@ -197,5 +197,10 @@
   "make_changes_to_the_text": "Make changes to this text in the document:",
   "go_to_answer_form": "Return to Answer Form",
   "i_will_review_your_asnwer": "I'll review your answer once more and get back to you via email once I've made a decision.",
-  "i_believe_my_answer_is_correct": "I believe my answer is correct"
+  "i_believe_my_answer_is_correct": "I believe my answer is correct",
+  "still_not_expected_answer": "I still don't think that this is the answer I expect.",
+  "try_challenging_again": "But you can try challenging the answer one more time. I may have missed something.",
+  "rephrased_answer": "I have rephrased your answer a little bit:",
+  "going_in_right_direction": "If this is what you meant, then yes, I believe you are going in the right direction.",
+  "answer_is_correct": "If this is what you meant, then yes, I believe your answer is correct."
 }

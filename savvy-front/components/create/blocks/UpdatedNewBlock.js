@@ -57,10 +57,6 @@ const UpdatedNewBlock = (props) => {
     setSaved(props.data ? true : false);
   }, [props.data]);
 
-  const passUpdated = () => {
-    // setSaved(false);
-  };
-
   const { lesson, me } = props;
 
   const getResult = async (res) => {
@@ -118,7 +114,6 @@ const UpdatedNewBlock = (props) => {
           complexity={data.complexity}
           lessonID={lesson.id}
           getResult={getResult}
-          passUpdated={passUpdated}
         />
       )}
       {!saved && type == "NewTest" && (
@@ -143,7 +138,6 @@ const UpdatedNewBlock = (props) => {
           me={me}
           lessonID={lesson.id}
           getResult={getResult}
-          passUpdated={passUpdated}
         />
       )}
       {!saved && type == "Quiz" && (
@@ -167,21 +161,14 @@ const UpdatedNewBlock = (props) => {
           user_name={data.user}
           me={me}
           getResult={getResult}
-          passUpdated={passUpdated}
           lessonID={lesson.id}
         />
       )}
       {!saved && (
         <>
-          <ButtonTwo onClick={(e) => setType("Note")}>
-            {t("add_note")}{" "}
-          </ButtonTwo>
-          <ButtonTwo onClick={(e) => setType("NewTest")}>
-            {t("add_test")}
-          </ButtonTwo>
-          <ButtonTwo onClick={(e) => setType("Quiz")}>
-            {t("add_quiz")}
-          </ButtonTwo>
+          <ButtonTwo onClick={(e) => setType("Note")}>Add longread</ButtonTwo>
+          <ButtonTwo onClick={(e) => setType("NewTest")}>Add quiz</ButtonTwo>
+          <ButtonTwo onClick={(e) => setType("Quiz")}>Add question</ButtonTwo>
           <ButtonTwo onClick={(e) => remove()}>Remove</ButtonTwo>
         </>
       )}

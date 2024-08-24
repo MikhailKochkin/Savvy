@@ -50,9 +50,7 @@ const Note = (props) => {
 
   const push = () => {
     if (moved == false) {
-      props.getData(
-        props.next ? [true, props.next.true] : [true, { type: "finish" }]
-      );
+      props.getData(props.next ? [true, props.next.true] : [true, undefined]);
     }
     setMoved(true);
   };
@@ -82,10 +80,6 @@ const Note = (props) => {
 
   const getResult = (data) => {
     props.getResult(data);
-  };
-
-  const passUpdated = () => {
-    props.passUpdated(true);
   };
 
   const switchUpdate = () => {
@@ -144,7 +138,6 @@ const Note = (props) => {
           ) : null}
         </>
       )}
-
       {getData && !isFinal && !moved && (
         <ArrowContainer>
           <div className="arrow_box" onClick={(e) => push()}>
@@ -164,7 +157,6 @@ const Note = (props) => {
           lessonID={lessonID}
           getResult={getResult}
           switchUpdate={switchUpdate}
-          passUpdated={passUpdated}
         />
       )}
     </>

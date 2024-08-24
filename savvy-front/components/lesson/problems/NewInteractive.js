@@ -136,7 +136,23 @@ const NewInteractive = (props) => {
     return arr.filter((item) => ids.has(item.id));
   };
 
+  const handleNextElement = (nextElement) => {
+    if (nextElement) {
+      setComponentList([...componentList, nextElement]);
+      // slide(nextElement.id);
+
+      if (!nextElement.next?.true?.value) {
+        props.onFinish(true, "new");
+      }
+    } else {
+      props.onFinish(true, "new");
+    }
+  };
+
   const updateArray = (data, type) => {
+    // 2 parameters are accepted:
+    // 1. Data is an array which looks like this: ["is answer correct?", "the id of next element in the case study"]
+    // 2. Type is the type of the question
     if (type === "branch") {
       let nextValue = componentList
         .at(-1)
@@ -157,47 +173,14 @@ const NewInteractive = (props) => {
 
       if (props.type === "ONLY_CORRECT") {
         if (data[0]) {
-          if (next_el) {
-            setComponentList([...componentList, next_el]);
-            // slide(next_el.id);
-          } else {
-            props.onFinish(true, "new");
-          }
-
-          let last_value = [...componentList, next_el][
-            [...componentList, next_el].length - 1
-          ];
-          if (!last_value || !last_value.next.true.value) {
-            props.onFinish(true, "new");
-            return;
-          }
-        } else {
-          return;
+          handleNextElement(next_el);
         }
       } else {
-        if (next_el) {
-          setComponentList([...componentList, next_el]);
-          // slide(next_el.id);
-        } else {
-          props.onFinish(true, "new");
-        }
-
-        let last_value = [...componentList, next_el][
-          [...componentList, next_el].length - 1
-        ];
-        if (!last_value || !last_value.next.true.value) {
-          props.onFinish(true, "new");
-          return;
-        }
+        handleNextElement(next_el);
       }
     }
-
-    // If nextValue is undefined or null, then exit early
   };
 
-  const getResults = () => {
-    return null;
-  };
   return (
     <Styles>
       <Questions>
@@ -237,7 +220,7 @@ const NewInteractive = (props) => {
                   exam={true}
                   story={true}
                   author={author}
-                  getResults={getResults}
+                  context={props.context}
                 />
               );
             } else if (com.type.toLowerCase() === "newtest") {
@@ -269,7 +252,7 @@ const NewInteractive = (props) => {
                   story={true}
                   exam={true}
                   author={author}
-                  getResults={getResults}
+                  context={props.context}
                 />
               );
             } else if (com.type.toLowerCase() === "note") {
@@ -288,7 +271,7 @@ const NewInteractive = (props) => {
                   exam={true}
                   problem={true}
                   author={author}
-                  isFinal={componentList.length == i}
+                  isFinal={componentList.length == i + 1}
                 />
               );
             } else if (com.type.toLowerCase() === "chat") {

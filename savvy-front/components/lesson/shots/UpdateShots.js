@@ -227,7 +227,6 @@ const UpdateShot = (props) => {
               const res2 = await updateShot();
               props.getResult(res2);
               props.switchUpdate();
-              props.passUpdated();
             }}
           >
             {loading ? t("saving") : t("save")}

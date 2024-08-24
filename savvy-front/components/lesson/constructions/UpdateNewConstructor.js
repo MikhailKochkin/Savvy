@@ -520,7 +520,6 @@ const UpdateNewConstructor = (props) => {
           });
           props.getResult(res);
           props.switchUpdate();
-          props.passUpdated();
         }}
       >
         {loading ? t("saving") : t("save")}

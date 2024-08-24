@@ -64,9 +64,7 @@ const TestPractice = (props) => {
   const [isUpdated, setIsUpdated] = useState(false);
   let tests = [...props.tests];
   let quizes = [...props.quizes];
-  const passResult = (val) => {
-    props.getResults(3);
-  };
+  const passResult = (val) => {};
   let filtered_tests = tests.filter((t) =>
     props.testPractice.tasks.includes(t.id)
   );
@@ -116,6 +114,7 @@ const TestPractice = (props) => {
             restart={restart}
             quizResults={props.quizResults}
             testResults={props.testResults}
+            context={props.context}
           />
         </Container>
       )}

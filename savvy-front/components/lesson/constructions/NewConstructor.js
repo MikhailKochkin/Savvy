@@ -75,10 +75,6 @@ const NewConstructor = (props) => {
     props.getResult(data);
   };
 
-  const passUpdated = () => {
-    props.passUpdated(true);
-  };
-
   const switchUpdate = () => {
     setUpdate(!update);
   };
@@ -103,7 +99,6 @@ const NewConstructor = (props) => {
             story={props.story}
             elements={elements}
             constructionResults={queryData}
-            // getResults={getResults}
           />
         ) : null}
         {!update && construction.type != "SUMMARY" ? (
@@ -129,7 +124,6 @@ const NewConstructor = (props) => {
             me={me}
             getResult={getResult}
             switchUpdate={switchUpdate}
-            passUpdated={passUpdated}
           />
         )}
       </Container>

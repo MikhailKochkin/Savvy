@@ -365,7 +365,7 @@ const CreateQuiz = (props) => {
                                 setAnswers(newAnswers);
                               }}
                             />
-                            <div className="answerRow">
+                            {/* <div className="answerRow">
                               <div className="row1">
                                 <label className="answerOptionLabel">
                                   Next task id
@@ -392,7 +392,7 @@ const CreateQuiz = (props) => {
                                   }}
                                 />
                               </div>
-                            </div>
+                            </div> */}
                           </AnswerOption>
                         ))}
                       </>

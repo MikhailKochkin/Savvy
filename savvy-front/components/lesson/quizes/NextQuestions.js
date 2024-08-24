@@ -20,9 +20,7 @@ const NextQuestions = (props) => {
   const updateArray = (data) => {
     setNum(num + 1);
   };
-  const getResults = (data) => {
-    setNum(num + 1);
-  };
+
   return (
     <div>
       {components.slice(0, num).map((com) => {
@@ -62,7 +60,6 @@ const NextQuestions = (props) => {
               key={el.id}
               problem={el}
               // complexity={el.complexity}
-              getResults={getResults}
               lessonID={lesson.id}
               me={me}
               story={true}

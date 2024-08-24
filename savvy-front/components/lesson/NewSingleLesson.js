@@ -18,6 +18,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       name
       number
       type
+      context
       structure
       short_structure
       change

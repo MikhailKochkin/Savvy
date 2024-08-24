@@ -620,6 +620,7 @@ const Message = ({
       </InformationSection>
       <QuestionButtons>
         {type.toLowerCase() == "newtest" &&
+          lesson.newTests.find((el) => el.id == id)?.type == "branch" &&
           lesson.newTests.find((el) => el.id == id)?.complexTestAnswers &&
           lesson.newTests
             .find((el) => el.id == id)
@@ -631,6 +632,19 @@ const Message = ({
                 sourceId={id}
               />
             ))}
+        {type.toLowerCase() == "newtest" &&
+          lesson.newTests.find((el) => el.id == id)?.type !== "branch" && (
+            <>
+              <div className="directionButton" ref={dragConnectorTrue}>
+                <div>True Answer</div>
+                <div className="circle_connector"></div>
+              </div>
+              <div className="directionButton" ref={dragConnectorFalse}>
+                <div>False Answer</div>
+                <div className="circle_connector"></div>
+              </div>
+            </>
+          )}
         {type.toLowerCase() == "quiz" && (
           <>
             <div className="directionButton" ref={dragConnectorTrue}>

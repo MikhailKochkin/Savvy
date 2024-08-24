@@ -282,19 +282,13 @@ const Chat = (props) => {
     props.passTextToBeTranslated(text);
   };
 
-  const passUpdated = () => {
-    props.passUpdated(true);
-  };
-
   const switchUpdate = () => {
     setUpdate(!update);
   };
 
   const push = () => {
     if (moved == false) {
-      props.getData(
-        props.next ? [true, props.next.true] : [true, { type: "finish" }]
-      );
+      props.getData(props.next ? [true, props.next.true] : [true, undefined]);
     }
     setMoved(true);
   };
@@ -506,7 +500,6 @@ const Chat = (props) => {
           lessonId={lessonId}
           getResult={getResult}
           switchUpdate={switchUpdate}
-          passUpdated={passUpdated}
         />
       )}
     </Styles>

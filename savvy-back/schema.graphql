@@ -2140,6 +2140,7 @@ type Lesson {
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int): [Chat!]!
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   constructions(after: ConstructionWhereUniqueInput, before: ConstructionWhereUniqueInput, first: Int, last: Int): [Construction!]!
+  context: String
   coursePage: CoursePage!
   coursePageID: String!
   coursePageId: String!
@@ -2214,6 +2215,7 @@ input LessonOrderByWithRelationInput {
   chats: ChatOrderByRelationAggregateInput
   constructionResults: ConstructionResultOrderByRelationAggregateInput
   constructions: ConstructionOrderByRelationAggregateInput
+  context: SortOrderInput
   coursePage: CoursePageOrderByWithRelationInput
   coursePageID: SortOrder
   coursePageId: SortOrder
@@ -2353,6 +2355,7 @@ input LessonWhereInput {
   chats: ChatListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
+  context: StringNullableFilter
   coursePage: CoursePageWhereInput
   coursePageID: StringFilter
   coursePageId: StringFilter
@@ -2418,6 +2421,7 @@ input LessonWhereUniqueInput {
   chats: ChatListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
+  context: StringNullableFilter
   coursePage: CoursePageWhereInput
   coursePageID: StringFilter
   coursePageId: StringFilter
@@ -2675,7 +2679,7 @@ type Mutation {
   createTeamQuestResult(answer: String, lessonId: String, teamQuestId: String): TeamQuestResult
   createTestPractice(failureText: String, goal: String, intro: String, lessonId: String, successText: String, tasks: [String], tasksNum: Int, text: String): TestPractice
   createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
-  createTestResult(answer: String, answerArray: [String], lessonID: String, result: String, testID: String): TestResult
+  createTestResult(answer: String, answerArray: [String], hint: String, lessonID: String, result: String, testID: String, type: String): TestResult
   createTextEditor(goal: String, lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, type: String, wrong: String): TextEditorResult
   createUseful(buttonText: String, header: String, image: String, link: String, name: String, tags: [String]): Useful
@@ -2734,7 +2738,7 @@ type Mutation {
   updateEmailReminder(emailsSent: [String], id: String): EmailReminder
   updateForum(id: String, text: String): Forum
   updateGrowthArea(id: String!, marks: MarksList, maxProgress: Int, name: String): GrowthArea
-  updateLesson(assignment: Boolean, audience: String, banner: String, challenge_num: Int, change: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
+  updateLesson(assignment: Boolean, audience: String, banner: String, challenge_num: Int, change: String, context: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswers, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextType, question: [String], type: String): NewTest
@@ -5059,6 +5063,7 @@ type TestResult {
   answerArray: [String!]!
   attempts: Int
   createdAt: DateTime!
+  hint: String
   id: String!
   lesson: Lesson
   lessonID: String
@@ -5069,6 +5074,7 @@ type TestResult {
   test: NewTest
   testID: String
   testId: String
+  type: String
   updatedAt: DateTime!
 }
 
@@ -5087,6 +5093,7 @@ input TestResultOrderByWithRelationInput {
   answerArray: SortOrder
   attempts: SortOrderInput
   createdAt: SortOrder
+  hint: SortOrderInput
   id: SortOrder
   lesson: LessonOrderByWithRelationInput
   lessonID: SortOrderInput
@@ -5097,6 +5104,7 @@ input TestResultOrderByWithRelationInput {
   test: NewTestOrderByWithRelationInput
   testID: SortOrderInput
   testId: SortOrderInput
+  type: SortOrderInput
   updatedAt: SortOrder
 }
 
@@ -5108,6 +5116,7 @@ input TestResultWhereInput {
   answerArray: StringNullableListFilter
   attempts: IntNullableFilter
   createdAt: DateTimeFilter
+  hint: StringNullableFilter
   id: StringFilter
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -5118,6 +5127,7 @@ input TestResultWhereInput {
   test: NewTestWhereInput
   testID: StringNullableFilter
   testId: StringNullableFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -5129,6 +5139,7 @@ input TestResultWhereUniqueInput {
   answerArray: StringNullableListFilter
   attempts: IntNullableFilter
   createdAt: DateTimeFilter
+  hint: StringNullableFilter
   id: String
   lesson: LessonWhereInput
   lessonID: StringNullableFilter
@@ -5139,6 +5150,7 @@ input TestResultWhereUniqueInput {
   test: NewTestWhereInput
   testID: StringNullableFilter
   testId: StringNullableFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 

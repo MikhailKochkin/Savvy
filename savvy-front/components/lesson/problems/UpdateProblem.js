@@ -133,7 +133,6 @@ const UpdateProblem = (props) => {
       ],
       onCompleted: () => {
         props.switchUpdate();
-        props.passUpdated();
       },
     }
   );
