@@ -2592,6 +2592,7 @@ const Mutation = mutationType({
       args: {
         name: stringArg(),
         lessonId: stringArg(),
+        type: stringArg(),
         messages: arg({
           type: "Messages",
         }),
@@ -2618,6 +2619,7 @@ const Mutation = mutationType({
       args: {
         id: stringArg(),
         name: stringArg(),
+        type: stringArg(),
         link_clicks: intArg(),
         isSecret: booleanArg(),
         messages: arg({
@@ -4036,8 +4038,6 @@ const Mutation = mutationType({
           } catch (error) {
             console.error("Error creating new payment:", error.message, error);
           }
-
-          console.log("finish?");
 
           const payment2 = await community_checkout.getPayment(
             payment.payment_method.id

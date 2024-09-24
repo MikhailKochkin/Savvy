@@ -151,3 +151,51 @@ export const compareTexts = async (text1, text2) => {
     throw new Error("An error occurred while checking the answer.");
   }
 };
+
+export const generateDiscussion = async (prompt, previousMessages, stage) => {
+  // console.log("prompt", prompt);
+  // console.log("previousMessages", previousMessages);
+
+  const AItype = "openai";
+  const url = AItype === "claude" ? "/api/generate2" : "/api/generate";
+
+  let currentPrompt;
+  if (previousMessages.length == 0) {
+    currentPrompt = prompt + "Return only the phrases from the dialogue.";
+  }
+  console.log("currentPrompt", currentPrompt);
+
+  try {
+    // Make a POST request to the API endpoint
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: currentPrompt,
+      }),
+    });
+
+    // Check if the response status is not 200 (OK)
+    if (response.status !== 200) {
+      throw (
+        (await response.json()).error ||
+        new Error(`Request failed with status ${response.status}`)
+      );
+    }
+
+    // Parse the response data
+    const data = await response.json();
+    const result =
+      AItype === "claude" ? data.result.content[0].text : data.result.content;
+
+    // Return the generated hint if it exists, otherwise return a default message
+    return result
+      ? { newMessage: result }
+      : { newHint: "Sorry, we are disconnected" };
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+};

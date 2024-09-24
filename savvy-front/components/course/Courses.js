@@ -3,6 +3,8 @@ import Reviews from "../landing/Reviews";
 import Programs from "../landing/Programs";
 import UseCases from "../landing/UseCases";
 import ContactForm from "../landing/ContactForm";
+import WallOfLove from "../landing/WallOfLove";
+
 import { useRouter } from "next/router";
 
 const Courses = () => {
@@ -11,9 +13,11 @@ const Courses = () => {
   return (
     <>
       <NewLanding4 />
+      <Reviews />
       {router.locale !== "ru" && <UseCases />}
       {router.locale == "ru" && <Programs />}
-      <Reviews />
+      <WallOfLove />
+
       <ContactForm />
     </>
   );

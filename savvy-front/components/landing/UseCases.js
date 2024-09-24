@@ -9,6 +9,7 @@ const Styles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: #fffaf6;
   .usecases_container {
     width: 70%;
   }
@@ -18,7 +19,6 @@ const Styles = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 100px;
     .landing_main_image {
       height: 500px;
     }
@@ -28,8 +28,14 @@ const Styles = styled.div`
     text-align: center;
     font-size: 2rem;
   }
+  @media (max-width: 1200px) {
+    .usecases_container {
+      width: 98%;
+    }
+  }
+
   @media (max-width: 800px) {
-    margin-top: 40px;
+    padding: 40px 0;
     .usecases_container {
       width: 100%;
     }

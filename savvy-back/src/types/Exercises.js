@@ -348,6 +348,7 @@ const Chat = objectType({
   definition(t) {
     t.model.id();
     t.model.name();
+    t.model.type();
     t.model.link_clicks();
     t.model.complexity();
     t.model.messages();

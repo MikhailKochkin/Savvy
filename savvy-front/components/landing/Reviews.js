@@ -6,19 +6,20 @@ const Styles = styled.div`
   /* min-height: 100vh; */
   width: 100vw;
   min-height: 30vh;
-
+  background: #fffaf6;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   h2 {
     font-size: 4rem;
-    font-weight: 600;
+    font-weight: 500;
     width: 80%;
     line-height: 1.4;
+    color: #b0b0b0;
     margin-bottom: 50px;
     span {
-      color: #3175f3;
+      color: #b0b0b0;
     }
   }
   .parent {
@@ -174,6 +175,7 @@ const LogoBlock = styled.div`
   justify-content: center;
   margin-bottom: 150px;
   margin-top: 80px;
+  max-width: 750px;
   h2 {
     font-size: 3.4rem;
     font-weight: 600;
@@ -182,6 +184,8 @@ const LogoBlock = styled.div`
     text-align: center;
   }
   @media (max-width: 800px) {
+    margin-bottom: 20px;
+
     flex-direction: column;
     h2 {
       font-size: 3rem;
@@ -190,17 +194,23 @@ const LogoBlock = styled.div`
 `;
 
 const Logos = styled.div`
-  width: 40vw;
+  width: 50vw;
+  max-width: 700px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   img {
-    height: 70px;
+    height: 55px;
     margin: 20px 0;
+    /* filter: grayscale(100%); */
+  }
+  @media (max-width: 1000px) {
+    width: 90vw;
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 500px) {
     flex-direction: column;
     img {
       height: 40px;
@@ -212,54 +222,9 @@ const Logos = styled.div`
 const Reviews = () => {
   const router = useRouter();
 
-  let eng_reviews = [
-    {
-      text: "I wish I had started this Legal English course earlier.",
-      author_name: "Nastya R.",
-      author_image:
-        "https://sun9-26.userapi.com/impg/bW8uzC2OgE3N6mQ-UbGADprJjRKIozlD01DDhQ/K9y5nSC4IXM.jpg?size=1344x1792&quality=96&sign=6a0b284d5b394f7bc00e97f044a1a325&type=album",
-    },
-    {
-      text: "I acquired drafting skills that I can now use in my every-day job.",
-      author_name: "Vera Z.",
-      author_image:
-        "https://sun9-48.userapi.com/impg/Eetn8cWpPY7rs__wS5FtQ9CRUylgePZ1PKSfPg/GxsQHAjsdHU.jpg?size=1080x1080&quality=96&sign=e9338491a7126108265a09b8469199f9&type=album",
-    },
-    {
-      text: "Enrolling on this course was one of the best educational decisions I have ever made.",
-      author_name: "Nastya Sh.",
-      author_image:
-        "https://sun9-15.userapi.com/impg/Qa7Iq2HVJQSMkBnBbk3H4wZUXyVZN6fPOu9TqA/REW7SpbeV68.jpg?size=1534x2160&quality=96&sign=8cd3260f7c157977cba6654d06c2c046&type=album",
-    },
-  ];
-
-  let rus_reviews = [
-    {
-      text: "После прохождения курса, невольно возникает вопрос, почему я не сделала это раньше?",
-      author_name: "Анастасия Рудановская",
-      author_image:
-        "https://sun9-26.userapi.com/impg/bW8uzC2OgE3N6mQ-UbGADprJjRKIozlD01DDhQ/K9y5nSC4IXM.jpg?size=1344x1792&quality=96&sign=6a0b284d5b394f7bc00e97f044a1a325&type=album",
-    },
-    {
-      text: "Я получила инструменты для составления юр документов и сейчас использую их на практике.",
-      author_name: "Вера Захарова",
-      author_image:
-        "https://sun9-48.userapi.com/impg/Eetn8cWpPY7rs__wS5FtQ9CRUylgePZ1PKSfPg/GxsQHAjsdHU.jpg?size=1080x1080&quality=96&sign=e9338491a7126108265a09b8469199f9&type=album",
-    },
-    {
-      text: "Решение начать этот курс – одно из самых правильных моих решений.",
-      author_name: "Настя Шашкина",
-      author_image:
-        "https://sun9-15.userapi.com/impg/Qa7Iq2HVJQSMkBnBbk3H4wZUXyVZN6fPOu9TqA/REW7SpbeV68.jpg?size=1534x2160&quality=96&sign=8cd3260f7c157977cba6654d06c2c046&type=album",
-    },
-  ];
-
-  let reviews;
-  router.locale == "ru" ? (reviews = rus_reviews) : (reviews = eng_reviews);
-
   return (
     <Styles>
-      {router.locale == "ru" ? (
+      {/* {router.locale == "ru" ? (
         <div class="parent">
           {reviews.map((r, i) => (
             <div
@@ -278,15 +243,44 @@ const Reviews = () => {
             </div>
           ))}
         </div>
-      ) : (
-        <LogoBlock>
-          <h2>Worked with and supported by</h2>
-          <Logos>
-            <img src="static/Strive.png" alt="" />
-            <img src="static/lawtechuk.png" alt="" />
-          </Logos>
-        </LogoBlock>
-      )}
+      ) : ( */}
+      <LogoBlock>
+        <h2>
+          {router.locale == "ru"
+            ? "Клиенты и партнеры"
+            : "Worked with and supported by"}
+        </h2>
+        <Logos>
+          {/* P&C */}
+          <img
+            src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1725619037/Screenshot_2024-09-06_at_14.36.20.png"
+            alt=""
+          />
+          {/* LawtechUK */}
+          <img src="static/lawtechuk.png" alt="" />
+          {/* Wealthbrite */}
+          <img
+            src="https://images.squarespace-cdn.com/content/v1/61eed1691f94c320aaed58e6/425e7edc-b9be-4271-9132-765bb4237f4b/WEALTHBRITE-wordmark-Black.png"
+            alt=""
+          />
+          {/* Avail */}
+          <img
+            src="https://www.legalgeek.co/wp-content/uploads/2023/02/Avail-logo-1-200x100-1.png"
+            alt=""
+          />
+          {/* Rigas */}
+          <img
+            src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1725619314/Screenshot_2024-09-06_at_14.41.45.png"
+            alt=""
+          />
+
+          {/* <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrJ46SxnTGYW1Ph5MCiW4xius8DHlh6vSOzw&s"
+            alt=""
+          /> */}
+          <img src="static/Strive.png" alt="" />
+        </Logos>
+      </LogoBlock>
     </Styles>
   );
 };

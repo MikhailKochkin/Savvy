@@ -3,35 +3,16 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { useMutation, gql } from "@apollo/client";
 import _ from "lodash";
+import PropTypes from "prop-types"; // Add this import
 
 import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
-import Reaction from "./Reaction";
-import ChangeForum from "../forum/ChangeForum";
-import Message from "./Message"; // Add this import at the top of the Chat component file
-import AiAssistant from "./AiAssistant";
+import FixedChat from "./types/FixedChat";
+import DynamicChat from "./types/DynamicChat";
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
     updateChat(id: $id, link_clicks: $link_clicks) {
-      id
-    }
-  }
-`;
-
-const CREATE_CHATRESULT_MUTATION = gql`
-  mutation CREATE_CHATRESULT_MUTATION(
-    $text: String!
-    $name: String!
-    $lessonId: String!
-    $chatId: String
-  ) {
-    createChatResult(
-      text: $text
-      name: $name
-      lessonId: $lessonId
-      chatId: $chatId
-    ) {
       id
     }
   }
@@ -136,150 +117,31 @@ const ArrowBox = styled.div`
   }
 `;
 
-const Next = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  button {
-    width: 100px;
-    border: 1px solid #cacaca;
-    background: none;
-    padding: 8px 15px;
-    font-family: Montserrat;
-    border-radius: 15px;
-    cursor: pointer;
-    color: black;
-    transition: 0.3s;
-    animation-duration: 1s;
-    animation-name: animate-fade;
-    animation-fill-mode: both;
-    @keyframes animate-fade {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-    &:hover {
-      background: #f4f4f4;
-    }
-  }
-`;
-
-const Messages = styled.div`
-  margin: 0 10px;
-  filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
-`;
-
-const Secret = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 540px;
-  position: relative;
-  #open {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    position: absolute;
-    box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
-    -webkit-box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
-    -moz-box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
-    border-radius: 10px;
-    top: 20px;
-    left: 25%;
-    z-index: 300;
-    img {
-      width: 200px;
-      margin: 20px 0;
-      /* Start the shake animation and make the animation last for 0.5 seconds */
-    }
-    img {
-      /* Start the shake animation and make the animation last for 0.5 seconds */
-      animation: ${(props) => (props.shiver ? "shake 1s" : "none")};
-    }
-    @keyframes shake {
-      0% {
-        transform: translate(1px, 1px) rotate(0deg);
-      }
-      10% {
-        transform: translate(-1px, -2px) rotate(-1deg);
-      }
-      20% {
-        transform: translate(-3px, 0px) rotate(1deg);
-      }
-      30% {
-        transform: translate(3px, 2px) rotate(0deg);
-      }
-      40% {
-        transform: translate(1px, -1px) rotate(1deg);
-      }
-      50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-      }
-      60% {
-        transform: translate(-3px, 1px) rotate(0deg);
-      }
-      70% {
-        transform: translate(3px, 1px) rotate(-1deg);
-      }
-      80% {
-        transform: translate(-1px, -1px) rotate(1deg);
-      }
-      90% {
-        transform: translate(1px, 2px) rotate(0deg);
-      }
-      100% {
-        transform: translate(1px, -2px) rotate(-1deg);
-      }
-    }
-    #button {
-      margin-bottom: 20px;
-      border: 1px solid #04377f;
-      padding: 5px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-  }
-  @media (max-width: 800px) {
-    #open {
-      left: 50px;
-    }
-  }
-`;
-
 const Chat = (props) => {
-  const { name, messages, me, story, lessonId, id, author, getData, library } =
-    props;
+  const {
+    name,
+    messages,
+    me,
+    story,
+    lessonId,
+    id,
+    author,
+    getData,
+    library,
+    type,
+  } = props;
   const [update, setUpdate] = useState(false);
   const [num, setNum] = useState(1);
   const [moved, setMoved] = useState(false);
-
   const [clicks, setClicks] = useState(props.clicks);
-  const [isRevealed, setIsRevealed] = useState(!props.isSecret);
-  const [shiver, setShiver] = useState(false);
-  const [showButton, setShowButton] = useState(true);
-  const [hasCreatedInitialResult, setHasCreatedInitialResult] = useState(false); // State to ensure function runs only once
 
   const chatRef = useRef(null);
   const { t } = useTranslation("lesson");
   const [updateChat, { data, loading, error }] =
     useMutation(UPDATE_CHAT_MUTATION);
 
-  const [createChatResult, { data: data2, loading: loading2, error: error2 }] =
-    useMutation(CREATE_CHATRESULT_MUTATION);
-
   const getResult = (data) => {
     props.getResult(data);
-  };
-
-  const passTextToBeTranslated = (text) => {
-    props.passTextToBeTranslated(text);
   };
 
   const switchUpdate = () => {
@@ -292,65 +154,6 @@ const Chat = (props) => {
     }
     setMoved(true);
   };
-
-  useEffect(() => {
-    const elements = document.getElementById(id).querySelectorAll("#user_name");
-    elements.forEach((element) => {
-      let name = me.name;
-      element.innerHTML = name;
-    });
-  }, [num]);
-
-  useEffect(() => {
-    if (messages.messagesList.length == 1 && props.moveNext) {
-      props.moveNext(props.id);
-    }
-    const elements = document.getElementById(id).querySelectorAll("#user_name");
-    let p;
-    elements.forEach((element) => {
-      let name = me.name;
-      element.innerHTML = name;
-    });
-
-    // document.addEventListener("keydown", detectKeyDown, true);
-    // return () => {
-    //   document.removeEventListener("click", detectKeyDown);
-    // };
-  }, []);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (props.story && entry.isIntersecting && !hasCreatedInitialResult) {
-          setHasCreatedInitialResult(true);
-          const res = createChatResult({
-            variables: {
-              text: messages.messagesList[0].text,
-              name: messages.messagesList[0].name
-                ? messages.messagesList[0].name
-                : messages.messagesList[0].author,
-              lessonId: lessonId,
-              chatId: id,
-            },
-          });
-          // Perform any actions you need when the component becomes visible
-        }
-      },
-      {
-        root: null,
-        threshold: 0.1, // Trigger when 10% of the component is visible
-      }
-    );
-
-    if (chatRef.current) {
-      observer.observe(chatRef.current);
-    }
-
-    return () => {
-      if (chatRef.current) {
-        observer.unobserve(chatRef.current);
-      }
-    };
-  }, [chatRef, hasCreatedInitialResult]);
 
   // const detectKeyDown = (e) => {
   //   if (e.key === "n") {
@@ -395,91 +198,34 @@ const Chat = (props) => {
           </>
         )}
       </Buttons>
-      {!update && (
-        <Messages isRevealed={isRevealed}>
-          {messages.messagesList.slice(0, num).map((m, i) => {
-            if (m.author === "author") {
-              return (
-                <>
-                  <Message
-                    id={"messagee" + i + id}
-                    key={i}
-                    time={i}
-                    role="author"
-                    m={m}
-                    me={me}
-                    author={author}
-                    passTextToBeTranslated={passTextToBeTranslated}
-                  />
-                  {m.reactions && m.reactions.length > 0 && (
-                    <Reaction
-                      reactions={m.reactions}
-                      me={me}
-                      author={author}
-                      m={m}
-                      author_image={m.image}
-                      author_name={m.name}
-                      initialQuestion={m.text}
-                      lessonId={lessonId}
-                      chatId={id}
-                    />
-                  )}
-                  {m.isAiAssistantOn && (
-                    <AiAssistant
-                      id={id}
-                      author={author}
-                      me={me}
-                      m={m}
-                      library={library}
-                      lessonId={lessonId}
-                    />
-                  )}
-                </>
-              );
-            } else {
-              return (
-                <Message
-                  id={"message" + i + id}
-                  key={i}
-                  time={i}
-                  role="student"
-                  shouldSlide={true}
-                  m={m}
-                  me={me}
-                  author={author}
-                  passTextToBeTranslated={passTextToBeTranslated}
-                />
-              );
-            }
-          })}
-        </Messages>
-      )}
-      {showButton && !update && num < messages.messagesList.length && (
-        <Next>
-          <button
-            onClick={async (e) => {
-              if (props.story) {
-                createChatResult({
-                  variables: {
-                    text: messages.messagesList[num].text,
-                    name: messages.messagesList[num].name
-                      ? messages.messagesList[num].name
-                      : messages.messagesList[num].author,
-                    lessonId: lessonId,
-                    chatId: id,
-                  },
-                });
-              }
+      {!update &&
+        (type == "dynamicchat" ? (
+          <DynamicChat
+            messages={messages}
+            me={me}
+            lessonId={lessonId}
+            id={id}
+            author={author}
+            library={library}
+            isSecret={props.isSecret}
+            moveNext={props.moveNext}
+            story={story}
+          />
+        ) : (
+          <FixedChat
+            messages={messages}
+            me={me}
+            lessonId={lessonId}
+            id={id}
+            author={author}
+            library={library}
+            isSecret={props.isSecret}
+            moveNext={props.moveNext}
+            story={story}
+            // passTextToBeTranslated={passTextToBeTranslated}
+          />
+        ))}
 
-              if (num == messages.messagesList.length - 1 && props.moveNext)
-                props.moveNext(props.id);
-              setNum(num + 1);
-            }}
-          >
-            {t("next")}
-          </button>
-        </Next>
-      )}
       {getData &&
         props.next.true.value &&
         !moved &&
@@ -495,6 +241,7 @@ const Chat = (props) => {
           id={id}
           name={name}
           me={me}
+          type={type}
           isSecret={props.isSecret}
           messages={messages}
           lessonId={lessonId}

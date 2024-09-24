@@ -63,10 +63,12 @@ const PROGRAMS_QUERY = gql`
 
 const Styles = styled.div`
   display: flex;
-  margin: 30px 0;
+  padding: 30px 0;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  background: #fffaf6;
+
   @media (max-width: 800px) {
     width: 100%;
     padding: 20px 0;
@@ -90,8 +92,9 @@ const Container = styled.div`
 `;
 
 const Search = styled.div`
-  background: #f1f1f1;
+  background: #fff;
   border-radius: 25px;
+  box-shadow: 0px 0px 5px rgba(149, 149, 149, 0.5);
   width: 70%;
   margin-bottom: 50px;
   padding: 25px 50px;
@@ -100,7 +103,7 @@ const Search = styled.div`
     font-size: 3rem;
     margin-bottom: 15px;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 900px) {
     width: 90%;
     padding: 25px 25px;
   }

@@ -2,8 +2,6 @@ export default function handler(req, res) {
   try {
     const { url } = req.query;
 
-    console.log("URL received:", url);
-
     if (!url) {
       console.log("URL parameter is missing");
       return res.status(400).send({ error: "URL parameter is missing" });
@@ -11,15 +9,12 @@ export default function handler(req, res) {
 
     // Decode the incoming URL parameter
     const decodedUrl = decodeURIComponent(url);
-    console.log("Decoded URL:", decodedUrl);
 
     // Check if the decoded URL is valid (optional, uncomment if needed)
     // if (!validUrl.isUri(decodedUrl)) {
     //   console.log("Invalid URL");
     //   return res.status(404).send({ error: "Invalid URL" });
     // }
-
-    console.log("Valid URL:", decodedUrl);
 
     // Prepare the oEmbed response object
     const oEmbedResponse = {
@@ -31,12 +26,10 @@ export default function handler(req, res) {
       provider_name: "BeSavvy",
       provider_url: "https://besavvy.app",
       cache_age: "86400", // Cache age in seconds
-      html: `<iframe src="${decodedUrl}" width="800" height="600"></iframe>`, // Replace with your embed code
+      html: `<iframe src="${decodedUrl}" width="800" height="600" scrolling="auto"></iframe>`, // Replace with your embed code
       width: 800,
       height: 600,
     };
-
-    console.log("oEmbedResponse:", oEmbedResponse);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Content-Type", "application/json");

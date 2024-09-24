@@ -55,6 +55,8 @@ const Query = queryType({
     t.crud.textEditorResult({ ordering: true, filtering: true });
     t.crud.constructionResults({ ordering: true, filtering: true });
     t.crud.constructionResult({ ordering: true, filtering: true });
+    t.crud.testPracticeResult({ ordering: true, filtering: true });
+    t.crud.testPracticeResults({ ordering: true, filtering: true });
     t.crud.feedbacks({ ordering: true, filtering: true });
     t.crud.lessonResults({ ordering: true, filtering: true });
     t.crud.challengeResults({ ordering: true, filtering: true });

@@ -416,9 +416,12 @@ const FullOpenQuestion = (props) => {
                       {t("show_an_ideal_answer")}
                     </Button1>
                   )}
-                  {(correctnessLevel === "wrong" ||
+
+                  {(correctnessLevel === "slightly_wrong" ||
+                    correctnessLevel === "wrong" ||
                     correctnessLevel === "completely_wrong") &&
-                    props.answer?.length / props.sampleAnswer?.length > 0.2 && (
+                    props.answer?.length / props.sampleAnswer?.length >=
+                      0.2 && (
                       <Button1
                         onClick={async (e) => {
                           // let newResult = await props.doubleCheck(props.answer);

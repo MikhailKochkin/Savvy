@@ -99,13 +99,26 @@ const Row = styled.div`
   border-top: 1px solid #fff;
   form {
     input {
-      width: 50px;
+      width: 150px;
       background: none;
       border: none;
       outline: 0;
       font-family: Montserrat;
       font-size: 1rem;
     }
+  }
+  input {
+    width: 350px;
+    background: none;
+    border: 1px solid grey;
+    outline: 0;
+    font-family: Montserrat;
+    padding: 2px 5px;
+    font-size: 1.4rem;
+    width: 95%;
+    border: 1px solid #c4c4c4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
   }
   .index {
     width: 2%;
@@ -213,7 +226,9 @@ const DeleteClient = (props) => {
 const Client = (props) => {
   const [comment, setComment] = useState(props.comment);
   const [message, setMessage] = useState(`<p>Hi ${props.name},</p>`);
-  const [subject, setSubject] = useState(`Birketts: New Way to Train Talents`);
+  const [subject, setSubject] = useState(
+    `Invitation to the Legal Ed Tech Community`
+  );
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
   const [selectedGroup, setSelectedGroup] = useState(null);

@@ -2,7 +2,17 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
 import parse from "html-react-parser";
-const Body = styled.div``;
+const Body = styled.div`
+  img {
+    display: block;
+    max-width: 600px;
+    box-shadow: "0 0 0 2px blue;";
+    object-fit: contain;
+    @media (max-width: 800px) {
+      width: 100%;
+    }
+  }
+`;
 
 const EmailContainer = styled.div`
   display: flex;

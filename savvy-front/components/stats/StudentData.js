@@ -411,11 +411,13 @@ const Person = ({
   coursePage,
   results,
   type,
+  passSelectedStudent,
 }) => {
   const [secret, setSecret] = useState(true);
   const [tags, setTags] = useState(student.tags);
   const [tag, setTag] = useState("");
   const [message, setMessage] = useState("");
+  const [isSelected, setIsSelected] = useState(false);
 
   const [sendMessage, { loading: sendMessageLoading }] = useMutation(
     SEND_MESSAGE_MUTATION
@@ -491,9 +493,18 @@ const Person = ({
     <Styles>
       <Header>
         <Name className="div1">
-          <div className="name">{`${student.name} ${
-            student.surname || ""
-          }`}</div>
+          <div className="name">
+            {" "}
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={(e) => {
+                passSelectedStudent(student.id);
+                setIsSelected(e.target.checked);
+              }}
+            />
+            {`${student.name} ${student.surname || ""}`}
+          </div>
           <div className="email">{student.email}</div>
         </Name>
         <Tags className="div2">

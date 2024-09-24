@@ -440,6 +440,7 @@ type Chat {
   link_clicks: Int
   messages: Json
   name: String
+  type: String
   updatedAt: DateTime!
   user: User!
 }
@@ -465,6 +466,7 @@ input ChatOrderByWithRelationInput {
   link_clicks: SortOrderInput
   messages: SortOrderInput
   name: SortOrderInput
+  type: SortOrderInput
   updatedAt: SortOrder
   user: UserOrderByWithRelationInput
   userId: SortOrder
@@ -556,6 +558,7 @@ input ChatWhereInput {
   link_clicks: IntNullableFilter
   messages: JsonNullableFilter
   name: StringNullableFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -575,6 +578,7 @@ input ChatWhereUniqueInput {
   link_clicks: IntNullableFilter
   messages: JsonNullableFilter
   name: StringNullableFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -2636,7 +2640,7 @@ type Mutation {
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
-  createChat(lessonId: String, messages: Messages, name: String): Chat
+  createChat(lessonId: String, messages: Messages, name: String, type: String): Chat
   createChatResult(chatId: String, lessonId: String, name: String, text: String): ChatResult
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createCommunityMember(email: String, name: String, number: String, subscription: String, surname: String): PaymentInfo2
@@ -2727,7 +2731,7 @@ type Mutation {
   updateActiveUser(active: Boolean, email: String): User
   updateBotDialogue(id: String, journey: [String], rating: Int): BotDialogue
   updateBusinessClient(comment: String, communication_history: ClientMessages, id: String, number: String, sales_cycle: SalesCycle, tags: [String]): BusinessClient
-  updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
+  updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String, type: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, context: String, elements: ElementsList, goal: String, hint: String, id: String, name: String, type: String, variants: [String]): Construction
@@ -3921,6 +3925,8 @@ type Query {
   stats(lessonId: String, userId: String): Stats
   team(where: TeamWhereUniqueInput!): Team
   teams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int, orderBy: [TeamOrderByWithRelationInput!], where: TeamWhereInput): [Team!]!
+  testPracticeResult(where: TestPracticeResultWhereUniqueInput!): TestPracticeResult
+  testPracticeResults(after: TestPracticeResultWhereUniqueInput, before: TestPracticeResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestPracticeResultOrderByWithRelationInput!], where: TestPracticeResultWhereInput): [TestPracticeResult!]!
   testResult(where: TestResultWhereUniqueInput!): TestResult
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestResultOrderByWithRelationInput!], where: TestResultWhereInput): [TestResult!]!
   textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
@@ -4975,6 +4981,24 @@ input TestPracticeOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input TestPracticeOrderByWithRelationInput {
+  createdAt: SortOrder
+  failureText: SortOrderInput
+  goal: SortOrderInput
+  id: SortOrder
+  intro: SortOrderInput
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrderInput
+  successText: SortOrderInput
+  tasks: SortOrder
+  tasksNum: SortOrder
+  testPracticeResult: TestPracticeResultOrderByRelationAggregateInput
+  text: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
+}
+
 type TestPracticeResult {
   correct: Int!
   createdAt: DateTime!
@@ -4999,6 +5023,20 @@ input TestPracticeResultOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input TestPracticeResultOrderByWithRelationInput {
+  correct: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrderInput
+  student: UserOrderByWithRelationInput
+  studentId: SortOrder
+  tasks: SortOrder
+  testPractice: TestPracticeOrderByWithRelationInput
+  testPracticeId: SortOrderInput
+  updatedAt: SortOrder
+}
+
 input TestPracticeResultWhereInput {
   AND: [TestPracticeResultWhereInput!]
   NOT: [TestPracticeResultWhereInput!]
@@ -5006,6 +5044,23 @@ input TestPracticeResultWhereInput {
   correct: IntFilter
   createdAt: DateTimeFilter
   id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  student: UserWhereInput
+  studentId: StringFilter
+  tasks: StringNullableListFilter
+  testPractice: TestPracticeWhereInput
+  testPracticeId: StringNullableFilter
+  updatedAt: DateTimeFilter
+}
+
+input TestPracticeResultWhereUniqueInput {
+  AND: [TestPracticeResultWhereInput!]
+  NOT: [TestPracticeResultWhereInput!]
+  OR: [TestPracticeResultWhereInput!]
+  correct: IntFilter
+  createdAt: DateTimeFilter
+  id: String
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
   student: UserWhereInput

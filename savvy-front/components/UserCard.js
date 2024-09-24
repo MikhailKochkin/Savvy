@@ -570,6 +570,7 @@ const UserCard = memo((props) => {
               <option value="0">Выберите срок</option>
               <option value="monthly">Monthly</option>
               <option value="annually">Annually</option>
+              <option value="biannually">Biannually</option>
             </select>
             <div>
               <label htmlFor="initialDate">Start Date:</label>

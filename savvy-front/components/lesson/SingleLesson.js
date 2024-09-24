@@ -95,6 +95,7 @@ const SINGLE_LESSON_QUERY = gql`
       chats {
         id
         name
+        type
         isSecret
         link_clicks
         complexity

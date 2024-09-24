@@ -3,7 +3,7 @@ import StudentData from "./StudentData";
 import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
 import PropTypes from "prop-types";
-import Loading from "../Loading";
+import SimulatorInsights from "./SimulatorInsights";
 import * as _ from "lodash";
 
 const LESSON_RESULTS_QUERY = gql`
@@ -43,6 +43,8 @@ const Styles = styled.div`
 `;
 
 const Header = styled.p`
+  display: flex;
+  flex-direction: row;
   font-size: 1.8rem;
   /* background: #edefed; */
   padding: 0.5% 2%;
@@ -89,7 +91,8 @@ const UserAnalytics = (props) => {
   return (
     <Styles>
       <Header>{coursePage}</Header>
-      <Header># Users: {students.length} </Header>
+      <Header># Users: {students.length}</Header>
+      <SimulatorInsights />
       {sorted.slice(0, number).map((student) => {
         let student_results = results.filter((r) => r.student.id == student.id);
         return (

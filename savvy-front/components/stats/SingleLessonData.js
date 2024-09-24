@@ -105,6 +105,7 @@ const LESSONS_QUERY = gql`
       #   }
       newTests {
         id
+        name
         question
         answers
         correct
@@ -114,6 +115,7 @@ const LESSONS_QUERY = gql`
       }
       quizes {
         id
+        name
         question
         answer
         next
@@ -158,6 +160,7 @@ const LESSONS_QUERY = gql`
       # }
       notes {
         id
+        name
         text
         type
         next
@@ -181,6 +184,7 @@ const LESSONS_QUERY = gql`
       }
       texteditors {
         id
+        name
         text
         totalMistakes
         goal

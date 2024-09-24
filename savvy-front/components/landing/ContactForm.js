@@ -342,19 +342,14 @@ const Action = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [number, setNumber] = useState("000000000000000");
-  const [isOpen, setIsOpen] = useState(false);
 
   const { t } = useTranslation("landing");
-
-  const { asPath } = useRouter();
-
-  let program;
 
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
 
   return (
-    <Styles id="c2a">
+    <Styles id="talk_to_founder">
       <Container>
         <Form>
           <Description>

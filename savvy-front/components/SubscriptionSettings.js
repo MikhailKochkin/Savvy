@@ -286,6 +286,7 @@ const Account = (props) => {
           >
             <option value="monthly">{t("monthly")}</option>
             <option value="annually">{t("annually")}</option>
+            <option value="biannually">{t("biannually")}</option>
           </select>
           <BlueButton onClick={handleUpdateSubscription}>
             {t("update_subscription")}

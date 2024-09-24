@@ -771,6 +771,7 @@ const LessonBlock = (props) => {
                 me={me}
                 author={lesson.user}
                 isSecret={data.isSecret}
+                type={data.type}
                 user={lesson.user.id}
                 messages={data.messages}
                 id={data.id}

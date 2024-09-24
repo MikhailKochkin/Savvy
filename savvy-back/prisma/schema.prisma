@@ -102,6 +102,7 @@ model ChallengeResult {
 model Chat {
   id          String   @id @default(cuid())
   name        String?
+  type        String?  @default("fixedchat")
   messages    Json?
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
