@@ -155,6 +155,10 @@ const Chat = (props) => {
     setMoved(true);
   };
 
+  const passNum = (num) => {
+    setNum(num);
+  };
+
   // const detectKeyDown = (e) => {
   //   if (e.key === "n") {
   //     setNum((num) => num + 1);
@@ -222,6 +226,7 @@ const Chat = (props) => {
             isSecret={props.isSecret}
             moveNext={props.moveNext}
             story={story}
+            passNum={passNum}
             // passTextToBeTranslated={passTextToBeTranslated}
           />
         ))}

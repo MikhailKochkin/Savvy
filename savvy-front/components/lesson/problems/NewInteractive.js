@@ -271,7 +271,7 @@ const NewInteractive = (props) => {
                   exam={true}
                   problem={true}
                   author={author}
-                  isFinal={componentList.length == i + 1}
+                  isFinal={problem.steps.problemItems.length == i + 1}
                 />
               );
             } else if (com.type.toLowerCase() === "chat") {

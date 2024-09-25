@@ -497,6 +497,7 @@ const NewSingleLesson = (props) => {
                   i_am_author={i_am_author}
                   i_am_student={i_am_student}
                   authSource={props.authSource}
+                  embedded={props.embedded}
                 />
               </LessonPart>
             </Container>{" "}

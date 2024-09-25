@@ -601,6 +601,7 @@ const Feed = (props) => {
     lessonId,
     openSize,
     step,
+    embedded,
   } = props;
   const { t } = useTranslation("lesson");
 
@@ -998,14 +999,16 @@ const Feed = (props) => {
           {width > 800 && (
             <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
           )}
-          <Navigation
-            i_am_author={props.i_am_author}
-            lesson={props.lesson}
-            me={me}
-            width={width}
-            passMenuChange={passMenuChange}
-            page="simulator"
-          />
+          {!props.embedded && (
+            <Navigation
+              i_am_author={props.i_am_author}
+              lesson={props.lesson}
+              me={me}
+              width={width}
+              passMenuChange={passMenuChange}
+              page="simulator"
+            />
+          )}
           <Border>
             {lessonElements.slice(0, num + 2).map((c, i) => (
               <Block

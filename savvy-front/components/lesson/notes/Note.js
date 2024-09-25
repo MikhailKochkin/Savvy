@@ -138,6 +138,7 @@ const Note = (props) => {
           ) : null}
         </>
       )}
+      {console.log("getData", id == "clvm6aovi000bt8khm97llgb7" ? !moved : " ")}
       {getData && !isFinal && !moved && (
         <ArrowContainer>
           <div className="arrow_box" onClick={(e) => push()}>

@@ -30,7 +30,6 @@ const embedPage = (props) => {
       id={props.query.id}
       embedded={true}
       authSource={props.query.authSource}
-
       // add={props.query.add}
     />
   );

@@ -220,6 +220,7 @@ const FixedChat = (props) => {
               if (num == messages.messagesList.length - 1 && props.moveNext)
                 props.moveNext(props.id);
               setNum(num + 1);
+              props.passNum(num + 1);
             }}
           >
             {t("next")}
