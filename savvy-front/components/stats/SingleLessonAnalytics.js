@@ -56,7 +56,8 @@ const Header = styled.div`
   margin: 0;
   margin-top: -2px;
   margin-bottom: 5px;
-  /* border-bottom: 3px solid #f2f6f9; */
+  border-bottom: 4px solid #f2f6f9;
+
   .lessonName {
     font-size: 2.8rem;
     font-weight: 600;
@@ -94,9 +95,9 @@ const Header = styled.div`
 
 const UserAnalytics = (props) => {
   const { students, lesson } = props;
-  const [number, setNumber] = useState(25);
   const [isCustomResultsModeOn, setIsCustomResultsModeOn] = useState(false);
   const [customResults, setCustomResults] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
 
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
     variables: {
@@ -108,12 +109,22 @@ const UserAnalytics = (props) => {
   const results = data.lessonResults;
 
   const getSelectedStudent = (id) => {
+    if (selectedStudents.includes(id)) {
+      setSelectedStudents(
+        selectedStudents.filter((studentId) => studentId !== id)
+      );
+    } else {
+      setSelectedStudents([
+        ...selectedStudents,
+        students.find((student) => student.id === id).id,
+      ]);
+    }
     setIsCustomResultsModeOn(true);
     const studentExists = customResults.some(
       (result) => result.student.id === id
     );
+    console.log("studentExists", studentExists);
     if (studentExists) {
-      console.log(1);
       let newCustomResults = [...customResults];
       newCustomResults = newCustomResults.filter(
         (result) => result.student.id !== id
@@ -123,10 +134,10 @@ const UserAnalytics = (props) => {
         setIsCustomResultsModeOn(false);
       }
     } else {
-      console.log(2);
-
       let newCustomResults = [...customResults];
-      newCustomResults.push(results.find((result) => result.student.id === id));
+      newCustomResults.push(
+        ...results.filter((result) => result.student.id === id)
+      );
       setCustomResults(newCustomResults);
     }
   };
@@ -137,11 +148,15 @@ const UserAnalytics = (props) => {
         <div className="lessonName">{lesson.name}</div>
       </Header>
       <HeaderStats
-        students={students}
+        students={selectedStudents.length > 0 ? selectedStudents : students}
         results={isCustomResultsModeOn ? customResults : results}
         lesson={lesson}
       />
-      <SimulatorInsights lesson={lesson} students={students} />
+      <SimulatorInsights
+        lesson={lesson}
+        students={students}
+        selectedStudents={selectedStudents}
+      />
       {[...students]
         .sort((a, b) => {
           const resultA = results.find((res) => res.student.id === b.id);

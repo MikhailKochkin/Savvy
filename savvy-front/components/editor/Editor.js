@@ -1239,6 +1239,7 @@ const App = (props) => {
           {type === "createError" && (
             <CreateQuiz getResult={getResult} lessonID={props.lessonId} />
           )}
+          {console.log("type", type)}
           {type === "error" && (
             <SingleQuiz
               key={modalData}

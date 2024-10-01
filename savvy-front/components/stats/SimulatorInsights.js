@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { gql, useLazyQuery } from "@apollo/client";
 import Loading from "../Loading";
 import { Tooltip } from "react-tooltip";
-import { set } from "lodash";
+import Modal from "styled-react-modal";
+import SimulatorInsightsBlock from "./SimulatorInsightsBlock";
 
 const QUIZZES_RESULTS_QUERY = gql`
   query QUIZZES_RESULTS_QUERY($lessonId: String!) {
@@ -134,7 +135,8 @@ const SectionElement = styled.div`
     // https://coolors.co/palette/f94144-f3722c-f8961e-f9844a-f9c74f-90be6d-43aa8b-4d908e-577590-277da1
     if (
       props.sectionType?.toLowerCase() == "chat" ||
-      props.sectionType?.toLowerCase() == "longread"
+      props.sectionType?.toLowerCase() == "longread" ||
+      props.sectionType?.toLowerCase() == "branch"
     )
       return "#77C37C";
     if (props.ratio) {
@@ -177,34 +179,32 @@ const SectionElement = styled.div`
 `;
 
 const SimulatorInsights = (props) => {
+  const { lesson, selectedStudents } = props;
+
   const [quizResults, setQuizResults] = useState([]);
   const [testResults, setTestResults] = useState([]);
   const [constructionResults, setConstructionResults] = useState([]);
   const [testPracticeResults, setTestPracticeResults] = useState([]);
-  const [sortedResults, setSortedResults] = useState([]);
-  const [getQuizData, { loading, error, data }] = useLazyQuery(
-    QUIZZES_RESULTS_QUERY,
-    {
-      variables: { lessonId: props.lesson.id },
-    }
-  );
-  const [getTestData, { loadingTest, errorTest, dataTest }] = useLazyQuery(
-    TEST_RESULTS_QUERY,
-    {
-      variables: { lessonId: props.lesson.id },
-    }
-  );
-  const [
-    getConstructionData,
-    { loadingConstruction, errorConstruction, dataConstruction },
-  ] = useLazyQuery(CONSTRUCTION_RESULTS_QUERY, {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState(null);
+
+  // GraphQL queries for fetching results
+
+  const [getQuizData, { loading }] = useLazyQuery(QUIZZES_RESULTS_QUERY, {
     variables: { lessonId: props.lesson.id },
   });
-
-  const [getTestPracticeData, { loadingTestPractice, errorTestPractice }] =
-    useLazyQuery(TESTPRACTICE_RESULTS_QUERY, {
+  const [getTestData, { loadingTest }] = useLazyQuery(TEST_RESULTS_QUERY, {
+    variables: { lessonId: props.lesson.id },
+  });
+  const [getConstructionData, { loadingConstruction }] = useLazyQuery(
+    CONSTRUCTION_RESULTS_QUERY,
+    {
       variables: { lessonId: props.lesson.id },
-    });
+    }
+  );
+  const [getTestPracticeData] = useLazyQuery(TESTPRACTICE_RESULTS_QUERY, {
+    variables: { lessonId: props.lesson.id },
+  });
 
   useEffect(() => {
     // Fetch quiz and test data on component load
@@ -223,65 +223,9 @@ const SimulatorInsights = (props) => {
     fetchData();
   }, [getQuizData, getTestData, getConstructionData, getTestPracticeData]);
 
-  const sortObjectsByWrongAnswerRatio = (objects) => {
-    return objects
-      .filter(
-        (obj) =>
-          obj.totalNumberOfQuizzes >= 10 &&
-          obj.quizzesWithSameId.length > 0 &&
-          obj.quizzesWithSameId[0].quiz.type.toLowerCase() !== "generate" &&
-          obj.quizzesWithSameId[0].quiz.type.toLowerCase() !== "findall"
-      )
-      .sort((a, b) => {
-        const ratioA = a.numberOfWrongAnswers / a.totalNumberOfQuizzes;
-        const ratioB = b.numberOfWrongAnswers / b.totalNumberOfQuizzes;
+  // Helper functions
 
-        // Sort in descending order (highest ratio first)
-        return ratioB - ratioA;
-      });
-  };
-
-  let analyze = () => {
-    let groupedByQuizId = {};
-    quizResults.forEach((item) => {
-      const quizId = item.quiz.id;
-
-      // Check if the quiz.id is already a key in the map
-      if (!groupedByQuizId[quizId]) {
-        // If it doesn't exist, create a new object with the structure
-        groupedByQuizId[quizId] = {
-          quizzesWithSameId: [],
-          totalNumberOfQuizzes: 0,
-          numberOfCorrectAnswers: 0,
-          numberOfWrongAnswers: 0,
-          quiz: lesson.quizes.find((q) => q.id == item.quiz.id), // Add the quiz object to the structure
-        };
-      }
-
-      // Add the current item to the quizzesWithSameId array
-      groupedByQuizId[quizId].quizzesWithSameId.push(item);
-
-      // Increment the total number of quizzes
-      groupedByQuizId[quizId].totalNumberOfQuizzes += 1;
-
-      // Increment the correct or wrong answer count
-      if (item.correct) {
-        groupedByQuizId[quizId].numberOfCorrectAnswers += 1;
-      } else {
-        groupedByQuizId[quizId].numberOfWrongAnswers += 1;
-      }
-    });
-
-    // Extract the arrays from the map
-    const resultArrays = Object.values(groupedByQuizId);
-
-    const sortedObjects = sortObjectsByWrongAnswerRatio(resultArrays);
-    setSortedResults(sortedObjects);
-  };
-
-  const { lesson } = props;
-
-  const uniqueResults = (results) => {
+  const getUniqueQuizResults = (results) => {
     const map = new Map();
 
     results.forEach((item) => {
@@ -340,7 +284,7 @@ const SimulatorInsights = (props) => {
     };
   };
 
-  const groupByStudentId = (constructionResults) => {
+  const groupConstructionResultsByStudentId = (constructionResults) => {
     const groupedResults = {};
 
     constructionResults.forEach((item) => {
@@ -361,7 +305,7 @@ const SimulatorInsights = (props) => {
     return Object.values(groupedResults);
   };
 
-  const groupByStudent = (quizResults) => {
+  const groupQuizResultsByStudent = (quizResults) => {
     // Step 1: Initialize an object to store grouped results
     const groupedResults = {};
 
@@ -441,7 +385,8 @@ const SimulatorInsights = (props) => {
   };
 
   const calculateStudentAttemptsAndScores = (constructionResults) => {
-    const groupedResults = groupByStudentId(constructionResults);
+    const groupedResults =
+      groupConstructionResultsByStudentId(constructionResults);
 
     // Calculate attempts for each student
     const attemptsByStudent = groupedResults.map((studentResults) => {
@@ -516,9 +461,6 @@ const SimulatorInsights = (props) => {
     return arr1.filter((item, index) => arr2[index]);
   };
 
-  const stringToArray = (str) => {
-    return str.split(/\s*,\s*/).map((item) => item.trim());
-  };
   let isDataBeingLoaded = loading || loadingTest || loadingConstruction;
 
   // Instructions:
@@ -526,18 +468,13 @@ const SimulatorInsights = (props) => {
   // 2. The simulator should find the questions that caused least problems for students.
   return (
     <Styles>
-      <h2>Simulator Insights and Trends</h2>
+      <h2>Simulator Insights (Beta)</h2>
       <HeatMap>
-        {console.log(
-          "lesson.structure.lessonItems",
-          lesson.structure.lessonItems
-        )}
         {lesson.structure.lessonItems.map((task, index) => {
           let type = task.type.toLowerCase();
           let coreElement;
           let elementName;
           let innerElements;
-          console.log("type", type);
 
           if (type === "problem") {
             coreElement = lesson.problems.find((p) => p.id === task.id);
@@ -572,7 +509,6 @@ const SimulatorInsights = (props) => {
             elementName = "Open Question";
           } else if (type === "texteditor") {
             coreElement = lesson.texteditors.find((t) => t.id === task.id);
-            console.log("coreElement", coreElement);
             let foundProblems = lesson.problems.filter((p) =>
               extractQuizAndProblemIds(coreElement.text).problemIds.includes(
                 p.id
@@ -626,6 +562,8 @@ const SimulatorInsights = (props) => {
                   let ratio;
                   let taskResult = null;
                   let type;
+                  let correctnessRatio = 0;
+                  let data;
 
                   if (element.type.toLowerCase() === "quiz") {
                     elementData = lesson.quizes.find(
@@ -634,21 +572,45 @@ const SimulatorInsights = (props) => {
                     type = "Open Question";
                     // 1. Calculate the ratio of correct answers to total answers
                     // 1.1 Calculate the total number of quizzes where an answer has been provided
-                    let allQuizResults = uniqueResults(
+                    let allQuizResults = getUniqueQuizResults(
                       quizResults.filter(
                         (item) =>
                           item.quiz.id === elementData.id &&
+                          (selectedStudents && selectedStudents.length > 0
+                            ? selectedStudents.includes(item.student.id)
+                            : true) &&
                           (item.result ||
                             item.ideasList?.quizIdeas?.length > 0) &&
                           item.student.id !== "cjqy9i57l000k0821rj0oo8l4" &&
                           item.student.id !== lesson.user.id
                       )
                     ).length;
+                    console.log(
+                      "correct allQuizResults",
+                      getUniqueQuizResults(
+                        quizResults.filter(
+                          (item) =>
+                            item.quiz.id === elementData.id &&
+                            (selectedStudents && selectedStudents.length > 0
+                              ? selectedStudents.includes(item.student.id)
+                              : true) &&
+                            ((item.result && item.correct) ||
+                              item.ideasList?.quizIdeas?.filter(
+                                (idea) => parseFloat(idea.result) > 58
+                              ).length > 0) &&
+                            item.student.id !== "cjqy9i57l000k0821rj0oo8l4" &&
+                            item.student.id !== lesson.user.id
+                        )
+                      ).map((r) => r.student.id)
+                    );
                     // 1.2 Calculate the total number of quizzes where the answer was correct / partially correct
-                    let allCorrectQuizResults = uniqueResults(
+                    let allCorrectQuizResults = getUniqueQuizResults(
                       quizResults.filter(
                         (item) =>
                           item.quiz.id === elementData.id &&
+                          (selectedStudents && selectedStudents.length > 0
+                            ? selectedStudents.includes(item.student.id)
+                            : true) &&
                           ((item.result && item.correct) ||
                             item.ideasList?.quizIdeas?.filter(
                               (idea) => parseFloat(idea.result) > 58
@@ -658,15 +620,14 @@ const SimulatorInsights = (props) => {
                       )
                     ).length;
                     // 1.3 Calculate the ratio of correct answers to total answers
-                    let correctnessRatio =
-                      allCorrectQuizResults / allQuizResults;
+                    correctnessRatio = allCorrectQuizResults / allQuizResults;
+                    data = `${allCorrectQuizResults} / ${allQuizResults}`;
                     // 1.4 Set coefficient for the ratio
                     let correctRatioCoefficient = 0.8;
 
                     // 2. Calculate the attempts ratio
                     // 2.1 Group the quiz results by student
-
-                    let quizResultGroupedByStudent = groupByStudent(
+                    let quizResultGroupedByStudent = groupQuizResultsByStudent(
                       quizResults.filter(
                         (qr) =>
                           qr.quiz.id === elementData.id &&
@@ -675,8 +636,7 @@ const SimulatorInsights = (props) => {
                       )
                     );
 
-                    // 2.2 Calculate the average score for each student
-
+                    // 2.2 Calculate the average score for each student based on the groups max and min values
                     let studentsScoreDerivedFromNumberOfAttempts =
                       calculateStudentScores(quizResultGroupedByStudent);
 
@@ -690,12 +650,13 @@ const SimulatorInsights = (props) => {
 
                     // 3. Calculate the final ratio
 
-                    ratio = (
-                      (averageAttemptsScoreForTheGroup *
-                        attemptsRatioCoefficient +
-                        correctnessRatio * correctRatioCoefficient) *
-                      100
-                    ).toFixed(0);
+                    // ratio = (
+                    //   (averageAttemptsScoreForTheGroup *
+                    //     attemptsRatioCoefficient +
+                    //     correctnessRatio * correctRatioCoefficient) *
+                    //   100
+                    // ).toFixed(0);
+                    ratio = (correctnessRatio * 100).toFixed(0);
                   } else if (element.type.toLowerCase() === "chat") {
                     type = "Chat";
                     elementData = lesson.chats.find((c) => c.id === element.id);
@@ -742,7 +703,6 @@ const SimulatorInsights = (props) => {
                     elementData = lesson.testPractices.find(
                       (nt) => nt.id === element.id
                     );
-                    console.log("testPracticeResults", testPracticeResults);
 
                     let cleanTestPracticeResults = testPracticeResults.filter(
                       (tpr) =>
@@ -773,9 +733,18 @@ const SimulatorInsights = (props) => {
                       key={index}
                       className="sectionElement"
                       ratio={!isNaN(ratio) ? ratio : 0}
-                      sectionType={type}
+                      sectionType={
+                        elementData?.type == "BRANCH" ? "branch" : type
+                      }
+                      onClick={(e) => {
+                        if (elementData.__typename === "Quiz") {
+                          setModalOpen(true);
+                          setActiveItem(elementData);
+                        }
+                      }}
                     >
                       <>
+                        {console.log("elementData", elementData?.type)}
                         <b>{type}: </b>
                         {elementData && elementData.name
                           ? elementData.name
@@ -788,18 +757,19 @@ const SimulatorInsights = (props) => {
                             </span>
                           )}
                         </div>
-
-                        {ratio && !isNaN(ratio) && (
-                          <div className="circle">
-                            <span
-                              data-tooltip-id="analytics-tooltip"
-                              data-tooltip-html={`<p>This is a task complexity indicator.</p> <p>The higher the number, the easier it is for students to complete this task.</p>`}
-                              data-tooltip-place="right"
-                            >
-                              {ratio}%
-                            </span>
-                          </div>
-                        )}
+                        {ratio &&
+                          !isNaN(ratio) &&
+                          elementData?.type !== "BRANCH" && (
+                            <div className="circle">
+                              <span
+                                data-tooltip-id="analytics-tooltip"
+                                data-tooltip-html={`<p>This is a task complexity indicator.</p> <p>The higher the number, the easier it is for students to complete this task.</p>`}
+                                data-tooltip-place="right"
+                              >
+                                {ratio}%
+                              </span>
+                            </div>
+                          )}
                       </>
                     </SectionElement>
                   );
@@ -809,8 +779,50 @@ const SimulatorInsights = (props) => {
         })}
       </HeatMap>
       <Tooltip id="analytics-tooltip" />
+      <StyledModal
+        isOpen={modalOpen}
+        onBackgroundClick={() => setModalOpen(false)}
+        onEscapeKeydown={() => setModalOpen(false)}
+      >
+        <SimulatorInsightsBlock
+          item={activeItem}
+          quizResults={
+            activeItem
+              ? quizResults.filter((qr) => qr.quiz.id == activeItem.id)
+              : []
+          }
+        />
+      </StyledModal>
     </Styles>
   );
 };
 
 export default SimulatorInsights;
+
+const StyledModal = Modal.styled`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  min-width: 400px;
+  max-width: 800px;
+  padding: 20px;
+      overflow-y: scroll;
+
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;

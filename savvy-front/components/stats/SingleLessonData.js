@@ -118,6 +118,7 @@ const LESSONS_QUERY = gql`
         name
         question
         answer
+        answers
         next
         type
         goal

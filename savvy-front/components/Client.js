@@ -142,7 +142,7 @@ const Row = styled.div`
     width: 10%;
   }
   .comment {
-    width: 45%;
+    width: 60%;
     padding: 0 2%;
     h4 {
       margin: 0;
@@ -322,7 +322,6 @@ const Client = (props) => {
         <div>
           {props.name} {props.surname}
         </div>
-        {/* <div>{number}</div> */}
         <div>{props.email}</div>
         {tags &&
           tags.map((t, i) => (
@@ -330,7 +329,6 @@ const Client = (props) => {
               <Tag
                 onClick={(e) => {
                   e.preventDefault();
-                  props.sort(t);
                 }}
                 key={i}
               >
@@ -433,16 +431,6 @@ const Client = (props) => {
           Отправить имейл
         </button>
         <br />
-      </div>
-      <div className="tags">
-        <li>pathname: {url.pathname}</li>
-        <li>id: {id}</li>
-        <li>utm_source: {utm_source}</li>
-        <li>utm_medium: {utm_medium}</li>
-        <li>utm_campaign: {utm_campaign}</li>
-        <li>utm_term: {utm_term}</li>
-        <li>utm_content: {utm_content}</li>
-        <li>communication_medium: {props.communication_medium}</li>
       </div>
     </Row>
   );

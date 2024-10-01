@@ -6,13 +6,16 @@ import AvgRating from "./AvgRating";
 const Header = styled.div`
   display: flex;
   flex-direction: row;
+  background: #fff;
   justify-content: space-between;
   font-size: 1.8rem;
-  padding: 0.5% 2%;
-  padding-top: 8px;
+  padding: 20px 2%;
   margin: 0;
   margin-top: -2px;
   margin-bottom: 5px;
+  position: sticky;
+  top: 0;
+  border-bottom: 4px solid #f2f6f9;
 `;
 
 const HeaderBlock = styled.div`
@@ -30,11 +33,11 @@ const HeaderCircle = styled.div`
   align-items: center;
   text-align: center;
   line-height: 1.6;
-  font-size: 3.4rem;
+  font-size: 2.6rem;
   border-radius: 50%;
   border: 4px solid #f2f6f9;
-  width: 110px;
-  height: 110px;
+  width: 85px;
+  height: 85px;
 `;
 
 const HeaderComment = styled.div`

@@ -243,7 +243,7 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
 
   return (
     <IntroData>
-      <h4>How to use the analytics page?</h4>
+      {/* <h4>How to use the analytics page?</h4>
       <div>
         At analytics page you can:
         <ul>
@@ -260,7 +260,7 @@ const ReportGenerator = ({ student, lesson, lessonData, date }) => {
         </ul>
       </div>
       <div>Lesson goal: {lesson.goal}</div>
-      {<button onClick={generateReport}>Generate report</button>}
+      {<button onClick={generateReport}>Generate report</button>} */}
       {generating ? (
         <Progress>
           <TailSpin

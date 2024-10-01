@@ -5,7 +5,7 @@ import TexteditorModal from "./TexteditorModal";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
   p {
     margin: 0.5% 0;
   }

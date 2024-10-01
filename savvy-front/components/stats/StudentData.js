@@ -495,14 +495,16 @@ const Person = ({
         <Name className="div1">
           <div className="name">
             {" "}
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={(e) => {
-                passSelectedStudent(student.id);
-                setIsSelected(e.target.checked);
-              }}
-            />
+            {passSelectedStudent && (
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={(e) => {
+                  passSelectedStudent(student.id);
+                  setIsSelected(e.target.checked);
+                }}
+              />
+            )}
             {`${student.name} ${student.surname || ""}`}
           </div>
           <div className="email">{student.email}</div>
@@ -525,20 +527,21 @@ const Person = ({
         <Square className="div3" inputColor={color}>
           <div>
             {type !== "lesson_analytics"
-              ? ((total / active_lessons.length) * 100).toFixed(0)
-              : Math.min(
+              ? `${total} / ${active_lessons.length}`
+              : `${Math.min(
                   (maxes[0].progress /
                     maxes[0].lesson.structure.lessonItems.length) *
                     100,
                   100
-                ).toFixed(0)}
-            %
+                ).toFixed(0)}%`}
           </div>
         </Square>
         <ButtonBox>
-          <SimpleButton className="div4" onClick={() => setSecret(!secret)}>
-            {secret ? "Open" : "Close"}
-          </SimpleButton>
+          {type !== "all_users_page" ? (
+            <SimpleButton className="div4" onClick={() => setSecret(!secret)}>
+              {secret ? "Open" : "Close"}
+            </SimpleButton>
+          ) : null}
         </ButtonBox>
         <RegDate
           className="div5"
@@ -556,110 +559,114 @@ const Person = ({
             : "Undefined"}
         </RegDate>
       </Header>
-      <Open secret={secret}>
-        {type !== "lesson_analytics" && (
-          <EmailBlock>
-            <h2>Connect</h2>
-            <Editor className="editor">
-              <DynamicLoadedEditor
-                getEditorText={setMessage}
-                value={""}
-                name="text"
-              />
-            </Editor>
-            <SendEmailButton onClick={handleSendMessage}>
-              {sendMessageLoading ? "Sending..." : "Send Email"}
-            </SendEmailButton>
-            <Buttons>
-              {student.number && (
-                <>
-                  <SendButton>
-                    <a
-                      target="_blank"
-                      href={`https://wa.me/${checkPhoneNumber(
-                        student.number
-                      )}?text=Добрый!`}
-                    >
-                      WhatsApp
-                    </a>
-                  </SendButton>
-                  <SendButton>
-                    <a
-                      target="_blank"
-                      href={`https://t.me/${checkPhoneNumber(student.number)}`}
-                    >
-                      Telegram
-                    </a>
-                  </SendButton>
-                </>
-              )}
-              {courseVisit && (
-                <>
-                  <SendButton onClick={() => handleSendEmail("hello")}>
-                    Welcome Email
-                  </SendButton>
-                  <SendButton onClick={() => handleSendEmail("problem")}>
-                    Problem Email
-                  </SendButton>
-                  <SendButton onClick={() => handleSendEmail("motivation")}>
-                    Motivation Email
-                  </SendButton>
-                </>
-              )}
-            </Buttons>
-            {courseVisit &&
-              courseVisit.reminders &&
-              courseVisit.reminders.map((r) => (
-                <li key={r}>{moment(r).format("LLL")}</li>
-              ))}
-          </EmailBlock>
-        )}
-        <Block>
+      {type !== "all_users_page" ? (
+        <Open secret={secret}>
           {type !== "lesson_analytics" && (
-            <Journey
-              student={student}
-              maxes={maxes}
-              results={results}
-              lessons={lessons}
-            />
-          )}
-          <TopBox>
-            <div className="div1">Simulator Name</div>
-            <div className="div2">Progress</div>
-            <div className="div3">Result</div>
-            <div className="div4">Visits</div>
-            <div className="div5">First action</div>
-            <div className="div6">Last action</div>
-            <div className="div7"></div>
-          </TopBox>
-          {lessons
-            .filter((l) => l.published)
-            .sort((a, b) => a.number - b.number)
-            .map((lesson, index) => {
-              let res = maxes.filter((r) => r.lesson.id === lesson.id);
-              return (
-                <LessonData
-                  key={lesson.id}
-                  lesson={lesson}
-                  index={index}
-                  coursePageID={coursePageID}
-                  student={student}
-                  type={type}
-                  res={res}
-                  date={
-                    type !== "lesson_analytics"
-                      ? courseVisit
-                        ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
-                        : "Undefined"
-                      : results.length > 0
-                      ? moment(results[0].createdAt).format("Do MMMM YYYY")
-                      : "Undefined"
-                  }
+            <EmailBlock>
+              <h2>Connect</h2>
+              <Editor className="editor">
+                <DynamicLoadedEditor
+                  getEditorText={setMessage}
+                  value={""}
+                  name="text"
                 />
-              );
-            })}
-        </Block>
-      </Open>
+              </Editor>
+              <SendEmailButton onClick={handleSendMessage}>
+                {sendMessageLoading ? "Sending..." : "Send Email"}
+              </SendEmailButton>
+              <Buttons>
+                {student.number && (
+                  <>
+                    <SendButton>
+                      <a
+                        target="_blank"
+                        href={`https://wa.me/${checkPhoneNumber(
+                          student.number
+                        )}?text=Добрый!`}
+                      >
+                        WhatsApp
+                      </a>
+                    </SendButton>
+                    <SendButton>
+                      <a
+                        target="_blank"
+                        href={`https://t.me/${checkPhoneNumber(
+                          student.number
+                        )}`}
+                      >
+                        Telegram
+                      </a>
+                    </SendButton>
+                  </>
+                )}
+                {courseVisit && (
+                  <>
+                    <SendButton onClick={() => handleSendEmail("hello")}>
+                      Welcome Email
+                    </SendButton>
+                    <SendButton onClick={() => handleSendEmail("problem")}>
+                      Problem Email
+                    </SendButton>
+                    <SendButton onClick={() => handleSendEmail("motivation")}>
+                      Motivation Email
+                    </SendButton>
+                  </>
+                )}
+              </Buttons>
+              {courseVisit &&
+                courseVisit.reminders &&
+                courseVisit.reminders.map((r) => (
+                  <li key={r}>{moment(r).format("LLL")}</li>
+                ))}
+            </EmailBlock>
+          )}
+          <Block>
+            {type !== "lesson_analytics" && (
+              <Journey
+                student={student}
+                maxes={maxes}
+                results={results}
+                lessons={lessons}
+              />
+            )}
+            <TopBox>
+              <div className="div1">Simulator Name</div>
+              <div className="div2">Progress</div>
+              <div className="div3">Result</div>
+              <div className="div4">Visits</div>
+              <div className="div5">First action</div>
+              <div className="div6">Last action</div>
+              <div className="div7"></div>
+            </TopBox>
+            {lessons
+              .filter((l) => l.published)
+              .sort((a, b) => a.number - b.number)
+              .map((lesson, index) => {
+                let res = maxes.filter((r) => r.lesson.id === lesson.id);
+                return (
+                  <LessonData
+                    key={lesson.id}
+                    lesson={lesson}
+                    index={index}
+                    coursePageID={coursePageID}
+                    student={student}
+                    type={type}
+                    res={res}
+                    date={
+                      type !== "lesson_analytics"
+                        ? courseVisit
+                          ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
+                          : "Undefined"
+                        : results.length > 0
+                        ? moment(results[0].createdAt).format("Do MMMM YYYY")
+                        : "Undefined"
+                    }
+                  />
+                );
+              })}
+          </Block>
+        </Open>
+      ) : null}
     </Styles>
   );
 };

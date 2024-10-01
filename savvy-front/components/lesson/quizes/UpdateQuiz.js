@@ -313,7 +313,7 @@ const UpdateQuiz = (props) => {
       <EditorInfoSection>
         <h3 className="label">Instructor Name</h3>
         <input
-          defaultValue={name}
+          defaultValue={instructorName}
           onChange={(e) => setInstructorName(e.target.value)}
         />
       </EditorInfoSection>

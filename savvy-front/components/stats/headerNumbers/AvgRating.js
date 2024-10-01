@@ -43,23 +43,6 @@ const AvgRating = ({ lesson, type }) => {
 
   const uniqueRatings = getUniqueRatingsWithHighestValues(ratings);
 
-  const calculateMedian = (ratings) => {
-    // Extract ratings values and sort them
-    const sortedRatings = ratings.map((r) => r.rating).sort((a, b) => a - b);
-
-    const length = sortedRatings.length;
-    const middle = Math.floor(length / 2);
-
-    // Calculate the median
-    if (length % 2 === 0) {
-      // If even, return the average of the two middle values
-      return (sortedRatings[middle - 1] + sortedRatings[middle]) / 2;
-    } else {
-      // If odd, return the middle value
-      return sortedRatings[middle];
-    }
-  };
-
   const calculateMode = (ratings) => {
     const frequency = {};
 

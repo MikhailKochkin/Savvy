@@ -32,16 +32,16 @@ const STUDENTS_QUERY = gql`
       surname
       tags
       email
-      number
-      studentFeedback {
-        id
-        lesson {
-          id
-          coursePage {
-            id
-          }
-        }
-      }
+      # number
+      # studentFeedback {
+      #   id
+      #   lesson {
+      #     id
+      #     coursePage {
+      #       id
+      #     }
+      #   }
+      # }
       courseVisits {
         id
         reminders
@@ -51,20 +51,20 @@ const STUDENTS_QUERY = gql`
         }
         createdAt
       }
-      challengeResults {
-        id
-        wrong
-        correct
-        createdAt
-        lesson {
-          id
-          name
-          coursePage {
-            id
-            title
-          }
-        }
-      }
+      # challengeResults {
+      #   id
+      #   wrong
+      #   correct
+      #   createdAt
+      #   lesson {
+      #     id
+      #     name
+      #     coursePage {
+      #       id
+      #       title
+      #     }
+      #   }
+      # }
     }
   }
 `;
@@ -73,150 +73,150 @@ const LESSONS_QUERY = gql`
   query LESSONS_QUERY($id: String!) {
     lessons(where: { coursePage: { id: { equals: $id } } }) {
       id
-      text
-      name
-      open
-      type
-      goal
+      # text
+      # name
+      # open
+      # type
+      # goal
       published
-      assignment
-      number
-      user {
-        id
-        name
-        surname
-      }
-      structure
-      coursePage {
-        id
-      }
-      forum {
-        id
-      }
-      shots {
-        id
-        title
-        parts
-        comments
-        user {
-          id
-        }
-      }
-      #   lessonResults {
+      # assignment
+      # number
+      # user {
+      #   id
+      #   name
+      #   surname
+      # }
+      # structure
+      # coursePage {
+      #   id
+      # }
+      # forum {
+      #   id
+      # }
+      # shots {
+      #   id
+      #   title
+      #   parts
+      #   comments
+      #   user {
       #     id
-      #     progress
-      #     createdAt
-      #     updatedAt
-      #     student {
+      #   }
+      # }
+      # #   lessonResults {
+      # #     id
+      # #     progress
+      # #     createdAt
+      # #     updatedAt
+      # #     student {
+      # #       id
+      # #       name
+      # #       surname
+      # #       number
+      # #       email
+      # #       new_subjects {
+      # #         id
+      # #       }
+      # #     }
+      # #   }
+      # newTests {
+      #   id
+      #   question
+      #   answers
+      #   correct
+      #   next
+      #   type
+      #   goal
+      # }
+      # quizes {
+      #   id
+      #   question
+      #   answer
+      #   next
+      #   type
+      #   goal
+      # }
+      # forum {
+      #   rating {
+      #     id
+      #     rating
+      #     user {
       #       id
       #       name
       #       surname
-      #       number
-      #       email
-      #       new_subjects {
-      #         id
-      #       }
       #     }
       #   }
-      newTests {
-        id
-        question
-        answers
-        correct
-        next
-        type
-        goal
-      }
-      quizes {
-        id
-        question
-        answer
-        next
-        type
-        goal
-      }
-      forum {
-        rating {
-          id
-          rating
-          user {
-            id
-            name
-            surname
-          }
-        }
-      }
+      # }
+      # # documents {
+      # #   id
+      # #   title
+      # #   documentResults {
+      # #     id
+      # #     user {
+      # #       id
+      # #     }
+      # #     document {
+      # #       id
+      # #     }
+      # #     answers
+      # #     drafts
+      # #     createdAt
+      # #   }
+      # # }
+      # notes {
+      #   id
+      #   text
+      #   type
+      #   next
+      # }
+      # chats {
+      #   id
+      #   name
+      #   messages
+      #   user {
+      #     id
+      #   }
+      # }
+      # testPractices {
+      #   id
+      #   tasks
+      #   goal
+      #   tasksNum
+      #   intro
+      #   successText
+      #   failureText
+      # }
+      # problems {
+      #   id
+      #   text
+      #   steps
+      #   nodeID
+      #   nodeType
+      #   goal
+      #   name
+      # }
+      # texteditors {
+      #   id
+      #   text
+      #   totalMistakes
+      #   goal
+      # }
+      # constructions {
+      #   id
+      #   name
+      #   variants
+      #   elements
+      #   columnsNum
+      #   answer
+      #   goal
+      # }
       # documents {
       #   id
       #   title
-      #   documentResults {
-      #     id
-      #     user {
-      #       id
-      #     }
-      #     document {
-      #       id
-      #     }
-      #     answers
-      #     drafts
-      #     createdAt
-      #   }
+      #   goal
       # }
-      notes {
-        id
-        text
-        type
-        next
-      }
-      chats {
-        id
-        name
-        messages
-        user {
-          id
-        }
-      }
-      testPractices {
-        id
-        tasks
-        goal
-        tasksNum
-        intro
-        successText
-        failureText
-      }
-      problems {
-        id
-        text
-        steps
-        nodeID
-        nodeType
-        goal
-        name
-      }
-      texteditors {
-        id
-        text
-        totalMistakes
-        goal
-      }
-      constructions {
-        id
-        name
-        variants
-        elements
-        columnsNum
-        answer
-        goal
-      }
-      documents {
-        id
-        title
-        goal
-      }
-      # user {
-      #   id
-      # }
+      # # user {
+      # #   id
+      # # }
     }
   }
 `;
@@ -251,7 +251,7 @@ const StudentsData = (props) => {
   return (
     <div>
       <UserAnalytics
-        coursePage={coursePage.title}
+        coursePage={coursePage}
         coursePageID={coursePage.id}
         lessons={lessons}
         students={students}
