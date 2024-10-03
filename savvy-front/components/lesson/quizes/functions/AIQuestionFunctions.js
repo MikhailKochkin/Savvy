@@ -131,10 +131,6 @@ export const generateHint = async (
    Use this approach: ${hintingMethods[allHints.length]} 
   Do NOT USE the words from the correct answer. DO NOT reveal the correct answer. `;
   //    Use this approach: ${hintingMethods[allHints.length]}
-  console.log(
-    "prompt",
-    hintIntro + hintPrompt + hintAnswerRecommendations + context
-  );
   try {
     // Make a POST request to the API endpoint
     const response = await fetch(url, {

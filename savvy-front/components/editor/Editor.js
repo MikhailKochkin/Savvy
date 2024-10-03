@@ -523,11 +523,6 @@ const deserialize = (el) => {
         typeof item === "object" && item !== null && !Array.isArray(item)
     );
   };
-  // console.log(
-  //   "el",
-  //   el,
-  //   el.nodeName == "TABLE" ? filterObjects(children) : null
-  // );
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -1239,7 +1234,6 @@ const App = (props) => {
           {type === "createError" && (
             <CreateQuiz getResult={getResult} lessonID={props.lessonId} />
           )}
-          {console.log("type", type)}
           {type === "error" && (
             <SingleQuiz
               key={modalData}

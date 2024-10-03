@@ -97,6 +97,16 @@ const TextBar = styled.div`
       height: auto;
     }
   }
+  blockquote {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 0;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    p {
+      margin: 10px 0;
+    }
+  }
   table {
     width: 100%;
     border: 1px solid #edefed;

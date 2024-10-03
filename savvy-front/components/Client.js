@@ -224,6 +224,7 @@ const DeleteClient = (props) => {
 };
 
 const Client = (props) => {
+  console.log("props", props);
   const [comment, setComment] = useState(props.comment);
   const [message, setMessage] = useState(`<p>Hi ${props.name},</p>`);
   const [subject, setSubject] = useState(
@@ -381,6 +382,9 @@ const Client = (props) => {
           props.communication_history.messages &&
           props.communication_history.messages.map((m) => (
             <Message>
+              <div>
+                <b>Subject:</b> {m.subject}
+              </div>
               <div>{parse(m.message)}</div>
               <div> {moment(m.date).format("DD-MM-YYYY HH:mm")}</div>
             </Message>

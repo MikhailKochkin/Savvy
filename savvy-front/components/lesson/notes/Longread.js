@@ -73,7 +73,7 @@ const Container = styled.div`
     img {
       display: block;
       width: 70%;
-      max-width: 700px;
+      max-width: 1200px;
       object-fit: cover;
       max-height: 50em;
       box-shadow: "0 0 0 2px blue;";
