@@ -558,21 +558,27 @@ const ConElement = (props) => {
     tempElement.innerHTML = htmlValue;
 
     // Recursive function to check for text nodes
-    const hasTextNodes = (node) => {
+    const hasTextNodesOrImages = (node) => {
+      // Check if the node is a text node with non-empty content
       if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== "") {
         return true;
       }
+      // Check if the node is an image element
+      if (node.nodeName === "IMG") {
+        return true;
+      }
+      // Recursively check child nodes
       for (let childNode of node.childNodes) {
-        if (hasTextNodes(childNode)) {
+        if (hasTextNodesOrImages(childNode)) {
           return true;
         }
       }
       return false;
     };
 
-    // Check if any child nodes contain text nodes
+    // Check if any child nodes contain text nodes or <img> tags
     return Array.from(tempElement.childNodes).some((node) =>
-      hasTextNodes(node)
+      hasTextNodesOrImages(node)
     );
   };
 

@@ -228,7 +228,12 @@ const Client = (props) => {
   const [comment, setComment] = useState(props.comment);
   const [message, setMessage] = useState(`<p>Hi ${props.name},</p>`);
   const [subject, setSubject] = useState(
-    `Invitation to the Legal Ed Tech Community`
+    props.communication_history?.messages?.length > 0
+      ? "Re: " +
+          props.communication_history.messages[
+            props.communication_history.messages.length - 1
+          ].subject
+      : ``
   );
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();

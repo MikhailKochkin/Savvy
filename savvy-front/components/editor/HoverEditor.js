@@ -239,7 +239,6 @@ const deserialize = (el) => {
       children.length > 0 ? children : [{ text: "" }]
     );
   }
-
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -382,7 +381,7 @@ const toggleFormat = (editor, format) => {
 };
 
 const addImageElement = (editor) => {
-  let link = prompt("Ссылка: ");
+  let link = prompt("Link: ");
   editor.selection.anchor.path == [0, 0] &&
     editor.selection.anchor.offset == 0 &&
     editor.insertBreak();

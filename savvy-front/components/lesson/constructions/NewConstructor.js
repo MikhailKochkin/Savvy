@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 import UpdateNewConstructor from "./UpdateNewConstructor";
 import Summary from "./Summary";
 import Document from "./Document";
+import Longread from "./Longread";
 
 const CONSTRUCTION_RESULT_QUERY = gql`
   query CONSTRUCTION_RESULT_QUERY($id: String!, $studentId: String!) {
@@ -24,21 +25,21 @@ const CONSTRUCTION_RESULT_QUERY = gql`
 `;
 
 const Styles = styled.div`
+  width: 100%;
   @media (max-width: 800px) {
     width: 100%;
   }
 `;
 
 const Container = styled.div`
-  width: ${(props) => (props.story ? "95vw" : "100%")};
-  max-width: 1350px;
+  width: ${(props) => (props.story ? "100vw" : "100%")};
   display: flex;
   margin-bottom: 4%;
   font-size: 1.4rem;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  background: #f8f9fa;
+  /* background: #f8f9fa; */
   @media (max-width: 800px) {
     font-size: 1.4rem;
     width: 100%;
@@ -101,7 +102,21 @@ const NewConstructor = (props) => {
             constructionResults={queryData}
           />
         ) : null}
-        {!update && construction.type != "SUMMARY" ? (
+        {!update && construction.type == "LONGREAD" ? (
+          <Longread
+            key={props.key}
+            lessonID={props.lessonID}
+            construction={props.construction}
+            complexity={props.complexity}
+            me={props.me}
+            story={props.story}
+            elements={elements}
+            getResult={getResult}
+          />
+        ) : null}
+        {!update &&
+        construction.type != "SUMMARY" &&
+        construction.type !== "LONGREAD" ? (
           <Document
             key={props.key}
             lessonID={props.lessonID}
