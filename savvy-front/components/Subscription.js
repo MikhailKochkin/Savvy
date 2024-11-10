@@ -688,7 +688,7 @@ const Subscription = (props) => {
             {" "}
             <h1 className="header" id="subscription_start">
               Выберите план и откройте доступ к 35+ курсам.{" "}
-              <span>🎉 Спец условия только 10.10!</span>
+              <span>🎉 Черная пятница 15.11!</span>
             </h1>
             <h3>
               {isReferralDiscountAvailable &&
@@ -733,7 +733,7 @@ const Subscription = (props) => {
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Доступные курсы (🎉 только 10.10){" "}
+                    Доступные курсы (🎉 до 15.11){" "}
                     <span
                       data-tooltip-id="my-tooltip"
                       data-tooltip-html={`Сразу после оплаты вы получите доступ к 1 курсу.<br/>
@@ -796,7 +796,7 @@ const Subscription = (props) => {
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Доступные курсы (🎉 только 10.10){" "}
+                    Доступные курсы (🎉 до 15.11){" "}
                     <span
                       data-tooltip-id="my-tooltip"
                       data-tooltip-html={`Сразу после оплаты вы получите доступ к 3 курсам.<br/>
@@ -910,7 +910,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    <span>24 000</span> 14 990 ₽ / 6 месяцев
+                    <span>24 000</span> 13 990 ₽ / 6 месяцев
                   </div>
                 </div>
                 <div className="section">
@@ -952,11 +952,11 @@ const Subscription = (props) => {
                     X
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(14990)}>
+                <ButtonBuy onClick={(e) => completePayment(13990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(14990)}>
-                  Оформить рассрочку за 2490/мес
+                <ButtonOpen onClick={(e) => getInstallments(13990)}>
+                  Оформить рассрочку за 2330/мес
                 </ButtonOpen>
               </Form>
               <Form>
