@@ -2634,6 +2634,7 @@ type Mutation {
   addUserToCourse(coursePageId: String, email: String): User
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   botSignup(email: String, name: String, number: String, password: String, surname: String): AuthPayload
+  cancelSubscription(id: String): Subscription
   checkAssignment(checked: Boolean, id: String): LessonResult
   copyLesson(coursePageId: String!, id: String!): Lesson
   createBotDialogue(journey: [String], source: String): BotDialogue

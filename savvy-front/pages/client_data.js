@@ -1,6 +1,7 @@
 import React from "react";
 import ClientData from "../components/ClientData";
 import { useQuery, gql } from "@apollo/client";
+import { useUser } from "../components/User";
 
 const CLIENTS_QUERY = gql`
   query CLIENTS_QUERY {
@@ -25,9 +26,17 @@ const CLIENTS_QUERY = gql`
 
 const client_data = () => {
   const { loading, error, data } = useQuery(CLIENTS_QUERY);
+  const me = useUser();
+
   if (loading) return <p>Loading...</p>;
   let initial_clients = data.businessClients;
-  return <ClientData initial_clients={initial_clients} />;
+  return (
+    <>
+      {me && me.permissions.includes("ADMIN") && (
+        <ClientData initial_clients={initial_clients} />
+      )}
+    </>
+  );
 };
 
 export default client_data;

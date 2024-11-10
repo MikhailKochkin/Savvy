@@ -291,9 +291,10 @@ const NewNav = (props) => {
                 </div>
               </Link>
             )}
-          <Link legacyBehavior href="/blog">
+          <Link legacyBehavior href="/security">
             <div className="blog">
-              <a>{t("blog")}</a>
+              {/* <a>{t("blog")}</a> */}
+              <a>Security</a>
             </div>
           </Link>
           {me && (

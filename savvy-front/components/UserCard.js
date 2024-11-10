@@ -30,6 +30,14 @@ const CREATE_SUBSCRIPTION_MUTATION = gql`
   }
 `;
 
+const CANCEL_SUBSCRIPTION_MUTATION = gql`
+  mutation CANCEL_SUBSCRIPTION_MUTATION($id: String!) {
+    cancelSubscription(id: $id) {
+      id
+    }
+  }
+`;
+
 const UPDATE_SUBSCRIPTION_MUTATION = gql`
   mutation UPDATE_SUBSCRIPTION_MUTATION(
     $id: String!
@@ -310,6 +318,11 @@ const UserCard = memo((props) => {
     updateSubscription,
     { data: updateData, loading: updateLoading, error: updateError },
   ] = useMutation(UPDATE_SUBSCRIPTION_MUTATION);
+
+  const [
+    cancelSubscription,
+    { data: cancelData, loading: cancelLoading, error: cancelError },
+  ] = useMutation(CANCEL_SUBSCRIPTION_MUTATION);
 
   const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
     useMutation(SEND_MESSAGE_MUTATION);
@@ -607,6 +620,20 @@ const UserCard = memo((props) => {
             >
               Create Subscription
             </button>
+            {props.subscriptions?.length > 0 && (
+              <button
+                onClick={async (e) => {
+                  const res = await cancelSubscription({
+                    variables: {
+                      id: props.subscriptions[0].id,
+                    },
+                  });
+                  alert("Subscription cancelled: ", props.subscriptions[0].id);
+                }}
+              >
+                Cancel Subscription
+              </button>
+            )}
           </div>
           <form
             onSubmit={async (e) => {

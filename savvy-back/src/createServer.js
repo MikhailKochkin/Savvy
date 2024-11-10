@@ -2,23 +2,19 @@ const { ApolloServer } = require("@apollo/server");
 const {
   ApolloServerPluginLandingPageGraphQLPlayground,
 } = require("@apollo/server-plugin-landing-page-graphql-playground");
-
-const {
-  ApolloServerPluginLandingPageDisabled,
-} = require("@apollo/server/plugin/disabled");
-
 const { PrismaClient } = require("@prisma/client");
 const { nexusPrisma } = require("@mercurialweb/nexus-plugin-prisma");
-// const { DateTimeResolver, JSONObjectResolver } = require("graphql-scalars");
-// const { GraphQLScalarType } = require("graphql/type");
 const { makeSchema, connectionPlugin } = require("nexus");
 const types = require("./types");
 
 const prisma = new PrismaClient();
 
+const areIntrospectionAndPlaygroundEnabled = !(
+  process.env.NODE_ENV == "production"
+);
 const server = new ApolloServer({
-  playground: true,
-  introspection: true,
+  introspection: areIntrospectionAndPlaygroundEnabled,
+  playground: areIntrospectionAndPlaygroundEnabled,
   apollo: {
     graphRef: process.env.APOLLO_GRAPH_REF, // replace with your graph id and variant
   },

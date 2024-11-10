@@ -5223,6 +5223,20 @@ const Mutation = mutationType({
         });
       },
     });
+    t.field("cancelSubscription", {
+      type: "Subscription",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.subscription.update({
+          where: { id: args.id },
+          data: {
+            isActive: false,
+          },
+        });
+      },
+    });
     t.field("createReferral", {
       type: "Referral",
       args: {

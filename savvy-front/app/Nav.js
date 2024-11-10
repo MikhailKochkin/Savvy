@@ -261,14 +261,6 @@ const Nav = (props) => {
                   </div>
                 </Link>
               </CourseMenu>
-              <UserData>
-                <Link legacyBehavior href="/blog">
-                  <div className="blog">
-                    {/* <a>{t("blog")}</a> */}
-                    <a>Blog</a>
-                  </div>
-                </Link>
-              </UserData>
             </StyledHeader>
           </>
         )}

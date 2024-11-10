@@ -5544,6 +5544,7 @@ export interface NexusGenFieldTypes {
     addUserToCourse: NexusGenRootTypes['User'] | null; // User
     advancedSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     botSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    cancelSubscription: NexusGenRootTypes['Subscription'] | null; // Subscription
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     copyLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     createBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
@@ -6671,6 +6672,7 @@ export interface NexusGenFieldTypeNames {
     addUserToCourse: 'User'
     advancedSignup: 'AuthPayload'
     botSignup: 'AuthPayload'
+    cancelSubscription: 'Subscription'
     checkAssignment: 'LessonResult'
     copyLesson: 'Lesson'
     createBotDialogue: 'BotDialogue'
@@ -7640,6 +7642,9 @@ export interface NexusGenArgTypes {
       number?: string | null; // String
       password?: string | null; // String
       surname?: string | null; // String
+    }
+    cancelSubscription: { // args
+      id?: string | null; // String
     }
     checkAssignment: { // args
       checked?: boolean | null; // Boolean
