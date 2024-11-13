@@ -53,6 +53,7 @@ const Lesson = objectType({
     t.model.problems();
     t.model.constructions();
     t.model.texteditors();
+    t.model.comments();
     t.model.createdAt();
     t.model.updatedAt();
   },
@@ -89,8 +90,28 @@ const Feedback = objectType({
   },
 });
 
+const Comment = objectType({
+  name: "Comment",
+  definition(t) {
+    t.model.id();
+    t.model.text();
+    t.model.blockId();
+    t.model.status();
+    t.model.userId();
+    t.model.lessonId();
+    t.model.lesson();
+    t.model.user();
+    t.model.sourceCommentId();
+    t.model.parentComment();
+    t.model.replies();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   Lesson,
   LessonResults,
   Feedback,
+  Comment,
 };

@@ -70,6 +70,8 @@ const Query = queryType({
     t.crud.referrals({ ordering: true, filtering: true });
     t.crud.chatResults({ ordering: true, filtering: true });
     t.crud.chatResult();
+    t.crud.comments({ ordering: true, filtering: true });
+    t.crud.comment();
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {

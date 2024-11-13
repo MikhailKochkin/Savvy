@@ -35,6 +35,36 @@ const SINGLE_LESSON_QUERY = gql`
       coursePage {
         id
       }
+      comments {
+        id
+        text
+        status
+        sourceCommentId
+        blockId
+        createdAt
+        updatedAt
+        user {
+          id
+          name
+          surname
+          image
+        }
+        replies {
+          id
+          text
+          status
+          sourceCommentId
+          blockId
+          createdAt
+          updatedAt
+          user {
+            id
+            name
+            surname
+            image
+          }
+        }
+      }
       shots {
         id
         title

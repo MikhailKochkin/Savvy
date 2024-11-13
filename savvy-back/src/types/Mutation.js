@@ -15,7 +15,6 @@ const { promisify } = require("util");
 const { randomBytes } = require("crypto");
 const axios = require("axios");
 const { YooCheckout, IGetPaymentList } = require("@a2seven/yoo-checkout");
-const idempotenceKey = "02347fc4-a4f0-456db-807e-f0d11c2eс4a5";
 
 const community_checkout = new YooCheckout({
   shopId: process.env.SHOP_ID_IP,
@@ -99,7 +98,7 @@ const makeANiceEmail = (text) => `
   </div>
 `;
 
-const newOrderEmail = (client, surname, email, course, price) => `
+const newOrderEmail = (client, surname, email, course, price, comment) => `
   <div className="email" style="
     padding: 20px;
     font-family: sans-serif;
@@ -110,6 +109,7 @@ const newOrderEmail = (client, surname, email, course, price) => `
     <p>${client} ${surname} оформил новый заказ.</p>
     <p> Имейл: ${email} </p>
     <p>Курс – ${course}, цена – ${price} </p>
+    <p>Комментарий: ${comment} </p>
   </div>
 `;
 
@@ -3873,7 +3873,8 @@ const Mutation = mutationType({
             user.surname,
             user.email,
             coursePage?.title ? coursePage.title : "BeSavvy Plus",
-            args.price
+            args.price,
+            args.comment
           ),
         });
 
@@ -5254,6 +5255,104 @@ const Mutation = mutationType({
           },
         });
         return Referral;
+      },
+    });
+    t.field("createComment", {
+      type: "Comment",
+      args: {
+        text: stringArg(),
+        lessonId: stringArg(),
+        blockId: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.comment.create({
+          data: {
+            text: args.text,
+            blockId: args.blockId,
+            lesson: {
+              connect: { id: args.lessonId },
+            },
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+          },
+        });
+      },
+    });
+    t.field("deleteComment", {
+      type: "Comment",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.comment.delete({ where: { id: args.id } });
+      },
+    });
+    t.field("updateComment", {
+      type: "Comment",
+      args: {
+        id: stringArg(),
+        text: stringArg(),
+        status: arg({
+          type: "CommentStatus",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.comment.update({
+          where: { id: args.id },
+          data: { text: args.text, status: args.status },
+        });
+      },
+    });
+    t.field("createReply", {
+      type: "Comment",
+      args: {
+        text: stringArg(),
+        lessonId: stringArg(),
+        blockId: stringArg(),
+        sourceCommentId: stringArg(), // New argument to link to the parent comment
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.comment.create({
+          data: {
+            text: args.text,
+            blockId: args.blockId,
+            lesson: {
+              connect: { id: args.lessonId },
+            },
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            parentComment: {
+              connect: { id: args.sourceCommentId }, // Connect reply to the parent comment
+            },
+          },
+        });
+      },
+    });
+    t.field("deleteReply", {
+      type: "Comment",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.comment.delete({ where: { id: args.id } });
+      },
+    });
+    t.field("updateReply", {
+      type: "Comment",
+      args: {
+        id: stringArg(),
+        text: stringArg(),
+        status: arg({
+          type: "CommentStatus",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.comment.update({
+          where: { id: args.id },
+          data: { text: args.text, status: args.status },
+        });
       },
     });
   },

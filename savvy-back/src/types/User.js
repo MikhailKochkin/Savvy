@@ -46,6 +46,7 @@ const User = objectType({
     t.model.company();
     t.model.lessonResults();
     t.model.challengeResults();
+    t.model.comments();
   },
 });
 

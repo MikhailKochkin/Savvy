@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -445,8 +444,17 @@ const UpdateNewConstructor = (props) => {
           </>
         )}
       </Explainer>
-      <h3>Goal</h3>
-      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
+      {/* <h3>Goal</h3>
+      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea> */}
+      <select
+        name="types"
+        id="types"
+        defaultValue={type}
+        onChange={(e) => setType(e.target.value)}
+      >
+        <option value="DOCUMENT">Document</option>
+        <option value="SUMMARY">Summary</option>
+      </select>
       <Number>
         <div className="name"># of blocks: </div>
         <Buttons>
@@ -480,15 +488,6 @@ const UpdateNewConstructor = (props) => {
           onChange={(e) => setColumns(parseInt(e.target.value))}
         />
       </Number>
-      <select
-        name="types"
-        id="types"
-        defaultValue={type}
-        onChange={(e) => setType(e.target.value)}
-      >
-        <option value="DOCUMENT">Document</option>
-        <option value="SUMMARY">Summary</option>
-      </select>
 
       <Block columns={columnsNum}>
         {elements.map((el, i) => {
@@ -527,8 +526,6 @@ const UpdateNewConstructor = (props) => {
     </Center>
   );
 };
-
-export default UpdateNewConstructor;
 
 const ConElement = (props) => {
   const { type } = props;
@@ -799,3 +796,5 @@ const ConElement = (props) => {
     </Element>
   );
 };
+
+export default UpdateNewConstructor;

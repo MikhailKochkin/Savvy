@@ -378,6 +378,7 @@ const NoteStyles = styled.div`
       padding: 0% 2.5%;
       position: relative;
       padding: 15px 15px;
+      vertical-align: top;
     }
   }
   @media (max-width: 800px) {

@@ -680,6 +680,29 @@ const Subscription = (props) => {
     });
   };
 
+  const makeInternationalPayment = async (price) => {
+    if (!props.me) {
+      router.push(
+        `auth?pathname=subscription?courseId=${props.courseId}&referrerId=${props.referrerId}`
+      );
+      return;
+    } else {
+      alert(
+        "Для проведения международного платежа мы сгенерируем для вас специальную ссылку. Эту ссылку мы направим вам на почту. После оплаты вы получите доступ к курсам."
+      );
+      const res = await createOrder({
+        variables: {
+          coursePageId: props.courseId
+            ? props.courseId
+            : "clwl0no8h00002xuxtmyq8778",
+          price: price,
+          userId: props.me.id,
+          comment: "Заявка на международный платеж",
+        },
+      });
+    }
+  };
+
   return (
     <Styles>
       <Container>
@@ -709,7 +732,7 @@ const Subscription = (props) => {
             >
               {/* Yearly */}
               На 6 месяцев
-              <DiscountLabel>-25%</DiscountLabel>
+              <DiscountLabel>-48%</DiscountLabel>
             </SliderButton>
           </SliderContainer>
         </TopBar>
@@ -776,7 +799,10 @@ const Subscription = (props) => {
                     completePayment(isReferralDiscountAvailable ? 1590 : 1990)
                   }
                 >
-                  {loading_data ? "..." : "Подписаться"}
+                  {loading_data ? "..." : "Подписаться (RU карта)"}
+                </ButtonBuy>
+                <ButtonBuy onClick={(e) => makeInternationalPayment(1990)}>
+                  Подписаться (Intl карта)
                 </ButtonBuy>
               </Form>
               <Form>
@@ -839,9 +865,11 @@ const Subscription = (props) => {
                     completePayment(isReferralDiscountAvailable ? 2990 : 3990)
                   }
                 >
-                  {loading_data ? "..." : "Подписаться"}
+                  {loading_data ? "..." : "Подписаться (RU карта)"}
                 </ButtonBuy>
-                <CommentBlock>Самый популярный 🎉</CommentBlock>
+                <ButtonBuy onClick={(e) => makeInternationalPayment(3990)}>
+                  Подписаться (Intl карта)
+                </ButtonBuy>
               </Form>
               <Form>
                 <Banner>

@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
 import Block from "./Block";
+import CommentSection from "./CommentSection";
 
 import CreateQuiz from "../create/CreateQuiz";
 import SingleQuiz from "./quizes/SingleQuiz";
@@ -921,6 +922,13 @@ const LessonBlock = (props) => {
             />
           </>
         )}
+
+        <CommentSection
+          comments={lesson.comments.filter((c) => c.blockId == el.id)}
+          lessonId={lesson.id}
+          blockId={el.id}
+          me={me}
+        />
 
         <Buttons>
           <div className="first">

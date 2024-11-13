@@ -652,6 +652,92 @@ input ClientMessages {
   messages: [ClientMessage]
 }
 
+type Comment {
+  blockId: String!
+  createdAt: DateTime!
+  id: String!
+  lesson: Lesson!
+  lessonId: String!
+  parentComment: Comment
+  replies(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int, last: Int): [Comment!]!
+  sourceCommentId: String
+  status: CommentStatus!
+  text: String!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+input CommentListRelationFilter {
+  every: CommentWhereInput
+  none: CommentWhereInput
+  some: CommentWhereInput
+}
+
+input CommentOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CommentOrderByWithRelationInput {
+  blockId: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrder
+  parentComment: CommentOrderByWithRelationInput
+  replies: CommentOrderByRelationAggregateInput
+  sourceCommentId: SortOrderInput
+  status: SortOrder
+  text: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
+enum CommentStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+input CommentWhereInput {
+  AND: [CommentWhereInput!]
+  NOT: [CommentWhereInput!]
+  OR: [CommentWhereInput!]
+  blockId: StringFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  parentComment: CommentWhereInput
+  replies: CommentListRelationFilter
+  sourceCommentId: StringNullableFilter
+  status: EnumCommentStatusFilter
+  text: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
+input CommentWhereUniqueInput {
+  AND: [CommentWhereInput!]
+  NOT: [CommentWhereInput!]
+  OR: [CommentWhereInput!]
+  blockId: StringFilter
+  createdAt: DateTimeFilter
+  id: String
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  parentComment: CommentWhereInput
+  replies: CommentListRelationFilter
+  sourceCommentId: StringNullableFilter
+  status: EnumCommentStatusFilter
+  text: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
 type CommunityMember {
   createdAt: DateTime!
   email: String!
@@ -1639,6 +1725,13 @@ input EmailsList {
   emails: [Email]
 }
 
+input EnumCommentStatusFilter {
+  equals: CommentStatus
+  in: [CommentStatus!]
+  not: NestedEnumCommentStatusFilter
+  notIn: [CommentStatus!]
+}
+
 input EnumCourseTypeNullableFilter {
   equals: CourseType
   in: [CourseType!]
@@ -2142,6 +2235,7 @@ type Lesson {
   challenge_num: Int
   change: String
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int): [Chat!]!
+  comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int, last: Int): [Comment!]!
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   constructions(after: ConstructionWhereUniqueInput, before: ConstructionWhereUniqueInput, first: Int, last: Int): [Construction!]!
   context: String
@@ -2217,6 +2311,7 @@ input LessonOrderByWithRelationInput {
   change: SortOrderInput
   chatResults: ChatResultOrderByRelationAggregateInput
   chats: ChatOrderByRelationAggregateInput
+  comments: CommentOrderByRelationAggregateInput
   constructionResults: ConstructionResultOrderByRelationAggregateInput
   constructions: ConstructionOrderByRelationAggregateInput
   context: SortOrderInput
@@ -2357,6 +2452,7 @@ input LessonWhereInput {
   change: StringNullableFilter
   chatResults: ChatResultListRelationFilter
   chats: ChatListRelationFilter
+  comments: CommentListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
   context: StringNullableFilter
@@ -2423,6 +2519,7 @@ input LessonWhereUniqueInput {
   change: StringNullableFilter
   chatResults: ChatResultListRelationFilter
   chats: ChatListRelationFilter
+  comments: CommentListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
   context: StringNullableFilter
@@ -2644,6 +2741,7 @@ type Mutation {
   createChat(lessonId: String, messages: Messages, name: String, type: String): Chat
   createChatResult(chatId: String, lessonId: String, name: String, text: String): ChatResult
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
+  createComment(blockId: String, lessonId: String, text: String): Comment
   createCommunityMember(email: String, name: String, number: String, subscription: String, surname: String): PaymentInfo2
   createConfUser(conf_number: Int, email: String): ConfUser
   createConstruction(answer: [String], columnsNum: Int, elements: ElementsList, hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
@@ -2675,6 +2773,7 @@ type Mutation {
   createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeas, improvement: String, lessonId: String, quiz: String, result: String, type: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createReferral(referrerId: String): Referral
+  createReply(blockId: String, lessonId: String, sourceCommentId: String, text: String): Comment
   createShot(comments: [String], lessonId: String, name: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
   createStatement(forumId: String, miniforumId: String, text: String): Statement
@@ -2692,6 +2791,7 @@ type Mutation {
   deleteChat(id: String): Chat
   deleteClause(id: String): Clause
   deleteClient(id: String): BusinessClient
+  deleteComment(id: String): Comment
   deleteConstruction(id: String): Construction
   deleteDocument(id: String): Document
   deleteEmailCampaign(id: String): EmailCampaign
@@ -2705,6 +2805,7 @@ type Mutation {
   deletePost(id: String): Post
   deleteProblem(id: String): Problem
   deleteQuiz(id: String): Quiz
+  deleteReply(id: String): Comment
   deleteShot(id: String): Shot
   deleteStatement(id: String): Statement
   deleteTextEditor(id: String): TextEditor
@@ -2734,6 +2835,7 @@ type Mutation {
   updateBusinessClient(comment: String, communication_history: ClientMessages, id: String, number: String, sales_cycle: SalesCycle, tags: [String]): BusinessClient
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String, type: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
+  updateComment(id: String, status: CommentStatus, text: String): Comment
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, context: String, elements: ElementsList, goal: String, hint: String, id: String, name: String, type: String, variants: [String]): Construction
   updateConstructionResult(elements: ElementsList, id: String): ConstructionResult
@@ -2757,6 +2859,7 @@ type Mutation {
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, isOrderOfAnswersImportant: Boolean, isScoringShown: Boolean, lessonId: String, name: String, next: NextType, question: String, shouldAnswerSizeMatchSample: Boolean, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
+  updateReply(id: String, status: CommentStatus, text: String): Comment
   updateScore(id: String, score: Int): User
   updateShot(comments: [String], id: String, name: String, parts: [String], title: String): Shot
   updateStatement(comments: [String], id: String): Statement
@@ -2818,6 +2921,13 @@ input NestedDecimalNullableFilter {
   lte: Decimal
   not: NestedDecimalNullableFilter
   notIn: [Decimal!]
+}
+
+input NestedEnumCommentStatusFilter {
+  equals: CommentStatus
+  in: [CommentStatus!]
+  not: NestedEnumCommentStatusFilter
+  notIn: [CommentStatus!]
 }
 
 input NestedEnumCourseTypeNullableFilter {
@@ -3886,6 +3996,8 @@ type Query {
   chatResult(where: ChatResultWhereUniqueInput!): ChatResult
   chatResults(after: ChatResultWhereUniqueInput, before: ChatResultWhereUniqueInput, first: Int, last: Int, orderBy: [ChatResultOrderByWithRelationInput!], where: ChatResultWhereInput): [ChatResult!]!
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByWithRelationInput!], where: ChatWhereInput): [Chat!]!
+  comment(where: CommentWhereUniqueInput!): Comment
+  comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int, last: Int, orderBy: [CommentOrderByWithRelationInput!], where: CommentWhereInput): [Comment!]!
   constructionResult(where: ConstructionResultWhereUniqueInput!): ConstructionResult
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int, orderBy: [ConstructionResultOrderByWithRelationInput!], where: ConstructionResultWhereInput): [ConstructionResult!]!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
@@ -5491,6 +5603,7 @@ type User {
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
   co_coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCo_coursePagesOrderByInput!]): [CoursePage!]!
   comment: String
+  comments(after: CommentWhereUniqueInput, before: CommentWhereUniqueInput, first: Int, last: Int): [Comment!]!
   company: Company
   country: String
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCoursePagesOrderByInput!]): [CoursePage!]!
@@ -5629,6 +5742,7 @@ input UserOrderByWithRelationInput {
   clause: ClauseOrderByRelationAggregateInput
   co_coursePages: CoursePageOrderByRelationAggregateInput
   comment: SortOrderInput
+  comments: CommentOrderByRelationAggregateInput
   company: CompanyOrderByWithRelationInput
   companyId: SortOrderInput
   construction: ConstructionOrderByRelationAggregateInput
@@ -5729,6 +5843,7 @@ input UserWhereInput {
   clause: ClauseListRelationFilter
   co_coursePages: CoursePageListRelationFilter
   comment: StringNullableFilter
+  comments: CommentListRelationFilter
   company: CompanyWhereInput
   companyId: StringNullableFilter
   construction: ConstructionListRelationFilter
@@ -5829,6 +5944,7 @@ input UserWhereUniqueInput {
   clause: ClauseListRelationFilter
   co_coursePages: CoursePageListRelationFilter
   comment: StringNullableFilter
+  comments: CommentListRelationFilter
   company: CompanyWhereInput
   companyId: StringNullableFilter
   construction: ConstructionListRelationFilter
