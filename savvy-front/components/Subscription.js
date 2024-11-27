@@ -710,8 +710,8 @@ const Subscription = (props) => {
           <div className="headers">
             {" "}
             <h1 className="header" id="subscription_start">
-              Выберите план и откройте доступ к 35+ курсам.{" "}
-              <span>🎉 Черная пятница 15.11!</span>
+              Выберите план и откройте доступ к 40+ курсам.{" "}
+              <span>🎉 Черная пятница 01.11!</span>
             </h1>
             <h3>
               {isReferralDiscountAvailable &&
@@ -732,7 +732,7 @@ const Subscription = (props) => {
             >
               {/* Yearly */}
               На 6 месяцев
-              <DiscountLabel>-48%</DiscountLabel>
+              <DiscountLabel>-44%</DiscountLabel>
             </SliderButton>
           </SliderContainer>
         </TopBar>
@@ -747,16 +747,12 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    {!isReferralDiscountAvailable && "1990 ₽ / мес"}
-                    {isReferralDiscountAvailable ? (
-                      <span>1990</span>
-                    ) : null}{" "}
-                    {isReferralDiscountAvailable ? "1590 ₽ / мес" : null}
+                    990 ₽ / мес
                   </div>
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Доступные курсы (🎉 до 15.11){" "}
+                    Доступные курсы (🎉 до 01.12){" "}
                     <span
                       data-tooltip-id="my-tooltip"
                       data-tooltip-html={`Сразу после оплаты вы получите доступ к 1 курсу.<br/>
@@ -768,7 +764,7 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    2 новых курса в месяц{" "}
+                    1 новый курс в месяц{" "}
                     <MiniButton onClick={(e) => slideToCourses()}>
                       Выбрать
                     </MiniButton>
@@ -794,14 +790,10 @@ const Subscription = (props) => {
                     X
                   </div>
                 </div>
-                <ButtonBuy
-                  onClick={(e) =>
-                    completePayment(isReferralDiscountAvailable ? 1590 : 1990)
-                  }
-                >
+                <ButtonBuy onClick={(e) => completePayment(990)}>
                   {loading_data ? "..." : "Подписаться (RU карта)"}
                 </ButtonBuy>
-                <ButtonBuy onClick={(e) => makeInternationalPayment(1990)}>
+                <ButtonBuy onClick={(e) => makeInternationalPayment(990)}>
                   Подписаться (Intl карта)
                 </ButtonBuy>
               </Form>
@@ -813,7 +805,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    {!isReferralDiscountAvailable && "3990 ₽ / мес"}
+                    {!isReferralDiscountAvailable && "2990 ₽ / мес"}
                     {isReferralDiscountAvailable ? (
                       <span>3990</span>
                     ) : null}{" "}
@@ -822,7 +814,7 @@ const Subscription = (props) => {
                 </div>
                 <div className="section">
                   <div className="comment">
-                    Доступные курсы (🎉 до 15.11){" "}
+                    Доступные курсы (🎉 до 01.12){" "}
                     <span
                       data-tooltip-id="my-tooltip"
                       data-tooltip-html={`Сразу после оплаты вы получите доступ к 3 курсам.<br/>
@@ -834,7 +826,7 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    4 новых курса в месяц{" "}
+                    3 новых курса в месяц{" "}
                     <MiniButton onClick={(e) => slideToCourses()}>
                       Выбрать
                     </MiniButton>
@@ -860,26 +852,22 @@ const Subscription = (props) => {
                     X
                   </div>
                 </div>
-                <ButtonBuy
-                  onClick={(e) =>
-                    completePayment(isReferralDiscountAvailable ? 2990 : 3990)
-                  }
-                >
+                <ButtonBuy onClick={(e) => completePayment(2990)}>
                   {loading_data ? "..." : "Подписаться (RU карта)"}
                 </ButtonBuy>
-                <ButtonBuy onClick={(e) => makeInternationalPayment(3990)}>
+                <ButtonBuy onClick={(e) => makeInternationalPayment(2990)}>
                   Подписаться (Intl карта)
                 </ButtonBuy>
               </Form>
               <Form>
                 <Banner>
-                  <div className="bannerFirst">Индивидуальный</div>
+                  <div className="bannerFirst">Расширенный</div>
                   <div>Чтобы изучать английский 1-на-1</div>
                 </Banner>
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    13990 ₽ / мес
+                    4990 ₽ / мес
                   </div>
                 </div>
                 <div className="section">
@@ -920,11 +908,14 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Индивидуальные занятия</div>
                   <div className="label" for="mistakes">
-                    3️⃣ занятия в месяц
+                    1️⃣ занятие в месяц
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(13990)}>
-                  {loading_data ? "..." : "Подписаться"}
+                <ButtonBuy onClick={(e) => completePayment(4990)}>
+                  {loading_data ? "..." : "Подписаться (RU карта)"}
+                </ButtonBuy>
+                <ButtonBuy onClick={(e) => makeInternationalPayment(4990)}>
+                  Подписаться (Intl карта)
                 </ButtonBuy>
               </Form>
             </>
@@ -938,7 +929,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    <span>24 000</span> 13 990 ₽ / 6 месяцев
+                    <span>17 990</span> 9 990 ₽ / 6 месяцев
                   </div>
                 </div>
                 <div className="section">
@@ -954,7 +945,7 @@ const Subscription = (props) => {
                     </span>
                   </div>
                   <div className="label" for="mistakes">
-                    Все 35+ курсов{" "}
+                    Все 40+ курсов{" "}
                     <MiniButton onClick={(e) => slideToCourses()}>
                       Выбрать
                     </MiniButton>
@@ -980,11 +971,11 @@ const Subscription = (props) => {
                     X
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(13990)}>
+                <ButtonBuy onClick={(e) => completePayment(9990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(13990)}>
-                  Оформить рассрочку за 2330/мес
+                <ButtonOpen onClick={(e) => getInstallments(9990)}>
+                  Оформить рассрочку за 1665/мес
                 </ButtonOpen>
               </Form>
               <Form>
@@ -995,7 +986,7 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Стоимость</div>
                   <div className="label" for="mistakes">
-                    <span>54 990</span> 40 990 ₽ / 6 месяцев
+                    <span>29 990</span> 21 990 ₽ / 6 месяцев
                   </div>
                 </div>
                 <div className="section">
@@ -1035,14 +1026,14 @@ const Subscription = (props) => {
                 <div className="section">
                   <div className="comment">Индивидуальные занятия</div>
                   <div className="label" for="mistakes">
-                    1️⃣ 5️⃣ занятий
+                    6️⃣ занятий
                   </div>
                 </div>
-                <ButtonBuy onClick={(e) => completePayment(40990)}>
+                <ButtonBuy onClick={(e) => completePayment(21990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(40990)}>
-                  Оформить рассрочку за 6800/мес
+                <ButtonOpen onClick={(e) => getInstallments(21990)}>
+                  Оформить рассрочку за 3660/мес
                 </ButtonOpen>
               </Form>
             </>
