@@ -711,7 +711,7 @@ const Subscription = (props) => {
             {" "}
             <h1 className="header" id="subscription_start">
               Выберите план и откройте доступ к 40+ курсам.{" "}
-              <span>🎉 Черная пятница 01.11!</span>
+              <span>🎉 Черная пятница 29.11!</span>
             </h1>
             <h3>
               {isReferralDiscountAvailable &&
@@ -800,7 +800,7 @@ const Subscription = (props) => {
               <Form>
                 <Banner>
                   <div className="bannerFirst">Базовый</div>
-                  <div>Чтобы учиться быстрее</div>
+                  <div>Чтобы ничего не упустить</div>
                 </Banner>
                 <div className="section">
                   <div className="comment">Стоимость</div>
@@ -924,7 +924,7 @@ const Subscription = (props) => {
               <Form>
                 <Banner>
                   <div className="bannerFirst">Базовый</div>
-                  <div>Чтобы учиться быстрее</div>
+                  <div>Чтобы ничего не упустить</div>
                 </Banner>
                 <div className="section">
                   <div className="comment">Стоимость</div>
