@@ -8,16 +8,10 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import ProblemBuilder from "../../create/ProblemBuilder";
-import UpdateProblemBuilder from "./UpdateProblemBuilder";
-import CanvasProblemBuilder from "../../create/CanvasProblemBuilder";
-import {
-  EditorInfoSection,
-  NameInput,
-  SimpleButton,
-  BlueButton,
-} from "../SimulatorDevelopmentStyles";
+import ProblemBuilder from "./ProblemBuilder";
+import CanvasProblemBuilder from "./CanvasProblemBuilder";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
+import { Row, ActionButton } from "../styles/DevPageStyles";
 
 const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
@@ -64,8 +58,9 @@ const Styles = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
   .editor_container {
-    width: 660px;
+    width: 600px;
   }
   .canvas_container {
     width: 100%;
@@ -152,71 +147,81 @@ const UpdateProblem = (props) => {
   return (
     <Styles>
       <div className="editor_container">
-        <EditorInfoSection>
-          <h3 className="label">ID: {id}</h3>
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Name</h3>
-          <div className="comment">The name will be used for navigation</div>
-          <NameInput
-            onChange={(e) => setName(e.target.value)}
-            defaultValue={name}
-            placeholder="Untitled"
-          />
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Goal</h3>
-          <div className="comment">
-            What learning results are students expected to achieve through this
-            document editor
+        <Row>
+          <div className="description">Id</div>
+          <div className="action_area">
+            <div className="element_info">{props.id}</div>
           </div>
-          <textarea
-            value={goal}
-            onChange={(e) => {
-              setGoal(e.target.value);
-              autoResizeTextarea(e);
-            }}
-            onInput={autoResizeTextarea}
-          />
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Context</h3>
-          <div className="comment">
-            This context will be used by AI to generate hints and feedback
+        </Row>
+        <Row>
+          <div className="description">Name</div>
+          <div className="action_area">
+            <input
+              onChange={(e) => setName(e.target.value)}
+              defaultValue={name}
+              placeholder="Untitled"
+            />
+            <div className="explainer">
+              The name will be used for navigation
+            </div>
           </div>
-          <textarea
-            value={context}
-            onChange={(e) => {
-              setContext(e.target.value);
-              autoResizeTextarea(e);
-            }}
-            onInput={autoResizeTextarea}
-          />
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Type</h3>
-          <div className="comment">
-            This determines how the case study works
+        </Row>
+        <Row>
+          <div className="description">Goal</div>
+          <div className="action_area">
+            <textarea
+              value={goal}
+              onChange={(e) => {
+                setGoal(e.target.value);
+                autoResizeTextarea(e);
+              }}
+              onInput={autoResizeTextarea}
+            />
+            <div className="explainer">
+              What learning results are students expected to achieve through
+              this document editor
+            </div>
           </div>
-          <select
-            name="types"
-            id="types"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          >
-            <option value="BRANCHING_SCENARIO">Branching scenario</option>
-            {/* <option value="GENERATE">Generate Ideas</option> */}
-            <option value="ONLY_CORRECT">Quiz-based learning scenario</option>
-          </select>
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label"></h3>
-          <DynamicLoadedEditor
-            getEditorText={getText}
-            value={text}
-            problem={true}
-          />
-        </EditorInfoSection>
+        </Row>
+        <Row>
+          <div className="description">Context</div>
+          <div className="action_area">
+            <textarea
+              value={context}
+              onChange={(e) => {
+                setContext(e.target.value);
+                autoResizeTextarea(e);
+              }}
+              onInput={autoResizeTextarea}
+            />
+            <div className="explainer">
+              This context will be used by AI to generate hints and feedback
+            </div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Type</div>
+          <div className="action_area">
+            <select
+              name="types"
+              id="types"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <option value="BRANCHING_SCENARIO">Branching scenario</option>
+              {/* <option value="GENERATE">Generate Ideas</option> */}
+              <option value="ONLY_CORRECT">Quiz-based learning scenario</option>
+            </select>
+            <div className="explainer">
+              This determines how the case study works
+            </div>
+          </div>
+        </Row>
+        <DynamicLoadedEditor
+          getEditorText={getText}
+          value={text}
+          problem={true}
+        />
 
         {/* <h3>Выберите задания для формата "Экзамен" и "Задача":</h3> */}
         {nodeID && nodeType && (
@@ -255,9 +260,9 @@ const UpdateProblem = (props) => {
           </DndProvider>
         </div>
       )}
-      <BlueButton onClick={handleUpdate}>
+      <ActionButton onClick={handleUpdate}>
         {loading ? t("saving") : t("save")}
-      </BlueButton>
+      </ActionButton>
     </Styles>
   );
 };

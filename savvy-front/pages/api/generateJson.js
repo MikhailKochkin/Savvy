@@ -35,7 +35,7 @@ export default async function (req, res) {
       // model: "gpt-4o",
       model: "gpt-4o-mini",
       max_tokens: 2048,
-      temperature: 0.8,
+      temperature: 0.7,
       response_format: { type: "json_object" },
     });
     // console.log("completion", completion.choices[0].message);

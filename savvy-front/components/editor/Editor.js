@@ -61,25 +61,10 @@ import { FaQuoteLeft } from "react-icons/fa";
 import { withTable, TableEditor } from "slate-table";
 import Modal from "styled-react-modal";
 import isHotkey from "is-hotkey";
-import CreateQuiz from "../create/CreateQuiz";
+import CreateQuiz from "../lesson/quizes/CreateQuiz";
 import SingleQuiz from "../lesson/quizes/SingleQuiz";
-
-const ELEMENT_TAGS = {
-  A: (el) => ({ type: "link", url: el.getAttribute("href") }),
-  BLOCKQUOTE: () => ({ type: "quote" }),
-  H1: () => ({ type: "heading-one" }),
-  H2: () => ({ type: "header" }),
-  H3: () => ({ type: "heading-three" }),
-  H4: () => ({ type: "heading-four" }),
-  H5: () => ({ type: "heading-five" }),
-  H6: () => ({ type: "heading-six" }),
-  IMG: (el) => ({ type: "image", url: el.getAttribute("src") }),
-  LI: () => ({ type: "list-item" }),
-  OL: () => ({ type: "numbered-list" }),
-  P: () => ({ type: "paragraph" }),
-  PRE: () => ({ type: "code" }),
-  UL: () => ({ type: "bulleted-list" }),
-};
+import CreateNote from "../lesson/notes/CreateNote";
+import SingleNote from "../lesson/notes/Note";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
@@ -1197,7 +1182,11 @@ const App = (props) => {
   };
 
   const getResult = (res) => {
-    setModalData(res.data.createQuiz.id);
+    if (res.data.createQuiz) {
+      setModalData(res.data.createQuiz.id);
+    } else if (res.data.createNote) {
+      setModalData(res.data.createNote.id);
+    }
   };
 
   return (
@@ -1224,7 +1213,7 @@ const App = (props) => {
                 onChange={(e) => setModalData(e.target.value)}
               />
             </div>
-            {type === "note" && "Write down the ID of the target note"}
+            {/* {type === "note" && "Write down the ID of the target note"} */}
             {type === "createError" &&
               "Write down the ID of the target question"}
             {type === "createProblem" &&
@@ -1233,6 +1222,9 @@ const App = (props) => {
 
           {type === "createError" && (
             <CreateQuiz getResult={getResult} lessonID={props.lessonId} />
+          )}
+          {type === "createNote" && (
+            <CreateNote getResult={getResult} lessonID={props.lessonId} />
           )}
           {type === "error" && (
             <SingleQuiz
@@ -1284,15 +1276,28 @@ const App = (props) => {
               check={props.lesson?.quizes.find((q) => q.id == modalData).check}
             />
           )}
+          {type == "note" && (
+            <SingleNote
+              key={modalData}
+              id={modalData}
+              me={props.me}
+              noteId={modalData}
+              lessonID={
+                props.lesson?.notes.find((q) => q.id == modalData).lessonId
+              }
+              note={props.lesson?.notes.find((q) => q.id == modalData)}
+              text={props.lesson?.notes.find((q) => q.id == modalData).text}
+              name={props.lesson?.notes.find((q) => q.id == modalData).name}
+              user={props.lesson.user.id}
+              author={props.lesson.user}
+            />
+          )}
           <button
             onClick={(e) => {
               handleSubmitModal(type);
-              // if (modalData.trim() !== "") {
-              //   insertComment(editor, modalData, setModalData, setModalOpen);
-              // }
             }}
           >
-            Update
+            Add Element Id to the Editor
           </button>
         </div>
       </StyledModal>

@@ -7,6 +7,8 @@ import UpdateNewConstructor from "./UpdateNewConstructor";
 import Summary from "./Summary";
 import Document from "./Document";
 import Longread from "./Longread";
+import { SecondaryButton } from "../styles/DevPageStyles";
+import DeleteSingleConstructor from "./DeleteSingleConstructor";
 
 const CONSTRUCTION_RESULT_QUERY = gql`
   query CONSTRUCTION_RESULT_QUERY($id: String!, $studentId: String!) {
@@ -85,9 +87,18 @@ const NewConstructor = (props) => {
       <Container id={"construction_" + construction.id}>
         {story !== true && (
           <Buttons>
-            <button onClick={(e) => setUpdate(!update)}>
+            <SecondaryButton onClick={(e) => setUpdate(!update)}>
               {!update ? t("update") : t("back")}
-            </button>
+            </SecondaryButton>
+            {me &&
+            (me.id === construction.user.id ||
+              me.permissions.includes("ADMIN")) &&
+            !story ? (
+              <DeleteSingleConstructor
+                id={construction.id}
+                lessonID={lessonID}
+              />
+            ) : null}
           </Buttons>
         )}
         {!update && construction.type == "SUMMARY" ? (
@@ -124,6 +135,7 @@ const NewConstructor = (props) => {
             complexity={props.complexity}
             me={props.me}
             story={props.story}
+            lesson={props.lesson}
             elements={elements}
             getResult={getResult}
           />
@@ -133,7 +145,8 @@ const NewConstructor = (props) => {
           <UpdateNewConstructor
             key={construction.id}
             id={construction.id}
-            lessonId={props.lessonID}
+            lessonId={props.lesson.id}
+            lesson={props.lesson}
             construction={construction}
             complexity={construction.complexity}
             me={me}

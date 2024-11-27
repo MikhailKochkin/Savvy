@@ -3,16 +3,18 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 import UpdateNote from "./UpdateNote";
-import DeleteNote from "../../delete/DeleteNote";
+import DeleteNote from "./DeleteNote";
 import Longread from "./Longread";
 import Email from "./Email";
 import MiniNote from "./MiniNote";
+import { SecondaryButton } from "../styles/DevPageStyles";
 
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
+  margin-bottom: 20px;
 `;
 
 const ArrowContainer = styled.div`
@@ -79,20 +81,24 @@ const Note = (props) => {
   }
 
   const getResult = (data) => {
-    props.getResult(data);
+    if (props.getResult) props.getResult(data);
   };
 
   const switchUpdate = () => {
     setUpdate(!update);
+  };
+
+  const passGeneratedData = (data) => {
+    if (props.passGeneratedData) props.passGeneratedData(data);
   };
   return (
     <>
       {!story && (
         <Buttons>
           {!exam && !story && (
-            <button onClick={(e) => setUpdate(!update)}>
+            <SecondaryButton onClick={(e) => setUpdate(!update)}>
               {!update ? t("update") : t("back")}
-            </button>
+            </SecondaryButton>
           )}
           {me && !props.story && !props.exam && (
             <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
@@ -123,6 +129,7 @@ const Note = (props) => {
               isRevealed={isRevealed}
               text={text}
               id={id}
+              name={name}
               getData={getData}
               isFinal={isFinal}
               problem={props.problem}
@@ -152,11 +159,13 @@ const Note = (props) => {
           isSecret={note.isSecret}
           complexity={complexity}
           id={id}
+          type={note.type}
           next={props.next}
           name={name}
           lessonID={lessonID}
           getResult={getResult}
           switchUpdate={switchUpdate}
+          passGeneratedData={passGeneratedData}
         />
       )}
     </>

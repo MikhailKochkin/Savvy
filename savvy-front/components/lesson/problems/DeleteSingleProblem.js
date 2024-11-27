@@ -1,30 +1,25 @@
-import React from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
-// import Button from "@material-ui/core/Button";
-// import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { SecondaryButton } from "../styles/DevPageStyles";
 
-const DELETE_CHAT_MUTATION = gql`
-  mutation DELETE_CHAT_MUTATION($id: String!) {
-    deleteChat(id: $id) {
+const DELETE_PROBLEM_MUTATION = gql`
+  mutation DELETE_PROBLEM_MUTATION($id: String!) {
+    deleteProblem(id: $id) {
       id
     }
   }
 `;
 
-const DeleteChat = (props) => {
-  const { lessonId, chatId } = props;
+const DeleteSingleProblem = (props) => {
   const { t } = useTranslation("lesson");
-
-  // const classes = useStyles();
+  const { lessonId, id } = props;
   return (
     <Mutation
-      mutation={DELETE_CHAT_MUTATION}
-      variables={{ id: chatId }}
+      mutation={DELETE_PROBLEM_MUTATION}
+      variables={{ id }}
       refetchQueries={() => [
         {
           query: SINGLE_LESSON_QUERY,
@@ -32,12 +27,12 @@ const DeleteChat = (props) => {
         },
       ]}
     >
-      {(deleteNote, { loading, error }) => (
+      {(deleteProblem, { loading, error }) => (
         <SecondaryButton
           color="secondary"
           onClick={() => {
-            if (confirm("Sure?")) {
-              deleteNote().catch((error) => {
+            if (confirm("Are you sure")) {
+              deleteProblem().catch((error) => {
                 alert(error.message);
               });
             }
@@ -50,4 +45,4 @@ const DeleteChat = (props) => {
   );
 };
 
-export default DeleteChat;
+export default DeleteSingleProblem;

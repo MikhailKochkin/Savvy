@@ -5,12 +5,7 @@ import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import {
-  EditorInfoSection,
-  NameInput,
-  SimpleButton,
-  BlueButton,
-} from "../SimulatorDevelopmentStyles";
+import { Row, ActionButton, SecondaryButton } from "../styles/DevPageStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 
 const UPDATE_TEXTEDITOR_MUTATION = gql`
@@ -64,6 +59,22 @@ const Container = styled.div`
   }
 `;
 
+const EditorSection = styled.div`
+  width: 100%;
+  margin: 20px 0;
+  textarea {
+    padding: 10px;
+    width: 100%;
+    height: 150px;
+    outline: 0;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-size: 1.4rem;
+    font-family: Montserrat;
+    margin: 20px 0;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
@@ -74,6 +85,7 @@ const UpdateTextEditor = (props) => {
   const [name, setName] = useState(props.name ? props.name : null);
   const [text, setText] = useState(props.text);
   const [open, setOpen] = useState(false);
+  const [openHTML, setOpenHTML] = useState(false);
   const [goal, setGoal] = useState(props.goal);
   const [context, setContext] = useState(props.context);
 
@@ -120,57 +132,71 @@ const UpdateTextEditor = (props) => {
   return (
     <>
       <Container>
-        <EditorInfoSection>
-          <h3 className="label">ID: {id}</h3>
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Name</h3>
-          <div className="comment">The name will be used for navigation</div>
-          <NameInput
-            onChange={(e) => setName(e.target.value)}
-            defaultValue={name}
-            placeholder="Untitled"
-          />
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Goal</h3>
-          <div className="comment">
-            What learning results are students expected to achieve through this
-            document editor
+        <Row>
+          <div className="description">Id</div>
+          <div className="action_area">
+            <div className="element_info">{props.id}</div>
           </div>
-          <textarea
-            value={goal}
-            onChange={(e) => {
-              setGoal(e.target.value);
-              autoResizeTextarea(e);
-            }}
-            onInput={autoResizeTextarea}
-          />
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Context</h3>
-          <div className="comment">
-            This context will be used by AI to generate hints and feedback
+        </Row>
+        <Row>
+          <div className="description">Name</div>
+          <div className="action_area">
+            <input
+              onChange={(e) => setName(e.target.value)}
+              defaultValue={name}
+              placeholder="Untitled"
+            />
+            <div className="explainer">
+              The name will be used for navigation
+            </div>
           </div>
-          <textarea
-            value={context}
-            onChange={(e) => {
-              setContext(e.target.value);
-              autoResizeTextarea(e);
-            }}
-            onInput={autoResizeTextarea}
-          />
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Text</h3>
+        </Row>
+        <Row>
+          <div className="description">Goal</div>
+          <div className="action_area">
+            <textarea
+              value={goal}
+              onChange={(e) => {
+                setGoal(e.target.value);
+                autoResizeTextarea(e);
+              }}
+              onInput={autoResizeTextarea}
+            />
+            <div className="explainer">
+              What learning results are students expected to achieve through
+              this document editor
+            </div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Context</div>
+          <div className="action_area">
+            <textarea
+              value={context}
+              onChange={(e) => {
+                setContext(e.target.value);
+                autoResizeTextarea(e);
+              }}
+              onInput={autoResizeTextarea}
+            />
+            <div className="explainer">
+              This context will be used by AI to generate hints and feedback
+            </div>
+          </div>
+        </Row>
+        {/* <h3 className="label">Text</h3>
           <div className="comment">
             We do not reveal the text immediately to prevent errors from
             breaking the website
-          </div>
-          <SimpleButton onClick={(e) => setOpen(!open)}>
-            {open ? "Close" : "Open"}
-          </SimpleButton>
-          {open && (
+          </div> */}
+        <SecondaryButton onClick={(e) => setOpen(!open)}>
+          {open ? "Close Editor" : "Open Editor"}
+        </SecondaryButton>
+        <SecondaryButton onClick={(e) => setOpenHTML(!openHTML)}>
+          {openHTML ? "Close HTML" : "Open HTML"}
+        </SecondaryButton>
+        {open && (
+          <EditorSection>
             <DynamicLoadedEditor
               getEditorText={getText}
               value={text}
@@ -179,24 +205,22 @@ const UpdateTextEditor = (props) => {
               lesson={props.lesson}
               me={props.me}
             />
-          )}
-        </EditorInfoSection>
-        <EditorInfoSection>
-          <h3 className="label">Doc Editor</h3>
-          <div className="comment">
-            Use TextEditor code to add features unavailable in the default
-          </div>
-          <textarea
-            id="texteditor_code"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          >
-            {text}
-          </textarea>
-        </EditorInfoSection>
-        <BlueButton onClick={handleUpdate}>
+          </EditorSection>
+        )}
+        {openHTML && (
+          <EditorSection>
+            <textarea
+              id="texteditor_code"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            >
+              {text}
+            </textarea>
+          </EditorSection>
+        )}
+        <ActionButton onClick={handleUpdate}>
           {loading ? t("saving") : t("save")}
-        </BlueButton>
+        </ActionButton>
       </Container>
     </>
   );

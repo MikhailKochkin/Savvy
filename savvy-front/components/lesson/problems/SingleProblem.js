@@ -7,10 +7,11 @@ import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
-import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
+import DeleteSingleProblem from "./DeleteSingleProblem";
 import Interactive from "./Interactive";
 import NewInteractive from "./NewInteractive";
 import UpdateProblem from "./UpdateProblem";
+import { SecondaryButton } from "../styles/DevPageStyles";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
@@ -357,9 +358,9 @@ const SingleProblem = (props) => {
     <>
       <Buttons>
         {me && !story && (
-          <button onClick={(e) => setUpdate(!update)}>
+          <SecondaryButton onClick={(e) => setUpdate(!update)}>
             {!update ? t("update") : t("back")}
-          </button>
+          </SecondaryButton>
         )}
         {me && !story ? (
           <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />

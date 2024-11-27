@@ -1,14 +1,35 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-import { v4 as uuidv4 } from "uuid";
-import { htmlToText } from "html-to-text";
-import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
 import { useTranslation } from "next-i18next";
-import Modal from "styled-react-modal";
+
 import Box from "./Box";
+import SingleQuiz from "../quizes/SingleQuiz";
+import { MiniOpenQuestionFrame, MiniAIButton } from "../quizes/QuestionStyles";
+import {
+  WindowColumn,
+  WindowBundle,
+  Window,
+  IconBlock,
+} from "../textEditors/TextEditorStyles";
+import {
+  OuterContainer,
+  ButtonTwo,
+  Block,
+  Element,
+  Variants,
+  VarContainer,
+  InputBlock,
+  StyledModal,
+} from "./ConstructionStyles";
+import {
+  findIsTest,
+  setNullForIsTest,
+  compareArrays,
+  shuffle,
+} from "./ConstructionFunctions";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -57,341 +78,55 @@ const Styles = styled.div`
   }
 `;
 
-const OuterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* align-items: stretch; // Stretch to match tallest child */
-`;
-
-const ButtonTwo = styled.button`
-  border: none;
-  background: #3f51b5;
-  padding: 10px 20px;
-  width: 200px;
-  height: 50px;
-  border: 2px solid #3f51b5;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-right: 10px;
-  transition: 0.3s;
-  &:hover {
-    background: #2e3b83;
-    border: 2px solid #2e3b83;
-  }
-  @media (max-width: 800px) {
-    width: 120px;
-  }
-`;
-
-const Block = styled.div`
-  /* overflow: auto; // Add this line */
-  width: 940px;
-  height: auto;
-  display: grid;
-  background: #fff;
-  column-gap: 10px;
-  /* row-gap: 10px; */
-  box-shadow: 0px 0px 3px 0px rgb(199 199 199);
-  padding: 30px;
-  grid-template-columns: ${(props) => {
-    return `repeat(${props.columns}, 1fr)`;
-  }};
-
-  grid-template-rows: auto;
-  img {
-    width: 100px;
-    height: 100px;
-  }
-  grid-template-rows: auto;
-  @media (max-width: 950px) {
-    flex-direction: column;
-    align-items: center;
-    overflow-x: auto;
-    width: 95%;
-  }
-`;
-
-const Element = styled.div`
-  font-size: 1.6rem;
-  width: 100%;
-  height: 100%;
-  border: 1px dashed #c4c4c4;
-  display: ${(props) => (props.display ? "flex" : "none")};
-  flex-direction: column;
-  .comment_yellow {
-    border: 2px solid #f3cf95;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-    width: 90%;
-  }
-  .single_option {
-    p {
-      margin: 3px 0;
-    }
-  }
-  .tick {
-    margin-left: 30px;
-  }
-  width: 100%;
-  height: 100%;
-  border-top: ${(props) =>
-    `1px ${
-      props.borders && props.borders.top !== "none" ? "solid" : "dashed"
-    } ${props.borders && props.borders.top !== "none" ? "#98A0A6" : "#fff"}`};
-  border-right: ${(props) =>
-    `1px ${
-      props.borders && props.borders.right !== "none" ? "solid" : "dashed"
-    } ${props.borders && props.borders.right !== "none" ? "#98A0A6" : "#fff"}`};
-  border-bottom: ${(props) =>
-    `1px ${
-      props.borders && props.borders.bottom !== "none" ? "solid" : "dashed"
-    } ${
-      props.borders && props.borders.bottom !== "none" ? "#98A0A6" : "#fff"
-    }`};
-  border-left: ${(props) =>
-    `1px ${
-      props.borders && props.borders.left !== "none" ? "solid" : "dashed"
-    } ${props.borders && props.borders.left !== "none" ? "#98A0A6" : "#fff"}`};
-  padding: 0px 15px;
-  grid-column-start: ${(props) => props.startColumn};
-  grid-column-end: span ${(props) => props.size};
-  grid-row-end: span ${(props) => props.rows};
-  p {
-    margin: 0;
-  }
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  .edit {
-    width: 90px;
-    font-size: 1.6rem;
-    line-height: 1.8;
-    font-family: Montserrat;
-    border: none;
-    outline: 0;
-    resize: none;
-    color: #393939;
-    overflow: hidden;
-    height: auto;
-    background: #bef1ed;
-    padding: 3px 3px;
-  }
-  .mini_button {
-    color: #6d7578;
-    border: 1px solid #6d7578;
-    font-family: Montserrat;
-    background: none;
-    outline: 0;
-    border-radius: 3px;
-    padding: 4px 7px;
-    margin: 0 5px;
-    transition: all 0.3s ease;
-    &:hover {
-      color: white;
-      background: #6d7578;
-    }
-  }
-  .show_button {
-    color: #6d7578;
-    border: 1px solid #6d7578;
-    font-family: Montserrat;
-    background: none;
-    outline: 0;
-    border-radius: 3px;
-    padding: 4px 7px;
-    margin: 0 5px;
-    transition: all 0.3s ease;
-    &:hover {
-      color: white;
-      background: #6d7578;
-    }
-  }
-  .blocked {
-    pointer-events: none;
-    color: #6d7578;
-    border: 1px solid #6d7578;
-    font-family: Montserrat;
-    background: none;
-    outline: 0;
-    border-radius: 3px;
-    padding: 4px 7px;
-    margin: 0 5px;
-    transition: all 0.3s ease;
-    &:hover {
-      color: white;
-      background: #6d7578;
-    }
-  }
-
-  /* Start the shake animation and make the animation last for 0.5 seconds */
-  animation: ${(props) => (props.shiver ? "shake 1s" : "none")};
-  @keyframes shake {
-    0% {
-      transform: translate(1px, 1px) rotate(0deg);
-    }
-    10% {
-      transform: translate(-1px, -2px) rotate(-1deg);
-    }
-    20% {
-      transform: translate(-3px, 0px) rotate(1deg);
-    }
-    30% {
-      transform: translate(3px, 2px) rotate(0deg);
-    }
-    40% {
-      transform: translate(1px, -1px) rotate(1deg);
-    }
-    50% {
-      transform: translate(-1px, 2px) rotate(-1deg);
-    }
-    60% {
-      transform: translate(-3px, 1px) rotate(0deg);
-    }
-    70% {
-      transform: translate(3px, 1px) rotate(-1deg);
-    }
-    80% {
-      transform: translate(-1px, -1px) rotate(1deg);
-    }
-    90% {
-      transform: translate(1px, 2px) rotate(0deg);
-    }
-    100% {
-      transform: translate(1px, -2px) rotate(-1deg);
-    }
-  }
-`;
-
-const Variants = styled.div`
-  display: flex;
-  flex-direction: column;
-  top: 50px;
-  /* height: ${(props) => {
-    return `${props.height}px`;
-  }}; */
-  height: 600px;
-  overflow-y: auto; // Handle overflow
-  padding: 10px;
-  @media (max-width: 800px) {
-    max-height: 100%;
-    padding: 3%;
-  }
-`;
-
-const VarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  width: 100%;
-  min-height: 600px;
-
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  @media (max-width: 800px) {
-    width: 100%;
-  }
-`;
-
-const setNullForIsTest = (elements) => {
-  return elements.map((element) => {
-    if (element.isTest && element.inDoc) {
-      // If isTest is true, set the element to null
-      return null;
-    } else {
-      // Otherwise, keep the element unchanged
-      return element;
-    }
-  });
-};
-
-const findIsTest = (elements) => {
-  let arr = [];
-  elements.map((element, i) => {
-    if (element.isTest && element.inDoc) {
-      // If isTest is true, set the element to null
-      return arr.push({
-        index: i,
-        element: null,
-      });
-    } else {
-      // Otherwise, keep the element unchanged
-      return;
-    }
-  });
-  return arr;
-};
-
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
-  const compareArrays = (arr1, arr2) => {
-    // Check if both arrays have the same length
-    if (arr1.length !== arr2.length) {
-      return false;
-    }
-
-    // Loop through the arrays to compare the 'text' property
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] && arr2[i]) {
-        if (arr1[i].text !== arr2[i].text) {
-          return false;
-        }
-      } else if (!arr1[i] && !arr2[i]) {
-        continue;
-      } else {
-        return false;
-      }
-    }
-
-    return true;
-  };
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeBlock, setActiveBlock] = useState(null);
   const elements = construction.elements.elements;
-  const [attempts, setAttempts] = useState(0); // Count the # of clicks on check button
+
+  // Open the Modal window with answer options
+  const [isModalWindowOpen, setIsModalWindowOpen] = useState(false);
+  // Get info about the answer chosen by the student from the Modal window
+  const [activeBlock, setActiveBlock] = useState(null);
+  // Count the # of clicks on check button
+  const [attempts, setAttempts] = useState(0);
+  // Info about the answers chosen by the student used for design purposes in the Modal Window
   const [elementsInUse, setElementsInUse] = useState();
+  // Start checking student answers
   const [startCheckingProcedure, setStartCheckingProcedure] = useState(false);
-  const [mode, setMode] = useState("learn");
+  const [checkMode, setCheckMode] = useState("learn");
   const [isButtonHidden, setIsButtonHidden] = useState(false);
+
   // DIFFERENT COLLECTIONS OF ELEMENTS
   // the data of the constructor
   const [input, setInput] = useState(setNullForIsTest(elements));
-  // optional elements in the right column
+  // answer varinats in the right column
   const [variants, setVariants] = useState([]);
-  // can we show the student if their results are (in)correct
+  // can we show the student if their results are (in)correct?
   const [isResultShown, setIsResultShown] = useState(false);
-  // smth to do with the width / height of the elements
+  // smth to do with the width / height of the window column
   const [heightInPixels, setHeightInPixels] = useState(200); // Initialize state
+
+  // we use this data to find a mini quiz once the error is clicked
+  const [errorId, setErrorId] = useState();
+  // is the window where error can be fixed shown?
+  const [isErrorWindowShown, setIsErrorWindowShown] = useState(false);
+  // const [errorFeedback, setErrorFeedback] = useState(); // ???
+  // new wording provided by the student to fix the error
+  const [errorAnswer, setErrorAnswer] = useState();
+  const [result, setResult] = useState(null);
+  // sample wording used to check the answer
+  const [correctErrorOption, setCorrectErrorOption] = useState();
+  const [type, setType] = useState("");
+  // what type of information have we found in the document?
+  const [miniQuiz, setMiniQuiz] = useState();
 
   const [createConstructionResult, { data, loading, error }] = useMutation(
     CREATE_CONSTRUCTIONRESULT_MUTATION
   );
-
   const { t } = useTranslation("lesson");
+  const toggleModal = (e) => setIsModalWindowOpen(!isModalWindowOpen);
 
-  const toggleModal = (e) => setIsOpen(!isOpen);
-
-  const shuffle = (array) => {
-    let m = array.length,
-      t,
-      i;
-    while (m) {
-      i = Math.floor(Math.random() * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-    return array;
+  const changeState = (e) => {
+    setErrorAnswer(e.target.innerHTML);
   };
 
   useEffect(() => {
@@ -409,9 +144,18 @@ const NewConstructor = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (errorId && !miniQuiz) {
+      let newMiniQuiz = props.lesson.quizes.find((quiz) => quiz.id == errorId);
+      setMiniQuiz(newMiniQuiz);
+    } else {
+      null;
+    }
+  }, [errorId]);
+
   const onCheck = (val, i) => {
     setIsResultShown(true);
-    setMode("check");
+    setCheckMode("check");
     // 2. the new data structure? Input?
     setAttempts(attempts + 1);
     if (compareArrays(elements, input)) setIsButtonHidden(true);
@@ -428,7 +172,7 @@ const NewConstructor = (props) => {
 
   const passElementValue = (val) => {
     setStartCheckingProcedure(false);
-    setMode("learn");
+    setCheckMode("learn");
 
     let newEl = [...elements].find((el) => el.text == val);
     let newInput = [...input];
@@ -437,21 +181,84 @@ const NewConstructor = (props) => {
     let newElementsInUse = [...elementsInUse];
     newElementsInUse.find((el) => el.index == activeBlock).element = newEl;
     setElementsInUse(newElementsInUse);
-    setIsOpen(false);
+    setIsModalWindowOpen(false);
     setIsResultShown(false);
   };
 
+  const onMouseClick = (e) => {
+    let z = document.createElement("span");
+    z.contentEditable = true;
+    z.innerHTML = e.target.innerHTML;
+    z.className = "edit";
+    z.setAttribute("data-initial", e.target.getAttribute("comment"));
+    z.addEventListener("input", changeState);
+    let n = e.target.parentNode.replaceChild(z, e.target);
+    // let button = document.createElement("button");
+    // button.innerHTML = "Check";
+    // button.className = "mini_button";
+    // button.tabIndex = 0;
+    // z.after(button);
+    // let wrong_option = htmlToText(e.target.innerHTML, {
+    //   wordwrap: false,
+    //   uppercase: false,
+    // });
+    // setAnswer("");
+    // setCorrectAnswer(e.target.getAttribute("comment"));
+    // setChosenElement(id);
+  };
+
   const passModalOpen = (val) => {
-    setIsOpen(true);
+    setIsModalWindowOpen(true);
   };
 
   const passActiveBlock = (index) => {
     setActiveBlock(index);
   };
 
+  const passResultToTextEditor = (val) => {
+    setResult(val);
+    let editedText = document.querySelector(`[errorId=${errorId}]`);
+    if (val == "true") {
+      editedText.style.backgroundColor = "rgba(50, 172, 102, 0.3)";
+      editedText.contentEditable = "false";
+    } else {
+      editedText.style.backgroundColor = "rgba(222, 107, 72, 0.3)";
+      setTimeout(() => {
+        editedText.style.backgroundColor = "#BEF1ED";
+      }, [2500]);
+    }
+  };
+
   return (
     <Styles id={"construction_" + construction.id}>
-      <OuterContainer>
+      <OuterContainer
+        onClick={async (e) => {
+          // 2. Error
+          if (
+            e.target.getAttribute("type") === "error" ||
+            e.target.parentElement.getAttribute("type") === "error"
+          ) {
+            setIsErrorWindowShown(true);
+            setErrorAnswer(e.target.innerHTML);
+            setResult(null);
+            setErrorId(e.target.getAttribute("elementid"));
+            onMouseClick(e);
+            setType("error");
+          }
+
+          if (e.target.classList.contains("edit")) {
+            setErrorAnswer(e.target.innerHTML);
+            let newMiniQuiz = props.lesson.quizes.find(
+              (quiz) => quiz.id == e.target.getAttribute("errorid")
+            );
+            setErrorId(e.target.getAttribute("errorid"));
+            if (!miniQuiz) setMiniQuiz(newMiniQuiz);
+            setCorrectErrorOption(e.target.getAttribute("data-initial"));
+            setIsErrorWindowShown(true);
+            setResult(null);
+          }
+        }}
+      >
         <Block id="con_block" columns={construction.columnsNum}>
           {[...elements].map((t, i) => (
             <ConElement
@@ -475,7 +282,7 @@ const NewConstructor = (props) => {
               // 4. Checking logic
               isResultShown={isResultShown}
               startCheckingProcedure={startCheckingProcedure}
-              mode={mode}
+              mode={checkMode}
               // shuffled elements in the right column. We will need this data to check if the chosen variant is in the right position.
               variants={variants}
               inputSingleElement={input[i]}
@@ -489,7 +296,7 @@ const NewConstructor = (props) => {
         </Block>
 
         <StyledModal
-          isOpen={isOpen}
+          isOpen={isModalWindowOpen}
           onBackgroundClick={toggleModal}
           onEscapeKeydown={toggleModal}
         >
@@ -509,43 +316,72 @@ const NewConstructor = (props) => {
           </VarContainer>
         </StyledModal>
       </OuterContainer>
+      {isErrorWindowShown && (
+        <WindowColumn>
+          <WindowBundle>
+            <Window>
+              <div className="questionBox">
+                <IconBlock>
+                  <div className="nameBlock">
+                    <img className="icon" src="../../static/hipster.svg" />
+                    <div className="name">BeSavvy</div>
+                  </div>
+                  <div
+                    className="cancelBlock"
+                    onClick={(e) => {
+                      setResult(null);
+                      setErrorAnswer("");
+                      setIsErrorWindowShown(false);
+                    }}
+                  >
+                    <img className="cancel" src="../../static/cancel.svg" />
+                  </div>
+                </IconBlock>
+                {miniQuiz ? (
+                  <SingleQuiz
+                    id={errorId}
+                    key={errorId}
+                    complexity={miniQuiz.complexity}
+                    question={miniQuiz.question}
+                    answer={miniQuiz.answer}
+                    answers={miniQuiz.answers}
+                    type={miniQuiz.type}
+                    goalType={miniQuiz.goalType}
+                    check={miniQuiz.check}
+                    me={me}
+                    story={true}
+                    ifRight={miniQuiz.ifRight}
+                    ifWrong={miniQuiz.ifWrong}
+                    name={miniQuiz.name}
+                    instructorName={miniQuiz.instructorName}
+                    image={miniQuiz.image}
+                    hidden={true}
+                    lesson={props.lesson}
+                    lessonID={props.lesson.id}
+                    quizID={miniQuiz.id}
+                    user={miniQuiz.user.id}
+                    user_name={miniQuiz.user}
+                    author={props.lesson.user}
+                    miniforum={null}
+                    getResult={null}
+                    passResultToTextEditor={passResultToTextEditor}
+                    openQuestionType="mini"
+                    questionFormat="mini"
+                    studentAnswerPassedFromAnotherComponent={errorAnswer}
+                  />
+                ) : null}
+              </div>
+            </Window>
+          </WindowBundle>
+        </WindowColumn>
+      )}
     </Styles>
   );
 };
 
-const InputBlock = styled.div`
-  padding: 5px;
-  width: 90%;
-  min-height: ${(props) => (props.isTest ? "75px" : "25px")};
-  border: ${(props) => props.border};
-  /* white-space: nowrap; */
-  font-family: Montserrat;
-  font-size: 1.6rem;
-  line-height: 1.8;
-  margin-right: 15px;
-  margin-top: 15px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  @media (max-width: 800px) {
-    font-size: 1.4rem;
-  }
-`;
-
 const ConElement = (props) => {
-  //  Element design
   const [size, setSize] = useState(props.size);
-  // Element number – used to check with the correct version
-  const [value, setValue] = useState(0);
-  const [reveal, setReveal] = useState(true);
-
-  // logic for checking added text
-  const [shown, setShown] = useState(false);
-  const [correctAnswer, setCorrectAnswer] = useState();
-  const [chosenElement, setChosenElement] = useState();
-  const [result, setResult] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [answers, setAnswers] = useState([]);
-  const [answer, setAnswer] = useState();
   let sign = "";
   const {
     isResultShown,
@@ -554,10 +390,7 @@ const ConElement = (props) => {
     i,
     borders,
     rows,
-    el,
-    elems,
     display,
-    passResult,
     allCorrect,
     isCorrect,
     inputSingleElement,
@@ -569,139 +402,6 @@ const ConElement = (props) => {
       setIsFinished(true);
     }
   }, [isCorrect, mode]);
-
-  const checkAnswer = async (e) => {
-    e.persist();
-    e.target.className = "blocked";
-    setShown(true);
-    let answer1 = htmlToText(correctAnswer.toLowerCase(), {
-      wordwrap: false,
-      uppercase: false,
-    });
-    let answer2 = htmlToText(answer.toLowerCase(), {
-      wordwrap: false,
-      uppercase: false,
-    }).replace(/\_/g, "");
-    let data = {
-      answer1: answer1,
-      answer2: answer2,
-    };
-
-    let el = document.getElementById(chosenElement);
-    e.target.innerHTML = "Checking...";
-    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        if (
-          !e.target.nextSibling ||
-          (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
-        ) {
-          let button2 = document.createElement("button");
-          button2.innerHTML = "Show";
-          button2.className = "show_button";
-          button2.addEventListener("click", show);
-          e.target.after(button2);
-        }
-        if (parseFloat(res.res) > 65) {
-          setResult(true);
-          el.style.background = "#D9EAD3";
-          e.target.style.display = "none";
-          let new_res = {
-            correctAnswer: correctAnswer,
-            studentAnswer: answer,
-            res: res.res,
-            id: uuidv4(),
-          };
-          setAnswers([...answers, new_res]);
-          passResult(new_res);
-          return true;
-        } else if (parseFloat(res.res) > 55 && parseFloat(res.res) <= 65) {
-          setResult(true);
-          el.style.background = "#ffd166";
-          e.target.style.display = "none";
-          let new_res = {
-            correctAnswer: correctAnswer,
-            studentAnswer: answer,
-            res: res.res,
-            id: uuidv4(),
-          };
-          passResult(new_res);
-          setAnswers([...answers, new_res]);
-          setTimeout(() => (el.style.background = "#bef1ed"), 3000);
-          return true;
-        } else {
-          setResult(false);
-          el.style.background = "#FCE5CD";
-          e.target.innerHTML = "Check";
-          e.target.className = "mini_button";
-          if (res.comment) {
-            if (res.comment == "Дайте более развернутый ответ") {
-              setHint("Try giving a more detailed answer.");
-            } else {
-              setHint("Try giving a shorter answer.");
-            }
-          }
-          let new_res = {
-            correctAnswer: correctAnswer,
-            studentAnswer: answer,
-            res: res.res,
-            id: uuidv4(),
-          };
-          passResult(new_res);
-          setAnswers([...answers, new_res]);
-          setTimeout(() => (el.style.background = "#bef1ed"), 3000);
-          return false;
-        }
-      })
-      .catch((err) => console.log(err));
-    setShown(false);
-    return r;
-  };
-
-  const onMouseClick = (e) => {
-    let z = document.createElement("span");
-    let id = uuidv4();
-    z.contentEditable = true;
-    z.innerHTML = e.target.innerHTML;
-    z.className = "edit";
-    z.setAttribute("data-initial", e.target.getAttribute("comment"));
-    z.setAttribute("id", id);
-    z.addEventListener("input", changeState);
-    let n = e.target.parentNode.replaceChild(z, e.target);
-    let button = document.createElement("button");
-    button.innerHTML = "Check";
-    button.className = "mini_button";
-    button.tabIndex = 0;
-    z.after(button);
-    let wrong_option = htmlToText(e.target.innerHTML, {
-      wordwrap: false,
-      uppercase: false,
-    });
-    setAnswer("");
-    setCorrectAnswer(e.target.getAttribute("comment"));
-    setChosenElement(id);
-  };
-
-  const changeState = (e) => {
-    setAnswer(e.target.innerHTML);
-  };
-
-  const show = (e) => {
-    e.preventDefault();
-    e.target.previousSibling.previousSibling.innerHTML =
-      e.target.previousSibling.previousSibling.getAttribute("data-initial");
-    e.target.style.pointerEvents = "none";
-    e.target.previousSibling.style.display = "none";
-    e.target.style.display = "none";
-    e.target.previousSibling.previousSibling.contentEditable = false;
-    e.target.previousSibling.previousSibling.style.pointerEvents = "none";
-  };
 
   let border;
 
@@ -715,7 +415,6 @@ const ConElement = (props) => {
     border = "2px dashed #00B600";
     sign = "✅";
   } else if (isTest && !isCorrect && mode == "check") {
-    console.log("wrong");
     border = "1px dashed #c4c4c4";
     sign = "❌";
   } else if (isTest && !isFinished) {
@@ -751,19 +450,7 @@ const ConElement = (props) => {
       >
         {isTest && (
           <>
-            <div
-              className="single_option"
-              onClick={(e) => {
-                if (allCorrect) {
-                  if (e.target.getAttribute("class") == "mini_button") {
-                    const ch = checkAnswer(e);
-                  }
-                  if (e.target.getAttribute("type") === "comment") {
-                    onMouseClick(e);
-                  }
-                }
-              }}
-            >
+            <div className="single_option">
               {inputSingleElement
                 ? parse(inputSingleElement.text)
                 : parse("<p></p>")}
@@ -785,29 +472,5 @@ const ConElement = (props) => {
     </Element>
   );
 };
-
-const StyledModal = Modal.styled`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  width: 600px;
-  min-height: 600px;
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    width: 90%;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
 
 export default NewConstructor;

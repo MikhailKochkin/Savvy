@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { useMutation, gql } from "@apollo/client";
 import _ from "lodash";
-import PropTypes from "prop-types"; // Add this import
 
 import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
 import FixedChat from "./types/FixedChat";
 import DynamicChat from "./types/DynamicChat";
+import { SecondaryButton } from "../styles/DevPageStyles";
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
@@ -18,7 +18,9 @@ const UPDATE_CHAT_MUTATION = gql`
   }
 `;
 
-const Buttons = styled.div``;
+const Buttons = styled.div`
+  margin-bottom: 20px;
+`;
 
 const Styles = styled.div`
   width: 570px;
@@ -197,7 +199,9 @@ const Chat = (props) => {
       <Buttons>
         {me && !story && (
           <>
-            <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
+            <SecondaryButton onClick={(e) => setUpdate(!update)}>
+              {!update ? t("update") : "Back"}
+            </SecondaryButton>
             <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
           </>
         )}

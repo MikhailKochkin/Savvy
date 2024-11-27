@@ -1,46 +1,35 @@
 import { useState, useEffect } from "react";
+import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { TailSpin } from "react-loader-spinner";
+import dynamic from "next/dynamic";
+import { Title, ActionButton, Row, Frame } from "./styles/DevPageStyles";
+
+const UPDATE_LESSON_MUTATION = gql`
+  mutation UPDATE_LESSON_MUTATION($id: String!, $story: String) {
+    updateLesson(id: $id, story: $story) {
+      id
+      story
+    }
+  }
+`;
+
+const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
+});
 
 const Styles = styled.div`
   width: 660px;
-  border: 1px solid #adb5bd;
+  border: 2px solid #f1f1f1;
+  background: #ffffff;
+  border-radius: 20px;
   margin: 40px 0;
   padding: 20px;
   h2 {
     font-size: 2rem;
     font-weight: 600;
-  }
-  textarea {
-    width: 550px;
-    height: 350px;
-    padding: 1rem;
-    font-size: 1.4rem;
-    border: 1px solid #ccc;
-    font-family: Montserrat;
-    border-radius: 5px;
-    outline: none;
-  }
-`;
-
-const Button = styled.button`
-  border: none;
-  background: #3f51b5;
-  padding: 10px 20px;
-  border: 2px solid #3f51b5;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-right: 10px;
-  transition: 0.3s;
-  margin-bottom: 25px;
-  &:hover {
-    background: #2e3b83;
-    border: 2px solid #2e3b83;
+    margin-bottom: 20px;
   }
 `;
 
@@ -52,446 +41,533 @@ const Progress2 = styled.div`
   margin: 10px;
 `;
 
-const GenerateLesson = (props) => {
-  const [source, setSource] = useState("");
-  const [generating, setGenerating] = useState(false);
-  const [recommendation, setRecommendation] = useState("");
-  const [ideas, setIdeas] = useState([
-    // {
-    //   description:
-    //     "Определение наиболее подходящей технологии для создания программного обеспечения (ПО)",
-    //   format: "note",
-    //   idea: "Выбор технологии разработки",
-    // },
-    // {
-    //   idea: "Процесс выбора технологии разработки",
-    //   description:
-    //     "Определение требований к ПО, анализ технологий, оценка технологий, выбор наиболее подходящей технологии, внедрение выбранной технологии.",
-    //   format: "shot",
-    // },
-    // {
-    //   idea: "Программный код",
-    //   description:
-    //     "ПО состоит из кода, который представляет из себя набор команд и алгоритмов. В процессе создания ПО код проходит несколько этапов трансформации: исходный код, объектный код, бинарный код.",
-    //   format: "note",
-    // },
-    // {
-    //   idea: "Исходный код",
-    //   description:
-    //     "Исходный код - это первоначальный код, написанный разработчиком вручную на определенном языке программирования.",
-    //   format: "chat",
-    // },
-    // {
-    //   idea: "Объектный код",
-    //   description:
-    //     "Объектный код - это результат, который получается после обработки исходного кода компилятором. Он уже не является текстом на языке программирования, а представляет собой набор инструкций для процессора.",
-    //   format: "chat",
-    // },
-    // {
-    //   idea: "Бинарный код",
-    //   description:
-    //     "Бинарный код - это низкоуровневый код, который представляет собой набор команд, выполняемых процессором напрямую. Бинарный код не может быть прочитан человеком, так как он представляет собой последовательность нулей и единиц.",
-    //   format: "chat",
-    // },
-  ]);
-  const [blocks, setBlocks] = useState([
+let simulatorStructureExample = {
+  lessonItems: [
     {
-      content: {
-        messagesList: [
-          {
-            author: "author",
-            text: "Let's dive into the world of laws regulating capital markets. Have you heard about these laws before?",
-          },
-          {
-            author: "student",
-            text: "I've heard of them but I'm not sure what they are for.",
-          },
-          {
-            author: "author",
-            text: "These laws, such as the Securities Act of 1933, the Jobs Act of 2012, and the Sarbanes-Oxley Act of 2002, are designed to protect investors and the public from fraud. They aim to instill confidence in the public's capital by regulating the activities of companies involved in the capital markets.",
-          },
-        ],
-      },
-      description:
-        "Various federal laws such as the Securities Act of 1933, the Jobs Act of 2012, and the Sarbanes-Oxley Act of 2002, aim to protect investors and the public from fraud and to instill confidence in the public’s capital.",
-      format: "chat",
-      idea: "Laws regulating capital markets",
-      status: "generated",
+      id: undefined,
+      type: "Chat",
+      comment:
+        "You're a junior privacy lawyer at a global tech company that's rapidly expanding into new markets. Your first major task is to get up to speed with GDPR compliance, a critical part of the company's global operations. Your mentor, a senior partner at the firm, explains that GDPR is not just about following rules—it's about creating trust with clients and users. The goal of this simulator is to help you understand how GDPR applies to real-world business scenarios, ensuring you can protect personal data and maintain compliance. Ready to start your journey?",
     },
     {
-      content: {
-        parts: [
-          "<h2>Slide 1. Introduction to Blue Sky Laws</h2><p>Blue Sky Laws are state regulations designed to protect investors from securities fraud. These laws require companies to provide full and fair disclosure of their financial information before going public.",
-          "<h2>Slide 2. Purpose of Blue Sky Laws</h2><p>The main goal of Blue Sky Laws is to prevent financial misrepresentation and ensure that investors have access to accurate and transparent information about the companies they are investing in.",
-          "<h2>Slide 3. Role of the Securities Commissioner</h2><p>Each state has a securities commissioner who is responsible for enforcing Blue Sky Laws within their jurisdiction. The commissioner oversees the registration and regulation of securities offerings to ensure compliance with state laws.",
-        ],
-        comments: [
-          "<p>Blue Sky Laws play a crucial role in maintaining the integrity of the financial markets and protecting investors from fraudulent schemes. It is important for companies to adhere to these laws to build trust with their investors.</p>",
-        ],
-      },
-      description:
-        "States have enacted laws known as Blue Sky Laws to prevent financial misrepresentation in companies looking to go public, regulated by each state’s securities commissioner.",
-      format: "shot",
-      idea: "State laws to prevent financial misrepresentation",
-      status: "generated",
+      id: undefined,
+      type: "Note",
+      comment:
+        "The startup you’re working with collects vast amounts of personal data from users across the EU. In your first meeting with the company's management, they make it clear: they need to understand GDPR compliance inside and out to continue expanding internationally. You’re given access to internal materials and research, including a primer on the foundational principles of GDPR. In this longread, dive deep into the key principles like data minimisation, purpose limitation, and transparency. Understanding these principles is crucial for advising clients on practical GDPR applications and ensuring that their operations are aligned with the law.",
     },
     {
-      content: {
-        text: "<h2>Role of Lawyers in Helping Public Companies Comply with Laws</h2><p>Public companies operate in a complex legal environment where compliance with laws and regulations is crucial for their success and sustainability. This is where lawyers play a critical role in guiding these companies through the legal landscape.</p><p>Key Responsibilities:</p><ul><li>Ensuring Compliance: Lawyers help public companies understand and adhere to various laws and regulations that govern their operations. This includes securities laws, employment laws, environmental regulations, and more.</li><li>Avoiding Liability: By providing legal advice and counsel, lawyers assist public companies in mitigating risks and avoiding potential legal pitfalls that could lead to liability.</li><li>Handling Legal Proceedings: In the event of legal challenges such as subpoenas, investigations, or testimony by the SEC, lawyers represent public companies and navigate the legal process on their behalf.</li><li>Strategic Counsel: Lawyers offer strategic counsel to public companies on how to structure their operations and transactions in a way that minimizes legal risks and maximizes compliance.</li><li>Drafting Legal Documents: Lawyers draft and review various legal documents such as contracts, disclosures, and filings to ensure they are in compliance with applicable laws and regulations.</li></ul><p>Overall, the role of lawyers in helping public companies comply with laws is indispensable in today's regulatory environment, where legal compliance is a key factor in maintaining a company's reputation and profitability.</p>",
-      },
-      description:
-        "Lawyers are needed to help public companies comply with laws and regulations, avoid liability, and handle legal proceedings such as subpoenas, investigations, and testimony by the SEC.",
-      format: "note",
-      idea: "Role of lawyers in helping public companies comply with laws",
-      status: "generated",
+      id: undefined,
+      type: "Problem",
+      comment:
+        "During your review of the startup’s data collection practices, you come across a request for consent to send marketing materials. Your manager asks you to assess whether this practice aligns with GDPR’s legal bases for data processing. Using a practical case involving a customer who wants to receive targeted marketing emails, you'll need to identify which of the six legal bases for processing personal data applies in this scenario. Understanding the legal bases is a cornerstone of GDPR compliance, and it's your job to ensure the company processes personal data lawfully.",
     },
-  ]);
+    {
+      id: undefined,
+      type: "TextEditor",
+      comment:
+        "Your team has drafted a Data Protection Impact Assessment (DPIA) for a new project involving the processing of sensitive personal data. The DPIA is crucial for assessing the risks to individuals’ privacy rights and ensuring that the company’s processing activities are compliant. However, you notice some discrepancies in the draft. The risk assessment section is incomplete, and certain mitigation strategies are missing. This exercise tasks you with identifying and correcting these gaps, ensuring that the DPIA meets GDPR's requirement for thorough and proactive data protection measures. Think of this as a crucial part of your role in advising clients and mitigating potential data privacy risks.",
+    },
+    {
+      id: undefined,
+      type: "Shot",
+      comment:
+        "The startup client needs a well-crafted privacy notice that aligns with GDPR, but they're unsure of what needs to be included. You’re tasked with drafting the notice, ensuring that it clearly informs users about their data rights and the company’s data processing activities. This block will guide you through the process of crafting an effective privacy notice, taking you step-by-step through the necessary legal language, structure, and practical considerations. It's vital that you not only follow the legal requirements but also write in a way that is understandable to the average user.",
+    },
+    {
+      id: undefined,
+      type: "Problem",
+      comment:
+        "The company receives a data subject access request (DSAR) from an individual asking for access to their personal data. The clock is ticking, as the company has only one month to respond. This is a real-world scenario where time-sensitive action is critical. In this task, you need to draft an appropriate response, ensuring that the request is handled in compliance with GDPR’s data subject rights provisions. This exercise will help you gain practical experience in managing requests, including verifying the identity of the requester and identifying the relevant data sets to share.",
+    },
+    {
+      id: undefined,
+      type: "Construction",
+      comment:
+        "You’ve just received an urgent email from a potential client—an e-commerce platform that has experienced a data breach involving customer payment information. The client is concerned about the impact on their brand and legal liabilities. Your job is to provide clear, GDPR-compliant advice on how to proceed. In this block, you’ll draft an email outlining the steps the client needs to take to notify affected individuals and the relevant authorities. You’ll also need to explain how the company can prevent similar incidents in the future, reinforcing the importance of strong data protection measures.",
+    },
+    {
+      id: undefined,
+      type: "Chat",
+      comment:
+        "You’ve completed the GDPR compliance training simulator. Your manager gathers the team for a final reflection. How will you apply the knowledge you’ve gained about data protection principles, legal bases, and GDPR documentation in your upcoming cases? In this chat, you’ll reflect on key takeaways from the simulator and discuss how these lessons will shape your work moving forward. This final step is important to solidify your understanding and prepare you for real-world challenges.",
+    },
+  ],
+};
 
-  const runBreaking = async (e) => {
-    e.preventDefault();
-    setGenerating(true);
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `
-          Take this text:""" ${source} """"
-          
-          Find up to 3 core ideas in this text. Guess which format is the best way to explain these ideas using this schema:
-          1. "Chat" format is good at explaining simple ideas.
-          2. "Shot" format is good at explaining lists and bullet points. It is very similar to slideshows.
-          3. Complex ideas should be explained in "Note" format. It is very similar to longreads.
-          Return these ideas as an object that looks like this. Use the same language as the text!!! 
-
-          { 
-            "ideas": [
-              {
-                "idea": "The concept of a contract in English law",
-                "description": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other.",
-                "format": "chat"
-              },
-              {
-                "idea": "Terms and elements of a contract",
-                "description": "All contracts must contain key terms and elements to be enforceable: Mutual assent, Consideration, Awareness, Capacity.",
-                "format": "shot"
-              }
-              {
-                "idea": "Contractual obligations",
-                "description": "What is a contractual obligation? Definition, examples, and types of contractual obligations",
-                "format": "note"
-              }
-            ]
-          }
-          `,
-        }),
-      });
-
-      //   2. "Slides" format is good at explaining lists and bullet points.
-      // 3. Complex ideas should be explained in "Note" format.
-      //  {
-      //       "idea": "Terms and elements of a contract",
-      //       "description": "All contracts must contain key terms and elements to be enforceable: Mutual assent between the parties, Consideration, Awareness of the contract,a legally enforceable contract, Capacity.",
-      //       "format": "slides"
-      //     }
-
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
-      }
-      const data = await response.json();
-      if (data.result.content) {
-        try {
-          let jsonArray = JSON.parse(data.result.content);
-          // console.log("jsonArray", jsonArray);
-          // console.log("ideas", jsonArray.ideas);
-          setIdeas(jsonArray.ideas);
-        } catch (error) {
-          // console.error("Error parsing JSON:", error);
-          alert("Error parsing JSON: " + error.message);
-        }
-      } else {
-        setIdeas([]);
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-    setGenerating(false);
-  };
-
-  const runGenereation = async (e) => {
-    e.preventDefault();
-    setGenerating(true);
-
-    await Promise.all(
-      ideas.map(async (el) => {
-        let prompt;
-        if (el.format == "chat") {
-          prompt = `
-              You are building a training simulator out of blocks.
-              Take this idea: """${el.idea}""" and its description: """${el.description}"""
-              and return it in the form of a chat between a student and the teacher. 
-              Use the same language as the language in which the idea is written.
-
-              MAKE EVERY CHAT DIFFERENT!!! MAKE IT LOOK LIKE A REAL DIALOGUE BETWEEN A STUDENT AND A TEACHER.
-
-              The result can look like this:
-
-              Example 1:
-             {
-                "idea": "The concept of a contract in English law",
-                "description": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other.",
-                "format": "chat",
-                "status: "generated",
-                "content": {
-                  "messagesList": [
-                    {
-                      "author": "author",
-                      "text": "Let's take a look at the most fundamental concept. The concept of a contract. Do you know what a contract is?"
-                    },
-                    {
-                      "author": "student",
-                      "text": "Not really... Could you explain please?"
-                    },
-                    {
-                      "author": "author",
-                      "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences."
-                    }
-                  ]
-                }
-              }
-
-              Example 2:
-              {
-                "idea": "The concept of a contract in English law",
-                "description": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other.",
-                "format": "chat",
-                "status: "generated",
-                "content": {
-                  "messagesList": [
-                    {
-                      "author": "student",
-                      "text": "Could you explain what a contract is?"
-                    },
-                    {
-                      "author": "author",
-                      "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences."
-                    }
-                  ]
-                }
-              }
-
-              Example 3:
-              {
-                "idea": "Terms and elements of a contract",
-                "description": "All contracts must contain key terms and elements to be enforceable: Mutual assent between the parties, Consideration, Awareness of the contract, a legally enforceable contract, Capacity.",
-                "format": "chat",
-                "status: "generated",
-                "content": {
-                  "messagesList": [
-                    {
-                      "author": "student",
-                      "text": "So a contract is just a number of obligations stated on a piece of paper? Is it all that takes to make a contract"
-                    },
-                    {
-                      "author": "author",
-                      "text": "Not exactly. Every contract must have 5 elements. Otherwise it won't be a contract."
-                    },
-                    {
-                      "author": "author",
-                      "text": "These are Mutual assent between the parties, Consideration, Awareness of the contract, a legally enforceable contract, Capacity. Let me explain what they are in more detail below."
-                    }
-                  ]
-                }
-              }
-          `;
-        } else if (el.format == "shot") {
-          prompt = `
-              You are building a training simulator out of blocks.
-              Take this idea: """${el.idea}""" and its description: """${el.description}"""
-              and return it in the form of a slideshow between a student and the teacher. 
-              Use the same language as the language in which the idea is written.
-
-              The result can look like this:
-
-              Call the format "shot" strictly!!!
-
-              Example 1:    
-                {
-                "idea": "Terms and elements of a contract",
-                "description": "All contracts must contain key terms and elements to be enforceable: Mutual assent between the parties, Consideration, Awareness of the contract, a legally enforceable contract, Capacity.",
-                "format": "shot",
-                "status: "generated",
-                "content": {
-                  "parts": [
-                    "<h2>Slide 1. Mutual assent between the parties</h2><p>In summary, mutual assent refers to two parties who agree upon something and are prepared to enter into a contract. To have mutual assent, an offeror makes an offer and an offeree accepts it. This is also called offer and acceptance, and is an important element when determining whether mutual assent is present.</p>",
-                  ],
-                  "comments": [
-                    "<p>Let me give you an example of how mutual assent works. One person decides to buy a house from another. They both will sign documents that will show the amount the offeror will provide and the house condition the offeree will submit upon sale.</p>",
-                  ]
-                }
-              }   
-          `;
-        } else if (el.format == "note") {
-          prompt = `
-              You are building a training simulator out of blocks.
-              Take this idea: """${el.idea}""" and its description: """${el.description}"""
-              and return it in the form of a detailed longread where all important information is highlighted. 
-              Use the same language as the language in whic the idea is written.
-
-              The result can look like this:
-
-             {
-                "idea": "Contractual obligations",
-                "description": "What is a contractual obligation? Definition, examples, and types of contractual obligations",
-                "format": "note",
-                "status: "generated",
-                "content": {
-                  "text": "<h2>Contractual obligation</h2><p>Contracts are an essential element of doing business — they serve to protect your company’s interests, define clear terms to your agreements with partners and clients, and outline the obligations of each contracting side.</p><p>But what are contractual obligations, exactly?</p><p>In short, contractual obligations are promises or commitments codified in a contract.</p><p><b>Key takeaways:</b></p><p>Contractual obligations are the terms that all parties commit to when they sign a contract.</p><p>The most common types of contractual obligations include delivery, timelines, payment terms, performance obligations, penalties, termination terms, non-compete and non-disclosure obligations.</p>"
-              }  
-              
-              Format must be "note" and status must be "generated"!
-          `;
-        } else {
-          prompt = `Return "Hello!" `;
-        }
-        try {
-          const response = await fetch("/api/generate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              prompt: prompt,
-            }),
-          });
-
-          if (response.status !== 200) {
-            throw (
-              (await response.json()).error ||
-              new Error(`Request failed with status ${response.status}`)
-            );
-          }
-          const data = await response.json();
-          if (data.result.content) {
-            // console.log("data.result.content", data.result.content);
-            let new_block = JSON.parse(data.result.content);
-            // console.log("new_block", typeof new_block, new_block);
-            let new_blocks = blocks;
-            new_blocks.push(new_block);
-            setBlocks(new_blocks);
-          } else {
-            setBlocks([...blocks]);
-          }
-        } catch (error) {
-          console.error(error);
-          alert(error.message);
-        }
-      })
-    );
-    // console.log("blocks", blocks);
-    setGenerating(false);
-  };
-
-  const findQuizIdeas = async (e) => {
-    e.preventDefault();
-    setGenerating(true);
-
-    let prompt = `
-      You are a teacher in an online school.
-      Analyze this text: """${source}""" and ask your student 3 open-ended questions to check that they have understood what this text is about.
-      Every question should have a detailed and engaging practical scenario.
-
-      Use the SAME language as the language of the TEXT!!! 
-
-      Return these 3 questions in the following format:
-      
+let lessonStructureExample = {
+  lessonItems: [
+    [
       {
-        "questions": [
-          {
-            "question": "<p>A client comes up to you and presents the following situation. His neigbour agreed to buy your client's lawn mower. But now he refuses to execute this deal because the neighbour claims that there is not contract. You client asks you to explain what a contract is.</p><p><b>Question:</b> Explain what a contract is.</p>",
-            "answer": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other"
-          },
-          {
-            "question": "<p>Two businessmen are negotiatng the terms of the contract. They cannot agree on what to put into the contract. They ask you to explain what are the essential elements of a contract.</p><p><b>Question:</b> Explain what are the essential elements of a contract.</p> ",
-            "answer": "Mutual assent between the parties, Consideration, Awareness of the contract, a legally enforceable contract, Capacity"
-          },
-        ]
-      }
-      
-    `;
+        id: undefined,
+        type: "Chat",
+        comment:
+          "Introduce the goal of the lesson, explain why this topic is important, remind to ask questions at the end of the lesson. For example, explain how capital markets transactions play a crucial role in raising funds for businesses and governments, and highlight their importance in the global economy.",
+      },
+      {
+        id: undefined,
+        type: "Note",
+        comment:
+          "Provide key information on the topic in a short and concise manner. For instance, describe the types of capital market transactions, such as IPOs, secondary offerings, and bond issuances, and their respective roles in financial markets.",
+      },
+      {
+        id: undefined,
+        type: "Note",
+        comment:
+          "The second longread delves more into the topic of the lesson. For example, explain the process of conducting an IPO, including preparation, regulatory requirements, and pricing mechanisms.",
+      },
+      {
+        id: undefined,
+        type: "Chat",
+        comment:
+          "The chat sums up core ideas and answers the questions that the student might have after reading 2 longreads. For example, clarify the differences between primary and secondary markets or discuss the role of underwriters in capital markets transactions.",
+      },
+      {
+        id: undefined,
+        type: "Problem",
+        comment:
+          "The first problem helps the student remember the core ideas from the lesson. For example, 'Match the following types of capital market transactions to their definitions.'",
+      },
+      {
+        id: undefined,
+        type: "Problem",
+        comment:
+          "The second problem helps the student understand how to apply the knowledge in real life. For example, 'Evaluate the potential risks and benefits for a company considering an IPO versus a private equity round.'",
+      },
+      {
+        id: undefined,
+        type: "TextEditor",
+        comment:
+          "The text editor helps the student practice working with real documents: laws, contracts, etc. For example, 'Review and edit a draft underwriting agreement for a bond issuance, ensuring compliance with applicable regulations.'",
+      },
+      {
+        id: undefined,
+        type: "Chat",
+        comment:
+          "The time for a final reflection. For example, ask the student, 'How can the knowledge of capital markets transactions help you in your future legal practice or career in finance?'",
+      },
+    ],
+  ],
+};
 
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: prompt,
-        }),
-      });
+let upgradedSimulatorStructureExample = {
+  lessonItems: [
+    {
+      id: undefined,
+      type: "Note",
+      comment:
+        "This longread expands the previous longread on GDPR principles, focusing on the practical implications of data protection principles in real-world scenarios. For example, explain how the principles of data minimisation and purpose limitation apply to specific data processing activities, such as targeted advertising or data analytics.",
+    },
+    {
+      id: undefined,
+      type: "Problem",
+      comment:
+        "This problem provides students another opportunity to apply their knowledge of GDPR legal bases in a new context. For example, 'Assess the legal basis for processing personal data in a scenario involving the use of biometric data for employee access control.'",
+    },
+    {
+      id: "cm38qc2wt000qd1aa4d3zi0yr",
+      type: "TextEditor",
+      comment:
+        "Current simulator structure missess a TextEditor block. This block provides students with a practical exercise in drafting GDPR-compliant documents, such as privacy policies or data processing agreements. For example, 'Draft a data processing agreement for a company outsourcing data processing activities to a third-party service provider.'",
+    },
+  ],
+};
 
-      if (response.status !== 200) {
-        throw (
-          (await response.json()).error ||
-          new Error(`Request failed with status ${response.status}`)
-        );
+const GenerateLesson = (props) => {
+  const { lesson } = props;
+  const populateLessonStructure = (items) => {
+    const updatedItems = items.map((item) => {
+      let comment;
+      if (item.type === "Chat") {
+        comment = lesson.chats
+          .find((chat) => chat.id === item.id)
+          ?.messages.messagesList.map((message) => message.text)
+          .join(" ");
+      } else if (item.type === "Note") {
+        comment = lesson.notes.find((note) => note.id === item.id)?.text;
+      } else if (item.type === "Problem") {
+        comment = lesson.problems.find(
+          (problem) => problem.id === item.id
+        ).text;
+      } else if (item.type === "TextEditor") {
+        comment = lesson.texteditors.find(
+          (textEditor) => textEditor.id === item.id
+        ).text;
+      } else if (item.type === "Shot") {
+        comment = "";
+      } else if (item.type === "Construction") {
+        comment = "";
+      } else if (item.type === "Forum") {
+        comment = lesson.forum.text;
+      } else if (item.type === "Quiz") {
+        comment = lesson.quizes.find((quiz) => quiz.id === item.id).question;
+      } else if (item.type === "NewTest") {
+        comment = lesson.newTests.find((newTest) => newTest.id === item.id)
+          .question[0];
       }
-
-      const data = await response.json();
-      if (data.result.content) {
-        let quizzes = JSON.parse(data.result.content);
-        console.log(1, quizzes);
-      } else {
-        console.log(2);
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    } finally {
-      setGenerating(false); // This will always be executed, even if there was an error
-    }
+      return {
+        id: item.id,
+        type: item.type,
+        content: comment,
+      };
+    });
+    console.log("updatedItems", updatedItems);
+    return updatedItems;
   };
+  const [source, setSource] = useState("");
+  const [simulatorStory, setSimulatorStory] = useState(props.story || "");
+  const [generating, setGenerating] = useState(false);
+  const [blocks, setBlocks] = useState([]);
+  const [simulatorType, setSimulatorType] = useState("Simulator");
+  const [structure, setStructure] = useState();
+
+  useEffect(() => {
+    if (props.structure) {
+      setStructure(populateLessonStructure(props.structure.lessonItems));
+    }
+  }, [props.structure]);
 
   const passData = (blocks) => {
     props.passData(blocks);
   };
+
+  const [updateLesson, { loading }] = useMutation(UPDATE_LESSON_MUTATION);
+
+  const myCallback = (dataFromChild) => {
+    setSimulatorStory(dataFromChild);
+  };
+
+  const generateSimStory = async (e) => {
+    let storyPrompt = `
+      Create a realistic legal scenario for this simulator.
+      ${source}
+      Set the scene in a specific location with key stakeholders facing a time-sensitive situation. 
+      Introduce the main characters, their roles, and their immediate legal challenge. 
+      Include relevant background details about the business/property/situation.
+      Present the scenario from the perspective of a lawyer who needs to provide advice. End with a clear indication of the task at hand.
+      Provide prompts for generating realistic portrait images of the main characters.
+      Return the result only with p, h2, and b tags.
+    `;
+
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: storyPrompt }),
+      });
+      const data = await response.json();
+      console.log("data.result.content", data.result.content);
+      setSimulatorStory(data.result.content);
+      return data.result.content;
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const generateSimStructure = async (e, simStory) => {
+    let structurePrompt = `
+      Generate a JSON structure for an interactive simulator aimed at junior lawyers. 
+      The simulator should follow a structured training loop and include the following elements:
+      ${source}.
+
+      Structure Requirements: JSON Formatting:
+      - Provide lesson items in JSON format using proper key-value pairs and nested structures where appropriate.
+      - Include the following attributes:
+        - id: Equal to undefined.
+        - type: Block type ('Chat', 'Longread', 'Shot', 'Problem', 'Editor', 'Construction', 'Forum').
+        - comment: Brief description of the block's purpose.
+
+      Training Loop Structure:
+
+      Ensure the simulator includes the following sequence for optimal learning:
+
+      1. Learning Phase (Explanatory Blocks):
+
+      - Chat: Initiate discussions, introduce goals, and provide feedback on key concepts.
+      - Longread: Deliver background knowledge, enhanced with multimedia support such as videos or infographics.
+      - Shots: Guide students step-by-step through drafting documents or performing specific GDPR-related processes.
+
+      2. Practice Phase (Practice Blocks):
+
+      - Problem: Present real-world scenarios where students apply their knowledge to practical challenges.
+      - TextEditor: Provide draft GDPR documents for students to review, analyse, and correct.
+      - Construction: Assign document drafting tasks (e.g., drafting a privacy notice or compliance email).
+    
+      3. Reflection Phase (Reflection Blocks):
+
+      Reflection blocks encourage students to think critically about what they have learned and how to apply it in real-world settings.
+
+      – Forum: A space for students to ask questions and engage with their peers or instructors. 
+      – Chat: Summarise key takeaways, ask students to reflect on their learning, and discuss how the knowledge can be applied in practice.
+      – Problem: Pose reflective scenarios where students assess how their newfound knowledge can be implemented in a real legal context.
+
+      Build the simulator, its theory and practice blocks around this story: ${simStory}.
+
+      Sample Structure to Emulate: ${JSON.stringify(
+        simulatorStructureExample,
+        null,
+        2
+      )}
+
+        Leverage this format to ensure clarity, engagement, and comprehensive learning outcomes. Ensure all descriptions are concise and written in British English.
+    `;
+
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: structurePrompt }),
+      });
+      const data = await response.json();
+      const jsonData = JSON.parse(data.result.content);
+      setBlocks(jsonData.lessonItems);
+      console.log("jsonData", jsonData.lessonItems);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const generateLessonStructure = async (e, story) => {
+    e.preventDefault();
+    let structurePrompt = `
+      Generate a JSON structure for an interactive lesson aimed at junior lawyers. 
+      The lesson should follow a structured training loop and include the following elements:
+      ${source} – the prompt.
+
+      Training Loop Structure:
+
+      Ensure the simulator includes the following sequence for optimal learning:
+
+      1. Learning Phase (Explanatory Blocks):
+
+      - Chat: Initiate discussions, introduce goals, and provide feedback on key concepts.
+      - Longread: Deliver background knowledge, enhanced with multimedia support such as videos or infographics.
+      - Shots: Guide students step-by-step through drafting documents or performing specific GDPR-related processes.
+
+      2. Practice Phase (Practice Blocks):
+
+      - Problem: Present real-world scenarios where students apply their knowledge to practical challenges.
+      - TextEditor: Provide draft GDPR documents for students to review, analyse, and correct.
+      - Construction: Assign document drafting tasks (e.g., drafting a privacy notice or compliance email).
+    
+      3. Reflection Phase (Reflection Blocks):
+
+      Reflection blocks encourage students to think critically about what they have learned and how to apply it in real-world settings.
+
+      – Forum: A space for students to ask questions and engage with their peers or instructors. 
+      – Chat: Summarise key takeaways, ask students to reflect on their learning, and discuss how the knowledge can be applied in practice.
+      – Problem: Pose reflective scenarios where students assess how their newfound knowledge can be implemented in a real legal context.
+
+      Sample Structure to Emulate: ${JSON.stringify(
+        lessonStructureExample,
+        null,
+        2
+      )}
+
+      Leverage this format to ensure clarity, engagement, and comprehensive learning outcomes. Ensure all comments are concise and written in Russian.
+
+      Structure Requirements: JSON Formatting:
+      - Provide lesson items in JSON format using proper key-value pairs and nested structures where appropriate.
+      - Include the following attributes:
+        - id: Equal to undefined.
+        - type: Block type ('Chat', 'Longread', 'Shot', 'Problem', 'Editor', 'Construction', 'Forum').
+        - comment: Brief description of the block's purpose.
+    `;
+
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: structurePrompt }),
+      });
+      const data = await response.json();
+      const jsonData = JSON.parse(data.result.content);
+      setBlocks(jsonData.lessonItems);
+      console.log("jsonData", jsonData.lessonItems);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const generateUpdatedSimStructure = async (e, structure) => {
+    e.preventDefault();
+    console.log(0, structure);
+
+    let structurePrompt = `
+      Add new items to the JSON structure for an interactive simulator aimed at junior lawyers using these recommendations: ${source}.
+      Current structure looks like that: ${JSON.stringify(structure, null, 2)}.
+      Add comments to new items explaining their purpose and content.
+      
+      Training Loop Structure:
+
+      Ensure the simulator includes the following sequence for optimal learning:
+
+      1. Learning Phase (Explanatory Blocks):
+
+      - Chat: Initiate discussions, introduce goals, and provide feedback on key concepts.
+      - Longread: Deliver background knowledge, enhanced with multimedia support such as videos or infographics.
+      - Shots: Guide students step-by-step through drafting documents or performing specific GDPR-related processes.
+
+      2. Practice Phase (Practice Blocks):
+
+      - Problem: Present real-world scenarios where students apply their knowledge to practical challenges.
+      - TextEditor: Provide draft GDPR documents for students to review, analyse, and correct.
+      - Construction: Assign document drafting tasks (e.g., drafting a privacy notice or compliance email).
+    
+      3. Reflection Phase (Reflection Blocks):
+      Reflection blocks encourage students to think critically about what they have learned and how to apply it in real-world settings.
+
+      – Forum: A space for students to ask questions and engage with their peers or instructors. 
+      – Chat: Summarise key takeaways, ask students to reflect on their learning, and discuss how the knowledge can be applied in practice.
+      – Problem: Pose reflective scenarios where students assess how their newfound knowledge can be implemented in a real legal context.
+
+      Sample Structure to Emulate: ${JSON.stringify(
+        upgradedSimulatorStructureExample,
+        null,
+        2
+      )}
+
+      Leverage this format to ensure clarity, engagement, and comprehensive learning outcomes. Ensure all descriptions are concise and written in British English.
+
+      Return new elements in JSON format.
+      Structure Requirements: JSON Formatting:
+      - Provide lesson items in JSON format using proper key-value pairs and nested structures where appropriate.
+      - Include the following attributes:
+        - id: Equal to undefined.
+        - type: Block type ('Chat', 'Longread', 'Shot', 'Problem', 'Editor', 'Construction', 'Forum').
+        - comment: Brief description of the block's purpose.
+
+    `;
+
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: structurePrompt }),
+      });
+      const data = await response.json();
+      const jsonData = JSON.parse(data.result.content);
+      setBlocks([
+        ...structure,
+        ...jsonData.lessonItems.map((item) => {
+          return {
+            id: undefined,
+            type: item.type,
+            comment: item.comment,
+          };
+        }),
+      ]);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
   return (
     <Styles>
-      <h2>Generate New Lesson</h2>
-      <textarea maxLength={2500} onChange={(e) => setSource(e.target.value)} />
-      <div>Characters used: {source.length} / 2500</div>
-      <br />
+      <Title>Generate Changes to Simulator</Title>
+      <Row>
+        <div className="description">Simulator type</div>
+        <div className="action_area">
+          <select onChange={(e) => setSimulatorType(e.target.value)}>
+            <option value="Simulator">Simulator</option>
+            <option value="Classic Lesson">Classic Lesson</option>
+          </select>
+        </div>
+      </Row>
+      {simulatorStory && (
+        <Row>
+          <div className="description">Simulator story</div>
+          <div className="action_area">
+            <Frame>
+              <DynamicHoverEditor
+                name="story"
+                getEditorText={myCallback}
+                value={simulatorStory}
+              />
+            </Frame>
+          </div>
+        </Row>
+      )}
+      <Row>
+        <div className="description">Simulator prompt</div>
+        <div className="action_area">
+          <textarea onChange={(e) => setSource(e.target.value)} />
+        </div>
+      </Row>
+      {/* <div>Characters used: {source.length} / 2500</div> */}
       {generating && (
         <Progress2>
           <TailSpin width="50" color="#2E80EC" />
         </Progress2>
       )}
-      <Button onClick={(e) => runBreaking(e)}>
-        Break information into blocks
-      </Button>
-      {ideas && ideas.length > 0 && "✅"}
-      <br />
-      <Button onClick={(e) => runGenereation(e)}>Generate Blocks</Button>
-      <br />
-      <Button onClick={(e) => findQuizIdeas(e)}>Generate Quiz Ideas</Button>
-      <br />
-      <Button onClick={(e) => generateQuizzes(e)}>Generate Quizzes</Button>
-      <br />
-
-      {/* {blocks?.length > 0 &&
-        blocks.map((b) => (
-          <li>
-            <b>{b.idea}</b> – {b.format}: {b.content}
-          </li>
-        ))} */}
-      <Button onClick={(e) => passData(blocks)}>Pass Blocks</Button>
+      <ActionButton
+        onClick={async (e) => {
+          setGenerating(true);
+          const simStory = await generateSimStory(e);
+          setSimulatorStory(simStory);
+          setGenerating(false);
+        }}
+      >
+        Generate Story
+      </ActionButton>
+      <ActionButton
+        onClick={async (e) => {
+          e.preventDefault();
+          try {
+            await updateLesson({
+              variables: {
+                id: props.lessonId,
+                story: simulatorStory,
+              },
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }}
+      >
+        {loading ? "..." : "Save Story"}
+      </ActionButton>
+      <ActionButton
+        onClick={async (e) => {
+          setGenerating(true);
+          if (simulatorType === "Simulator") {
+            await generateSimStructure(e, simulatorStory);
+          } else {
+            await generateLessonStructure(e);
+          }
+          setGenerating(false);
+        }}
+      >
+        Generate Sim Structure
+      </ActionButton>
+      {props.structure && (
+        <ActionButton
+          onClick={async (e) => {
+            setGenerating(true);
+            const res = await generateUpdatedSimStructure(e, structure);
+            setGenerating(false);
+          }}
+        >
+          Upgrade Sim Structure
+        </ActionButton>
+      )}
+      <ActionButton onClick={(e) => passData(blocks, simulatorStory)}>
+        Pass Blocks
+      </ActionButton>
     </Styles>
   );
 };

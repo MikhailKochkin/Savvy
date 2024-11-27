@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-import { set } from "lodash";
 
 const Styles = styled.div`
   border: 1px solid #c4c4c4;

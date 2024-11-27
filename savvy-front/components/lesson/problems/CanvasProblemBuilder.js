@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { useDrag, useDrop } from "react-dnd";
@@ -6,6 +6,7 @@ import { mergeRefs } from "react-merge-refs";
 import parse from "html-react-parser";
 import Modal from "styled-react-modal";
 import NewBlock from "./blocks/NewBlock";
+import { MicroButton, SecondaryButton } from "../styles/DevPageStyles";
 
 const Styles = styled.div`
   display: flex;
@@ -20,16 +21,39 @@ const Styles = styled.div`
   .canvasArea {
     position: relative;
     width: 100%;
+    overflow-y: auto;
     height: 900px;
     background: #f9f9fb;
     border: 2px solid #f5f6f6;
     margin: 15px 0;
     overflow: auto;
+    zoom: ${(props) => `${props.zoom}%`};
   }
+
   .toolbar {
     width: 660px;
     display: flex;
     justify-content: space-between; /* Distribute items evenly along the main axis */
+  }
+`;
+
+const Toolbar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0px;
+  .right {
+    width: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .left {
+    width: 45%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 `;
 
@@ -39,11 +63,17 @@ const MessageStyles = styled.div`
   background: #fff;
   border: 2px solid #eff1f4;
   border-radius: 10px;
+  transform-origin: 0 0;
+  background: ${(props) => (props.primary ? "palevioletred" : "white")};
+  opacity: ${(props) => (props.isDragging ? 0 : 0.7)};
+  color: #000;
+
+  z-index: 10;
   cursor: pointer;
-  h2 {
-    margin: 5px 0;
-  }
   .type {
+    background: #fff;
+    opacity: 1;
+    color: #000;
   }
   .id_info {
     font-size: 1rem;
@@ -74,25 +104,6 @@ const MessageStyles = styled.div`
 `;
 
 const DevWindowStyles = styled.div``;
-
-const SimpleButton = styled.button`
-  flex: 1;
-  height: 40px;
-  background: none;
-  padding: 5px 0;
-  border: 2px solid #69696a;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #323334;
-  margin-right: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-  &:hover {
-    background: #f4f4f4;
-  }
-`;
 
 const QuestionButtons = styled.div`
   display: flex;
@@ -133,13 +144,35 @@ const InformationSection = styled.div`
 `;
 
 const SVGConnections = ({ messages, breakConnection }) => {
-  const getControlPoint = (x1, y1, x2, y2) => {
+  const getControlPoints = (x1, y1, x2, y2) => {
     const dx = x2 - x1;
     const dy = y2 - y1;
     const length = Math.sqrt(dx * dx + dy * dy);
-    const cx = x1 + dx / 2;
-    const cy = y1 + dy / 2 - length * 0.3;
-    return { cx, cy };
+
+    // Control points offset for smooth S-curve
+    const c1x = x1 + length * 0.9; // First control point (right of start point)
+    const c1y = y1 - length * 0; // Slightly above start point
+    const c2x = x2 - length * 0.7; // Second control point (left of end point)
+    const c2y = y2 - length * 0; // Slightly above end point
+
+    return { c1x, c1y, c2x, c2y };
+  };
+
+  const getMidpoint = (x1, y1, c1x, c1y, c2x, c2y, x2, y2, t = 0.5) => {
+    // Cubic Bézier interpolation formula
+    const mt = 1 - t;
+    const midpointX =
+      mt * mt * mt * x1 +
+      3 * mt * mt * t * c1x +
+      3 * mt * t * t * c2x +
+      t * t * t * x2;
+    const midpointY =
+      mt * mt * mt * y1 +
+      3 * mt * mt * t * c1y +
+      3 * mt * t * t * c2y +
+      t * t * t * y2;
+
+    return { midpointX, midpointY };
   };
 
   const squareSize = 20;
@@ -150,8 +183,8 @@ const SVGConnections = ({ messages, breakConnection }) => {
         position: "absolute",
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
+        width: "400vw",
+        height: "100vh",
         pointerEvents: "none",
       }}
     >
@@ -170,44 +203,65 @@ const SVGConnections = ({ messages, breakConnection }) => {
       {messages.flatMap((message) => {
         if (!message.next.branches || message.next.branches.length == 0) {
           return ["true", "false"].map((key) => {
-            const targetId = message.next[key].value;
+            const targetId = message.next[key]?.value;
             const target = messages.find((m) => m.id === targetId);
             if (!target) return null;
-            const x1 =
-              key === "true"
-                ? message.position.x + 280 - 50
-                : message.position.x + 280 - 50;
-            const y1 =
-              key === "true"
-                ? message.position.y + 150 + 40
-                : message.position.y + 150 + 80;
 
-            const x2 =
-              key === "true"
-                ? target.position.x - 5
-                : target.position.x + squareSize / 2 - 15;
-            const y2 =
-              key === "true"
-                ? target.position.y + squareSize / 2 + 15
-                : target.position.y + 50;
+            let zoom = 1;
 
-            const controlPointOffset = 50;
-            let { cx, cy } = getControlPoint(x1, y1, x2, y2);
-            cy =
-              key === "true"
-                ? cy - controlPointOffset
-                : cy + controlPointOffset;
+            let zoom_coef = parseFloat(((1 - zoom) * 10).toFixed(2));
 
-            const t = 0.5;
-            const mt = 1 - t;
-            const midpointX = mt * mt * x1 + 2 * mt * t * cx + t * t * x2;
-            const midpointY = mt * mt * y1 + 2 * mt * t * cy + t * t * y2;
+            let x1;
+            let y1;
+            if (zoom > 0.4 && zoom < 0.7) {
+              x1 = message.position.x + 280 - 50 - zoom_coef * 24;
+              y1 =
+                key === "true"
+                  ? message.position.y + 150 + 40 - zoom_coef * 20
+                  : message.position.y + 150 + 80 - zoom_coef * 23.5;
+            } else if (zoom >= 0.7 && zoom < 0.9) {
+              x1 = message.position.x + 280 - 50 - zoom_coef * 24;
+              y1 =
+                key === "true"
+                  ? message.position.y + 150 + 40 - zoom_coef * 20
+                  : message.position.y + 150 + 80 - zoom_coef * 22.5;
+            } else {
+              x1 = message.position.x + 280 - 50 - zoom_coef * 24;
+              y1 =
+                key === "true"
+                  ? message.position.y + 150 + 40 - zoom_coef * 20
+                  : message.position.y + 150 + 80 - zoom_coef * 20;
+            }
+            console.log("zoom_coef", zoom_coef, zoom);
+
+            // Define start and end points
+
+            // console.log("x1", x1, y1, zoom);
+
+            const x2 = target.position.x - 5;
+            const y2 = target.position.y + 50 - zoom_coef * 5;
+
+            // Calculate control points for cubic Bézier curve
+            const { c1x, c1y, c2x, c2y } = getControlPoints(x1, y1, x2, y2);
+
+            // Calculate midpoint for the interactive circle
+            const { midpointX, midpointY } = getMidpoint(
+              x1,
+              y1,
+              c1x,
+              c1y,
+              c2x,
+              c2y,
+              x2,
+              y2
+            );
+
             return (
               <g key={`${message.id}-${key}`}>
                 <path
-                  d={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
+                  d={`M ${x1} ${y1} C ${c1x} ${c1y} ${c2x} ${c2y} ${x2} ${y2}`}
                   fill="none"
-                  stroke={key === "true" ? "#72D47F" : "#EB5E55"}
+                  stroke={key === "true" ? "#2a9d8f" : "#f4a261"}
                   markerEnd="url(#arrowhead)"
                   onClick={() => breakConnection(message.id, targetId, key)}
                   style={{ pointerEvents: "visiblePainted" }}
@@ -225,82 +279,50 @@ const SVGConnections = ({ messages, breakConnection }) => {
             );
           });
         } else {
-          return message.next.branches.map((branch, i) => {
-            const targetId = branch.value;
-            const target = messages.find((m) => m.id === targetId);
-            if (!target) return null;
-            const x1 = message.position.x + 280 - 50;
-            const y1 = message.position.y + 150 + 40 + (i * 45 + 5 * i);
-
-            const x2 = target.position.x - 5;
-
-            const y2 = target.position.y + 50;
-
-            const controlPointOffset = 50;
-            let { cx, cy } = getControlPoint(x1, y1, x2, y2);
-            cy = cy - controlPointOffset;
-
-            const t = 0.5;
-            const mt = 1 - t;
-            const midpointX = mt * mt * x1 + 2 * mt * t * cx + t * t * x2;
-            const midpointY = mt * mt * y1 + 2 * mt * t * cy + t * t * y2;
-
-            return (
-              <g key={`${message.id}-${branch}`}>
-                <path
-                  d={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
-                  fill="none"
-                  stroke={"#ECD444"}
-                  markerEnd="url(#arrowhead)"
-                  onClick={() =>
-                    breakConnection(message.id, targetId, "branch")
-                  }
-                  style={{ pointerEvents: "visiblePainted" }}
-                  strokeDasharray="5,5"
-                />
-                <circle
-                  cx={midpointX}
-                  cy={midpointY}
-                  r={5}
-                  fill={"#ECD444"}
-                  onClick={() =>
-                    breakConnection(message.id, targetId, "branch")
-                  }
-                  style={{ pointerEvents: "auto" }}
-                />
-              </g>
-            );
-          });
+          // Handle branches logic here (similar to above)
         }
       })}
     </svg>
   );
 };
 
-const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
-  const { t } = useTranslation("lesson");
-  const initializeMessages = (items) => {
-    return items.map((item) => {
-      return {
-        id: item.id,
-        content: "",
-        position: item.position || { x: 100, y: 100 }, // Use saved position or default
-        type: item.type,
-        next: {
-          true: {
-            value: item.next.true.value,
-            type: item.next.true.type,
-          },
-          false: {
-            value: item.next.false.value,
-            type: item.next.false.type,
-          },
-          branches: item.next?.branches ? item.next.branches : [],
+const initializeMessages = (items) => {
+  return items.map((item) => {
+    return {
+      id: item.id,
+      content: "",
+      position: item.position || { x: 100, y: 100 }, // Use saved position or default
+      type: item.type,
+      question: item.question,
+      answers: item.answers,
+      whichAnswersAreCorrect: item.whichAnswersAreCorrect,
+      next: {
+        true: {
+          value: item.next.true.value,
+          type: item.next.true.type,
         },
-      };
-    });
-  };
-  const [messages, setMessages] = useState(initializeMessages(items));
+        false: {
+          value: item.next.false.value,
+          type: item.next.false.type,
+        },
+        branches: item.next?.branches ? item.next.branches : [],
+      },
+    };
+  });
+};
+
+const CanvasProblemBuilder = ({
+  items,
+  getSteps,
+  lesson,
+  me,
+  generatedSteps,
+}) => {
+  const { t } = useTranslation("lesson");
+  const [messages, setMessages] = useState(
+    items ? initializeMessages(items) : []
+  );
+  const [zoom, setZoom] = useState(1);
   const [activeMessage, setActiveMessage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -439,7 +461,7 @@ const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
       })
     );
   };
-  const developElement = (id) => {
+  const developElement = (id, question, answers, whichAnswersAreCorrect) => {
     const chosenElement = messages.find((el) => el.id === id);
     const foundData = [
       ...lesson.notes,
@@ -447,7 +469,13 @@ const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
       ...lesson.newTests,
       ...lesson.chats,
     ].find((el) => el.id === id);
-    setActiveMessage({ ...chosenElement, foundData });
+    setActiveMessage({
+      ...chosenElement,
+      foundData,
+      question,
+      answers,
+      whichAnswersAreCorrect,
+    });
     setModalOpen(true);
   };
 
@@ -460,7 +488,7 @@ const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
   };
 
   return (
-    <Styles>
+    <Styles zoom={100 * zoom}>
       {activeMessage && (
         <StyledModal
           isOpen={modalOpen}
@@ -475,25 +503,41 @@ const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
               lesson={lesson}
               me={me}
               data={activeMessage.foundData}
+              generatedInfo={{
+                question: activeMessage.question,
+                answers: activeMessage.answers,
+                whichAnswersAreCorrect: activeMessage.whichAnswersAreCorrect,
+              }}
               library={lesson.notes}
             />
             <button onClick={() => setModalOpen(false)}>Close</button>
           </DevWindowStyles>
         </StyledModal>
       )}
-      <h2>{t("guiding_questions")}</h2>
-      <div className="toolbar">
-        {["Note", "NewTest", "Quiz", "Chat"].map((type) => (
-          <SimpleButton key={type} onClick={() => addMessage(type)}>
-            {t(`add_${type.toLowerCase()}`)}
-          </SimpleButton>
-        ))}
-      </div>
-      <div
-        className="canvasArea"
-        ref={dropCanvas}
-        style={{ backgroundColor: "#f9f9fb" }}
-      >
+      {/* <h2>{t("guiding_questions")}</h2> */}
+      <Toolbar>
+        <div className="left">
+          {["Note", "NewTest", "Quiz", "Chat"].map((type) => (
+            <SecondaryButton key={type} onClick={() => addMessage(type)}>
+              {t(`add_${type.toLowerCase()}`)}
+            </SecondaryButton>
+          ))}
+        </div>
+        <div className="right">
+          <SecondaryButton
+            onClick={() => setZoom((prevZoom) => Math.min(prevZoom + 0.1, 1))}
+          >
+            Zoom In
+          </SecondaryButton>
+          <SecondaryButton
+            onClick={() => setZoom((prevZoom) => Math.max(prevZoom - 0.1, 0.5))}
+          >
+            Zoom Out
+          </SecondaryButton>
+          {/* <div>{zoom}</div> */}
+        </div>
+      </Toolbar>
+      <div className="canvasArea" ref={dropCanvas}>
         {messages.map((message, index) => (
           <Message
             key={index}
@@ -503,9 +547,17 @@ const CanvasProblemBuilder = ({ items, getSteps, lesson, me }) => {
             developElement={developElement}
             onRemove={deleteMessage}
             lesson={lesson}
+            question={message.question}
+            answers={message.answers}
+            whichAnswersAreCorrect={message.whichAnswersAreCorrect}
+            zoom={zoom}
           />
         ))}
-        <SVGConnections messages={messages} breakConnection={breakConnection} />
+        <SVGConnections
+          messages={messages}
+          breakConnection={breakConnection}
+          zoom={zoom}
+        />
       </div>
     </Styles>
   );
@@ -522,6 +574,10 @@ const Message = ({
   type,
   onRemove,
   foundElement,
+  question,
+  answers,
+  whichAnswersAreCorrect,
+  zoom,
 }) => {
   const { t } = useTranslation("lesson");
 
@@ -553,7 +609,7 @@ const Message = ({
   });
 
   const passElementValue = () => {
-    developElement(id);
+    developElement(id, question, answers, whichAnswersAreCorrect);
   };
 
   const handleRemove = (e) => {
@@ -567,11 +623,12 @@ const Message = ({
     <MessageStyles
       onClick={(e) => passElementValue()}
       ref={mergeRefs([dragRef, dropRef])}
+      // zoom={zoom}
+      isDragging={isDragging}
       style={{
         position: "absolute",
         top: position.y,
         left: position.x,
-        opacity: isDragging ? 0.5 : 1,
       }}
     >
       <InformationSection>
@@ -699,8 +756,7 @@ const StyledModal = Modal.styled`
   border: 1px solid grey;
   border-radius: 10px;
   height: 800px;
-  max-width: 880px;
-  min-width: 560px;
+  width: 640px;
   padding: 2%;
       overflow-y: scroll;
 

@@ -7,6 +7,12 @@ import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
 import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";
+import {
+  Row,
+  ActionButton,
+  SecondaryButton,
+  MicroButton,
+} from "../styles/DevPageStyles";
 
 const UPDATE_CONSTRUCTION_MUTATION = gql`
   mutation UPDATE_CONSTRUCTION_MUTATION(
@@ -41,41 +47,16 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
   }
 `;
 
-const Center = styled.div`
+const Styles = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
-  background: white;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
   padding: 2%;
-  textarea {
-    padding: 10px;
-    font-size: 1.6rem;
-    font-family: Montserrat;
-    line-height: 1.4;
+  .editor_container {
     width: 600px;
-    margin-bottom: 40px;
-  }
-  select {
-    width: 50%;
-    font-size: 1.4rem;
-    outline: none;
-    line-height: 1.3;
-    padding: 1.5% 2%;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    margin-bottom: 1.5%;
-    border: 1px solid #c5c5c5;
-    border-radius: 4px;
-    background: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
-      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
-    background-repeat: no-repeat, repeat;
-    background-position: right 0.7em top 50%, 0 0;
-    background-size: 0.65em auto, 100%;
   }
 `;
 
@@ -380,115 +361,141 @@ const UpdateNewConstructor = (props) => {
 
   const { lessonId } = props;
   return (
-    <Center>
-      <Title>{t("Construction")}</Title>
-      <NameInput
-        defaultValue={name}
-        placeholder="Undefined"
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Explainer>
-        {router.locale == "ru" ? (
-          <>
-            <p>
-              Задача конструктора – дать студенту возможность самостоятельно
-              создать полноценный документ, слайд или формулу. Для этого ему
-              предстоит выбрать нужные блоки и поместить их в правильное место.
-              Вы можете создать любое количество блоков в любых конфигурациях.
-              Но обратите внимание на их настройки:
-            </p>
-            <ul>
-              <li>
-                По общему правилу блоки статичны. То есть, когда они будут
-                показываться студентам, двигать их будет нельзя.
-              </li>
-              <li>
-                Нажмите на ✅, чтобы сделать блок активным. Тогда студент при
-                выполнении задания сможет ставить его на разные места в
-                документе.
-              </li>
-              <li>
-                Нажмите на ⛔️, если хотите сделать блок лишним. Тогда он будет
-                предложен студенту как вариант, но в документе для него места не
-                будет. Обязательно ставьте такие блоки в самый конец документа.
-              </li>
-              <li>Нажмите на ➡️, если хотите увеличить ширину блока.</li>
-            </ul>
-          </>
-        ) : (
-          <>
-            <p>
-              The purpose of the doc builder is to develop the skill of drafting
-              documents. To do this, students will have to select the right
-              blocks and place them in the right places. You can create any
-              number of blocks in any configuration. But pay attention to these
-              settings:
-            </p>
-            <ul>
-              <li>
-                As a general rule, blocks are static. That is, when they are
-                shown to the students, they cannot be moved.
-              </li>
-              <li>
-                Press ✅ to make the block active. The student will then be able
-                to move it to different positions in the document.
-              </li>
-              <li>
-                Press ⛔️ if you want to make the block redundant. It will then
-                be an option to the student, but there will be no room for it in
-                the document. Please put such blocks at the very end of the
-                document.
-              </li>
-              <li>Press ➡️ if you want to increase the block width.</li>
-            </ul>
-          </>
-        )}
-      </Explainer>
-      {/* <h3>Goal</h3>
-      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea> */}
-      <select
-        name="types"
-        id="types"
-        defaultValue={type}
-        onChange={(e) => setType(e.target.value)}
-      >
-        <option value="DOCUMENT">Document</option>
-        <option value="SUMMARY">Summary</option>
-      </select>
-      <Number>
-        <div className="name"># of blocks: </div>
-        <Buttons>
-          <MoreButton
-            onClick={(e) => {
-              let arr = [...elements];
-              arr.pop();
-              setElements([...arr]);
-            }}
-          >
-            -
-          </MoreButton>
-          <MoreButton
-            onClick={(e) => {
-              let index = elements.length;
-              let new_el = { ...mod_el };
-              new_el.place = index;
-              setElements([...elements, new_el]);
-            }}
-          >
-            +
-          </MoreButton>
-        </Buttons>
-      </Number>
-      <Number>
-        <div className="name"># of columns: </div>
-        <input
-          type="number"
-          max="30"
-          defaultValue={columnsNum}
-          onChange={(e) => setColumns(parseInt(e.target.value))}
-        />
-      </Number>
+    <Styles>
+      <div className="editor_container">
+        {/* <Explainer>
+          {router.locale == "ru" ? (
+            <>
+              <p>
+                Задача конструктора – дать студенту возможность самостоятельно
+                создать полноценный документ, слайд или формулу. Для этого ему
+                предстоит выбрать нужные блоки и поместить их в правильное
+                место. Вы можете создать любое количество блоков в любых
+                конфигурациях. Но обратите внимание на их настройки:
+              </p>
+              <ul>
+                <li>
+                  По общему правилу блоки статичны. То есть, когда они будут
+                  показываться студентам, двигать их будет нельзя.
+                </li>
+                <li>
+                  Нажмите на ✅, чтобы сделать блок активным. Тогда студент при
+                  выполнении задания сможет ставить его на разные места в
+                  документе.
+                </li>
+                <li>
+                  Нажмите на ⛔️, если хотите сделать блок лишним. Тогда он
+                  будет предложен студенту как вариант, но в документе для него
+                  места не будет. Обязательно ставьте такие блоки в самый конец
+                  документа.
+                </li>
+                <li>Нажмите на ➡️, если хотите увеличить ширину блока.</li>
+              </ul>
+            </>
+          ) : (
+            <>
+              <p>
+                The purpose of the doc builder is to develop the skill of
+                drafting documents. To do this, students will have to select the
+                right blocks and place them in the right places. You can create
+                any number of blocks in any configuration. But pay attention to
+                these settings:
+              </p>
+              <ul>
+                <li>
+                  As a general rule, blocks are static. That is, when they are
+                  shown to the students, they cannot be moved.
+                </li>
+                <li>
+                  Press ✅ to make the block active. The student will then be
+                  able to move it to different positions in the document.
+                </li>
+                <li>
+                  Press ⛔️ if you want to make the block redundant. It will
+                  then be an option to the student, but there will be no room
+                  for it in the document. Please put such blocks at the very end
+                  of the document.
+                </li>
+                <li>Press ➡️ if you want to increase the block width.</li>
+              </ul>
+            </>
+          )}
+        </Explainer> */}
+        <Row>
+          <div className="description">Id</div>
+          <div className="action_area">
+            <div className="element_info">{props.id}</div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Name</div>
+          <div className="action_area">
+            <input
+              onChange={(e) => setName(e.target.value)}
+              defaultValue={name}
+              placeholder="Untitled"
+            />
+            <div className="explainer">
+              The name will be used for navigation
+            </div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Type</div>
+          <div className="action_area">
+            <select
+              name="types"
+              id="types"
+              defaultValue={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <option value="DOCUMENT">Document</option>
+              <option value="SUMMARY">Summary</option>
+            </select>
+            <div className="explainer">
+              This determines how the editor works
+            </div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Number of columns</div>
+          <div className="action_area">
+            <input
+              type="number"
+              max="30"
+              defaultValue={columnsNum}
+              onChange={(e) => setColumns(parseInt(e.target.value))}
+            />
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Number of blocks</div>
+          <div className="action_area">
+            <SecondaryButton
+              onClick={(e) => {
+                let arr = [...elements];
+                arr.pop();
+                setElements([...arr]);
+              }}
+            >
+              -
+            </SecondaryButton>
+            <SecondaryButton
+              onClick={(e) => {
+                let index = elements.length;
+                let new_el = { ...mod_el };
+                new_el.place = index;
+                setElements([...elements, new_el]);
+              }}
+            >
+              +
+            </SecondaryButton>
+          </div>
+        </Row>
 
+        {/* <h3>Goal</h3>
+      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea> */}
+      </div>
       <Block columns={columnsNum}>
         {elements.map((el, i) => {
           return (
@@ -499,6 +506,9 @@ const UpdateNewConstructor = (props) => {
               i={i}
               type={type}
               getData={getData}
+              lessonId={lessonId}
+              lesson={lesson}
+              me={props.me}
             />
           );
         })}
@@ -523,7 +533,7 @@ const UpdateNewConstructor = (props) => {
       >
         {loading ? t("saving") : t("save")}
       </ButtonTwo>
-    </Center>
+    </Styles>
   );
 };
 
@@ -699,7 +709,7 @@ const ConElement = (props) => {
           </div>
         </div>
         <div>
-          <button onClick={toggleDropdown}>Borders</button>
+          <MicroButton onClick={toggleDropdown}>Borders</MicroButton>
           {dropdownOpen && (
             <div className="border-dropdown">
               <button
@@ -779,10 +789,14 @@ const ConElement = (props) => {
         </div>
       </Settings>
       <DynamicLoadedEditor
-        onChange={(e) => updateEl(e.target.value)}
+        // onChange={(e) => updateEl(e.target.value)}
         getEditorText={myCallback}
         value={includesTextNodes(el.text) ? el.text : ""}
         type="DocBuilder"
+        complex={true}
+        lessonId={props.lessonId}
+        lesson={props.lesson}
+        me={props.me}
       />
       {type && type !== "SUMMARY" && (
         <div className="comment">

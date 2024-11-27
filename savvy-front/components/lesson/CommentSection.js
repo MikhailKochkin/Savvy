@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
 import parse from "html-react-parser";
 import moment from "moment";
-
+import { OrangeButton } from "./styles/DevPageStyles";
 const CREATE_COMMENT_MUTATION = gql`
   mutation CREATE_COMMENT_MUTATION(
     $text: String!
@@ -99,7 +99,6 @@ const CommentSectionContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  border-top: 1px solid #adb5bd;
   width: 100%;
   padding: 20px 0;
   p {
@@ -118,25 +117,6 @@ const CreateCommentStyles = styled.div`
   color: #474747;
   padding: 20px;
   border-radius: 20px;
-`;
-
-const AddCommentButton = styled.button`
-  background-color: #e75605;
-  color: white;
-  border-radius: 25px;
-  border: 1px solid #e75605;
-  width: 140px;
-  font-family: Montserrat;
-  font-weight: 500;
-  padding: 10px 0;
-  margin-top: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-  &:hover {
-    background-color: #d15005;
-    border: 1px solid #d15005;
-    color: white;
-  }
 `;
 
 const SingleComment = styled.div`
@@ -395,21 +375,20 @@ const CommentSection = (props) => {
 
   let parentComments = comments.filter((com) => !com.sourceCommentId);
 
-  console.log("comments", comments);
-
   return (
     <CommentSectionContainer>
-      <CreateCommentStyles>
-        <DynamicLoadedEditor
-          value={newComment}
-          getEditorText={myCallback}
-          placeholder={`Add comment`}
-        />
-        <AddCommentButton onClick={addComment}>
-          {loading ? "..." : "Add Comment"}
-        </AddCommentButton>
-      </CreateCommentStyles>
-
+      {props.blockId ? (
+        <CreateCommentStyles>
+          <DynamicLoadedEditor
+            value={newComment}
+            getEditorText={myCallback}
+            placeholder={`Add comment`}
+          />
+          <OrangeButton onClick={addComment}>
+            {loading ? "..." : "Add Comment"}
+          </OrangeButton>
+        </CreateCommentStyles>
+      ) : null}
       {parentComments.map((comment) => (
         <SingleComment key={comment.id}>
           <div className="parent_comment">
@@ -547,9 +526,9 @@ const CommentSection = (props) => {
                 getEditorText={setNewReply}
                 placeholder={`Add a reply`}
               />
-              <AddCommentButton onClick={() => addReply(comment.id)}>
+              <OrangeButton onClick={() => addReply(comment.id)}>
                 {replyLoading ? "..." : "Add Reply"}
-              </AddCommentButton>
+              </OrangeButton>
             </CreateCommentStyles>
           )}
         </SingleComment>

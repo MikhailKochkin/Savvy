@@ -501,6 +501,7 @@ model Lesson {
   text                String
   goal                String?
   context             String?
+  story               String?
   openSize            Int?                 @default(2)
   coursePageID        String               @db.VarChar(30)
   createdAt           DateTime             @default(now())
@@ -557,7 +558,7 @@ model Lesson {
   texteditors         TextEditor[]
   textEditorResults   TextEditorResult[]
   chatResults         ChatResult[]
-  comments           Comment[]
+  comments            Comment[]
 }
 
 model LessonResult {

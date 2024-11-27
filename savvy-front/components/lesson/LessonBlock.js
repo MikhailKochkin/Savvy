@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import CreateNewTest from "../create/CreateNewTest";
-import SingleTest from "./tests/SingleTest";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
@@ -8,7 +6,10 @@ import parse from "html-react-parser";
 import Block from "./Block";
 import CommentSection from "./CommentSection";
 
-import CreateQuiz from "../create/CreateQuiz";
+import CreateNewTest from "./tests/CreateNewTest";
+import SingleTest from "./tests/SingleTest";
+
+import CreateQuiz from "./quizes/CreateQuiz";
 import SingleQuiz from "./quizes/SingleQuiz";
 
 import CreateTestBlock from "./testblocks/CreateTestBlock";
@@ -28,13 +29,13 @@ import CreateConstructor from "../create/CreateConstructor";
 import NewConstructor from "./constructions/NewConstructor";
 import SingleConstructor from "./constructions/SingleConstructor";
 
-import CreateTextEditor from "../create/CreateTextEditor";
+import CreateTextEditor from "./textEditors/CreateTextEditor";
 import TextEditor from "./textEditors/SingleTextEditor";
 
-import CreateProblem from "../create/CreateProblem";
+import CreateProblem from "./problems/CreateProblem";
 import Problem from "./problems/SingleProblem";
 
-import CreateNote from "../create/CreateNote";
+import CreateNote from "./notes/CreateNote";
 import Note from "./notes/Note";
 
 import CreateChat from "./chat/CreateChat";
@@ -46,41 +47,7 @@ import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
 import SingleLesson_Menu from "./SingleLesson_Menu";
 import CreateDocument from "./documents/CreateDocument";
 import Document from "./documents/Document";
-
-const ButtonTwo = styled.button`
-  background: none;
-  padding: 10px 20px;
-  border: 2px solid #69696a;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #323334;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-right: 10px;
-  transition: 0.3s;
-  &:hover {
-    background: #f4f4f4;
-  }
-`;
-
-const ButtonThree = styled.button`
-  background: none;
-  padding: 10px 20px;
-  border: 2px solid #69696a;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #323334;
-  cursor: pointer;
-  margin: 30px 0;
-  transition: 0.3s;
-  &:hover {
-    background: #f4f4f4;
-  }
-`;
+import { SecondaryButton, SecondaryMenuButton } from "./styles/DevPageStyles";
 
 const Menu = styled.div`
   border-bottom: 1px solid #adb5bd;
@@ -96,17 +63,20 @@ const Box = styled.div`
   // border-bottom: none;
   width: 60%;
   background: #f8f8f8;
-  margin-top: 20px;
+  margin: 20px 0;
   margin-right: 10px;
 `;
 
 const Styles = styled.div`
   padding: 20px;
   border: ${(props) =>
-    props.isAdded ? "2px solid #adb5bd" : "2px dashed #dee2e6"};
+    props.isAdded ? "2px solid #F1F1F1" : "2px dashed #F1F1F1"};
   width: ${(props) => (props.width ? "75vw" : "660px")};
   margin-bottom: 100px;
+  margin-top: 20px;
   margin-right: 10px;
+  border-radius: 20px;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -116,7 +86,7 @@ const Buttons = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  padding: 15px 10px;
+  padding: 25px 10px;
   border-top: 1px solid #adb5bd;
   div {
     width: 50%;
@@ -141,6 +111,7 @@ const LessonBlock = (props) => {
     saved,
     lessonData,
     initial_data,
+    simulationStory,
   } = props;
   const [isSaved, setIsSaved] = useState(saved);
   const [isAdded, setIsAdded] = useState(saved);
@@ -429,16 +400,20 @@ const LessonBlock = (props) => {
     }
     setIsSaved(true);
   };
+
+  const passGeneratedData = (data) => {
+    props.addGeneratedPlace(idNum, data);
+  };
   return (
     <>
       {props.index == 0 && (
-        <ButtonThree
+        <SecondaryButton
           onClick={(e) => {
             props.addPlace(0);
           }}
         >
           {t("add_first")}
-        </ButtonThree>
+        </SecondaryButton>
       )}
       {props.comment && <Box>{parse(props.comment)}</Box>}
       <Styles
@@ -452,39 +427,49 @@ const LessonBlock = (props) => {
       >
         {!isSaved && (
           <Menu>
-            <ButtonTwo onClick={(e) => addBlock("Chat")}>{t("Chat")}</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Note")}>{t("Note")}</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Shot")}>{t("Shot")}</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("NewTest")}>
+            <SecondaryMenuButton onClick={(e) => addBlock("Chat")}>
+              {t("Chat")}
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("Note")}>
+              {t("Note")}
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("Shot")}>
+              {t("Shot")}
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("NewTest")}>
               {t("NewTest")}
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Quiz")}>{t("Quiz")}</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("TestPractice")}>
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("Quiz")}>
+              {t("Quiz")}
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("TestPractice")}>
               {t("TestPractice")}
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Problem")}>
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("Problem")}>
               {t("Problem")}
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("TextEditor")}>
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("TextEditor")}>
               {t("TextEditor")}
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Construction")}>
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("Construction")}>
               {t("Construction")}
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Document")}>
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("Document")}>
               {t("writing")}
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Forum")}>
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("Forum")}>
               {t("Forum")}
-            </ButtonTwo>
+            </SecondaryMenuButton>
 
-            <ButtonTwo onClick={(e) => addBlock("addOld")}>
+            <SecondaryMenuButton onClick={(e) => addBlock("addOld")}>
               {t("AddOld")}
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("TeamQuest")}>
+            </SecondaryMenuButton>
+            <SecondaryMenuButton onClick={(e) => addBlock("TeamQuest")}>
               Team Quest
-            </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Offer")}>Offer</ButtonTwo>
+            </SecondaryMenuButton>
+            {/* <SecondaryMenuButton onClick={(e) => addBlock("Offer")}>
+              Offer
+            </SecondaryMenuButton> */}
           </Menu>
         )}
         {type.toLowerCase() == "note" && (
@@ -494,6 +479,7 @@ const LessonBlock = (props) => {
                 lessonID={lesson.id}
                 getResult={getResult}
                 isSaved={isSaved}
+                simulationStory={simulationStory}
                 initial_data={
                   initial_data && initial_data.format == "note"
                     ? initial_data
@@ -515,6 +501,7 @@ const LessonBlock = (props) => {
                 lessonID={lesson.id}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
                 getResult={getResult}
+                passGeneratedData={passGeneratedData}
               />
             )}
           </>
@@ -557,6 +544,7 @@ const LessonBlock = (props) => {
           <>
             {!isSaved && el.id == undefined && (
               <CreateProblem
+                simulationStory={simulationStory}
                 lessonID={lesson.id}
                 getResult={getResult}
                 lesson={lesson}
@@ -759,6 +747,7 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
                 me={me}
                 prompt={props.prompt}
+                simulationStory={simulationStory}
                 initial_data={
                   initial_data && initial_data.format == "chat"
                     ? initial_data
@@ -790,6 +779,7 @@ const LessonBlock = (props) => {
                 lessonID={lesson.id}
                 getResult={getResult}
                 isSaved={isSaved}
+                simulationStory={simulationStory}
               />
             )}
             {(isSaved || d != null) &&
@@ -874,6 +864,7 @@ const LessonBlock = (props) => {
                       construction={data}
                       elements={data.elements.elements}
                       complexity={data.complexity}
+                      lesson={lesson}
                       me={me}
                       story={false}
                       getResult={getResult}
@@ -933,7 +924,7 @@ const LessonBlock = (props) => {
         <Buttons>
           <div className="first">
             {" "}
-            <ButtonTwo
+            <SecondaryButton
               onClick={(e) => {
                 if (confirm("Are you sure?")) {
                   props.remove(idNum);
@@ -941,17 +932,17 @@ const LessonBlock = (props) => {
               }}
             >
               {t("remove_block")}
-            </ButtonTwo>
+            </SecondaryButton>
           </div>
           {isSaved && (
             <div>
-              <ButtonTwo
+              <SecondaryButton
                 onClick={(e) => {
                   props.addPlace(idNum);
                 }}
               >
                 {t("new_block")}
-              </ButtonTwo>
+              </SecondaryButton>
             </div>
           )}
         </Buttons>

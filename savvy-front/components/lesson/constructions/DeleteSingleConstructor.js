@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
-import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";
 import { useTranslation } from "next-i18next";
+import { SecondaryButton } from "../styles/DevPageStyles";
 
 const DELETE_CONSTRUCTION_MUTATION = gql`
   mutation DELETE_CONSTRUCTION_MUTATION($id: String!) {
@@ -48,7 +49,7 @@ const DeleteSingleConstruction = (props) => {
       ]}
     >
       {(deleteConstruction, { loading, error }) => (
-        <Button
+        <SecondaryButton
           onClick={() => {
             if (confirm("Are you sure")) {
               deleteConstruction().catch((error) => {
@@ -58,7 +59,7 @@ const DeleteSingleConstruction = (props) => {
           }}
         >
           {loading ? t("deleting") : t("delete")}
-        </Button>
+        </SecondaryButton>
       )}
     </Mutation>
   );

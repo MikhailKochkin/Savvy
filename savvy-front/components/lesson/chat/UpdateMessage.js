@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
+import { MicroButton, Frame } from "../styles/DevPageStyles";
 
 const Styles = styled.div`
   margin-top: 1%;
@@ -11,36 +12,19 @@ const Styles = styled.div`
   }
 `;
 
-const Frame = styled.div`
-  height: 60%;
-  width: 100%;
-  margin-bottom: 15px;
-  border: 1px solid #e5e5e5;
-  border-radius: 3.5px;
-  padding-left: 1%;
-  font-size: 1.6rem;
-  outline: 0;
-  p {
-    margin-left: 0.6%;
-  }
-`;
-
-const MainFrame = styled.div`
-  height: 60%;
-  width: 80%;
-  margin-bottom: 15px;
-  border: 1px solid #8d99ae;
-  border-radius: 3.5px;
-  padding-left: 1%;
-  font-size: 1.6rem;
-  outline: 0;
-  p {
-    margin-left: 0.6%;
-  }
-`;
-
 const Header = styled.div`
   margin: 10px 0;
+`;
+
+const Textarea = styled.textarea`
+  padding: 10px;
+  outline: 0;
+  border: 1px solid #e5e5e5;
+  margin-left: 5px;
+  border-radius: 12px;
+  font-weight: 400;
+  font-size: 1.4rem;
+  font-family: Montserrat;
 `;
 
 const ReactBlock = styled.div`
@@ -171,7 +155,9 @@ const Buttons = styled.div`
   flex-direction: row;
   margin-bottom: 15px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #cacaca;
+  button {
+    margin-right: 15px;
+  }
   .number {
     cursor: pointer;
     border: 1px solid grey;
@@ -210,6 +196,22 @@ const UpdateMessage = (props) => {
   const [isAiAssistantOn, setIsAiAssistantOn] = useState(
     props.isAiAssistantOn ? props.isAiAssistantOn : false
   );
+
+  useEffect(() => {
+    setText(props.text);
+    setAuthor(props.author.toLowerCase() || "author");
+    setName(props.name || (props.author === "author" ? "author" : "student"));
+    setReactions(props.reactions);
+    setImage(props.image);
+    setIsAiAssistantOn(props.isAiAssistantOn || false);
+  }, [
+    props.text,
+    props.author,
+    props.name,
+    props.reactions,
+    props.image,
+    props.isAiAssistantOn,
+  ]);
 
   const updateField = (field, value) => {
     if (field === "text") {
@@ -253,16 +255,16 @@ const UpdateMessage = (props) => {
             value={name}
             onChange={(e) => updateField("name", e.target.value)}
           />
-          <button
+          <MicroButton
             onClick={() => {
               const link = prompt("Image link: ");
               if (link) updateField("image", link);
             }}
           >
             Image
-          </button>
+          </MicroButton>
         </IconBlock>
-        <MainFrame>
+        <Frame>
           <DynamicHoverEditor
             index={props.index}
             name="text"
@@ -270,9 +272,8 @@ const UpdateMessage = (props) => {
             placeholder="Message"
             value={text}
           />
-        </MainFrame>
-        <br />
-        <textarea
+        </Frame>
+        <Textarea
           id="summary"
           placeholder="Description"
           value={text}
@@ -280,7 +281,7 @@ const UpdateMessage = (props) => {
         />
       </Phrase>
       <Buttons>
-        <button
+        <MicroButton
           onClick={() => {
             const updatedReactions = reactions.slice(0, -1);
             setReactions(updatedReactions);
@@ -288,8 +289,8 @@ const UpdateMessage = (props) => {
           }}
         >
           -1 reaction
-        </button>
-        <button
+        </MicroButton>
+        <MicroButton
           onClick={() => {
             const updatedReactions = [
               ...reactions,
@@ -300,39 +301,43 @@ const UpdateMessage = (props) => {
           }}
         >
           +1 reaction
-        </button>
-        <button onClick={(e) => updateField("AiAssistant")}>
+        </MicroButton>
+        {/* <MicroButton onClick={(e) => updateField("AiAssistant")}>
           {isAiAssistantOn ? "Turn off AI assistant" : "Turn on AI assistant"}
-        </button>
+        </MicroButton> */}
       </Buttons>
-      {reactions.map((r, i) => (
-        <ReactBlock key={i}>
-          <Header>Reaction № {i + 1}</Header>
-          <Phrase>
-            <IconBlock>{author === "author" ? "👨🏻‍🎓" : "👩🏼‍🏫"}</IconBlock>
-            <Frame>
-              <DynamicHoverEditor
-                index={i}
-                name="reaction"
-                getEditorText={(value) => updateReaction(i, "reaction", value)}
-                value={r.reaction}
-              />
-            </Frame>
-          </Phrase>
-          <Header>Response № {i + 1}</Header>
-          <Phrase>
-            <IconBlock>{author === "author" ? "👩🏼‍🏫" : "👨🏻‍🎓"}</IconBlock>
-            <Frame>
-              <DynamicHoverEditor
-                index={i}
-                name="comment"
-                getEditorText={(value) => updateReaction(i, "comment", value)}
-                value={r.comment}
-              />
-            </Frame>
-          </Phrase>
-        </ReactBlock>
-      ))}
+      {reactions &&
+        reactions.length > 0 &&
+        reactions.map((r, i) => (
+          <ReactBlock key={i}>
+            <Header>Reaction № {i + 1}</Header>
+            <Phrase>
+              <IconBlock>{author === "author" ? "👨🏻‍🎓" : "👩🏼‍🏫"}</IconBlock>
+              <Frame>
+                <DynamicHoverEditor
+                  index={i}
+                  name="reaction"
+                  getEditorText={(value) =>
+                    updateReaction(i, "reaction", value)
+                  }
+                  value={r.reaction}
+                />
+              </Frame>
+            </Phrase>
+            <Header>Response № {i + 1}</Header>
+            <Phrase>
+              <IconBlock>{author === "author" ? "👩🏼‍🏫" : "👨🏻‍🎓"}</IconBlock>
+              <Frame>
+                <DynamicHoverEditor
+                  index={i}
+                  name="comment"
+                  getEditorText={(value) => updateReaction(i, "comment", value)}
+                  value={r.comment}
+                />
+              </Frame>
+            </Phrase>
+          </ReactBlock>
+        ))}
     </Styles>
   );
 };

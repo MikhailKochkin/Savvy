@@ -68,6 +68,9 @@ const EmailInfo = styled.div`
       font-size: 2rem;
     }
   }
+  .emailSubject {
+    width: 400px;
+  }
   .times_column {
     width: 50%;
     display: flex;
@@ -131,7 +134,9 @@ const Note = (props) => {
               <div className="sender_name">
                 {author.name} {author.surname}
               </div>
-              <div>Re: Help ASAP</div>
+              <div className="emailSubject">
+                {props.name ? props.name : "Re: Help ASAP"}
+              </div>
               <div>
                 To: {me.name} {me.surname}
               </div>

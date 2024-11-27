@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import CreateMessage from "./CreateMessage";
 import { useTranslation } from "next-i18next";
+import _ from "lodash";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import _ from "lodash";
+import CreateMessage from "./CreateMessage";
+import { Row, ActionButton } from "../styles/DevPageStyles";
 
 const CREATE_CHAT_MUTATION = gql`
   mutation CREATE_CHAT_MUTATION(
@@ -85,41 +86,12 @@ const Bottom = styled.div`
   }
 `;
 
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin: 15px 0;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #cacaca;
-  .number {
-    cursor: pointer;
-    border: 1px solid grey;
-    border-radius: 10px;
-    display: flex;
-    font-size: 1.4rem;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    // width: 110px;
-    height: 25px;
-    margin-right: 15px;
-    padding: 0 20px;
-    button {
-      border: none;
-      cursor: pointer;
-      background: none;
-      font-size: 1.2rem;
-      font-family: Montserrat;
-    }
-  }
-`;
-
 const CreateChat = (props) => {
-  const { me, lessonData, initial_data } = props;
-  const [name, setName] = useState("Dialogue");
+  const { me, lessonData, initial_data, simulationStory } = props;
+  const [name, setName] = useState("");
+  const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [isGenerated, setIsGenerated] = useState(true);
   const [createChat, { data, loading, error }] =
     useMutation(CREATE_CHAT_MUTATION);
   const { t } = useTranslation("lesson");
@@ -164,45 +136,150 @@ const CreateChat = (props) => {
     setMessages([...old_messages]);
   };
 
+  const generateChat = async (e) => {
+    e.preventDefault();
+
+    let chatPrompt = `
+              You are building a block of a simulator that has the following story: """${simulationStory}"""
+              This block type is Chat. Chat is a collection of messsages from different characters that explain complex topics through discussion.
+              
+              The topic and purpose of this chat block are: """${prompt}""".
+
+              Generate and return in JSON format a new chat using the information from the above.
+
+              The result must look like this:
+
+              Example 1:
+              Simulator story: "Jane is a law student who is heeting help from her tutor Jack"
+              Prompt: "Explain the concept of a contract in English law."
+              result: {
+                "content": {
+                  "messagesList": [
+                    {
+                      "author": "author",
+                      "text": "Let's take a look at the most fundamental concept. The concept of a contract. Do you know what a contract is?"
+                      "image": "",
+                      "number": 1,
+                      "name": "Jack",
+                    },
+                    {
+                      "author": "student",
+                      "text": "Not really... Could you explain please?",
+                      "image": "",
+                      "number": 2,
+                      "name": "Jane",
+
+                    },
+                    {
+                      "author": "author",
+                      "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences.",
+                      "image": "",
+                      "number": 3,
+                      "name": "Jack",
+
+                    }
+                  ]
+                }
+              }
+
+              Example 2:
+              Simulator story: "Jane is a law student who is heeting help from her tutor Jack"
+              Prompt: "Explain the concept of a contract in English law."
+              {
+                "idea": "The concept of a contract in English law",
+                "description": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other.",
+                "format": "chat",
+                "status: "generated",
+                "content": {
+                  "messagesList": [
+                    {
+                      "author": "student",
+                      "text": "Could you explain what a contract is?"
+                      "image": "",
+                      "number": 1,
+                      "name": "Jane",
+
+                    },
+                    {
+                      "author": "author",
+                      "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences.",
+                      "image": "",
+                      "number": 2,
+                      "name": "Jack",
+                    }
+                  ]
+                }
+              }
+          `;
+
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: chatPrompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let new_messages = JSON.parse(data.result.content);
+        console.log("new_messages", new_messages);
+        setMessages(new_messages.content.messagesList);
+        // setSimulatorStory(data.result.content);
+        return data;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
   return (
     <Styles>
-      {/* <Input
-        type="text"
-        placeholder="Название диалога"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <br /> */}
-      {/* <div>Do you want to generate this block with AI?</div> */}
-      {/* <Buttons>
-        <div className="number">
-          <button onClick={(e) => onGenerate(e)}>Use AI 🤖</button>
+      <Row>
+        <div className="description">Name</div>
+        <div className="action_area">
+          <input
+            onChange={(e) => setName(e.target.value)}
+            defaultValue={name}
+            placeholder="Untitled"
+          />
         </div>
-        <div className="number">
-          <button onClick={(e) => setIsGenerated(true)}>
-            Do it on your own
-          </button>
+      </Row>
+      <Row>
+        <div className="description">Prompt</div>
+        <div className="action_area">
+          <textarea onChange={(e) => setPrompt(e.target.value)} />
+          <ActionButton
+            onClick={async (e) => {
+              setGenerating(true);
+              const res = await generateChat(e);
+              setGenerating(false);
+            }}
+          >
+            {!generating ? "Generate with AI" : "..."}
+          </ActionButton>
         </div>
-      </Buttons>
-      {generating && (
-        <div>Generating the chat... It can take up to one minute.</div>
-      )} */}
-      {isGenerated && (
+      </Row>
+      {generating && <div>Generating the chat...</div>}
+      {!generating && (
         <>
           {messages.map((m, i) => (
-            <>
-              <CreateMessage
-                index={i}
-                message={m}
-                // document={props.document}
-                getMessage={getMessage}
-                updateAuthor={updateAuthor}
-                updateText={updateText}
-                updateReaction={updateReaction}
-                updateImage={updateImage}
-                updateName={updateName}
-              />
-            </>
+            <CreateMessage
+              index={i}
+              message={m}
+              // document={props.document}
+              getMessage={getMessage}
+              updateAuthor={updateAuthor}
+              updateText={updateText}
+              updateReaction={updateReaction}
+              updateImage={updateImage}
+              updateName={updateName}
+            />
           ))}
           <Bottom>
             <div className="number_box">

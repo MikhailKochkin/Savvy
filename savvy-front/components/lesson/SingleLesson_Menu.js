@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import DeleteSingleLesson from "../delete/DeleteSingleLesson";
+import DeleteSingleLesson from "./DeleteSingleLesson";
 
 const MenuPart = styled.div`
   display: flex;
@@ -223,91 +223,92 @@ const SingleLesson_Menu = (props) => {
               </ButtonZone>
             )} */}
         </NavPart>
-        {me && (lesson.user.id === me.id || me.permissions.includes("ADMIN")) && (
-          <TeacherPart>
-            <ButtonZone>
-              <ChooseButton name="updateLesson" onClick={onSwitch}>
-                Изменить урок
-              </ChooseButton>
-            </ButtonZone>
-            <ButtonZone>
-              <ChooseButton name="createTest" onClick={onSwitch}>
-                Новый тест
-              </ChooseButton>
-            </ButtonZone>
-            <ButtonZone>
-              <ChooseButton name="createForum" onClick={onSwitch}>
-                Включить форум
-              </ChooseButton>
-            </ButtonZone>
+        {me &&
+          (lesson.user.id === me.id || me.permissions.includes("ADMIN")) && (
+            <TeacherPart>
+              <ButtonZone>
+                <ChooseButton name="updateLesson" onClick={onSwitch}>
+                  Изменить урок
+                </ChooseButton>
+              </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createTest" onClick={onSwitch}>
+                  Новый тест
+                </ChooseButton>
+              </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createForum" onClick={onSwitch}>
+                  Включить форум
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createNote" onClick={onSwitch}>
-                Новый лонгрид
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createNote" onClick={onSwitch}>
+                  Новый лонгрид
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createChat" onClick={onSwitch}>
-                Новый диалог
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createChat" onClick={onSwitch}>
+                  Новый диалог
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createDocument" onClick={onSwitch}>
-                Новый документ
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createDocument" onClick={onSwitch}>
+                  Новый документ
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createShot" onClick={onSwitch}>
-                Новый алгоритм
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createShot" onClick={onSwitch}>
+                  Новый алгоритм
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createQuiz" onClick={onSwitch}>
-                Новый вопрос
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createQuiz" onClick={onSwitch}>
+                  Новый вопрос
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createTestBlock" onClick={onSwitch}>
-                Новый тестовый блок
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createTestBlock" onClick={onSwitch}>
+                  Новый тестовый блок
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createProblem" onClick={onSwitch}>
-                Новая задача
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createProblem" onClick={onSwitch}>
+                  Новая задача
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createConstructor" onClick={onSwitch}>
-                Новый конструктор
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createConstructor" onClick={onSwitch}>
+                  Новый конструктор
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <ChooseButton name="createTextEditor" onClick={onSwitch}>
-                Новый редактор
-              </ChooseButton>
-            </ButtonZone>
-            <ButtonZone>
-              <ChooseButton name="createExam" onClick={onSwitch}>
-                Новый экзамен
-              </ChooseButton>
-            </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createTextEditor" onClick={onSwitch}>
+                  Новый редактор
+                </ChooseButton>
+              </ButtonZone>
+              <ButtonZone>
+                <ChooseButton name="createExam" onClick={onSwitch}>
+                  Новый экзамен
+                </ChooseButton>
+              </ButtonZone>
 
-            <ButtonZone>
-              <DeleteSingleLesson
-                id={lesson.id}
-                coursePageID={lesson.coursePage.id}
-              />
-            </ButtonZone>
-          </TeacherPart>
-        )}
+              <ButtonZone>
+                <DeleteSingleLesson
+                  id={lesson.id}
+                  coursePageID={lesson.coursePage.id}
+                />
+              </ButtonZone>
+            </TeacherPart>
+          )}
       </Sticky>
     </MenuPart>
   );

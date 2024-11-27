@@ -4,7 +4,7 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import parse from "html-react-parser";
 
-import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";
+import { SINGLE_LESSON_QUERY } from "../../SingleLesson";
 
 const UPDATE_QUIZ_MUTATION = gql`
   mutation UPDATE_QUIZ_MUTATION($id: String!, $next: NextType) {

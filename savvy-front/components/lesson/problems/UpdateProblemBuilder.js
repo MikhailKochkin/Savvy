@@ -5,7 +5,7 @@ import * as _ from "lodash";
 import { arrayOf, objectOf } from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "next-i18next";
-import UpdatedNewBlock from "../../create/blocks/UpdatedNewBlock";
+import UpdatedNewBlock from "./blocks/UpdatedNewBlock";
 
 const Button = styled.div`
   width: 170px;

@@ -3,19 +3,19 @@ import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "next-i18next";
 
-import CreateNote from "../CreateNote";
-import Note from "../../lesson/notes/Note";
+import CreateNote from "../../notes/CreateNote";
+import Note from "../../notes/Note";
 
-import CreateNewTest from "../CreateNewTest";
-import SingleTest from "../../lesson/tests/SingleTest";
+import CreateNewTest from "../../tests/CreateNewTest";
+import SingleTest from "../../tests/SingleTest";
 
-import CreateQuiz from "../CreateQuiz";
-import SingleQuiz from "../../lesson/quizes/SingleQuiz";
+import CreateQuiz from "../../quizes/CreateQuiz";
+import SingleQuiz from "../../quizes/SingleQuiz";
 
-import CreateChat from "../../lesson/chat/CreateChat";
-import Chat from "../../lesson/chat/Chat";
+import CreateChat from "../../chat/CreateChat";
+import Chat from "../../chat/Chat";
 
-import Block from "../../lesson/Block";
+import Block from "../../Block";
 
 const Styles = styled.div`
   font-size: 1.5rem;
@@ -53,13 +53,12 @@ const NewBlock = (props) => {
   const add = () => {
     props.add(props.obj.id, props.obj.index);
   };
-
   useEffect(() => {
     setData(props.data);
     setSaved(props.data ? true : false);
   }, [props.data]);
 
-  const { lesson, me } = props;
+  const { lesson, me, generatedInfo } = props;
 
   const getOldResult = (type, id) => {
     setSaved(true);
@@ -166,7 +165,11 @@ const NewBlock = (props) => {
         <Block getOldResult={getOldResult} chats={lesson.chats} />
       )}
       {!saved && type == "NewTest" && (
-        <CreateNewTest lessonID={lesson.id} getResult={getResult} />
+        <CreateNewTest
+          lessonID={lesson.id}
+          getResult={getResult}
+          generatedInfo={generatedInfo}
+        />
       )}
       {saved && type == "NewTest" && data && (
         <SingleTest
@@ -196,7 +199,11 @@ const NewBlock = (props) => {
         <Block getOldResult={getOldResult} tests={lesson.newTests} />
       )}
       {!saved && type == "Quiz" && (
-        <CreateQuiz lessonID={lesson.id} getResult={getResult} />
+        <CreateQuiz
+          lessonID={lesson.id}
+          getResult={getResult}
+          generatedInfo={generatedInfo}
+        />
       )}
       {saved && type == "Quiz" && data && (
         <SingleQuiz

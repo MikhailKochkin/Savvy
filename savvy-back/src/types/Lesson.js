@@ -7,6 +7,7 @@ const Lesson = objectType({
     t.model.name();
     t.model.number();
     t.model.text();
+    t.model.story();
     t.model.type();
     t.model.context();
     t.model.goal();

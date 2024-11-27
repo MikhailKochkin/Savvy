@@ -46,6 +46,8 @@ const Query = queryType({
     t.crud.posts({ ordering: true, filtering: true });
     t.crud.chat({ ordering: true, filtering: true });
     t.crud.chats({ ordering: true, filtering: true });
+    t.crud.note({ ordering: true, filtering: true });
+    t.crud.notes({ ordering: true, filtering: true });
     t.crud.testResults({ ordering: true, filtering: true });
     t.crud.testResult({ ordering: true, filtering: true });
     t.crud.quizResults({ ordering: true, filtering: true });

@@ -2268,6 +2268,7 @@ type Lesson {
   short_structure: Json
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   shots(after: ShotWhereUniqueInput, before: ShotWhereUniqueInput, first: Int, last: Int): [Shot!]!
+  story: String
   structure: Json
   tags: [String!]!
   teamQuestResults(after: TeamQuestResultWhereUniqueInput, before: TeamQuestResultWhereUniqueInput, first: Int, last: Int): [TeamQuestResult!]!
@@ -2349,6 +2350,7 @@ input LessonOrderByWithRelationInput {
   short_structure: SortOrderInput
   shotResults: ShotResultOrderByRelationAggregateInput
   shots: ShotOrderByRelationAggregateInput
+  story: SortOrderInput
   structure: SortOrderInput
   tags: SortOrder
   teamQuestResults: TeamQuestResultOrderByRelationAggregateInput
@@ -2490,6 +2492,7 @@ input LessonWhereInput {
   short_structure: JsonNullableFilter
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
+  story: StringNullableFilter
   structure: JsonNullableFilter
   tags: StringNullableListFilter
   teamQuestResults: TeamQuestResultListRelationFilter
@@ -2557,6 +2560,7 @@ input LessonWhereUniqueInput {
   short_structure: JsonNullableFilter
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
+  story: StringNullableFilter
   structure: JsonNullableFilter
   tags: StringNullableListFilter
   teamQuestResults: TeamQuestResultListRelationFilter
@@ -2845,7 +2849,7 @@ type Mutation {
   updateEmailReminder(emailsSent: [String], id: String): EmailReminder
   updateForum(id: String, text: String): Forum
   updateGrowthArea(id: String!, marks: MarksList, maxProgress: Int, name: String): GrowthArea
-  updateLesson(assignment: Boolean, audience: String, banner: String, challenge_num: Int, change: String, context: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
+  updateLesson(assignment: Boolean, audience: String, banner: String, challenge_num: Int, change: String, context: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, story: String, structure: LessonStructure, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswers, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextType, question: [String], type: String): NewTest
@@ -3167,6 +3171,25 @@ input NoteListRelationFilter {
 
 input NoteOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input NoteOrderByWithRelationInput {
+  chat: SortOrderInput
+  complexity: SortOrderInput
+  createdAt: SortOrder
+  id: SortOrder
+  isSecret: SortOrderInput
+  lesson: LessonOrderByWithRelationInput
+  lessonID: SortOrderInput
+  lessonId: SortOrderInput
+  link_clicks: SortOrderInput
+  name: SortOrderInput
+  next: SortOrderInput
+  text: SortOrder
+  type: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrderInput
 }
 
 input NoteWhereInput {
@@ -4019,6 +4042,8 @@ type Query {
   me: User
   miniForums(after: MiniForumWhereUniqueInput, before: MiniForumWhereUniqueInput, first: Int, last: Int, where: MiniForumWhereInput): [MiniForum!]!
   newTest(where: NewTestWhereUniqueInput!): NewTest
+  note(where: NoteWhereUniqueInput!): Note
+  notes(after: NoteWhereUniqueInput, before: NoteWhereUniqueInput, first: Int, last: Int, orderBy: [NoteOrderByWithRelationInput!], where: NoteWhereInput): [Note!]!
   offer(where: OfferWhereUniqueInput!): Offer
   offers(after: OfferWhereUniqueInput, before: OfferWhereUniqueInput, first: Int, last: Int, orderBy: [OfferOrderByWithRelationInput!], where: OfferWhereInput): [Offer!]!
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: [OrderOrderByWithRelationInput!], where: OrderWhereInput): [Order!]!

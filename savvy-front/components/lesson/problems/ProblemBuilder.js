@@ -1,6 +1,16 @@
-import { useState, useEffect } from "react";
-import TestBlock from "./TestBlock";
-import * as _ from "lodash";
+import React, { Component } from "react";
+import TestBlock from "./blocks/TestBlock";
+import Block from "./blocks/Block";
+import styled from "styled-components";
+
+const Styles = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .tree {
+    display: inline-block;
+  }
+`;
 
 const colors = [
   "#0D3B66",
@@ -21,134 +31,242 @@ const colors = [
   "#FF0054",
   "#FF5400",
   "#FFBD00",
+  "#EAE0CC",
+  "#FF5733",
+  "#FDEDEC",
+  "#0D3B66",
+  "#FAF0CA",
+  "#F4D35E",
+  "#EE964B",
+  "#F95738",
+  "#5AB1BB",
+  "#DA4167",
+  "#54DEFD",
+  "#9B5DE5",
+  "#F15BB5",
+  "#FEE440",
+  "#00BBF9",
+  "#00F5D4",
+  "#390099",
+  "#9E0059",
+  "#FF0054",
+  "#FF5400",
+  "#FFBD00",
+  "#EAE0CC",
+  "#FF5733",
+  "#FDEDEC",
+  "#0D3B60",
+  "#FAF0C0",
+  "#F4D350",
+  "#EE9640",
+  "#F95730",
+  "#5AB1B0",
+  "#DA4160",
+  "#54DEF0",
+  "#9B5DE0",
+  "#F15BB0",
+  "#FEE441",
+  "#00BBF0",
+  "#00F5D0",
+  "#390090",
+  "#9E0050",
+  "#FF0050",
+  "#FF5401",
+  "#FFBD01",
+  "#EAE0C0",
+  "#FF5731",
+  "#FDEDE2",
 ];
 
-const ProblemBuilder = (props) => {
-  const [components, setComponents] = useState([]);
-  const cloned_elements = _.cloneDeep(props.elements);
+class ProblemBuilder extends Component {
+  state = {
+    blocks: [],
+    tree_blocks: "",
+    usedElements: [],
+    colorNum: 1,
+  };
 
-  useEffect(() => {
-    let arr = [];
-    let i = 0;
-    const recurse2 = (el) => {
-      if (!arr.includes(el)) {
-        el.color = colors[i];
-        el.sourceColor = "#fff";
-        arr.push(el);
+  getNode = (type, id) => {
+    this.props.getNode(type, id);
+  };
+
+  object_search = (
+    obj,
+    value,
+    newColor,
+    el,
+    source,
+    color,
+    colors,
+    correct
+  ) => {
+    // check the key of an object
+    // obj.key - color of the cheked block  , value – color of the source of the new block
+    if (obj.key === value) {
+      // if it matches, add el to nodes
+      if (obj.nodes.find((el) => el.correct == correct) === undefined) {
+        obj.nodes.push({
+          key: newColor,
+          source_color: value,
+          correct: correct,
+          el: (
+            <TestBlock
+              id={el.id ? el.id : "first"}
+              type={el.__typename.toLowerCase()}
+              newTests={this.props.newTests}
+              quizes={this.props.quizes}
+              notes={this.props.notes}
+              lessonID={this.props.lessonID}
+              value={el ? el : null}
+              correct={correct}
+              source={source ? source : null}
+              getNewBlock={this.handleNewBlock}
+              sourceColor={color}
+              color={colors[this.state.colorNum]}
+              fixed={true}
+            />
+          ),
+          nodes: [],
+        });
+      } else if (obj.nodes.find((el) => el.correct == correct) !== undefined) {
+        obj.nodes[
+          obj.nodes.indexOf(obj.nodes.find((el) => el.correct == correct))
+        ].key = colors[this.state.colorNum];
+        obj.nodes[
+          obj.nodes.indexOf(obj.nodes.find((el) => el.correct == correct))
+        ].el = (
+          <TestBlock
+            id={el.id ? el.id : "first"}
+            type={el.__typename.toLowerCase()}
+            newTests={this.props.newTests}
+            quizes={this.props.quizes}
+            notes={this.props.notes}
+            lessonID={this.props.lessonID}
+            value={el ? el : null}
+            correct={correct}
+            source={source ? source : null}
+            getNewBlock={this.handleNewBlock}
+            sourceColor={color}
+            color={colors[this.state.colorNum]}
+            fixed={true}
+          />
+        );
       }
-      if (el.next) {
-        if (el.next.true) {
-          let next_true = cloned_elements.filter(
-            (e) => e.id === el.next.true.value
-          )[0];
-          if (
-            next_true &&
-            arr.filter((c) => c.id === next_true.id).length === 0
-          ) {
-            next_true.source = el.id;
-            next_true.color = colors[i + 1];
-            next_true.sourceColor = colors[i];
-            arr.push(next_true);
-          }
-        }
-        if (el.next.false) {
-          let next_false = cloned_elements.filter(
-            (e) => e.id === el.next.false.value
-          )[0];
-          if (
-            next_false &&
-            arr.filter((c) => c.id === next_false.id).length === 0
-          ) {
-            next_false.source = el.id;
-            next_false.color = colors[i + 1];
-            next_false.sourceColor = colors[i];
-            arr.push(next_false);
-          }
-        }
-        i++;
-        if (el.next.true) {
-          let next_true = cloned_elements.filter(
-            (e) => e.id === el.next.true.value
-          )[0];
-          if (next_true !== undefined && next_true !== null) {
-            recurse2(next_true);
-          }
-        }
-        if (el.next.false) {
-          let next_false = cloned_elements.filter(
-            (e) => e.id === el.next.false.value
-          )[0];
-          if (next_false !== undefined && next_false !== null) {
-            recurse2(next_false);
-          }
-        }
+    } else {
+      // if it doesn't, get down to its nodes
+      if (obj.nodes) {
+        // and recurisvely check every node
+        obj.nodes.map((n) =>
+          this.object_search(
+            n,
+            value,
+            newColor,
+            el,
+            source,
+            color,
+            colors,
+            correct
+          )
+        );
       }
-    };
+    }
+    this.setState({ tree_blocks: obj });
+  };
 
-    let first = cloned_elements.filter((e) => e.id === props.nodeID)[0];
-    recurse2(first);
-    setComponents([...arr]);
-  }, [0]);
+  handleNewBlock = async (id, root, color, correct) => {
+    let el = [
+      ...this.props.newTests,
+      ...this.props.quizes,
+      ...this.props.notes,
+    ].filter((l) => l.id === id)[0];
+    let source = [
+      ...this.props.newTests,
+      ...this.props.quizes,
+      ...this.props.notes,
+    ].filter((l) => l.id === root)[0];
+    if (el) {
+      const res = await this.object_search(
+        this.state.tree_blocks,
+        color,
+        colors[this.state.colorNum],
+        el,
+        source,
+        color,
+        colors,
+        correct
+      );
+      this.setState((prevState) => ({
+        colorNum: prevState.colorNum + 1,
+      }));
+    }
+    // let used = [...this.state.usedElements, id];
+    // this.setState({ usedElements: used });
+  };
 
-  const handleNewBlock = (id, root, color) => {
-    if (id) {
-      let el = props.elements.filter((l) => l.id === id)[0];
-      let source = props.elements.filter((l) => l.id === root)[0];
-      el.source = source.id;
-      el.color = colors[colors.indexOf(source.color) + 1];
-      el.sourceColor = source.color;
-      setComponents([...components, el]);
+  open = (obj) => <Block obj={obj} />;
+  componentDidMount = () => {
+    let el = [
+      ...this.props.newTests,
+      ...this.props.quizes,
+      ...this.props.notes,
+    ].find((el) => el.id == this.props.nodeID);
+    if (el) {
+      this.setState({
+        tree_blocks: {
+          key: colors[0],
+          source_color: "#FFF",
+          el: (
+            <TestBlock
+              id="first"
+              type={el.__typename.toLowerCase()}
+              newTests={this.props.newTests}
+              quizes={this.props.quizes}
+              notes={this.props.notes}
+              lessonID={this.props.lessonID}
+              value={el ? el : null}
+              source={null}
+              getNewBlock={this.handleNewBlock}
+              sourceColor="#FFF"
+              color={colors[0]}
+              getNode={this.getNode}
+            />
+          ),
+          nodes: [],
+        },
+      });
+    } else {
+      this.setState({
+        tree_blocks: {
+          key: colors[0],
+          source_color: "#FFF",
+          el: (
+            <TestBlock
+              id="first"
+              newTests={this.props.newTests}
+              quizes={this.props.quizes}
+              notes={this.props.notes}
+              getNewBlock={this.handleNewBlock}
+              color={colors[0]}
+              sourceColor="#FFF"
+              lessonID={this.props.lessonID}
+              getNode={this.getNode}
+            />
+          ),
+          nodes: [],
+        },
+      });
     }
   };
 
-  const removeBlock = (id) => {
-    let comps = components;
-    comps = comps.filter((c) => c.id !== id);
-    setComponents(comps);
-  };
-  return (
-    <>
-      {components.map((el) => (
-        <>
-          <TestBlock
-            id={el ? el.id : "first"}
-            type={el.__typename.toLowerCase()}
-            lessonID={props.lessonID}
-            newTests={props.newTests}
-            quizes={props.quizes}
-            notes={props.notes}
-            t={{
-              type:
-                el.next && el.next.true && el.next.true.type
-                  ? el.next.true.type.toLowerCase()
-                  : null,
-              value:
-                el.next && el.next.true && el.next.true.value
-                  ? el.next.true.value.toLowerCase()
-                  : null,
-            }}
-            f={{
-              type:
-                el.next && el.next.false && el.next.false.type
-                  ? el.next.false.type.toLowerCase()
-                  : null,
-              value:
-                el.next && el.next.false && el.next.false.value
-                  ? el.next.false.value.toLowerCase()
-                  : null,
-            }}
-            value={el ? el : null}
-            source={el.source ? el.source : "null"}
-            getNewBlock={handleNewBlock}
-            removeBlock={removeBlock}
-            sourceColor={el.sourceColor}
-            color={el.color}
-            fixed={true}
-          />
-        </>
-      ))}
-    </>
-  );
-};
+  render() {
+    return (
+      <Styles>
+        <div className="tree">
+          {this.state.tree_blocks !== "" && this.open(this.state.tree_blocks)}
+        </div>
+      </Styles>
+    );
+  }
+}
 
 export default ProblemBuilder;

@@ -18,6 +18,7 @@ const SINGLE_LESSON_QUERY = gql`
       context
       open
       goal
+      story
       type
       totalPoints
       hasSecret
@@ -322,6 +323,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100vw;
+  background: #fafafa;
   /* The side navigation menu */
   .sidenav {
     height: 100%; /* 100% Full-height */

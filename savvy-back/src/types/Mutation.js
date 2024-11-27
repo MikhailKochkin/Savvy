@@ -1823,6 +1823,7 @@ const Mutation = mutationType({
         id: stringArg(),
         number: intArg(),
         name: stringArg(),
+        story: stringArg(),
         banner: stringArg(),
         audience: stringArg(),
         context: stringArg(),

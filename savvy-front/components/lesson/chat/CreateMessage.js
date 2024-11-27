@@ -133,7 +133,7 @@ const Phrase = styled.div`
       border: none;
       outline: none;
       font-size: 2rem;
-      fon-weight: bold;
+      font-weight: bold;
       cursor: pointer;
     }
   }
@@ -192,11 +192,10 @@ const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const CreateMessage = (props) => {
   const { message } = props;
-
   const [author, setAuthor] = useState(
     message?.author?.toLowerCase() ? message.author.toLowerCase() : "author"
   );
-  const [name, setName] = useState();
+  const [name, setName] = useState(message?.name ? message?.name : "");
   const [text, setText] = useState(message?.text ? message.text : "");
   const [reactions, setReactions] = useState([]);
   const [image, setImage] = useState("");

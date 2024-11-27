@@ -1,3 +1,32 @@
+// Description: This file contains the architecture of the system.
+
+const scenario = {
+  description: `
+    I am launching an ad campaign on Facebook. My goal is to achieve 200 sales within my current budget: 10,000 USD.
+    I have 3 ads. I want to know how much I should allocate to each ad set to achieve my goal.
+  `,
+  formula: {
+    ad1: 0.5,
+    ad2: 0.4,
+    ad3: 0.3,
+  },
+};
+
+const actionType = {
+  boolean: {
+    description: "",
+    value: true / false,
+  },
+  number: {
+    description: "",
+    value: 0,
+  },
+  string: {
+    description: "",
+    value: "",
+  },
+};
+
 const graph = [
   {
     id: "start",
@@ -18,6 +47,7 @@ const graph = [
   },
   {
     id: "node2",
+    actionType: actionType.number,
     value: 12,
     dependencies: [],
     sources: ["start"],
@@ -25,6 +55,7 @@ const graph = [
   },
   {
     id: "node3",
+    actionType: actionType.number,
     value: 15,
     formula: (x) => x * 2,
     dependencies: [],

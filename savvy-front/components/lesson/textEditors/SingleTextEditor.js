@@ -10,15 +10,23 @@ import smoothscroll from "smoothscroll-polyfill";
 import { TailSpin } from "react-loader-spinner";
 
 import SingleProblem from "../problems/SingleProblem";
-import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
+import DeleteSingleTextEditor from "./DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
 import SingleQuiz from "../quizes/SingleQuiz";
 import Note from "../notes/Note";
 import { MiniOpenQuestionFrame, MiniAIButton } from "../quizes/QuestionStyles";
 import {
+  WindowColumn,
+  WindowBundle,
+  Window,
+  IconBlock,
+  Progress2,
+} from "./TextEditorStyles";
+import {
   containsOnlyNumbers,
   compareStrings,
 } from "../SimulatorDevelopmentFunctions";
+import { SecondaryButton } from "../styles/DevPageStyles";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
@@ -46,7 +54,7 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   }
 `;
 
-const Styles = styled.div`
+const TextEditorStyles = styled.div`
   margin-bottom: 20px;
   width: ${(props) => (props.width ? "95vw" : "100%")};
   display: flex;
@@ -196,119 +204,6 @@ const TextBar = styled.div`
   }
 `;
 
-const WindowBundle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  top: 15%;
-  position: -webkit-sticky;
-  position: sticky;
-`;
-const Window = styled.div`
-  margin-left: -10px;
-  margin-bottom: 20px;
-  min-height: 80px;
-  border-radius: 10px;
-  width: 320px;
-  line-height: 1.4;
-  background: rgb(255, 255, 255);
-  -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
-  -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
-  box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
-  opacity: 0; // Initial opacity
-  visibility: hidden; // Initial visibility
-  transition: opacity 0.3s ease-in-out; // Transition effect
-  opacity: 1; // Active opacity
-  visibility: visible; // Active visibility
-  /* ${(props) =>
-    props.active &&
-    `
-    opacity: 1;  // Active opacity
-    visibility: visible;  // Active visibility
-  `} */
-  .answerBox {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    border-top: 1px solid #f3f3f3;
-    padding: 10px 15px;
-    button {
-      background-color: #d2edfd;
-      color: #000a60;
-      border-radius: 4px;
-      border: none;
-      box-shadow: none;
-      box-sizing: border-box;
-      font-family: Montserrat;
-      font-weight: 500;
-      font-size: 14px;
-      /* height: 24px; */
-      padding: 8px 15px;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      transition: 0.3s;
-      cursor: pointer;
-      &:hover {
-        box-shadow: rgb(66 133 244 / 15%) 0px 1px 3px 1px;
-        background-color: #a4dbfe;
-      }
-    }
-  }
-  .questionBox {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 15px;
-    .icon {
-      border-radius: 50%;
-      height: 40px;
-      width: 40px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-    }
-    .nameBlock {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-    }
-    .name {
-      margin-left: 8px;
-    }
-
-    .cancelBlock {
-      height: 100%;
-      transition: 0.5s;
-      border-radius: 50%;
-      padding: 1%;
-      cursor: pointer;
-      &:hover {
-        background: #ecf5fe;
-      }
-    }
-    .cancel {
-      margin: 5px;
-      height: 15px;
-      width: 15px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-  .studentsWording {
-    width: 100%;
-    margin: 10px 0;
-    .studentsWordingHeader {
-      margin-bottom: 5px;
-    }
-  }
-`;
-
 const Comment = styled.div`
   padding: 7px 10px;
   border-radius: 10px;
@@ -317,15 +212,6 @@ const Comment = styled.div`
     margin: 0px;
     margin-bottom: 10px;
   }
-`;
-
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  /* align-items: center; */
-  width: 100%;
-  margin: 5px 0;
 `;
 
 const EditText = styled.div`
@@ -343,20 +229,6 @@ const EditText = styled.div`
   @media (max-width: 900px) {
     width: 100%;
   }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  width: 100%;
-`;
-
-const WindowColumn = styled.div`
-  height: 100%;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 10%;
 `;
 
 const BlueButton = styled.button`
@@ -379,12 +251,12 @@ const BlueButton = styled.button`
   }
 `;
 
-const Progress2 = styled.div`
+const Buttons = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
-  margin: 10px;
+  margin-bottom: 20px;
 `;
 
 const SingleTextEditor = (props) => {
@@ -401,7 +273,7 @@ const SingleTextEditor = (props) => {
   const [note, setNote] = useState(); // note text
   const [noteId, setNoteId] = useState(); // note text
   const [problemId, setProblemId] = useState(); // case study id
-  const [errorId, setErrorId] = useState(); // ???
+  const [errorId, setErrorId] = useState(); // we use this data to find a mini quiz once the error is clicked
 
   const [errorFeedback, setErrorFeedback] = useState(); // ???
   const [errorAnswer, setErrorAnswer] = useState(); // new wording provided by the student to fix the error
@@ -444,6 +316,7 @@ const SingleTextEditor = (props) => {
     null;
   }
 
+  // old function for older use cases
   const evaluateErrorFix = async (e) => {
     setChekingAnswer(true);
     const answer1 = htmlToText(correctErrorOption.toLowerCase(), {
@@ -475,6 +348,8 @@ const SingleTextEditor = (props) => {
     }
   };
 
+  // old function for older use cases
+
   const fetchChecker = async (data) => {
     try {
       const response = await fetch(
@@ -502,6 +377,8 @@ const SingleTextEditor = (props) => {
   };
 
   // Handle click events on the document
+  //(handles all types of use cases:
+  // from very old ones to the newest –> elementid)
   const onMouseClick = (e) => {
     if (e.target.getAttribute("feedback")) {
       setErrorFeedback(e.target.getAttribute("feedback"));
@@ -535,12 +412,14 @@ const SingleTextEditor = (props) => {
     setWrongErrorOption(wrong_option);
   };
 
-  // this function is automatically added to the edited text to pass all changes to the state
+  // this function is automatically added to the edited text to
+  // pass all changes to the state
   const changeState = (e) => {
     setErrorAnswer(e.target.innerHTML);
   };
 
-  // used for old cases when the indormation is revealed when it is clicked on
+  // used for old cases when the information is revealed
+  // when it is clicked on
   const onReveal = (e) => {
     let span = document.createElement("span");
     span.innerHTML = ` (${e.target.getAttribute("data")})`;
@@ -612,17 +491,17 @@ const SingleTextEditor = (props) => {
           me.permissions.includes("ADMIN") ||
           lesson.user.id == me.id) &&
         !story && (
-          <>
-            <button onClick={(e) => setUpdate(!update)}>
+          <Buttons>
+            <SecondaryButton onClick={(e) => setUpdate(!update)}>
               {update ? t("back") : t("update")}
-            </button>
+            </SecondaryButton>
             <DeleteSingleTextEditor
               id={props.textEditor.id}
               lessonID={props.lessonID}
             />
-          </>
+          </Buttons>
         )}
-      <Styles id={textEditor.id + 1} width={story}>
+      <TextEditorStyles id={textEditor.id + 1} width={story}>
         {!update && (
           <div>
             {/* The document itself */}
@@ -630,128 +509,135 @@ const SingleTextEditor = (props) => {
               <EditText story={story}>
                 <div
                   onClick={async (e) => {
-                    // update the number of attempts made by the student
-                    setAttempts(attempts + 1);
-                    if (e.target.getAttribute("class") == "mini_button") {
+                    // Increment the number of attempts made by the student
+                    setAttempts((prev) => prev + 1);
+
+                    // Extract commonly used attributes and elements for cleaner code
+                    const target = e.target;
+                    const parent = target.parentElement;
+                    const type =
+                      target.getAttribute("type") ||
+                      parent?.getAttribute("type");
+                    const elementId = target.getAttribute("elementid");
+                    const innerText = target.innerHTML;
+
+                    /**
+                     * Helper function to create a result entry with a delay.
+                     * @param {string} type - The type of interaction (error, note, etc.).
+                     * @param {string} correct - Correct value (optional).
+                     * @param {string} wrong - Incorrect value (optional).
+                     * @param {string} guess - User guess or interaction.
+                     * @param {boolean} result - Whether the interaction is correct.
+                     * @param {number} delay - Time delay before sending the result.
+                     */
+                    const createResult = (
+                      type,
+                      correct = "",
+                      wrong = "",
+                      guess = "",
+                      result = true,
+                      delay = 1000
+                    ) => {
+                      setTimeout(() => {
+                        createTextEditorResult({
+                          variables: {
+                            lessonId: props.lessonID,
+                            textEditorId: props.textEditor.id,
+                            attempts,
+                            correct,
+                            wrong,
+                            type,
+                            guess,
+                            result,
+                          },
+                        });
+                      }, delay);
+                    };
+
+                    // Handle mini-button clicks to check the answer and give feedback
+                    if (target.classList.contains("mini_button")) {
                       const ch = await check(e);
+                      if (errorFeedback) setShowFeedback(true); // Show feedback if errorFeedback is enabled
+                      createResult(
+                        "error",
+                        correctErrorOption,
+                        wrongErrorOption,
+                        errorAnswer,
+                        ch
+                      );
+                      return;
+                    }
 
-                      if (errorFeedback) {
-                        setShowFeedback(true);
-                      }
-                      setTimeout(() => {
-                        const res2 = createTextEditorResult({
-                          variables: {
-                            lessonId: props.lessonID,
-                            textEditorId: props.textEditor.id,
-                            attempts: attempts,
-                            correct: correctErrorOption,
-                            wrong: wrongErrorOption,
-                            type: "error",
-                            guess: errorAnswer,
-                            result: ch,
-                          },
-                        });
-                      }, 1000);
-                    }
+                    // Handle click on an editable text element when no error window is shown
                     if (
-                      e.target.classList.contains("edit") &&
-                      isErrorWindowShown == false
+                      target.classList.contains("edit") &&
+                      !isErrorWindowShown
                     ) {
-                      setErrorAnswer(e.target.innerHTML);
+                      setErrorAnswer(innerText);
                     }
-                    // 1. Comment / Note
-                    if (
-                      e.target.getAttribute("type") === "note" ||
-                      e.target.parentElement.getAttribute("type") === "note"
-                    ) {
-                      let val =
-                        e.target.getAttribute("type") === "note"
-                          ? e.target.getAttribute("text")
-                          : e.target.parentElement.getAttribute("text");
-                      if (e.target.tagName !== "BUTTON") {
-                        e.target.className = "edit";
-                      }
+
+                    // Handle notes-related interactions
+                    if (type === "note") {
                       setIsNoteWindowShown(true);
-                      setCurrentlyActiveStringinNotes(e.target.innerHTML);
-                      setNote(val);
-                      setNoteId(e.target.getAttribute("elementid"));
-                      setType("note");
-                      setTimeout(() => {
-                        const res2 = createTextEditorResult({
-                          variables: {
-                            lessonId: props.lessonID,
-                            textEditorId: props.textEditor.id,
-                            attempts: attempts,
-                            correct: val,
-                            wrong: "",
-                            type: "note",
-                            guess: "opened",
-                            result: true,
-                          },
-                        });
-                      }, 3000);
+                      setCurrentlyActiveStringinNotes(innerText); // Store the active note string
+                      setNoteId(elementId); // Store note ID for reference
+                      setType("note"); // Set interaction type to 'note'
+                      setNote(
+                        target.getAttribute("text") ||
+                          parent.getAttribute("text")
+                      ); // Retrieve note content
+                      target.className = "edit"; // Mark as editable
+                      createResult(
+                        "note",
+                        target.getAttribute("text") || "",
+                        "",
+                        "opened",
+                        true,
+                        3000
+                      ); // Log the note interaction
+                      return;
                     }
-                    // 2. Error
-                    if (
-                      e.target.id === "id" ||
-                      e.target.getAttribute("type") === "error" ||
-                      e.target.parentElement.getAttribute("type") === "error"
-                    ) {
+
+                    // Handle error-related interactions
+                    if (type === "error" || target.id === "id") {
                       setIsErrorWindowShown(true);
-                      setErrorAnswer(e.target.innerHTML);
-                      setResult(null);
-                      setErrorId(e.target.getAttribute("elementid"));
-
-                      if (total > 0) {
-                        const res2 = onMouseClick(e);
-                      } else if (props.total == 0 || props.total == null) {
-                        const res3 = onReveal(e);
-                      }
-                      setType("error");
+                      setErrorAnswer(innerText); // Store error text
+                      setErrorId(elementId); // Store error ID
+                      setType("error"); // Set interaction type to 'error'
+                      total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
+                      return;
                     }
 
-                    if (
-                      e.target.classList.contains("edit") &&
-                      e.target.getAttribute("type") !== "note" &&
-                      e.target.parentElement?.getAttribute("type") !== "note" &&
-                      e.target.getAttribute("type") !== "problem" &&
-                      e.target.parentElement?.getAttribute("type") !== "problem"
-                    ) {
-                      setErrorAnswer(e.target.innerHTML);
-                      let newMiniQuiz = props.lesson.quizes.find(
-                        (quiz) => quiz.id == e.target.getAttribute("errorid")
-                      );
-                      setErrorId(e.target.getAttribute("errorid"));
+                    // Handle problem (case study) interactions
+                    if (type === "problem") {
+                      target.className = "edit"; // Mark problem text as editable
+                      setType("problem"); // Set interaction type to 'problem'
+                      setProblemId(elementId); // Store problem ID
+                      setTimeout(() => slide(elementId), 500); // Transition to the case study
+                      return;
+                    }
 
-                      setMiniQuiz(newMiniQuiz);
+                    // Handle non-note, non-problem editable interactions
+                    if (
+                      target.classList.contains("edit") &&
+                      !["note", "problem"].includes(type)
+                    ) {
+                      setErrorAnswer(innerText); // Store the user's answer
+                      setErrorId(target.getAttribute("errorid")); // Store the error ID
+                      setMiniQuiz(
+                        props.lesson.quizes.find(
+                          (quiz) => quiz.id === target.getAttribute("errorid")
+                        )
+                      ); // Find related quiz
                       setCorrectErrorOption(
-                        e.target.getAttribute("data-initial")
-                      );
-                      setIsErrorWindowShown(true);
-                      setResult(null);
-                    }
-
-                    // 3. Case Study. Transition to Case Study.
-
-                    if (
-                      e.target &&
-                      (e.target.getAttribute("type") === "problem" ||
-                        (e.target.parentElement &&
-                          e.target.parentElement.getAttribute("type") ===
-                            "problem"))
-                    ) {
-                      // 1.1 add styles to the text with a mistake
-                      e.target.className = "edit";
-                      // 1.2 add data necessary tp prove student with feedback to state
-                      setType("problem");
-                      setProblemId(e.target.getAttribute("elementid"));
-                      setTimeout(() => {
-                        slide(e.target.getAttribute("elementid"));
-                      }, 500);
+                        target.getAttribute("data-initial")
+                      ); // Store correct option for feedback
+                      setIsErrorWindowShown(true); // Show the error feedback window
+                      setResult(null); // Reset result state
                     }
                   }}
                 >
-                  {parse(text)}
+                  {parse(text)} {/* Render the text content */}
                 </div>
               </EditText>
             </TextBar>
@@ -812,25 +698,6 @@ const SingleTextEditor = (props) => {
                   </div>
                 </Window>
               )}
-              {/* <Window active={showFeedback}>
-                <div className="questionBox">
-                  <IconBlock>
-                    <div className="nameBlock">
-                      <img className="icon" src="../../static/hipster.svg" />
-                      <div className="name">BeSavvy</div>
-                    </div>
-                    <div
-                      className="cancelBlock"
-                      onClick={(e) => setShowFeedback(false)}
-                    >
-                      <img className="cancel" src="../../static/cancel.svg" />
-                    </div>
-                  </IconBlock>
-                </div>
-                <div className="answerBox">
-                  <Comment>{errorFeedback}</Comment>
-                </div>
-              </Window> */}
               {isErrorWindowShown && (
                 <Window>
                   <div className="questionBox">
@@ -929,7 +796,7 @@ const SingleTextEditor = (props) => {
             </WindowBundle>
           </WindowColumn>
         )}
-      </Styles>
+      </TextEditorStyles>
       {update && (
         <UpdateTextEditor
           lessonID={lessonID}

@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "next-i18next";
 
-import CreateNote from "../CreateNote";
-import Note from "../../lesson/notes/Note";
+import CreateNote from "../../notes/CreateNote";
+import Note from "../../notes/Note";
 
-import CreateNewTest from "../CreateNewTest";
-import SingleTest from "../../lesson/tests/SingleTest";
+import CreateNewTest from "../../tests/CreateNewTest";
+import SingleTest from "../../tests/SingleTest";
 
-import CreateQuiz from "../CreateQuiz";
-import SingleQuiz from "../../lesson/quizes/SingleQuiz";
+import CreateQuiz from "../../quizes/CreateQuiz";
+import SingleQuiz from "../../quizes/SingleQuiz";
 
 const Block = styled.div`
   font-size: 1.5rem;

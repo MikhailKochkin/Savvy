@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import Router from "next/router";
-
+import { PrimaryButton } from "./styles/DevPageStyles";
 const DELETE_LESSON_MUTATION = gql`
   mutation DELETE_LESSON_MUTATION($id: String!) {
     deleteLesson(id: $id) {
@@ -31,24 +31,13 @@ const Button = styled.button`
   }
 `;
 
-const Delete = styled.div`
-  background: none;
-  width: 100%;
-`;
-
 const DeleteSingleLesson = (props) => {
   const [deleteLesson, { data, loading, error }] = useMutation(
     DELETE_LESSON_MUTATION
   );
 
   return (
-    // <Mutation
-    //   mutation={DELETE_LESSON_MUTATION}
-    //   variables={{ id: props.id }}
-    //   update={update}
-    // >
-    //   {(DeleteSandbox, { error }) => (
-    <Button
+    <PrimaryButton
       onClick={() => {
         if (confirm("Sure?")) {
           deleteLesson({
@@ -65,12 +54,8 @@ const DeleteSingleLesson = (props) => {
         }
       }}
     >
-      {/* <Delete id="remove"> */}
       Delete Lesson
-      {/* </Delete> */}
-    </Button>
-    //   )}
-    // </Mutation>
+    </PrimaryButton>
   );
 };
 

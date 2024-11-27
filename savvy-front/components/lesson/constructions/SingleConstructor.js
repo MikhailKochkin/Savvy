@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
-import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
+import DeleteSingleConstructor from "./DeleteSingleConstructor";
 import UpdateConstruction from "./UpdateConstruction";
 import { CURRENT_USER_QUERY } from "../../User";
 import Box from "./Box";

@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
+import { useMutation, gql } from "@apollo/client";
+import { useTranslation } from "next-i18next";
 import styled from "styled-components";
 import parse from "html-react-parser";
 import { v4 as uuidv4 } from "uuid";
 import { htmlToText } from "html-to-text";
-import dynamic from "next/dynamic";
-import { useMutation, gql } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
-import { useTranslation } from "next-i18next";
 import Modal from "styled-react-modal";
-import Box from "./Box";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -249,37 +247,6 @@ const Element = styled.div`
     100% {
       transform: translate(1px, -2px) rotate(-1deg);
     }
-  }
-`;
-
-const Variants = styled.div`
-  display: flex;
-  flex-direction: column;
-  top: 50px;
-  /* height: ${(props) => {
-    return `${props.height}px`;
-  }}; */
-  height: 600px;
-  overflow-y: auto; // Handle overflow
-  padding: 10px;
-  @media (max-width: 800px) {
-    max-height: 100%;
-    padding: 3%;
-  }
-`;
-
-const VarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  width: 100%;
-  min-height: 600px;
-
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  @media (max-width: 800px) {
-    width: 100%;
   }
 `;
 

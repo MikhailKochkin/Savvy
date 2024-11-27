@@ -1760,6 +1760,7 @@ export interface NexusGenInputs {
     short_structure?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     shotResults?: NexusGenInputs['ShotResultOrderByRelationAggregateInput'] | null; // ShotResultOrderByRelationAggregateInput
     shots?: NexusGenInputs['ShotOrderByRelationAggregateInput'] | null; // ShotOrderByRelationAggregateInput
+    story?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     structure?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
     teamQuestResults?: NexusGenInputs['TeamQuestResultOrderByRelationAggregateInput'] | null; // TeamQuestResultOrderByRelationAggregateInput
@@ -1882,6 +1883,7 @@ export interface NexusGenInputs {
     short_structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     shots?: NexusGenInputs['ShotListRelationFilter'] | null; // ShotListRelationFilter
+    story?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teamQuestResults?: NexusGenInputs['TeamQuestResultListRelationFilter'] | null; // TeamQuestResultListRelationFilter
@@ -1948,6 +1950,7 @@ export interface NexusGenInputs {
     short_structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     shots?: NexusGenInputs['ShotListRelationFilter'] | null; // ShotListRelationFilter
+    story?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teamQuestResults?: NexusGenInputs['TeamQuestResultListRelationFilter'] | null; // TeamQuestResultListRelationFilter
@@ -2298,6 +2301,24 @@ export interface NexusGenInputs {
   }
   NoteOrderByRelationAggregateInput: { // input type
     _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  NoteOrderByWithRelationInput: { // input type
+    chat?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    isSecret?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
+    lessonID?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    lessonId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    link_clicks?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    name?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    next?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    text?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    type?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    user?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
+    userId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
   }
   NoteWhereInput: { // input type
     AND?: NexusGenInputs['NoteWhereInput'][] | null; // [NoteWhereInput!]
@@ -4741,6 +4762,7 @@ export interface NexusGenObjects {
     openSize?: number | null; // Int
     published?: boolean | null; // Boolean
     short_structure?: NexusGenScalars['Json'] | null; // Json
+    story?: string | null; // String
     structure?: NexusGenScalars['Json'] | null; // Json
     tags: string[]; // [String!]!
     text: string; // String!
@@ -5594,6 +5616,7 @@ export interface NexusGenFieldTypes {
     short_structure: NexusGenScalars['Json'] | null; // Json
     shotResults: NexusGenRootTypes['ShotResult'][]; // [ShotResult!]!
     shots: NexusGenRootTypes['Shot'][]; // [Shot!]!
+    story: string | null; // String
     structure: NexusGenScalars['Json'] | null; // Json
     tags: string[]; // [String!]!
     teamQuestResults: NexusGenRootTypes['TeamQuestResult'][]; // [TeamQuestResult!]!
@@ -5996,6 +6019,8 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
     miniForums: NexusGenRootTypes['MiniForum'][]; // [MiniForum!]!
     newTest: NexusGenRootTypes['NewTest'] | null; // NewTest
+    note: NexusGenRootTypes['Note'] | null; // Note
+    notes: NexusGenRootTypes['Note'][]; // [Note!]!
     offer: NexusGenRootTypes['Offer'] | null; // Offer
     offers: NexusGenRootTypes['Offer'][]; // [Offer!]!
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
@@ -6747,6 +6772,7 @@ export interface NexusGenFieldTypeNames {
     short_structure: 'Json'
     shotResults: 'ShotResult'
     shots: 'Shot'
+    story: 'String'
     structure: 'Json'
     tags: 'String'
     teamQuestResults: 'TeamQuestResult'
@@ -7149,6 +7175,8 @@ export interface NexusGenFieldTypeNames {
     me: 'User'
     miniForums: 'MiniForum'
     newTest: 'NewTest'
+    note: 'Note'
+    notes: 'Note'
     offer: 'Offer'
     offers: 'Offer'
     orders: 'Order'
@@ -8480,6 +8508,7 @@ export interface NexusGenArgTypes {
       number?: number | null; // Int
       open?: boolean | null; // Boolean
       short_structure?: NexusGenInputs['LessonStructure'] | null; // LessonStructure
+      story?: string | null; // String
       structure?: NexusGenInputs['LessonStructure'] | null; // LessonStructure
       tags?: Array<string | null> | null; // [String]
       tariffs?: string | null; // String
@@ -8906,6 +8935,17 @@ export interface NexusGenArgTypes {
     }
     newTest: { // args
       where: NexusGenInputs['NewTestWhereUniqueInput']; // NewTestWhereUniqueInput!
+    }
+    note: { // args
+      where: NexusGenInputs['NoteWhereUniqueInput']; // NoteWhereUniqueInput!
+    }
+    notes: { // args
+      after?: NexusGenInputs['NoteWhereUniqueInput'] | null; // NoteWhereUniqueInput
+      before?: NexusGenInputs['NoteWhereUniqueInput'] | null; // NoteWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['NoteOrderByWithRelationInput'][] | null; // [NoteOrderByWithRelationInput!]
+      where?: NexusGenInputs['NoteWhereInput'] | null; // NoteWhereInput
     }
     offer: { // args
       where: NexusGenInputs['OfferWhereUniqueInput']; // OfferWhereUniqueInput!
