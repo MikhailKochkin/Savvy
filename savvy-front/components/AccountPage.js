@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 import { useUser } from "./User";
 import Account from "./Account";
 import Teams from "./Teams";
-import SubscriptionSettings from "./SubscriptionSettings";
+import SubscriptionSettings from "./subscription/SubscriptionSettings";
 
 import MyCourses from "./MyCourses";
 import PleaseSignIn from "./auth/PleaseSignIn";
@@ -72,8 +72,8 @@ const AccountPage = (props) => {
             <div onClick={(e) => setPage("account")} name="account">
               {t("account")}
             </div>
-            <div onClick={(e) => setPage("teams")} name="account">
-              {t("teams")}
+            <div onClick={(e) => setPage("my_courses")} name="account">
+              My courses
             </div>
             <div onClick={(e) => setPage("subscription")} name="account">
               {t("subscription")}
@@ -81,13 +81,12 @@ const AccountPage = (props) => {
           </Menu>
           <Data>
             {page === "account" && me && <Account me={me} id={props.id} />}
-            {page === "teams" && me && <Teams me={me} id={props.id} />}
+            {page === "my_courses" && me && <MyCourses me={me} />}
             {page === "subscription" && me && (
               <SubscriptionSettings me={me} id={props.id} />
             )}
           </Data>
         </Container>
-        {me && <MyCourses me={me} />}
       </Styles>
     </PleaseSignIn>
   );

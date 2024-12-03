@@ -18,11 +18,10 @@ const ClassicButton = styled.div`
   border: none;
   background: none;
   cursor: pointer;
-  min-width: 80px;
   display: flex;
   font-size: 1.6rem;
-  flex-direction: row;
-  justify-content: flex-end;
+  padding: 1px 6px;
+  font-weight: 600;
   @media (max-width: 850px) {
     color: white;
     margin: 8px 8px 8px 32px;
@@ -38,6 +37,7 @@ const LandingButton = styled.div`
   font-weight: 500;
   padding: 5px 25px;
   cursor: pointer;
+
   &:hover {
     color: #5c5c5c;
     cursor: pointer;
@@ -61,13 +61,9 @@ const Signout = ({ landing }) => {
   };
 
   return landing ? (
-    <LandingButton onClick={handleSignout}>
-      <a>{t("sign_out")}</a>
-    </LandingButton>
+    <LandingButton onClick={handleSignout}>{t("sign_out")}</LandingButton>
   ) : (
-    <ClassicButton onClick={handleSignout}>
-      <a>{t("sign_out")}</a>
-    </ClassicButton>
+    <ClassicButton onClick={handleSignout}>{t("sign_out")}</ClassicButton>
   );
 };
 

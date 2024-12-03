@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import UserCard from "./UserCard";
-import emailGroups from "../emailGroups";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(

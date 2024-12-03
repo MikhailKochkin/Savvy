@@ -2,19 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import _ from "lodash";
-import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import ReactResizeDetector from "react-resize-detector";
 
 import Auth from "../auth/Auth.js";
-import AnswerQuestions from "./AnswerQuestions";
-import TranslateText from "./TranslateText";
+import TranslateText from "./lesson_management/TranslateText.js";
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
-// import PagePurchase from "./PagePurchase.js";
 import calculateSum from "../../functions.js";
-import Navigation from "./Navigation";
+import Navigation from "./lesson_management/Navigation.js";
 
 const Buttons = styled.div`
   display: flex;

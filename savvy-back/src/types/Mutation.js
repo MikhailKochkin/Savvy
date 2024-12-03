@@ -1140,6 +1140,25 @@ const Mutation = mutationType({
         return coursePage;
       },
     });
+    t.field("deleteCoursePage", {
+      type: "CoursePage",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        const lesson = await ctx.prisma.coursePage.findUnique(
+          { where },
+          `{ id }`
+        );
+        //3. Delete it
+        return ctx.prisma.coursePage.delete({
+          where: {
+            id: args.id,
+          },
+        });
+      },
+    });
     t.field("createProgram", {
       type: "Program",
       args: {

@@ -4,10 +4,10 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
-import LoadingText from "../LoadingText";
+import LoadingText from "../layout/LoadingText";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import PleaseSignIn from "../auth/PleaseSignIn";
-import LoadingErrorMessage from "../LoadingErrorMessage";
+import LoadingErrorMessage from "../layout/LoadingErrorMessage";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {

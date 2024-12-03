@@ -5,6 +5,8 @@ import * as EmailValidator from "email-validator";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { InlineWidget } from "react-calendly";
+import ReactResizeDetector from "react-resize-detector";
 
 import "react-phone-number-input/style.css";
 
@@ -62,9 +64,9 @@ const Description = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 48%;
+  width: 50%;
   min-width: 460px;
-
+  margin-bottom: 30px;
   padding: 4%;
   color: #fff;
   line-height: 1.2;
@@ -141,7 +143,7 @@ const Description = styled.div`
     height: auto;
     width: 100%;
     min-width: 100px;
-    margin-bottom: 10px;
+    margin-bottom: 40px;
     #description {
       width: 100%;
     }
@@ -282,8 +284,8 @@ const Form = styled.div`
   color: black;
   display: flex;
   flex-direction: column;
-  align-items: space-between;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   .PhoneInput {
     width: 80%;
     height: 22px;
@@ -339,23 +341,29 @@ const Form = styled.div`
 `;
 
 const Action = (props) => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("000000000000000");
-
-  const { t } = useTranslation("landing");
-
-  const [createBusinessClient, { data, loading, error }] =
-    useMutation(CREATE_CLIENT);
+  const [width, setWidth] = useState(800);
+  const onResize = (width) => {
+    setWidth(width);
+  };
 
   return (
     <Styles id="talk_to_founder">
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+
       <Container>
         <Form>
           <Description>
             Talk to our <span className="orange">founder</span> to get started
           </Description>
-          <Contact>
+
+          <InlineWidget
+            styles={{
+              width: width > 1000 ? "1000px" : "350px",
+              height: width > 1000 ? "700px" : "900px",
+            }}
+            url="https://calendly.com/mike-from-besavvy/call-with-mike-kochkin"
+          />
+          {/* <Contact>
             <div id="form_container">
               <form>
                 <div className="label">Name</div>
@@ -366,15 +374,6 @@ const Action = (props) => {
                   // placeholder={t("name")}
                   onChange={(e) => setName(e.target.value)}
                 />
-                {/* <div className="label">Number</div>
-                <input
-                  id="tel"
-                  className="data"
-                  type="tel"
-                  autocomplete="off"
-                  // placeholder={t("number")}
-                  onChange={(e) => setNumber(e.target.value)}
-                /> */}
                 <div className="label">Email</div>
                 <input
                   id="email"
@@ -410,7 +409,7 @@ const Action = (props) => {
                 </button>
               </form>
             </div>
-          </Contact>
+          </Contact> */}
         </Form>
       </Container>
     </Styles>

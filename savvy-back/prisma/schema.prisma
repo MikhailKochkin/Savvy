@@ -18,7 +18,7 @@ model Application {
   createdAt     DateTime   @default(now())
   coursePageId  String     @db.VarChar(30)
   promocode     String?
-  coursePage    CoursePage @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coursePage    CoursePage @relation(fields: [coursePageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model BotDialogue {
@@ -313,7 +313,7 @@ model CourseVisit {
   coursePageId String     @db.VarChar(30)
   comment      String?
   info         Json?
-  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   student      User       @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -535,7 +535,7 @@ model Lesson {
   exams               Exam[]
   examResults         ExamResult[]
   feedback            Feedback[]
-  coursePage          CoursePage           @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coursePage          CoursePage           @relation(fields: [coursePageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   forum               Forum?               @relation(fields: [forumId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user                User                 @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   lessonResults       LessonResult[]
@@ -680,7 +680,7 @@ model Order {
   coursePageId String     @db.VarChar(30)
   programId    String?
   teamId       String?
-  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   program      Program?   @relation(fields: [programId], references: [id])
   team         Team?      @relation(fields: [teamId], references: [id])
   user         User       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -695,7 +695,7 @@ model PointA {
   userId       String     @db.VarChar(30)
   coursePageId String     @db.VarChar(30)
   text         String?
-  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user         User       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   pointATest   PointATest[] @relation("PointATests")
 

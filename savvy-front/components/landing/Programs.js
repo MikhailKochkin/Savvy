@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import smoothscroll from "smoothscroll-polyfill";
 
 import Program from "./Program";
-import LoadingDummy from "../Loading";
+import LoadingDummy from "../layout/Loading";
 
 const COURSES_QUERY = gql`
   query COURSES_QUERY {

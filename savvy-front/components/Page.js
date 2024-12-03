@@ -3,10 +3,10 @@ import { withRouter, useRouter } from "next/router";
 import { ModalProvider } from "styled-react-modal";
 import dynamic from "next/dynamic";
 
-import Meta from "./Meta";
-import Footer from "./Footer";
-import Header from "./Header";
-import Layout from "../components/Layout";
+import Meta from "./layout/Meta";
+import Footer from "./layout/Footer";
+import Header from "./layout/Header";
+import Layout from "./layout/Layout";
 // import { useUser } from "./User";
 
 const theme = {
@@ -59,11 +59,11 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-const DynamicNav = dynamic(import("./Nav"), {
+const DynamicNav = dynamic(import("./layout/Nav"), {
   ssr: false,
 });
 
-const DynamicSpaceNav = dynamic(import("./SpaceNav"), {
+const DynamicSpaceNav = dynamic(import("./layout/SpaceNav"), {
   ssr: false,
 });
 

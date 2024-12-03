@@ -1,4 +1,4 @@
-import Courses from "../components/course/Courses";
+import Courses from "../components/landing/LandingLayout";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps = async ({ locale }) => ({

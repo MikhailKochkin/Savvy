@@ -2,10 +2,13 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
 
 import { useUser } from "../components/User";
-const DynamicSubscription = dynamic(import("../components/Subscription"), {
-  loading: () => <p>...</p>,
-  ssr: false,
-});
+const DynamicSubscription = dynamic(
+  import("../components/subscription/Subscription"),
+  {
+    loading: () => <p>...</p>,
+    ssr: false,
+  }
+);
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
@@ -21,6 +24,8 @@ const SubscriptionPage = (props) => {
       courseId={props.query.courseId}
       referrerId={props.query.referrerId}
       referrerName={props.query.referrerName}
+      // avalable types: "gift", "special"
+      type={props.query.type}
     />
   );
 };

@@ -5734,6 +5734,7 @@ export interface NexusGenFieldTypes {
     deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     deleteComment: NexusGenRootTypes['Comment'] | null; // Comment
     deleteConstruction: NexusGenRootTypes['Construction'] | null; // Construction
+    deleteCoursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     deleteDocument: NexusGenRootTypes['Document'] | null; // Document
     deleteEmailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
     deleteEmailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
@@ -6890,6 +6891,7 @@ export interface NexusGenFieldTypeNames {
     deleteClient: 'BusinessClient'
     deleteComment: 'Comment'
     deleteConstruction: 'Construction'
+    deleteCoursePage: 'CoursePage'
     deleteDocument: 'Document'
     deleteEmailCampaign: 'EmailCampaign'
     deleteEmailReminder: 'EmailReminder'
@@ -8222,6 +8224,9 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
     }
     deleteConstruction: { // args
+      id?: string | null; // String
+    }
+    deleteCoursePage: { // args
       id?: string | null; // String
     }
     deleteDocument: { // args

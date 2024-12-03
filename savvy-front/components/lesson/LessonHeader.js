@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import parse from "html-react-parser";
-import calculateSum from "../../functions.js";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {

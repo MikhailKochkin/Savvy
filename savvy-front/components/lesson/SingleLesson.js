@@ -4,8 +4,8 @@ import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import { useUser } from "../User";
 import LessonBuilder from "./LessonBuilder";
-import Navigation from "./Navigation";
-import LoadingText from "../LoadingText";
+import Navigation from "./lesson_management/Navigation";
+import LoadingText from "../layout/LoadingText";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: String!) {

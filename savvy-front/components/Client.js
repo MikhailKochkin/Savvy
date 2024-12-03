@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
-import emailGroups from "../emailGroups";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION(
@@ -241,11 +240,11 @@ const Client = (props) => {
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [editorText, setEditorText] = useState(null);
 
-  const handleGroupChange = (groupName) => {
-    const group = emailGroups.find((group) => group.name === groupName);
-    setSelectedGroup(group);
-    setSelectedEmail(null); // Reset selected email when group changes
-  };
+  // const handleGroupChange = (groupName) => {
+  //   const group = emailGroups.find((group) => group.name === groupName);
+  //   setSelectedGroup(group);
+  //   setSelectedEmail(null); // Reset selected email when group changes
+  // };
 
   const handleEmailChange = (subject) => {
     const email = selectedGroup?.emails.find(

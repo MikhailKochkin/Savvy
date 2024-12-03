@@ -57,14 +57,17 @@ import {
   BiCustomize,
   BiTable,
 } from "react-icons/bi";
+import { LuHeading2, LuHeading3 } from "react-icons/lu";
+
 import { FaQuoteLeft } from "react-icons/fa";
 import { withTable, TableEditor } from "slate-table";
 import Modal from "styled-react-modal";
 import isHotkey from "is-hotkey";
-import CreateQuiz from "../lesson/quizes/CreateQuiz";
-import SingleQuiz from "../lesson/quizes/SingleQuiz";
-import CreateNote from "../lesson/notes/CreateNote";
-import SingleNote from "../lesson/notes/Note";
+import CreateQuiz from "../lesson/block_type_quizes/CreateQuiz";
+import SingleQuiz from "../lesson/block_type_quizes/SingleQuiz";
+import CreateNote from "../lesson/block_type_notes/CreateNote";
+import SingleNote from "../lesson/block_type_notes/Note";
+import { Row, PrimaryButton } from "../lesson/styles/DevPageStyles";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
@@ -204,6 +207,7 @@ const Label = styled.label`
   background: #efefef;
   outline: none;
   width: 37px;
+  height: 37px;
   &:hover {
     background: #112862;
     color: white;
@@ -326,6 +330,8 @@ const serialize = (node) => {
       )}">${children}</div>`;
     case "header":
       return `<h2>${children}</h2>`;
+    case "headerThree":
+      return `<h3>${children}</h3>`;
     case "paragraph":
       return `<p>${children}</p>`;
     case "numbered-list":
@@ -544,6 +550,12 @@ const deserialize = (el) => {
         { type: "header" },
         children.length > 0 ? children : [{ text: "" }]
       );
+    case "H3":
+      return jsx(
+        "element",
+        { type: "headerThree" },
+        children.length > 0 ? children : [{ text: "" }]
+      );
     case "P":
       return jsx(
         "element",
@@ -639,19 +651,14 @@ const uploadFile = async (e, editor) => {
 };
 
 const toggleElement = (editor, format) => {
-  const isActive = isElementActive(editor, format);
+  const isActive = isElementActive(editor, format); // Check if the format is already active
+
+  // If active, revert to paragraph or default block type
   if (isActive) {
-    Transforms.unwrapNodes(editor, {
-      // match: (n) => Text.isText(n),
-      split: true,
-    });
-    const newProperties = {
-      type: isActive ? "paragraph" : isList ? "list-item" : format,
-    };
-    Transforms.setNodes(editor, newProperties);
+    Transforms.setNodes(editor, { type: "paragraph" });
   } else {
-    const block = { type: format, children: [] };
-    Transforms.wrapNodes(editor, block);
+    // Otherwise, update the node type to the desired format
+    Transforms.setNodes(editor, { type: format });
   }
 };
 
@@ -1052,6 +1059,8 @@ const App = (props) => {
         return <QuoteElement {...props} />;
       case "header":
         return <HeaderElement {...props} />;
+      case "headerThree":
+        return <HeaderThreeElement {...props} />;
       case "video":
         return <VideoElement {...props} />;
       case "image":
@@ -1200,19 +1209,24 @@ const App = (props) => {
       >
         <div className="scrollable_block">
           <div className="info_board">
-            <div className="row">
-              <div>Element Type</div>
-              <div className="type">{type}</div>
-            </div>
-            <div className="row">
-              <div>Element Id</div>
-              <input
-                type="text"
-                placeholder={""}
-                value={modalData}
-                onChange={(e) => setModalData(e.target.value)}
-              />
-            </div>
+            <Row>
+              <div className="description">Element Type</div>
+              <div className="action_area">
+                <div className="element_info">{type}</div>
+              </div>
+            </Row>
+            <Row>
+              <div className="description">Element Id</div>
+              <div className="action_area">
+                <input
+                  onChange={(e) => setModalData(e.target.value)}
+                  type="text"
+                  placeholder={""}
+                  value={modalData}
+                />
+              </div>
+            </Row>
+
             {/* {type === "note" && "Write down the ID of the target note"} */}
             {type === "createError" &&
               "Write down the ID of the target question"}
@@ -1292,13 +1306,15 @@ const App = (props) => {
               author={props.lesson.user}
             />
           )}
-          <button
+          <PrimaryButton
             onClick={(e) => {
+              e.preventDefault();
+              alert("Element ID is added to the editor");
               handleSubmitModal(type);
             }}
           >
             Add Element Id to the Editor
-          </button>
+          </PrimaryButton>
         </div>
       </StyledModal>
 
@@ -1344,7 +1360,15 @@ const App = (props) => {
                 toggleElement(editor, "header");
               }}
             >
-              <BiHeading value={{ className: "react-icons" }} />
+              <LuHeading2 value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleElement(editor, "headerThree");
+              }}
+            >
+              <LuHeading3 value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
               onMouseDown={(event) => {
@@ -1404,10 +1428,6 @@ const App = (props) => {
                 type="file"
                 class="custom-file-input"
                 onChange={(e) => uploadFile(e, editor)}
-                // onMouseDown={(event) => {
-                //   event.preventDefault();
-                //   CustomEditor.addImageElement(editor);
-                // }}
               />
             </Label>
             <ButtonStyle
@@ -1654,6 +1674,13 @@ const HeaderElement = (props) => {
     <h2 {...props.attributes} style={{ lineHeight: "1.4" }}>
       {props.children}
     </h2>
+  );
+};
+const HeaderThreeElement = (props) => {
+  return (
+    <h3 {...props.attributes} style={{ lineHeight: "1.4" }}>
+      {props.children}
+    </h3>
   );
 };
 

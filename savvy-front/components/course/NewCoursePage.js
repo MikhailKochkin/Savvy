@@ -6,29 +6,32 @@ import ReactResizeDetector from "react-resize-detector";
 import dynamic from "next/dynamic";
 
 import { useUser } from "../User";
-import ATF from "./coursePageBlocks/ATF";
-import Syllabus from "./coursePageBlocks/Syllabus";
-import SellingPoints from "./coursePageBlocks/SellingPoints";
-import Teachers from "./coursePageBlocks/Teachers";
-import Reviews from "./coursePageBlocks/Reviews";
-import ActionLeads from "./coursePageBlocks/ActionLeads";
-import Prices from "./coursePageBlocks/Prices";
-import MobileAction from "./coursePageBlocks/MobileAction";
-import MobileLeads from "./coursePageBlocks/MobileLeads";
-import Goal from "./coursePageBlocks/Goal";
-import BottomLine from "./coursePageBlocks/BottomLine";
+import ATF from "./landingPageDesignBlocks/ATF";
+import Syllabus from "./landingPageDesignBlocks/Syllabus";
+import LearningMethodsAndResults from "./landingPageDesignBlocks/LearningMethodsAndResults";
+import Teachers from "./landingPageDesignBlocks/Teachers";
+import Reviews from "./landingPageDesignBlocks/Reviews";
+import ActionLeads from "./landingPageDesignBlocks/ActionLeads";
+import Prices from "./landingPageDesignBlocks/Prices";
+import MobileAction from "./landingPageDesignBlocks/MobileAction";
+import MobileLeads from "./landingPageDesignBlocks/MobileLeads";
+import WhatToExpect from "./landingPageDesignBlocks/WhatToExpect";
+import BottomLine from "./landingPageDesignBlocks/BottomLine";
 
 import moment from "moment";
 
-const DynamicAction = dynamic(import("./coursePageBlocks/Action"), {
+const DynamicAction = dynamic(import("./landingPageDesignBlocks/Action"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
 
-const DynamicMobileBuy = dynamic(import("./coursePageBlocks/MobileBuy"), {
-  loading: () => <p>...</p>,
-  ssr: false,
-});
+const DynamicMobileBuy = dynamic(
+  import("./landingPageDesignBlocks/MobileBuy"),
+  {
+    loading: () => <p>...</p>,
+    ssr: false,
+  }
+);
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -141,16 +144,17 @@ const Styles = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  max-width: 1200px;
+  max-width: 1100px;
+  width: 85%;
   @media (max-width: 800px) {
+    width: 100%;
     flex-direction: column;
   }
-  /* justify-content: center;
-  align-items: center; */
 `;
 
 const Main = styled.div`
   width: 70%;
+  padding: 20px;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -180,35 +184,32 @@ const NewCoursePage = (props) => {
   return (
     <Styles>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <BottomLine me={me} id={props.id} />
+      {/* <BottomLine me={me} id={props.id} /> */}
+      <ATF id={props.id} />
+
       <Container>
+        {width < 880 && data && (
+          <MobileAction
+            promocode={props.promocode}
+            me={me}
+            coursePage={data.coursePage}
+          />
+        )}
         <Main>
-          <ATF id={props.id} />
           {data && !loading && (
             <>
-              {width < 880 && (
-                <MobileAction
-                  promocode={props.promocode}
-                  me={me}
-                  coursePage={data.coursePage}
-                />
-              )}
-              <Goal coursePage={data.coursePage} />
+              <WhatToExpect coursePage={data.coursePage} />
               <Syllabus
                 id={props.id}
                 lessons={data.coursePage.lessons}
                 coursePageId={data.coursePage.id}
               />
-              {data.coursePage &&
+              {/* {data.coursePage &&
                 data.coursePage.reviews &&
                 data.coursePage.reviews.reviews.length > 0 && (
                   <Reviews data={data.coursePage} />
-                )}
-              <SellingPoints coursePage={data.coursePage} />
-              {data.coursePage.prices &&
-                data.coursePage.prices.prices.length > 0 && (
-                  <Prices coursePage={data.coursePage} />
-                )}
+                )} */}
+              <LearningMethodsAndResults coursePage={data.coursePage} />
               {/* {width < 880 &&
                 (props.form == "lead" ? (
                   <MobileLeads me={me} coursePage={data.coursePage} />

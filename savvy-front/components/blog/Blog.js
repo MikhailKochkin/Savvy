@@ -1,15 +1,15 @@
-import { Query } from "@apollo/client/react/components";
-import { gql } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
 
 import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
+import Loading from "../layout/Loading";
 
 const POSTS_QUERY = gql`
   query POSTS_QUERY {
-    posts(orderBy: { createdAt: desc }) {
+    posts(where: { language: { equals: "en" } }, orderBy: { createdAt: desc }) {
       id
       title
       text
@@ -102,43 +102,145 @@ const Posts = styled.div`
   }
 `;
 
+const Categories = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 40px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 40px;
+  color: #4b5563;
+  @media (max-width: 800px) {
+    width: 100%;
+    overflow-x: scroll;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Hide scrollbar for Webkit-based browsers */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+`;
+
+const Category = styled.h3`
+  margin: 0;
+  padding-bottom: 10px;
+  font-weight: ${(props) => (props.active ? "600" : "500")};
+  font-size: 1.8rem;
+  border-bottom: ${(props) =>
+    props.active ? "2px solid #383943" : "2px solid #fff"};
+  cursor: pointer;
+  @media (max-width: 800px) {
+    flex: 0 0 auto; /* Allows scrolling while maintaining content size */
+    margin: 0;
+  }
+`;
+
 const Blog = (props) => {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [posts, setPosts] = useState([]);
   const { t } = useTranslation("blog");
-  const router = useRouter();
+
+  const { data, loading } = useQuery(POSTS_QUERY);
+  useEffect(() => {
+    if (data) {
+      setPosts(data.posts);
+    }
+  }, [data]);
+
+  if (loading) return <Loading />;
 
   return (
     <Styles>
       <Container>
         <Posts>
           <h1>The BeSavvy Blog</h1>
-          <h2>{t("h2")}</h2>
-          <Query query={POSTS_QUERY}>
-            {({ data, loading, fetchMore }) => {
-              if (loading) return <p>Loading...</p>;
-              let posts = [...data.posts].filter(
-                (p) => p.language == router.locale
-              );
-              return (
-                <PostsContainer>
-                  {[...posts].map((d, index) => (
-                    <PostCard
-                      id={d.id}
-                      text={d.text}
-                      title={d.title}
-                      likes={d.likes}
-                      tags={d.tags}
-                      author={d.user}
-                      summary={d.summary}
-                      image={d.image}
-                      createdAt={d.createdAt}
-                      me={props.me}
-                      index={index + 1}
-                    />
-                  ))}
-                </PostsContainer>
-              );
-            }}
-          </Query>
+          <h2>
+            We write about how AI and simulations can change legal training and
+            education
+          </h2>
+          <Categories>
+            <Category
+              active={activeCategory === "all"}
+              onClick={() => {
+                setPosts(data.posts);
+                setActiveCategory("all");
+              }}
+            >
+              View All
+            </Category>
+            <Category
+              active={activeCategory === "Law Firm Training"}
+              onClick={() => {
+                setPosts(
+                  [...data.posts].filter((p) =>
+                    p.tags.includes("Law Firm Training")
+                  )
+                );
+                setActiveCategory("Law Firm Training");
+              }}
+            >
+              Law Firm Training
+            </Category>
+            <Category
+              active={activeCategory === "AI"}
+              onClick={() => {
+                setPosts([...data.posts].filter((p) => p.tags.includes("AI")));
+                setActiveCategory("AI");
+              }}
+            >
+              AI
+            </Category>
+            <Category
+              active={activeCategory === "LMS"}
+              onClick={() => {
+                setPosts([...data.posts].filter((p) => p.tags.includes("LMS")));
+                setActiveCategory("LMS");
+              }}
+            >
+              LMS
+            </Category>
+            <Category
+              active={activeCategory === "Simulators"}
+              onClick={() => {
+                setPosts(
+                  [...data.posts].filter((p) => p.tags.includes("Simulators"))
+                );
+                setActiveCategory("Simulators");
+              }}
+            >
+              Simulators
+            </Category>
+            <Category
+              active={activeCategory === "Legal Tech"}
+              onClick={() => {
+                setPosts(
+                  [...data.posts].filter((p) => p.tags.includes("Legal Tech"))
+                );
+                setActiveCategory("Legal Tech");
+              }}
+            >
+              Legal Tech
+            </Category>
+          </Categories>
+          <PostsContainer>
+            {[...posts].map((d, index) => (
+              <PostCard
+                id={d.id}
+                text={d.text}
+                title={d.title}
+                likes={d.likes}
+                tags={d.tags}
+                author={d.user}
+                summary={d.summary}
+                image={d.image}
+                createdAt={d.createdAt}
+                me={props.me}
+                index={index + 1}
+              />
+            ))}
+          </PostsContainer>
           {props.me &&
             props.me.permissions &&
             props.me.permissions.includes("ADMIN") && (

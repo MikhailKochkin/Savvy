@@ -1,25 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useState } from "react";
+import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
-import Link from "next/link";
-import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
+import Head from "next/head";
+import { useRouter } from "next/router";
 
 import UpdatePost from "./UpdatePost";
-import Modal from "styled-react-modal";
-import ContactForm from "../landing/ContactForm";
-import BottomLine from "./BottomLine";
-import Navigator from "../navigator/Navigator";
-import Loading from "../Loading";
-
-const UPDATE_POST_MUTATION = gql`
-  mutation UPDATE_POST_MUTATION($id: String!, $likes: Int, $tags: [String]) {
-    updatePost(id: $id, likes: $likes, tags: $tags) {
-      id
-    }
-  }
-`;
+import Loading from "../layout/Loading";
+import TableOfContents from "./TableOfContents";
+import { SecondaryButton, Buttons } from "../lesson/styles/DevPageStyles";
 
 const POST_QUERY = gql`
   query POST_QUERY($id: String!) {
@@ -58,7 +48,6 @@ const POST_QUERY = gql`
     }
   }
 `;
-
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -69,26 +58,10 @@ const Styles = styled.div`
   @media (max-width: 800px) {
     padding-top: 10px;
   }
-  .divider {
-    /* border: none; */
-    height: 2px;
-    /* background-color: #ccc; */
-    margin: 30px 0;
-  }
   img {
     display: block;
     width: 100%;
     box-shadow: "0 0 0 2px blue;";
-  }
-  h1 {
-    font-size: 3.4rem;
-    margin: 0;
-    margin-bottom: 30px;
-    line-height: 1.2;
-    color: #252f3f;
-    @media (max-width: 800px) {
-      font-size: 3.2rem;
-    }
   }
   h2 {
     font-size: 2.6rem;
@@ -167,22 +140,24 @@ const Styles = styled.div`
     background-color: #f2fafb;
     border-radius: 5px;
   }
+
   .article {
     font-size: 1.6rem;
     width: 100%;
     margin: 1% 1%;
     padding: 1% 4%;
     border-left: 3px solid #0094c6;
-    /* line-height: 1.6; */
+
     p {
       margin: 10px 0;
     }
   }
+
   .date {
     font-weight: bold;
     font-size: 1.6rem;
   }
-  /* margin-bottom: 50px; */
+
   .title {
     width: 90%;
   }
@@ -198,12 +173,8 @@ const ProgressBar = styled.div`
   z-index: 9999;
 `;
 
-const PostContainer = styled.div`
-  width: ${(props) => (props.page ? "45%" : "100%")};
-  /* margin-bottom: 50px; */
-  button {
-    margin: 50px 0;
-  }
+const Container = styled.div`
+  width: 980px;
   .author {
     display: flex;
     flex-direction: row;
@@ -211,149 +182,126 @@ const PostContainer = styled.div`
     font-size: 2rem;
     margin-top: 20px;
     color: #252f3f;
-    .name {
-      font-style: italic;
-    }
-    img {
-      width: 45px;
-      height: 45px;
-      border-radius: 50px;
-      margin-right: 20px;
-    }
   }
   @media (max-width: 800px) {
     width: 90%;
   }
 `;
 
-const Banner = styled.div`
-  width: 50%;
-  background: #479bc5;
-  margin: 5% 0;
-  color: white;
+const BlogPost = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 4% 0;
-  .header {
-    font-size: 2.4rem;
-  }
-  .comment {
-    font-size: 1.6rem;
-    text-align: center;
-    line-height: 1.2;
-    margin: 2%;
-  }
-  @media (max-width: 800px) {
-    width: 100%;
-    height: 300px;
-    .comment {
-      margin: 4%;
-    }
-    .buttons {
-      text-align: center;
-      padding: 0 2%;
-      margin-bottom: 4%;
-    }
-  }
 `;
 
-const StyledModal = Modal.styled`
+const PostIntroContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
+  flex-direction: column;
+  justify-content: space-between;
+  h1 {
+    font-size: 3.4rem;
+    margin: 0;
+    margin-bottom: 30px;
+    line-height: 1.2;
+    color: #252f3f;
+    @media (max-width: 800px) {
+      font-size: 3.2rem;
+    }
   }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
+  img {
+    display: block;
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+
+    box-shadow: "0 0 0 2px blue;";
   }
 `;
 
-const Button = styled.button`
-  background: #2a79c0;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  padding: 2%;
-  font-family: Montserrat;
-  border-radius: 5px;
-  margin-top: 2%;
-  width: 50%;
-  outline: 0;
-  &:hover {
-    background: #174975;
-  }
-  @media (max-width: 800px) {
-    padding: 3%;
-  }
-`;
-
-const Feedback = styled.div`
+const PostBodyContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 3%;
-  font-size: 1.6rem;
-  img {
-    width: 25px;
-    margin-right: 10px;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const SideColumn = styled.div`
+  padding: 20px 0;
+  width: 30%;
+  padding-right: 20px;
+  .name {
+    font-style: italic;
+  }
+  #written_by {
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  @media (max-width: 800px) {
+    width: 95%;
+    padding-right: 0;
+  }
+`;
+
+const SideColumnBlock = styled.div`
+  margin-top: 20px;
+  border-bottom: 1px solid #f0f1f1;
+  .author_info {
+    font-size: 1.4rem;
+    color: #6b7280;
+    line-height: 1.4;
+    font-style: italic;
+  }
+  button {
+    background-color: #141416;
+    color: white;
+    border: none;
+    width: 95%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-radius: 12px;
+    font-family: Montserrat;
+    font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 20px 0;
     &:hover {
-      filter: drop-shadow(0px 0px 3px #a0ced9);
-    }
-  }
-  .question {
-    flex-basis: 40%;
-    span {
-      cursor: pointer;
-      font-style: italic;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-    @media (max-width: 900px) {
-      flex-basis: 60%;
-    }
-  }
-  .favorite {
-    display: flex;
-    flex-basis: 60%;
-    font-weight: bold;
-    font-size: 1.6rem;
-    flex-direction: row;
-    @media (max-width: 900px) {
-      flex-basis: 40%;
+      background-color: #2d2d31;
     }
   }
 `;
 
-const Data = styled.div``;
+const MainColumn = styled.div`
+  width: 70%;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const AuthorInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  padding-bottom: 10px;
+  img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  #author_name {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+`;
 
 const Post = (props) => {
-  const [checked, setChecked] = useState(false);
+  const router = useRouter();
 
-  const handleChange = () => {
-    setChecked(!checked);
-  };
-  const [
-    updatePost,
-    { data: updated_data, loading: updated_loading, error: updated_error },
-  ] = useMutation(UPDATE_POST_MUTATION);
   const {
     loading: post_loading,
     error: post_error,
@@ -362,108 +310,8 @@ const Post = (props) => {
     variables: { id: props.id },
   });
 
-  const { t } = useTranslation("blog");
   const [scrollProgress, setScrollProgress] = useState(0);
   const [update, setUpdate] = useState(false);
-  // const [likes, setLikes] = useState(0);
-  const [hasReachedBottom, setHasReachedBottom] = useState(false);
-  const [hasReachedHalf, setHasReachedHalf] = useState(false);
-  const postContainerRef = useRef(null);
-
-  function handleScrollProgress() {
-    const scrollPosition = window.pageYOffset;
-    const componentTop = postContainerRef.current.offsetTop;
-    const componentHeight = postContainerRef.current.offsetHeight;
-    const viewportHeight = window.innerHeight;
-
-    // Calculate the scrollable range of the component
-    const scrollableRange = componentHeight - viewportHeight + componentTop;
-
-    // Calculate the progress based on the scroll position and scrollable range
-    const progress = ((scrollPosition - componentTop) / scrollableRange) * 100;
-
-    // Clamp progress between 0 and 100
-    const clampedProgress = Math.min(Math.max(progress, 0), 100);
-    setScrollProgress(clampedProgress);
-  }
-  useEffect(() => {
-    if (post_data) {
-      if (props.getLessonInfo)
-        props.getLessonInfo(
-          post_data.post.lessonId,
-          post_data.post.coursePage ? post_data.post.coursePage.lessons : [],
-          post_data.post.coursePage ? post_data.post.coursePage.id : null
-        );
-      if (props.getTags) props.getTags(post_data.post.tags);
-      if (props.getLeadIn) props.getLeadIn(post_data.post.leadin);
-      if (props.getCampaignId)
-        props.getCampaignId(post_data.post.emailCampaignId);
-    }
-  }, [post_data]);
-  useEffect(() => {
-    // ... (existing useEffect code)
-
-    if (post_data && postContainerRef.current) {
-      window.addEventListener("scroll", handleScrollProgress);
-
-      return () => {
-        // ... (existing cleanup code)
-        window.removeEventListener("scroll", handleScrollProgress);
-      };
-    }
-  }, [post_data, postContainerRef.current]);
-
-  useEffect(() => {
-    if (post_data && postContainerRef.current) {
-      function hasScrolledToPosition(position) {
-        const scrollPosition = window.pageYOffset;
-        const viewportHeight = window.innerHeight;
-
-        const componentTop = postContainerRef.current.offsetTop;
-        const componentHeight = postContainerRef.current.offsetHeight;
-
-        if (
-          scrollPosition + viewportHeight >=
-          componentTop + componentHeight * position
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-
-      function handleScroll() {
-        if (
-          !hasReachedHalf &&
-          hasScrolledToPosition(0.5) &&
-          props.hasReachedHalf
-        ) {
-          // console.log("User has scrolled to the middle of the article");
-          // You can add your custom code here to execute when the user scrolls to the middle of the article
-          props.hasReachedHalf(true);
-          setHasReachedHalf(true);
-        }
-
-        if (
-          !hasReachedBottom &&
-          hasScrolledToPosition(1) &&
-          props.hasReachedBottom
-        ) {
-          // console.log("User has scrolled to the bottom of the article");
-          // You can add your custom code here to execute when the user scrolls to the bottom of the article
-          props.hasReachedBottom(true);
-          setHasReachedBottom(true);
-        }
-      }
-
-      window.addEventListener("scroll", handleScroll);
-
-      // Clean up the event listener when the component is unmounted
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }
-  }, [post_data, postContainerRef.current, hasReachedBottom, hasReachedHalf]);
 
   if (post_loading) return <Loading />;
   if (post_error) return post_error;
@@ -472,60 +320,98 @@ const Post = (props) => {
   moment.locale("ru");
   return (
     <>
-      {/* <BottomLine post={post} /> */}
+      <Head>
+        <title>{post.title} | besavvy</title>
+        <meta name="description" content={post.summary} />
+        <meta name="keywords" content={post.tags.join(", ")} />
+      </Head>
       <Styles id={props.id}>
-        {/* <div className="title">
-          <Link
-          legacyBehavior
-            href={{
-              pathname: "/blog",
-            }}
-          >
-            <a>{t("back")}</a>
-          </Link>
-        </div> */}
-        <PostContainer ref={postContainerRef} page={props.page == "post"}>
-          {props.me &&
-            props.me.permissions &&
-            props.me.permissions.includes("ADMIN") && (
-              <button onClick={(e) => setUpdate(!update)}>Switch</button>
-            )}
+        <Container>
+          <Buttons>
+            <SecondaryButton
+              onClick={(e) =>
+                router.push("/blog", {
+                  locale: "en",
+                })
+              }
+            >
+              Back
+            </SecondaryButton>
+            {props.me &&
+              props.me.permissions &&
+              props.me.permissions.includes("ADMIN") && (
+                <SecondaryButton onClick={(e) => setUpdate(!update)}>
+                  Switch
+                </SecondaryButton>
+              )}
+          </Buttons>
           {!update && (
-            <>
-              <h1>{post.title}</h1>
-              <div className="author">
-                <img src={post.user.image} />
-                <div className="name">
-                  {t("by")} {post.user.name} {post.user.surname}
-                </div>
-              </div>
-              <div className="text">{parse(post.text)}</div>
-              <Data>
-                <span className="date">
-                  {moment(post.createdAt).format("DD/MM/YYYY")}
-                </span>
-                {/* <Feedback>
-                  <div className="favorite">
-                    <span
-                      className="likes"
-                      onClick={async (e) => {
-                        updatePost({
-                          variables: {
-                            id: post.id,
-                            likes: likes + 1,
-                            tags: [...post.tags],
-                          },
-                        });
-                        setLikes(likes + 1);
-                      }}
+            <BlogPost>
+              <PostIntroContainer>
+                <h1>{post.title}</h1>
+                <img src={post.image} />
+              </PostIntroContainer>
+              <PostBodyContainer>
+                <SideColumn>
+                  <TableOfContents text={post.text} />
+                  <SideColumnBlock>
+                    <div id="written_by">Written by</div>
+                    <AuthorInfo>
+                      <img src={post.user.image} />
+                      <div>
+                        <div id="author_name">
+                          {post.user.name} {post.user.surname}
+                        </div>
+                        <div className="author_info">Founder of besavvy</div>
+                      </div>
+                    </AuthorInfo>
+                  </SideColumnBlock>
+                  <SideColumnBlock>
+                    <div className="author_info">
+                      BeSavvy is a go-to platform for building training
+                      simualtions for law firms
+                    </div>
+                    <button
+                      onClick={(e) =>
+                        router.push("/", {
+                          locale: "en",
+                        })
+                      }
                     >
-                      <img src="../../static/favorite.svg" />
+                      Learn about BeSavvy
+                    </button>
+                  </SideColumnBlock>
+                </SideColumn>
+                <MainColumn>
+                  <article>
+                    <div className="text">{parse(post.text)}</div>
+                  </article>
+                  <>
+                    <span className="date">
+                      {moment(post.createdAt).format("DD MMM YYYY")}
                     </span>
-                    {likes}
-                  </div>
-                </Feedback> */}
-              </Data>
-            </>
+                    <SideColumnBlock>
+                      <div className="author_info">
+                        BeSavvy is an AI-powered platform transforming how
+                        lawyers train and develop essential skills. With
+                        engaging simulations, we help legal professionals build
+                        hard, soft, tech, and management skills needed to excel
+                        in their careers.
+                      </div>
+                      <button
+                        onClick={(e) =>
+                          router.push("/", {
+                            locale: "en",
+                          })
+                        }
+                      >
+                        Learn about BeSavvy
+                      </button>
+                    </SideColumnBlock>
+                  </>
+                </MainColumn>
+              </PostBodyContainer>
+            </BlogPost>
           )}
           {update && (
             <UpdatePost
@@ -537,12 +423,11 @@ const Post = (props) => {
               image={post.image}
             />
           )}
-        </PostContainer>
-        {scrollProgress < 100 && (
-          <ProgressBar style={{ width: `${scrollProgress}%` }} />
-        )}
+          {scrollProgress < 100 && (
+            <ProgressBar style={{ width: `${scrollProgress}%` }} />
+          )}
+        </Container>
       </Styles>
-      {/* <Navigator level={"more_next_steps"} tags={post.tags.join("-")} /> */}
     </>
   );
 };

@@ -7,7 +7,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import CreateClient from "./CreateClient";
 import Client from "./Client";
-import emailGroups from "../emailGroups";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION(
@@ -299,50 +298,50 @@ const ClientData = (props) => {
     return differenceInHours > 80;
   }
 
-  const send = () => {
-    if (emailType == "") {
-      alert("Выберите тему писем");
-      return;
-    }
-    clients.map((c) => {
-      let last_email = findNewestItem(
-        c.communication_history && c.communication_history.messages
-          ? c.communication_history.messages
-          : []
-      );
-      let next_email = getNextEmailItem(
-        emailGroups.find((el) => el.name === emailType),
-        last_email?.subject
-      );
+  // const send = () => {
+  //   if (emailType == "") {
+  //     alert("Выберите тему писем");
+  //     return;
+  //   }
+  //   clients.map((c) => {
+  //     let last_email = findNewestItem(
+  //       c.communication_history && c.communication_history.messages
+  //         ? c.communication_history.messages
+  //         : []
+  //     );
+  //     let next_email = getNextEmailItem(
+  //       emailGroups.find((el) => el.name === emailType),
+  //       last_email?.subject
+  //     );
 
-      if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
-        let mess = c.communication_history
-          ? [
-              ...c.communication_history.messages,
-              {
-                message: next_email.text,
-                date: new Date().toISOString(),
-                subject: next_email.subject,
-              },
-            ]
-          : [
-              {
-                message: next_email.text,
-                date: new Date().toISOString(),
-                subject: next_email.subject,
-              },
-            ];
-        const res = sendBusinessClientEmail({
-          variables: {
-            id: c.id,
-            communication_history: {
-              messages: mess,
-            },
-          },
-        });
-      }
-    });
-  };
+  //     if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
+  //       let mess = c.communication_history
+  //         ? [
+  //             ...c.communication_history.messages,
+  //             {
+  //               message: next_email.text,
+  //               date: new Date().toISOString(),
+  //               subject: next_email.subject,
+  //             },
+  //           ]
+  //         : [
+  //             {
+  //               message: next_email.text,
+  //               date: new Date().toISOString(),
+  //               subject: next_email.subject,
+  //             },
+  //           ];
+  //       const res = sendBusinessClientEmail({
+  //         variables: {
+  //           id: c.id,
+  //           communication_history: {
+  //             messages: mess,
+  //           },
+  //         },
+  //       });
+  //     }
+  //   });
+  // };
 
   return (
     <Styles>
@@ -386,9 +385,9 @@ const ClientData = (props) => {
           value={emailType}
           onChange={(e) => setEmailType(e.target.value)}
         >
-          {emailGroups.map((g) => (
+          {/* {emailGroups.map((g) => (
             <option value={g.name}>{g.name}</option>
-          ))}
+          ))} */}
         </select>
         {/* Page Buttons */}
         <div className="pagination">

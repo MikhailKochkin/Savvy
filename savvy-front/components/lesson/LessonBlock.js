@@ -3,50 +3,47 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
-import Block from "./Block";
-import CommentSection from "./CommentSection";
+import Block from "./block_type_problems/blocks/Block";
+import CommentSection from "./lesson_management/CommentSection";
 
-import CreateNewTest from "./tests/CreateNewTest";
-import SingleTest from "./tests/SingleTest";
+import CreateNewTest from "./block_type_tests/CreateNewTest";
+import SingleTest from "./block_type_tests/SingleTest";
 
-import CreateQuiz from "./quizes/CreateQuiz";
-import SingleQuiz from "./quizes/SingleQuiz";
+import CreateQuiz from "./block_type_quizes/CreateQuiz";
+import SingleQuiz from "./block_type_quizes/SingleQuiz";
 
-import CreateTestBlock from "./testblocks/CreateTestBlock";
-import TestPractice from "./testblocks/TB";
+import CreateTestBlock from "./block_type_testblocks/CreateTestBlock";
+import TestPractice from "./block_type_testblocks/TB";
 
-import CreateOffer from "./offers/CreateOffer";
-import BannerOffer from "./offers/BannerOffer";
+import CreateOffer from "./block_type_offers/CreateOffer";
+import BannerOffer from "./block_type_offers/BannerOffer";
 
-import CreateTeamQuest from "./teamQuests/CreateTeamQuest";
-import TeamQuest from "./teamQuests/TeamQuest";
+import CreateTeamQuest from "./block_type_teamQuests/CreateTeamQuest";
+import TeamQuest from "./block_type_teamQuests/TeamQuest";
 
-import CreateShot from "../create/CreateShot";
-import Shots from "./shots/Shots";
+import CreateShot from "./block_type_shots/CreateShot";
+import Shots from "./block_type_shots/Shots";
 
-import CreateConstructor from "../create/CreateConstructor";
+import CreateConstructor from "./block_type_constructions/CreateConstructor";
+import NewConstructor from "./block_type_constructions/NewConstructor";
+import SingleConstructor from "./block_type_constructions/archive/SingleConstructor";
 
-import NewConstructor from "./constructions/NewConstructor";
-import SingleConstructor from "./constructions/SingleConstructor";
+import CreateTextEditor from "./block_type_textEditors/CreateTextEditor";
+import TextEditor from "./block_type_textEditors/SingleTextEditor";
 
-import CreateTextEditor from "./textEditors/CreateTextEditor";
-import TextEditor from "./textEditors/SingleTextEditor";
+import CreateProblem from "./block_type_problems/CreateProblem";
+import Problem from "./block_type_problems/SingleProblem";
 
-import CreateProblem from "./problems/CreateProblem";
-import Problem from "./problems/SingleProblem";
+import CreateNote from "./block_type_notes/CreateNote";
+import Note from "./block_type_notes/Note";
 
-import CreateNote from "./notes/CreateNote";
-import Note from "./notes/Note";
+import CreateChat from "./block_type_chats/CreateChat";
+import Chat from "./block_type_chats/Chat";
 
-import CreateChat from "./chat/CreateChat";
-import Chat from "./chat/Chat";
-
-import CreateForum from "./forum/CreateForum";
-import ChangeForum from "./forum/ChangeForum";
-import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
-import SingleLesson_Menu from "./SingleLesson_Menu";
-import CreateDocument from "./documents/CreateDocument";
-import Document from "./documents/Document";
+import CreateForum from "./block_type_forum/CreateForum";
+import ChangeForum from "./block_type_forum/ChangeForum";
+import CreateDocument from "./block_type_documents/CreateDocument";
+import Document from "./block_type_documents/Document";
 import { SecondaryButton, SecondaryMenuButton } from "./styles/DevPageStyles";
 
 const Menu = styled.div`
@@ -427,44 +424,79 @@ const LessonBlock = (props) => {
       >
         {!isSaved && (
           <Menu>
-            <SecondaryMenuButton onClick={(e) => addBlock("Chat")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "chat"}
+              onClick={(e) => addBlock("Chat")}
+            >
               {t("Chat")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("Note")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "note"}
+              onClick={(e) => addBlock("Note")}
+            >
               {t("Note")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("Shot")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "shot"}
+              onClick={(e) => addBlock("Shot")}
+            >
               {t("Shot")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("NewTest")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "newtest"}
+              onClick={(e) => addBlock("NewTest")}
+            >
               {t("NewTest")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("Quiz")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "quiz"}
+              onClick={(e) => addBlock("Quiz")}
+            >
               {t("Quiz")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("TestPractice")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "testpractice"}
+              onClick={(e) => addBlock("TestPractice")}
+            >
               {t("TestPractice")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("Problem")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "problem"}
+              onClick={(e) => addBlock("Problem")}
+            >
               {t("Problem")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("TextEditor")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "texteditor"}
+              onClick={(e) => addBlock("TextEditor")}
+            >
               {t("TextEditor")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("Construction")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "construction"}
+              onClick={(e) => addBlock("Construction")}
+            >
               {t("Construction")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("Document")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "document"}
+              onClick={(e) => addBlock("Document")}
+            >
               {t("writing")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("Forum")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "forum"}
+              onClick={(e) => addBlock("Forum")}
+            >
               {t("Forum")}
             </SecondaryMenuButton>
-
             <SecondaryMenuButton onClick={(e) => addBlock("addOld")}>
               {t("AddOld")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton onClick={(e) => addBlock("TeamQuest")}>
+            <SecondaryMenuButton
+              active={type.toLowerCase() == "teamquest"}
+              onClick={(e) => addBlock("TeamQuest")}
+            >
               Team Quest
             </SecondaryMenuButton>
             {/* <SecondaryMenuButton onClick={(e) => addBlock("Offer")}>

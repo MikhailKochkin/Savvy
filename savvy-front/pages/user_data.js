@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UserData from "../components/UserData";
 import { useLazyQuery, useQuery, gql } from "@apollo/client";
-import NewUserCreate from "../components/NewUserCreate";
+// import NewUserCreate from "../components/NewUserCreate";
 import { useUser } from "../components/User";
 
 const CLIENTS_QUERY = gql`
@@ -476,7 +476,7 @@ const ClientData = () => {
           <br />
           <button onClick={handleButtonClick4}>Load Active users</button>
 
-          <NewUserCreate users={users} />
+          {/* <NewUserCreate users={users} /> */}
 
           {loading || loading2 || loading3 || loading4 ? "Грузимся..." : ""}
           {initialClients && initialClients.length > 0 && (

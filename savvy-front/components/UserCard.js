@@ -6,9 +6,6 @@ import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
-import emailGroups from "../emailGroups";
-import wa_messages from "../wa_messages";
-import { set } from "lodash";
 
 const CREATE_SUBSCRIPTION_MUTATION = gql`
   mutation CREATE_SUBSCRIPTION_MUTATION(

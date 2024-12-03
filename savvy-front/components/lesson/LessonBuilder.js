@@ -7,9 +7,9 @@ import smoothscroll from "smoothscroll-polyfill";
 import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import UpdateLesson from "./UpdateLesson";
 import LessonBlock from "./LessonBlock";
-import Analyzer from "./Analyzer";
-import GenerateLesson from "./GenerateLesson";
-import ChangePositions from "./ChangePositions";
+import Analyzer from "../archive/Analyzer";
+import GenerateLesson from "./lesson_management/GenerateLesson";
+import ChangePositions from "./lesson_management/ChangePositions";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure) {
@@ -110,27 +110,23 @@ const LessonBuilder = (props) => {
       return object.id === id;
     });
     if (comment) {
-      console.log(0);
       new_elements.splice(index + 1, 0, {
         id: undefined,
         type: comment.type,
         comment: comment.text,
       });
     } else {
-      console.log(1);
       new_elements.splice(index + 1, 0, {
         id: undefined,
         type: undefined,
       });
     }
-    console.log("new_elements", new_elements);
     setElements([...new_elements]);
   };
 
   const remove = (id) => {
     let new_list = elements;
     let new_list2 = new_list.filter((el) => el.id != id && el.id != undefined);
-    console.log("remove");
     setElements([...new_list2]);
 
     let a = new_list2.filter((el) => el.id != undefined);
@@ -194,17 +190,15 @@ const LessonBuilder = (props) => {
     const flattenedBlocks = blocks.flat();
 
     let new_blocks = flattenedBlocks.map((el) => ({
-      id: el.id || undefined, // Ensure id is assigned even if missing
-      type: el.type || "undefined", // Ensure type is assigned even if missing
-      comment: el.comment || "undefined", // Ensure comment is assigned even if missing
+      id: el.id && el.id !== "undefined" ? el.id : undefined, // Ensure id is assigned even if missing
+      type: el.type == "Longread" ? "Note" : el.type, // Ensure type is assigned even if missing
+      comment: el.comment || undefined, // Ensure comment is assigned even if missing
     }));
-    console.log("new_blocks", new_blocks);
 
     setElements(new_blocks);
   };
 
   const handleItemsUpdate = (updatedItems) => {
-    console.log("handleItemsUpdate");
     setElements(updatedItems);
   };
 
@@ -227,14 +221,17 @@ const LessonBuilder = (props) => {
           structure={lesson.structure}
           lesson={lesson}
         />
-        <ChangePositions
-          initialItems={lesson.structure.lessonItems}
-          onItemsUpdate={handleItemsUpdate}
-          lessonId={lesson.id}
-          lesson={lesson}
-        />
+        {lesson.structure?.lessonItems ? (
+          <ChangePositions
+            initialItems={
+              lesson.structure?.lessonItems ? lesson.structure.lessonItems : []
+            }
+            onItemsUpdate={handleItemsUpdate}
+            lessonId={lesson.id}
+            lesson={lesson}
+          />
+        ) : null}
         <BuilderPart id="builder_part">
-          {console.log("elements 2", elements)}
           {[...elements].map((el, i) => {
             return (
               <>

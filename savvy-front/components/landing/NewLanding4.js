@@ -6,7 +6,6 @@ import NewNav from "./NewNav";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import MainImage from "./MainImage";
 
 const Styles = styled.div`
   width: 100%;

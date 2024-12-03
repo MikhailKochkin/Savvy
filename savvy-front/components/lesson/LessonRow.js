@@ -5,7 +5,7 @@ import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import CompletionRate from "./CompletionRate";
+import CompletionRate from "./lesson_management/CompletionRate";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION(

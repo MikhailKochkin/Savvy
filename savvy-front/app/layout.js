@@ -4,9 +4,8 @@ import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { Montserrat } from "next/font/google";
 
 import StyledComponentsRegistry from "../lib/registry";
-import Footer from "./Footer";
-import Nav from "./Nav";
-import { Providers } from "./providers";
+// import Footer from "../components/layout/Footer";
+// import Nav from "../components/layout/Nav";
 import "./global.css";
 
 const inter = Montserrat({
@@ -40,9 +39,9 @@ export default function RootLayout({ children }) {
           {/* do not remove fragments. Otherwise: Error: React.Children.only
           expected to receive a single React element child. */}
           <>
-            <Nav />
+            {/* <Nav /> */}
             <main>{children}</main>
-            <Footer />
+            {/* <Footer /> */}
           </>
         </StyledComponentsRegistry>
       </body>

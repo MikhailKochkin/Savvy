@@ -1,4 +1,4 @@
-import Stats from "../components/stats/Stats";
+import Stats from "../components/stats/courseStats/CourseStats";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps = async ({ locale }) => ({

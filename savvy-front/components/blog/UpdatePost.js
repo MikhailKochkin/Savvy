@@ -119,7 +119,9 @@ const UpdatePost = (props) => {
         placeholder="Запишите теги, через запятую без пробелов: тег1,тег2,тег3"
         required
         value={tags}
-        onChange={(e) => setTags(e.target.value)}
+        onChange={(e) => {
+          setTags(e.target.value.split(","));
+        }}
       />
       <Img src={image} alt="Upload Preview" />
       <textarea value={text} onChange={(e) => setText(e.target.value)} />
@@ -128,7 +130,6 @@ const UpdatePost = (props) => {
         previousText={text}
         value={text}
       />
-
       <Mutation
         mutation={UPDATE_POST_MUTATION}
         variables={{

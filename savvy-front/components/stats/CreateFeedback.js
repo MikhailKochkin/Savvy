@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
-import { GET_RESULTS } from "./LessonData";
+import { GET_RESULTS } from "./singleStudentFullStats/SingleStudentInDepthStats";
 
 const CREATE_FEEDBACK_MUTATION = gql`
   mutation CREATE_FEEDBACK_MUTATION(

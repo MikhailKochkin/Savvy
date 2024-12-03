@@ -12,7 +12,9 @@ export const MicroButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 30px;
   max-width: 140px;
+  margin-right: 10px;
   &:hover {
     background-color: #f2f2f2;
   }
@@ -29,7 +31,6 @@ export const SecondaryButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  margin-right: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 140px;
 
@@ -41,7 +42,8 @@ export const SecondaryButton = styled.button`
 export const SecondaryMenuButton = styled.button`
   background-color: white;
   color: #333;
-  border: 1px solid #e8e8e8;
+  border: ${(props) =>
+    props.active ? "2px solid #2274A5" : "1px solid #e8e8e8"};
   padding: 10px 14px;
   font-size: 14px;
   border-radius: 12px;
@@ -68,7 +70,6 @@ export const PrimaryButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
-  max-width: 130px;
 
   &:hover {
     background-color: #2d2d31;
@@ -133,12 +134,15 @@ export const Row = styled.div`
     min-height: 40px;
     line-height: 1.4;
     font-weight: 600;
+    font-size: 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
   .action_area {
     width: 75%;
+    margin-left: 15px;
+
     .element_info {
       font-size: 1.4rem;
       height: 40px;
@@ -199,11 +203,19 @@ export const Frame = styled.div`
   font-size: 1.6rem;
   outline: 0;
   p {
-    /* margin: 0.8%; */
-    margin-left: 0.6%;
+    margin: 0;
+    margin-bottom: 5px;
   }
 `;
 
 export const SettingsBlock = styled.div`
   width: 640px;
+`;
+
+export const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 20px;
+  margin: 20px 0;
 `;

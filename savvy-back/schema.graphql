@@ -2797,6 +2797,7 @@ type Mutation {
   deleteClient(id: String): BusinessClient
   deleteComment(id: String): Comment
   deleteConstruction(id: String): Construction
+  deleteCoursePage(id: String): CoursePage
   deleteDocument(id: String): Document
   deleteEmailCampaign(id: String): EmailCampaign
   deleteEmailReminder(id: String): EmailReminder
