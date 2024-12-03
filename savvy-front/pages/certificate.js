@@ -2,7 +2,7 @@ import React from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useQuery, gql } from "@apollo/client";
 
-import Certificate from "../components/Certificate";
+import Certificate from "../components/course/Certificate";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {

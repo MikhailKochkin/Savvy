@@ -7,8 +7,8 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import ReactResizeDetector from "react-resize-detector";
 
 import calculateSum from "../../functions.js";
-import Navigation from "../lesson/Navigation";
-import TranslateText from "../lesson/TranslateText";
+import Navigation from "../lesson/lesson_management/Navigation";
+import TranslateText from "../lesson/lesson_management/TranslateText";
 
 const Buttons = styled.div`
   display: flex;

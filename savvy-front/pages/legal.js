@@ -1,6 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import Legal from "../components/Legal";
+import Legal from "../components/layout/Legal";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {

@@ -4,20 +4,19 @@ import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import { TailSpin } from "react-loader-spinner";
 
 import DemoFeed from "./DemoFeed";
-import Note from "../lesson/notes/Note";
-import Shots from "../lesson/shots/Shots";
-import SingleTest from "../lesson/tests/SingleTest";
-import Chat from "../lesson/chat/Chat";
-import SingleQuiz from "../lesson/quizes/SingleQuiz";
-import SingleProblem from "../lesson/problems/SingleProblem";
-import SingleTextEditor from "../lesson/textEditors/SingleTextEditor";
-import SingleConstructor from "../lesson/constructions/SingleConstructor";
-import NewConstructor from "../lesson/constructions/NewConstructor";
+import Note from "../lesson/block_type_notes/Note";
+import Shots from "../lesson/block_type_shots/Shots";
+import SingleTest from "../lesson/block_type_tests/SingleTest";
+import Chat from "../lesson/block_type_chats/Chat";
+import SingleQuiz from "../lesson/block_type_quizes/SingleQuiz";
+import SingleProblem from "../lesson/block_type_problems/SingleProblem";
+import SingleTextEditor from "../lesson/block_type_textEditors/SingleTextEditor";
+import SingleConstructor from "../lesson/block_type_constructions/archive/SingleConstructor";
+import NewConstructor from "../lesson/block_type_constructions/NewConstructor";
 import DemoSignUp from "./DemoSignUp";
-import Forum from "../lesson/forum/Forum";
-import Document from "../lesson/documents/Document";
-import Exam from "../lesson/exams/Exam";
-import TestPractice from "../lesson/testblocks/TB";
+import Forum from "../lesson/block_type_forum/Forum";
+import Document from "../lesson/block_type_documents/Document";
+import TestPractice from "../lesson/block_type_testblocks/TB";
 import LessonData from "../stats/DemoLessonData";
 
 const LESSON_RESULTS_QUERY = gql`
@@ -539,12 +538,6 @@ const StoryEx = (props) => {
         );
       components.push(item);
       move_statuses.push(true);
-    } else if (task.type.toLowerCase() === "exam") {
-      el = lesson.exams.find((con) => con.id === task.id);
-      if (!el) return;
-
-      item = <Exam lesson={lesson} me={props.me} exam={el} story={true} />;
-      components.push(item);
     } else if (task.type.toLowerCase() === "document") {
       el = lesson.documents.find((con) => con.id === task.id);
       if (!el) return;

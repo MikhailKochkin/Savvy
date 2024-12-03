@@ -3,21 +3,20 @@ import styled from "styled-components";
 import parse from "html-react-parser";
 import moment from "moment";
 import { TailSpin } from "react-loader-spinner";
-import Loading from "../Loading";
+import Loading from "../layout/Loading";
 import { useLazyQuery, gql, useMutation } from "@apollo/client";
-import CreateFeedback from "./CreateFeedback";
-import TestResult from "./results/TestResult";
-import Note from "../lesson/notes/Note";
+// import CreateFeedback from "./CreateFeedback";
+import TestResult from "./simulatorBlocksResults/TestResult";
+import Note from "../lesson/block_type_notes/Note";
 
-import Chat from "../lesson/chat/Chat";
-import Shots from "../lesson/shots/Shots";
+import Chat from "../lesson/block_type_chats/Chat";
+import Shots from "../lesson/block_type_shots/Shots";
 
-import TexteditorResult from "./results/TexteditorResult";
-import QuizResult from "./results/QuizResult";
-import ProblemResult from "./results/ProblemResult";
-import ConstructionResult from "./results/ConstructionResult";
-import DocumentResult from "./results/DocumentResult";
-import Feedback from "./Feedback";
+import TexteditorResult from "./simulatorBlocksResults/TexteditorResult";
+import QuizResult from "./simulatorBlocksResults/QuizResult";
+import ProblemResult from "./simulatorBlocksResults/ProblemResult";
+import ConstructionResult from "./simulatorBlocksResults/ConstructionResult";
+import DocumentResult from "./simulatorBlocksResults/DocumentResult";
 
 const GET_RESULTS = gql`
   query stats($lessonId: String!, $userId: String!) {
