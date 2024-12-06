@@ -479,7 +479,7 @@ const SimulatorInsights = (props) => {
           if (type === "problem") {
             coreElement = lesson.problems.find((p) => p.id === task.id);
             innerElements = lesson.problems.find((p) => p.id === task.id).steps
-              .problemItems;
+              ?.problemItems;
             elementName = "Case Study";
           } else if (type === "chat") {
             coreElement = lesson.chats.find((ch) => ch.id === task.id);
@@ -527,7 +527,7 @@ const SimulatorInsights = (props) => {
             });
 
             foundProblems.forEach((p) => {
-              innerElements.push(...p.steps.problemItems);
+              innerElements.push(...p.steps?.problemItems);
             });
 
             elementName = "Doc Editor";
@@ -555,7 +555,8 @@ const SimulatorInsights = (props) => {
                 <b>{elementName}:</b> {coreElement ? coreElement.name : ""}
               </TopSectionElement>
               {isDataBeingLoaded && <Loading />}
-              {innerElements.length > 0 &&
+              {innerElements &&
+                innerElements.length > 0 &&
                 !isDataBeingLoaded &&
                 innerElements.map((element, index) => {
                   let elementData;

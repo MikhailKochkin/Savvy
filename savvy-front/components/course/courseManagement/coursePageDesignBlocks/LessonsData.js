@@ -172,29 +172,33 @@ const Box = styled.div`
     border: none;
   }
   .div2 {
-    width: 22%;
+    width: 21%;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
     line-height: 1.4;
+    margin-right: 2px;
   }
   .div3 {
-    width: 36%;
+    width: 34%;
     p {
       margin: 0;
       margin-bottom: 5px;
       line-height: 1.5;
     }
+    margin-right: 2px;
   }
   .div4 {
-    width: 12%;
+    width: 15%;
+    margin-right: 2px;
   }
   .div5 {
-    width: 18%;
+    width: 16%;
+    margin-right: 2px;
   }
   .div6 {
-    width: 7%;
+    width: 9%;
   }
   @media (max-width: 850px) {
     .div1 {

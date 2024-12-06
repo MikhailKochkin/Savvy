@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
 import { Row, ActionButton, Frame, MicroButton } from "../styles/DevPageStyles";
+import {
+  autoResizeTextarea,
+  adjustTextareaHeight,
+} from "../SimulatorDevelopmentFunctions";
 
 const UPDATE_QUIZ_MUTATION = gql`
   mutation UPDATE_QUIZ_MUTATION(
@@ -86,57 +90,6 @@ const Container = styled.div`
   }
 `;
 
-const Comment = styled.div`
-  margin: 3% 0;
-  border-radius: 5px;
-  border: 2px solid #dddddd;
-  width: 90%;
-  min-height: 100px;
-  padding: 1.5%;
-  font-size: 1.4rem;
-  outline: 0;
-  &#ifRight {
-    border: 1px solid #84bc9c;
-  }
-  &#ifWrong {
-    border: 1px solid #de6b48;
-  }
-`;
-
-const AnswerOption = styled.div`
-  margin: 3% 0;
-  width: 100%;
-  min-height: 60px;
-  padding: 15px;
-  font-size: 1.4rem;
-  outline: 0;
-  background: #f8f8f8;
-  border-radius: 15px;
-
-  .answerRow {
-    display: flex;
-    flex-direction: row;
-    .row1 {
-      margin-right: 10px;
-    }
-    div {
-      width: 50%;
-    }
-  }
-  input,
-  textarea {
-    border-radius: 5px;
-    border: 1px solid #c4c4c4;
-    min-height: 50px;
-    width: 100%;
-    font-family: Montserrat;
-    font-size: 1.4rem;
-    outline: 0;
-    padding: 10px;
-    margin-bottom: 5px;
-  }
-`;
-
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -166,9 +119,17 @@ const UpdateQuiz = (props) => {
     props.complexity ? props.complexity : 0
   );
   const [isScoringShown, setIsScoringShown] = useState(props.isScoringShown);
+  const [generating, setGenerating] = useState(false);
   const [check, setCheck] = useState(props.check);
 
   const { t } = useTranslation("lesson");
+
+  // Adjust textarea heights on mount
+  useEffect(() => {
+    const textareas = document.querySelectorAll(".dynamic-textarea");
+    console.log(textareas);
+    textareas.forEach((textarea) => adjustTextareaHeight(textarea));
+  }, [answers]); // Run this effect whenever answers change
 
   const [updateQuiz, { loading, error }] = useMutation(UPDATE_QUIZ_MUTATION, {
     variables: {
@@ -204,6 +165,183 @@ const UpdateQuiz = (props) => {
     }
   };
 
+  const upgradeSampleAnswer = async (e) => {
+    e.preventDefault();
+    let prompt = `
+    You are tasked with improving the clarity and completeness of a sample answer to make it suitable for accurate semantic comparison and assessment.
+
+    Task:
+    1. Ensure the sentence structure follows this pattern: subject – predicate – object.
+    2. Replace all pronouns with specific nouns for clarity and precision.
+    3. Expand on incomplete ideas to ensure every thought is fully developed and well-articulated.
+    4. Use plain and simple language, similar to oral speech.
+    5. Do not increase the size of the answer significantly.
+
+    Input:
+    – Question: "${question}"
+    - Initial Answer: "${answer}"
+
+    Output:
+    Provide the upgraded answer in JSON format with clear, accurate, and complete sentences. Example format:
+    {
+      "upgraded_answer": "Improved and fully developed version of the input answer."
+    }
+
+    Example Input:
+    - Initial Answer: "The first course of action is to understand its worth and set realistic expectations."
+
+    Example Output:
+    {
+      "upgraded_answer": "First evaluation is needed to understand the company's worth and set realistic expectations for the future sale of the company."
+    }
+
+    `;
+
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: prompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let upgraded_answer = JSON.parse(data.result.content).upgraded_answer;
+        setAnswer(upgraded_answer);
+        return data;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const generateSemanticCloud = async (e) => {
+    e.preventDefault();
+    let semanticCloudPrompt = `
+      You are generating a semantic cloud to help compare student answers with a correct answer semantically.
+
+          Task:
+          1. Given a question and correct answer:
+            - Generate three alternative correct answers:
+              a. A very short answer with key terms only.
+              b. A colloquial answer that could be given by a junior lawyer.
+              c. A detailed answer, written in simple and plain language.
+
+          2. Avoid using the exact words from the correct answer. Use the same language as the correct answer.
+
+          Input:
+          - Question: "${question}"
+          - Correct Answer: "${answer}"
+
+          Output:
+          Return the results as JSON in this format:
+          {
+            "semantic_cloud": [
+              {"answer": "A very short answer", "index": 0},
+              {"answer": "A colloquial answer", "index": 1},
+              {"answer": "A more detailed answer", "index": 2}
+            ]
+          }    
+      `;
+
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: semanticCloudPrompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let newAnswers = JSON.parse(data.result.content).semantic_cloud;
+        setAnswers((prev) => [...prev, ...newAnswers]);
+        console.log(newAnswers);
+        return data;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const generateDifferentAnswers = async (e) => {
+    e.preventDefault();
+    let semanticCloudPrompt = `
+      I am designing a practice question to help junior lawyers.
+        Task:
+        1. Given a question and its correct answer:
+          - Generate three alternative answers that are correct but phrased differently from the original correct answer.
+
+        2. Requirements:
+          - Ensure the generated answers are semantically accurate.
+          - Use the same language style as the provided correct answer.
+          - Avoid repeating the exact words from the original correct answer.
+
+        Input:
+        - Question: "${question}"
+        - Correct Answer: "${answer}"
+
+        Output:
+        Provide the alternative answers in JSON format as follows:
+        {
+          "semantic_cloud": [
+            {
+              "answer": "Alternative correct answer 1",
+              "next_id": "",
+              "next_type": "",
+              "index": 0
+            },
+            {
+              "answer": "Alternative correct answer 2",
+              "next_id": "",
+              "next_type": "",
+              "index": 1
+            },
+            {
+              "answer": "Alternative correct answer 3",
+              "next_id": "",
+              "next_type": "",
+              "index": 2
+            }
+          ]
+        }
+    `;
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: semanticCloudPrompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let newAnswers = JSON.parse(data.result.content).semantic_cloud;
+        setAnswers((prev) => [...prev, ...newAnswers]);
+        console.log(newAnswers);
+        return data;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
   return (
     <Container>
       <Row>
@@ -217,7 +355,7 @@ const UpdateQuiz = (props) => {
         <div className="action_area">
           <input
             onChange={(e) => setName(e.target.value)}
-            defaultValue={name}
+            valuelue={name}
             placeholder="Untitled"
           />
         </div>
@@ -225,10 +363,7 @@ const UpdateQuiz = (props) => {
       <Row>
         <div className="description">Checking mode</div>
         <div className="action_area">
-          <select
-            defaultValue={check}
-            onChange={(e) => setCheck(e.target.value)}
-          >
+          <select valuelue={check} onChange={(e) => setCheck(e.target.value)}>
             <option value={undefined}>Not chosen</option>
             <option value={"WORD"}>Literally</option>
             <option value={"IDEA"}>By implication</option>
@@ -244,7 +379,7 @@ const UpdateQuiz = (props) => {
           <select
             name="types"
             id="types"
-            defaultValue={type}
+            valuelue={type}
             onChange={(e) => setType(e.target.value)}
           >
             <option value={null}>Undefined</option>
@@ -265,7 +400,7 @@ const UpdateQuiz = (props) => {
           <select
             name="types"
             id="types"
-            defaultValue={goalType}
+            valuelue={goalType}
             onChange={(e) => setGoalType(e.target.value)}
           >
             <option value="EDUCATE">Educate</option>
@@ -278,7 +413,7 @@ const UpdateQuiz = (props) => {
         <div className="description">Is Scoring Shown</div>
         <div className="action_area">
           <select
-            defaultValue={isScoringShown ? "true" : "false"}
+            valuelue={isScoringShown ? "true" : "false"}
             onChange={(e) => setIsScoringShown(e.target.value == "true")}
           >
             <option value={"true"}>True</option>
@@ -294,7 +429,7 @@ const UpdateQuiz = (props) => {
             <select
               name="types"
               id="types"
-              defaultValue={isOrderOfAnswersImportant}
+              valuelue={isOrderOfAnswersImportant}
               onChange={(e) =>
                 setIsOrderOfAnswersImportant(e.target.value === "true")
               }
@@ -315,7 +450,7 @@ const UpdateQuiz = (props) => {
           <select
             name="types"
             id="types"
-            defaultValue={shouldAnswerSizeMatchSample}
+            valuelue={shouldAnswerSizeMatchSample}
             onChange={(e) => setShouldAnswerSizeMatchSample(e.target.value)}
           >
             <option value={false}>No</option>
@@ -331,7 +466,7 @@ const UpdateQuiz = (props) => {
         <div className="description">Instructor Name</div>
         <div className="action_area">
           <input
-            defaultValue={instructorName}
+            valuelue={instructorName}
             onChange={(e) => setInstructorName(e.target.value)}
           />
           <div className="explainer"></div>
@@ -340,10 +475,7 @@ const UpdateQuiz = (props) => {
       <Row>
         <div className="description">Instructor Image</div>
         <div className="action_area">
-          <input
-            defaultValue={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
+          <input valuelue={image} onChange={(e) => setImage(e.target.value)} />
           <div className="explainer"></div>
         </div>
       </Row>
@@ -362,92 +494,115 @@ const UpdateQuiz = (props) => {
           <div className="explainer"></div>
         </div>
       </Row>
-      {type !== "GENERATE" && type !== "FINDALL" && (
-        <Row>
-          <div className="description">Question</div>
-          <div className="action_area">
-            <Frame>
-              <DynamicLoadedEditor
-                id="question"
-                name="question"
-                placeholder={"Question"}
-                value={question}
-                getEditorText={setQuestion}
-              />
-            </Frame>
-            <div className="explainer"></div>
+      <Row>
+        <div className="description">Sample Answer</div>
+        <div className="action_area">
+          <textarea
+            className="dynamic-textarea"
+            name="answer"
+            placeholder={"Answer"}
+            value={answer}
+            onChange={(e) => {
+              setAnswer(e.target.value);
+              autoResizeTextarea(e);
+            }}
+            onInput={autoResizeTextarea}
+          />
+          <MicroButton
+            onClick={async (e) => {
+              e.preventDefault();
+              setGenerating(true);
+              await upgradeSampleAnswer(e);
+              setGenerating(false);
+            }}
+          >
+            {generating ? "Upgrading..." : "Upgrade"}
+          </MicroButton>
+          <div className="explainer">
+            This sample answer is used to check student answers and generate
+            semantic cloud
           </div>
-        </Row>
-      )}
-
-      {type !== "GENERATE" && type !== "FINDALL" && (
-        <Row>
-          <div className="description">Sample Answer</div>
-          <div className="action_area">
+        </div>
+      </Row>
+      <Row>
+        <div className="description">Semantic Cloud</div>
+        <div className="action_area">
+          {answers.map((an, i) => (
             <textarea
-              id="answer"
-              name="answer"
-              placeholder={"Answer"}
-              defaultValue={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+              className="dynamic-textarea"
+              value={an.answer}
+              placeholder={`Answer`}
+              onChange={(e) => {
+                const newAnswers = [...answers];
+                newAnswers[i] = {
+                  ...newAnswers[i],
+                  answer: e.target.value,
+                }; // Create a new object for the specific element and update its property
+                setAnswers(newAnswers);
+                autoResizeTextarea(e);
+              }}
+              onInput={autoResizeTextarea}
+              onLoad={(e) => autoResizeTextarea(e)}
             />
-            <div className="explainer">
-              This determines how the case study works
-            </div>
-          </div>
-        </Row>
-      )}
-      {(type == "GENERATE" || type == "FINDALL") && (
-        <Row>
-          <div className="description">Ideas</div>
-          <div className="action_area">
-            {answers.map((an, i) => (
-              <textarea
-                value={an.answer}
-                placeholder={`Answer`}
-                onChange={(e) => {
-                  const newAnswers = [...answers];
-                  newAnswers[i] = {
-                    ...newAnswers[i],
-                    answer: e.target.value,
-                  }; // Create a new object for the specific element and update its property
-                  setAnswers(newAnswers);
-                }}
-              />
-            ))}
+          ))}
+
+          <MicroButton
+            onClick={(e) => {
+              e.preventDefault();
+              if (answers.length > 0) {
+                const newAnswers = answers.slice(0, -1);
+                setAnswers(newAnswers);
+              }
+            }}
+          >
+            -1
+          </MicroButton>
+          <MicroButton
+            onClick={(e) => {
+              e.preventDefault();
+              return setAnswers([
+                ...answers,
+                {
+                  answer: ``,
+                  next_id: "",
+                  next_type: "",
+                  index: answers.length,
+                },
+              ]);
+            }}
+          >
+            +1
+          </MicroButton>
+          {type !== "GENERATE" && type !== "FINDALL" && (
             <MicroButton
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
-                if (answers.length > 0) {
-                  const newAnswers = answers.slice(0, -1);
-                  setAnswers(newAnswers);
-                }
+                setGenerating(true);
+                await generateSemanticCloud(e);
+                setGenerating(false);
               }}
             >
-              -1
+              {generating ? "Generating..." : "Generate similar"}
             </MicroButton>
+          )}
+          {type == "GENERATE" || type == "FINDALL" ? (
             <MicroButton
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
-                return setAnswers([
-                  ...answers,
-                  {
-                    answer: ``,
-                    next_id: "",
-                    next_type: "",
-                    index: answers.length,
-                  },
-                ]);
+                setGenerating(true);
+                await generateDifferentAnswers(e);
+                setGenerating(false);
               }}
             >
-              +1
+              {generating ? "Generating..." : "Generate different"}
             </MicroButton>
-            <div className="explainer">
-              This determines how the case study works
-            </div>
+          ) : null}
+          <div className="explainer">
+            This answers are used to make the answer assessment more accurate
           </div>
-        </Row>
-      )}
+        </div>
+      </Row>
+      {/* )} */}
       <Row>
         <div className="description">Correct answer comments</div>
         <div className="action_area">
@@ -461,7 +616,8 @@ const UpdateQuiz = (props) => {
             />
           </Frame>
           <div className="explainer">
-            This determines how the case study works
+            This info is used to provide improvement advice to students if the
+            answer is partially correct
           </div>
         </div>
       </Row>
@@ -478,7 +634,8 @@ const UpdateQuiz = (props) => {
             />
           </Frame>
           <div className="explainer">
-            This determines how the case study works
+            This info is used to explain what the answer is missing if the
+            student answer is incorrect
           </div>
         </div>
       </Row>

@@ -49,7 +49,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 const CreateSingleNote = (props) => {
   const { lessonID, simulationStory } = props;
 
-  const [name, setName] = useState();
+  const [name, setName] = useState("");
   const [text, setText] = useState("");
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
@@ -63,6 +63,7 @@ const CreateSingleNote = (props) => {
     variables: {
       lessonId: lessonID,
       text,
+      name,
     },
     refetchQueries: [
       {

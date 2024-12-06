@@ -9,7 +9,7 @@ export const Container = styled.div`
 `;
 
 export const LessonStyles = styled.div`
-  max-width: 900px;
+  width: 800px;
   min-width: 700px;
   margin: 1.5% 0;
   @media (max-width: 1000px) {

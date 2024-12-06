@@ -1,23 +1,11 @@
 import styled from "styled-components";
-import { gql } from "@apollo/client";
 import { useUser } from "../../User";
 import CourseData from "./coursePageDesignBlocks/CourseData";
 import ToolsBox from "./coursePageDesignBlocks/ToolsBox";
 import LessonsData from "./coursePageDesignBlocks/LessonsData";
 import LessonSearch from "./LessonSearch";
 
-import {
-  Container,
-  LessonStyles,
-  LessonsInfo,
-  Total,
-  Buttons,
-  Button,
-  Syllabus,
-  Video,
-  Comment,
-  Lessons,
-} from "../styles/CoursePage_Styles";
+import { Container, LessonStyles } from "../styles/CoursePage_Styles";
 
 const CourseInfo = styled.div`
   display: flex;

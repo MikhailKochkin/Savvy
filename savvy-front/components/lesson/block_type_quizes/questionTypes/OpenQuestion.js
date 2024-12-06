@@ -78,6 +78,7 @@ const OpenQuestion = (props) => {
   // const [correct, setCorrect] = useState(""); // is the answer by the student correct? Used to communicate with the student
   const [correctnessLevel, setCorrectnessLevel] = useState(); // more deep understanding of the correctness. Used to generate prompts
   const [result, setResult] = useState(null); // student's grade
+  const [results, setResults] = useState([]); // student's sciring for all elements from semantic cloud
   const [isAnswerBeingChecked, setIsAnswerBeingChecked] = useState(false);
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [serverComment, setServerComment] = useState(null);
@@ -197,6 +198,7 @@ const OpenQuestion = (props) => {
           const resolvedCorrectnessLevel = await correctnessLevel;
 
           results.push({
+            answer: el.answer,
             result,
             correctnessLevel: resolvedCorrectnessLevel,
             color,
@@ -204,7 +206,7 @@ const OpenQuestion = (props) => {
           });
         })
       );
-
+      setResults(results);
       const highestResult = results.reduce((max, current) =>
         current.result > max.result ? current : max
       );
@@ -248,10 +250,6 @@ const OpenQuestion = (props) => {
 
   const challengeAnswer = async (e) => {
     let new_wording = await rephraseAnswer(answer, props.answer);
-
-    // console.log("props.answer", props.answer);
-    // console.log("student answer", answer);
-    // console.log("new_wording", new_wording);
 
     const { result, correctnessLevel, color, comment } = await checkAnswer(
       e,
@@ -487,6 +485,7 @@ const OpenQuestion = (props) => {
       answer={answer}
       onAnswer={onAnswer}
       passAnswer={passAnswer}
+      sampleAnswer={props.answer}
       me={me}
       result={result}
       isAnswerBeingChecked={isAnswerBeingChecked}
@@ -506,6 +505,7 @@ const OpenQuestion = (props) => {
       explanationsNum={explanationsNum}
       improvementsNum={improvementsNum}
       isScoringShown={isScoringShown}
+      challengeAnswer={challengeAnswer}
     />
   ) : (
     <FullOpenQuestion

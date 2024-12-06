@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import parse from "html-react-parser";
+import { useRouter } from "next/navigation";
 
 import { SecondaryButton } from "./lesson/styles/DevPageStyles";
 
@@ -133,6 +134,8 @@ const MyCourses = (props) => {
   const { loading, error, data } = useQuery(MY_COURSE_PAGES_QUERY, {
     variables: { id: props.me.id },
   });
+  const router = useRouter();
+
   if (loading) return <p>Loading...</p>;
   return (
     <Styles>

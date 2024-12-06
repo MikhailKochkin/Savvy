@@ -140,6 +140,16 @@ const Styles = styled.div`
     background-color: #f2fafb;
     border-radius: 5px;
   }
+  blockquote {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 0;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    p {
+      margin: 10px 0;
+    }
+  }
 
   .article {
     font-size: 1.6rem;
@@ -209,8 +219,7 @@ const PostIntroContainer = styled.div`
   }
   img {
     display: block;
-    width: 100%;
-    max-height: 500px;
+    height: 100%;
     object-fit: cover;
 
     box-shadow: "0 0 0 2px blue;";

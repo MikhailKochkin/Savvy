@@ -4,7 +4,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { gql, useMutation } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
-import { Title } from "./../styles/DevPageStyles";
+import { Title, ActionButton } from "./../styles/DevPageStyles";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure!) {
@@ -111,52 +111,54 @@ const DraggableItem = ({ item, index, moveItem, lesson }) => {
         }}
       >
         {index + 1}.{" "}
-        {item.type.toLowerCase() == "chat"
+        {item.type?.toLowerCase() == "chat"
           ? `Chat: ${
               lesson.chats.find((ch) => ch.id == item.id)?.name || "Chat"
             }`
           : null}
-        {item.type.toLowerCase() == "shot"
+        {item.type?.toLowerCase() == "shot"
           ? `Deck: ${
               lesson.shots.find((ch) => ch.id == item.id)?.name || "Deck"
             }`
           : null}
-        {item.type.toLowerCase() == "note"
+        {item.type?.toLowerCase() == "note"
           ? `Longread: ${
               lesson.notes.find((ch) => ch.id == item.id)?.name || "Longread"
             }`
           : null}
-        {item.type.toLowerCase() == "newtest"
+        {item.type?.toLowerCase() == "newtest"
           ? `Quiz: ${
               lesson.newTests.find((ch) => ch.id == item.id)?.name || "Quiz"
             }`
           : null}
-        {item.type.toLowerCase() == "quiz"
+        {item.type?.toLowerCase() == "quiz"
           ? `Question: ${
               lesson.quizes.find((ch) => ch.id == item.id)?.name || "Question"
             }`
           : null}
-        {item.type.toLowerCase() == "problem"
+        {item.type?.toLowerCase() == "problem"
           ? `Case Study: ${
               lesson.problems.find((ch) => ch.id == item.id)?.name ||
               "Case Study"
             }`
           : null}
-        {item.type.toLowerCase() == "texteditor"
+        {item.type?.toLowerCase() == "texteditor"
           ? `Doc Editor: ${
               lesson.texteditors.find((ch) => ch.id == item.id)?.name ||
               "Doc Editor"
             }`
           : null}
-        {item.type.toLowerCase() == "construction"
+        {item.type?.toLowerCase() == "construction"
           ? `Doc Builder: ${
               lesson.constructions.find((ch) => ch.id == item.id)?.name ||
               "Doc Builder"
             }`
           : null}
-        {item.type.toLowerCase() == "testpractice" && "Chain of questions"}
-        {item.type.toLowerCase() == "forum" ? `Q&A` : null}
-        <DownArrow onClick={(e) => slide(item.id)}>⬇️</DownArrow>
+        {item.type?.toLowerCase() == "testpractice" && "Chain of questions"}
+        {item.type?.toLowerCase() == "forum" ? `Q&A` : null}
+        {item?.id ? (
+          <DownArrow onClick={(e) => slide(item.id)}>⬇️</DownArrow>
+        ) : null}
       </MovableButton>
     </Row>
   );
@@ -165,7 +167,6 @@ const DraggableItem = ({ item, index, moveItem, lesson }) => {
 const ChangePositions = ({ initialItems, onItemsUpdate, lessonId, lesson }) => {
   const [items, setItems] = useState(initialItems);
   const [updateLesson, { loading }] = useMutation(UPDATE_LESSON_MUTATION);
-  const [active, setActive] = useState(false);
 
   const saveLessonStructure = (newItems) => {
     updateLesson({
@@ -177,24 +178,14 @@ const ChangePositions = ({ initialItems, onItemsUpdate, lessonId, lesson }) => {
   };
 
   useEffect(() => {
-    if (active) {
-      const initialItemsString = JSON.stringify(
-        initialItems.map((item) => item.id)
-      );
-      const currentItemsString = JSON.stringify(items.map((item) => item.id));
-
-      if (initialItemsString !== currentItemsString) {
-        onItemsUpdate(items); // Notify parent whenever items' positions change
-      }
-    }
-  }, [items, initialItems, onItemsUpdate]);
+    setItems(initialItems);
+  }, [initialItems]);
 
   const moveItem = (fromIndex, toIndex) => {
     const updatedItems = [...items];
     const [movedItem] = updatedItems.splice(fromIndex, 1);
     updatedItems.splice(toIndex, 0, movedItem);
     setItems(updatedItems);
-
     saveLessonStructure(updatedItems);
   };
 
@@ -202,6 +193,7 @@ const ChangePositions = ({ initialItems, onItemsUpdate, lessonId, lesson }) => {
     <DndProvider backend={HTML5Backend}>
       <Styles style={{ padding: "20px" }}>
         <Title>Change blocks' positions</Title>
+
         {items.map((item, index) => (
           <DraggableItem
             key={item.id}
@@ -211,6 +203,7 @@ const ChangePositions = ({ initialItems, onItemsUpdate, lessonId, lesson }) => {
             lesson={lesson}
           />
         ))}
+        <ActionButton onClick={(e) => onItemsUpdate(items)}>Save</ActionButton>
       </Styles>
     </DndProvider>
   );

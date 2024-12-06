@@ -10,6 +10,7 @@ import LessonBlock from "./LessonBlock";
 import Analyzer from "../archive/Analyzer";
 import GenerateLesson from "./lesson_management/GenerateLesson";
 import ChangePositions from "./lesson_management/ChangePositions";
+import { set } from "lodash";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure) {
@@ -45,7 +46,6 @@ const BuilderPart = styled.div`
 
 const LessonBuilder = (props) => {
   const { lesson } = props;
-  const router = useRouter();
   const [elements, setElements] = useState(
     props.lesson.structure && props.lesson.structure.lessonItems.length > 0
       ? props.lesson.structure.lessonItems
@@ -61,9 +61,8 @@ const LessonBuilder = (props) => {
     name: lesson.name,
     description: lesson.description,
   });
-  const [result, setResult] = useState();
-  const [passTemplate, setPassTemplate] = useState(false);
-  const [place, setPlace] = useState("end");
+  const [isElementPositionChangeOn, setIsElementPositionChangeOn] =
+    useState(false);
   const [simulationStory, setSimulationStory] = useState("");
 
   const updateLessonData = ({ name, description }) => {
@@ -177,16 +176,13 @@ const LessonBuilder = (props) => {
   };
 
   const addPlace = (id) => {
-    setPlace(id);
     addBlock(id);
   };
 
   const addGeneratedPlace = (id, data) => {
-    setPlace(id);
     addBlock(id, data);
   };
   const passData = (blocks) => {
-    // Flatten blocks in case it contains nested arrays
     const flattenedBlocks = blocks.flat();
 
     let new_blocks = flattenedBlocks.map((el) => ({
@@ -221,11 +217,9 @@ const LessonBuilder = (props) => {
           structure={lesson.structure}
           lesson={lesson}
         />
-        {lesson.structure?.lessonItems ? (
+        {elements ? (
           <ChangePositions
-            initialItems={
-              lesson.structure?.lessonItems ? lesson.structure.lessonItems : []
-            }
+            initialItems={elements}
             onItemsUpdate={handleItemsUpdate}
             lessonId={lesson.id}
             lesson={lesson}

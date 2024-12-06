@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
 import smoothscroll from "smoothscroll-polyfill";
 
 import SingleQuiz from "../../block_type_quizes/SingleQuiz";

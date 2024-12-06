@@ -186,7 +186,7 @@ const UpdateLesson = (props) => {
     setDescription(dataFromChild);
   };
 
-  const { lessonID, lesson, change } = props;
+  const { lessonId, lesson, change } = props;
   return (
     <Styles>
       <Container>
@@ -216,7 +216,7 @@ const UpdateLesson = (props) => {
                   return;
                 }
                 const res = await copyLesson({
-                  variables: { id: lessonID, coursePageId: coursePageId },
+                  variables: { id: lessonId, coursePageId: coursePageId },
                 });
                 alert("Copied!");
               }}
@@ -400,7 +400,7 @@ const UpdateLesson = (props) => {
         <Row>
           <div className="description">
             <DeleteSingleLesson
-              lessonId={lessonID}
+              lessonId={lessonId}
               coursePageId={props.coursePageId}
             />
           </div>
@@ -414,7 +414,7 @@ const UpdateLesson = (props) => {
             try {
               await updateLesson({
                 variables: {
-                  id: lessonID,
+                  id: lessonId,
                   number,
                   name,
                   text,
@@ -432,7 +432,7 @@ const UpdateLesson = (props) => {
                 refetchQueries: [
                   {
                     query: SINGLE_LESSON_QUERY,
-                    variables: { id: lessonID },
+                    variables: { id: lessonId },
                   },
                 ],
               });

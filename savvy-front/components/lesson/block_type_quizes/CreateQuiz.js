@@ -62,6 +62,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 });
 
 const CreateQuiz = (props) => {
+  const [name, setName] = useState(props.generatedInfo?.name || "");
   const [question, setQuestion] = useState(props.generatedInfo?.question || "");
   const [answer, setAnswer] = useState("");
   const [answers, setAnswers] = useState([
@@ -99,6 +100,7 @@ const CreateQuiz = (props) => {
     variables: {
       lessonId: lessonID,
       answer: answer,
+      name: name,
       question: question,
       ifRight: ifRight,
       ifWrong: ifWrong,

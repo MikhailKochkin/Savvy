@@ -9,6 +9,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import ProblemBuilder from "./archive/ProblemBuilder";
 import CanvasProblemBuilder from "./functions/CanvasProblemBuilder";
+import NewCanvasProblemBuilder from "./functions/NewCanvasProblemBuilder";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 import { Row, ActionButton } from "../styles/DevPageStyles";
 
@@ -248,6 +249,13 @@ const UpdateProblem = (props) => {
       </div>
       {!nodeID && !nodeType && (
         <div className="canvas_container">
+          {/* <NewCanvasProblemBuilder
+            lesson={props.lesson}
+            me={props.me}
+            lessonID={lesson.id}
+            getSteps={getSteps}
+            items={steps ? steps.problemItems : []}
+          /> */}
           <DndProvider backend={HTML5Backend}>
             <CanvasProblemBuilder
               lesson={props.lesson}

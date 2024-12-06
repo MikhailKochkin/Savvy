@@ -191,13 +191,6 @@ const Account = (props) => {
   const [upload, setUpload] = useState(false);
   const [description, setDescription] = useState(props.me.description);
   const [work, setWork] = useState(props.me.work);
-  const [subscriptionType, setSubscriptionType] = useState(
-    props.me.subscriptionType ? props.me.subscriptionType : "None"
-  );
-  const [subscriptionLength, setSubscriptionLength] = useState(
-    props.me.subscriptionType ? props.me.subscriptionType : "None"
-  );
-
   const { t } = useTranslation("account");
 
   const [updateUser, { error, loading }] = useMutation(UPDATE_USER_MUTATION, {
@@ -245,14 +238,6 @@ const Account = (props) => {
         tags: props.me.tags,
       },
     });
-  };
-
-  const handleCancelSubscription = async () => {
-    // await cancelSubscription({
-    //   variables: {
-    //     id: props.me.id,
-    //   },
-    // });
   };
 
   const { me } = props;

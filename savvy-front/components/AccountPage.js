@@ -4,7 +4,6 @@ import { useTranslation } from "next-i18next";
 
 import { useUser } from "./User";
 import Account from "./Account";
-import Teams from "./Teams";
 import SubscriptionSettings from "./subscription/SubscriptionSettings";
 
 import MyCourses from "./MyCourses";

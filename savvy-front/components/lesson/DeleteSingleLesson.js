@@ -18,19 +18,21 @@ const DeleteSingleLesson = (props) => {
 
   return (
     <PrimaryButton
-      onClick={() => {
+      onClick={async () => {
         if (confirm("Sure?")) {
-          deleteLesson({
-            variables: {
-              id: props.lessonId,
-            },
-          }).catch((error) => {
+          try {
+            await deleteLesson({
+              variables: {
+                id: props.lessonId,
+              },
+            });
+            Router.push({
+              pathname: "/course",
+              query: { id: props.coursePageId },
+            });
+          } catch (error) {
             alert(error.message);
-          });
-          Router.push({
-            pathname: "/course",
-            query: { id: props.coursePageId },
-          });
+          }
         }
       }}
     >

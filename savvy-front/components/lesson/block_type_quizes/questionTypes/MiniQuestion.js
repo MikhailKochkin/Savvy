@@ -37,7 +37,9 @@ const Comment = styled.div`
   border-radius: 10px;
   border-color: #f3f3f3;
   margin-bottom: 15px;
-  height: 250px;
+  min-height: 120px;
+
+  max-height: 250px;
   overflow-y: auto; /* Add overflow property to make it scrollable */
   p {
     margin: 8px 0;
@@ -93,7 +95,9 @@ const MiniQuestion = (props) => {
   const [generatingHint, setGeneratingHint] = useState(false);
   const [generatingExplanation, setGeneratingExplanation] = useState(false);
   const [generatingImprovement, setGeneratingImprovement] = useState(false);
-
+  const [generatingChallenge, setGeneratingChallenge] = useState(false);
+  const [challengeResult, setChallengeResult] = useState(null);
+  const [newWording, setNewWording] = useState(null);
   const { t } = useTranslation("lesson");
 
   useEffect(() => {
@@ -122,6 +126,42 @@ const MiniQuestion = (props) => {
             <b>Explanation:</b>
           </div>
           {parse(explanations[explanations.length - 1])}
+        </Comment>
+      );
+    }
+    return null;
+  };
+
+  const renderChallenge = () => {
+    if (!generatingChallenge && challengeResult) {
+      return (
+        <Comment>
+          <div>
+            {challengeResult < 58 ? (
+              <>
+                <p>{t("still_not_expected_answer")}</p>
+                <p>{t("try_challenging_again")}</p>
+              </>
+            ) : null}
+            {challengeResult >= 58 && challengeResult < 65 ? (
+              <>
+                <p>{t("rephrased_answer")}</p>
+                <p>
+                  <i>{newWording}</i>
+                </p>
+                <p>{t("going_in_right_direction")}</p>
+              </>
+            ) : null}
+            {challengeResult > 65 ? (
+              <>
+                <p>{t("rephrased_answer")}</p>
+                <p>
+                  <i>{newWording}</i>
+                </p>
+                <p>{t("answer_is_correct")}</p>
+              </>
+            ) : null}
+          </div>
         </Comment>
       );
     }
@@ -178,7 +218,7 @@ const MiniQuestion = (props) => {
             }}
           >
             {explanations.length == 0
-              ? t("explain_what_is_wrong_with_my_answer")
+              ? "What is wrong?"
               : t("more_explanations")}
           </MiniAIButton>
         )}
@@ -193,6 +233,28 @@ const MiniQuestion = (props) => {
             {improvements.length == 0
               ? t("what_can_i_improve")
               : t("more_improvements")}
+          </MiniAIButton>
+        )}
+        {console.log(
+          correctnessLevel,
+          props.answer?.length / props.sampleAnswer?.length
+        )}
+        {(correctnessLevel === "slightly_wrong" ||
+          ((correctnessLevel === "wrong" ||
+            correctnessLevel === "completely_wrong") &&
+            props.answer?.length / props.sampleAnswer?.length >= 0.2)) && (
+          <MiniAIButton
+            onClick={async (e) => {
+              e.preventDefault();
+              setGeneratingChallenge(true);
+              setChallengeResult(null);
+              const newChallengeResult = await props.challengeAnswer();
+              setChallengeResult(newChallengeResult.result);
+              setNewWording(newChallengeResult.new_wording);
+              setGeneratingChallenge(false);
+            }}
+          >
+            {t("i_believe_my_answer_is_correct")}
           </MiniAIButton>
         )}
         {(explanationsNum > 1 ||
@@ -231,7 +293,10 @@ const MiniQuestion = (props) => {
           )}
         </MiniOpenQuestionFrame>
         {renderHint()}
-        {(generatingExplanation || generatingImprovement || generatingHint) && (
+        {(generatingExplanation ||
+          generatingImprovement ||
+          generatingHint ||
+          generatingChallenge) && (
           <Progress2>
             <TailSpin width="35" color="#2E80EC" />
           </Progress2>
@@ -244,6 +309,7 @@ const MiniQuestion = (props) => {
         {renderExplanation()}
         {renderImprovement()}
         {renderCorrectAnswer()}
+        {renderChallenge()}
       </div>
       {renderButtons()}
     </Styles>

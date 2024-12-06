@@ -57,7 +57,7 @@ const Box = styled.div`
     margin-right: 2px;
   }
   .div2 {
-    width: 22%;
+    width: 21%;
     margin-right: 2px;
     display: flex;
     flex-direction: row;
@@ -66,7 +66,7 @@ const Box = styled.div`
     line-height: 1.4;
   }
   .div3 {
-    width: 36%;
+    width: 34%;
     p {
       margin: 0;
       margin-bottom: 5px;
@@ -75,15 +75,15 @@ const Box = styled.div`
     margin-right: 2px;
   }
   .div4 {
-    width: 12%;
+    width: 15%;
     margin-right: 2px;
   }
   .div5 {
-    width: 18%;
+    width: 16%;
     margin-right: 2px;
   }
   .div6 {
-    width: 7%;
+    width: 9%;
   }
   @media (max-width: 850px) {
     display: flex;

@@ -416,37 +416,28 @@ const FullOpenQuestion = (props) => {
                       {t("show_an_ideal_answer")}
                     </Button1>
                   )}
-
                   {(correctnessLevel === "slightly_wrong" ||
-                    correctnessLevel === "wrong" ||
-                    correctnessLevel === "completely_wrong") &&
-                    props.answer?.length / props.sampleAnswer?.length >=
-                      0.2 && (
-                      <Button1
-                        onClick={async (e) => {
-                          // let newResult = await props.doubleCheck(props.answer);
-                          // const res = sendBusinessEmail({
-                          //   variables: {
-                          //     subject: "System Assessment Challenged",
-                          //     email: "mikhail@besavvy.app",
-                          //     type: "internal",
-                          //     name: "Mikhail",
-                          //     connection: `${props.me.name} ${props.me.surname} claims that their answer (${props.answer}) in question with id: ${id} was not checked correctly. <a href="https://besavvy.app/lesson?id=${lessonId}&type=stats">Lesson Link</a>`,
-                          //   },
-                          // });
-                          setIsChallengeBeingProcessed(true);
-                          setIsAnswerChallenged(true);
-                          const newChallengeResult =
-                            await props.challengeAnswer();
-                          setChallengeResult(newChallengeResult.result);
-                          setNewWording(newChallengeResult.new_wording);
-                          slideTo(`answer_challenge_${id}`);
-                          setIsChallengeBeingProcessed(false);
-                        }}
-                      >
-                        {t("i_believe_my_answer_is_correct")}
-                      </Button1>
-                    )}
+                    ((correctnessLevel === "wrong" ||
+                      correctnessLevel === "completely_wrong") &&
+                      props.answer?.length / props.sampleAnswer?.length >=
+                        0.2)) && (
+                    <Button1
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        setIsChallengeBeingProcessed(true);
+                        setIsAnswerChallenged(true);
+                        setChallengeResult(null);
+                        const newChallengeResult =
+                          await props.challengeAnswer();
+                        setChallengeResult(newChallengeResult.result);
+                        setNewWording(newChallengeResult.new_wording);
+                        slideTo(`answer_challenge_${id}`);
+                        setIsChallengeBeingProcessed(false);
+                      }}
+                    >
+                      {t("i_believe_my_answer_is_correct")}
+                    </Button1>
+                  )}
                 </Group2>
               </Options>
             </div>

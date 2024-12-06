@@ -155,6 +155,7 @@ export const Row = styled.div`
       font-size: 1.2rem;
       color: #b0b0b0;
       margin-top: 5px;
+      line-height: 1.4;
     }
     input,
     textarea {
@@ -165,6 +166,7 @@ export const Row = styled.div`
       border-radius: 12px;
       font-size: 1.4rem;
       font-family: Montserrat;
+      resize: none;
     }
     select {
       width: 100%;

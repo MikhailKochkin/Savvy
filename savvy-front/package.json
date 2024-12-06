@@ -25,6 +25,7 @@
     "@formatjs/intl-localematcher": "^0.5.4",
     "@next/third-parties": "^14.2.5",
     "@tcb-web/create-credit": "^2.0.1",
+    "@xyflow/react": "^12.3.5",
     "accept-language": "^3.0.18",
     "apollo-link-error": "^1.1.13",
     "apollo-upload-client": "^16.0.0",

@@ -3,6 +3,13 @@ export const autoResizeTextarea = (event) => {
   event.target.style.height = event.target.scrollHeight + "px";
 };
 
+export const adjustTextareaHeight = (textarea) => {
+  if (textarea) {
+    textarea.style.height = "auto"; // Reset height
+    textarea.style.height = textarea.scrollHeight + "px"; // Adjust to default value
+  }
+};
+
 export const guessAlphabet = (str) => {
   // Removing <p> at the beginning of the string if it exists
   if (str.startsWith("<p>")) {
