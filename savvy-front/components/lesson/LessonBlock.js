@@ -40,6 +40,9 @@ import Note from "./block_type_notes/Note";
 import CreateChat from "./block_type_chats/CreateChat";
 import Chat from "./block_type_chats/Chat";
 
+import CreateProcessManager from "./block_type_processManager/CreateProcessManager";
+import ProcessManager from "./block_type_processManager/ProcessManager";
+
 import CreateForum from "./block_type_forum/CreateForum";
 import ChangeForum from "./block_type_forum/ChangeForum";
 import CreateDocument from "./block_type_documents/CreateDocument";
@@ -143,6 +146,8 @@ const LessonBlock = (props) => {
     d = lesson.teamQuests.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "offer" && !el.data) {
     d = lesson.offers.find((n) => n.id == el.id);
+  } else if (el.type && el.type.toLowerCase() == "processmanager" && !el.data) {
+    d = lesson.processManagers.find((n) => n.id == el.id);
   } else if (el.data) {
     d = el.data;
   } else {
@@ -394,9 +399,34 @@ const LessonBlock = (props) => {
         "Problem",
         res.data.updateTeamQuest
       );
+    } else if (res.data.createProcessManager) {
+      setType("ProcessManager");
+      setIdNum(res.data.createProcessManager.id);
+      props.addToLesson(
+        res.data.createProcessManager.id,
+        index,
+        "ProcessManager",
+        res.data.createProcessManager
+      );
+    } else if (res.data.updateProcessManager) {
+      setType("ProcessManager");
+      setIdNum(res.data.updateProcessManager.id);
+      props.addToLesson(
+        res.data.updateProcessManager.id,
+        index,
+        "ProcessManager",
+        res.data.updateProcessManager
+      );
     }
     setIsSaved(true);
   };
+
+  let i_am_author = false;
+  if (lesson.user.id == me.id) {
+    i_am_author = true;
+  } else if (me.permissions.includes("ADMIN")) {
+    i_am_author = true;
+  }
 
   const passGeneratedData = (data) => {
     props.addGeneratedPlace(idNum, data);
@@ -419,7 +449,8 @@ const LessonBlock = (props) => {
         width={
           type.toLowerCase() == "texteditor" ||
           type.toLowerCase() == "construction" ||
-          type.toLowerCase() == "problem"
+          type.toLowerCase() == "problem" ||
+          type.toLowerCase() == "processmanager"
         }
       >
         {!isSaved && (
@@ -479,6 +510,12 @@ const LessonBlock = (props) => {
               {t("Construction")}
             </SecondaryMenuButton>
             <SecondaryMenuButton
+              active={type.toLowerCase() == "processManager"}
+              onClick={(e) => addBlock("ProcessManager")}
+            >
+              Process Manager
+            </SecondaryMenuButton>
+            <SecondaryMenuButton
               active={type.toLowerCase() == "document"}
               onClick={(e) => addBlock("Document")}
             >
@@ -493,12 +530,12 @@ const LessonBlock = (props) => {
             <SecondaryMenuButton onClick={(e) => addBlock("addOld")}>
               {t("AddOld")}
             </SecondaryMenuButton>
-            <SecondaryMenuButton
+            {/* <SecondaryMenuButton
               active={type.toLowerCase() == "teamquest"}
               onClick={(e) => addBlock("TeamQuest")}
             >
               Team Quest
-            </SecondaryMenuButton>
+            </SecondaryMenuButton> */}
             {/* <SecondaryMenuButton onClick={(e) => addBlock("Offer")}>
               Offer
             </SecondaryMenuButton> */}
@@ -903,6 +940,31 @@ const LessonBlock = (props) => {
                     />
                   )}
                 </>
+              )}
+          </>
+        )}
+        {type.toLowerCase() == "processmanager" && (
+          <>
+            {!isSaved && d == null && (
+              <CreateProcessManager
+                lessonId={lesson.id}
+                getResult={getResult}
+                isSaved={isSaved}
+              />
+            )}
+            {console.log(data, isSaved)}
+            {(isSaved || d != null) &&
+              data &&
+              data.__typename.toLowerCase() == "processmanager" && (
+                <ProcessManager
+                  key={data.id}
+                  id={data.id}
+                  processManager={data}
+                  me={me}
+                  lessonID={lesson.id}
+                  getResult={getResult}
+                  i_am_author={i_am_author}
+                />
               )}
           </>
         )}
