@@ -3013,6 +3013,80 @@ const Mutation = mutationType({
         return updatedConstructionResult;
       },
     });
+    t.field("createProcessManager", {
+      type: "ProcessManager",
+      args: {
+        name: stringArg(),
+        backgroundStory: stringArg(),
+        remainingResources: intArg(),
+        lessonId: stringArg(),
+        nodes: arg({
+          type: "ProcessNodes",
+        }),
+        edges: arg({
+          type: "ProcessEdges",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        const userId = args.userId;
+        delete args.userId;
+        const lessonId = args.lessonId;
+        delete args.lessonId;
+
+        const processManager = await ctx.prisma.processManager.create({
+          data: {
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            ...args,
+          },
+        });
+        return processManager;
+      },
+    });
+
+    t.field("updateProcessManager", {
+      type: "ProcessManager",
+      args: {
+        id: stringArg(),
+        name: stringArg(),
+        backgroundStory: stringArg(),
+        remainingResources: intArg(),
+        nodes: arg({
+          type: "ProcessNodes",
+        }),
+        edges: arg({
+          type: "ProcessEdges",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        const updates = { ...args };
+        delete updates.id;
+
+        return ctx.prisma.processManager.update({
+          data: {
+            ...updates,
+          },
+          where: {
+            id: args.id,
+          },
+        });
+      },
+    });
+
+    t.field("deleteProcessManager", {
+      type: "ProcessManager",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        return ctx.prisma.processManager.delete({ where });
+      },
+    });
     t.field("createProblem", {
       type: "Problem",
       args: {

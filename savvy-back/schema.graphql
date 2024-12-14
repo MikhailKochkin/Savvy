@@ -2262,6 +2262,7 @@ type Lesson {
   openSize: Int
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
   problems(after: ProblemWhereUniqueInput, before: ProblemWhereUniqueInput, first: Int, last: Int): [Problem!]!
+  processManagers(after: ProcessManagerWhereUniqueInput, before: ProcessManagerWhereUniqueInput, first: Int, last: Int): [ProcessManager!]!
   published: Boolean
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int): [QuizResult!]!
   quizes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int): [Quiz!]!
@@ -2344,6 +2345,7 @@ input LessonOrderByWithRelationInput {
   openSize: SortOrderInput
   problemResults: ProblemResultOrderByRelationAggregateInput
   problems: ProblemOrderByRelationAggregateInput
+  processManagers: ProcessManagerOrderByRelationAggregateInput
   published: SortOrderInput
   quizResults: QuizResultOrderByRelationAggregateInput
   quizes: QuizOrderByRelationAggregateInput
@@ -2486,6 +2488,7 @@ input LessonWhereInput {
   openSize: IntNullableFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   published: BoolNullableFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
@@ -2554,6 +2557,7 @@ input LessonWhereUniqueInput {
   openSize: IntNullableFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   published: BoolNullableFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
@@ -2772,6 +2776,7 @@ type Mutation {
   createPrivateOrder(coursePageId: String, promocode: String, userId: String): PaymentInfo
   createProblem(goal: String, lessonId: String, name: String, steps: ProblemStructure, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
+  createProcessManager(backgroundStory: String, edges: ProcessEdges, lessonId: String, name: String, nodes: ProcessNodes, remainingResources: Int): ProcessManager
   createProgram(audience: String, description: String, goals: [String], header: [String], image: String, methods: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String): Program
   createQuiz(answer: String, answers: ComplexAnswer, goalType: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: String, type: String): Quiz
   createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeas, improvement: String, lessonId: String, quiz: String, result: String, type: String): QuizResult
@@ -2809,6 +2814,7 @@ type Mutation {
   deleteOrder(id: String): Order
   deletePost(id: String): Post
   deleteProblem(id: String): Problem
+  deleteProcessManager(id: String): ProcessManager
   deleteQuiz(id: String): Quiz
   deleteReply(id: String): Comment
   deleteShot(id: String): Shot
@@ -2860,6 +2866,7 @@ type Mutation {
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
   updateProblem(complexity: Int, context: String, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructure, text: String, type: String): Problem
+  updateProcessManager(backgroundStory: String, edges: ProcessEdges, id: String, name: String, nodes: ProcessNodes, remainingResources: Int): ProcessManager
   updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, answers: ComplexAnswer, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, isOrderOfAnswersImportant: Boolean, isScoringShown: Boolean, lessonId: String, name: String, next: NextType, question: String, shouldAnswerSizeMatchSample: Boolean, type: String): Quiz
@@ -3839,6 +3846,102 @@ input ProblemWhereUniqueInput {
   userId: StringFilter
 }
 
+input ProcessEdge {
+  id: String
+  source: String
+  target: String
+}
+
+input ProcessEdges {
+  processEdges: [ProcessEdge]
+}
+
+type ProcessManager {
+  backgroundStory: String
+  createdAt: DateTime!
+  edges: Json!
+  id: String!
+  lesson: Lesson
+  lessonId: String!
+  name: String!
+  nodes: Json!
+  remainingResources: Int
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+input ProcessManagerListRelationFilter {
+  every: ProcessManagerWhereInput
+  none: ProcessManagerWhereInput
+  some: ProcessManagerWhereInput
+}
+
+input ProcessManagerOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ProcessManagerOrderByWithRelationInput {
+  backgroundStory: SortOrderInput
+  createdAt: SortOrder
+  edges: SortOrder
+  id: SortOrder
+  lesson: LessonOrderByWithRelationInput
+  lessonId: SortOrder
+  name: SortOrder
+  nodes: SortOrder
+  remainingResources: SortOrderInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+}
+
+input ProcessManagerWhereInput {
+  AND: [ProcessManagerWhereInput!]
+  NOT: [ProcessManagerWhereInput!]
+  OR: [ProcessManagerWhereInput!]
+  backgroundStory: StringNullableFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  name: StringFilter
+  remainingResources: IntNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
+input ProcessManagerWhereUniqueInput {
+  AND: [ProcessManagerWhereInput!]
+  NOT: [ProcessManagerWhereInput!]
+  OR: [ProcessManagerWhereInput!]
+  backgroundStory: StringNullableFilter
+  createdAt: DateTimeFilter
+  id: String
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  name: StringFilter
+  remainingResources: IntNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
+input ProcessNode {
+  canNodeBeUpdated: Boolean
+  description: String
+  formula: String
+  id: String
+  label: String
+  type: String
+  value: String
+}
+
+input ProcessNodes {
+  processNodes: [ProcessNode]
+}
+
 type Program {
   audience: String
   batch: String
@@ -4051,6 +4154,8 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByWithRelationInput!], where: PostWhereInput): [Post!]!
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int, orderBy: [ProblemResultOrderByWithRelationInput!], where: ProblemResultWhereInput): [ProblemResult!]!
+  processManager(where: ProcessManagerWhereUniqueInput!): ProcessManager
+  processManagers(after: ProcessManagerWhereUniqueInput, before: ProcessManagerWhereUniqueInput, first: Int, last: Int, orderBy: [ProcessManagerOrderByWithRelationInput!], where: ProcessManagerWhereInput): [ProcessManager!]!
   program(where: ProgramWhereUniqueInput!): Program
   programs(after: ProgramWhereUniqueInput, before: ProgramWhereUniqueInput, first: Int, last: Int, orderBy: [ProgramOrderByWithRelationInput!], where: ProgramWhereInput): [Program!]!
   questResults(lessonId: String, list_of_ids: [String]): QuestResults
@@ -5815,6 +5920,7 @@ input UserOrderByWithRelationInput {
   posts: PostOrderByRelationAggregateInput
   problemResults: ProblemResultOrderByRelationAggregateInput
   problems: ProblemOrderByRelationAggregateInput
+  processManagers: ProcessManagerOrderByRelationAggregateInput
   quizResults: QuizResultOrderByRelationAggregateInput
   quizes: QuizOrderByRelationAggregateInput
   ratings: RatingOrderByRelationAggregateInput
@@ -5916,6 +6022,7 @@ input UserWhereInput {
   posts: PostListRelationFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
   ratings: RatingListRelationFilter
@@ -6017,6 +6124,7 @@ input UserWhereUniqueInput {
   posts: PostListRelationFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
   ratings: RatingListRelationFilter

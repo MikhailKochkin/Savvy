@@ -380,6 +380,80 @@ const TeamQuest = objectType({
   },
 });
 
+const ProcessManager = objectType({
+  name: "ProcessManager",
+  definition(t) {
+    t.model.id();
+    t.model.name();
+    t.model.backgroundStory();
+    t.model.remainingResources();
+    t.model.userId();
+    t.model.lessonId();
+    t.model.user();
+    t.model.lesson();
+    t.model.nodes();
+    t.model.edges();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
+// const Messages = inputObjectType({
+//   name: "Messages",
+//   definition(t) {
+//     t.list.field("messagesList", { type: "MessageElement" });
+//   },
+// });
+
+// const MessageElement = inputObjectType({
+//   name: "MessageElement",
+//   definition(t) {
+//     t.int("number");
+//     t.string("author");
+//     t.string("name");
+//     t.string("text");
+//     t.string("image");
+//     t.boolean("isAiAssistantOn");
+//     t.list.field("reactions", { type: "Reaction" });
+//   },
+// });
+
+const ProcessNodes = inputObjectType({
+  name: "ProcessNodes",
+  definition(t) {
+    t.list.field("processNodes", { type: "ProcessNode" });
+  },
+});
+
+const ProcessNode = inputObjectType({
+  name: "ProcessNode",
+  definition(t) {
+    t.string("id");
+    t.string("type");
+    t.string("label");
+    t.string("value");
+    t.boolean("canNodeBeUpdated");
+    t.string("description");
+    t.string("formula");
+  },
+});
+
+const ProcessEdges = inputObjectType({
+  name: "ProcessEdges",
+  definition(t) {
+    t.list.field("processEdges", { type: "ProcessEdge" });
+  },
+});
+
+const ProcessEdge = inputObjectType({
+  name: "ProcessEdge",
+  definition(t) {
+    t.string("id");
+    t.string("source");
+    t.string("target");
+  },
+});
+
 module.exports = {
   NewTest,
   Shot,
@@ -402,4 +476,9 @@ module.exports = {
   MiniForum,
   TeamQuest,
   Offer,
+  ProcessManager,
+  ProcessNode,
+  ProcessNodes,
+  ProcessEdges,
+  ProcessEdge,
 };
