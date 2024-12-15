@@ -2309,6 +2309,7 @@ export interface NexusGenInputs {
     chat?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     complexity?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    horizontal_image?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     isSecret?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     lesson?: NexusGenInputs['LessonOrderByWithRelationInput'] | null; // LessonOrderByWithRelationInput
@@ -2322,6 +2323,7 @@ export interface NexusGenInputs {
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     user?: NexusGenInputs['UserOrderByWithRelationInput'] | null; // UserOrderByWithRelationInput
     userId?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
+    vertical_image?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
   }
   NoteWhereInput: { // input type
     AND?: NexusGenInputs['NoteWhereInput'][] | null; // [NoteWhereInput!]
@@ -2330,6 +2332,7 @@ export interface NexusGenInputs {
     chat?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    horizontal_image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     isSecret?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
@@ -2343,6 +2346,7 @@ export interface NexusGenInputs {
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    vertical_image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   NoteWhereUniqueInput: { // input type
     AND?: NexusGenInputs['NoteWhereInput'][] | null; // [NoteWhereInput!]
@@ -2351,6 +2355,7 @@ export interface NexusGenInputs {
     chat?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    horizontal_image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: string | null; // String
     isSecret?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
@@ -2364,6 +2369,7 @@ export interface NexusGenInputs {
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    vertical_image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   OfferListRelationFilter: { // input type
     every?: NexusGenInputs['OfferWhereInput'] | null; // OfferWhereInput
@@ -4905,6 +4911,7 @@ export interface NexusGenObjects {
   Note: { // root type
     complexity?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    horizontal_image?: string | null; // String
     id: string; // String!
     isSecret?: boolean | null; // Boolean
     lessonID?: string | null; // String
@@ -4916,6 +4923,7 @@ export interface NexusGenObjects {
     type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
+    vertical_image?: string | null; // String
   }
   Offer: { // root type
     courseId?: string | null; // String
@@ -5935,6 +5943,7 @@ export interface NexusGenFieldTypes {
   Note: { // field return type
     complexity: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    horizontal_image: string | null; // String
     id: string; // String!
     isSecret: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -5948,6 +5957,7 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
+    vertical_image: string | null; // String
   }
   Offer: { // field return type
     courseId: string | null; // String
@@ -7112,6 +7122,7 @@ export interface NexusGenFieldTypeNames {
   Note: { // field return type name
     complexity: 'Int'
     createdAt: 'DateTime'
+    horizontal_image: 'String'
     id: 'String'
     isSecret: 'Boolean'
     lesson: 'Lesson'
@@ -7125,6 +7136,7 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
+    vertical_image: 'String'
   }
   Offer: { // field return type name
     courseId: 'String'
@@ -8697,6 +8709,7 @@ export interface NexusGenArgTypes {
     }
     updateNote: { // args
       complexity?: number | null; // Int
+      horizontal_image?: string | null; // String
       id?: string | null; // String
       isSecret?: boolean | null; // Boolean
       link_clicks?: number | null; // Int
@@ -8704,6 +8717,7 @@ export interface NexusGenArgTypes {
       next?: NexusGenInputs['NextType'] | null; // NextType
       text?: string | null; // String
       type?: string | null; // String
+      vertical_image?: string | null; // String
     }
     updateOffer: { // args
       courseId?: string | null; // String

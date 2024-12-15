@@ -72,6 +72,7 @@ const Note = (props) => {
     lessonID,
     isFinal,
   } = props;
+  console.log("note", note);
   let width;
   if (props.problem) {
     width = "100%";
@@ -145,7 +146,13 @@ const Note = (props) => {
             <MiniNote text={text} id={id} />
           ) : null}
           {note?.type?.toLowerCase() == "picture" ? (
-            <Picture story={story} />
+            <Picture
+              story={story}
+              horizontal_image={note.horizontal_image}
+              vertical_image={note.vertical_image}
+              text={text}
+              id={id}
+            />
           ) : null}{" "}
         </>
       )}
@@ -165,6 +172,8 @@ const Note = (props) => {
           id={id}
           type={note.type}
           next={props.next}
+          vertical_image={note.vertical_image}
+          horizontal_image={note.horizontal_image}
           name={name}
           lessonID={lessonID}
           getResult={getResult}

@@ -1053,6 +1053,7 @@ const Feed = (props) => {
                 width={width}
                 passMenuChange={passMenuChange}
                 page="simulator"
+                story={props.story}
               />
             )}
           </div>

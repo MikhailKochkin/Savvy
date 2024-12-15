@@ -167,6 +167,7 @@ export const Row = styled.div`
       font-size: 1.4rem;
       font-family: Montserrat;
       resize: none;
+      margin-bottom: 10px;
     }
     select {
       width: 100%;
@@ -190,6 +191,7 @@ export const Row = styled.div`
       background-repeat: no-repeat, repeat;
       background-position: right 0.7em top 50%, 0 0;
       background-size: 0.65em auto, 100%;
+      margin-bottom: 10px;
     }
     .green {
       border: 2px solid #6a994e;

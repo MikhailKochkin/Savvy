@@ -589,6 +589,7 @@ const StoryEx = (props) => {
           textToBeTranslated={textToBeTranslated}
           authSource={props.authSource}
           embedded={props.embedded}
+          story={true}
         />
       )}
     </Container>

@@ -952,7 +952,6 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
               />
             )}
-            {console.log(data, isSaved)}
             {(isSaved || d != null) &&
               data &&
               data.__typename.toLowerCase() == "processmanager" && (

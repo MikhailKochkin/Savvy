@@ -2553,6 +2553,8 @@ const Mutation = mutationType({
         link_clicks: intArg(),
         isSecret: booleanArg(),
         complexity: intArg(),
+        horizontal_image: stringArg(),
+        vertical_image: stringArg(),
         name: stringArg(),
         next: arg({
           type: "NextType", // name should match the name you provided

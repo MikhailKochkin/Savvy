@@ -5,7 +5,12 @@ import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { useTranslation } from "next-i18next";
 import { Textarea } from "../styles/GenerationBlockStyles";
-import { Row, ActionButton, SecondaryButton } from "../styles/DevPageStyles";
+import {
+  Row,
+  ActionButton,
+  SecondaryButton,
+  MicroButton,
+} from "../styles/DevPageStyles";
 import parse from "html-react-parser";
 
 const UPDATE_NOTE_MUTATION = gql`
@@ -16,6 +21,8 @@ const UPDATE_NOTE_MUTATION = gql`
     $complexity: Int
     $isSecret: Boolean
     $type: String
+    $horizontal_image: String
+    $vertical_image: String
   ) {
     updateNote(
       id: $id
@@ -24,12 +31,18 @@ const UPDATE_NOTE_MUTATION = gql`
       complexity: $complexity
       isSecret: $isSecret
       type: $type
+      horizontal_image: $horizontal_image
+      vertical_image: $vertical_image
     ) {
       id
       text
       name
       next
       type
+      complexity
+      isSecret
+      horizontal_image
+      vertical_image
     }
   }
 `;
@@ -127,6 +140,15 @@ const UpdateNote = (props) => {
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
   const [breakBlocks, setBreakBlocks] = useState([]);
+  const [horizontalImage, setHorizontalImage] = useState(
+    props.horizontal_image ? props.horizontal_image : ""
+  );
+  const [verticalImage, setVerticalImage] = useState(
+    props.vertical_image ? props.vertical_image : ""
+  );
+  const [horizontalImageUploading, setHorizontalImageUploading] =
+    useState(false);
+  const [verticalImageUploading, setVerticalImageUploading] = useState(false);
 
   const [updateNote, { loading, error }] = useMutation(UPDATE_NOTE_MUTATION, {
     refetchQueries: [
@@ -361,18 +383,70 @@ const UpdateNote = (props) => {
 
   const handleUpdateNote = async (e) => {
     e.preventDefault();
-    const res = await updateNote({
-      variables: {
-        id,
-        text,
-        complexity,
-        isSecret,
-        type,
-        name,
-      },
+    console.log({
+      id,
+      text,
+      complexity,
+      isSecret,
+      type,
+      name,
+      horizontal_image: horizontalImage,
+      vertical_image: verticalImage,
     });
-    props.getResult(res);
-    props.switchUpdate();
+    try {
+      const res = await updateNote({
+        variables: {
+          id,
+          text,
+          complexity,
+          isSecret,
+          type,
+          name,
+          horizontal_image: horizontalImage,
+          vertical_image: verticalImage,
+        },
+      });
+      props.getResult(res);
+      props.switchUpdate();
+    } catch (error) {
+      console.error("Error updating note:", error);
+    }
+  };
+
+  const uploadHorizontalImage = async (e) => {
+    setHorizontalImageUploading(true);
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "savvy-app");
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const file = await res.json();
+    setHorizontalImage(file.secure_url);
+    setHorizontalImageUploading(false);
+  };
+
+  const uploadVerticalImage = async (e) => {
+    setVerticalImageUploading(true);
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "savvy-app");
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const file = await res.json();
+    setVerticalImage(file.secure_url);
+    setVerticalImageUploading(false);
   };
 
   return (
@@ -406,6 +480,52 @@ const UpdateNote = (props) => {
           </select>
         </div>
       </Row>
+      {type == "picture" && (
+        <>
+          <Row>
+            <div className="description">Horizontal Image</div>
+            <div className="action_area">
+              <input
+                onChange={(e) => setHorizontalImage(e.target.value)}
+                defaultValue={horizontalImage}
+                placeholder=""
+              />
+              <input
+                type="file"
+                onChange={(e) => uploadHorizontalImage(e)}
+                style={{ display: "none" }}
+                id="horizontalImageUpload"
+              />
+              <label htmlFor="horizontalImageUpload">
+                <MicroButton as="span">
+                  {horizontalImageUploading ? "Uploading..." : "Upload"}
+                </MicroButton>
+              </label>
+            </div>
+          </Row>
+          <Row>
+            <div className="description">Vertical Image</div>
+            <div className="action_area">
+              <input
+                onChange={(e) => setVerticalImage(e.target.value)}
+                defaultValue={verticalImage}
+                placeholder=""
+              />
+              <input
+                type="file"
+                onChange={(e) => uploadVerticalImage(e)}
+                style={{ display: "none" }}
+                id="verticalImageUpload"
+              />
+              <label htmlFor="verticalImageUpload">
+                <MicroButton as="span">
+                  {verticalImageUploading ? "Uploading..." : "Upload"}
+                </MicroButton>
+              </label>
+            </div>
+          </Row>
+        </>
+      )}
       <Row>
         <div className="description">Prompt</div>
         <div className="action_area">

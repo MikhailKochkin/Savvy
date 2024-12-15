@@ -6,7 +6,14 @@ import { useState, useEffect } from "react";
 
 const Head = styled.div`
   position: ${(props) => (props.isSticky ? "fixed" : "absolute")};
-  top: 40px;
+  top: ${(props) =>
+    props.story && props.isSticky
+      ? "40px"
+      : props.story && !props.isSticky
+      ? "0px"
+      : !props.story && !props.isSticky
+      ? "80px"
+      : "20px"};
   z-index: 1000;
   pointer-events: none;
   display: flex;
@@ -20,7 +27,7 @@ const Head = styled.div`
   font-size: 2rem;
   padding: 0 20px;
   background: transparent;
-  transition: top 2s ease, position 0.3s ease;
+  transition: top 1s ease, position 0.3s ease;
   #change_page {
     font-size: 1.7rem;
   }
@@ -116,7 +123,8 @@ const Navigation = (props) => {
   }, []);
 
   return (
-    <Head isSticky={isSticky}>
+    <Head isSticky={isSticky} story={props.story}>
+      {console.log("isSticky", isSticky, "story", !props.story)}
       <Left>
         {props.page !== "demo" && (
           <div className="block">

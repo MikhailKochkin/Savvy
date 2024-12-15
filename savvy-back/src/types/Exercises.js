@@ -89,6 +89,8 @@ const Note = objectType({
     t.model.name();
     t.model.next();
     t.model.type();
+    t.model.horizontal_image();
+    t.model.vertical_image();
     t.model.link_clicks();
     t.model.isSecret();
     t.model.complexity();

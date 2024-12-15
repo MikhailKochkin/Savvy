@@ -119,6 +119,8 @@ const SINGLE_LESSON_QUERY = gql`
         isSecret
         text
         next
+        vertical_image
+        horizontal_image
         user {
           id
         }
@@ -514,6 +516,7 @@ const SingleLesson = (props) => {
         lesson={lesson}
         me={me}
         page="development"
+        story={false}
       />
       <LessonStyles>
         <LessonPart>

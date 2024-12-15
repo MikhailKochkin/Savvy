@@ -223,7 +223,6 @@ const DAGComponent = ({ defaultNodes, defaultEdges, remainingResources }) => {
       const data = await response.json();
       if (response.ok) {
         let newFeedback = "";
-        console.log(data.result.content);
         setFeedback(data.result.content);
 
         return data?.resul?.content ? data.result.content : "";
@@ -312,7 +311,6 @@ const DAGComponent = ({ defaultNodes, defaultEdges, remainingResources }) => {
   };
 
   const remainingResource = resourceLimit - getTotalNodeValues();
-  console.log("resourceLimit", resourceLimit, getTotalNodeValues());
 
   return (
     <Styles>

@@ -41,6 +41,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         isSecret
         complexity
         next
+        vertical_image
+        horizontal_image
         user {
           id
         }

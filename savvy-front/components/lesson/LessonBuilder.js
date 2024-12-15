@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
-import { useRouter } from "next/router";
 import smoothscroll from "smoothscroll-polyfill";
 
 import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import UpdateLesson from "./UpdateLesson";
 import LessonBlock from "./LessonBlock";
-import Analyzer from "../archive/Analyzer";
 import GenerateLesson from "./lesson_management/GenerateLesson";
 import ChangePositions from "./lesson_management/ChangePositions";
-import { set } from "lodash";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure) {

@@ -586,24 +586,7 @@ const SimulatorInsights = (props) => {
                           item.student.id !== lesson.user.id
                       )
                     ).length;
-                    console.log(
-                      "correct allQuizResults",
-                      getUniqueQuizResults(
-                        quizResults.filter(
-                          (item) =>
-                            item.quiz.id === elementData.id &&
-                            (selectedStudents && selectedStudents.length > 0
-                              ? selectedStudents.includes(item.student.id)
-                              : true) &&
-                            ((item.result && item.correct) ||
-                              item.ideasList?.quizIdeas?.filter(
-                                (idea) => parseFloat(idea.result) > 58
-                              ).length > 0) &&
-                            item.student.id !== "cjqy9i57l000k0821rj0oo8l4" &&
-                            item.student.id !== lesson.user.id
-                        )
-                      ).map((r) => r.student.id)
-                    );
+
                     // 1.2 Calculate the total number of quizzes where the answer was correct / partially correct
                     let allCorrectQuizResults = getUniqueQuizResults(
                       quizResults.filter(
@@ -745,7 +728,6 @@ const SimulatorInsights = (props) => {
                       }}
                     >
                       <>
-                        {console.log("elementData", elementData?.type)}
                         <b>{type}: </b>
                         {elementData && elementData.name
                           ? elementData.name

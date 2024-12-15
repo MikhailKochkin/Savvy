@@ -2860,7 +2860,7 @@ type Mutation {
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswers, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextType, question: [String], type: String): NewTest
-  updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextType, text: String, type: String): Note
+  updateNote(complexity: Int, horizontal_image: String, id: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextType, text: String, type: String, vertical_image: String): Note
   updateOffer(courseId: String, discountPrice: Int, header: String, id: String, price: Int, text: String, type: String): Offer
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
@@ -3156,6 +3156,7 @@ input NextType {
 type Note {
   complexity: Int
   createdAt: DateTime!
+  horizontal_image: String
   id: String!
   isSecret: Boolean
   lesson: Lesson
@@ -3169,6 +3170,7 @@ type Note {
   updatedAt: DateTime!
   user: User
   userId: String
+  vertical_image: String
 }
 
 input NoteListRelationFilter {
@@ -3185,6 +3187,7 @@ input NoteOrderByWithRelationInput {
   chat: SortOrderInput
   complexity: SortOrderInput
   createdAt: SortOrder
+  horizontal_image: SortOrderInput
   id: SortOrder
   isSecret: SortOrderInput
   lesson: LessonOrderByWithRelationInput
@@ -3198,6 +3201,7 @@ input NoteOrderByWithRelationInput {
   updatedAt: SortOrder
   user: UserOrderByWithRelationInput
   userId: SortOrderInput
+  vertical_image: SortOrderInput
 }
 
 input NoteWhereInput {
@@ -3207,6 +3211,7 @@ input NoteWhereInput {
   chat: BoolNullableFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
+  horizontal_image: StringNullableFilter
   id: StringFilter
   isSecret: BoolNullableFilter
   lesson: LessonWhereInput
@@ -3220,6 +3225,7 @@ input NoteWhereInput {
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringNullableFilter
+  vertical_image: StringNullableFilter
 }
 
 input NoteWhereUniqueInput {
@@ -3229,6 +3235,7 @@ input NoteWhereUniqueInput {
   chat: BoolNullableFilter
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
+  horizontal_image: StringNullableFilter
   id: String
   isSecret: BoolNullableFilter
   lesson: LessonWhereInput
@@ -3242,6 +3249,7 @@ input NoteWhereUniqueInput {
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringNullableFilter
+  vertical_image: StringNullableFilter
 }
 
 enum NullsOrder {
