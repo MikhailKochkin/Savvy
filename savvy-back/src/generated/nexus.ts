@@ -1754,6 +1754,7 @@ export interface NexusGenInputs {
     openSize?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     problemResults?: NexusGenInputs['ProblemResultOrderByRelationAggregateInput'] | null; // ProblemResultOrderByRelationAggregateInput
     problems?: NexusGenInputs['ProblemOrderByRelationAggregateInput'] | null; // ProblemOrderByRelationAggregateInput
+    processManagers?: NexusGenInputs['ProcessManagerOrderByRelationAggregateInput'] | null; // ProcessManagerOrderByRelationAggregateInput
     published?: NexusGenInputs['SortOrderInput'] | null; // SortOrderInput
     quizResults?: NexusGenInputs['QuizResultOrderByRelationAggregateInput'] | null; // QuizResultOrderByRelationAggregateInput
     quizes?: NexusGenInputs['QuizOrderByRelationAggregateInput'] | null; // QuizOrderByRelationAggregateInput
@@ -1877,6 +1878,7 @@ export interface NexusGenInputs {
     openSize?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
     problems?: NexusGenInputs['ProblemListRelationFilter'] | null; // ProblemListRelationFilter
+    processManagers?: NexusGenInputs['ProcessManagerListRelationFilter'] | null; // ProcessManagerListRelationFilter
     published?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
@@ -1944,6 +1946,7 @@ export interface NexusGenInputs {
     openSize?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
     problems?: NexusGenInputs['ProblemListRelationFilter'] | null; // ProblemListRelationFilter
+    processManagers?: NexusGenInputs['ProcessManagerListRelationFilter'] | null; // ProcessManagerListRelationFilter
     published?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
@@ -2804,6 +2807,29 @@ export interface NexusGenInputs {
     steps?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
     type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+  }
+  ProcessManagerListRelationFilter: { // input type
+    every?: NexusGenInputs['ProcessManagerWhereInput'] | null; // ProcessManagerWhereInput
+    none?: NexusGenInputs['ProcessManagerWhereInput'] | null; // ProcessManagerWhereInput
+    some?: NexusGenInputs['ProcessManagerWhereInput'] | null; // ProcessManagerWhereInput
+  }
+  ProcessManagerOrderByRelationAggregateInput: { // input type
+    _count?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  ProcessManagerWhereInput: { // input type
+    AND?: NexusGenInputs['ProcessManagerWhereInput'][] | null; // [ProcessManagerWhereInput!]
+    NOT?: NexusGenInputs['ProcessManagerWhereInput'][] | null; // [ProcessManagerWhereInput!]
+    OR?: NexusGenInputs['ProcessManagerWhereInput'][] | null; // [ProcessManagerWhereInput!]
+    backgroundStory?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    remainingResources?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -4182,6 +4208,7 @@ export interface NexusGenInputs {
     posts?: NexusGenInputs['PostOrderByRelationAggregateInput'] | null; // PostOrderByRelationAggregateInput
     problemResults?: NexusGenInputs['ProblemResultOrderByRelationAggregateInput'] | null; // ProblemResultOrderByRelationAggregateInput
     problems?: NexusGenInputs['ProblemOrderByRelationAggregateInput'] | null; // ProblemOrderByRelationAggregateInput
+    processManagers?: NexusGenInputs['ProcessManagerOrderByRelationAggregateInput'] | null; // ProcessManagerOrderByRelationAggregateInput
     quizResults?: NexusGenInputs['QuizResultOrderByRelationAggregateInput'] | null; // QuizResultOrderByRelationAggregateInput
     quizes?: NexusGenInputs['QuizOrderByRelationAggregateInput'] | null; // QuizOrderByRelationAggregateInput
     ratings?: NexusGenInputs['RatingOrderByRelationAggregateInput'] | null; // RatingOrderByRelationAggregateInput
@@ -4282,6 +4309,7 @@ export interface NexusGenInputs {
     posts?: NexusGenInputs['PostListRelationFilter'] | null; // PostListRelationFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
     problems?: NexusGenInputs['ProblemListRelationFilter'] | null; // ProblemListRelationFilter
+    processManagers?: NexusGenInputs['ProcessManagerListRelationFilter'] | null; // ProcessManagerListRelationFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
     ratings?: NexusGenInputs['RatingListRelationFilter'] | null; // RatingListRelationFilter
@@ -4382,6 +4410,7 @@ export interface NexusGenInputs {
     posts?: NexusGenInputs['PostListRelationFilter'] | null; // PostListRelationFilter
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
     problems?: NexusGenInputs['ProblemListRelationFilter'] | null; // ProblemListRelationFilter
+    processManagers?: NexusGenInputs['ProcessManagerListRelationFilter'] | null; // ProcessManagerListRelationFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
     ratings?: NexusGenInputs['RatingListRelationFilter'] | null; // RatingListRelationFilter

@@ -2344,6 +2344,7 @@ input LessonOrderByWithRelationInput {
   openSize: SortOrderInput
   problemResults: ProblemResultOrderByRelationAggregateInput
   problems: ProblemOrderByRelationAggregateInput
+  processManagers: ProcessManagerOrderByRelationAggregateInput
   published: SortOrderInput
   quizResults: QuizResultOrderByRelationAggregateInput
   quizes: QuizOrderByRelationAggregateInput
@@ -2486,6 +2487,7 @@ input LessonWhereInput {
   openSize: IntNullableFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   published: BoolNullableFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
@@ -2554,6 +2556,7 @@ input LessonWhereUniqueInput {
   openSize: IntNullableFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   published: BoolNullableFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
@@ -3834,6 +3837,32 @@ input ProblemWhereUniqueInput {
   steps: JsonNullableFilter
   text: StringFilter
   type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
+input ProcessManagerListRelationFilter {
+  every: ProcessManagerWhereInput
+  none: ProcessManagerWhereInput
+  some: ProcessManagerWhereInput
+}
+
+input ProcessManagerOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ProcessManagerWhereInput {
+  AND: [ProcessManagerWhereInput!]
+  NOT: [ProcessManagerWhereInput!]
+  OR: [ProcessManagerWhereInput!]
+  backgroundStory: StringNullableFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  name: StringFilter
+  remainingResources: IntNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -5815,6 +5844,7 @@ input UserOrderByWithRelationInput {
   posts: PostOrderByRelationAggregateInput
   problemResults: ProblemResultOrderByRelationAggregateInput
   problems: ProblemOrderByRelationAggregateInput
+  processManagers: ProcessManagerOrderByRelationAggregateInput
   quizResults: QuizResultOrderByRelationAggregateInput
   quizes: QuizOrderByRelationAggregateInput
   ratings: RatingOrderByRelationAggregateInput
@@ -5916,6 +5946,7 @@ input UserWhereInput {
   posts: PostListRelationFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
   ratings: RatingListRelationFilter
@@ -6017,6 +6048,7 @@ input UserWhereUniqueInput {
   posts: PostListRelationFilter
   problemResults: ProblemResultListRelationFilter
   problems: ProblemListRelationFilter
+  processManagers: ProcessManagerListRelationFilter
   quizResults: QuizResultListRelationFilter
   quizes: QuizListRelationFilter
   ratings: RatingListRelationFilter
