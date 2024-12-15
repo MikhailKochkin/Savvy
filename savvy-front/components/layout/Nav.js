@@ -260,9 +260,10 @@ const CourseMenu = styled.div`
     justify-content: center;
   }
   a {
-    /* &:hover {
-      border-bottom: 1px solid #112a62;
-    } */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -361,7 +362,7 @@ const Nav = (props) => {
             <CourseMenu>
               <Link href="/">
                 <div className="logo">
-                  <img src="/static/long_logo.svg" />
+                  <img src="/static/logo_dark_long_lesson_menu.svg" />
                 </div>
               </Link>
             </CourseMenu>
