@@ -74,6 +74,8 @@ const Query = queryType({
     t.crud.chatResult();
     t.crud.comments({ ordering: true, filtering: true });
     t.crud.comment();
+    t.crud.processManagers({ ordering: true, filtering: true });
+    t.crud.processManager();
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {

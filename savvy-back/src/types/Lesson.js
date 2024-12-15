@@ -43,6 +43,7 @@ const Lesson = objectType({
     t.model.quizResults();
     t.model.problemResults();
     t.model.textEditorResults();
+    t.model.processManagers();
     t.model.shots();
     t.model.notes();
     t.model.chats();

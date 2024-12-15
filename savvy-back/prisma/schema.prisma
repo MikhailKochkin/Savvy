@@ -559,6 +559,7 @@ model Lesson {
   textEditorResults   TextEditorResult[]
   chatResults         ChatResult[]
   comments            Comment[]
+  processManagers     ProcessManager[]
 }
 
 model LessonResult {
@@ -1121,6 +1122,21 @@ model TextEditorResult {
   textEditor   TextEditor? @relation(fields: [textEditorId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
+model ProcessManager {
+  id                String             @id @default(cuid()) @db.VarChar(30)
+  name              String
+  backgroundStory   String?
+  remainingResources Int?
+  userId            String             @db.VarChar(30)
+  lessonId          String             @db.VarChar(30)
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  lesson            Lesson?            @relation(fields: [lessonId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  nodes             Json               // Storing nodes as a JSON object
+  edges             Json               // Storing edges as a JSON object
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
 model Uni {
   id         String       @id @default(cuid()) @db.VarChar(30)
   title      String
@@ -1240,6 +1256,7 @@ model User {
   userIsReferrer     Referral[]           @relation("ReferrerInReferral")
   userIsReferee      Referral[]           @relation("RefereeInReferral")
   comments           Comment[]
+  processManagers    ProcessManager[]
 }
 
 model Referral {

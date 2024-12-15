@@ -24,7 +24,7 @@ const Styles = styled.div`
   font-size: 1.6rem;
   @media (max-width: 800px) {
     flex-direction: column;
-    width: 100%;
+    width: 95%;
     font-size: 1.6rem;
   }
 `;

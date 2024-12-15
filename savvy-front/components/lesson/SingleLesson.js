@@ -161,6 +161,17 @@ const SINGLE_LESSON_QUERY = gql`
           surname
         }
       }
+      processManagers {
+        id
+        name
+        remainingResources
+        backgroundStory
+        nodes
+        edges
+        user {
+          id
+        }
+      }
       documents {
         id
         title

@@ -144,7 +144,7 @@ const Container = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
-    width: 95%;
+    width: 90%;
     font-size: 1.6rem;
     .black_back {
       padding: 20px 0;
