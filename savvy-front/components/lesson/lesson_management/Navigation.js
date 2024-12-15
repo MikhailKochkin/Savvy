@@ -1,13 +1,11 @@
-import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { useQuery, gql } from "@apollo/client";
-import { result } from "lodash";
 import { Tooltip } from "react-tooltip";
+import { useState, useEffect } from "react";
 
 const Head = styled.div`
-  position: sticky;
+  position: ${(props) => (props.isSticky ? "fixed" : "absolute")};
   top: 40px;
   z-index: 1000;
   pointer-events: none;
@@ -21,6 +19,8 @@ const Head = styled.div`
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
+  background: transparent;
+  transition: top 2s ease, position 0.3s ease;
   #change_page {
     font-size: 1.7rem;
   }
@@ -99,8 +99,24 @@ const Right = styled.div`
 const Navigation = (props) => {
   const { lesson, i_am_author, me } = props;
   const { t } = useTranslation("lesson");
+
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      // Adjust scroll threshold as needed
+      setIsSticky(scrollPosition > 120);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <Head>
+    <Head isSticky={isSticky}>
       <Left>
         {props.page !== "demo" && (
           <div className="block">
@@ -116,14 +132,12 @@ const Navigation = (props) => {
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content="Back to course page"
                 src="/static/arrow_left.svg"
-                // onClick={(e) => props.passMenuChange()}
               />
             </Link>
           </div>
         )}
         {props.passMenuChange && (
           <div className="block">
-            {" "}
             <img
               data-tooltip-id="my-tooltip"
               data-tooltip-content={t("lesson_menu")}

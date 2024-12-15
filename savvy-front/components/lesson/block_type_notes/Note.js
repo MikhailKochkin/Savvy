@@ -7,6 +7,7 @@ import DeleteNote from "./DeleteNote";
 import Longread from "./types/Longread";
 import Email from "./types/Email";
 import MiniNote from "./types/MiniNote";
+import Picture from "./types/Picture";
 import { SecondaryButton } from "../styles/DevPageStyles";
 
 const Buttons = styled.div`
@@ -143,6 +144,9 @@ const Note = (props) => {
           {note?.type?.toLowerCase() == "mininote" ? (
             <MiniNote text={text} id={id} />
           ) : null}
+          {note?.type?.toLowerCase() == "picture" ? (
+            <Picture story={story} />
+          ) : null}{" "}
         </>
       )}
       {getData && !isFinal && !moved && (

@@ -126,9 +126,13 @@ const MobileMenu = styled.header`
     }
   }
   .mini_logo {
-    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
     img {
-      height: 24px;
+      height: 28px;
     }
     a {
       font-weight: 500;
@@ -427,7 +431,7 @@ const Nav = (props) => {
                 {/* <div>BeSavvy</div> */}
                 <div className="mini_logo">
                   {/* BeSavvy Lawyer */}
-                  <img src="/static/long_logo.svg" />
+                  <img src="/static/logo_dark_long_lesson_menu.svg" />
                 </div>
               </Span>
               <div className="logo">

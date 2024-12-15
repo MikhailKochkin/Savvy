@@ -761,7 +761,6 @@ const Feed = (props) => {
                 <img src="../static/close-lg.svg" />
               </div>
             </div>
-
             <div
               className="navigate"
               data-tooltip-id="my-tooltip"
@@ -771,7 +770,6 @@ const Feed = (props) => {
               <img className="icon" src="/static/navigation.svg" />
               <div>{t("navigate")}</div>
             </div>
-
             {openNavigation && (
               <div className="navigate_block">
                 <div className="nav">
@@ -943,14 +941,12 @@ const Feed = (props) => {
                 )}
               </TranslationBlock>
             )}
-
             {/* <div className="questions">{t("have_questions")}</div> */}
             {/* <AnswerQuestions notes={notes} chats={chats} /> */}
             {/* <div className="go_to_chat">{t("chat_help")}</div>
             <button onClick={(e) => search(lessonElements.length - 2)}>
               {t("get_to_chat")}
             </button> */}
-            {/* <br /> */}
             <div
               className="navigate"
               data-tooltip-id="my-tooltip"
@@ -960,7 +956,6 @@ const Feed = (props) => {
               <img className="icon" src="/static/menu-blocks.svg" />
               <div>{t("other_simulators")}</div>
             </div>
-
             {linkMenuOpen && (
               <SimulatorLinks>
                 {other_simulators.map((s) => (
@@ -996,94 +991,71 @@ const Feed = (props) => {
           {width > 800 && (
             <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
           )}
-          {!props.embedded && (
-            <Navigation
-              i_am_author={props.i_am_author}
-              lesson={props.lesson}
-              me={me}
-              width={width}
-              passMenuChange={passMenuChange}
-              page="simulator"
-            />
-          )}
-          <Border>
-            {lessonElements.slice(0, num + 2).map((c, i) => (
-              <Block
-                key={i + "block"}
-                open={open}
-                show={i === num + 1 ? "final" : "no"}
-                className={i === num + 1 ? "final" : "no"}
-              >
-                {c}
-                {props.move_statuses[i] && (
-                  <Buttons>
-                    {/* Show move button if it is not the last block in the lesson */}
-                    {lessonElements.length > num + 1 && i === num && (
-                      <>
-                        <div
-                          id="arrow_box"
-                          className="arrow_box"
-                          onClick={async (e) => {
-                            let res2 = move(lessonElements[i + 1]?.props?.id);
-                            if (result) {
-                              let res = await updateLessonResult({
-                                variables: {
-                                  id: result.id,
-                                  lessonID: props.lessonID,
-                                  progress: num + 2,
-                                },
-                              });
-                            } else if (
-                              !result &&
-                              props.me?.id !== "clkvdew14837181f13vcbbcw0x"
-                            ) {
-                              let res = await createLessonResult({
-                                variables: {
-                                  lessonID: props.lessonID,
-                                  progress: num + 2,
-                                },
-                              });
-                              setResult(res.data.createLessonResult);
-                            }
-                          }}
-                        >
-                          <img
-                            className="arrow"
-                            src="../../static/down-arrow.svg"
-                          />
-                        </div>
-                      </>
-                    )}
-                  </Buttons>
-                )}
-              </Block>
-            ))}
-          </Border>
-          {/* {props.me.id !== "clkvdew14837181f13vcbbcw0x" && (
-            <Stepper>
-              {" "}
-              {props.me &&
-                next_lesson &&
-                lessonElements.length === num + 1 &&
-                props.next &&
-                props.next.published && (
-                  <Link
-                    legacyBehavior
-                    href={{
-                      pathname: "/lesson",
-                      query: {
-                        id: props.next.id,
-                        type: props.next.type.toLowerCase(),
-                      },
-                    }}
-                  >
-                    <a className="next_lesson_link">
-                      <SimpleButton>{t("next_lesson")}</SimpleButton>
-                    </a>
-                  </Link>
-                )}
-            </Stepper>
-          )} */}
+          <div style={{ position: "relative", width: "100%" }}>
+            <Border>
+              {lessonElements.slice(0, num + 2).map((c, i) => (
+                <Block
+                  key={i + "block"}
+                  open={open}
+                  show={i === num + 1 ? "final" : "no"}
+                  className={i === num + 1 ? "final" : "no"}
+                >
+                  {c}
+                  {props.move_statuses[i] && (
+                    <Buttons>
+                      {/* Show move button if it is not the last block in the lesson */}
+                      {lessonElements.length > num + 1 && i === num && (
+                        <>
+                          <div
+                            id="arrow_box"
+                            className="arrow_box"
+                            onClick={async (e) => {
+                              let res2 = move(lessonElements[i + 1]?.props?.id);
+                              if (result) {
+                                let res = await updateLessonResult({
+                                  variables: {
+                                    id: result.id,
+                                    lessonID: props.lessonID,
+                                    progress: num + 2,
+                                  },
+                                });
+                              } else if (
+                                !result &&
+                                props.me?.id !== "clkvdew14837181f13vcbbcw0x"
+                              ) {
+                                let res = await createLessonResult({
+                                  variables: {
+                                    lessonID: props.lessonID,
+                                    progress: num + 2,
+                                  },
+                                });
+                                setResult(res.data.createLessonResult);
+                              }
+                            }}
+                          >
+                            <img
+                              className="arrow"
+                              src="../../static/down-arrow.svg"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </Buttons>
+                  )}
+                </Block>
+              ))}
+            </Border>
+            {!props.embedded && (
+              <Navigation
+                i_am_author={props.i_am_author}
+                lesson={props.lesson}
+                me={me}
+                width={width}
+                passMenuChange={passMenuChange}
+                page="simulator"
+              />
+            )}
+          </div>
         </Content>
       </Styles>
     </>
