@@ -32,12 +32,18 @@ import Loading from "../../layout/Loading";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: String!) {
-    lesson(where: { id: $id }) {
+    lesson(id: $id) {
       id
       text
       name
       open
-      structure
+      structure {
+        lessonItems {
+          id
+          type
+          comment
+        }
+      }
       challenge_num
       number
       type
@@ -47,7 +53,21 @@ const SINGLE_LESSON_QUERY = gql`
       notes {
         id
         text
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         user {
           id
         }
@@ -113,7 +133,21 @@ const SINGLE_LESSON_QUERY = gql`
         ifWrong
         type
         check
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         user {
           id
         }
@@ -126,7 +160,21 @@ const SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         question
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         user {
           id
         }

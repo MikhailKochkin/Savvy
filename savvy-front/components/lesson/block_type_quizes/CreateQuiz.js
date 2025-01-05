@@ -298,7 +298,6 @@ const CreateQuiz = (props) => {
         onClick={async (e) => {
           e.preventDefault();
           const res = await createQuiz();
-          console.log("res createQuiz", res);
           props.getResult(res);
         }}
       >

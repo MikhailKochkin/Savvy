@@ -89,7 +89,6 @@ const NewConstructor = (props) => {
 
   if (queryLoading) return "...";
   // if (error) return `Error! ${error.message}`;
-  console.log("queryData", queryData);
   const getResult = (data) => {
     props.getResult(data);
   };

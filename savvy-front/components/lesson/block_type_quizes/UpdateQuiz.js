@@ -360,14 +360,12 @@ const UpdateQuiz = (props) => {
   const addRelatedAnswer = async (i) => {
     let updatedAnswers = [...answers];
     let updatedAnswer = answers[i];
-    console.log("updatedAnswer", updatedAnswer);
     if (updatedAnswer.relatedAnswers) {
       updatedAnswer.relatedAnswers = [...updatedAnswer.relatedAnswers, ""];
     } else {
       updatedAnswer = { ...updatedAnswer, relatedAnswers: [""] };
     }
     updatedAnswers[i] = updatedAnswer;
-    console.log("updatedAnswers", updatedAnswers);
 
     setAnswers(updatedAnswers);
   };

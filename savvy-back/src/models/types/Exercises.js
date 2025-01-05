@@ -196,14 +196,14 @@ const Offer = objectType({
     t.string("text");
     t.string("header");
     t.string("type");
-    t.int("courseId");
+    t.string("courseId");
     t.float("price");
     t.float("discountPrice");
-    t.int("userId");
-    t.int("lessonId");
+    t.string("userId");
+    t.string("lessonId");
     t.field("lesson", { type: "Lesson" });
     t.field("user", { type: "User" });
-    t.int("programId");
+    t.string("programId");
     t.field("program", { type: "Program" });
     t.field("createdAt", { type: "DateTime" });
     t.field("updatedAt", { type: "DateTime" });

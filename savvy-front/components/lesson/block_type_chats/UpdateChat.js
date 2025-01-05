@@ -149,7 +149,6 @@ const UpdateChat = (props) => {
       const data = await response.json();
       if (response.ok) {
         let updated_messages = JSON.parse(data.result.content);
-        console.log("updated_messages", updated_messages);
         setMess(updated_messages.result.content.messagesList);
         return data;
       } else {
@@ -257,7 +256,6 @@ const UpdateChat = (props) => {
         <ButtonTwo
           onClick={async (e) => {
             e.preventDefault();
-            console.log("mess", mess);
             const res = await updateChat({
               variables: {
                 id: props.id,

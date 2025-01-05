@@ -251,7 +251,6 @@ const DynamicChat = (props) => {
       const data = await response.json();
       if (response.ok) {
         let newMessage = JSON.parse(data.result.content);
-        console.log("newMessage", newMessage);
         setDialogueMessages((prevMessages) => [...prevMessages, newMessage]);
         return data;
       } else {

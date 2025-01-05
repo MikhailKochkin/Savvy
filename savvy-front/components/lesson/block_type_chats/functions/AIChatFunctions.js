@@ -163,7 +163,6 @@ export const generateDiscussion = async (prompt, previousMessages, stage) => {
   if (previousMessages.length == 0) {
     currentPrompt = prompt + "Return only the phrases from the dialogue.";
   }
-  console.log("currentPrompt", currentPrompt);
 
   try {
     // Make a POST request to the API endpoint

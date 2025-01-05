@@ -174,7 +174,6 @@ const CreateTextEditor = (props) => {
         Example 1. """${JSON.stringify(document_sample_result, null, 2)}"""
 
     `;
-    console.log(chatPrompt);
 
     try {
       const response = await fetch("/api/generateJson", {
@@ -187,7 +186,6 @@ const CreateTextEditor = (props) => {
       const data = await response.json();
       if (response.ok) {
         let new_case_editor = JSON.parse(data.result.content);
-        console.log("new_case_editor", new_case_editor);
         setText(new_case_editor.document_text);
         setGeneratedEmbeddedData(new_case_editor.embedded_data);
         return data;

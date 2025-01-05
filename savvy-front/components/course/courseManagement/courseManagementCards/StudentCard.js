@@ -316,9 +316,9 @@ class StudentCard extends Component {
       (status * 100) / coursePage.lessons.filter((l) => l.published).length;
     let left = coursePage.lessons.filter((l) => l.published).length - status;
 
-    let my_certificate = me.certificates.find(
-      (certificate) => certificate.coursePage.id === coursePage.id
-    );
+    // let my_certificate = me.certificates.find(
+    //   (certificate) => certificate.coursePage.id === coursePage.id
+    // );
     return (
       <Payment>
         <div className="results">
@@ -443,9 +443,9 @@ class StudentCard extends Component {
             </a>
           </button>
         )} */}
-        {ratio > 85 && !my_certificate && (
+        {/* {ratio > 85 && !my_certificate && (
           <CreateCertificate coursePageId={coursePage.id} studentId={me.id} />
-        )}
+        )} */}
       </Payment>
     );
   }

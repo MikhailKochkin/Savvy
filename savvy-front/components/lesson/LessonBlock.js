@@ -930,8 +930,6 @@ const LessonBlock = (props) => {
                 jsonStoryString={jsonStoryString}
               />
             )}
-            {console.log("data", data)}
-
             {(isSaved || d != null) &&
               data &&
               data.__typename.toLowerCase() == "construction" && (

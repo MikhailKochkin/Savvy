@@ -123,7 +123,6 @@ const UpdateProblem = (props) => {
   );
 
   const { t } = useTranslation("lesson");
-  console.log("updatedSteps", updatedSteps);
   const [updateProblem, { loading, error }] = useMutation(
     UPDATE_PROBLEM_MUTATION,
     {
@@ -151,16 +150,6 @@ const UpdateProblem = (props) => {
         props.switchUpdate();
       },
     }
-  );
-
-  console.log(
-    [...updatedSteps].map(({ content, next, ...keepAttrs }) => {
-      const { branches, ...nextWithoutBranches } = next || {};
-      return {
-        ...keepAttrs,
-        next: next ? { ...nextWithoutBranches, branchesInput: branches } : null,
-      };
-    })
   );
 
   const handleUpdate = async (e) => {

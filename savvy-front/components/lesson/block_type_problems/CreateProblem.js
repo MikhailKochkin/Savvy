@@ -566,7 +566,6 @@ const CreateProblem = (props) => {
       const data = await response.json();
       if (response.ok) {
         let updated_questions = JSON.parse(data.result.content);
-        console.log("updated_questions", updated_questions.steps);
         return updated_questions?.steps;
       } else {
         throw new Error(
@@ -610,7 +609,6 @@ const CreateProblem = (props) => {
         The total number of questions should be between 3 and 7.
     `;
 
-    console.log("chatPrompt", chatPrompt);
     try {
       const response = await fetch("/api/generateJson", {
         method: "POST",
@@ -704,7 +702,6 @@ const CreateProblem = (props) => {
         onClick={async (e) => {
           e.preventDefault();
           const res = await createProblem();
-          console.log("problem res", res);
           props.getResult(res);
         }}
       >

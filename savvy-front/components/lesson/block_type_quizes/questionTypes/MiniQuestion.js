@@ -235,10 +235,7 @@ const MiniQuestion = (props) => {
               : t("more_improvements")}
           </MiniAIButton>
         )}
-        {console.log(
-          correctnessLevel,
-          props.answer?.length / props.sampleAnswer?.length
-        )}
+
         {(correctnessLevel === "slightly_wrong" ||
           ((correctnessLevel === "wrong" ||
             correctnessLevel === "completely_wrong") &&

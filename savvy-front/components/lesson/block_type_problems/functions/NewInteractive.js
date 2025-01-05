@@ -254,7 +254,6 @@ const NewInteractive = (props) => {
               );
             } else if (com.type.toLowerCase() === "note") {
               let el = lesson.notes.filter((q) => q.id === com.id)[0];
-              console.log("note el", el);
               return (
                 <Note
                   id={el.id}

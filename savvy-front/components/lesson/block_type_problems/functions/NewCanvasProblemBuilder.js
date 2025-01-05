@@ -171,14 +171,12 @@ const MessageNode = ({ data, isConnectable }) => {
 const nodeTypes = { messageNode: MessageNode };
 
 const CanvasProblemBuilder = ({ items }) => {
-  console.log("items", items);
   const [nodes, setNodes, onNodesChange] = useNodesState(
     initializeMessages(items)
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(
     generateEdges(initializeMessages(items))
   );
-  console.log("nodes", nodes);
 
   return (
     <div style={{ width: "100%", height: "600px", border: "1px solid #ddd" }}>

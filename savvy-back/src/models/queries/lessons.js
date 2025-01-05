@@ -81,6 +81,11 @@ function lessonQueries(t) {
         include: {
           comments: true,
           user: true,
+          challengeResults: {
+            include: {
+              student: true, // Include the lessons field inside coursePage
+            },
+          },
           coursePage: {
             include: {
               lessons: true, // Include the lessons field inside coursePage
@@ -110,7 +115,12 @@ function lessonQueries(t) {
               user: true, // Include the lessons field inside coursePage
             },
           },
-          offers: true,
+          offers: {
+            include: {
+              user: true,
+              lesson: true, // Include the lessons field inside coursePage
+            },
+          },
           constructions: {
             include: {
               user: true, // Include the lessons field inside coursePage

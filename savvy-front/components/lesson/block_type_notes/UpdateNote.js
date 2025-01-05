@@ -382,16 +382,7 @@ const UpdateNote = (props) => {
 
   const handleUpdateNote = async (e) => {
     e.preventDefault();
-    console.log({
-      id,
-      text,
-      complexity,
-      isSecret,
-      type,
-      name,
-      horizontal_image: horizontalImage,
-      vertical_image: verticalImage,
-    });
+
     try {
       const res = await updateNote({
         variables: {

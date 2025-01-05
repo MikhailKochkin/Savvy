@@ -580,7 +580,6 @@ const NewSingleLesson = (props) => {
         <title>{lesson ? lesson.name : "Simulator"}</title>
         <meta name="description" content={lesson.description} />
       </Head>
-      {console.log(lesson)}
       <div id="root"></div>
       <>
         {lesson && (

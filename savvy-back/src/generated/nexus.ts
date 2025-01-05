@@ -893,21 +893,21 @@ export interface NexusGenObjects {
     vertical_image?: string | null; // String
   }
   Offer: { // root type
-    courseId?: number | null; // Int
+    courseId?: string | null; // String
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     discountPrice?: number | null; // Float
     header?: string | null; // String
     id?: string | null; // String
     lesson?: NexusGenRootTypes['Lesson'] | null; // Lesson
-    lessonId?: number | null; // Int
+    lessonId?: string | null; // String
     price?: number | null; // Float
     program?: NexusGenRootTypes['Program'] | null; // Program
-    programId?: number | null; // Int
+    programId?: string | null; // String
     text?: string | null; // String
     type?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     user?: NexusGenRootTypes['User'] | null; // User
-    userId?: number | null; // Int
+    userId?: string | null; // String
   }
   Order: { // root type
     comment?: string | null; // String
@@ -2086,21 +2086,21 @@ export interface NexusGenFieldTypes {
     vertical_image: string | null; // String
   }
   Offer: { // field return type
-    courseId: number | null; // Int
+    courseId: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     discountPrice: number | null; // Float
     header: string | null; // String
     id: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
-    lessonId: number | null; // Int
+    lessonId: string | null; // String
     price: number | null; // Float
     program: NexusGenRootTypes['Program'] | null; // Program
-    programId: number | null; // Int
+    programId: string | null; // String
     text: string | null; // String
     type: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
     user: NexusGenRootTypes['User'] | null; // User
-    userId: number | null; // Int
+    userId: string | null; // String
   }
   Order: { // field return type
     comment: string | null; // String
@@ -3330,21 +3330,21 @@ export interface NexusGenFieldTypeNames {
     vertical_image: 'String'
   }
   Offer: { // field return type name
-    courseId: 'Int'
+    courseId: 'String'
     createdAt: 'DateTime'
     discountPrice: 'Float'
     header: 'String'
     id: 'String'
     lesson: 'Lesson'
-    lessonId: 'Int'
+    lessonId: 'String'
     price: 'Float'
     program: 'Program'
-    programId: 'Int'
+    programId: 'String'
     text: 'String'
     type: 'String'
     updatedAt: 'DateTime'
     user: 'User'
-    userId: 'Int'
+    userId: 'String'
   }
   Order: { // field return type name
     comment: 'String'

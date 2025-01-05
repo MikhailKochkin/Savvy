@@ -375,7 +375,6 @@ const UpdateTest = (props) => {
           </Frame>
         </div>
       </Row>
-      {console.log("complexAnswers", complexAnswers)}
       <ActionButton
         onClick={async (e) => {
           e.preventDefault();

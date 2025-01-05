@@ -653,7 +653,6 @@ const CreateConstructor = (props) => {
       const data = await response.json();
       if (response.ok) {
         let new_construction = JSON.parse(data.result.content);
-        console.log("new_construction", new_construction);
         setElements(new_construction.elements);
         setColumnsNum(new_construction.columnsNum);
         // setText(new_case_study.introductory_text);

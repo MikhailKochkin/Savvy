@@ -209,12 +209,10 @@ const UpdateMessage = (props) => {
   ]);
 
   const updateMessage = (fields) => {
-    console.log("message", message);
     const updatedMessage = {
       ...message,
       ...fields, // Update multiple fields simultaneously
     };
-    console.log("updatedMessage", updatedMessage);
     setMessage(updatedMessage);
     props.passUpdatedMessage(updatedMessage, props.index);
   };

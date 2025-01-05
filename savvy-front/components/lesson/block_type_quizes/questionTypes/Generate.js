@@ -232,8 +232,6 @@ const Generate = (props) => {
       result: String(uv.result), // convert numeric to string
     }));
 
-    console.log("quizIdeas", quizIdeas);
-
     // Persist the quiz result with the matched answer included
     createQuizResult({
       variables: {

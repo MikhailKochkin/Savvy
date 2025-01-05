@@ -135,7 +135,6 @@ const RegisterCard = (props) => {
 
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
-  console.log("me", me);
   me &&
   me.orders.filter(
     (o) => o.coursePage.id === coursePage.id && o.isPaid === null

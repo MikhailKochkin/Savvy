@@ -719,7 +719,6 @@ const UserCard = memo((props) => {
         ))}
         <button
           onClick={async (e) => {
-            console.log(subject, message);
             const res = await sendMessage({
               variables: {
                 userId: props.id,
@@ -761,10 +760,8 @@ const UserCard = memo((props) => {
           {areCourseSettingsOpen && (
             <div>
               <h4>Курсы</h4>
-              {console.log(props.coursePages)}
               {props.coursePages.map((c) => {
                 const ids = props.new_subjects.map((course) => course.id);
-                console.log(ids, c.id, ids.includes(c.id));
                 return (
                   <div className="miniblock">
                     <div className="main">

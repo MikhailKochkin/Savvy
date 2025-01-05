@@ -1419,21 +1419,21 @@ type Note {
 }
 
 type Offer {
-  courseId: Int
+  courseId: String
   createdAt: DateTime
   discountPrice: Float
   header: String
   id: String
   lesson: Lesson
-  lessonId: Int
+  lessonId: String
   price: Float
   program: Program
-  programId: Int
+  programId: String
   text: String
   type: String
   updatedAt: DateTime
   user: User
-  userId: Int
+  userId: String
 }
 
 type Order {

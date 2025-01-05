@@ -170,7 +170,6 @@ const CreateSingleNote = (props) => {
       const data = await response.json();
       if (response.ok) {
         let new_longread = JSON.parse(data.result.content);
-        console.log(new_longread);
         setText(new_longread.text);
         //  setMessages(new_messages.content.messagesList);
         // setSimulatorStory(data.result.content);
@@ -185,7 +184,6 @@ const CreateSingleNote = (props) => {
       alert(error.message);
     }
   };
-  console.log("simulationStory", simulationStory);
   return (
     <Container>
       <Row>
