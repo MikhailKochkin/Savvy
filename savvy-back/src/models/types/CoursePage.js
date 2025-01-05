@@ -63,13 +63,13 @@ const CoursePage = objectType({
     t.string("currency"); // Currency
     t.boolean("installments"); // Installment availability
     t.list.string("tags"); // Tags
-    t.string("header"); // Header
+    t.list.string("header"); // Header
     t.int("view"); // View count
     t.list.string("countries"); // Supported countries
-    t.string("subheader"); // Subheader
+    t.list.string("subheader"); // Subheader
     t.field("nextStart", { type: "DateTime" }); // Next start date
     t.field("uptodateAt", { type: "DateTime" }); // Last updated date
-    t.string("goals"); // Goals
+    t.list.string("goals"); // Goals
     t.string("courseType"); // Course type
     // t.list.field("students", { type: "User" }); // Students
     t.list.field("new_students", { type: "User" }); // New students

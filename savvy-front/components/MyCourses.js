@@ -19,7 +19,7 @@ const MY_COURSE_PAGES_QUERY = gql`
         id
         forum {
           id
-          ratings {
+          rating {
             id
             rating
           }

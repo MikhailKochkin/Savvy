@@ -582,8 +582,8 @@ export interface NexusGenObjects {
     currency?: string | null; // String
     description?: string | null; // String
     discountPrice?: number | null; // Float
-    goals?: string | null; // String
-    header?: string | null; // String
+    goals?: Array<string | null> | null; // [String]
+    header?: Array<string | null> | null; // [String]
     id?: string | null; // String
     image?: string | null; // String
     installments?: boolean | null; // Boolean
@@ -599,7 +599,7 @@ export interface NexusGenObjects {
     published?: boolean | null; // Boolean
     result?: string | null; // String
     reviews?: NexusGenRootTypes['ReviewsList'] | null; // ReviewsList
-    subheader?: string | null; // String
+    subheader?: Array<string | null> | null; // [String]
     subscriptionPrice?: number | null; // Float
     tags?: Array<string | null> | null; // [String]
     title?: string | null; // String
@@ -1646,8 +1646,8 @@ export interface NexusGenFieldTypes {
     currency: string | null; // String
     description: string | null; // String
     discountPrice: number | null; // Float
-    goals: string | null; // String
-    header: string | null; // String
+    goals: Array<string | null> | null; // [String]
+    header: Array<string | null> | null; // [String]
     id: string | null; // String
     image: string | null; // String
     installments: boolean | null; // Boolean
@@ -1663,7 +1663,7 @@ export interface NexusGenFieldTypes {
     published: boolean | null; // Boolean
     result: string | null; // String
     reviews: NexusGenRootTypes['ReviewsList'] | null; // ReviewsList
-    subheader: string | null; // String
+    subheader: Array<string | null> | null; // [String]
     subscriptionPrice: number | null; // Float
     tags: Array<string | null> | null; // [String]
     title: string | null; // String

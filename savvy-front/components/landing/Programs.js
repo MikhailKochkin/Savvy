@@ -162,11 +162,11 @@ const Programs = (props) => {
     return;
   }
   const { loading, error, data } = useQuery(COURSES_QUERY);
-  const {
-    loading: loading1,
-    error: error1,
-    data: data1,
-  } = useQuery(PROGRAMS_QUERY);
+  // const {
+  //   loading: loading1,
+  //   error: error1,
+  //   data: data1,
+  // } = useQuery(PROGRAMS_QUERY);
 
   const [tag, setTag] = useState(
     router.locale == "ru" || props.isSubscriptionPage
@@ -180,7 +180,7 @@ const Programs = (props) => {
   });
 
   if (loading) return <LoadingDummy />;
-  if (loading1) return <LoadingDummy />;
+  // if (loading1) return <LoadingDummy />;
   if (!data || !data.coursePages)
     return (
       <ErrorMessage>

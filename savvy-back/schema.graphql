@@ -630,8 +630,8 @@ type CoursePage {
   currency: String
   description: String
   discountPrice: Float
-  goals: String
-  header: String
+  goals: [String]
+  header: [String]
   id: String
   image: String
   installments: Boolean
@@ -647,7 +647,7 @@ type CoursePage {
   published: Boolean
   result: String
   reviews: ReviewsList
-  subheader: String
+  subheader: [String]
   subscriptionPrice: Float
   tags: [String]
   title: String

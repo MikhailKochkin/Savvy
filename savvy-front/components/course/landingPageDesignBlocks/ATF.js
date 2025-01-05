@@ -8,7 +8,7 @@ import Loading from "../../layout/Loading";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+    coursePage(id: $id) {
       id
       title
       updatedAt

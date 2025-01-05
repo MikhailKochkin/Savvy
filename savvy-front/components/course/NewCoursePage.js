@@ -39,22 +39,15 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       id
       title
       price
-      prices
       promotionId
       discountPrice
       video
       audience
       result
       tags
-      tariffs
-      prices
       currency
       methods
-      reviews
       installments
-      subscriptionPrice
-      subscription
-      promocode
       published
       user {
         id
@@ -66,7 +59,11 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         type
         open
         description
-        structure
+        structure {
+          lessonItems {
+            id
+          }
+        }
         published
         coursePage {
           id
@@ -86,16 +83,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         surname
         image
         description
-        work
-        status
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
       }
       authors {
         id
@@ -106,14 +93,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         description
         status
         work
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
       }
     }
   }
