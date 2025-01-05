@@ -131,7 +131,11 @@ function lessonQueries(t) {
           forum: {
             include: {
               user: true,
-              rating: true,
+              rating: {
+                include: {
+                  user: true,
+                },
+              },
               statements: {
                 include: {
                   user: true,

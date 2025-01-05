@@ -11,6 +11,7 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CanvasProblemBuilder from "./functions/CanvasProblemBuilder";
 import { Row, ActionButton, SettingsBlock } from "../styles/DevPageStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
+import Loading from "../../layout/Loading";
 
 const Styles = styled.div`
   display: flex;
@@ -580,6 +581,7 @@ const CreateProblem = (props) => {
 
   const generateProblem = async (e) => {
     e.preventDefault();
+
     let chatPrompt = `
         You are building a block of a simulator that has the following background: """${previousStories.join(
           "\n"
@@ -607,6 +609,8 @@ const CreateProblem = (props) => {
 
         The total number of questions should be between 3 and 7.
     `;
+
+    console.log("chatPrompt", chatPrompt);
     try {
       const response = await fetch("/api/generateJson", {
         method: "POST",
@@ -677,7 +681,9 @@ const CreateProblem = (props) => {
             value={text}
           />
         </div>
-      ) : null}
+      ) : (
+        <Loading />
+      )}
       {!generating ? (
         <div className="canvas_container">
           <DndProvider backend={HTML5Backend}>

@@ -21,12 +21,7 @@ import LessonData from "../stats/DemoLessonData";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(
-      where: {
-        lesson: { id: { equals: $lessonId } }
-        student: { id: { equals: $userId } }
-      }
-    ) {
+    lessonResults(lessonId: $lessonId, userId: $userId) {
       id
       visitsNumber
       progress

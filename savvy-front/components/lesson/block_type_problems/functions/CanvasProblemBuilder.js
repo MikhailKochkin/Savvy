@@ -232,7 +232,6 @@ const SVGConnections = ({ messages, breakConnection }) => {
                   ? message.position.y + 150 + 40 - zoom_coef * 20
                   : message.position.y + 150 + 80 - zoom_coef * 20;
             }
-            console.log("zoom_coef", zoom_coef, zoom);
 
             // Define start and end points
 

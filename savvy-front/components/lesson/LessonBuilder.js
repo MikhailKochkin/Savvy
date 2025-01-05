@@ -212,7 +212,7 @@ const LessonBuilder = (props) => {
   // INFO DOE NEW BLOCKS AI GENERATION
   // 1. Create character string
   const cleanedCharacters = combinedCharacters.map(
-    ({ __typename, image, ...rest }) => rest
+    ({ __typename, ...rest }) => rest
   );
   const jsonCharactersString = JSON.stringify(cleanedCharacters);
 
@@ -255,7 +255,9 @@ const LessonBuilder = (props) => {
     return updatedItems;
   };
 
-  let currentStory = populateLessonStructure(lesson.structure.lessonItems);
+  let currentStory = lesson.structure
+    ? populateLessonStructure(lesson.structure?.lessonItems)
+    : [];
   const jsonStoryString = JSON.stringify(currentStory);
 
   return (

@@ -16,6 +16,7 @@ import {
   Buttons,
 } from "../styles/DevPageStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
+import Loading from "../../layout/Loading";
 
 const CREATE_CONSTRUCTION_MUTATION = gql`
   mutation CREATE_CONSTRUCION_MUTATION(
@@ -745,7 +746,7 @@ const CreateConstructor = (props) => {
           </div>
         </Row>
       </SettingsBlock>
-      {generating && <div>Generating...</div>}
+      {generating && <Loading />}
       {!generating && (
         <Block columns={columnsNum}>
           {elements.map((el, i) => (

@@ -8,6 +8,7 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateMessage from "./functions/CreateMessage";
 import { Row, ActionButton } from "../styles/DevPageStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
+import Loading from "../../layout/Loading";
 
 const CREATE_CHAT_MUTATION = gql`
   mutation CREATE_CHAT_MUTATION(
@@ -95,7 +96,15 @@ const Bottom = styled.div`
 `;
 
 const CreateChat = (props) => {
-  const { me, lessonData, initial_data, simulationStory } = props;
+  const {
+    me,
+    lessonData,
+    initial_data,
+    simulationStory,
+    jsonCharactersString,
+    jsonStoryString,
+    previousStories,
+  } = props;
   const [name, setName] = useState("");
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
@@ -111,11 +120,8 @@ const CreateChat = (props) => {
   }, [initial_data]);
 
   const updateMessageProperties = (message, index) => {
-    console.log("message", message);
-
     const updatedMessages = [...messages];
     updatedMessages[index] = message;
-    console.log("updatedMessages", updatedMessages);
     setMessages(updatedMessages);
   };
 
@@ -123,77 +129,81 @@ const CreateChat = (props) => {
     e.preventDefault();
 
     let chatPrompt = `
-              You are building a block of a simulator that has the following story: """${simulationStory}"""
-              This block type is Chat. Chat is a collection of messsages from different characters that explain complex topics through discussion.
-              
-              The topic and purpose of this chat block are: """${prompt}""".
+        You are building a block of a simulator that has the following background: """${previousStories.join(
+          "\n"
+        )}""", 
+        and the following current story: """${jsonStoryString}"""
+        The main character of the simulator are: """${jsonCharactersString}"""
+        This block type is Chat. Chat is a collection of messsages from different characters that explain complex topics through discussion.
+        
+        The topic and purpose of this chat block are: """${prompt}""".
 
-              Generate and return in JSON format a new chat using the information from the above.
-              If you want to address the student in the dialogue, use [name] to represent the student's name.
+        Generate and return in JSON format a new chat using the information from the above.
+        If you want to address the student in the dialogue, use [name] to represent the student's name.
 
-              The result must look like this:
+        The result must look like this:
 
-              Example 1:
-              Simulator story: "Jane is a law student who is heeting help from her tutor Jack"
-              Prompt: "Explain the concept of a contract in English law."
-              result: {
-                "content": {
-                  "messagesList": [
-                    {
-                      "author": "author",
-                      "text": "Hi [name]!Let's take a look at the most fundamental concept. The concept of a contract. Do you know what a contract is?"
-                      "image": "",
-                      "number": 1,
-                      "name": "Jack",
-                    },
-                    {
-                      "author": "student",
-                      "text": "Not really... Could you explain please?",
-                      "image": "",
-                      "number": 2,
-                      "name": "student",
-
-                    },
-                    {
-                      "author": "author",
-                      "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences.",
-                      "image": "",
-                      "number": 3,
-                      "name": "Jack",
-
-                    }
-                  ]
-                }
-              }
-
-              Example 2:
-              Simulator story: "Jane is a law student who is heeting help from her tutor Jack"
-              Prompt: "Explain the concept of a contract in English law."
+        Example 1:
+        Simulator story: "Jane is a law student who is heeting help from her tutor Jack"
+        Prompt: "Explain the concept of a contract in English law."
+        result: {
+          "content": {
+            "messagesList": [
               {
-                "idea": "The concept of a contract in English law",
-                "description": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other.",
-                "format": "chat",
-                "status: "generated",
-                "content": {
-                  "messagesList": [
-                    {
-                      "author": "student",
-                      "text": "Could you explain what a contract is?"
-                      "image": "",
-                      "number": 1,
-                      "name": "student",
+                "author": "author",
+                "text": "Hi [name]!Let's take a look at the most fundamental concept. The concept of a contract. Do you know what a contract is?"
+                "image": "", // add image link if you have it
+                "number": 1,
+                "name": "Jack",
+              },
+              {
+                "author": "student",
+                "text": "Not really... Could you explain please?",
+                "image": "", // avoid adding images to messages wher e the name is student or author
+                "number": 2,
+                "name": "student",
 
-                    },
-                    {
-                      "author": "author",
-                      "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences.",
-                      "image": "",
-                      "number": 2,
-                      "name": "Jack",
-                    }
-                  ]
-                }
+              },
+              {
+                "author": "author",
+                "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences.",
+                "image": "",
+                "number": 3,
+                "name": "Jack",
+
               }
+            ]
+          }
+        }
+
+        Example 2:
+        Simulator story: "Jane is a law student who is heeting help from her tutor Jack"
+        Prompt: "Explain the concept of a contract in English law."
+        {
+          "idea": "The concept of a contract in English law",
+          "description": "A contract is an agreement between two parties who have agreed to carry out certain obligations to each other.",
+          "format": "chat",
+          "status: "generated",
+          "content": {
+            "messagesList": [
+              {
+                "author": "student",
+                "text": "Could you explain what a contract is?"
+                "image": "",
+                "number": 1,
+                "name": "student",
+
+              },
+              {
+                "author": "author",
+                "text": "Of course. A contract is an agreement between two parties who have agreed to carry out certain obligations to each other. In simple words, it is a legally binding agreement between two or more parties. It outlines the rights and responsibilities of each party involved in the agreement. If any party fails to fulfill their obligations as stated in the contract, they can face legal consequences.",
+                "image": "",
+                "number": 2,
+                "name": "Jack",
+              }
+            ]
+          }
+        }
           `;
 
     try {
@@ -254,7 +264,7 @@ const CreateChat = (props) => {
           </ActionButton>
         </div>
       </Row>
-      {generating && <div>Generating the chat...</div>}
+      {generating && <Loading />}
       {!generating && (
         <>
           {messages.map((m, i) => (

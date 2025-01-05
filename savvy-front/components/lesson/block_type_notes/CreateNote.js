@@ -6,6 +6,7 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { useTranslation } from "next-i18next";
 import { Row, ActionButton } from "../styles/DevPageStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
+import Loading from "../../layout/Loading";
 
 const CREATE_NOTE_MUTATION = gql`
   mutation CREATE_NOTE_MUTATION(
@@ -47,7 +48,13 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 });
 
 const CreateSingleNote = (props) => {
-  const { lessonID, simulationStory } = props;
+  const {
+    lessonID,
+    simulationStory,
+    previousStories,
+    jsonStoryString,
+    jsonCharactersString,
+  } = props;
 
   const [name, setName] = useState("");
   const [text, setText] = useState("");
@@ -78,7 +85,12 @@ const CreateSingleNote = (props) => {
     e.preventDefault();
 
     let chatPrompt = `
-        You are building a block of a simulator that has the following story: """${simulationStory}"""
+        You are building a block of a simulator that has the following background: """${previousStories.join(
+          "\n"
+        )}""", 
+        and the following current story: """${jsonStoryString}"""
+        The main character of the simulator are: """${jsonCharactersString}"""
+        
         This block type is longread. Longread is a long document that is a collection of different types of media: text, tables, graphs, videos, etc.
               
         The topic and purpose of this longread block are: """${prompt}""".
@@ -207,7 +219,7 @@ const CreateSingleNote = (props) => {
           </ActionButton>
         </div>
       </Row>
-      {generating && <div>Generating the chat...</div>}
+      {generating && <Loading />}
       {!generating && (
         <>
           <Editor>

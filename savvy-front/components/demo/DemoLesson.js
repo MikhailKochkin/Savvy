@@ -8,13 +8,19 @@ import { TailSpin } from "react-loader-spinner";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
-    lesson(where: { id: $id }) {
+    lesson(id: $id) {
       id
       text
       name
       number
       type
-      structure
+      structure {
+        lessonItems {
+          id
+          type
+          comment
+        }
+      }
       change
       open
       totalPoints
@@ -34,7 +40,21 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         type
         isSecret
         complexity
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         user {
           id
         }
@@ -45,7 +65,14 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         isSecret
         link_clicks
         complexity
-        messages
+        messages {
+          messagesList {
+            author
+            name
+            text
+            image
+          }
+        }
         user {
           id
         }
@@ -54,7 +81,13 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
-        answers
+        answers {
+          answerElements {
+            answer
+            index
+            relatedAnswers
+          }
+        }
         complexity
         ifRight
         ifWrong
@@ -63,13 +96,34 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         name
         image
         goalType
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         user {
           id
         }
       }
       newTests {
+        id
         answers
+        complexTestAnswers {
+          complexTestAnswers {
+            id
+            answer
+          }
+        }
         type
         correct
         comments
@@ -80,7 +134,21 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         instructorName
         name
         image
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         id
         user {
           id
@@ -91,7 +159,27 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         text
         name
         nodeID
-        steps
+        steps {
+          problemItems {
+            id
+            type
+            next {
+              true {
+                type
+                value
+              }
+              false {
+                type
+                value
+              }
+              branches {
+                source
+                type
+                value
+              }
+            }
+          }
+        }
         complexity
         nodeType
         type
@@ -104,7 +192,26 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
-        elements
+        elements {
+          elements {
+            type
+            value
+            text
+            comment
+            place
+            size
+            rows
+            inDoc
+            isTest
+            edit
+            borders {
+              top
+              bottom
+              left
+              right
+            }
+          }
+        }
         columnsNum
         complexity
         variants

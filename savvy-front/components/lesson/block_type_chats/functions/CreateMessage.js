@@ -284,7 +284,7 @@ const CreateMessage = (props) => {
               }
             }}
           >
-            Add image
+            {message.image ? "Change image" : "Add image"}
           </button>
         </div>
         <div className="number">

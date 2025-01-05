@@ -553,6 +553,9 @@ const LessonBlock = (props) => {
                 getResult={getResult}
                 isSaved={isSaved}
                 simulationStory={simulationStory}
+                jsonCharactersString={jsonCharactersString}
+                jsonStoryString={jsonStoryString}
+                previousStories={props.previousStories}
                 initial_data={
                   initial_data && initial_data.format == "note"
                     ? initial_data
@@ -824,8 +827,11 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
                 characters={props.characters}
                 me={me}
-                prompt={props.prompt}
                 simulationStory={simulationStory}
+                jsonCharactersString={jsonCharactersString}
+                jsonStoryString={jsonStoryString}
+                previousStories={props.previousStories}
+                prompt={props.prompt}
                 initial_data={
                   initial_data && initial_data.format == "chat"
                     ? initial_data
