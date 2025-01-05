@@ -1,7 +1,7 @@
 import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
-import PleaseSignIn from "../auth/PleaseSignIn";
-import AreYouEnrolled from "../auth/AreYouEnrolled";
+import Head from "next/head";
+
 import { useUser } from "../User";
 import LessonBuilder from "./LessonBuilder";
 import Navigation from "./lesson_management/Navigation";
@@ -9,7 +9,7 @@ import LoadingText from "../layout/LoadingText";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: String!) {
-    lesson(where: { id: $id }) {
+    lesson(id: $id) {
       id
       text
       name
@@ -24,7 +24,18 @@ const SINGLE_LESSON_QUERY = gql`
       hasSecret
       challenge_num
       createdAt
-      structure
+      structure {
+        lessonItems {
+          id
+          type
+          comment
+        }
+      }
+      characters {
+        name
+        description
+        image
+      }
       assignment
       change
       user {
@@ -35,6 +46,15 @@ const SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
+        lessons {
+          number
+          characters {
+            name
+            description
+            image
+          }
+          story
+        }
       }
       comments {
         id
@@ -104,12 +124,6 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
       }
-      teamQuests {
-        id
-        introduction
-        solution
-        tasks
-      }
       notes {
         id
         name
@@ -118,7 +132,21 @@ const SINGLE_LESSON_QUERY = gql`
         complexity
         isSecret
         text
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         vertical_image
         horizontal_image
         user {
@@ -132,7 +160,21 @@ const SINGLE_LESSON_QUERY = gql`
         isSecret
         link_clicks
         complexity
-        messages
+
+        messages {
+          messagesList {
+            author
+            name
+            text
+            image
+            reactions {
+              reaction
+              comment
+              name
+              image
+            }
+          }
+        }
         user {
           id
         }
@@ -149,13 +191,33 @@ const SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         answer
-        answers
+        answers {
+          answerElements {
+            answer
+            relatedAnswers
+            index
+          }
+        }
         isOrderOfAnswersImportant
         shouldAnswerSizeMatchSample
         name
         image
         instructorName
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         createdAt
         user {
           id
@@ -163,17 +225,17 @@ const SINGLE_LESSON_QUERY = gql`
           surname
         }
       }
-      processManagers {
-        id
-        name
-        remainingResources
-        backgroundStory
-        nodes
-        edges
-        user {
-          id
-        }
-      }
+      # processManagers {
+      #   id
+      #   name
+      #   remainingResources
+      #   backgroundStory
+      #   nodes
+      #   edges
+      #   user {
+      #     id
+      #   }
+      # }
       documents {
         id
         title
@@ -262,7 +324,12 @@ const SINGLE_LESSON_QUERY = gql`
       newTests {
         id
         answers
-        complexTestAnswers
+        complexTestAnswers {
+          complexTestAnswers {
+            id
+            answer
+          }
+        }
         correct
         goal
         goalType
@@ -271,7 +338,21 @@ const SINGLE_LESSON_QUERY = gql`
         complexity
         ifRight
         ifWrong
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         name
         instructorName
         image
@@ -289,7 +370,27 @@ const SINGLE_LESSON_QUERY = gql`
         nodeID
         context
         complexity
-        steps
+        steps {
+          problemItems {
+            id
+            type
+            next {
+              true {
+                type
+                value
+              }
+              false {
+                type
+                value
+              }
+              branches {
+                source
+                type
+                value
+              }
+            }
+          }
+        }
         type
         nodeType
         user {
@@ -301,16 +402,31 @@ const SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
-        goal
-        complexity
-        elements
-        context
+        elements {
+          elements {
+            type
+            value
+            text
+            comment
+            place
+            size
+            rows
+            inDoc
+            isTest
+            edit
+            borders {
+              top
+              bottom
+              left
+              right
+            }
+          }
+        }
         columnsNum
+        complexity
         variants
         hint
         type
-        text
-        hasText
         user {
           id
         }
@@ -389,42 +505,6 @@ const Container = styled.div`
     .sidenav a {
       font-size: 18px;
     }
-  }
-`;
-
-const Head = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  cursor: pointer;
-  height: 10vh;
-  background-image: url("/static/pattern.svg");
-  background-size: cover;
-  width: 100vw;
-  font-size: 2rem;
-  padding: 0 20px;
-  #to_student_page {
-    width: 400px;
-    text-align: right;
-    font-size: 1.7rem;
-  }
-  span {
-    margin: 0 3%;
-    color: #fff;
-  }
-  #back {
-    &:hover {
-      color: #e4e4e4;
-    }
-    cursor: pointer;
-  }
-  @media (max-width: 800px) {
-    font-size: 1.6rem;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 1%;
   }
 `;
 
@@ -511,6 +591,10 @@ const SingleLesson = (props) => {
   }
   return (
     <Container>
+      <Head>
+        <title>Development Page</title>
+        <meta name="Development Page" content="Simulator Development Page" />
+      </Head>
       <Navigation
         i_am_author={true}
         lesson={lesson}

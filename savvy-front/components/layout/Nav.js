@@ -199,9 +199,12 @@ const DesktopMenu = styled.header`
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
+
     a {
       padding: 0;
       margin: 0;
+      min-width: 200px;
+      text-align: center;
       font-size: 1.6rem;
       transition: ease-in 0.5s;
 
@@ -372,16 +375,6 @@ const Nav = (props) => {
                   <a>{t("blog")}</a>
                 </div>
               </Link>
-              {me &&
-                me.status &&
-                me.status !== "STUDENT" &&
-                me.status !== "LAWYER" && (
-                  <Link legacyBehavior href="/coursesManagement">
-                    <div className="my">
-                      <a>{t("my_courses")}</a>
-                    </div>
-                  </Link>
-                )}
               {me && (
                 <Link
                   legacyBehavior
@@ -478,20 +471,7 @@ const Nav = (props) => {
                 <Link href="/">
                   <button onClick={(e) => closeNav()}>BeSavvy</button>
                 </Link>
-                {me && me.status === "AUTHOR" && (
-                  <Link href="/coursesManagement">
-                    <button onClick={(e) => closeNav()}>
-                      {t("my_courses")}
-                    </button>
-                  </Link>
-                )}
-                {me && me.status === "SAVVY_AUTHOR" && (
-                  <Link href="/coursesManagement">
-                    <button onClick={(e) => closeNav()}>
-                      {t("my_courses")}
-                    </button>
-                  </Link>
-                )}
+
                 <Link
                   href={{
                     pathname: "/blog",

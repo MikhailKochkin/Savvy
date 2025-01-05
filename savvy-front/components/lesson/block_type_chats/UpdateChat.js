@@ -5,18 +5,13 @@ import { useTranslation } from "next-i18next";
 
 import UpdateMessage from "./functions/UpdateMessage";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import {
-  Row,
-  ActionButton,
-  MicroButton,
-  SecondaryButton,
-} from "../styles/DevPageStyles";
+import { Row, ActionButton, SecondaryButton } from "../styles/DevPageStyles";
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION(
     $id: String!
     $name: String!
-    $messages: Messages!
+    $messages: MessagesInput!
     $type: String
   ) {
     updateChat(id: $id, name: $name, messages: $messages, type: $type) {
@@ -25,7 +20,18 @@ const UPDATE_CHAT_MUTATION = gql`
       type
       link_clicks
       complexity
-      messages
+      messages {
+        messagesList {
+          author
+          name
+          text
+          image
+          reactions {
+            reaction
+            comment
+          }
+        }
+      }
       user {
         id
       }
@@ -80,8 +86,6 @@ const UpdateChat = (props) => {
   const [type, setType] = useState(props.type);
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
-  // const [isSecret, setIsSecret] = useState(props.isSecret);
-
   const { t } = useTranslation("lesson");
   const [updateChat, { data, loading, error }] = useMutation(
     UPDATE_CHAT_MUTATION,
@@ -95,9 +99,9 @@ const UpdateChat = (props) => {
     }
   );
 
-  const updateMessageProperty = (val, i, property) => {
+  const updateMessageProperties = (message, index) => {
     const updatedMessages = [...mess];
-    updatedMessages[i] = { ...updatedMessages[i], [property]: val };
+    updatedMessages[index] = message;
     setMess(updatedMessages);
   };
 
@@ -133,8 +137,6 @@ const UpdateChat = (props) => {
                 }
               }
         `;
-
-    console.log("chatPrompt", chatPrompt);
 
     try {
       const response = await fetch("/api/generateJson", {
@@ -217,17 +219,11 @@ const UpdateChat = (props) => {
             author={m.author}
             text={m.text}
             name={m.name}
+            image={m.image}
+            characters={props.characters}
             isAiAssistantOn={m.isAiAssistantOn}
             reactions={m.reactions}
-            getMessage={(data) => updateMessageProperty(data, data.number - 1)}
-            updateAuthor={(val) => updateMessageProperty(val, i, "author")}
-            updateText={(val) => updateMessageProperty(val, i, "text")}
-            updateReaction={(val) => updateMessageProperty(val, i, "reactions")}
-            updateImage={(val) => updateMessageProperty(val, i, "image")}
-            updateName={(val) => updateMessageProperty(val, i, "name")}
-            updateAiAssistant={(val) =>
-              updateMessageProperty(val, i, "isAiAssistantOn")
-            }
+            passUpdatedMessage={updateMessageProperties}
           />
         ))}
       <Bottom>
@@ -261,12 +257,17 @@ const UpdateChat = (props) => {
         <ButtonTwo
           onClick={async (e) => {
             e.preventDefault();
+            console.log("mess", mess);
             const res = await updateChat({
               variables: {
                 id: props.id,
-                messages: { messagesList: mess },
+                messages: {
+                  messagesList: mess.map((m) => ({
+                    ...m,
+                    __typename: undefined,
+                  })),
+                },
                 name,
-                // isSecret,
                 type,
               },
             });

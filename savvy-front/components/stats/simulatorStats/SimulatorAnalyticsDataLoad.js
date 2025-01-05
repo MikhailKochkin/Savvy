@@ -8,9 +8,7 @@ import { useUser } from "../../User";
 
 const STUDENTS_QUERY = gql`
   query STUDENTS_QUERY($lessonId: String!) {
-    users(
-      where: { lessonResults: { some: { lessonId: { equals: $lessonId } } } }
-    ) {
+    studentsAnalytics(lessonId: $lessonId) {
       id
       name
       surname
@@ -28,7 +26,7 @@ const STUDENTS_QUERY = gql`
       }
       courseVisits {
         id
-        reminders
+        # reminders
         visitsNumber
         coursePage {
           id
@@ -55,7 +53,7 @@ const STUDENTS_QUERY = gql`
 
 const LESSONS_QUERY = gql`
   query LESSONS_QUERY($id: String!) {
-    lessons(where: { id: { equals: $id } }) {
+    lessons(id: $id) {
       id
       text
       name
@@ -70,7 +68,13 @@ const LESSONS_QUERY = gql`
         name
         surname
       }
-      structure
+      structure {
+        lessonItems {
+          id
+          type
+          comment
+        }
+      }
       coursePage {
         id
       }
@@ -86,29 +90,29 @@ const LESSONS_QUERY = gql`
           id
         }
       }
-      #   lessonResults {
-      #     id
-      #     progress
-      #     createdAt
-      #     updatedAt
-      #     student {
-      #       id
-      #       name
-      #       surname
-      #       number
-      #       email
-      #       new_subjects {
-      #         id
-      #       }
-      #     }
-      #   }
+      lessonResults {
+        id
+        progress
+        createdAt
+        updatedAt
+        student {
+          id
+          name
+          surname
+          number
+          email
+          new_subjects {
+            id
+          }
+        }
+      }
       newTests {
         id
         name
         question
         answers
         correct
-        next
+        # next
         type
         goal
       }
@@ -117,16 +121,21 @@ const LESSONS_QUERY = gql`
         name
         question
         answer
-        answers
-        next
+        answers {
+          answerElements {
+            answer
+            index
+          }
+        }
+        # next
         type
         goal
       }
       testPractices {
         id
-        tasks
+        # tasks
         goal
-        tasksNum
+        # tasksNum
         intro
         successText
         failureText
@@ -142,33 +151,40 @@ const LESSONS_QUERY = gql`
           }
         }
       }
-      # documents {
-      #   id
-      #   title
-      #   documentResults {
-      #     id
-      #     user {
-      #       id
-      #     }
-      #     document {
-      #       id
-      #     }
-      #     answers
-      #     drafts
-      #     createdAt
-      #   }
-      # }
+      documents {
+        id
+        title
+        documentResults {
+          id
+          user {
+            id
+          }
+          document {
+            id
+          }
+          answers
+          drafts
+          createdAt
+        }
+      }
       notes {
         id
         name
         text
         type
-        next
+        # next
       }
       chats {
         id
         name
-        messages
+        messages {
+          messagesList {
+            author
+            name
+            text
+            image
+          }
+        }
         user {
           id
         }
@@ -176,7 +192,12 @@ const LESSONS_QUERY = gql`
       problems {
         id
         text
-        steps
+        steps {
+          problemItems {
+            id
+            type
+          }
+        }
         nodeID
         nodeType
         goal
@@ -193,7 +214,26 @@ const LESSONS_QUERY = gql`
         id
         name
         variants
-        elements
+        elements {
+          elements {
+            type
+            value
+            text
+            comment
+            place
+            size
+            rows
+            inDoc
+            isTest
+            edit
+            borders {
+              top
+              bottom
+              left
+              right
+            }
+          }
+        }
         columnsNum
         answer
         goal
@@ -237,7 +277,7 @@ const SingleLessonAnalyticsDataLoad = (props) => {
 
   if (loading1 || loading2) return <Loading />;
 
-  let students = data1?.users;
+  let students = data1?.studentsAnalytics;
   let lesson = data2?.lessons[0];
 
   return (

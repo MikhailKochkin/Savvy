@@ -335,7 +335,7 @@ const SingleProblem = (props) => {
     });
     if (
       props.moveNext &&
-      (problem?.steps?.problemItems.length == 0 || !problem?.steps)
+      (problem?.steps?.problemItems?.length == 0 || !problem?.steps)
     )
       props.moveNext(props.id);
   }, []);
@@ -379,7 +379,8 @@ const SingleProblem = (props) => {
               onFinish={onFinish}
             />
           )}
-          {problem.steps && problem.steps.problemItems.length >= 1 && (
+
+          {problem.steps && problem.steps.problemItems?.length >= 1 && (
             <NewInteractive
               lesson={lesson}
               me={me}
@@ -391,7 +392,7 @@ const SingleProblem = (props) => {
               context={lesson.context ? lesson.context : ""}
             />
           )}
-          {(!problem.steps || problem.steps.problemItems.length == 0) && (
+          {(!problem.steps || problem.steps.problemItems?.length == 0) && (
             <ResponseArea>
               <h2>{t("write_answer")}</h2>
               <Frame story={story}>

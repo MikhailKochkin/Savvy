@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { useMutation, useQuery, useLazyQuery, gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";

@@ -31,7 +31,7 @@ export const PayBox = styled.div`
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+    coursePage(id: $id) {
       id
       title
       published
@@ -41,16 +41,16 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         surname
         image
         description
-        work
-        status
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
+        # work
+        # status
+        # uni {
+        #   id
+        #   title
+        # }
+        # company {
+        #   id
+        #   name
+        # }
       }
       authors {
         id
@@ -59,14 +59,14 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         image
         description
         status
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
+        # uni {
+        #   id
+        #   title
+        # }
+        # company {
+        #   id
+        #   name
+        # }
       }
       lessons {
         id
@@ -82,19 +82,19 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($coursePageId: String!, $userId: String!) {
-    lessonResults(
-      where: {
-        lesson: { coursePageId: { equals: $coursePageId } }
-        student: { id: { equals: $userId } }
-      }
-    ) {
+    lessonResults(coursePageId: $coursePageId, userId: $userId) {
       id
       visitsNumber
       progress
       lesson {
         id
         name
-        structure
+        structure {
+          lessonItems {
+            type
+            id
+          }
+        }
         type
         number
       }
@@ -122,7 +122,6 @@ const ToolsBox = (props) => {
     fetchQuery,
     { loading: stats_loading, error: stats_error, data: stats_data },
   ] = useLazyQuery(LESSON_RESULTS_QUERY);
-
   useEffect(() => {
     // when the first query is loaded, then fire this lazy query function
     if (me) {

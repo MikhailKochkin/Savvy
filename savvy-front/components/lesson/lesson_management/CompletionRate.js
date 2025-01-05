@@ -2,17 +2,16 @@ import { useQuery, gql } from "@apollo/client";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(
-      where: {
-        lesson: { id: { equals: $lessonId } }
-        student: { id: { equals: $userId } }
-      }
-    ) {
+    lessonResults(lessonId: $lessonId, userId: $userId) {
       id
       progress
       lesson {
         id
-        structure
+        structure {
+          lessonItems {
+            id
+          }
+        }
       }
     }
   }

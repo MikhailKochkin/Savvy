@@ -31,31 +31,15 @@ const CURRENT_USER_QUERY = gql`
         term
         startDate
         paymentID
-        renewals
+        renewals {
+          date
+          type
+          price
+        }
         endDate
         createdAt
         updatedAt
       }
-      # teams {
-      #   id
-      #   name
-      #   users {
-      #     id
-      #     name
-      #     surname
-      #     image
-      #   }
-      # }
-      # myTeams {
-      #   id
-      #   name
-      #   users {
-      #     id
-      #     name
-      #     surname
-      #     image
-      #   }
-      # }
       certificates {
         id
         createdAt
@@ -65,7 +49,9 @@ const CURRENT_USER_QUERY = gql`
       }
       courseVisits {
         id
-        reminders
+        # reminders {
+        #   id
+        # }
         coursePage {
           id
         }
@@ -102,9 +88,9 @@ const CURRENT_USER_QUERY = gql`
         name
       }
       status
-      # lessonResults {
-      #   id
-      # }
+      lessonResults {
+        id
+      }
       orders {
         id
         coursePage {
@@ -124,7 +110,7 @@ const CURRENT_USER_QUERY = gql`
       #   id
       # }
       # }
-      # isFamiliar
+      isFamiliar
       # favourites
       # coverLetter
       # resume
@@ -141,10 +127,6 @@ const CURRENT_USER_QUERY = gql`
       subscriptions {
         id
       }
-      # careerTrack {
-      #   id
-      # }
-      # careerTrackID
     }
   }
 `;

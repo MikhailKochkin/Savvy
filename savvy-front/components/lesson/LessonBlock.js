@@ -112,6 +112,8 @@ const LessonBlock = (props) => {
     lessonData,
     initial_data,
     simulationStory,
+    jsonCharactersString,
+    jsonStoryString,
   } = props;
   const [isSaved, setIsSaved] = useState(saved);
   const [isAdded, setIsAdded] = useState(saved);
@@ -171,8 +173,10 @@ const LessonBlock = (props) => {
   useEffect(() => {
     if (props.initial_data?.format) {
       setType(props.initial_data?.format);
+    } else if (el_type) {
+      setType(el_type);
     }
-  }, [props.initial_data]);
+  }, [props.initial_data, el_type]);
 
   const addBlock = (type) => {
     setType(type);
@@ -543,7 +547,7 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "note" && (
           <>
-            {!isSaved && el.id == undefined && (
+            {!isSaved && d == null && (
               <CreateNote
                 lessonID={lesson.id}
                 getResult={getResult}
@@ -577,11 +581,12 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "shot" && (
           <>
-            {!isSaved && el.id == undefined && (
+            {!isSaved && d == null && (
               <CreateShot
                 lessonID={lesson.id}
                 getResult={getResult}
                 isSaved={isSaved}
+                simulationStory={simulationStory}
                 initial_data={
                   initial_data && initial_data.format == "shot"
                     ? initial_data
@@ -611,9 +616,13 @@ const LessonBlock = (props) => {
         )}
         {type.toLowerCase() == "problem" && (
           <>
-            {!isSaved && el.id == undefined && (
+            {!isSaved && d == null && (
               <CreateProblem
                 simulationStory={simulationStory}
+                jsonCharactersString={jsonCharactersString}
+                jsonStoryString={jsonStoryString}
+                previousStories={props.previousStories}
+                characters={props.characters}
                 lessonID={lesson.id}
                 getResult={getResult}
                 lesson={lesson}
@@ -646,7 +655,6 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
               />
             )}
-
             {(isSaved || d != null) && data && data.__typename == "NewTest" && (
               <SingleTest
                 key={data.id}
@@ -814,6 +822,7 @@ const LessonBlock = (props) => {
                 lessonData={lessonData}
                 getResult={getResult}
                 isSaved={isSaved}
+                characters={props.characters}
                 me={me}
                 prompt={props.prompt}
                 simulationStory={simulationStory}
@@ -829,6 +838,7 @@ const LessonBlock = (props) => {
                 name={data.name}
                 me={me}
                 author={lesson.user}
+                characters={props.characters}
                 isSecret={data.isSecret}
                 type={data.type}
                 user={lesson.user.id}
@@ -841,6 +851,7 @@ const LessonBlock = (props) => {
             )}
           </>
         )}
+
         {type.toLowerCase() == "texteditor" && (
           <>
             {!isSaved && d == null && (
@@ -908,8 +919,13 @@ const LessonBlock = (props) => {
                 lessonID={lesson.id}
                 getResult={getResult}
                 isSaved={isSaved}
+                previousStories={props.previousStories}
+                jsonCharactersString={jsonCharactersString}
+                jsonStoryString={jsonStoryString}
               />
             )}
+            {console.log("data", data)}
+
             {(isSaved || d != null) &&
               data &&
               data.__typename.toLowerCase() == "construction" && (
@@ -931,7 +947,7 @@ const LessonBlock = (props) => {
                       key={data.id}
                       lessonID={lesson.id}
                       construction={data}
-                      elements={data.elements.elements}
+                      elements={data.elements?.elements}
                       complexity={data.complexity}
                       lesson={lesson}
                       me={me}

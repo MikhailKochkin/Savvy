@@ -37,7 +37,6 @@ const UPDATE_NOTE_MUTATION = gql`
       id
       text
       name
-      next
       type
       complexity
       isSecret

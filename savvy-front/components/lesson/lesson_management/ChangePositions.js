@@ -4,8 +4,11 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { gql, useMutation } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
-import { Title, ActionButton } from "./../styles/DevPageStyles";
-
+import { ActionButton, SecondaryButton } from "./../styles/DevPageStyles";
+import {
+  autoResizeTextarea,
+  adjustTextareaHeight,
+} from "./../SimulatorDevelopmentFunctions";
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure!) {
     updateLesson(id: $id, structure: $structure) {
@@ -16,16 +19,14 @@ const UPDATE_LESSON_MUTATION = gql`
 
 const Styles = styled.div`
   width: 660px;
-  border: 2px solid #f1f1f1;
   background: #fff;
   border-radius: 20px;
-  margin: 40px 0;
-  padding: 20px;
+  margin: 20px 0;
   h2 {
     font-size: 2rem;
     font-weight: 600;
   }
-  textarea {
+  /* textarea {
     width: 550px;
     height: 220px;
     padding: 1rem;
@@ -34,7 +35,7 @@ const Styles = styled.div`
     font-family: Montserrat;
     border-radius: 5px;
     outline: none;
-  }
+  } */
 `;
 
 const DownArrow = styled.span`
@@ -59,11 +60,77 @@ const DragIcon = styled.img`
 
 const MovableButton = styled.div`
   line-height: 1.6;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  border: 1px solid #ccc;
+  font-size: 1.4rem;
+  width: 90%;
+  .number {
+    width: 5%;
+    margin-right: 5px;
+    border-right: 1px solid #ccc;
+  }
+  .type {
+    width: 20%;
+    select {
+      border: none;
+      display: inline-block;
+      background: none;
+      outline: 0;
+      width: 90%;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      text-indent: 0.01px;
+      text-overflow: "";
+      cursor: pointer;
+    }
+  }
+  .comment {
+    width: 70%;
+    margin-right: 5px;
+    border-left: 1px solid #ccc;
+
+    border-right: 1px solid #ccc;
+    textarea {
+      border: none;
+      font-family: Montserrat;
+      font-size: 1.2rem;
+      line-height: 1.4;
+      width: 95%;
+      height: 20px;
+      outline: 0;
+      margin: 0 5px;
+    }
+  }
+  .navigation {
+    width: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    button {
+      margin-bottom: 5px;
+      font-size: 1.2rem;
+    }
+  }
 `;
 
 const ItemType = "ITEM";
 
-const DraggableItem = ({ item, index, moveItem, lesson }) => {
+const DraggableItem = ({
+  item,
+  index,
+  moveItem,
+  lesson,
+  passCommentUpdates,
+  passTypeUpdates,
+  passDeleteItem,
+  passCreateNewItem,
+}) => {
   const [, ref] = useDrag({
     type: ItemType,
     item: { index },
@@ -92,6 +159,27 @@ const DraggableItem = ({ item, index, moveItem, lesson }) => {
     });
   };
 
+  const getCommentUpdates = (index, value) => {
+    passCommentUpdates(index, value);
+  };
+
+  const getTypeUpdates = (index, value) => {
+    passTypeUpdates(index, value);
+  };
+
+  const getCreateNewItem = (index) => {
+    passCreateNewItem(index);
+  };
+
+  const getDeleteItem = (index) => {
+    passDeleteItem(index);
+  };
+
+  useEffect(() => {
+    const textareas = document.querySelectorAll(".dynamic-textarea");
+    textareas.forEach((textarea) => adjustTextareaHeight(textarea));
+  }, [item.comment]); // Run this effect whenever answers change
+
   return (
     <Row ref={(node) => ref(drop(node))}>
       <DragIcon
@@ -110,72 +198,77 @@ const DraggableItem = ({ item, index, moveItem, lesson }) => {
           cursor: "move",
         }}
       >
-        {index + 1}.{" "}
-        {item.type?.toLowerCase() == "chat"
-          ? `Chat: ${
-              lesson.chats.find((ch) => ch.id == item.id)?.name || "Chat"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "shot"
-          ? `Deck: ${
-              lesson.shots.find((ch) => ch.id == item.id)?.name || "Deck"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "note"
-          ? `Longread: ${
-              lesson.notes.find((ch) => ch.id == item.id)?.name || "Longread"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "newtest"
-          ? `Quiz: ${
-              lesson.newTests.find((ch) => ch.id == item.id)?.name || "Quiz"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "quiz"
-          ? `Question: ${
-              lesson.quizes.find((ch) => ch.id == item.id)?.name || "Question"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "problem"
-          ? `Case Study: ${
-              lesson.problems.find((ch) => ch.id == item.id)?.name ||
-              "Case Study"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "texteditor"
-          ? `Doc Editor: ${
-              lesson.texteditors.find((ch) => ch.id == item.id)?.name ||
-              "Doc Editor"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "construction"
-          ? `Doc Builder: ${
-              lesson.constructions.find((ch) => ch.id == item.id)?.name ||
-              "Doc Builder"
-            }`
-          : null}
-        {item.type?.toLowerCase() == "testpractice" && "Chain of questions"}
-        {item.type?.toLowerCase() == "forum" ? `Q&A` : null}
-        {item?.id ? (
-          <DownArrow onClick={(e) => slide(item.id)}>⬇️</DownArrow>
-        ) : null}
+        <div className="number">{index + 1}. </div>
+        <div className="type">
+          <select
+            className="type"
+            name="itemType"
+            id="itemType"
+            value={item.type}
+            onChange={(e) => getTypeUpdates(index, e.target.value)}
+          >
+            <option value="Chat">Chat</option>
+            <option value="Shot">Slides</option>
+            <option value="Note">Longread</option>
+            <option value="NewTest">Quiz</option>
+            <option value="Quiz">Question</option>
+            <option value="Problem">Case Study</option>
+            <option value="Texteditor">Doc Editor</option>
+            <option value="Construction">Doc Builder</option>
+            <option value="Forum">QA</option>
+          </select>
+        </div>
+        <div className="comment">
+          <textarea
+            className="dynamic-textarea"
+            value={item.comment}
+            onChange={(e) => {
+              getCommentUpdates(index, e.target.value);
+            }}
+            onInput={autoResizeTextarea}
+          />
+        </div>
+        <div className="navigation">
+          {item?.id ? (
+            <DownArrow onClick={(e) => slide(item.id)}>⬇️</DownArrow>
+          ) : null}
+          <button
+            onClick={() => getDeleteItem(index)}
+            style={{ marginLeft: "10px", color: "red" }}
+          >
+            D
+          </button>
+          <button
+            onClick={() => getCreateNewItem(index + 1)}
+            style={{ marginLeft: "10px", color: "green" }}
+          >
+            A
+          </button>
+        </div>
+        {/* Render children */}
       </MovableButton>
     </Row>
   );
 };
 
-const ChangePositions = ({ initialItems, onItemsUpdate, lessonId, lesson }) => {
+const ChangePositions = ({
+  initialItems,
+  onItemsUpdate,
+  lessonId,
+  lesson,
+  passNewBlockInfo,
+}) => {
   const [items, setItems] = useState(initialItems);
   const [updateLesson, { loading }] = useMutation(UPDATE_LESSON_MUTATION);
 
-  const saveLessonStructure = (newItems) => {
-    updateLesson({
-      variables: {
-        id: lessonId,
-        structure: { lessonItems: newItems },
-      },
-    }).catch((err) => console.error("Failed to save:", err));
-  };
+  // const saveLessonStructure = (newItems) => {
+  //   updateLesson({
+  //     variables: {
+  //       id: lessonId,
+  //       structure: { lessonItems: newItems },
+  //     },
+  //   }).catch((err) => console.error("Failed to save:", err));
+  // };
 
   useEffect(() => {
     setItems(initialItems);
@@ -186,14 +279,42 @@ const ChangePositions = ({ initialItems, onItemsUpdate, lessonId, lesson }) => {
     const [movedItem] = updatedItems.splice(fromIndex, 1);
     updatedItems.splice(toIndex, 0, movedItem);
     setItems(updatedItems);
-    saveLessonStructure(updatedItems);
+    passNewBlockInfo(updatedItems);
+    // saveLessonStructure(updatedItems);
+  };
+
+  const passCommentUpdates = (index, value) => {
+    const updatedItems = [...items];
+    updatedItems[index].comment = value;
+    passNewBlockInfo(updatedItems);
+  };
+
+  const passTypeUpdates = (index, value) => {
+    const updatedItems = [...items];
+    updatedItems[index].type = value;
+    passNewBlockInfo(updatedItems);
+  };
+  const createNewItem = (position) => {
+    const newItem = {
+      id: `new-${Date.now()}`, // Unique ID for the new item
+      type: "chat", // Default type
+      comment: "", // Default comment
+    };
+    const updatedItems = [...items];
+    updatedItems.splice(position, 0, newItem); // Insert the new item at the specified position
+    setItems(updatedItems);
+    passNewBlockInfo(updatedItems);
+  };
+
+  const deleteItem = (index) => {
+    const updatedItems = items.filter((_, i) => i !== index);
+    setItems(updatedItems);
+    passNewBlockInfo(updatedItems);
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Styles style={{ padding: "20px" }}>
-        <Title>Change blocks' positions</Title>
-
+      <Styles>
         {items.map((item, index) => (
           <DraggableItem
             key={item.id}
@@ -201,8 +322,16 @@ const ChangePositions = ({ initialItems, onItemsUpdate, lessonId, lesson }) => {
             item={item}
             moveItem={moveItem}
             lesson={lesson}
+            passCommentUpdates={passCommentUpdates}
+            passTypeUpdates={passTypeUpdates}
+            passDeleteItem={deleteItem}
+            passCreateNewItem={createNewItem}
           />
         ))}
+        <br />
+        <ActionButton onClick={() => createNewItem(items.length)}>
+          Add New Item
+        </ActionButton>
         <ActionButton onClick={(e) => onItemsUpdate(items)}>Save</ActionButton>
       </Styles>
     </DndProvider>

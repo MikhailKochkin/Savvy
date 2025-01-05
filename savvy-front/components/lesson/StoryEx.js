@@ -20,12 +20,7 @@ import TestPractice from "./block_type_testblocks/TB";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(
-      where: {
-        lesson: { id: { equals: $lessonId } }
-        student: { id: { equals: $userId } }
-      }
-    ) {
+    lessonResults(lessonId: $lessonId, userId: $userId) {
       id
       visitsNumber
       progress
@@ -476,38 +471,38 @@ const StoryEx = (props) => {
       );
       components.push(item);
       move_statuses.push(true);
-    } else if (task.type.toLowerCase() === "construction") {
-      el = lesson.constructions.find((con) => con.id === task.id);
-      if (!el) return;
+      // } else if (task.type.toLowerCase() === "construction") {
+      // el = lesson.constructions.find((con) => con.id === task.id);
+      // if (!el) return;
 
-      item =
-        el.elements !== null ? (
-          <NewConstructor
-            key={el.id}
-            id={el.id}
-            lessonID={lesson.id}
-            construction={el}
-            complexity={el.complexity}
-            me={me}
-            context={el.context}
-            story={true}
-            elements={el.elements.elements}
-          />
-        ) : (
-          <SingleConstructor
-            key={el.id}
-            id={el.id}
-            lessonID={lesson.id}
-            complexity={el.complexity}
-            construction={el}
-            variants={el.variants}
-            me={me}
-            arr={Array(el.answer.length).fill("")}
-            story={true}
-          />
-        );
-      components.push(item);
-      move_statuses.push(true);
+      // item =
+      //   el.elements !== null ? (
+      //     <NewConstructor
+      //       key={el.id}
+      //       id={el.id}
+      //       lessonID={lesson.id}
+      //       construction={el}
+      //       complexity={el.complexity}
+      //       me={me}
+      //       context={el.context}
+      //       story={true}
+      //       elements={el.elements.elements}
+      //     />
+      //   ) : (
+      //     <SingleConstructor
+      //       key={el.id}
+      //       id={el.id}
+      //       lessonID={lesson.id}
+      //       complexity={el.complexity}
+      //       construction={el}
+      //       variants={el.variants}
+      //       me={me}
+      //       arr={Array(el.answer.length).fill("")}
+      //       story={true}
+      //     />
+      //   );
+      // components.push(item);
+      // move_statuses.push(true);
     } else if (task.type.toLowerCase() === "document") {
       el = lesson.documents.find((con) => con.id === task.id);
       if (!el) return;

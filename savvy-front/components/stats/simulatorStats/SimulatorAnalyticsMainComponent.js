@@ -10,7 +10,7 @@ import HeaderStats from "./headerNumbers/HeaderStats"; // Import the new HeaderS
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!) {
-    lessonResults(where: { lessonId: { equals: $lessonId } }) {
+    lessonResults(lessonId: $lessonId) {
       id
       visitsNumber
       progress
@@ -18,7 +18,12 @@ const LESSON_RESULTS_QUERY = gql`
       lesson {
         id
         name
-        structure
+        structure {
+          lessonItems {
+            id
+            type
+          }
+        }
         published
         type
         number
@@ -123,7 +128,6 @@ const SimulatorAnalyticsMainComponent = (props) => {
     const studentExists = customResults.some(
       (result) => result.student.id === id
     );
-    console.log("studentExists", studentExists);
     if (studentExists) {
       let newCustomResults = [...customResults];
       newCustomResults = newCustomResults.filter(

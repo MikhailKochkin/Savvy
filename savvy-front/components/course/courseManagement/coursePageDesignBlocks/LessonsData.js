@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import styled from "styled-components";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
-import Feedback from "../Feedback";
+// import Feedback from "../Feedback";
 import Loading from "../../../layout/Loading";
 import LessonHeader from "../../../lesson/LessonHeader";
 import LessonRow from "../../../lesson/LessonRow";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+    coursePage(id: $id) {
       id
       lessons {
         id
@@ -18,7 +18,12 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         tags
         type
         open
-        structure
+        structure {
+          lessonItems {
+            type
+            id
+          }
+        }
         description
         published
         coursePage {
@@ -109,15 +114,6 @@ export const Total = styled.div`
     margin-bottom: 6%;
     line-height: 1.4;
   }
-`;
-
-const Comment = styled.div`
-  font-size: 1.6rem;
-  background: #0268e6;
-  color: white;
-  padding: 2% 3%;
-  margin-top: 3%;
-  text-align: center;
 `;
 
 const Lessons = styled.div`
@@ -414,7 +410,7 @@ const LessonsData = (props) => {
         </>
       )}
 
-      {me && isEnrolled ? (
+      {/* {me && isEnrolled ? (
         <>
           {me.studentFeedback.filter(
             (f) => f.lesson.coursePage.id == coursePage.id
@@ -427,7 +423,7 @@ const LessonsData = (props) => {
               <Feedback feedback={feedback} />
             ))}
         </>
-      ) : null}
+      ) : null} */}
     </LessonsInfo>
   );
 };

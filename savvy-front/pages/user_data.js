@@ -6,10 +6,7 @@ import { useUser } from "../components/User";
 
 const CLIENTS_QUERY = gql`
   query CLIENTS_QUERY($initialDate: DateTime!, $lastDate: DateTime!) {
-    users(
-      where: { createdAt: { gte: $initialDate, lte: $lastDate } }
-      orderBy: { createdAt: desc }
-    ) {
+    users(initialDate: $initialDate, lastDate: $lastDate) {
       id
       name
       surname
@@ -25,7 +22,11 @@ const CLIENTS_QUERY = gql`
         term
         startDate
         paymentID
-        renewals
+        renewals {
+          date
+          type
+          price
+        }
         endDate
         createdAt
         updatedAt
@@ -72,7 +73,7 @@ const CLIENTS_QUERY = gql`
         isPaid
         createdAt
       }
-      traffic_sources
+      # traffic_sources
       createdAt
       updatedAt
       messages {
@@ -87,7 +88,7 @@ const CLIENTS_QUERY = gql`
 
 const CLIENTS_EMAIL_QUERY = gql`
   query CLIENTS_EMAIL_QUERY($email: String!) {
-    users(where: { email: { equals: $email } }) {
+    users(email: $email) {
       id
       name
       surname
@@ -102,7 +103,11 @@ const CLIENTS_EMAIL_QUERY = gql`
         type
         startDate
         paymentID
-        renewals
+        renewals {
+          date
+          type
+          price
+        }
         endDate
         createdAt
         updatedAt
@@ -149,7 +154,7 @@ const CLIENTS_EMAIL_QUERY = gql`
         isPaid
         createdAt
       }
-      traffic_sources
+      # traffic_sources
       createdAt
       updatedAt
       messages {
@@ -164,7 +169,7 @@ const CLIENTS_EMAIL_QUERY = gql`
 
 const CLIENTS_TAGS_QUERY = gql`
   query CLIENTS_TAGS_QUERY {
-    users(where: { subscriptions: { some: {} } }) {
+    subscribers {
       id
       name
       surname
@@ -179,7 +184,11 @@ const CLIENTS_TAGS_QUERY = gql`
         type
         startDate
         paymentID
-        renewals
+        renewals {
+          date
+          type
+          price
+        }
         endDate
         createdAt
         updatedAt
@@ -226,7 +235,7 @@ const CLIENTS_TAGS_QUERY = gql`
         isPaid
         createdAt
       }
-      traffic_sources
+      # traffic_sources
       createdAt
       updatedAt
       messages {
@@ -241,7 +250,7 @@ const CLIENTS_TAGS_QUERY = gql`
 
 const CLIENTS_ACTIVE_QUERY = gql`
   query CLIENTS_ACTIVE_QUERY($date: DateTime!) {
-    users(where: { lessonResults: { some: { updatedAt: { gte: $date } } } }) {
+    users(activeDate: $date) {
       id
       name
       surname
@@ -256,7 +265,11 @@ const CLIENTS_ACTIVE_QUERY = gql`
         type
         startDate
         paymentID
-        renewals
+        renewals {
+          date
+          type
+          price
+        }
         endDate
         createdAt
         updatedAt
@@ -303,7 +316,7 @@ const CLIENTS_ACTIVE_QUERY = gql`
         isPaid
         createdAt
       }
-      traffic_sources
+      # traffic_sources
       createdAt
       updatedAt
       messages {
@@ -318,7 +331,7 @@ const CLIENTS_ACTIVE_QUERY = gql`
 
 const ACTIVE_COURSES_QUERY = gql`
   query ACTIVE_COURSES_QUERY {
-    coursePages(where: { published: { equals: true } }) {
+    coursePages(published: true) {
       id
       title
     }
@@ -367,17 +380,21 @@ const ClientData = () => {
   };
 
   const handleButtonClick3 = () => {
-    getUserData3({
-      variables: {},
-    });
+    getUserData3();
   };
 
   const handleButtonClick4 = () => {
-    getUserData4({
-      variables: {
-        date: `${initialDate}:00.000Z`,
-      },
-    });
+    console.log(initialDate.length);
+    if (initialDate.length > 17) {
+      alert("Please select a valid date");
+      return;
+    } else {
+      getUserData4({
+        variables: {
+          date: `${initialDate}:00.000Z`,
+        },
+      });
+    }
   };
 
   const handleInitialDateChange = (e) => {
@@ -416,13 +433,12 @@ const ClientData = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>; // Handle error here
-
   let initialClients = data
     ? data.users
     : data2
     ? data2.users
     : data3
-    ? data3.users
+    ? data3.subscribers
     : data4
     ? sortClientsByActivity(data4.users)
     : [];

@@ -73,6 +73,14 @@ const ADD_USER_TO_COURSE_MUTATION = gql`
   }
 `;
 
+const ADD_COAUTHOR_MUTATION = gql`
+  mutation ADD_COAUTHOR_MUTATION($email: String!, $coursePageId: String) {
+    addCoAuthor(email: $email, coursePageId: $coursePageId) {
+      id
+    }
+  }
+`;
+
 const Form = styled.form`
   width: 100%;
   padding: 2% 2% 0 2%;
@@ -132,72 +140,10 @@ const Fieldset = styled.fieldset`
   }
 `;
 
-const Circle = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 30%;
-  @media (max-width: 800px) {
-    width: 65%;
-  }
-  cursor: pointer;
-  border: 1px solid grey;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  margin-bottom: 15px;
-  margin-right: 15px;
-  button {
-    border: none;
-    cursor: pointer;
-
-    background: none;
-    font-family: Montserrat;
-  }
-`;
-
-const Button = styled.button`
-  padding: 1% 2%;
-  font-size: 1.6rem;
-  width: 20%;
-  font-weight: 600;
-  color: #fffdf7;
-  background: ${(props) => props.theme.green};
-  border: solid 1px white;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-  &:active {
-    background: ${(props) => props.theme.darkGreen};
-  }
-  @media (max-width: 800px) {
-    width: 40%;
-  }
-`;
-
 const Title = styled.div`
   margin: 25px 0;
   font-size: 2.2rem;
   font-weight: 600;
-`;
-
-const Explainer = styled.div`
-  font-size: 1.4rem;
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 5px;
-`;
-
-const Module = styled.div`
-  border-bottom: 1px solid grey;
-  margin: 15px 0;
-  select {
-    width: 60%;
-  }
 `;
 
 const Img = styled.img`
@@ -223,27 +169,6 @@ const Frame = styled.div`
     margin: 0.8%;
     margin-left: 0.6%;
   }
-`;
-
-const Prices = styled.div`
-  input,
-  textarea {
-    margin-bottom: 5px;
-  }
-  .price_box {
-    border: 1px solid #e5e5e5;
-    width: 80%;
-    margin: 5px 0px;
-    padding: 15px 25px;
-    .text {
-      font-size: 1.2rem;
-    }
-  }
-`;
-
-const Circles = styled.div`
-  display: flex;
-  flex-direction: row;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
@@ -301,6 +226,7 @@ const UpdateForm = (props) => {
   );
 
   const [addUserToCourse] = useMutation(ADD_USER_TO_COURSE_MUTATION);
+  const [addCoAuthor] = useMutation(ADD_COAUTHOR_MUTATION);
 
   const { t } = useTranslation("coursePage");
 
@@ -393,20 +319,6 @@ const UpdateForm = (props) => {
           />
         </div>
       </Row>
-      {/* <Row>
-        <div className="description">Price</div>
-        <div className="action_area">
-          <input
-            className="second"
-            type="number"
-            id="description"
-            name="description"
-            required
-            defaultValue={price}
-            onChange={(e) => setPrice(parseInt(e.target.value))}
-          />
-        </div>
-      </Row> */}
       <Row>
         <div className="description">
           {" "}
@@ -423,6 +335,28 @@ const UpdateForm = (props) => {
             }}
           >
             Add student{" "}
+          </SecondaryButton>
+        </div>
+        <div className="action_area">
+          <input onChange={(e) => setEmail(e.target.value)} />
+        </div>
+      </Row>
+      <Row>
+        <div className="description">
+          {" "}
+          <SecondaryButton
+            onClick={async (e) => {
+              e.preventDefault();
+              await addCoAuthor({
+                variables: {
+                  coursePageId: props.coursePage.id,
+                  email,
+                },
+              });
+              alert("Added");
+            }}
+          >
+            Add Author{" "}
           </SecondaryButton>
         </div>
         <div className="action_area">

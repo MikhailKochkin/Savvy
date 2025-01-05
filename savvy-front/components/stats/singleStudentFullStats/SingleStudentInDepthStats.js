@@ -39,16 +39,16 @@ const GET_RESULTS = gql`
         }
         createdAt
       }
-      testPracticeResults {
-        id
-        testPractice {
-          id
-        }
-        correct
-        tasks
-        createdAt
-        updatedAt
-      }
+      # testPracticeResults {
+      #   id
+      #   testPractice {
+      #     id
+      #   }
+      #   correct
+      #   tasks
+      #   createdAt
+      #   updatedAt
+      # }
       shotResults {
         id
         answer
@@ -73,7 +73,12 @@ const GET_RESULTS = gql`
         comment
         type
         hint
-        ideasList
+        ideasList {
+          quizIdeas {
+            idea
+            result
+          }
+        }
         explanation
         improvement
         student {
@@ -128,13 +133,29 @@ const GET_RESULTS = gql`
         id
         answer
         answers
-        elements
+        elements {
+          elements {
+            type
+            value
+            text
+            comment
+            place
+            size
+            rows
+            inDoc
+            isTest
+            edit
+            borders {
+              top
+              bottom
+              left
+              right
+            }
+          }
+        }
         inputs
         attempts
         createdAt
-        construction {
-          id
-        }
         student {
           id
           name
@@ -313,11 +334,12 @@ const SingleStudentInDepthStats = (props) => {
   if (loading) return <Loading />;
   if (error) return `Error! ${error.message}`;
 
-  let challenge_result =
-    student.challengeResults.filter((ch) => ch.lesson.id == lesson.id).length >
-    0
-      ? student.challengeResults.filter((ch) => ch.lesson.id == lesson.id)[0]
-      : null;
+  let challenge_result = null;
+  // student.challengeResults?.length > 0 &&
+  // student.challengeResults.filter((ch) => ch.lesson.id == lesson.id).length >
+  //   0
+  //   ? student.challengeResults.filter((ch) => ch.lesson.id == lesson.id)[0]
+  //   : null;
   return (
     <>
       {res.length > 0 && res[0].lesson.structure ? (
@@ -483,21 +505,21 @@ const SingleStudentInDepthStats = (props) => {
                 />
               );
             }
-            if (l.type.toLowerCase() == "testpractice") {
-              let testPractice = lesson.testPractices.filter(
-                (n) => n.id === l.id
-              )[0];
-              return (
-                <TestPractice
-                  lesson={lesson}
-                  testPractice={testPractice}
-                  student={student}
-                  results={data.stats.testPracticeResults}
-                  quizResults={data.stats.quizResults}
-                  testResults={data.stats.testResults}
-                />
-              );
-            }
+            // if (l.type.toLowerCase() == "testpractice") {
+            //   let testPractice = lesson.testPractices.filter(
+            //     (n) => n.id === l.id
+            //   )[0];
+            //   return (
+            //     <TestPractice
+            //       lesson={lesson}
+            //       testPractice={testPractice}
+            //       student={student}
+            //       results={data.stats.testPracticeResults}
+            //       quizResults={data.stats.quizResults}
+            //       testResults={data.stats.testResults}
+            //     />
+            //   );
+            // }
             if (l.type.toLowerCase() == "problem") {
               return (
                 <ProblemResult
@@ -529,6 +551,12 @@ const SingleStudentInDepthStats = (props) => {
               );
             }
             if (l.type.toLowerCase() == "texteditor") {
+              {
+                console.log(
+                  "data.stats.textEditorResults",
+                  data.stats.textEditorResults
+                );
+              }
               return (
                 <TexteditorResult
                   texteditors={lesson.texteditors.filter((t) => t.id === l.id)}

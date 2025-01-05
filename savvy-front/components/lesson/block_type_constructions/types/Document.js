@@ -40,16 +40,14 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
     $attempts: Int
     $lessonId: String
     $constructionId: String
-    $elements: ElementsList
-    $answers: ConstructionAnswers
+    $elements: ConstructionElementsListInput # $answers: ConstructionAnswers
   ) {
     createConstructionResult(
       answer: $answer
       attempts: $attempts
       lessonId: $lessonId
       constructionId: $constructionId
-      elements: $elements
-      answers: $answers
+      elements: $elements # answers: $answers
     ) {
       id
     }
@@ -83,7 +81,9 @@ const Styles = styled.div`
 
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
-  const elements = construction.elements.elements;
+  let elements = construction.elements?.elements
+    ? construction.elements?.elements
+    : [];
 
   // Open the Modal window with answer options
   const [isModalWindowOpen, setIsModalWindowOpen] = useState(false);
@@ -168,7 +168,17 @@ const NewConstructor = (props) => {
         attempts: attempts,
         lessonId: lessonID,
         constructionId: construction.id,
-        elements: { elements: input },
+        elements: {
+          elements: input.map(({ borders, __typename, ...rest }) => ({
+            borders: {
+              top: borders.top,
+              bottom: borders.bottom,
+              left: borders.left,
+              right: borders.right,
+            },
+            ...rest,
+          })),
+        },
       },
     });
   };

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import React, { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import * as EmailValidator from "email-validator";

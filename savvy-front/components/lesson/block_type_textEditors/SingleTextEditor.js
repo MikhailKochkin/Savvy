@@ -118,19 +118,35 @@ const TextBar = styled.div`
       margin: 10px 0;
     }
   }
-  table {
+  .table-wrapper {
+    border: 1px solid #d6d6d6;
     width: 100%;
-    border: 1px solid #edefed;
+    overflow-x: scroll;
+  }
+  table {
+    width: 640px;
     border-collapse: collapse;
+    font-size: 1.4rem;
+    p {
+      margin: 0;
+      margin-bottom: 5px;
+    }
+    tbody {
+      width: 100%;
+    }
     tr {
       border: 1px solid #edefed;
     }
+    tr:nth-child(even) {
+      background: #f8f8f8;
+    }
     thead {
-      background: #f5f5f5;
-      font-weight: bold;
+      background: #36304a;
+      color: #fff;
     }
     th {
       border: 1px solid #edefed;
+      padding: 15px 0;
     }
     td {
       border: 1px solid #edefed;
@@ -139,7 +155,8 @@ const TextBar = styled.div`
       border-right: none;
       padding: 0% 2.5%;
       position: relative;
-      width: 5%;
+      padding: 15px 15px;
+      vertical-align: top;
     }
   }
   h2 {
@@ -261,6 +278,14 @@ const Buttons = styled.div`
   width: 100%;
   margin-bottom: 20px;
 `;
+
+const wrapTables = (html) => {
+  const wrappedHtml = html.replace(
+    /<table/g,
+    '<div className="table-wrapper"><table'
+  );
+  return wrappedHtml.replace(/<\/table>/g, "</table></div>");
+};
 
 const SingleTextEditor = (props) => {
   const { textEditor, me, lessonID, story, complexity, text, lesson } = props;
@@ -640,7 +665,8 @@ const SingleTextEditor = (props) => {
                     }
                   }}
                 >
-                  {parse(text)} {/* Render the text content */}
+                  {parse(wrapTables(text))}
+                  {/* Render the text content */}
                 </div>
               </EditText>
             </TextBar>

@@ -35,7 +35,7 @@ const DynamicMobileBuy = dynamic(
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+    coursePage(id: $id) {
       id
       title
       price
@@ -59,12 +59,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       user {
         id
       }
-      # orders {
-      #   id
-      #   user {
-      #     id
-      #   }
-      # }
       lessons {
         id
         name
@@ -83,14 +77,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       }
       description
       courseType
-      # students
-      # applications {
-      #   id
-      #   applicantId
-      # }
-      # new_students {
-      #   id
-      # }
       goals
       nextStart
       user {

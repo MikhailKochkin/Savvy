@@ -10,6 +10,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CanvasProblemBuilder from "./functions/CanvasProblemBuilder";
 import { Row, ActionButton, SettingsBlock } from "../styles/DevPageStyles";
+import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 
 const Styles = styled.div`
   display: flex;
@@ -26,33 +27,12 @@ const Styles = styled.div`
   }
 `;
 
-const ButtonTwo = styled.button`
-  border: none;
-  background: #3f51b5;
-  padding: 10px 20px;
-  border: 2px solid #3f51b5;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-right: 10px;
-  transition: 0.3s;
-  width: 250px;
-  &:hover {
-    background: #2e3b83;
-    border: 2px solid #2e3b83;
-  }
-`;
-
 const CREATE_PROBLEM_MUTATION = gql`
   mutation CREATE_PROBLEM_MUTATION(
     $name: String
     $text: String!
     $lessonId: String!
-    $steps: ProblemStructure # $nodeType: String #$nodeID: String!
+    $steps: ProblemStructureInput # $nodeType: String #$nodeID: String!
   ) {
     createProblem(
       name: $name
@@ -64,7 +44,25 @@ const CREATE_PROBLEM_MUTATION = gql`
       name
       text
       lessonId
-      steps
+      user {
+        id
+      }
+      steps {
+        problemItems {
+          id
+          type
+          next {
+            true {
+              value
+              type
+            }
+            false {
+              value
+              type
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -269,8 +267,119 @@ let gdpr_sample_result = {
   ],
 };
 
+let exit_strategy_sample_result = {
+  introductory_text:
+    '<h2><p>Exit Strategy Planning</p></h2><p>I think we should start with a general brainstorm session. Let\'s map out all the options Alex and QuickNourish could consider.</p><div className="question"><p><b>Your task:</b> please add the explanation to the below considerations.</p></div>',
+  steps: [
+    {
+      question:
+        "Shouldn't we first think about what shareholders typically consider when planning an exit? Before we jump into specific strategies, let's outline the key considerations shareholders face in situations like this. What in your opinion should QuickNourish do in relation to this aspect? ❓ Use the hint option if you don't know where to start.",
+      answers: [
+        "Go over your main contracts and, if necessary, work out new terms so they can be easily handed over.",
+        "Review and, if necessary, renegotiate key contracts and agreements to ensure they are transferable.",
+        "Review and renegotiate key documents, contracts, and agreements.",
+        "Check the contracts for change of control provisions.",
+        "Confirm if the agreements survive the planned transaction/exit.",
+      ],
+      explanations: [
+        "Ensuring contracts are transferable is a key step in exit planning.",
+        "Change of control provisions may impose restrictions or obligations in a transaction.",
+        "Survivability of agreements affects the continuity of operations post-exit.",
+      ],
+      whichAnswersAreCorrect: [true, true, true, true, true],
+      id: 1,
+      next: {
+        true: {
+          value: 2,
+          type: "Quiz",
+        },
+        false: {
+          value: 2,
+          type: "Quiz",
+        },
+      },
+      position: {
+        x: 25,
+        y: 25,
+      },
+      type: "Quiz",
+    },
+    {
+      question:
+        "The company might also need to conduct due diligence. But for what reason?",
+      answers: [
+        "To ensure that the company is in a healthy state with limited red flags and unresolved matters which could have an impact on the appeal of the company as a target.",
+        "Check that the company is in good health with no big problems or loose ends that could make it less appealing to buyers.",
+      ],
+      explanations: [
+        "Due diligence identifies risks and ensures the company is attractive to buyers.",
+        "Resolving red flags in advance can significantly enhance the company's appeal.",
+      ],
+      whichAnswersAreCorrect: [true, true],
+      id: 2,
+      next: {
+        true: {
+          value: 3,
+          type: "Quiz",
+        },
+        false: {
+          value: 3,
+          type: "Quiz",
+        },
+      },
+      position: {
+        x: 325,
+        y: 25,
+      },
+      type: "Quiz",
+    },
+    {
+      question:
+        "Could you list some of the types of legal issues that need to be considered as part of a due diligence? Make every idea really brief (2-4 words). Put every idea in a separate form. To create more forms press +1 button.",
+      answers: [
+        "Intellectual property (IP)",
+        "IP and IT",
+        "Environment",
+        "Pending court claims, litigation",
+        "Compliance",
+        "Real estate",
+        "Pensions",
+        "Contracts",
+      ],
+      explanations: [
+        "Each item ensures a comprehensive review of legal risks and obligations.",
+        "Brief answers help focus on key areas during due diligence.",
+      ],
+      whichAnswersAreCorrect: [true, true, true, true, true, true, true, true],
+      id: 3,
+      next: {
+        true: {
+          value: null,
+          type: null,
+        },
+        false: {
+          value: null,
+          type: null,
+        },
+      },
+      position: {
+        x: 625,
+        y: 25,
+      },
+      type: "Quiz",
+    },
+  ],
+};
+
 const CreateProblem = (props) => {
-  const { lessonID, lesson, simulationStory } = props;
+  const {
+    lessonID,
+    lesson,
+    simulationStory,
+    previousStories,
+    jsonCharactersString,
+    jsonStoryString,
+  } = props;
   const [name, setName] = useState();
   const [text, setText] = useState();
   const [steps, setSteps] = useState([]);
@@ -288,9 +397,6 @@ const CreateProblem = (props) => {
   const getSteps = (val) => {
     setSteps([...val]);
   };
-
-  const rus_placeholder = `<h2><p>План задачи</p></h2><p>1. Заголовок: название задачи. Сделайте его заголовком, нажав на кнопку <b>H</b>.</p><p>2. Опишите условия кейса</p><p>3. Запишите вопрос к задаче. Визуально выделите его, нажав на кнопку с двумя точками.</p><p>4. Ответ к задаче. Его нужно будет скрыть от студента, нажав на кнопку с минусом по центру диалогового окна. В появившемся окне напишите слово "Ответ". Ответ станет доступен только после решения задачи студентом.</p>`;
-  const eng_placeholder = `<h2><p>Case Study plan</p></h2><p>1. Title: the name of the case study. Add title styles by pressing <b>the H button </b>.</p><p>2. Explain the case</p><p>3. Write down the question to the case. Highlight it visually by clicking on the button with two dots.</p><p>4. Write down the solution to case study. You can hide it from the student by clicking on the button with a minus in the middle of the dialog box. In the window that appears, type the word "Answer". The answer will be available only after the student has solved the problem.</p>`;
 
   const [createProblem, { loading, error }] = useMutation(
     CREATE_PROBLEM_MUTATION,
@@ -322,12 +428,167 @@ const CreateProblem = (props) => {
     }
   );
 
+  const updateQuestions = async (e, questions) => {
+    e.preventDefault();
+    let updateQuestionsPrompt = `
+        You are given the following questions: """${JSON.stringify(
+          questions
+        )}""".
+        These questions are part of a case study designed to teach students how to solve a problem effectively. There are three types of guiding questions:
+
+        NewTest: A guiding question that has answers like "yes" or "no" or requires the student to choose from a closed list of options. For these questions, include an array whichAnswersAreCorrect (e.g., [true, false]) to indicate which option(s) are correct.
+        Quiz: An open-ended question that allows students to think critically and come up with their answers. Use this question type for most scenarios.
+        Chat: A collection of mentor-like messages. These provide hints, explanations, or insights before or after answering other questions. They may also summarise insights from previously answered questions.
+        Your task is to:
+
+        Ensure Socratic Method: Make the questions follow the Socratic method by encouraging critical thinking and exploration of concepts.
+        Add Mentor Personality: Frame the questions as if presented by a mentor. Include relevant backstory, examples, or analogies to make the interaction more engaging and relatable.
+        Improve Accuracy Checking: Add multiple diverse sample answers to improve the accuracy of the system when evaluating responses.
+
+        Instructions:
+
+        Update the given questions to be more engaging, follow the Socratic method, and include a mentor-like narrative.
+        Add diverse sample answers for each question to enhance accuracy.
+        Return the updated questions in JSON format.
+
+        Output Example: Provide the updated questions in the JSON format. Example:
+
+        steps: [
+          {
+            question:
+              "Shouldn't we first think about what shareholders typically consider when planning an exit? Before we jump into specific strategies, let's outline the key considerations shareholders face in situations like this. What in your opinion should QuickNourish do in relation to this aspect? ❓ Use the hint option if you don't know where to start.",
+            answers: [
+              "Go over your main contracts and, if necessary, work out new terms so they can be easily handed over.",
+              "Review and, if necessary, renegotiate key contracts and agreements to ensure they are transferable.",
+              "Review and renegotiate key documents, contracts, and agreements.",
+              "Check the contracts for change of control provisions.",
+              "Confirm if the agreements survive the planned transaction/exit.",
+            ],
+            explanations: [
+              "Ensuring contracts are transferable is a key step in exit planning.",
+              "Change of control provisions may impose restrictions or obligations in a transaction.",
+              "Survivability of agreements affects the continuity of operations post-exit.",
+            ],
+            whichAnswersAreCorrect: [true, true, true, true, true],
+            id: 1,
+            next: {
+              true: {
+                value: 2,
+                type: "Quiz",
+              },
+              false: {
+                value: 2,
+                type: "Quiz",
+              },
+            },
+            position: {
+              x: 25,
+              y: 25,
+            },
+            type: "Quiz",
+          },
+          {
+            question:
+              "The company might also need to conduct due diligence. But for what reason?",
+            answers: [
+              "To ensure that the company is in a healthy state with limited red flags and unresolved matters which could have an impact on the appeal of the company as a target.",
+              "Check that the company is in good health with no big problems or loose ends that could make it less appealing to buyers.",
+            ],
+            explanations: [
+              "Due diligence identifies risks and ensures the company is attractive to buyers.",
+              "Resolving red flags in advance can significantly enhance the company's appeal.",
+            ],
+            whichAnswersAreCorrect: [true, true],
+            id: 2,
+            next: {
+              true: {
+                value: 3,
+                type: "Quiz",
+              },
+              false: {
+                value: 3,
+                type: "Quiz",
+              },
+            },
+            position: {
+              x: 325,
+              y: 25,
+            },
+            type: "Quiz",
+          },
+          {
+            question:
+              "Could you list some of the types of legal issues that need to be considered as part of a due diligence? Make every idea really brief (2-4 words). Put every idea in a separate form. To create more forms press +1 button.",
+            answers: [
+              "Intellectual property (IP)",
+              "IP and IT",
+              "Environment",
+              "Pending court claims, litigation",
+              "Compliance",
+              "Real estate",
+              "Pensions",
+              "Contracts",
+            ],
+            explanations: [
+              "Each item ensures a comprehensive review of legal risks and obligations.",
+              "Brief answers help focus on key areas during due diligence.",
+            ],
+            whichAnswersAreCorrect: [true, true, true, true, true, true, true, true],
+            id: 3,
+            next: {
+              true: {
+                value: null,
+                type: null,
+              },
+              false: {
+                value: null,
+                type: null,
+              },
+            },
+            position: {
+              x: 625,
+              y: 25,
+            },
+            type: "Quiz",
+          },
+        ],
+    `;
+
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: updateQuestionsPrompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let updated_questions = JSON.parse(data.result.content);
+        console.log("updated_questions", updated_questions.steps);
+        return updated_questions?.steps;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
   const generateProblem = async (e) => {
     e.preventDefault();
     let chatPrompt = `
-        You are building a block of a simulator that has the following story: """${simulationStory}"""
+        You are building a block of a simulator that has the following background: """${previousStories.join(
+          "\n"
+        )}""", 
+        and the following current story: """${jsonStoryString}"""
+        The main character of the simulator are: """${jsonCharactersString}"""
+
         This block type is a Case Study, presenting a complex problem accompanied by a series of interconnected questions designed in a Socratic style to guide students toward solving the problem.
-        You receive this data that is used to make an interactive case study: """${prompt}"""
+        You receive this instructions that are used to make an interactive case study: """${prompt}"""
         Develop the case study based on the simualtor story and the data provided that will consist of 2 parts: the introduction to the problem and the questions to solve it.
         There are 3 types of quiding questions:
 
@@ -338,12 +599,14 @@ const CreateProblem = (props) => {
         Return the result in a JSON that looks like this: 
         
         Example 1. """${JSON.stringify(gdpr_sample_result, null, 2)}"""
+        Example 2. """ ${JSON.stringify(
+          exit_strategy_sample_result,
+          null,
+          2
+        )}"""
 
         The total number of questions should be between 3 and 7.
     `;
-
-    console.log(chatPrompt);
-
     try {
       const response = await fetch("/api/generateJson", {
         method: "POST",
@@ -356,7 +619,10 @@ const CreateProblem = (props) => {
       if (response.ok) {
         let new_case_study = JSON.parse(data.result.content);
         setText(new_case_study.introductory_text);
-        setGeneratedSteps(new_case_study.steps);
+        let updatedQuestions = await updateQuestions(e, new_case_study.steps);
+        setGeneratedSteps(
+          updatedQuestions ? updatedQuestions : new_case_study.steps
+        );
         return data;
       } else {
         throw new Error(
@@ -385,7 +651,11 @@ const CreateProblem = (props) => {
         <Row>
           <div className="description">Prompt</div>
           <div className="action_area">
-            <textarea onChange={(e) => setPrompt(e.target.value)} />
+            <textarea
+              onChange={(e) => {
+                setPrompt(e.target.value), autoResizeTextarea(e);
+              }}
+            />
             <ActionButton
               onClick={async (e) => {
                 setGenerating(true);
@@ -421,18 +691,19 @@ const CreateProblem = (props) => {
           </DndProvider>
         </div>
       ) : null}
-      <ButtonTwo
+      <ActionButton
         type="submit"
         variant="contained"
         color="primary"
         onClick={async (e) => {
           e.preventDefault();
           const res = await createProblem();
+          console.log("problem res", res);
           props.getResult(res);
         }}
       >
         {loading ? t("saving") : t("save")}
-      </ButtonTwo>
+      </ActionButton>
       {error ? error.message : null}
     </Styles>
   );

@@ -798,7 +798,7 @@ const Feed = (props) => {
                           {el.type.toLowerCase() == "chat"
                             ? `${
                                 props.lesson.chats.find((ch) => ch.id == el.id)
-                                  .name
+                                  ?.name
                                   ? props.lesson.chats.find(
                                       (ch) => ch.id == el.id
                                     ).name
@@ -808,7 +808,7 @@ const Feed = (props) => {
                           {el.type.toLowerCase() == "shot"
                             ? `${
                                 props.lesson.shots.find((ch) => ch.id == el.id)
-                                  .name
+                                  ?.name
                                   ? props.lesson.shots.find(
                                       (ch) => ch.id == el.id
                                     ).name
@@ -818,7 +818,7 @@ const Feed = (props) => {
                           {el.type.toLowerCase() == "note"
                             ? `${
                                 props.lesson.notes.find((ch) => ch.id == el.id)
-                                  .name
+                                  ?.name
                                   ? props.lesson.notes.find(
                                       (ch) => ch.id == el.id
                                     ).name
@@ -829,7 +829,7 @@ const Feed = (props) => {
                             ? `${
                                 props.lesson.newTests.find(
                                   (ch) => ch.id == el.id
-                                ).name
+                                )?.name
                                   ? props.lesson.newTests.find(
                                       (ch) => ch.id == el.id
                                     ).name
@@ -839,7 +839,7 @@ const Feed = (props) => {
                           {el.type.toLowerCase() == "quiz"
                             ? `${
                                 props.lesson.quizes.find((ch) => ch.id == el.id)
-                                  .name
+                                  ?.name
                                   ? props.lesson.quizes.find(
                                       (ch) => ch.id == el.id
                                     ).name
@@ -850,7 +850,7 @@ const Feed = (props) => {
                             ? `${
                                 props.lesson.problems.find(
                                   (ch) => ch.id == el.id
-                                ).name
+                                )?.name
                                   ? props.lesson.problems.find(
                                       (ch) => ch.id == el.id
                                     ).name
@@ -861,7 +861,7 @@ const Feed = (props) => {
                             ? `${
                                 props.lesson.texteditors.find(
                                   (ch) => ch.id == el.id
-                                ).name
+                                )?.name
                                   ? props.lesson.texteditors.find(
                                       (ch) => ch.id == el.id
                                     ).name
@@ -872,7 +872,7 @@ const Feed = (props) => {
                             ? `${
                                 props.lesson.constructions.find(
                                   (ch) => ch.id == el.id
-                                ).name
+                                )?.name
                                   ? props.lesson.constructions.find(
                                       (ch) => ch.id == el.id
                                     ).name

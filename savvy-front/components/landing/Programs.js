@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
 import { useRouter } from "next/router";
 import smoothscroll from "smoothscroll-polyfill";
 
@@ -10,10 +9,7 @@ import LoadingDummy from "../layout/Loading";
 
 const COURSES_QUERY = gql`
   query COURSES_QUERY {
-    coursePages(
-      where: { published: { equals: true } }
-      orderBy: { createdAt: asc }
-    ) {
+    coursePages(published: true, orderByCreatedAt: "asc") {
       id
       title
       description
@@ -206,7 +202,6 @@ const Programs = (props) => {
     slide();
   };
   const filtered_courses = data.coursePages.filter((c) => c.tags.includes(tag));
-  const filtered_programs = data1.programs.filter((c) => c.tags.includes(tag));
 
   return (
     <Styles id="course_search">

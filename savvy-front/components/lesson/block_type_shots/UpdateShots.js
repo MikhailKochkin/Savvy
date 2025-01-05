@@ -110,6 +110,12 @@ const UpdateShot = (props) => {
   return (
     <Styles>
       <Row>
+        <div className="description">Id</div>
+        <div className="action_area">
+          <input value={props.shotID} />
+        </div>
+      </Row>
+      <Row>
         <div className="description">Name</div>
         <div className="action_area">
           <input

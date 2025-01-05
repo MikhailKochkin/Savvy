@@ -4,7 +4,14 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
-import { Row, ActionButton, Frame, MicroButton } from "../styles/DevPageStyles";
+import {
+  Row,
+  ActionButton,
+  Frame,
+  MicroButton,
+  NanoButton,
+  Buttons,
+} from "../styles/DevPageStyles";
 import {
   autoResizeTextarea,
   adjustTextareaHeight,
@@ -15,6 +22,7 @@ const UPDATE_QUIZ_MUTATION = gql`
     $id: String!
     $question: String
     $answer: String
+    $answers: ComplexAnswerInput
     $check: String
     $complexity: Int
     $type: String
@@ -25,7 +33,6 @@ const UPDATE_QUIZ_MUTATION = gql`
     $isScoringShown: Boolean
     $name: String
     $image: String
-    $answers: ComplexAnswer
     $isOrderOfAnswersImportant: Boolean
     $shouldAnswerSizeMatchSample: Boolean
   ) {
@@ -55,8 +62,13 @@ const UPDATE_QUIZ_MUTATION = gql`
       ifRight
       ifWrong
       answer
-      answers
-      next
+      answers {
+        answerElements {
+          answer
+          index
+          relatedAnswers
+        }
+      }
       goalType
       createdAt
       name
@@ -127,7 +139,6 @@ const UpdateQuiz = (props) => {
   // Adjust textarea heights on mount
   useEffect(() => {
     const textareas = document.querySelectorAll(".dynamic-textarea");
-    console.log(textareas);
     textareas.forEach((textarea) => adjustTextareaHeight(textarea));
   }, [answers]); // Run this effect whenever answers change
 
@@ -149,7 +160,11 @@ const UpdateQuiz = (props) => {
       isOrderOfAnswersImportant: isOrderOfAnswersImportant,
       isScoringShown: isScoringShown,
       answers: {
-        answerElements: answers,
+        answerElements: answers.map((answer) => ({
+          answer: answer.answer,
+          index: answer.index,
+          relatedAnswers: answer.relatedAnswers,
+        })),
       },
     },
   });
@@ -342,6 +357,29 @@ const UpdateQuiz = (props) => {
     }
   };
 
+  const addRelatedAnswer = async (i) => {
+    let updatedAnswers = [...answers];
+    let updatedAnswer = answers[i];
+    console.log("updatedAnswer", updatedAnswer);
+    if (updatedAnswer.relatedAnswers) {
+      updatedAnswer.relatedAnswers = [...updatedAnswer.relatedAnswers, ""];
+    } else {
+      updatedAnswer = { ...updatedAnswer, relatedAnswers: [""] };
+    }
+    updatedAnswers[i] = updatedAnswer;
+    console.log("updatedAnswers", updatedAnswers);
+
+    setAnswers(updatedAnswers);
+  };
+
+  const removeRelatedAnswer = async (i, j) => {
+    let updatedAnswers = [...answers];
+    let updatedAnswer = answers[i];
+    updatedAnswer.relatedAnswers.splice(j, 1);
+    updatedAnswers[i] = updatedAnswer;
+    setAnswers(updatedAnswers);
+  };
+
   return (
     <Container>
       <Row>
@@ -528,22 +566,52 @@ const UpdateQuiz = (props) => {
         <div className="description">Semantic Cloud</div>
         <div className="action_area">
           {answers.map((an, i) => (
-            <textarea
-              className="dynamic-textarea"
-              value={an.answer}
-              placeholder={`Answer`}
-              onChange={(e) => {
-                const newAnswers = [...answers];
-                newAnswers[i] = {
-                  ...newAnswers[i],
-                  answer: e.target.value,
-                }; // Create a new object for the specific element and update its property
-                setAnswers(newAnswers);
-                autoResizeTextarea(e);
-              }}
-              onInput={autoResizeTextarea}
-              onLoad={(e) => autoResizeTextarea(e)}
-            />
+            <div className="multilevel_fields">
+              <div className="mainfield">
+                <textarea
+                  className="dynamic-textarea"
+                  value={an.answer}
+                  placeholder={`Answer`}
+                  onChange={(e) => {
+                    const newAnswers = [...answers];
+                    newAnswers[i] = {
+                      ...newAnswers[i],
+                      answer: e.target.value,
+                    }; // Create a new object for the specific element and update its property
+                    setAnswers(newAnswers);
+                    autoResizeTextarea(e);
+                  }}
+                  onInput={autoResizeTextarea}
+                  onLoad={(e) => autoResizeTextarea(e)}
+                />
+                <Buttons direction={"column"} gapSize={"5px"} margin={"0"}>
+                  <NanoButton onClick={() => removeRelatedAnswer(i)}>
+                    -1
+                  </NanoButton>
+                  <NanoButton onClick={() => addRelatedAnswer(i)}>
+                    +1
+                  </NanoButton>
+                </Buttons>
+              </div>
+
+              <div className="subfield">
+                {an.relatedAnswers &&
+                  an.relatedAnswers?.map((rel, j) => (
+                    <textarea
+                      className="dynamic-textarea"
+                      value={rel}
+                      onChange={(e) => {
+                        const newAnswers = [...answers];
+                        newAnswers[i].relatedAnswers[j] = e.target.value;
+                        setAnswers(newAnswers);
+                        autoResizeTextarea(e);
+                      }}
+                      onInput={autoResizeTextarea}
+                      onLoad={(e) => autoResizeTextarea(e)}
+                    />
+                  ))}
+              </div>
+            </div>
           ))}
 
           <MicroButton
@@ -598,7 +666,7 @@ const UpdateQuiz = (props) => {
             </MicroButton>
           ) : null}
           <div className="explainer">
-            This answers are used to make the answer assessment more accurate
+            These answers are used to make the answer assessment more accurate
           </div>
         </div>
       </Row>

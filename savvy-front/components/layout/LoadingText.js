@@ -20,7 +20,7 @@ const Frame = styled.div`
   align-items: center;
 `;
 
-const Phrase = styled.p`
+const Phrase = styled.div`
   margin: 0;
   text-align: center;
   font-weight: 500;
@@ -40,7 +40,7 @@ const Phrase = styled.p`
   }
 `;
 
-const Loading = () => {
+const LoadingText = () => {
   const [phrase, setPhrase] = useState("");
 
   useEffect(() => {
@@ -83,4 +83,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default LoadingText;

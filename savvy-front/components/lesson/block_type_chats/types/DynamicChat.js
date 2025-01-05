@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useTranslation } from "next-i18next";
 import { useMutation, gql } from "@apollo/client";
-import _ from "lodash";
 import PropTypes from "prop-types"; // Add this import
+import Message from "../functions/Message"; // Add this import at the top of the Chat component file
+import { autoResizeTextarea } from "../../SimulatorDevelopmentFunctions";
+import { MicroButton } from "../../styles/DevPageStyles";
+import Loading from "../../../layout/Loading";
 
 import { generateDiscussion } from "../functions/AIChatFunctions";
 
@@ -25,36 +27,169 @@ const CREATE_CHATRESULT_MUTATION = gql`
   }
 `;
 
-const Next = styled.div`
+const MessageRow = styled.div`
+  display: flex;
+  transition: 0.2s ease-out;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  /* Add slide-in animation */
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: animate-slide-in-from-left 0.8s forwards;
+  /* Animation from the right */
+  @keyframes animate-slide-in-from-right {
+    0% {
+      opacity: 0;
+      transform: translateX(70px);
+    }
+    50% {
+      transform: translateX(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Animation from the left */
+  @keyframes animate-slide-in-from-left {
+    0% {
+      opacity: 0;
+      transform: translateX(-70px);
+    }
+    50% {
+      transform: translateX(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  p {
+    margin: 5px 0;
+  }
+  &.student {
+    justify-content: flex-start;
+    justify-content: stretch;
+  }
+  .author_text {
+    background: #f3f3f3;
+    color: black;
+    border-radius: 25px;
+    padding: 2% 5%;
+    display: flex;
+    min-width: 20%;
+    max-width: 70%;
+    font-size: 1.6rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    p {
+      margin: 5px 0;
+      &.button_box {
+        margin: 30px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      a.button {
+        border: none;
+        background: #0084ff;
+        color: #fff;
+        border-radius: 25px;
+        padding: 12px 20px;
+        cursor: pointer;
+        width: 100%;
+        margin: 10px 0;
+        transition: 0.3s;
+        &:hover {
+          background: #005fb8;
+        }
+        @media (max-width: 800px) {
+          display: block;
+          text-align: center;
+          padding: 12px 20px;
+          line-height: 1.2;
+        }
+      }
+    }
+    @media (max-width: 800px) {
+      font-size: 1.6rem;
+    }
+  }
+
+  .student_text {
+    width: 60%;
+    background: #fff;
+    outline: 0;
+
+    padding: 0px 15px;
+
+    margin-bottom: 20px;
+    textarea {
+      padding: 15px;
+      width: 100%;
+      outline: 0;
+      border: 2px solid #e5e5e5;
+      border-radius: 20px;
+      font-size: 1.6rem;
+      font-weight: 500;
+      font-family: Montserrat;
+      resize: none;
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    @media (max-width: 800px) {
+      font-size: 1.6rem;
+    }
+  }
+`;
+
+const IconBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 65px;
+  .icon {
+    margin: 5px;
+    border-radius: 50%;
+    height: 55px;
+    width: 55px;
+    object-fit: cover;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #8f93a3;
+    max-width: 80px;
+    margin: 0 7px;
+    line-height: 1.4;
+  }
+`;
+
+const Icon = styled.div`
+  margin: 5px;
+  border-radius: 50%;
+  background: #2f80ed; /* fallback for old browsers */
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  height: 55px;
+  width: 55px;
+  object-fit: cover;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  button {
-    width: 100px;
-    border: 1px solid #cacaca;
-    background: none;
-    padding: 8px 15px;
-    font-family: Montserrat;
-    border-radius: 15px;
-    cursor: pointer;
-    color: black;
-    transition: 0.3s;
-    animation-duration: 1s;
-    animation-name: animate-fade;
-    animation-fill-mode: both;
-    @keyframes animate-fade {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-    &:hover {
-      background: #f4f4f4;
-    }
-  }
 `;
 
 const Messages = styled.div`
@@ -62,74 +197,80 @@ const Messages = styled.div`
 `;
 
 const DynamicChat = (props) => {
-  const { messages, me, lessonId, id, author, library } = props;
+  const { messages, me, id, author } = props;
+  const [dialogueMessages, setDialogueMessages] = useState([
+    messages.messagesList[0],
+  ]);
+  const [studentResponse, setStudentResponse] = useState("");
+  const [generatingResponse, setGeneratingResponse] = useState(false);
 
-  const chatRef = useRef(null);
-  const { t } = useTranslation("lesson");
+  const generateStudentResponse = async () => {
+    setDialogueMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        author: "student",
+        text: studentResponse,
+        name: me.name,
+      },
+    ]);
+    setStudentResponse("");
 
-  // the logic benhind building a dynamic chat powered by GenAI
-  // 1. The chat start with an opening message. Such a message only requires context to be generated
-  // 2. Next messages are generated from context + previous messages + user input
-  // 3. The chat is finished pnce a certain number of messages are generated
-  // 4. The chat can be restarted by clicking on a button
+    const chatPrompt = `
+      You are a character in a story. 
+      This is your description and all the knowledge you have (your knowledge hub): "${
+        messages.messagesList[1]
+      }". When asnwering any questions, stick strictly to the knowledge you have.
 
-  // Questions:
-  // - How do we know when the chat is finished?
-  // - Do we need different functions for starting the dialogue and continuing it?
+      Allowed topics are: Biology and Chemistry.
+      You are talking to the user: """${me.name}"""
+      Your dialogue history is: """${JSON.stringify(dialogueMessages)}"""
 
-  //   const [createChatResult, { data: data2, loading: loading2, error: error2 }] =
-  //     useMutation(CREATE_CHATRESULT_MUTATION);
+      The student's response or question is: """${studentResponse}"""
 
-  //   useEffect(() => {
-  //     const observer = new IntersectionObserver(
-  //       ([entry]) => {
-  //         if (props.story && entry.isIntersecting && !hasCreatedInitialResult) {
-  //           setHasCreatedInitialResult(true);
-  //           const res = createChatResult({
-  //             variables: {
-  //               text: messages.messagesList[0].text,
-  //               name: messages.messagesList[0].name
-  //                 ? messages.messagesList[0].name
-  //                 : messages.messagesList[0].author,
-  //               lessonId: lessonId,
-  //               chatId: id,
-  //             },
-  //           });
-  //           // Perform any actions you need when the component becomes visible
-  //         }
-  //       },
-  //       {
-  //         root: null,
-  //         threshold: 0.1, // Trigger when 10% of the component is visible
-  //       }
-  //     );
+      If the answer to the student question is within the allowed topics, generate and return in JSON format a new message based on the student's response/questions and the current dialogue messages.
+      if the naswer is not within the allowed topics, return a message: "Sorry, I can;t respond".
 
-  //     if (chatRef.current) {
-  //       observer.observe(chatRef.current);
-  //     }
+      The result must look like this:
 
-  //     return () => {
-  //       if (chatRef.current) {
-  //         observer.unobserve(chatRef.current);
-  //       }
-  //     };
-  //   }, [chatRef, hasCreatedInitialResult]);
+      {
+        "author": "author",
+        "text": "" // response generated by the AI,
+        "name": "" // name of the character,
+      },
+
+    `;
+
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: chatPrompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let newMessage = JSON.parse(data.result.content);
+        console.log("newMessage", newMessage);
+        setDialogueMessages((prevMessages) => [...prevMessages, newMessage]);
+        return data;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
 
   return (
-    <Messages>
-      <div>DynamicChat</div>
-      <button
-        onClick={async (e) => {
-          let res = await generateDiscussion(messages.messagesList[0].text, []);
-          console.log("res", res);
-        }}
-      >
-        Start
-      </button>
-      {/* {messages.messagesList.slice(0, num).map((m, i) => {
-        if (m.author === "author") {
-          return (
-            <>
+    <>
+      <Messages>
+        {dialogueMessages.map((m, i) => {
+          if (m.author === "author") {
+            return (
               <Message
                 id={"messagee" + i + id}
                 key={i}
@@ -138,50 +279,53 @@ const DynamicChat = (props) => {
                 m={m}
                 me={me}
                 author={author}
-                passTextToBeTranslated={passTextToBeTranslated}
               />
-              {m.reactions && m.reactions.length > 0 && (
-                <Reaction
-                  reactions={m.reactions}
-                  me={me}
-                  author={author}
-                  m={m}
-                  author_image={m.image}
-                  author_name={m.name}
-                  initialQuestion={m.text}
-                  lessonId={lessonId}
-                  chatId={id}
-                />
-              )}
-              {m.isAiAssistantOn && (
-                <AiAssistant
-                  id={id}
-                  author={author}
-                  me={me}
-                  m={m}
-                  library={library}
-                  lessonId={lessonId}
-                />
-              )}
-            </>
-          );
-        } else {
-          return (
-            <Message
-              id={"message" + i + id}
-              key={i}
-              time={i}
-              role="student"
-              shouldSlide={true}
-              m={m}
-              me={me}
-              author={author}
-              passTextToBeTranslated={passTextToBeTranslated}
-            />
-          );
-        }
-      })} */}
-    </Messages>
+            );
+          } else {
+            return (
+              <Message
+                id={"message" + i + id}
+                key={i}
+                time={i}
+                role="student"
+                shouldSlide={true}
+                m={m}
+                me={me}
+                author={author}
+              />
+            );
+          }
+        })}
+      </Messages>
+      {generatingResponse && <Loading />}
+      <MessageRow>
+        <IconBlock>
+          <Icon className="icon2" background={"student"}>
+            {me.image && <img className="icon" src={me.image} />}
+          </Icon>
+          <div className="name">{me.name}</div>
+        </IconBlock>
+        <div className="student_text">
+          <textarea
+            placeholder={""}
+            value={studentResponse}
+            onChange={(e) => {
+              setStudentResponse(e.target.value);
+              autoResizeTextarea(e);
+            }}
+          />
+        </div>
+        <MicroButton
+          onClick={async (e) => {
+            setGeneratingResponse(true);
+            await generateStudentResponse();
+            setGeneratingResponse(false);
+          }}
+        >
+          {generatingResponse ? "..." : "Send"}
+        </MicroButton>
+      </MessageRow>
+    </>
   );
 };
 

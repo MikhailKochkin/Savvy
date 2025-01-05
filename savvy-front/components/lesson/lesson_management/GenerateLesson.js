@@ -3,16 +3,18 @@ import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { TailSpin } from "react-loader-spinner";
 import dynamic from "next/dynamic";
+
+import ChangePositions from "./ChangePositions";
 import { Title, ActionButton, Row, Frame } from "./../styles/DevPageStyles";
 
-const UPDATE_LESSON_MUTATION = gql`
-  mutation UPDATE_LESSON_MUTATION($id: String!, $story: String) {
-    updateLesson(id: $id, story: $story) {
-      id
-      story
-    }
-  }
-`;
+// const UPDATE_LESSON_MUTATION = gql`
+//   mutation UPDATE_LESSON_MUTATION($id: String!, $story: String) {
+//     updateLesson(id: $id, story: $story) {
+//       id
+//       story
+//     }
+//   }
+// `;
 
 const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>Loading...</p>,
@@ -173,98 +175,100 @@ let upgradedSimulatorStructureExample = {
 };
 
 const GenerateLesson = (props) => {
-  const { lesson } = props;
-  const populateLessonStructure = (items) => {
-    const updatedItems = items.map((item) => {
-      let comment;
-      if (item.type === "Chat") {
-        comment = lesson.chats
-          .find((chat) => chat.id === item.id)
-          ?.messages.messagesList.map((message) => message.text)
-          .join(" ");
-      } else if (item.type === "Note") {
-        comment = lesson.notes.find((note) => note.id === item.id)?.text;
-      } else if (item.type === "Problem") {
-        comment = lesson.problems.find(
-          (problem) => problem.id === item.id
-        ).text;
-      } else if (item.type === "TextEditor") {
-        comment = lesson.texteditors.find(
-          (textEditor) => textEditor.id === item.id
-        ).text;
-      } else if (item.type === "Shot") {
-        comment = "";
-      } else if (item.type === "Construction") {
-        comment = "";
-      } else if (item.type === "Forum") {
-        comment = lesson.forum.text;
-      } else if (item.type === "Quiz") {
-        comment = lesson.quizes.find((quiz) => quiz.id === item.id).question;
-      } else if (item.type === "NewTest") {
-        comment = lesson.newTests.find((newTest) => newTest.id === item.id)
-          .question[0];
-      }
-      return {
-        id: item.id,
-        type: item.type,
-        content: comment,
-      };
-    });
-    return updatedItems;
-  };
+  const { lesson, elements } = props;
+  // const populateLessonStructure = (items) => {
+  //   const updatedItems = items.map((item) => {
+  //     let content;
+  //     if (item.type === "Chat") {
+  //       content = lesson.chats
+  //         .find((chat) => chat.id === item.id)
+  //         ?.messages.messagesList.map((message) => message.text)
+  //         .join(" ");
+  //     } else if (item.type === "Note") {
+  //       content = lesson.notes.find((note) => note.id === item.id)?.text;
+  //     } else if (item.type === "Problem") {
+  //       content = lesson.problems.find(
+  //         (problem) => problem.id === item.id
+  //       ).text;
+  //     } else if (item.type === "TextEditor") {
+  //       content = lesson.texteditors.find(
+  //         (textEditor) => textEditor.id === item.id
+  //       ).text;
+  //     } else if (item.type === "Shot") {
+  //       content = "";
+  //     } else if (item.type === "Construction") {
+  //       content = "";
+  //     } else if (item.type === "Forum") {
+  //       content = lesson.forum.text;
+  //     } else if (item.type === "Quiz") {
+  //       content = lesson.quizes.find((quiz) => quiz.id === item.id).question;
+  //     } else if (item.type === "NewTest") {
+  //       content = lesson.newTests.find((newTest) => newTest.id === item.id)
+  //         .question[0];
+  //     }
+  //     return {
+  //       id: item.id,
+  //       type: item.type,
+  //       content: content,
+  //     };
+  //   });
+  //   return updatedItems;
+  // };
   const [source, setSource] = useState("");
-  const [simulatorStory, setSimulatorStory] = useState(props.story || "");
-  const [generating, setGenerating] = useState(false);
-  const [blocks, setBlocks] = useState([]);
+  const [simulatorStory, setSimulatorStory] = useState(props.story || ""); // the background story for this simulator
+  const [generating, setGenerating] = useState(false); // loading indicator
+  const [blocks, setBlocks] = useState(elements || []); //
   const [simulatorType, setSimulatorType] = useState("Simulator");
-  const [structure, setStructure] = useState();
+  const [structure, setStructure] = useState(props.structure); // the structure of this simulator with the content of every block used for generating improvements
 
-  useEffect(() => {
-    if (props.structure) {
-      setStructure(populateLessonStructure(props.structure.lessonItems));
-    }
-  }, [props.structure]);
+  // useEffect(() => {
+  //   if (props.structure) {
+  //     setStructure(populateLessonStructure(props.structure.lessonItems));
+  //   }
+  // }, [props.structure]);
+
+  console.log("elements", elements, structure);
 
   const passData = (blocks) => {
     props.passData(blocks);
   };
 
-  const [updateLesson, { loading }] = useMutation(UPDATE_LESSON_MUTATION);
+  // const [updateLesson, { loading }] = useMutation(UPDATE_LESSON_MUTATION);
 
   const myCallback = (dataFromChild) => {
     setSimulatorStory(dataFromChild);
   };
 
-  const generateSimStory = async (e) => {
-    let storyPrompt = `
-      Create a realistic legal scenario for this simulator.
-      ${source}
-      Set the scene in a specific location with key stakeholders facing a time-sensitive situation. 
-      Introduce the main characters, their roles, and their immediate legal challenge. 
-      Include relevant background details about the business/property/situation.
-      Present the scenario from the perspective of a lawyer who needs to provide advice. End with a clear indication of the task at hand.
-      Provide prompts for generating realistic portrait images of the main characters.
-      Return the result only with p, h2, and b tags.
-    `;
+  // const generateSimStory = async (e) => {
+  //   let storyPrompt = `
+  //     Create a realistic legal scenario for this simulator.
+  //     ${source}
+  //     Set the scene in a specific location with key stakeholders facing a time-sensitive situation.
+  //     Introduce the main characters, their roles, and their immediate legal challenge.
+  //     Include relevant background details about the business/property/situation.
+  //     Present the scenario from the perspective of a lawyer who needs to provide advice. End with a clear indication of the task at hand.
+  //     Provide prompts for generating realistic portrait images of the main characters.
+  //     Return the result only with p, h2, and b tags.
+  //   `;
 
-    e.preventDefault();
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: storyPrompt }),
-      });
-      const data = await response.json();
-      console.log("data.result.content", data.result.content);
-      setSimulatorStory(data.result.content);
-      return data.result.content;
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-  };
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch("/api/generate", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ prompt: storyPrompt }),
+  //     });
+  //     const data = await response.json();
+  //     console.log("data.result.content", data.result.content);
+  //     setSimulatorStory(data.result.content);
+  //     return data.result.content;
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert(error.message);
+  //   }
+  // };
 
   const generateSimStructure = async (e, simStory) => {
     let structurePrompt = `
@@ -311,7 +315,18 @@ const GenerateLesson = (props) => {
         2
       )}
 
-        Leverage this format to ensure clarity, engagement, and comprehensive learning outcomes. Ensure all descriptions are concise and written in British English.
+        Leverage this format to ensure clarity, engagement, and comprehensive learning outcomes. 
+        
+        Ensure all descriptions are concise and written in RUSSIAN.
+
+
+      Structure Requirements: JSON Formatting:
+      - RETURN COMMENTS IN RUSSIAN!!!
+      - Provide lesson items in JSON format using proper key-value pairs and nested structures where appropriate.
+      - Include the following attributes:
+        - id: Equal to undefined.
+        - type: Block type ('Chat', 'Longread', 'Shot', 'Problem', 'Editor', 'Construction', 'Forum').
+        - comment: Brief description of the block's purpose in RUSSIAN.
     `;
 
     e.preventDefault();
@@ -373,11 +388,13 @@ const GenerateLesson = (props) => {
       Leverage this format to ensure clarity, engagement, and comprehensive learning outcomes. Ensure all comments are concise and written in Russian.
 
       Structure Requirements: JSON Formatting:
+      - RETURN COMMENTS IN RUSSIAN!!!
       - Provide lesson items in JSON format using proper key-value pairs and nested structures where appropriate.
       - Include the following attributes:
         - id: Equal to undefined.
         - type: Block type ('Chat', 'Longread', 'Shot', 'Problem', 'Editor', 'Construction', 'Forum').
-        - comment: Brief description of the block's purpose.
+        - comment: Brief description of the block's purpose in RUSSIAN.
+
     `;
 
     e.preventDefault();
@@ -391,8 +408,27 @@ const GenerateLesson = (props) => {
       });
       const data = await response.json();
       const jsonData = JSON.parse(data.result.content);
-      setBlocks(jsonData.lessonItems);
-      console.log("jsonData", jsonData.lessonItems);
+      const cleanedData = jsonData.lessonItems.map((item) => {
+        return {
+          id: undefined,
+          type: [
+            "chat",
+            "shot",
+            "note",
+            "newtest",
+            "quiz",
+            "problem",
+            "texteditor",
+            "construction",
+            "forum",
+          ].includes(item.type)
+            ? item.type
+            : undefined,
+          comment: item.comment,
+        };
+      });
+      setBlocks(cleanedData);
+      console.log("cleanedData", cleanedData);
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -401,7 +437,6 @@ const GenerateLesson = (props) => {
 
   const generateUpdatedSimStructure = async (e, structure) => {
     e.preventDefault();
-    console.log(0, structure);
 
     let structurePrompt = `
       Add new items to the JSON structure for an interactive simulator aimed at junior lawyers using these recommendations: ${source}.
@@ -475,9 +510,12 @@ const GenerateLesson = (props) => {
     }
   };
 
+  const handleItemsUpdate = (newItems) => {
+    props.onItemsUpdate(newItems);
+  };
   return (
     <Styles>
-      <Title>Generate Changes to Simulator</Title>
+      <Title> Simulator Structure</Title>
       <Row>
         <div className="description">Simulator type</div>
         <div className="action_area">
@@ -487,20 +525,20 @@ const GenerateLesson = (props) => {
           </select>
         </div>
       </Row>
-      {simulatorStory && (
-        <Row>
-          <div className="description">Simulator story</div>
-          <div className="action_area">
-            <Frame>
-              <DynamicHoverEditor
-                name="story"
-                getEditorText={myCallback}
-                value={simulatorStory}
-              />
-            </Frame>
-          </div>
-        </Row>
-      )}
+      {/* {simulatorStory && ( */}
+      <Row>
+        <div className="description">Simulator story</div>
+        <div className="action_area">
+          <Frame>
+            <DynamicHoverEditor
+              name="story"
+              getEditorText={myCallback}
+              value={simulatorStory}
+            />
+          </Frame>
+        </div>
+      </Row>
+      {/* )} */}
       <Row>
         <div className="description">Simulator prompt</div>
         <div className="action_area">
@@ -513,7 +551,7 @@ const GenerateLesson = (props) => {
           <TailSpin width="50" color="#2E80EC" />
         </Progress2>
       )}
-      <ActionButton
+      {/* <ActionButton
         onClick={async (e) => {
           setGenerating(true);
           const simStory = await generateSimStory(e);
@@ -522,8 +560,8 @@ const GenerateLesson = (props) => {
         }}
       >
         Generate Story
-      </ActionButton>
-      <ActionButton
+      </ActionButton> */}
+      {/* <ActionButton
         onClick={async (e) => {
           e.preventDefault();
           try {
@@ -539,7 +577,7 @@ const GenerateLesson = (props) => {
         }}
       >
         {loading ? "..." : "Save Story"}
-      </ActionButton>
+      </ActionButton> */}
       <ActionButton
         onClick={async (e) => {
           setGenerating(true);
@@ -567,6 +605,12 @@ const GenerateLesson = (props) => {
       <ActionButton onClick={(e) => passData(blocks, simulatorStory)}>
         Pass Blocks
       </ActionButton>
+      <ChangePositions
+        initialItems={blocks}
+        onItemsUpdate={handleItemsUpdate}
+        lessonId={lesson.id}
+        lesson={lesson}
+      />
     </Styles>
   );
 };

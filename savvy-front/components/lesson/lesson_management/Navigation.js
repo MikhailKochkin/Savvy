@@ -124,7 +124,6 @@ const Navigation = (props) => {
 
   return (
     <Head isSticky={isSticky} story={props.story}>
-      {console.log("isSticky", isSticky, "story", !props.story)}
       <Left>
         {props.page !== "demo" && (
           <div className="block">

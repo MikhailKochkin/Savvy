@@ -44,7 +44,7 @@ const SINGLE_SIGNUP_MUTATION = gql`
 
 const USERS_QUERY = gql`
   query USERS_QUERY($email: String!) {
-    users(where: { email: { equals: $email } }) {
+    users(email: $email) {
       id
       email
       name

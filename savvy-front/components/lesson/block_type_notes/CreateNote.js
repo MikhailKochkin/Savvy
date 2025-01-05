@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { useTranslation } from "next-i18next";
 import { Row, ActionButton } from "../styles/DevPageStyles";
+import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 
 const CREATE_NOTE_MUTATION = gql`
   mutation CREATE_NOTE_MUTATION(
@@ -19,7 +20,6 @@ const CREATE_NOTE_MUTATION = gql`
       isSecret
       text
       name
-      next
       user {
         id
       }
@@ -173,7 +173,7 @@ const CreateSingleNote = (props) => {
       alert(error.message);
     }
   };
-
+  console.log("simulationStory", simulationStory);
   return (
     <Container>
       <Row>
@@ -189,7 +189,13 @@ const CreateSingleNote = (props) => {
       <Row>
         <div className="description">Prompt</div>
         <div className="action_area">
-          <textarea onChange={(e) => setPrompt(e.target.value)} />
+          <textarea
+            onChange={(e) => {
+              setPrompt(e.target.value);
+              autoResizeTextarea(e);
+            }}
+            onInput={autoResizeTextarea}
+          />
           <ActionButton
             onClick={async (e) => {
               setGenerating(true);

@@ -15,7 +15,7 @@ const UPDATE_TEST_MUTATION = gql`
     $answers: [String!]
     $correct: [Boolean!]
     $comments: [String!]
-    $complexTestAnswers: ComplexTestAnswers
+    $complexTestAnswers: ComplexTestAnswersInput
     $goal: String
     $complexity: Int
     $type: String
@@ -46,12 +46,16 @@ const UPDATE_TEST_MUTATION = gql`
       correct
       type
       goal
-      complexTestAnswers
+      complexTestAnswers {
+        complexTestAnswers {
+          id
+          answer
+        }
+      }
       comments
       complexity
       ifRight
       ifWrong
-      next
       question
       instructorName
       name
@@ -89,141 +93,6 @@ const Container = styled.div`
     border: 1px solid #ccc;
     border-radius: 3.5px;
     font-size: 1.5rem;
-  }
-`;
-
-const Answers = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 3%;
-`;
-
-const ButtonTwo = styled.button`
-  border: none;
-  background: #3f51b5;
-  padding: 10px 20px;
-  border: 2px solid #3f51b5;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-right: 10px;
-  transition: 0.3s;
-  &:hover {
-    background: #2e3b83;
-    border: 2px solid #2e3b83;
-  }
-`;
-
-const AnswerOption = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 2% 0;
-  border-bottom: 1px solid #adb5bd;
-  padding-bottom: 20px;
-  .question {
-    border-radius: 5px;
-    border: 1px solid #c4c4c4;
-    width: 80%;
-    min-height: 50px;
-    padding: 1.5%;
-    font-size: 1.4rem;
-    outline: 0;
-  }
-  .comment {
-    border-radius: 5px;
-    margin-top: 15px;
-    border: 1px solid #c4c4c4;
-    width: 80%;
-    min-height: 50px;
-    padding: 1.5%;
-    font-size: 1.4rem;
-    outline: 0;
-  }
-
-  select {
-    width: 20%;
-    font-size: 1.4rem;
-    outline: none;
-    line-height: 1.3;
-    padding: 0.5% 1%;
-    /* padding: 0.6em 1.4em 0.5em 0.8em; */
-    max-width: 100%;
-    box-sizing: border-box;
-    margin-top: 2%;
-    border: 1px solid #c5c5c5;
-    border-radius: 4px;
-    background: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
-      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
-    background-repeat: no-repeat, repeat;
-    background-position: right 0.7em top 50%, 0 0;
-    background-size: 0.65em auto, 100%;
-  }
-`;
-
-const Comment = styled.div`
-  margin-top: 3%;
-  border-radius: 5px;
-  border: 1px solid #c4c4c4;
-  width: 80%;
-  min-height: 100px;
-  padding: 1.5%;
-  font-size: 1.4rem;
-  outline: 0;
-  &#ifRight {
-    border: 1px solid #84bc9c;
-  }
-  &#ifWrong {
-    border: 1px solid #de6b48;
-  }
-`;
-
-const Complexity = styled.div`
-  select,
-  option {
-    width: 80%;
-    border-radius: 5px;
-    margin: 3% 0;
-    border: 1px solid #c4c4c4;
-    font-family: Montserrat;
-    font-size: 1.4rem;
-    outline: 0;
-    padding: 1.5%;
-  }
-`;
-
-const CustomSelect1 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 30%;
-  @media (max-width: 800px) {
-    width: 65%;
-  }
-  cursor: pointer;
-  border: 1px solid grey;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  margin-right: 15px;
-  button {
-    border: none;
-    cursor: pointer;
-
-    background: none;
-    font-family: Montserrat;
   }
 `;
 
@@ -476,7 +345,6 @@ const UpdateTest = (props) => {
           >
             +1
           </MicroButton>
-          {/* <div className="explainer">The name will be used for navigation</div> */}
         </AnswerArea>
       </Row>
       <Row>
@@ -491,9 +359,6 @@ const UpdateTest = (props) => {
               getEditorText={setIf}
             />
           </Frame>
-          {/* <div className="explainer">
-            This determines how the case study works
-          </div> */}
         </div>
       </Row>
       <Row>
@@ -508,12 +373,9 @@ const UpdateTest = (props) => {
               getEditorText={setIf}
             />
           </Frame>
-          {/* <div className="explainer">
-            This determines how the case study works
-          </div> */}
         </div>
       </Row>
-
+      {console.log("complexAnswers", complexAnswers)}
       <ActionButton
         onClick={async (e) => {
           e.preventDefault();
@@ -526,7 +388,10 @@ const UpdateTest = (props) => {
               comments: comments,
               complexity,
               complexTestAnswers: {
-                complexTestAnswers: complexAnswers,
+                complexTestAnswers: complexAnswers.map((answer) => ({
+                  id: answer.id,
+                  answer: answer.answer,
+                })),
               },
               type,
               goal,

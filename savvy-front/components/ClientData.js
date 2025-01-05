@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 

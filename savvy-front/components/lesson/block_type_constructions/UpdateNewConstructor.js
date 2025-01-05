@@ -19,7 +19,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
     $id: String!
     $hint: String
     $columnsNum: Int
-    $elements: ElementsList
+    $elements: ConstructionElementsListInput
     $goal: String
     $type: String
     $name: String
@@ -36,12 +36,32 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
       id
       name
       goal
+      lessonId
       lessonID
       variants
       answer
       hint
       columnsNum
-      elements
+      elements {
+        elements {
+          type
+          value
+          text
+          comment
+          place
+          size
+          rows
+          inDoc
+          isTest
+          edit
+          borders {
+            top
+            bottom
+            left
+            right
+          }
+        }
+      }
       type
     }
   }
@@ -307,64 +327,6 @@ const UpdateNewConstructor = (props) => {
   return (
     <Styles>
       <div className="editor_container">
-        {/* <Explainer>
-          {router.locale == "ru" ? (
-            <>
-              <p>
-                Задача конструктора – дать студенту возможность самостоятельно
-                создать полноценный документ, слайд или формулу. Для этого ему
-                предстоит выбрать нужные блоки и поместить их в правильное
-                место. Вы можете создать любое количество блоков в любых
-                конфигурациях. Но обратите внимание на их настройки:
-              </p>
-              <ul>
-                <li>
-                  По общему правилу блоки статичны. То есть, когда они будут
-                  показываться студентам, двигать их будет нельзя.
-                </li>
-                <li>
-                  Нажмите на ✅, чтобы сделать блок активным. Тогда студент при
-                  выполнении задания сможет ставить его на разные места в
-                  документе.
-                </li>
-                <li>
-                  Нажмите на ⛔️, если хотите сделать блок лишним. Тогда он
-                  будет предложен студенту как вариант, но в документе для него
-                  места не будет. Обязательно ставьте такие блоки в самый конец
-                  документа.
-                </li>
-                <li>Нажмите на ➡️, если хотите увеличить ширину блока.</li>
-              </ul>
-            </>
-          ) : (
-            <>
-              <p>
-                The purpose of the doc builder is to develop the skill of
-                drafting documents. To do this, students will have to select the
-                right blocks and place them in the right places. You can create
-                any number of blocks in any configuration. But pay attention to
-                these settings:
-              </p>
-              <ul>
-                <li>
-                  As a general rule, blocks are static. That is, when they are
-                  shown to the students, they cannot be moved.
-                </li>
-                <li>
-                  Press ✅ to make the block active. The student will then be
-                  able to move it to different positions in the document.
-                </li>
-                <li>
-                  Press ⛔️ if you want to make the block redundant. It will
-                  then be an option to the student, but there will be no room
-                  for it in the document. Please put such blocks at the very end
-                  of the document.
-                </li>
-                <li>Press ➡️ if you want to increase the block width.</li>
-              </ul>
-            </>
-          )}
-        </Explainer> */}
         <Row>
           <div className="description">Id</div>
           <div className="action_area">
@@ -436,9 +398,6 @@ const UpdateNewConstructor = (props) => {
             </SecondaryButton>
           </div>
         </Row>
-
-        {/* <h3>Goal</h3>
-      <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea> */}
       </div>
       <Block columns={columnsNum}>
         {elements.map((el, i) => {
@@ -468,7 +427,17 @@ const UpdateNewConstructor = (props) => {
               goal,
               type,
               name,
-              elements: { elements },
+              elements: {
+                elements: elements.map(({ borders, __typename, ...rest }) => ({
+                  borders: {
+                    top: borders.top,
+                    bottom: borders.bottom,
+                    left: borders.left,
+                    right: borders.right,
+                  },
+                  ...rest,
+                })),
+              },
             },
           });
           props.getResult(res);

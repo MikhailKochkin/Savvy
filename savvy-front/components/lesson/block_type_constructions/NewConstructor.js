@@ -12,14 +12,28 @@ import DeleteSingleConstructor from "./DeleteSingleConstructor";
 
 const CONSTRUCTION_RESULT_QUERY = gql`
   query CONSTRUCTION_RESULT_QUERY($id: String!, $studentId: String!) {
-    constructionResults(
-      where: {
-        constructionId: { equals: $id }
-        studentId: { equals: $studentId }
-      }
-    ) {
+    constructionResults(constructionId: $id, studentId: $studentId) {
       id
-      elements
+      elements {
+        elements {
+          type
+          value
+          text
+          comment
+          place
+          size
+          rows
+          inDoc
+          isTest
+          edit
+          borders {
+            top
+            bottom
+            left
+            right
+          }
+        }
+      }
       createdAt
       updatedAt
     }
@@ -59,7 +73,9 @@ const Buttons = styled.div`
 
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
-  let elements = construction.elements.elements;
+  let elements = construction.elements?.elements
+    ? construction.elements?.elements
+    : [];
   const [update, setUpdate] = useState(false);
   const { t } = useTranslation("lesson");
 
@@ -73,7 +89,7 @@ const NewConstructor = (props) => {
 
   if (queryLoading) return "...";
   // if (error) return `Error! ${error.message}`;
-
+  console.log("queryData", queryData);
   const getResult = (data) => {
     props.getResult(data);
   };

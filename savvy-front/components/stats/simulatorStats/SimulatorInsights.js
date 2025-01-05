@@ -8,13 +8,18 @@ import SimulatorInsightsBlock from "./SimulatorInsightsBlock";
 
 const QUIZZES_RESULTS_QUERY = gql`
   query QUIZZES_RESULTS_QUERY($lessonId: String!) {
-    quizResults(where: { lessonId: { equals: $lessonId } }) {
+    quizResults(lessonId: $lessonId) {
       id
       correct
       result
       comment
       type
-      ideasList
+      ideasList {
+        quizIdeas {
+          idea
+          result
+        }
+      }
       student {
         id
       }
@@ -32,7 +37,7 @@ const QUIZZES_RESULTS_QUERY = gql`
 
 const TEST_RESULTS_QUERY = gql`
   query TEST_RESULTS_QUERY_RESULTS_QUERY($lessonId: String!) {
-    testResults(where: { lessonId: { equals: $lessonId } }) {
+    testResults(lessonId: $lessonId) {
       id
       answer
       answerArray
@@ -54,7 +59,7 @@ const TEST_RESULTS_QUERY = gql`
 
 const CONSTRUCTION_RESULTS_QUERY = gql`
   query CONSTRUCTION_RESULTS_QUERY($lessonId: String!) {
-    constructionResults(where: { lessonId: { equals: $lessonId } }) {
+    constructionResults(lessonId: $lessonId) {
       id
       answer
       inputs
@@ -74,7 +79,7 @@ const CONSTRUCTION_RESULTS_QUERY = gql`
 
 const TESTPRACTICE_RESULTS_QUERY = gql`
   query TESTPRACTICE_RESULTS_QUERY($lessonId: String!) {
-    testPracticeResults(where: { lessonId: { equals: $lessonId } }) {
+    testPracticeResults(lessonId: $lessonId) {
       id
       testPractice {
         id
@@ -184,12 +189,11 @@ const SimulatorInsights = (props) => {
   const [quizResults, setQuizResults] = useState([]);
   const [testResults, setTestResults] = useState([]);
   const [constructionResults, setConstructionResults] = useState([]);
-  const [testPracticeResults, setTestPracticeResults] = useState([]);
+  // const [testPracticeResults, setTestPracticeResults] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
 
   // GraphQL queries for fetching results
-
   const [getQuizData, { loading }] = useLazyQuery(QUIZZES_RESULTS_QUERY, {
     variables: { lessonId: props.lesson.id },
   });
@@ -211,13 +215,12 @@ const SimulatorInsights = (props) => {
     const fetchData = async () => {
       const res = await getQuizData();
       const res2 = await getTestData();
-      const res3 = await getConstructionData();
-      const res4 = await getTestPracticeData();
-
+      // const res3 = await getConstructionData();
+      // const res4 = await getTestPracticeData();
       setQuizResults(res.data.quizResults);
       setTestResults(res2.data.testResults);
-      setConstructionResults(res3.data.constructionResults);
-      setTestPracticeResults(res4.data.testPracticeResults);
+      // setConstructionResults(res3.data.constructionResults);
+      // setTestPracticeResults(res4.data.testPracticeResults);
     };
 
     fetchData();
@@ -688,23 +691,26 @@ const SimulatorInsights = (props) => {
                       (nt) => nt.id === element.id
                     );
 
-                    let cleanTestPracticeResults = testPracticeResults.filter(
-                      (tpr) =>
-                        tpr.testPractice.id === elementData.id &&
-                        tpr.student.id !== lesson.user.id &&
-                        tpr.student.id !== "cjqy9i57l000k0821rj0oo8l4"
-                    );
+                    let cleanTestPracticeResults = [];
+                    // testPracticeResults.filter(
+                    //   (tpr) =>
+                    //     tpr.testPractice.id === elementData.id &&
+                    //     tpr.student.id !== lesson.user.id &&
+                    //     tpr.student.id !== "cjqy9i57l000k0821rj0oo8l4"
+                    // );
 
-                    const totalCorrect = cleanTestPracticeResults.reduce(
-                      (sum, result) => sum + result.correct,
-                      0
-                    );
+                    // const totalCorrect = cleanTestPracticeResults.reduce(
+                    //   (sum, result) => sum + result.correct,
+                    //   0
+                    // );
+
+                    const totalCorrect = [];
 
                     const averageCorrect =
                       totalCorrect / cleanTestPracticeResults.length;
 
                     taskResult = `${averageCorrect.toFixed(1)} / ${
-                      cleanTestPracticeResults[0].tasks.length
+                      cleanTestPracticeResults[0]?.tasks.length
                     }`;
 
                     // ratio = calculateAverageScore(

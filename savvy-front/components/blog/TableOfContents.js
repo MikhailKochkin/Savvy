@@ -61,7 +61,6 @@ const TableOfContents = ({ text }) => {
   return (
     <Styles>
       <ul>
-        {console.log(toc)}
         {toc.map((item) => (
           <li className="header" key={item.id}>
             <span href={`#${item.id}`}>{item.text}</span>

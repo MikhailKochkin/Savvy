@@ -3,7 +3,7 @@ import styled from "styled-components";
 import parse from "html-react-parser";
 import Modal from "styled-react-modal";
 import dynamic from "next/dynamic";
-import { useMutation, gql, useQuery } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
 import { useTranslation } from "next-i18next";
 // import Box from "./Box";
@@ -342,7 +342,9 @@ function transformArray(arr) {
 
 const NewConstructor = (props) => {
   const { construction, lessonID, story, constructionResults } = props;
-  let elements = construction.elements.elements;
+  let elements = construction.elements?.elements
+    ? construction.elements?.elements
+    : [];
   const { t } = useTranslation("lesson");
   const [attempts, setAttempts] = useState(0);
   const [answers, setAnswers] = useState([]);

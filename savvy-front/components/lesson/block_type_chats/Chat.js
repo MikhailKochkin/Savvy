@@ -254,6 +254,7 @@ const Chat = (props) => {
           isSecret={props.isSecret}
           messages={messages}
           lessonId={lessonId}
+          characters={props.characters}
           getResult={getResult}
           switchUpdate={switchUpdate}
         />

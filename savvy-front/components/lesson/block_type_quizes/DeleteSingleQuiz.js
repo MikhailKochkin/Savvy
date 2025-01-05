@@ -3,8 +3,8 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 
-import { SecondaryButton } from "../styles/DevPageStyles";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { SecondaryButton } from "../styles/DevPageStyles";
 
 const DELETE_QUIZ_MUTATION = gql`
   mutation DELETE_QUIZ_MUTATION($id: String!) {

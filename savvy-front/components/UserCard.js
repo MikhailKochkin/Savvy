@@ -1,5 +1,5 @@
-import { useState, useEffect, memo } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useState, memo } from "react";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
@@ -831,16 +831,16 @@ const UserCard = memo((props) => {
       <div className="tags">
         <h4>Курсы</h4>
         <ol>
-          {props.new_subjects.map((o) => (
+          {props.new_subjects?.map((o) => (
             <li>{o.title}</li>
           ))}{" "}
         </ol>
 
         <h4>Заказы</h4>
-        {props.orders.map((o) => (
+        {props.orders?.map((o) => (
           <div>
             <div>
-              <b>{o.coursePage.title}</b>
+              <b>{o.coursePage?.title}</b>
             </div>
             <li>{o.isPaid ? "Оплачен" : "Не оплачен"}</li>
             <li>{o.price}</li>
@@ -860,13 +860,13 @@ const UserCard = memo((props) => {
           </div>
         ))}
         <h4>Результаты уроков</h4>
-        {props.lessonResults.length > 0 && (
+        {props.lessonResults?.length > 0 && (
           <button onClick={(e) => setShowLessonResults(!showLessonResults)}>
             Открыть
           </button>
         )}
         {showLessonResults &&
-          props.lessonResults.length > 0 &&
+          props.lessonResults?.length > 0 &&
           props.lessonResults
             .slice() // Make a copy of the array to avoid mutating the original
             .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // Sort by newest updatedAt
@@ -892,7 +892,7 @@ const UserCard = memo((props) => {
               </div>
             ))}
         <h4>Результаты испытаний</h4>
-        {props.challengeResults.length > 0 &&
+        {props.challengeResults?.length > 0 &&
           props.challengeResults.map((l) => (
             <div>
               <div>

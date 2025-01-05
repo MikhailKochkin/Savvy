@@ -11,7 +11,7 @@ import Loading from "../Loading";
 
 const LAWRDLE_QUERY = gql`
   query LAWRDLE_QUERY($id: String!) {
-    lawrdles(where: { id: { equals: $id } }) {
+    lawrdles(id: $id) {
       id
       word
       story

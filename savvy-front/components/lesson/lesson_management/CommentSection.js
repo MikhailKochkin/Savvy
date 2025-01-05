@@ -473,7 +473,6 @@ const CommentSection = (props) => {
               </div>
             </div>
           </div>
-
           {/* Step 6: Display Replies */}
           {comment.replies &&
             comment.replies.map((reply, i) => (

@@ -21,7 +21,7 @@ const Meta = () => (
     />
 
     <link rel="shortcut icon" href="/static/favicon2.ico" />
-    <title>BeSavvy: simulators for lawyers</title>
+    <title>BeSavvy Simulator</title>
     <script
       async
       strategy="afterInteractive"

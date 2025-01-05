@@ -49,6 +49,13 @@ const IconBlock = styled.div`
   align-items: center;
   width: 65px;
   margin-right: 10px;
+  .mini_select {
+    border: 1px solid grey;
+    outline: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
   .icon {
     margin: 5px;
     border-radius: 50%;
@@ -173,82 +180,107 @@ const DynamicHoverEditor = dynamic(import("../../../editor/HoverEditor"), {
 });
 
 const CreateMessage = (props) => {
-  const { message } = props;
-  const [author, setAuthor] = useState(
-    message?.author?.toLowerCase() ? message.author.toLowerCase() : "author"
-  );
-  const [name, setName] = useState(message?.name ? message?.name : "");
-  const [text, setText] = useState(message?.text ? message.text : "");
-  const [reactions, setReactions] = useState([]);
-  const [image, setImage] = useState("");
+  const { m, characters } = props;
 
-  const myCallback2 = (dataFromChild, name, index) => {
-    if (name == "text") {
-      setText(dataFromChild);
-      props.updateText(dataFromChild, props.index);
-    }
+  const [message, setMessage] = useState({
+    author: m?.author?.toLowerCase() || "author",
+    name: m?.name || "",
+    text: m?.text || "",
+    reactions: m?.reactions || [],
+    image: m?.image || "",
+  });
+
+  const updateMessage = (fields) => {
+    const updatedMessage = {
+      ...message,
+      ...fields,
+    };
+    setMessage(updatedMessage);
+    props.passUpdatedMessage(updatedMessage, props.index);
   };
 
-  const myCallback3 = (dataFromChild, name, index) => {
-    let new_reactions = [...reactions];
-    new_reactions[index][name] = dataFromChild;
-    setReactions(new_reactions);
-    props.updateReaction(reactions, props.index);
-  };
-
-  const updateAuthor = (val) => {
-    setAuthor(val);
-    setName(val);
-    props.updateAuthor(val, props.index);
+  const updateReaction = (index, field, value) => {
+    const updatedReactions = [...message.reactions];
+    updatedReactions[index] = {
+      ...updatedReactions[index],
+      [field]: value,
+    };
+    updateMessage({ reactions: updatedReactions });
   };
 
   return (
     <Styles>
       <Phrase>
         <IconBlock>
+          {/* Author Selection */}
+          <select
+            className="mini_select"
+            value={message.author}
+            onChange={(e) => updateMessage({ author: e.target.value })}
+          >
+            <option value={"student"}>Left</option>
+            <option value={"author"}>Right</option>
+          </select>
+          {/* Author and Name Selection */}
           <div className="select_box">
             <select
-              value={author}
-              index={props.index}
-              defaultValue={message?.author?.toLowerCase()}
+              value={message.name}
               onChange={(e) => {
-                e.preventDefault();
-                updateAuthor(e.target.value);
-                setName(e.target.value);
+                if (
+                  e.target.value === "author" ||
+                  e.target.value === "student"
+                ) {
+                  updateMessage({ name: e.target.value });
+                } else {
+                  const character = characters.find(
+                    (character) => character.name === e.target.value
+                  );
+                  if (character) {
+                    updateMessage({
+                      name: character.name,
+                      image: character.image,
+                    });
+                  }
+                }
               }}
             >
               <option value="author">👩🏼‍🏫</option>
               <option value="student">👨🏻‍🎓</option>
+              {characters?.map((item) => (
+                <option key={item.id} value={item.name}>
+                  {item.name[0].toUpperCase()}
+                </option>
+              ))}
             </select>
           </div>
           <div className="name">
             <input
-              onChange={(e) => {
-                setName(e.target.value);
-                props.updateName(e.target.value, props.index);
-              }}
-              defaultValue={name}
+              onChange={(e) => updateMessage({ name: e.target.value })}
+              value={message.name}
             />
           </div>
         </IconBlock>
+
+        {/* Text Editor */}
         <MainFrame>
           <DynamicHoverEditor
             index={props.index}
             name="text"
-            getEditorText={myCallback2}
+            getEditorText={(value) => updateMessage({ text: value })}
             placeholder="Message"
-            value={text}
+            value={message.text}
           />
         </MainFrame>
       </Phrase>
+
+      {/* Buttons for Image and Reactions */}
       <Buttons>
         <div className="number">
           <button
-            onClick={(e) => {
-              let link = prompt("Image link: ");
+            onClick={() => {
+              const link = prompt("Image link: ");
               if (link) {
-                setImage(link);
-                props.updateImage(link, props.index);
+                updateMessage({ image: link });
               }
             }}
           >
@@ -257,11 +289,9 @@ const CreateMessage = (props) => {
         </div>
         <div className="number">
           <button
-            onClick={(e) => {
-              let new_reactions = [...reactions];
-              let popped = new_reactions.pop();
-              setReactions([...new_reactions]);
-              props.updateReaction([...new_reactions], props.index);
+            onClick={() => {
+              const updatedReactions = message.reactions.slice(0, -1);
+              updateMessage({ reactions: updatedReactions });
             }}
           >
             -1 reaction
@@ -269,44 +299,34 @@ const CreateMessage = (props) => {
         </div>
         <div className="number">
           <button
-            onClick={(e) => {
-              setReactions([
-                ...reactions,
-                {
-                  reaction: "",
-                  comment: "",
-                },
-              ]);
-              props.updateReaction(
-                [
-                  ...reactions,
-                  {
-                    reaction: "",
-                    comment: "",
-                  },
-                ],
-                props.index
-              );
+            onClick={() => {
+              const updatedReactions = [
+                ...message.reactions,
+                { reaction: "", comment: "" },
+              ];
+              updateMessage({ reactions: updatedReactions });
             }}
           >
             +1 reaction
           </button>
         </div>
       </Buttons>
-      {reactions.map((r, i) => (
-        <ReactBlock>
+
+      {/* Reactions */}
+      {message.reactions.map((r, i) => (
+        <ReactBlock key={i}>
           <Header>Reaction № {i + 1}</Header>
           <Phrase>
             <IconBlock>
               <div className="select_box">
-                {author == "author" ? "👨🏻‍🎓" : "👩🏼‍🏫"}
+                {message.author === "author" ? "👨🏻‍🎓" : "👩🏼‍🏫"}
               </div>
             </IconBlock>
             <Frame>
               <DynamicHoverEditor
                 index={i}
                 name="reaction"
-                getEditorText={myCallback3}
+                getEditorText={(value) => updateReaction(i, "reaction", value)}
                 value={r.reaction}
               />
             </Frame>
@@ -316,14 +336,14 @@ const CreateMessage = (props) => {
           <Phrase>
             <IconBlock>
               <div className="select_box">
-                {author == "author" ? "👩🏼‍🏫" : "👨🏻‍🎓"}
+                {message.author === "author" ? "👩🏼‍🏫" : "👨🏻‍🎓"}
               </div>
             </IconBlock>
             <Frame>
               <DynamicHoverEditor
                 index={i}
                 name="comment"
-                getEditorText={myCallback3}
+                getEditorText={(value) => updateReaction(i, "comment", value)}
                 value={r.comment}
               />
             </Frame>

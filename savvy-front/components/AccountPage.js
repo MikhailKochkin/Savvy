@@ -7,6 +7,7 @@ import Account from "./Account";
 import SubscriptionSettings from "./subscription/SubscriptionSettings";
 
 import MyCourses from "./MyCourses";
+import Educator from "./course/courseManagement/MyCourses";
 import PleaseSignIn from "./auth/PleaseSignIn";
 
 const Styles = styled.div`
@@ -74,6 +75,9 @@ const AccountPage = (props) => {
             <div onClick={(e) => setPage("my_courses")} name="account">
               My courses
             </div>
+            <div onClick={(e) => setPage("developper")} name="account">
+              Developper
+            </div>
             <div onClick={(e) => setPage("subscription")} name="account">
               {t("subscription")}
             </div>
@@ -84,6 +88,7 @@ const AccountPage = (props) => {
             {page === "subscription" && me && (
               <SubscriptionSettings me={me} id={props.id} />
             )}
+            {page === "developper" && me && <Educator me={me} />}
           </Data>
         </Container>
       </Styles>

@@ -215,13 +215,15 @@ const Shots = (props) => {
                     e.preventDefault();
                     setNum(num + 1);
                     if (num + 1 === parts.length) {
-                      await createShotResult({
+                      console.log("createShotResult");
+                      const res = await createShotResult({
                         variables: {
                           lessonId: lessonID,
                           shotId: shotID,
                           answer: "Looked through",
                         },
                       });
+                      console.log("res");
                     }
                   }}
                 >

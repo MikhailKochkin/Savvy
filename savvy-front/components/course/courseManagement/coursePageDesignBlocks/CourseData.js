@@ -9,7 +9,7 @@ import LoadingErrorMessage from "../../../layout/LoadingErrorMessage";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+    coursePage(id: $id) {
       id
       title
       description
@@ -96,58 +96,6 @@ const Data = styled.div`
     width: 100%;
   }
 `;
-const SimpleButton = styled.button`
-  width: 230px;
-  height: 40px;
-  background: #000000;
-  padding: 5px 0;
-  border: 2px solid #000000;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: 0.3s;
-  a {
-    color: #fff;
-  }
-  &:hover {
-    background: #f4f4f4;
-    color: #000000;
-    a {
-      color: #000000;
-    }
-  }
-`;
-
-const ErrorMessage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-direction: center;
-  width: 100vw;
-  padding: 5% 0;
-  img {
-    width: 400px;
-    border-radius: 25px;
-    margin-bottom: 10px;
-  }
-  p {
-    width: 380px;
-    text-align: center;
-  }
-  @media (max-width: 600px) {
-    width: 100%;
-    img {
-      width: 80%;
-    }
-    p {
-      width: 80%;
-    }
-  }
-`;
 
 const Header = styled.span`
   font-size: 2.4rem;
@@ -188,7 +136,7 @@ const CourseData = (props) => {
   return (
     <Data id="info_box">
       <Header>{coursePage.title}</Header>
-      {coursePage && coursePage.authors.length > 0 ? (
+      {coursePage && coursePage.authors?.length > 0 ? (
         coursePage.authors.map((a) => (
           <div className="name">
             <img src={a.image} />
@@ -207,11 +155,6 @@ const CourseData = (props) => {
                 : coursePage.user.name}{" "}
             </p>
           </div>
-          {coursePage.user.work ? (
-            <p className="track2">{parse(coursePage.user.work)}</p>
-          ) : (
-            ""
-          )}
         </>
       )}
       <div className="description">

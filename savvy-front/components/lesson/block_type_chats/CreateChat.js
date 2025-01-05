@@ -7,11 +7,12 @@ import _ from "lodash";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateMessage from "./functions/CreateMessage";
 import { Row, ActionButton } from "../styles/DevPageStyles";
+import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 
 const CREATE_CHAT_MUTATION = gql`
   mutation CREATE_CHAT_MUTATION(
     $name: String!
-    $messages: Messages!
+    $messages: MessagesInput!
     $lessonId: String!
   ) {
     createChat(name: $name, messages: $messages, lessonId: $lessonId) {
@@ -20,7 +21,14 @@ const CREATE_CHAT_MUTATION = gql`
       isSecret
       link_clicks
       complexity
-      messages
+      messages {
+        messagesList {
+          author
+          name
+          text
+          image
+        }
+      }
       user {
         id
       }
@@ -102,38 +110,13 @@ const CreateChat = (props) => {
     }
   }, [initial_data]);
 
-  const getMessage = (data) => {
-    setMessages([...messages, data]);
-  };
+  const updateMessageProperties = (message, index) => {
+    console.log("message", message);
 
-  const updateAuthor = (val, i) => {
-    let old_messages = [...messages];
-    old_messages[i].author = val;
-    setMessages([...old_messages]);
-  };
-
-  const updateText = (val, i) => {
-    let old_messages = [...messages];
-    old_messages[i].text = val;
-    setMessages([...old_messages]);
-  };
-
-  const updateReaction = (val, i) => {
-    let old_messages = [...messages];
-    old_messages[i].reactions = val;
-    setMessages([...old_messages]);
-  };
-
-  const updateImage = (val, i) => {
-    let old_messages = [...messages];
-    old_messages[i].image = val;
-    setMessages([...old_messages]);
-  };
-
-  const updateName = (val, i) => {
-    let old_messages = [...messages];
-    old_messages[i].name = val;
-    setMessages([...old_messages]);
+    const updatedMessages = [...messages];
+    updatedMessages[index] = message;
+    console.log("updatedMessages", updatedMessages);
+    setMessages(updatedMessages);
   };
 
   const generateChat = async (e) => {
@@ -146,6 +129,7 @@ const CreateChat = (props) => {
               The topic and purpose of this chat block are: """${prompt}""".
 
               Generate and return in JSON format a new chat using the information from the above.
+              If you want to address the student in the dialogue, use [name] to represent the student's name.
 
               The result must look like this:
 
@@ -157,7 +141,7 @@ const CreateChat = (props) => {
                   "messagesList": [
                     {
                       "author": "author",
-                      "text": "Let's take a look at the most fundamental concept. The concept of a contract. Do you know what a contract is?"
+                      "text": "Hi [name]!Let's take a look at the most fundamental concept. The concept of a contract. Do you know what a contract is?"
                       "image": "",
                       "number": 1,
                       "name": "Jack",
@@ -167,7 +151,7 @@ const CreateChat = (props) => {
                       "text": "Not really... Could you explain please?",
                       "image": "",
                       "number": 2,
-                      "name": "Jane",
+                      "name": "student",
 
                     },
                     {
@@ -197,7 +181,7 @@ const CreateChat = (props) => {
                       "text": "Could you explain what a contract is?"
                       "image": "",
                       "number": 1,
-                      "name": "Jane",
+                      "name": "student",
 
                     },
                     {
@@ -223,7 +207,6 @@ const CreateChat = (props) => {
       const data = await response.json();
       if (response.ok) {
         let new_messages = JSON.parse(data.result.content);
-        console.log("new_messages", new_messages);
         setMessages(new_messages.content.messagesList);
         // setSimulatorStory(data.result.content);
         return data;
@@ -253,7 +236,13 @@ const CreateChat = (props) => {
       <Row>
         <div className="description">Prompt</div>
         <div className="action_area">
-          <textarea onChange={(e) => setPrompt(e.target.value)} />
+          <textarea
+            onChange={(e) => {
+              setPrompt(e.target.value);
+              autoResizeTextarea(e);
+            }}
+            onInput={autoResizeTextarea}
+          />
           <ActionButton
             onClick={async (e) => {
               setGenerating(true);
@@ -271,14 +260,9 @@ const CreateChat = (props) => {
           {messages.map((m, i) => (
             <CreateMessage
               index={i}
-              message={m}
-              // document={props.document}
-              getMessage={getMessage}
-              updateAuthor={updateAuthor}
-              updateText={updateText}
-              updateReaction={updateReaction}
-              updateImage={updateImage}
-              updateName={updateName}
+              m={m}
+              characters={props.characters}
+              passUpdatedMessage={updateMessageProperties}
             />
           ))}
           <Bottom>

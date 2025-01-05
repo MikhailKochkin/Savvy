@@ -1,12 +1,13 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
-import Link from "next/link";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import parse from "html-react-parser";
+import Modal from "styled-react-modal";
+import CreateCourse from "./CreateCourse";
 
-import PleaseSignIn from "../../auth/PleaseSignIn";
 import Loading from "../../layout/Loading";
 import {
   SecondaryButton,
@@ -15,7 +16,7 @@ import {
 
 const MY_COURSES_QUERY = gql`
   query MY_COURSES_QUERY($id: String!) {
-    coursePages(where: { userId: { equals: $id } }) {
+    coursePages(userId: $id) {
       id
       title
       user {
@@ -39,7 +40,7 @@ const MY_COURSES_QUERY = gql`
 
 const MY_CO_AUTHORED_COURSES_QUERY = gql`
   query MY_CO_AUTHORED_COURSES_QUERY($id: String!) {
-    coursePages(where: { authors: { some: { id: { equals: $id } } } }) {
+    coursePages(co_authorId: $id) {
       id
       title
       user {
@@ -47,28 +48,12 @@ const MY_CO_AUTHORED_COURSES_QUERY = gql`
         name
         surname
         image
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
       }
       authors {
         id
         name
         surname
         image
-        uni {
-          id
-          title
-        }
-        company {
-          id
-          name
-        }
       }
       lessons {
         id
@@ -98,15 +83,15 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   background: #e8eff6;
-  padding: 50px 0;
+  padding: 20px 0;
 `;
 const Courses = styled.div`
-  width: 70%;
+  width: 95%;
   max-width: 890px;
   padding: 1.5%;
   background: #fff;
   border-radius: 20px;
-  margin-top: 30px;
+  margin-bottom: 20px;
   @media (max-width: 850px) {
     width: 95%;
   }
@@ -170,12 +155,16 @@ const Row = styled.div`
 
 const MyCourses = (props) => {
   const { me } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { t } = useTranslation("educator");
   const router = useRouter();
 
   let publishedCourses = [];
   let developedCourses = [];
   let coauthoredCourses = [];
+
+  const toggleCourseCreateModal = (e) => setIsModalOpen(!isModalOpen);
 
   const { loading, error, data } = useQuery(MY_COURSES_QUERY, {
     variables: { id: me.id },
@@ -206,113 +195,146 @@ const MyCourses = (props) => {
     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
   return (
-    <PleaseSignIn>
-      <Styles>
-        {/* <EducatorImage /> */}
-        <Container>
-          <Courses>
-            <Title primary>
-              My courses in development: {developedCourses.length}
-            </Title>
+    <Styles>
+      {/* <EducatorImage /> */}
+      <Container>
+        <Courses>
+          <Title primary>
+            My courses in development: {developedCourses.length}
+          </Title>
 
-            <Background>
-              <Row>
-                <div className="name">
-                  <b>Name</b>
-                </div>
+          <Background>
+            <Row>
+              <div className="name">
+                <b>Name</b>
+              </div>
+              <div className="description">
+                <b>Description</b>
+              </div>
+              <div className="updated">
+                <b>Last updated</b>
+              </div>
+              <div className="move">
+                {" "}
+                <b>Action</b>
+              </div>
+            </Row>
+            {developedCourses.map((coursePage) => (
+              <Row key={coursePage.id}>
+                <div className="name">{coursePage.title}</div>
                 <div className="description">
-                  <b>Description</b>
+                  {parse(coursePage.description)}
                 </div>
                 <div className="updated">
-                  <b>Last updated</b>
+                  {new Date(coursePage.updatedAt).toLocaleDateString()}
                 </div>
                 <div className="move">
-                  {" "}
-                  <b>Action</b>
+                  <SecondaryButton
+                    onClick={() => router.push(`course?id=${coursePage.id}`)}
+                  >
+                    Open
+                  </SecondaryButton>
                 </div>
               </Row>
-              {developedCourses.map((coursePage) => (
-                <Row key={coursePage.id}>
-                  <div className="name">{coursePage.title}</div>
-                  <div className="description">
-                    {parse(coursePage.description)}
-                  </div>
-                  <div className="updated">
-                    {new Date(coursePage.updatedAt).toLocaleDateString()}
-                  </div>
-                  <div className="move">
-                    <SecondaryButton
-                      onClick={() => router.push(`course?id=${coursePage.id}`)}
-                    >
-                      Open
-                    </SecondaryButton>
-                  </div>
-                </Row>
-              ))}
-              <Row>
-                <div className="name">
-                  <b>
-                    <i>New Course</i>
-                  </b>
-                </div>
-                <div className="description"></div>
-                <div className="updated"></div>
-                <div className="move">
-                  <PrimaryButton onClick={() => router.push(`create`)}>
-                    Create
-                  </PrimaryButton>
-                </div>
-              </Row>
-            </Background>
-          </Courses>
-          <Courses>
-            <Title primary>
-              My courses in production: {publishedCourses.length}
-            </Title>
-            <Background>
-              <Row>
-                <div className="name">
-                  <b>Name</b>
-                </div>
-                <div className="description">
-                  <b>Description</b>
-                </div>
+            ))}
+            <Row>
+              <div className="name">
+                <b>
+                  <i>New Course</i>
+                </b>
+              </div>
+              <div className="description"></div>
+              <div className="updated"></div>
+              <div className="move">
+                <PrimaryButton onClick={() => toggleCourseCreateModal()}>
+                  Create
+                </PrimaryButton>
+              </div>
+            </Row>
+          </Background>
+        </Courses>
+        <Courses>
+          <Title primary>
+            My courses in production: {publishedCourses.length}
+          </Title>
+          <Background>
+            <Row>
+              <div className="name">
+                <b>Name</b>
+              </div>
+              <div className="description">
+                <b>Description</b>
+              </div>
+              <div className="updated">
+                <b>Last updated</b>
+              </div>
+              <div className="move">
+                {" "}
+                <b>Action</b>
+              </div>
+            </Row>
+            {publishedCourses.length === 0 && <p>{t("No_Courses")}</p>}
+            {publishedCourses.map((coursePage) => (
+              <Row key={coursePage.id}>
+                <div className="name">{coursePage.title}</div>
+                <div className="description">{coursePage.description}</div>
                 <div className="updated">
-                  <b>Last updated</b>
+                  {new Date(coursePage.updatedAt).toLocaleDateString()}
                 </div>
                 <div className="move">
-                  {" "}
-                  <b>Action</b>
+                  <SecondaryButton
+                    onClick={() => router.push(`course?id=${coursePage.id}`)}
+                  >
+                    Open
+                  </SecondaryButton>
                 </div>
               </Row>
-              {publishedCourses.length === 0 && <p>{t("No_Courses")}</p>}
-              {publishedCourses.map((coursePage) => (
-                <Row key={coursePage.id}>
-                  <div className="name">{coursePage.title}</div>
-                  <div className="description">{coursePage.description}</div>
-                  <div className="updated">
-                    {new Date(coursePage.updatedAt).toLocaleDateString()}
-                  </div>
-                  <div className="move">
-                    <SecondaryButton
-                      onClick={() => router.push(`course?id=${coursePage.id}`)}
-                    >
-                      Open
-                    </SecondaryButton>
-                  </div>
-                </Row>
-              ))}
-            </Background>
-          </Courses>
-        </Container>
-      </Styles>
-    </PleaseSignIn>
+            ))}
+          </Background>
+        </Courses>
+      </Container>
+      <StyledModal
+        isOpen={isModalOpen}
+        onBackgroundClick={toggleCourseCreateModal}
+        onEscapeKeydown={toggleCourseCreateModal}
+      >
+        <CreateCourse />
+      </StyledModal>
+    </Styles>
   );
 };
 
 MyCourses.propTypes = {
   me: PropTypes.object.isRequired,
 };
+
+const StyledModal = Modal.styled`
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  height: 800px;
+  width: 640px;
+  padding: 2%;
+      overflow-y: scroll;
+
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;
 
 export default MyCourses;
 export { MY_COURSES_QUERY };

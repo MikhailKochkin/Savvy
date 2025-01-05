@@ -34,7 +34,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $type: String
     $explanation: String
     $improvement: String
-    $ideasList: QuizIdeas
+    $ideasList: QuizIdeasInput
   ) {
     createQuizResult(
       answer: $answer
@@ -129,100 +129,124 @@ const Generate = (props) => {
   const getMatchingAnswers = async () => {
     let matchedAnswers = [];
     setProgress("true");
+
     // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
-    // 2. Create a set to hold the indexes of matched answers
-    //    an array to list the ideas that are more than 65
-    //    a result array to store the results of checking student's every idea
     let matchedIndexes = new Set();
     let newCorrectIdeas = [];
     let new_results = [];
     let old_results = [];
-    let updatedExpectedAnswers = [...expectedAnswers]; // Initialize temporary array
+    let updatedExpectedAnswers = [...expectedAnswers];
 
-    // 3. Iterate over each idea
+    // 2. Iterate over each idea
     for (let idea of ideas) {
-      // if the idea has already been evaluated, we skip it and save its old evaluation
-      if (overallResults && overallResults.find((res) => res.idea === idea)) {
-        old_results.push(overallResults.find((res) => res.idea === idea));
+      // Check if the idea has already been evaluated
+      let existingResult =
+        overallResults && overallResults.find((res) => res.idea === idea);
+      if (existingResult) {
+        old_results.push(existingResult);
         continue;
-      } else {
-        // For each not evaulated idea, iterate over each answer
-        for (let answer of answers) {
-          let data1 = {
-            answer1: answer.answer,
-            answer2: idea,
-          };
-          try {
-            const response = await fetch(
-              "https://arcane-refuge-67529.herokuapp.com/checker",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data1),
-              }
-            );
-            // get the result
-            const res = await response.json();
+      }
 
-            let new_obj = {
-              idea: idea,
-              result: res.res,
-              next_id: parseFloat(res.res) > 57 ? answer.next_id : null,
-              next_type: parseFloat(res.res) > 57 ? answer.next_type : null,
-            };
-            // save the results to the array with all other results
-            new_results.push(new_obj);
+      // Store the best match for this idea
+      let bestMatch = {
+        result: 0,
+        matchedText: null, // This will store the best-matching string
+      };
 
-            // If res.res is more than 60 and the answer's index is not in the set, add the answer to the matchedAnswers array
-            if (res.res > 57 && !matchedIndexes.has(answer.index)) {
-              matchedAnswers.push(answer);
-              matchedIndexes.add(answer.index);
+      for (let answer of answers) {
+        // Combine main answer text with related answers
+        let textsToCheck = [answer.answer, ...(answer.relatedAnswers || [])];
+
+        let fetchPromises = textsToCheck.map((text) => {
+          return fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              answer1: text,
+              answer2: idea,
+            }),
+          });
+        });
+
+        try {
+          // Evaluate all texts for the current answer
+          let responses = await Promise.all(fetchPromises);
+          let jsonResults = await Promise.all(
+            responses.map((res) => res.json())
+          );
+
+          // Find the highest result and track the corresponding text
+          jsonResults.forEach((r, index) => {
+            const val = parseFloat(r.res);
+            if (val > bestMatch.result) {
+              bestMatch.result = val;
+              bestMatch.matchedText = textsToCheck[index];
             }
-            if (res.res > 57) {
-              newCorrectIdeas.push({
-                idea: idea,
-                matchedAnswer: answer,
-              });
-              updatedExpectedAnswers[answer.index] = answer; // Accumulate changes
-            }
-          } catch (error) {
-            console.error("There was an error:", error);
-          }
+          });
+        } catch (error) {
+          console.error("Error comparing answers:", error);
         }
+      }
+
+      // Add the best match for this idea
+      let new_obj = {
+        idea,
+        result: bestMatch.result,
+        matchedAnswer: bestMatch.matchedText, // Include only the best-matching string
+      };
+      new_results.push(new_obj);
+
+      // If the best match exceeds the threshold, track it as a correct idea
+      if (bestMatch.result > 57 && bestMatch.matchedText) {
+        newCorrectIdeas.push({
+          idea,
+          matchedAnswer: bestMatch.matchedText,
+        });
       }
     }
 
+    // Merge results and keep the highest match for each idea
     let unique_values = [];
     [...old_results, ...new_results].forEach((item) => {
       const existingItem = unique_values.find((uv) => uv.idea === item.idea);
       if (!existingItem) {
-        unique_values.push({ ...item }); // Add a copy of the item if it doesn't exist
+        unique_values.push({ ...item });
       } else if (parseFloat(item.result) > parseFloat(existingItem.result)) {
         existingItem.result = item.result;
-        existingItem.next_id = item.next_id;
-        existingItem.next_type = item.next_type;
+        existingItem.matchedAnswer = item.matchedAnswer;
       }
     });
 
+    // Update state
     setOverallResults(unique_values);
     setProgress("false");
     setCorrectIdeas([...correctIdeas, ...newCorrectIdeas]);
     setIsFeedbackShown(true);
-    setExpectedAnswers(updatedExpectedAnswers); // Update state with accumulated changes
+    setExpectedAnswers(updatedExpectedAnswers);
 
+    let quizIdeas = unique_values.map((uv) => ({
+      ...uv,
+      result: String(uv.result), // convert numeric to string
+    }));
+
+    console.log("quizIdeas", quizIdeas);
+
+    // Persist the quiz result with the matched answer included
     createQuizResult({
       variables: {
         quiz: props.quizId,
         lessonId: props.lessonId,
         hint: AIhint,
         type: "answer",
-        ideasList: { quizIdeas: unique_values },
+        ideasList: { quizIdeas }, // Includes matchedAnswer for each idea
         comment: ``,
       },
     });
+
+    // Pass the result based on the problem type
     if (props.problemType === "ONLY_CORRECT") {
       if (newCorrectIdeas.length >= props.answers.answerElements.length) {
         props.passResult("true");

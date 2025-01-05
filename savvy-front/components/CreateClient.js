@@ -1,6 +1,6 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 
 const CREATE_CLIENT = gql`

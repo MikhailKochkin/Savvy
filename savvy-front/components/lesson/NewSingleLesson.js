@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
+
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
 import LoadingText from "../layout/LoadingText";
@@ -11,7 +13,7 @@ import LoadingErrorMessage from "../layout/LoadingErrorMessage";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
-    lesson(where: { id: $id }) {
+    lesson(id: $id) {
       id
       text
       openSize
@@ -19,8 +21,13 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       number
       type
       context
-      structure
-      short_structure
+      structure {
+        lessonItems {
+          id
+          type
+          comment
+        }
+      }
       change
       open
       totalPoints
@@ -40,7 +47,21 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         type
         isSecret
         complexity
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         vertical_image
         horizontal_image
         user {
@@ -53,7 +74,14 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         isSecret
         link_clicks
         complexity
-        messages
+        messages {
+          messagesList {
+            author
+            name
+            text
+            image
+          }
+        }
         user {
           id
         }
@@ -62,7 +90,13 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
-        answers
+        answers {
+          answerElements {
+            answer
+            index
+            relatedAnswers
+          }
+        }
         complexity
         ifRight
         ifWrong
@@ -71,7 +105,21 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         name
         image
         goalType
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         isOrderOfAnswersImportant
         shouldAnswerSizeMatchSample
         user {
@@ -83,7 +131,12 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       newTests {
         id
         answers
-        complexTestAnswers
+        complexTestAnswers {
+          complexTestAnswers {
+            id
+            answer
+          }
+        }
         type
         correct
         comments
@@ -94,7 +147,21 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         instructorName
         name
         image
-        next
+        next {
+          true {
+            type
+            value
+          }
+          false {
+            type
+            value
+          }
+          branches {
+            source
+            type
+            value
+          }
+        }
         id
         user {
           id
@@ -108,18 +175,38 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         successText
         failureText
       }
-      teamQuests {
-        id
-        introduction
-        solution
-        tasks
-      }
+      # teamQuests {
+      #   id
+      #   introduction
+      #   solution
+      #   # tasks
+      # }
       problems {
         id
         text
         name
         nodeID
-        steps
+        steps {
+          problemItems {
+            id
+            type
+            next {
+              true {
+                type
+                value
+              }
+              false {
+                type
+                value
+              }
+              branches {
+                source
+                type
+                value
+              }
+            }
+          }
+        }
         complexity
         nodeType
         type
@@ -152,7 +239,26 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
-        elements
+        elements {
+          elements {
+            type
+            value
+            text
+            comment
+            place
+            size
+            rows
+            inDoc
+            isTest
+            edit
+            borders {
+              top
+              bottom
+              left
+              right
+            }
+          }
+        }
         columnsNum
         complexity
         variants
@@ -470,6 +576,11 @@ const NewSingleLesson = (props) => {
 
   return (
     <>
+      <Head>
+        <title>{lesson ? lesson.name : "Simulator"}</title>
+        <meta name="description" content={lesson.description} />
+      </Head>
+      {console.log(lesson)}
       <div id="root"></div>
       <>
         {lesson && (

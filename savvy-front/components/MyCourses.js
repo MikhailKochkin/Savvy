@@ -3,15 +3,13 @@ import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
+import Loading from "./layout/Loading";
 
 import { SecondaryButton } from "./lesson/styles/DevPageStyles";
 
 const MY_COURSE_PAGES_QUERY = gql`
-  query MY_COURSE_PAGES_QUERY($id: String!) {
-    coursePages(
-      where: { new_students: { some: { id: { equals: $id } } } }
-      orderBy: { createdAt: desc }
-    ) {
+  query MY_COURSE_PAGES_QUERY($id: String!, $orderByCreatedAt: String) {
+    coursePages(studentId: $id, orderByCreatedAt: $orderByCreatedAt) {
       id
       title
       description
@@ -21,7 +19,7 @@ const MY_COURSE_PAGES_QUERY = gql`
         id
         forum {
           id
-          rating {
+          ratings {
             id
             rating
           }
@@ -33,28 +31,12 @@ const MY_COURSE_PAGES_QUERY = gql`
         surname
         image
         status
-        company {
-          id
-          name
-        }
-        uni {
-          id
-          title
-        }
       }
       authors {
         id
         name
         surname
         status
-        company {
-          id
-          name
-        }
-        uni {
-          id
-          title
-        }
       }
     }
   }
@@ -136,7 +118,9 @@ const MyCourses = (props) => {
   });
   const router = useRouter();
 
-  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  if (loading) return <Loading />;
   return (
     <Styles>
       <Container>

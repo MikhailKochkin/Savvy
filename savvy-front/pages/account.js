@@ -4,7 +4,12 @@ import AccountPage from "../components/AccountPage";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["nav", "account", "auth"])),
+    ...(await serverSideTranslations(locale, [
+      "nav",
+      "account",
+      "auth",
+      "create",
+    ])),
   },
 });
 

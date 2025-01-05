@@ -17,7 +17,7 @@ const CREATE_QUIZ_MUTATION = gql`
     $type: String
     $goalType: String
     $name: String
-    $answers: ComplexAnswer
+    $answers: ComplexAnswerInput
   ) {
     createQuiz(
       question: $question
@@ -38,7 +38,6 @@ const CREATE_QUIZ_MUTATION = gql`
       ifRight
       ifWrong
       answer
-      next
       name
       goalType
       createdAt
@@ -47,7 +46,13 @@ const CREATE_QUIZ_MUTATION = gql`
         name
         surname
       }
-      answers
+      answers {
+        answerElements {
+          answer
+          relatedAnswers
+          index
+        }
+      }
     }
   }
 `;
@@ -293,6 +298,7 @@ const CreateQuiz = (props) => {
         onClick={async (e) => {
           e.preventDefault();
           const res = await createQuiz();
+          console.log("res createQuiz", res);
           props.getResult(res);
         }}
       >

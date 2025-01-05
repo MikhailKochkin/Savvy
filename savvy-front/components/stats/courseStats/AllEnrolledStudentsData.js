@@ -3,7 +3,7 @@ import LessonsResultsLoad from "./LessonsResultsLoad";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+    coursePage(id: $id) {
       id
       title
       courseType
@@ -23,7 +23,8 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 const STUDENTS_QUERY = gql`
   query STUDENTS_QUERY($coursePageId: String!) {
     users(
-      where: { new_subjects: { some: { id: { equals: $coursePageId } } } }
+      # where: { new_subjects: { some: { id: { equals: $coursePageId } } } }
+      where: { coursePageId: $coursePageId }
     ) {
       id
       name

@@ -28,7 +28,7 @@ const CREATE_CLIENT = gql`
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+    coursePage(id: $id) {
       id
       title
       price
@@ -156,43 +156,6 @@ const Container = styled.div`
     flex-direction: row;
     width: 95%;
     justify-content: space-between;
-  }
-`;
-
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  padding: 2%;
-  .top_message {
-    padding-bottom: 2%;
-    border-bottom: 1px solid grey;
-    font-size: 2rem;
-    width: 100%;
-    text-align: center;
-  }
-  .bottom_message {
-    margin-top: 2%;
-  }
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
   }
 `;
 

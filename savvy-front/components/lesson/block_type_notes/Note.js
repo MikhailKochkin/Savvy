@@ -72,7 +72,6 @@ const Note = (props) => {
     lessonID,
     isFinal,
   } = props;
-  console.log("note", note);
   let width;
   if (props.problem) {
     width = "100%";

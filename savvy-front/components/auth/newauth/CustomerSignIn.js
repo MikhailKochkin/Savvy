@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useMutation, gql, useQuery, useLazyQuery } from "@apollo/client";
+import { useMutation, gql, useLazyQuery } from "@apollo/client";
 import styled from "styled-components";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";

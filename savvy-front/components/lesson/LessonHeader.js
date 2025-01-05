@@ -8,17 +8,16 @@ import parse from "html-react-parser";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(
-      where: {
-        lesson: { id: { equals: $lessonId } }
-        student: { id: { equals: $userId } }
-      }
-    ) {
+    lessonResults(lessonId: $lessonId, userId: $userId) {
       id
       progress
       lesson {
         id
-        structure
+        structure {
+          lessonItems {
+            id
+          }
+        }
       }
     }
   }
@@ -334,7 +333,7 @@ const LessonHeader = (props) => {
     variables: { lessonId: props.lesson.id, userId: props.me.id },
   });
   // if (error) return <p>Error</p>;
-
+  console.log("data", data);
   useEffect(() => {
     if (data?.lessonResults.length > 0 && lesson?.structure?.lessonItems) {
       maxResult = getLessonWithHighestProgress(data.lessonResults);

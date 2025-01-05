@@ -20,7 +20,7 @@ const UPDATE_PROBLEM_MUTATION = gql`
     $name: String
     $type: String
     $complexity: Int
-    $steps: ProblemStructure
+    $steps: ProblemStructureInput
     $goal: String
     $context: String
   ) {
@@ -38,7 +38,27 @@ const UPDATE_PROBLEM_MUTATION = gql`
       text
       name
       nodeID
-      steps
+      steps {
+        problemItems {
+          id
+          type
+          next {
+            true {
+              type
+              value
+            }
+            false {
+              type
+              value
+            }
+            branches {
+              source
+              type
+              value
+            }
+          }
+        }
+      }
       goal
       type
       complexity
@@ -94,7 +114,7 @@ const UpdateProblem = (props) => {
   const [type, setType] = useState(props.problem.type);
   const [context, setContext] = useState(props.context);
   const [updatedSteps, setUpdatedSteps] = useState(
-    props.steps && props.steps.problemItems.length > 0
+    props.steps && props.steps.problemItems?.length > 0
       ? props.steps.problemItems
       : []
   );
@@ -103,6 +123,7 @@ const UpdateProblem = (props) => {
   );
 
   const { t } = useTranslation("lesson");
+  console.log("updatedSteps", updatedSteps);
   const [updateProblem, { loading, error }] = useMutation(
     UPDATE_PROBLEM_MUTATION,
     {
@@ -115,9 +136,9 @@ const UpdateProblem = (props) => {
         name,
         context,
         steps: {
-          problemItems: [...updatedSteps].map(
-            ({ content, ...keepAttrs }) => keepAttrs
-          ),
+          problemItems: [...updatedSteps].map(({ content, ...keepAttrs }) => ({
+            ...keepAttrs,
+          })),
         },
       },
       refetchQueries: [
@@ -130,6 +151,16 @@ const UpdateProblem = (props) => {
         props.switchUpdate();
       },
     }
+  );
+
+  console.log(
+    [...updatedSteps].map(({ content, next, ...keepAttrs }) => {
+      const { branches, ...nextWithoutBranches } = next || {};
+      return {
+        ...keepAttrs,
+        next: next ? { ...nextWithoutBranches, branchesInput: branches } : null,
+      };
+    })
   );
 
   const handleUpdate = async (e) => {
@@ -179,7 +210,7 @@ const UpdateProblem = (props) => {
             />
             <div className="explainer">
               What learning results are students expected to achieve through
-              this document editor
+              this case study
             </div>
           </div>
         </Row>

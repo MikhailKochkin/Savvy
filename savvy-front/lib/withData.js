@@ -1,8 +1,12 @@
 "use client";
-import { ApolloClient, ApolloLink, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+} from "@apollo/client";
 import { onError } from "apollo-link-error";
 import { getDataFromTree } from "@apollo/react-ssr";
-import { createUploadLink } from "apollo-upload-client";
 import { useEffect } from "react"; // Import useEffect hook
 import { useRouter } from "next/router"; // Import useRouter hook to access router object
 import { endpoint, prodEndpoint } from "../config";
@@ -22,8 +26,9 @@ function createApolloClient(headers) {
           );
         if (networkError) console.log(`[Network error]: ${networkError}`);
       }),
-      createUploadLink({
+      new HttpLink({
         uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
+        // Pass in fetchOptions or credentials as needed
         fetchOptions: {
           credentials: "include",
         },

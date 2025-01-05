@@ -9,7 +9,7 @@ import Loading from "../layout/Loading";
 
 const POSTS_QUERY = gql`
   query POSTS_QUERY {
-    posts(where: { language: { equals: "en" } }, orderBy: { createdAt: desc }) {
+    posts(language: "en", orderByCreatedAt: "desc") {
       id
       title
       text
@@ -142,7 +142,7 @@ const Blog = (props) => {
   const [posts, setPosts] = useState([]);
   const { t } = useTranslation("blog");
 
-  const { data, loading } = useQuery(POSTS_QUERY);
+  const { data, loading, error } = useQuery(POSTS_QUERY);
   useEffect(() => {
     if (data) {
       setPosts(data.posts);
@@ -150,6 +150,7 @@ const Blog = (props) => {
   }, [data]);
 
   if (loading) return <Loading />;
+  if (error) return <div>Error loading posts</div>;
 
   return (
     <Styles>

@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, useLazyQuery, gql } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
 
 import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import UpdateLesson from "./UpdateLesson";
 import LessonBlock from "./LessonBlock";
-import GenerateLesson from "./lesson_management/GenerateLesson";
+import GenerateLesson from "./lesson_management/NewGenerateLesson";
 import ChangePositions from "./lesson_management/ChangePositions";
 
 const UPDATE_LESSON_MUTATION = gql`
-  mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure) {
+  mutation UPDATE_LESSON_MUTATION(
+    $id: String!
+    $structure: LessonStructureInput
+  ) {
     updateLesson(id: $id, structure: $structure) {
       id
     }
@@ -73,23 +76,6 @@ const LessonBuilder = (props) => {
     smoothscroll.polyfill();
   });
 
-  const slide = () => {
-    var my_element = document.getElementById("builder_part");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
-
-  // const getTemplate = (val) => {
-  //   let new_template = templates[val][router.locale];
-  //   setElements((e) => [...new_template]);
-  //   setPassTemplate(true);
-  //   setTimeout(() => setPassTemplate(false), 2000);
-  //   slide();
-  // };
-
   const [updateLesson, { data, loading }] = useMutation(
     UPDATE_LESSON_MUTATION,
     {
@@ -128,17 +114,18 @@ const LessonBuilder = (props) => {
     let a = new_list2.filter((el) => el.id != undefined);
     const b = a.map(({ num, ...keepAttrs }) => keepAttrs);
     const c = b.map(({ data, ...keepAttrs }) => keepAttrs);
-    const d = c.map(({ comment, ...keepAttrs }) => keepAttrs);
-    const e = d.map(({ content, ...keepAttrs }) => keepAttrs);
+    const e = c.map(({ content, ...keepAttrs }) => keepAttrs);
     const f = e.map(({ description, ...keepAttrs }) => keepAttrs);
     const g = f.map(({ format, ...keepAttrs }) => keepAttrs);
     const h = g.map(({ idea, ...keepAttrs }) => keepAttrs);
     const j = h.map(({ status, ...keepAttrs }) => keepAttrs);
+    const k = j.map(({ __typename, ...keepAttrs }) => keepAttrs);
+    const l = k.map(({ prompt, ...keepAttrs }) => keepAttrs);
     updateLesson({
       variables: {
         id: props.lesson.id,
         structure: {
-          lessonItems: j,
+          lessonItems: l,
         },
       },
     });
@@ -152,21 +139,22 @@ const LessonBuilder = (props) => {
     temp_obj.data = data;
     new_list[num] = temp_obj;
     setElements([...new_list]);
+
     let a = new_list.filter((el) => el.id != undefined);
     const b = a.map(({ num, ...keepAttrs }) => keepAttrs);
     const c = b.map(({ data, ...keepAttrs }) => keepAttrs);
-    const d = c.map(({ comment, ...keepAttrs }) => keepAttrs);
-    const e = d.map(({ content, ...keepAttrs }) => keepAttrs);
+    const e = c.map(({ content, ...keepAttrs }) => keepAttrs);
     const f = e.map(({ description, ...keepAttrs }) => keepAttrs);
     const g = f.map(({ format, ...keepAttrs }) => keepAttrs);
     const h = g.map(({ idea, ...keepAttrs }) => keepAttrs);
     const j = h.map(({ status, ...keepAttrs }) => keepAttrs);
     const k = j.map(({ prompt, ...keepAttrs }) => keepAttrs);
+    const l = k.map(({ __typename, ...keepAttrs }) => keepAttrs);
     updateLesson({
       variables: {
         id: props.lesson.id,
         structure: {
-          lessonItems: k,
+          lessonItems: l,
         },
       },
     });
@@ -179,7 +167,8 @@ const LessonBuilder = (props) => {
   const addGeneratedPlace = (id, data) => {
     addBlock(id, data);
   };
-  const passData = (blocks) => {
+  const passData = (blocks, story) => {
+    setSimulationStory(story);
     const flattenedBlocks = blocks.flat();
 
     let new_blocks = flattenedBlocks.map((el) => ({
@@ -194,6 +183,80 @@ const LessonBuilder = (props) => {
   const handleItemsUpdate = (updatedItems) => {
     setElements(updatedItems);
   };
+
+  let combinedCharacters = [];
+  if (lesson.characters) {
+    combinedCharacters.push(...lesson.characters);
+  } else {
+    combinedCharacters.push(
+      ...lesson.coursePage.lessons
+        .flatMap((lesson) => lesson.characters)
+        .filter((character) => character) // Remove falsy values
+    );
+
+    combinedCharacters = combinedCharacters.filter(
+      (character, index, self) =>
+        index === self.findIndex((c) => c.image === character.image) // Ensure unique characters by `id`
+    );
+  }
+
+  let previousStories = [];
+  if (lesson.coursePage.lessons) {
+    lesson.coursePage.lessons.map((other_lesson) => {
+      if (other_lesson.number < lesson.number) {
+        previousStories.push(other_lesson.story);
+      }
+    });
+  }
+
+  // INFO DOE NEW BLOCKS AI GENERATION
+  // 1. Create character string
+  const cleanedCharacters = combinedCharacters.map(
+    ({ __typename, image, ...rest }) => rest
+  );
+  const jsonCharactersString = JSON.stringify(cleanedCharacters);
+
+  // 2. Create lesson info string
+  const populateLessonStructure = (items) => {
+    const updatedItems = items.map((item) => {
+      let content;
+      if (item.type === "Chat") {
+        content = lesson.chats
+          .find((chat) => chat.id === item.id)
+          ?.messages.messagesList.map((message) => message.text)
+          .join(" ");
+      } else if (item.type === "Note") {
+        content = lesson.notes.find((note) => note.id === item.id)?.text;
+      } else if (item.type === "Problem") {
+        content = lesson.problems.find(
+          (problem) => problem.id === item.id
+        ).text;
+      } else if (item.type === "TextEditor") {
+        content = lesson.texteditors.find(
+          (textEditor) => textEditor.id === item.id
+        ).text;
+      } else if (item.type === "Shot") {
+        content = "";
+      } else if (item.type === "Construction") {
+        content = "";
+      } else if (item.type === "Forum") {
+        content = lesson.forum.text;
+      } else if (item.type === "Quiz") {
+        content = lesson.quizes.find((quiz) => quiz.id === item.id).question;
+      } else if (item.type === "NewTest") {
+        content = lesson.newTests.find((newTest) => newTest.id === item.id)
+          .question[0];
+      }
+      return {
+        type: item.type,
+        content: content,
+      };
+    });
+    return updatedItems;
+  };
+
+  let currentStory = populateLessonStructure(lesson.structure.lessonItems);
+  const jsonStoryString = JSON.stringify(currentStory);
 
   return (
     <Styles>
@@ -212,51 +275,54 @@ const LessonBuilder = (props) => {
           lessonId={lesson.id}
           story={lesson.story}
           structure={lesson.structure}
+          elements={elements}
           lesson={lesson}
+          characters={combinedCharacters}
         />
-        {elements ? (
+        {/* {elements ? (
           <ChangePositions
             initialItems={elements}
             onItemsUpdate={handleItemsUpdate}
             lessonId={lesson.id}
             lesson={lesson}
           />
-        ) : null}
+        ) : null} */}
         <BuilderPart id="builder_part">
           {[...elements].map((el, i) => {
             return (
-              <>
-                <LessonBlock
-                  key={el.id}
-                  id={el.id}
-                  comment={el.comment ? el.comment : null}
-                  saved={el.id ? true : false}
-                  index={i}
-                  me={props.me}
-                  el={el}
-                  simulationStory={simulationStory}
-                  lessonData={lessonData}
-                  prompt={el.prompt ? el.prompt : "missing"}
-                  // updateTemplate={passTemplate}
-                  el_type={el.type}
-                  el_id={el.id}
-                  lesson={lesson}
-                  remove={remove}
-                  addToLesson={addToLesson}
-                  addPlace={addPlace}
-                  addGeneratedPlace={addGeneratedPlace}
-                  initial_data={
-                    el.status && el.status == "generated"
-                      ? {
-                          content: el.content,
-                          format: el.format,
-                          idea: el.idea,
-                          description: el.description,
-                        }
-                      : null
-                  }
-                />
-              </>
+              <LessonBlock
+                key={el.id}
+                id={el.id}
+                comment={el.comment ? el.comment : null}
+                saved={el.id && !el.id.includes("temp") ? true : false}
+                index={i}
+                me={props.me}
+                el={el}
+                simulationStory={simulationStory}
+                lessonData={lessonData}
+                prompt={el.prompt ? el.prompt : "missing"}
+                characters={combinedCharacters}
+                jsonCharactersString={jsonCharactersString}
+                jsonStoryString={jsonStoryString}
+                el_type={el.type}
+                el_id={el.id}
+                lesson={lesson}
+                previousStories={previousStories}
+                remove={remove}
+                addToLesson={addToLesson}
+                addPlace={addPlace}
+                addGeneratedPlace={addGeneratedPlace}
+                initial_data={
+                  el.status && el.status == "generated"
+                    ? {
+                        content: el.content,
+                        format: el.format,
+                        idea: el.idea,
+                        description: el.description,
+                      }
+                    : null
+                }
+              />
             );
           })}
         </BuilderPart>

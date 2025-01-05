@@ -296,39 +296,39 @@ const BannerOffer = (props) => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (isEmailSent || !props.me) return;
-            const res = sendBusinessEmail({
-              variables: {
-                subject: "New Offer Banner Reach",
-                email: "mikhail@besavvy.app",
-                type: "internal",
-                name: "Mikhail",
-                connection: `I noticed ${props.me.name} ${props.me.surname} (${props.me.email}) reached the offer banner in ${props.coursePage?.title}`,
-              },
-            });
-            setIsEmailSent(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.1 } // Adjust the threshold as needed
-    );
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       entries.forEach((entry) => {
+  //         if (entry.isIntersecting) {
+  //           if (isEmailSent || !props.me) return;
+  //           const res = sendBusinessEmail({
+  //             variables: {
+  //               subject: "New Offer Banner Reach",
+  //               email: "mikhail@besavvy.app",
+  //               type: "internal",
+  //               name: "Mikhail",
+  //               connection: `I noticed ${props.me.name} ${props.me.surname} (${props.me.email}) reached the offer banner in ${props.coursePage?.title}`,
+  //             },
+  //           });
+  //           setIsEmailSent(true);
+  //           observer.disconnect();
+  //         }
+  //       });
+  //     },
+  //     { threshold: 0.1 } // Adjust the threshold as needed
+  //   );
 
-    if (bannerRef.current) {
-      observer.observe(bannerRef.current);
-    }
+  //   if (bannerRef.current) {
+  //     observer.observe(bannerRef.current);
+  //   }
 
-    return () => {
-      if (bannerRef.current) {
-        observer.unobserve(bannerRef.current);
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (bannerRef.current) {
+  //       observer.unobserve(bannerRef.current);
+  //     }
+  //   };
+  // }, []);
 
   router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
   return (

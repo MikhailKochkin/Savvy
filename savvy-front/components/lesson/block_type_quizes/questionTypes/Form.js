@@ -22,7 +22,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
     $hint: String
     $explanation: String
     $improvement: String
-    $ideasList: QuizIdeas
+    $ideasList: QuizIdeasInput
   ) {
     createQuizResult(
       answer: $answer

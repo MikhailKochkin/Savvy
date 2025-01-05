@@ -13,7 +13,7 @@ import { SecondaryButton, Buttons } from "../lesson/styles/DevPageStyles";
 
 const POST_QUERY = gql`
   query POST_QUERY($id: String!) {
-    post(where: { id: $id }) {
+    post(id: $id) {
       id
       title
       text
@@ -325,7 +325,6 @@ const Post = (props) => {
   if (post_loading) return <Loading />;
   if (post_error) return post_error;
   let post = post_data.post;
-
   moment.locale("ru");
   return (
     <>

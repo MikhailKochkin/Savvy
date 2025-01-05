@@ -12,7 +12,7 @@ export const getServerSideProps = async ({ locale }) => ({
 
 const CERT_QUERY = gql`
   query CERT_QUERY($id: String!) {
-    certificates(where: { id: { equals: $id } }) {
+    certificates(id: $id) {
       id
       createdAt
       updatedAt

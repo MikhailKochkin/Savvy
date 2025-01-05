@@ -183,10 +183,10 @@ const NewNav = (props) => {
         <Link href="/">
           <div className="logo">
             <Image
-              src={`/static/logo_colored.svg`}
-              alt={"alt"}
-              width="112"
-              height="32"
+              src={`/static/logo_dark_long_lesson_menu.svg`}
+              alt={"logo"}
+              width="132"
+              height="42"
             />
           </div>
         </Link>
@@ -194,14 +194,6 @@ const NewNav = (props) => {
           <img src="static/menu-icon.svg" />
         </MobileMenu>
         <DesktopMenu>
-          {me &&
-            me.status &&
-            me.status !== "STUDENT" &&
-            me.status !== "LAWYER" && (
-              <Link href="/coursesManagement">
-                <div className="my">{t("my_courses")}</div>
-              </Link>
-            )}
           <Link href="/blog">
             <div className="blog">{t("blog")}</div>
           </Link>
@@ -239,16 +231,6 @@ const NewNav = (props) => {
           <Link href="/">
             <button onClick={closeNav}>BeSavvy</button>
           </Link>
-          {me && me.status === "AUTHOR" && (
-            <Link href="/coursesManagement">
-              <button onClick={closeNav}>{t("my_courses")}</button>
-            </Link>
-          )}
-          {me && me.status === "SAVVY_AUTHOR" && (
-            <Link href="/coursesManagement">
-              <button onClick={(e) => closeNav()}>{t("my_courses")}</button>
-            </Link>
-          )}
           <Link
             href={{
               pathname: "/blog",

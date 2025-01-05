@@ -6,7 +6,7 @@ import ContactForm from "./ContactForm";
 import Loading from "../layout/Loading";
 const USEFUL_QUERY = gql`
   query USEFUL_QUERY($id: String!) {
-    useful(where: { id: $id }) {
+    useful(id: $id) {
       id
       header
       buttonText

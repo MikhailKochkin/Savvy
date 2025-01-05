@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin"]
 }
 
 datasource db {
@@ -526,6 +527,7 @@ model Lesson {
   assignment          Boolean?
   totalPoints         Int?                 @default(0)
   hasSecret           Boolean?             @default(false)
+  characters          Json?
   challengeResults    ChallengeResult[]    
   chats               Chat[]
   constructions       Construction[]
