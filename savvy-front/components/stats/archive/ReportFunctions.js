@@ -34,8 +34,6 @@ export const findTextEditors = (lesson) => {
       let foundTextEditor = lesson.texteditors.find(
         (editor) => editor.id === item.id
       );
-      console.log("foundTextEditor", foundTextEditor);
-      console.log("availableData before push", availableData);
       availableData.push({
         id: item.id,
         text: foundTextEditor.text,
@@ -46,10 +44,8 @@ export const findTextEditors = (lesson) => {
         __typename: foundTextEditor.__typename.toLowerCase(),
         questions: [],
       });
-      console.log("availableData after push", availableData);
     }
   });
-  console.log("availableData result in findTextEditors", availableData);
   return availableData;
 };
 
@@ -93,7 +89,6 @@ export const populateTextEditorsWithQuestions = (
   lesson,
   quizResults
 ) => {
-  console.log("newAvailabletextEditors 0 texteditors", availableTextEditors);
   let newAvailabletextEditors = availableTextEditors.map((el) => {
     let textEditorData = extractElementInfoFromTextEditors(el.text);
     let tasks = [];
@@ -110,9 +105,7 @@ export const populateTextEditorsWithQuestions = (
         if (foundProblem) tasks.push(foundProblem);
       }
     });
-    console.log("tasks", tasks);
     el.questions.push(...tasks);
-    console.log("el", el);
     return el;
   });
   console.log(

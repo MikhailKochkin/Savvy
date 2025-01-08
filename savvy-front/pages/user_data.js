@@ -384,7 +384,6 @@ const ClientData = () => {
   };
 
   const handleButtonClick4 = () => {
-    console.log(initialDate.length);
     if (initialDate.length > 17) {
       alert("Please select a valid date");
       return;

@@ -198,6 +198,9 @@ const ComplexQuestion = (props) => {
   const [feedbackList, setFeedbackList] = useState(
     new Array(props.answers.answerElements.length).fill(" ")
   );
+  const [expectedAnswers, setExpectedAnswers] = useState(
+    new Array(props.answers?.answerElements?.length).fill(null)
+  );
 
   const [isAnswerBeingChecked, setIsAnswerBeingChecked] = useState(false);
   const [areIdeasShown, setAreIdeasShown] = useState(false);
@@ -231,14 +234,56 @@ const ComplexQuestion = (props) => {
 
   // 2. Evaluate the ideas and find matching answers from the list of correct answers
   const getMatchingAnswers = async () => {
+    // Use a Set to keep track of answers that are “used” if they exceed the threshold
+    const usedAnswers = new Set();
+
+    let newCorrectIdeas = [];
+    let new_results = [];
+    let old_results = [];
+    let updatedExpectedAnswers = [...expectedAnswers];
+
+    // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
 
-    const promiseResults = await Promise.all(
-      ideas.map(async (idea, ideaIndex) => {
-        let data1 = {
-          answer1: answers[ideaIndex].answer,
-          answer2: idea,
-        };
+    for (let idea of ideas) {
+      // Skip empty ideas (null, undefined, or blank string)
+      if (!idea || !idea.trim()) {
+        console.log("Skipping empty idea:", idea);
+        continue;
+      }
+
+      console.log("idea", idea);
+
+      // Check if the idea has already been evaluated
+      let existingResult =
+        overallResults && overallResults.find((res) => res.idea === idea);
+      console.log("existingResult", existingResult);
+
+      if (existingResult) {
+        old_results.push(existingResult);
+        continue;
+      }
+
+      // Keep track of the best match for this idea
+      let bestMatch = {
+        result: 0,
+        matchedText: null,
+      };
+
+      // Iterate through each answer
+      for (let answer of answers) {
+        // Skip if this answer is already used for a previous idea
+        if (usedAnswers.has(answer)) {
+          continue;
+        }
+
+        // If best match is already >= 65, skip checking more answers
+        if (bestMatch.result >= 65) {
+          break;
+        }
+
+        // 1) Compare main answer text
+        let mainResponse;
         try {
           const response = await fetch(
             "https://arcane-refuge-67529.herokuapp.com/checker",
@@ -247,38 +292,143 @@ const ComplexQuestion = (props) => {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(data1),
+              body: JSON.stringify({
+                answer1: answer.answer, // main answer text
+                answer2: idea,
+              }),
             }
           );
-          const res = await response.json();
-          return {
-            index: ideaIndex,
-            idea: idea,
-            result: res.res,
-            next_id: null,
-            next_type: null,
-          };
+          mainResponse = await response.json();
         } catch (error) {
-          console.error("There was an error:", error);
-          return null;
+          console.error("Error comparing main answer:", error);
+          continue;
         }
-      })
-    );
 
-    const new_results = promiseResults.filter((result) => result !== null);
-    setOverallResults(new_results.sort((a, b) => a.index - b.index));
+        const mainScore = parseFloat(mainResponse.res) || 0;
+        console.log("mainScore", mainScore);
+
+        // Update best match if main answer is better than current best
+        if (mainScore > bestMatch.result) {
+          bestMatch.result = mainScore;
+          bestMatch.matchedText = answer.answer;
+        }
+
+        // If the main score is below 25, skip related answers
+        if (mainScore < 25) {
+          continue;
+        }
+
+        // If mainScore is above 65, mark this entire answer as “used” and stop checking it
+        if (mainScore > 65) {
+          usedAnswers.add(answer);
+          break;
+        } else {
+          // If we are between 25 and 65, let's check each related answer
+          let fetchPromises = [];
+          let textsToFetch = [];
+
+          (answer.relatedAnswers || []).forEach((relAns) => {
+            fetchPromises.push(
+              fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  answer1: relAns,
+                  answer2: idea,
+                }),
+              })
+            );
+            textsToFetch.push(relAns);
+          });
+
+          try {
+            const responses = await Promise.all(fetchPromises);
+            const jsonResults = await Promise.all(
+              responses.map((res) => res.json())
+            );
+
+            // Update best match based on related answers
+            jsonResults.forEach((r, index) => {
+              let val = parseFloat(r.res) || 0;
+              if (val > bestMatch.result) {
+                bestMatch.result = val;
+                bestMatch.matchedText = textsToFetch[index];
+              }
+            });
+
+            // If any related answer is above 65, mark this entire answer as used
+            if (bestMatch.result > 65) {
+              usedAnswers.add(answer);
+              break;
+            }
+          } catch (error) {
+            console.error("Error comparing related answers:", error);
+            // Continue to the next answer
+          }
+        }
+      } // end of answers loop
+
+      // Add the best match for this idea
+      let new_obj = {
+        idea,
+        result: bestMatch.result,
+        matchedAnswer: bestMatch.matchedText,
+      };
+      new_results.push(new_obj);
+
+      // If the best match exceeds threshold, track as correct
+      if (bestMatch.result > 57 && bestMatch.matchedText) {
+        newCorrectIdeas.push({
+          idea,
+          matchedAnswer: bestMatch.matchedText,
+        });
+      }
+    }
+
+    // Merge results with old_results
+    let unique_values = [];
+    [...old_results, ...new_results].forEach((item) => {
+      const existingItem = unique_values.find((uv) => uv.idea === item.idea);
+      if (!existingItem) {
+        unique_values.push({ ...item });
+      } else if (parseFloat(item.result) > parseFloat(existingItem.result)) {
+        existingItem.result = item.result;
+        existingItem.matchedAnswer = item.matchedAnswer;
+      }
+    });
+
+    // Update state
+    setOverallResults(unique_values);
+    setCorrectIdeas([...correctIdeas, ...newCorrectIdeas]);
     setIsFeedbackShown(true);
-    props.passResult("true");
+    setExpectedAnswers(updatedExpectedAnswers);
+
+    let quizIdeas = unique_values.map((uv) => ({
+      ...uv,
+      result: String(uv.result),
+    }));
+
+    // Persist the quiz result with the matched answer included
     createQuizResult({
       variables: {
         quiz: props.quizId,
         lessonId: props.lessonId,
         type: "answer",
-        ideasList: { quizIdeas: new_results.map(({ index, ...rest }) => rest) },
+        ideasList: { quizIdeas },
         comment: ``,
       },
     });
-    return new_results; // Return the results if needed
+
+    // Pass the result based on the problem type
+    if (props.problemType === "ONLY_CORRECT") {
+      if (newCorrectIdeas.length >= props.answers.answerElements.length) {
+        props.passResult("true");
+      }
+    } else {
+      props.passResult("true");
+    }
   };
 
   const generateExplainer = async (event, sampleAnswer, studentAnswer) => {

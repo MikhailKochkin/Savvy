@@ -246,7 +246,7 @@ const UpdateMessage = (props) => {
             value={message.name}
             onChange={(e) => {
               if (e.target.value === "author" || e.target.value === "student") {
-                updateMessage({ name: e.target.value });
+                updateMessage({ name: e.target.value, image: null });
               } else {
                 const character = characters.find(
                   (character) => character.name === e.target.value
@@ -278,7 +278,7 @@ const UpdateMessage = (props) => {
           {/* Image Input */}
           <MicroButton
             onClick={() => {
-              const link = prompt("Image link: ");
+              const link = prompt("Image link: ", message.image || "");
               if (link) updateMessage({ image: link });
             }}
           >

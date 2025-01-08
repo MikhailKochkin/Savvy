@@ -140,10 +140,6 @@ const generateEdges = (nodes) => {
 const handleStyle = { left: 10 };
 
 const MessageNode = ({ data, isConnectable }) => {
-  const onChange = useCallback((evt) => {
-    console.log(evt.target.value);
-  }, []);
-
   return (
     <MessageStyles>
       <Handle

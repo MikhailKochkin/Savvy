@@ -173,6 +173,7 @@ const Note = objectType({
     t.string("id");
     t.string("text");
     t.string("name");
+    t.string("instructorName");
     t.field("next", { type: "NextType" });
     t.string("type");
     t.string("horizontal_image");

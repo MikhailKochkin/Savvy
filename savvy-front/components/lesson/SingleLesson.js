@@ -128,6 +128,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         name
         type
+        instructorName
         link_clicks
         complexity
         isSecret
@@ -389,6 +390,10 @@ const SINGLE_LESSON_QUERY = gql`
                 value
               }
             }
+            position {
+              x
+              y
+            }
           }
         }
         type
@@ -579,7 +584,7 @@ const SingleLesson = (props) => {
   if (
     me &&
     (me.coursePages.filter((c) => c.id == lesson.coursePage.id).length > 0 ||
-      me.co_coursePages.filter((c) => c.id == lesson.coursePage.id).length > 0)
+      me.co_coursePages?.filter((c) => c.id == lesson.coursePage.id).length > 0)
   ) {
     i_am_author = true;
   }

@@ -387,6 +387,7 @@ const SingleProblem = (props) => {
               problem={problem}
               story={story}
               type={problem.type}
+              jsonStoryString={props.jsonStoryString}
               author={author}
               onFinish={onFinish}
               context={lesson.context ? lesson.context : ""}

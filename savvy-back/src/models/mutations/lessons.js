@@ -73,7 +73,6 @@ function lessonMutations(t) {
         const updates = { ...args };
         delete updates.id;
         delete updates.tags;
-        console.log(args);
 
         const data = {
           ...updates,

@@ -127,79 +127,151 @@ const Generate = (props) => {
   }
 
   const getMatchingAnswers = async () => {
-    let matchedAnswers = [];
-    setProgress("true");
+    // Use a Set to keep track of answers that are “used” if they exceed the threshold
+    const usedAnswers = new Set();
 
-    // 1. Get sample answers for this task
-    let answers = props.answers.answerElements;
-    let matchedIndexes = new Set();
     let newCorrectIdeas = [];
     let new_results = [];
     let old_results = [];
     let updatedExpectedAnswers = [...expectedAnswers];
 
-    // 2. Iterate over each idea
+    // 1. Get sample answers for this task
+    let answers = props.answers.answerElements;
+
     for (let idea of ideas) {
+      // Skip empty ideas (null, undefined, or blank string)
+      if (!idea || !idea.trim()) {
+        console.log("Skipping empty idea:", idea);
+        continue;
+      }
+
+      console.log("idea", idea);
+
       // Check if the idea has already been evaluated
       let existingResult =
         overallResults && overallResults.find((res) => res.idea === idea);
+      console.log("existingResult", existingResult);
+
       if (existingResult) {
         old_results.push(existingResult);
         continue;
       }
 
-      // Store the best match for this idea
+      // Keep track of the best match for this idea
       let bestMatch = {
         result: 0,
-        matchedText: null, // This will store the best-matching string
+        matchedText: null,
       };
 
+      // Iterate through each answer
       for (let answer of answers) {
-        // Combine main answer text with related answers
-        let textsToCheck = [answer.answer, ...(answer.relatedAnswers || [])];
-
-        let fetchPromises = textsToCheck.map((text) => {
-          return fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              answer1: text,
-              answer2: idea,
-            }),
-          });
-        });
-
-        try {
-          // Evaluate all texts for the current answer
-          let responses = await Promise.all(fetchPromises);
-          let jsonResults = await Promise.all(
-            responses.map((res) => res.json())
-          );
-
-          // Find the highest result and track the corresponding text
-          jsonResults.forEach((r, index) => {
-            const val = parseFloat(r.res);
-            if (val > bestMatch.result) {
-              bestMatch.result = val;
-              bestMatch.matchedText = textsToCheck[index];
-            }
-          });
-        } catch (error) {
-          console.error("Error comparing answers:", error);
+        // Skip if this answer is already used for a previous idea
+        if (usedAnswers.has(answer)) {
+          continue;
         }
-      }
+
+        // If best match is already >= 65, skip checking more answers
+        if (bestMatch.result >= 65) {
+          break;
+        }
+
+        // 1) Compare main answer text
+        let mainResponse;
+        try {
+          const response = await fetch(
+            "https://arcane-refuge-67529.herokuapp.com/checker",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                answer1: answer.answer, // main answer text
+                answer2: idea,
+              }),
+            }
+          );
+          mainResponse = await response.json();
+        } catch (error) {
+          console.error("Error comparing main answer:", error);
+          continue;
+        }
+
+        const mainScore = parseFloat(mainResponse.res) || 0;
+        console.log("mainScore", mainScore);
+
+        // Update best match if main answer is better than current best
+        if (mainScore > bestMatch.result) {
+          bestMatch.result = mainScore;
+          bestMatch.matchedText = answer.answer;
+        }
+
+        // If the main score is below 25, skip related answers
+        if (mainScore < 25) {
+          continue;
+        }
+
+        // If mainScore is above 65, mark this entire answer as “used” and stop checking it
+        if (mainScore > 65) {
+          usedAnswers.add(answer);
+          break;
+        } else {
+          // If we are between 25 and 65, let's check each related answer
+          let fetchPromises = [];
+          let textsToFetch = [];
+
+          (answer.relatedAnswers || []).forEach((relAns) => {
+            fetchPromises.push(
+              fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  answer1: relAns,
+                  answer2: idea,
+                }),
+              })
+            );
+            textsToFetch.push(relAns);
+          });
+
+          try {
+            const responses = await Promise.all(fetchPromises);
+            const jsonResults = await Promise.all(
+              responses.map((res) => res.json())
+            );
+
+            // Update best match based on related answers
+            jsonResults.forEach((r, index) => {
+              let val = parseFloat(r.res) || 0;
+              if (val > bestMatch.result) {
+                bestMatch.result = val;
+                bestMatch.matchedText = textsToFetch[index];
+              }
+            });
+
+            // If any related answer is above 65, mark this entire answer as used
+            if (bestMatch.result > 65) {
+              usedAnswers.add(answer);
+              break;
+            }
+          } catch (error) {
+            console.error("Error comparing related answers:", error);
+            // Continue to the next answer
+          }
+        }
+      } // end of answers loop
 
       // Add the best match for this idea
       let new_obj = {
         idea,
         result: bestMatch.result,
-        matchedAnswer: bestMatch.matchedText, // Include only the best-matching string
+        matchedAnswer: bestMatch.matchedText,
       };
       new_results.push(new_obj);
 
-      // If the best match exceeds the threshold, track it as a correct idea
+      // If the best match exceeds threshold, track as correct
       if (bestMatch.result > 57 && bestMatch.matchedText) {
         newCorrectIdeas.push({
           idea,
@@ -208,7 +280,7 @@ const Generate = (props) => {
       }
     }
 
-    // Merge results and keep the highest match for each idea
+    // Merge results with old_results
     let unique_values = [];
     [...old_results, ...new_results].forEach((item) => {
       const existingItem = unique_values.find((uv) => uv.idea === item.idea);
@@ -222,14 +294,13 @@ const Generate = (props) => {
 
     // Update state
     setOverallResults(unique_values);
-    setProgress("false");
     setCorrectIdeas([...correctIdeas, ...newCorrectIdeas]);
     setIsFeedbackShown(true);
     setExpectedAnswers(updatedExpectedAnswers);
 
     let quizIdeas = unique_values.map((uv) => ({
       ...uv,
-      result: String(uv.result), // convert numeric to string
+      result: String(uv.result),
     }));
 
     // Persist the quiz result with the matched answer included
@@ -237,9 +308,8 @@ const Generate = (props) => {
       variables: {
         quiz: props.quizId,
         lessonId: props.lessonId,
-        hint: AIhint,
         type: "answer",
-        ideasList: { quizIdeas }, // Includes matchedAnswer for each idea
+        ideasList: { quizIdeas },
         comment: ``,
       },
     });
@@ -372,7 +442,9 @@ const Generate = (props) => {
             inputColor={inputColor}
             onClick={async (e) => {
               e.preventDefault();
-              getMatchingAnswers(answer);
+              setProgress("true");
+              await getMatchingAnswers(answer);
+              setProgress("false");
             }}
           >
             {t("evaluate_ideas")}
@@ -479,7 +551,12 @@ const Generate = (props) => {
                         quiz: props.quizId,
                         lessonId: props.lessonId,
                         hint: AIhint,
-                        ideasList: { quizIdeas: overallResults },
+                        ideasList: {
+                          quizIdeas: overallResults.map((idea) => ({
+                            ...idea,
+                            result: idea.result.toString(),
+                          })),
+                        },
                         comment: `Student opened correct answer`,
                         type: "answerReveal",
                       },

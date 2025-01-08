@@ -57,6 +57,10 @@ const UPDATE_PROBLEM_MUTATION = gql`
               value
             }
           }
+          position {
+            x
+            y
+          }
         }
       }
       goal
@@ -123,6 +127,7 @@ const UpdateProblem = (props) => {
   );
 
   const { t } = useTranslation("lesson");
+
   const [updateProblem, { loading, error }] = useMutation(
     UPDATE_PROBLEM_MUTATION,
     {
@@ -134,9 +139,13 @@ const UpdateProblem = (props) => {
         type,
         name,
         context,
+
         steps: {
-          problemItems: [...updatedSteps].map(({ content, ...keepAttrs }) => ({
-            ...keepAttrs,
+          problemItems: updatedSteps.map(({ position, content, ...rest }) => ({
+            ...rest,
+            position: position
+              ? (({ __typename, ...positionRest }) => positionRest)(position)
+              : undefined, // Handle cases where position is undefined
           })),
         },
       },

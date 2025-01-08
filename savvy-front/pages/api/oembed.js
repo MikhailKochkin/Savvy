@@ -3,7 +3,6 @@ export default function handler(req, res) {
     const { url } = req.query;
 
     if (!url) {
-      console.log("URL parameter is missing");
       return res.status(400).send({ error: "URL parameter is missing" });
     }
 

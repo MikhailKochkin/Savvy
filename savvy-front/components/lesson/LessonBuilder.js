@@ -200,16 +200,7 @@ const LessonBuilder = (props) => {
     );
   }
 
-  let previousStories = [];
-  if (lesson.coursePage.lessons) {
-    lesson.coursePage.lessons.map((other_lesson) => {
-      if (other_lesson.number < lesson.number) {
-        previousStories.push(other_lesson.story);
-      }
-    });
-  }
-
-  // INFO DOE NEW BLOCKS AI GENERATION
+  // INFO FOR NEW BLOCKS AI GENERATION
   // 1. Create character string
   const cleanedCharacters = combinedCharacters.map(
     ({ __typename, ...rest }) => rest
@@ -230,11 +221,11 @@ const LessonBuilder = (props) => {
       } else if (item.type === "Problem") {
         content = lesson.problems.find(
           (problem) => problem.id === item.id
-        ).text;
+        )?.text;
       } else if (item.type === "TextEditor") {
         content = lesson.texteditors.find(
           (textEditor) => textEditor.id === item.id
-        ).text;
+        )?.text;
       } else if (item.type === "Shot") {
         content = "";
       } else if (item.type === "Construction") {
@@ -259,6 +250,15 @@ const LessonBuilder = (props) => {
     ? populateLessonStructure(lesson.structure?.lessonItems)
     : [];
   const jsonStoryString = JSON.stringify(currentStory);
+
+  let previousStories = [];
+  if (lesson.coursePage.lessons) {
+    lesson.coursePage.lessons.map((other_lesson) => {
+      if (other_lesson.number < lesson.number) {
+        previousStories.push(other_lesson.story);
+      }
+    });
+  }
 
   return (
     <Styles>

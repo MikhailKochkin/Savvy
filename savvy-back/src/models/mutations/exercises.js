@@ -143,7 +143,6 @@ function exercisesMutations(t) {
     },
     resolve: async (_, args, ctx) => {
       const updates = { ...args };
-      console.log("updates", updates.complexTestAnswers.complexTestAnswers);
       delete updates.id;
       const updatedTest = await ctx.prisma.newTest.update({
         data: updates,
@@ -705,6 +704,7 @@ function exercisesMutations(t) {
       horizontal_image: stringArg(),
       vertical_image: stringArg(),
       name: stringArg(),
+      instructorName: stringArg(),
       next: arg({
         type: "NextTypeInput", // name should match the name you provided
       }),
@@ -1025,7 +1025,6 @@ function exercisesMutations(t) {
     resolve: async (_, args, ctx) => {
       const lessonId = args.lessonId;
       delete args.lessonId;
-      console.log("args", args.steps.problemItemsInput);
       const problem = await ctx.prisma.problem.create({
         data: {
           user: {
@@ -1283,7 +1282,6 @@ function exercisesMutations(t) {
           ...args,
         },
       });
-      console.log(ShotResult);
       return ShotResult;
     },
   });

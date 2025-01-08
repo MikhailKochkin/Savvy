@@ -93,15 +93,18 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const CreateNewTest = (props) => {
   const { lessonID, generatedInfo } = props;
-
   const [name, setName] = useState("");
   const [num, setNum] = useState(2);
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
-  const [answers, setAnswers] = useState(generatedInfo?.answers || ["", ""]);
+  const [answers, setAnswers] = useState(
+    generatedInfo?.answers ? [...generatedInfo?.answers] : ["", ""]
+  );
   const [comments, setComments] = useState(["", ""]);
   const [correct, setCorrect] = useState(
-    generatedInfo?.whichAnswersAreCorrect || [false, false]
+    generatedInfo?.whichAnswersAreCorrect
+      ? [...generatedInfo?.whichAnswersAreCorrect]
+      : [false, false]
   );
   const [question, setQuestion] = useState(generatedInfo?.question || "");
   const [type, setType] = useState("TEST");

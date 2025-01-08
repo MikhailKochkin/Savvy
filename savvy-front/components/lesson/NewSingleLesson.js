@@ -44,6 +44,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         link_clicks
         text
         name
+        instructorName
         type
         isSecret
         complexity
@@ -80,6 +81,12 @@ const NEW_SINGLE_LESSON_QUERY = gql`
             name
             text
             image
+            reactions {
+              reaction
+              comment
+              name
+              image
+            }
           }
         }
         user {
@@ -389,6 +396,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           number
           type
           published
+          story
           name
           open
         }

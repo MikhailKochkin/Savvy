@@ -1276,7 +1276,7 @@ type Mutation {
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswersInput, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextTypeInput, question: [String], type: String): NewTest
-  updateNote(complexity: Int, horizontal_image: String, id: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextTypeInput, text: String, type: String, vertical_image: String): Note
+  updateNote(complexity: Int, horizontal_image: String, id: String, instructorName: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextTypeInput, text: String, type: String, vertical_image: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
@@ -1404,6 +1404,7 @@ type Note {
   createdAt: DateTime
   horizontal_image: String
   id: String
+  instructorName: String
   isSecret: Boolean
   lesson: Lesson
   lessonId: Int
@@ -1878,6 +1879,9 @@ type Query {
     userId: String
   ): [LessonResult]
   lessons(
+    """ID of the coursePage to fetch."""
+    coursePageId: String
+
     """ID of the lesson to fetch."""
     id: String
   ): [Lesson]
@@ -1985,6 +1989,9 @@ type Query {
   ): [UserLevel]
   users(
     activeDate: DateTime
+
+    """Id"""
+    coursePageId: String
 
     """Email of the user to fetch."""
     email: String

@@ -638,7 +638,6 @@ const SingleStudentDataRow = ({
               <div className="div6">Last action</div>
               <div className="div7"></div>
             </TopBox>
-            {console.log("lessons", lessons)}
             {lessons
               // .filter((l) => l.published)
               .sort((a, b) => a.number - b.number)

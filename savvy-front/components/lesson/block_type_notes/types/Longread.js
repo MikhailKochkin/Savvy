@@ -238,9 +238,9 @@ const Secret = styled.div`
 `;
 
 const NoteStyles = styled.div`
-  max-width: 660px;
+  max-width: 100%;
   background: #fff;
-  margin: 2% 0 0 0;
+  margin: 10px 0 0 0;
   filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
   .video-container {
     width: 400px;
@@ -350,7 +350,7 @@ const NoteStyles = styled.div`
   }
 
   table {
-    width: 640px;
+    width: 100%;
     border-collapse: collapse;
     font-size: 1.4rem;
     tbody {
@@ -457,9 +457,9 @@ const Note = (props) => {
   const { story, text, id, getData, isFinal } = props;
   let width;
   if (props.problem) {
-    width = "100%";
+    width = "660px";
   } else if (props.story) {
-    width = "100%";
+    width = "660px";
   } else {
     width = "90%";
   }

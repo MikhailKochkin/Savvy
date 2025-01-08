@@ -78,6 +78,17 @@ const Break = styled.div`
   margin-bottom: 30px;
 `;
 
+const SingleCharatcerStyles = styled.div`
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  .character_image_icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+  }
+`;
+
 let updatedStructureExample = {
   lessonItems: [
     {
@@ -249,10 +260,8 @@ const GenerateLesson = (props) => {
       );
     }
     const data = await response.json();
-    console.log("data", data);
 
     const jsonData = JSON.parse(data.result.content);
-    console.log("background_story", jsonData.background_story);
 
     return jsonData.background_story;
   };
@@ -352,7 +361,6 @@ const GenerateLesson = (props) => {
         };
       });
       setBlocks(cleanedData);
-      console.log("cleanedData", cleanedData);
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -409,9 +417,7 @@ const GenerateLesson = (props) => {
         body: JSON.stringify({ prompt: structurePrompt }),
       });
       const data = await response.json();
-      console.log("data.result.content", data.result.content);
       const jsonData = JSON.parse(data.result.content);
-      console.log("jsonData", jsonData.lessonItems);
 
       const cleanedData = jsonData.lessonItems.map((item, index) => {
         return {
@@ -420,7 +426,6 @@ const GenerateLesson = (props) => {
           comment: item.comment,
         };
       });
-      console.log("cleanedData", cleanedData);
 
       setBlocks(cleanedData);
     } catch (error) {
@@ -556,6 +561,7 @@ const GenerateLesson = (props) => {
       >
         Save Story
       </ActionButton>
+      <ActionButton onClick={async (e) => {}}>Summarize</ActionButton>
       <Break />
       <Title>Characters</Title>
       {[...characters].map((ch, index) => (
@@ -702,7 +708,7 @@ const CharacterData = ({
   };
 
   return (
-    <>
+    <SingleCharatcerStyles>
       <Row>
         <div className="description">Name</div>
         <div className="action_area">
@@ -727,7 +733,14 @@ const CharacterData = ({
         </div>
       </Row>
       <Row>
-        <div className="description">Image</div>
+        <div className="description">
+          <div>Image</div>
+          <div>
+            {character.image ? (
+              <img className="character_image_icon" src={character.image} />
+            ) : null}
+          </div>
+        </div>
         <div className="action_area">
           <input
             // onChange={(e) => setHorizontalImage(e.target.value)}
@@ -749,7 +762,7 @@ const CharacterData = ({
           </label>
         </div>
       </Row>
-    </>
+    </SingleCharatcerStyles>
   );
 };
 

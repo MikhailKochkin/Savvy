@@ -223,7 +223,6 @@ const DeleteClient = (props) => {
 };
 
 const Client = (props) => {
-  console.log("props", props);
   const [comment, setComment] = useState(props.comment);
   const [message, setMessage] = useState(`<p>Hi ${props.name},</p>`);
   const [subject, setSubject] = useState(

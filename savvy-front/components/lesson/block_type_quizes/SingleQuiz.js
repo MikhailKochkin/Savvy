@@ -97,6 +97,7 @@ const SingleQuiz = (props) => {
     isOrderOfAnswersImportant,
     shouldAnswerSizeMatchSample,
     studentAnswerPassedFromAnotherComponent,
+    jsonStoryString,
   } = props;
   const getResult = (data) => {
     props.getResult(data);
@@ -147,6 +148,7 @@ const SingleQuiz = (props) => {
               name={props.name}
               context={props.context}
               image={props.image}
+              jsonStoryString={props.jsonStoryString}
               instructorName={props.instructorName}
               openQuestionType={props.openQuestionType}
               studentAnswerPassedFromAnotherComponent={

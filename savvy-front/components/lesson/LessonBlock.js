@@ -567,6 +567,7 @@ const LessonBlock = (props) => {
               <Note
                 text={data.text}
                 name={data.name}
+                instructorName={data.instructorName}
                 me={me}
                 clicks={data.link_clicks}
                 user={lesson.user.id}
@@ -845,6 +846,7 @@ const LessonBlock = (props) => {
                 me={me}
                 author={lesson.user}
                 characters={props.characters}
+                previousStories={props.previousStories}
                 isSecret={data.isSecret}
                 type={data.type}
                 user={lesson.user.id}

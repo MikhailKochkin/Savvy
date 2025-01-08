@@ -19,7 +19,6 @@ const server = new ApolloServer({
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   schema, // We'll directly use the imported schema
   context: ({ req, res }) => {
-    console.log("apollo", req);
     return { req, res, prisma };
   },
 });

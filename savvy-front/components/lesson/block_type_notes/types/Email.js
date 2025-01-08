@@ -49,16 +49,16 @@ const EmailInfo = styled.div`
       height: 42px;
       color: #fff;
       border-radius: 50%;
-      background: #485563; /* fallback for old browsers */
+      background: #614385; /* fallback for old browsers */
       background: -webkit-linear-gradient(
-        to right,
-        #29323c,
-        #485563
+        to left,
+        #516395,
+        #614385
       ); /* Chrome 10-25, Safari 5.1-6 */
       background: linear-gradient(
-        to right,
-        #29323c,
-        #485563
+        to left,
+        #516395,
+        #614385
       ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     }
   }
@@ -66,10 +66,16 @@ const EmailInfo = styled.div`
     width: 40%;
     .sender_name {
       font-size: 2rem;
+      height: 42px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
   }
   .emailSubject {
     width: 400px;
+    line-height: 1.4;
+    margin: 10px 0;
   }
   .times_column {
     width: 50%;
@@ -109,7 +115,7 @@ const Note = (props) => {
 
   const todaysDate = getFormattedToday();
 
-  const { me, author, text, id } = props;
+  const { me, author, text, id, instructorName } = props;
   let width;
   if (props.problem) {
     width = "100%";
@@ -119,6 +125,17 @@ const Note = (props) => {
     width = "90%";
   }
 
+  const getInitials = (instructorName) => {
+    const words = instructorName.split(" ");
+    if (words.length === 1) {
+      return words[0].slice(0, 2);
+    } else if (words.length >= 2) {
+      return words[0][0] + words[1][0];
+    }
+  };
+
+  const initials = getInitials(instructorName);
+
   return (
     <>
       <EmailContainer id={id}>
@@ -126,19 +143,22 @@ const Note = (props) => {
           <EmailInfo>
             <div className="image_column">
               <div className="circle">
-                {author.name[0]}
-                {author.surname[0]}
+                {instructorName
+                  ? getInitials(instructorName)
+                  : `${author.name[0]}${author.surname[0]}`}
               </div>
             </div>
             <div className="names_column">
               <div className="sender_name">
-                {author.name} {author.surname}
+                {instructorName
+                  ? instructorName
+                  : `${author.name} ${author.surname}`}
               </div>
               <div className="emailSubject">
-                {props.name ? props.name : "Re: Help ASAP"}
+                <b>Subject:</b> {props.name ? props.name : "Re: Help ASAP"}
               </div>
               <div>
-                To: {me.name} {me.surname}
+                <b>To:</b> {me.name} {me.surname}
               </div>
             </div>
             <div className="times_column">{todaysDate}</div>

@@ -227,8 +227,6 @@ const GenerateLesson = (props) => {
   //   }
   // }, [props.structure]);
 
-  console.log("elements", elements, structure);
-
   const passData = (blocks) => {
     props.passData(blocks);
   };
@@ -341,7 +339,6 @@ const GenerateLesson = (props) => {
       const data = await response.json();
       const jsonData = JSON.parse(data.result.content);
       setBlocks(jsonData.lessonItems);
-      console.log("jsonData", jsonData.lessonItems);
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -428,7 +425,6 @@ const GenerateLesson = (props) => {
         };
       });
       setBlocks(cleanedData);
-      console.log("cleanedData", cleanedData);
     } catch (error) {
       console.error(error);
       alert(error.message);

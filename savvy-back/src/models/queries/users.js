@@ -6,6 +6,7 @@ function userQueries(t) {
     args: {
       id: stringArg({ description: "ID of the user to fetch." }),
       email: stringArg({ description: "Email of the user to fetch." }),
+      coursePageId: stringArg({ description: "Id" }),
       initialDate: arg({
         type: "DateTime",
       }),
@@ -18,12 +19,19 @@ function userQueries(t) {
     },
     resolve: (
       _parent,
-      { id, email, initialDate, lastDate, activeDate },
+      { id, email, initialDate, lastDate, activeDate, coursePageId },
       ctx
     ) => {
       const where = {
         ...(id && { id: { equals: id } }),
         ...(email && { email: { equals: email } }),
+        ...(coursePageId && {
+          coursePages: {
+            some: {
+              id: { equals: coursePageId },
+            },
+          },
+        }),
         ...(initialDate &&
           lastDate && {
             createdAt: {

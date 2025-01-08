@@ -131,6 +131,7 @@ const Chat = (props) => {
     getData,
     library,
     type,
+    previousStories,
   } = props;
   const [update, setUpdate] = useState(false);
   const [num, setNum] = useState(1);
@@ -218,6 +219,7 @@ const Chat = (props) => {
             isSecret={props.isSecret}
             moveNext={props.moveNext}
             story={story}
+            previousStories={previousStories}
           />
         ) : (
           <FixedChat

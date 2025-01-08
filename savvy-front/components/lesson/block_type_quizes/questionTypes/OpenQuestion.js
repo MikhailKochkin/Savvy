@@ -71,6 +71,7 @@ const OpenQuestion = (props) => {
     instructorName,
     context,
     image,
+    jsonStoryString,
   } = props;
 
   const [answer, setAnswer] = useState(""); // The answer provided by the student
@@ -292,7 +293,8 @@ const OpenQuestion = (props) => {
       ifWrong,
       hints,
       router,
-      context
+      context,
+      jsonStoryString
     );
     setHints([...hints, hintGenerationResult.newHint]);
     createQuizResult({

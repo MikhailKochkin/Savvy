@@ -645,6 +645,7 @@ model Note {
   chat        Boolean?
   complexity  Int?     @default(1)
   link_clicks Int?     @default(0)
+  instructorName String? 
   horizontal_image String?
   vertical_image   String?
   isSecret    Boolean? @default(false)

@@ -14,7 +14,13 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         open
         assignment
         number
-        structure
+        structure {
+          lessonItems {
+            id
+            type
+            comment
+          }
+        }
       }
     }
   }
@@ -24,7 +30,7 @@ const STUDENTS_QUERY = gql`
   query STUDENTS_QUERY($coursePageId: String!) {
     users(
       # where: { new_subjects: { some: { id: { equals: $coursePageId } } } }
-      where: { coursePageId: $coursePageId }
+      coursePageId: $coursePageId
     ) {
       id
       name
@@ -33,7 +39,6 @@ const STUDENTS_QUERY = gql`
       email
       courseVisits {
         id
-        reminders
         visitsNumber
         coursePage {
           id
@@ -46,7 +51,7 @@ const STUDENTS_QUERY = gql`
 
 const LESSONS_QUERY = gql`
   query LESSONS_QUERY($id: String!) {
-    lessons(where: { coursePage: { id: { equals: $id } } }) {
+    lessons(coursePageId: $id) {
       id
       published
     }

@@ -195,6 +195,7 @@ const NewInteractive = (props) => {
                   type={el.type}
                   goalType={el.goalType}
                   check={el.check}
+                  jsonStoryString={props.jsonStoryString}
                   question={el.question}
                   answer={el.answer}
                   answers={el.answers}

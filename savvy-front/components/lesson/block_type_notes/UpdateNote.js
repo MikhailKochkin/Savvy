@@ -18,6 +18,7 @@ const UPDATE_NOTE_MUTATION = gql`
     $id: String!
     $text: String
     $name: String
+    $instructorName: String
     $complexity: Int
     $isSecret: Boolean
     $type: String
@@ -28,6 +29,7 @@ const UPDATE_NOTE_MUTATION = gql`
       id: $id
       text: $text
       name: $name
+      instructorName: $instructorName
       complexity: $complexity
       isSecret: $isSecret
       type: $type
@@ -37,6 +39,7 @@ const UPDATE_NOTE_MUTATION = gql`
       id
       text
       name
+      instructorName
       type
       complexity
       isSecret
@@ -135,6 +138,9 @@ const UpdateNote = (props) => {
   const [type, setType] = useState(props.type ? props.type : "longread");
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
+  );
+  const [instructorName, setInstructorName] = useState(
+    props.instructorName || ""
   );
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
@@ -390,6 +396,7 @@ const UpdateNote = (props) => {
           text,
           complexity,
           isSecret,
+          instructorName,
           type,
           name,
           horizontal_image: horizontalImage,
@@ -470,6 +477,18 @@ const UpdateNote = (props) => {
           </select>
         </div>
       </Row>
+      {type == "email" && (
+        <Row>
+          <div className="description">Sender Name</div>
+          <div className="action_area">
+            <input
+              onChange={(e) => setInstructorName(e.target.value)}
+              value={instructorName}
+              placeholder=""
+            />
+          </div>
+        </Row>
+      )}
       {type == "picture" && (
         <>
           <Row>

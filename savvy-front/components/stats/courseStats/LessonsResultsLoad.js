@@ -5,9 +5,7 @@ import PropTypes from "prop-types";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($coursePageId: String!) {
-    lessonResults(
-      where: { lesson: { coursePageId: { equals: $coursePageId } } }
-    ) {
+    lessonResults(coursePageId: $coursePageId) {
       id
       visitsNumber
       progress
@@ -15,7 +13,12 @@ const LESSON_RESULTS_QUERY = gql`
       lesson {
         id
         name
-        structure
+        structure {
+          lessonItems {
+            id
+            type
+          }
+        }
         published
         type
         number
@@ -88,7 +91,7 @@ const LessonsResultsLoad = (props) => {
   let d = cloned_elements.map((el) =>
     Object.defineProperty(el, "date", {
       value:
-        el.courseVisits.filter((c) => c.coursePage.id == coursePageID).length >
+        el.courseVisits?.filter((c) => c.coursePage.id == coursePageID).length >
         0
           ? new Date(
               el.courseVisits.filter(
@@ -223,7 +226,7 @@ const LessonsResultsLoad = (props) => {
             results={student_results}
             type="all_users_page"
             courseVisit={
-              student.courseVisits.filter(
+              student.courseVisits?.filter(
                 (c) => c.coursePage.id === coursePageID
               )[0]
             }

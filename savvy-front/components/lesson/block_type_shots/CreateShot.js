@@ -189,7 +189,6 @@ const CreateShot = (props) => {
       const data = await response.json();
       if (response.ok) {
         let new_slides = JSON.parse(data.result.content);
-        console.log("new_slides", new_slides);
         setParts(splitContentArray(new_slides.content).partsArray);
         setComments(splitContentArray(new_slides.content).commentsArray);
 

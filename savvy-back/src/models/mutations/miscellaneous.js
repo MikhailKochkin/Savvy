@@ -281,12 +281,9 @@ function miscellaneousMutations(t) {
         },
       });
 
-      console.log("order", order.user.email);
-
       // 2. check at yookassa if any order is paid
       if (order.paymentID) {
         const payment = await community_checkout.getPayment(order.paymentID);
-        console.log("payment 1", payment);
 
         const createPayload = {
           amount: {

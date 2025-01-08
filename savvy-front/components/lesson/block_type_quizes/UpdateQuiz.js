@@ -180,7 +180,7 @@ const UpdateQuiz = (props) => {
     }
   };
 
-  const upgradeSampleAnswer = async (e) => {
+  const upgradeSampleAnswer = async (e, answer_to_upgrade) => {
     e.preventDefault();
     let prompt = `
     You are tasked with improving the clarity and completeness of a sample answer to make it suitable for accurate semantic comparison and assessment.
@@ -190,11 +190,11 @@ const UpdateQuiz = (props) => {
     2. Replace all pronouns with specific nouns for clarity and precision.
     3. Expand on incomplete ideas to ensure every thought is fully developed and well-articulated.
     4. Use plain and simple language, similar to oral speech.
-    5. Do not increase the size of the answer significantly.
+    5. Do not increase the size of the answer by more than 5 words.
 
     Input:
     – Question: "${question}"
-    - Initial Answer: "${answer}"
+    - Initial Answer: "${answer_to_upgrade}"
 
     Output:
     Provide the upgraded answer in JSON format with clear, accurate, and complete sentences. Example format:
@@ -209,7 +209,6 @@ const UpdateQuiz = (props) => {
     {
       "upgraded_answer": "First evaluation is needed to understand the company's worth and set realistic expectations for the future sale of the company."
     }
-
     `;
 
     try {
@@ -223,8 +222,7 @@ const UpdateQuiz = (props) => {
       const data = await response.json();
       if (response.ok) {
         let upgraded_answer = JSON.parse(data.result.content).upgraded_answer;
-        setAnswer(upgraded_answer);
-        return data;
+        return upgraded_answer;
       } else {
         throw new Error(
           data.error.message || "An error occurred during your request."
@@ -277,7 +275,6 @@ const UpdateQuiz = (props) => {
       if (response.ok) {
         let newAnswers = JSON.parse(data.result.content).semantic_cloud;
         setAnswers((prev) => [...prev, ...newAnswers]);
-        console.log(newAnswers);
         return data;
       } else {
         throw new Error(
@@ -344,8 +341,75 @@ const UpdateQuiz = (props) => {
       if (response.ok) {
         let newAnswers = JSON.parse(data.result.content).semantic_cloud;
         setAnswers((prev) => [...prev, ...newAnswers]);
-        console.log(newAnswers);
         return data;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const extendSemanticCloud = async (e) => {
+    e.preventDefault();
+    let semanticCloudPrompt = `
+      I am designing a practice question to help junior lawyers. These question has several correct answers.
+        Task:
+        1. Given a question and its correct answers:
+          - Generate three alternative answers for every correct answer that mean the same but phrased differently from the original correct answer.
+          - These alternative answers must be:
+              a. A very short answer with key terms only.
+              b. A colloquial answer that could be given by a junior lawyer.
+              c. A detailed answer, written in simple and plain language.
+
+        2. Requirements:
+          - Ensure the generated answers are semantically accurate.
+          - Use the same language style as the provided correct answer.
+          - Avoid repeating the exact words from the original correct answer.
+          – Important! Leave the original correct answer unchanged!!! Only add alternative answers
+
+
+        Input:
+        - Question: "${question}"
+        - Correct Answers: "${answers}"
+
+        Output:
+        Provide the alternative answers in JSON format as follows:
+        {
+          "semantic_cloud": [
+            {
+              "answer": "Correct answer 1", // do not make any changes to the original correct answer!!!
+              "relatedAnswers": [] // generated three similar answers
+              "next_id": "",
+              "next_type": "",
+              "index": 0
+            },
+            {
+              "answer": "Correct answer 2",
+              "relatedAnswers": [] // generated three similar answers
+              "next_id": "",
+              "next_type": "",
+              "index": 1
+            },
+          ]
+        }
+    `;
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: semanticCloudPrompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let newAnswers = JSON.parse(data.result.content).semantic_cloud;
+        newAnswers.map((na, i) => (na.answer = answers[i].answer));
+        return newAnswers;
       } else {
         throw new Error(
           data.error.message || "An error occurred during your request."
@@ -359,22 +423,44 @@ const UpdateQuiz = (props) => {
 
   const addRelatedAnswer = async (i) => {
     let updatedAnswers = [...answers];
-    let updatedAnswer = answers[i];
+    let updatedAnswer = { ...answers[i] }; // Create a new object for updatedAnswer
     if (updatedAnswer.relatedAnswers) {
       updatedAnswer.relatedAnswers = [...updatedAnswer.relatedAnswers, ""];
     } else {
-      updatedAnswer = { ...updatedAnswer, relatedAnswers: [""] };
+      updatedAnswer.relatedAnswers = [""]; // Directly assign the new array
     }
     updatedAnswers[i] = updatedAnswer;
 
     setAnswers(updatedAnswers);
   };
 
-  const removeRelatedAnswer = async (i, j) => {
-    let updatedAnswers = [...answers];
-    let updatedAnswer = answers[i];
-    updatedAnswer.relatedAnswers.splice(j, 1);
-    updatedAnswers[i] = updatedAnswer;
+  const removeRelatedAnswer = async (i) => {
+    // Validate the main answer index
+    // if (typeof i === "undefined" || !answers[i]?.relatedAnswers) {
+    //   console.error("Invalid index or no related answers found", { i });
+    //   return;
+    // }
+
+    // Get the related answers for the specific answer
+    const relatedAnswers = answers[i].relatedAnswers;
+
+    // Ensure there is at least one related answer to remove
+    // if (relatedAnswers.length === 0) {
+    //   console.error("No related answers to remove for answer at index:", i);
+    //   return;
+    // }
+
+    // Remove the last item
+    let updatedAnswers = answers.map((answer, index) =>
+      index === i
+        ? {
+            ...answer,
+            relatedAnswers: relatedAnswers.slice(0, -1), // Remove the last item
+          }
+        : answer
+    );
+
+    // Update the state with the modified answers
     setAnswers(updatedAnswers);
   };
 
@@ -548,7 +634,8 @@ const UpdateQuiz = (props) => {
             onClick={async (e) => {
               e.preventDefault();
               setGenerating(true);
-              await upgradeSampleAnswer(e);
+              const res = await upgradeSampleAnswer(e, answer);
+              setAnswer(res);
               setGenerating(false);
             }}
           >
@@ -600,7 +687,11 @@ const UpdateQuiz = (props) => {
                       value={rel}
                       onChange={(e) => {
                         const newAnswers = [...answers];
-                        newAnswers[i].relatedAnswers[j] = e.target.value;
+                        const newAn = { ...newAnswers[i] };
+                        const newRelAns = [...newAnswers[i].relatedAnswers];
+                        newRelAns[j] = e.target.value;
+                        newAn.relatedAnswers = newRelAns;
+                        newAnswers[i] = newAn;
                         setAnswers(newAnswers);
                         autoResizeTextarea(e);
                       }}
@@ -611,7 +702,6 @@ const UpdateQuiz = (props) => {
               </div>
             </div>
           ))}
-
           <MicroButton
             onClick={(e) => {
               e.preventDefault();
@@ -661,6 +751,38 @@ const UpdateQuiz = (props) => {
               }}
             >
               {generating ? "Generating..." : "Generate different"}
+            </MicroButton>
+          ) : null}
+          {type == "GENERATE" || type == "FINDALL" ? (
+            <MicroButton
+              onClick={async (e) => {
+                e.preventDefault();
+                setGenerating(true);
+                let newAnswers = await Promise.all(
+                  answers.map(async (an) => {
+                    let new_an = { ...an }; // Make a copy of the object
+                    new_an.answer = await upgradeSampleAnswer(e, an);
+                    return new_an;
+                  })
+                );
+                setAnswers(newAnswers); // Logs the resolved values
+                setGenerating(false);
+              }}
+            >
+              {generating ? "Upgrading..." : "Upgrade Cloud"}
+            </MicroButton>
+          ) : null}
+          {type == "GENERATE" || type == "FINDALL" ? (
+            <MicroButton
+              onClick={async (e) => {
+                e.preventDefault();
+                setGenerating(true);
+                const res = await extendSemanticCloud(e);
+                setAnswers(res);
+                setGenerating(false);
+              }}
+            >
+              {generating ? "Adding..." : "Add subanswers"}
             </MicroButton>
           ) : null}
           <div className="explainer">

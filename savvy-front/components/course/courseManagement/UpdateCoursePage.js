@@ -12,7 +12,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       banner
       audience
       result
-      modules
       goals
       header
       discountPrice
@@ -22,13 +21,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         number
       }
       price
-      prices
       subheader
-      tariffs
       methods
       nextStart
       video
-      news
       user {
         id
       }

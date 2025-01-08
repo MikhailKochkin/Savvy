@@ -5,10 +5,16 @@ function lessonQueries(t) {
     type: "Lesson",
     args: {
       id: stringArg({ description: "ID of the lesson to fetch." }),
+      coursePageId: stringArg({
+        description: "ID of the coursePage to fetch.",
+      }),
     },
-    resolve: async (_parent, { id }, ctx) => {
-      // Use the argument in the Prisma query
-      const where = id ? { id } : {}; // Construct a filter dynamically
+    resolve: async (_parent, { id, coursePageId }, ctx) => {
+      // Use the arguments in the Prisma query
+      const where = {
+        ...(id && { id }),
+        ...(coursePageId && { coursePageId }),
+      }; // Construct a filter dynamically
       const res = await ctx.prisma.lesson.findMany({
         where, // Prisma supports `where` filtering
         include: {
@@ -25,7 +31,11 @@ function lessonQueries(t) {
               user: true, // Include the lessons field inside coursePage
             },
           },
-          chats: true,
+          chats: {
+            include: {
+              reactions: true,
+            },
+          },
           quizes: {
             include: {
               user: true, // Include the lessons field inside coursePage
@@ -65,7 +75,6 @@ function lessonQueries(t) {
           comments: true,
         },
       });
-      console.log("Steps:", res[0].problems[0].steps.problemItems);
       return res;
     },
   });

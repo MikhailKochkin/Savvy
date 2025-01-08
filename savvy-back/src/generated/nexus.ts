@@ -879,6 +879,7 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     horizontal_image?: string | null; // String
     id?: string | null; // String
+    instructorName?: string | null; // String
     isSecret?: boolean | null; // Boolean
     lesson?: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonId?: number | null; // Int
@@ -2072,6 +2073,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     horizontal_image: string | null; // String
     id: string | null; // String
+    instructorName: string | null; // String
     isSecret: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonId: number | null; // Int
@@ -3316,6 +3318,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     horizontal_image: 'String'
     id: 'String'
+    instructorName: 'String'
     isSecret: 'Boolean'
     lesson: 'Lesson'
     lessonId: 'Int'
@@ -4551,6 +4554,7 @@ export interface NexusGenArgTypes {
       complexity?: number | null; // Int
       horizontal_image?: string | null; // String
       id?: string | null; // String
+      instructorName?: string | null; // String
       isSecret?: boolean | null; // Boolean
       link_clicks?: number | null; // Int
       name?: string | null; // String
@@ -4774,6 +4778,7 @@ export interface NexusGenArgTypes {
       userId?: string | null; // String
     }
     lessons: { // args
+      coursePageId?: string | null; // String
       id?: string | null; // String
     }
     newTest: { // args
@@ -4888,6 +4893,7 @@ export interface NexusGenArgTypes {
     }
     users: { // args
       activeDate?: NexusGenScalars['DateTime'] | null; // DateTime
+      coursePageId?: string | null; // String
       email?: string | null; // String
       id?: string | null; // String
       initialDate?: NexusGenScalars['DateTime'] | null; // DateTime

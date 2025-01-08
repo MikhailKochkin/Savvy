@@ -71,6 +71,7 @@ const Note = (props) => {
     getData,
     lessonID,
     isFinal,
+    instructorName,
   } = props;
   let width;
   if (props.problem) {
@@ -131,6 +132,7 @@ const Note = (props) => {
               text={text}
               id={id}
               name={name}
+              instructorName={instructorName}
               getData={getData}
               isFinal={isFinal}
               problem={props.problem}
@@ -174,6 +176,7 @@ const Note = (props) => {
           vertical_image={note.vertical_image}
           horizontal_image={note.horizontal_image}
           name={name}
+          instructorName={note.instructorName}
           lessonID={lessonID}
           getResult={getResult}
           switchUpdate={switchUpdate}

@@ -28,6 +28,10 @@ const CREATE_CHAT_MUTATION = gql`
           name
           text
           image
+          reactions {
+            reaction
+            comment
+          }
         }
       }
       user {

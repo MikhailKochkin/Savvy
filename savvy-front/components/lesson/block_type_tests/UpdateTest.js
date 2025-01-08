@@ -6,7 +6,14 @@ import { useTranslation } from "next-i18next";
 import { v4 as uuidv4 } from "uuid";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { Row, ActionButton, Frame, MicroButton } from "../styles/DevPageStyles";
+import {
+  Row,
+  ActionButton,
+  Frame,
+  MicroButton,
+  SecondaryButton,
+  Buttons,
+} from "../styles/DevPageStyles";
 
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION(
@@ -114,6 +121,9 @@ const TopRow = styled.div`
   .answer_box {
     width: 85%;
   }
+  .correct_box {
+    margin-bottom: 0;
+  }
   select {
     width: 12% !important;
     border: 1px solid #e5e5e5;
@@ -137,6 +147,7 @@ const UpdateTest = (props) => {
   const [comments, setComments] = useState(
     props.comments ? props.comments : new Array(props.answers.length).fill("")
   );
+  const [whichCommentIsGenerated, setWhichCommentIsGenerated] = useState(null);
   const [correct, setCorrect] = useState(props.correct);
   const [question, setQuestion] = useState(props.question[0]);
   const [complexity, setComplexity] = useState(
@@ -198,6 +209,42 @@ const UpdateTest = (props) => {
       ],
     }
   );
+
+  const generateExplanation = async (e, i, question, answer, isCorrect) => {
+    e.preventDefault();
+    let generateExplanationPrompt = `
+      You are developing a comment for one of the questions of the quiz.
+      The quiz questions is """${question}"""
+      The answer is """${answer}""". 
+      It is ${isCorrect}.
+
+      Write a plain and simple two sentence explanation why this answer is ${isCorrect}. 
+      Add <p> tags to the result.  
+
+    `;
+
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: generateExplanationPrompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let newExplanation = data.result.content;
+        return newExplanation;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
 
   return (
     <Container>
@@ -290,7 +337,7 @@ const UpdateTest = (props) => {
                       name={i}
                       value={answer[0]}
                       getEditorText={handleArray}
-                      placeholder={`Вариант ответа ${i + 1}`}
+                      placeholder={`Answer option ${i + 1}`}
                     />
                   </Frame>
                   <select
@@ -302,15 +349,44 @@ const UpdateTest = (props) => {
                     <option value={false}>❌</option>
                   </select>
                 </TopRow>
-                <Frame>
-                  <DynamicLoadedEditor
-                    index={i + 1}
-                    name={i}
-                    value={answer[2]}
-                    getEditorText={handleArray2}
-                    placeholder={`Комментарий к варианту ответа ${i + 1}`}
-                  />
-                </Frame>
+                {whichCommentIsGenerated !== i ? (
+                  <TopRow>
+                    <Frame>
+                      <DynamicLoadedEditor
+                        index={i + 1}
+                        name={i}
+                        value={comments[i]}
+                        getEditorText={handleArray2}
+                        placeholder={`Comment to answer option ${i + 1}`}
+                      />
+                    </Frame>
+                    <Buttons margin="0 0 0 19px">
+                      <SecondaryButton
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          setWhichCommentIsGenerated(i);
+                          const newExplanation = await generateExplanation(
+                            e,
+                            i,
+                            question,
+                            answers[i],
+                            correct[i]
+                          );
+
+                          let newComments = [...comments];
+
+                          newComments[i] = newExplanation;
+                          setComments(newComments);
+                          setWhichCommentIsGenerated(null);
+                        }}
+                      >
+                        AI
+                      </SecondaryButton>
+                    </Buttons>
+                  </TopRow>
+                ) : (
+                  "..."
+                )}
               </div>
             );
           })}

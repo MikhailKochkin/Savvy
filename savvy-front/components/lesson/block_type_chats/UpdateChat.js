@@ -212,18 +212,31 @@ const UpdateChat = (props) => {
       </Row>
       {!generating &&
         mess.map((m, i) => (
-          <UpdateMessage
-            key={i}
-            index={i}
-            author={m.author}
-            text={m.text}
-            name={m.name}
-            image={m.image}
-            characters={props.characters}
-            isAiAssistantOn={m.isAiAssistantOn}
-            reactions={m.reactions}
-            passUpdatedMessage={updateMessageProperties}
-          />
+          <>
+            <div>
+              {type == "dynamicchat"
+                ? i == 0
+                  ? "First chat message:"
+                  : i == 1
+                  ? "Info about the bot:"
+                  : i == 2
+                  ? "Info about the user:"
+                  : null
+                : null}
+            </div>
+            <UpdateMessage
+              key={i}
+              index={i}
+              author={m.author}
+              text={m.text}
+              name={m.name}
+              image={m.image}
+              characters={props.characters}
+              isAiAssistantOn={m.isAiAssistantOn}
+              reactions={m.reactions}
+              passUpdatedMessage={updateMessageProperties}
+            />
+          </>
         ))}
       <Bottom>
         <div className="number_box">
@@ -256,21 +269,33 @@ const UpdateChat = (props) => {
         <ButtonTwo
           onClick={async (e) => {
             e.preventDefault();
-            const res = await updateChat({
-              variables: {
-                id: props.id,
-                messages: {
-                  messagesList: mess.map((m) => ({
-                    ...m,
-                    __typename: undefined,
-                  })),
+
+            // Clean up messagesList to remove __typename from all nested objects
+            const cleanedMessages = mess.map((m) => ({
+              ...m,
+              reactions: m.reactions?.map((reaction) => {
+                const { __typename, ...rest } = reaction; // Remove __typename
+                return rest;
+              }),
+              __typename: undefined, // Remove __typename from the top-level message
+            }));
+
+            try {
+              const res = await updateChat({
+                variables: {
+                  id: props.id,
+                  messages: {
+                    messagesList: cleanedMessages,
+                  },
+                  name,
+                  type,
                 },
-                name,
-                type,
-              },
-            });
-            props.getResult(res);
-            props.switchUpdate();
+              });
+              props.getResult(res);
+              props.switchUpdate();
+            } catch (error) {
+              console.error("Error updating chat:", error);
+            }
           }}
         >
           {loading ? t("saving") : t("save")}

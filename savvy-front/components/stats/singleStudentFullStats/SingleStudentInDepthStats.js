@@ -551,12 +551,6 @@ const SingleStudentInDepthStats = (props) => {
               );
             }
             if (l.type.toLowerCase() == "texteditor") {
-              {
-                console.log(
-                  "data.stats.textEditorResults",
-                  data.stats.textEditorResults
-                );
-              }
               return (
                 <TexteditorResult
                   texteditors={lesson.texteditors.filter((t) => t.id === l.id)}

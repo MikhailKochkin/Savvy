@@ -54,16 +54,6 @@ const Container = styled.div`
   }
 `;
 
-const Progress = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 70vh;
-  margin: 0 0 2% 0;
-`;
-
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID, coursePage, context } = props;
   const [experience, setExperience] = useState(0); // User's experience points
@@ -110,10 +100,6 @@ const StoryEx = (props) => {
 
   // Function to update user experience points
 
-  // const getResults = (res, id) => {
-  //   setExperience((prevExperience) => prevExperience + res);
-  // };
-
   const prevSelection = useRef("");
 
   const passTextToBeTranslated = (text) => {
@@ -156,21 +142,6 @@ const StoryEx = (props) => {
   }, [props.id, me]);
 
   if (stats_error) return <p>{stats_error}</p>;
-  // if (stats_loading)
-  //   return (
-  //     <Progress>
-  //       <TailSpin
-  //         height="80"
-  //         width="80"
-  //         color="#2E80EC"
-  //         ariaLabel="tail-spin-loading"
-  //         radius="1"
-  //         wrapperStyle={{}}
-  //         wrapperClass=""
-  //         visible={true}
-  //       />{" "}
-  //     </Progress>
-  //   );
 
   // Find the lesson result with the highest progress value for the current user
   const findNewestLessonResult = (stats_data, lesson) => {
@@ -221,6 +192,44 @@ const StoryEx = (props) => {
     updatedStructure.splice(middleIndex, 0, newObject);
   }
 
+  const populateLessonStructure = (items) => {
+    const updatedItems = items.map((item) => {
+      let content;
+      if (item.type === "Chat") {
+        content = lesson.chats
+          .find((chat) => chat.id === item.id)
+          ?.messages.messagesList.map((message) => message.text)
+          .join(" ");
+      } else if (item.type === "Note") {
+        content = lesson.notes.find((note) => note.id === item.id)?.text;
+      } else if (item.type === "Problem") {
+        content = lesson.problems.find(
+          (problem) => problem.id === item.id
+        ).text;
+      } else if (item.type === "TextEditor") {
+        content = lesson.texteditors.find(
+          (textEditor) => textEditor.id === item.id
+        ).text;
+      } else if (item.type === "Shot") {
+        content = "";
+      } else if (item.type === "Construction") {
+        content = "";
+      } else if (item.type === "Forum") {
+        content = lesson.forum.text;
+      } else if (item.type === "Quiz") {
+        content = lesson.quizes.find((quiz) => quiz.id === item.id).question;
+      } else if (item.type === "NewTest") {
+        content = lesson.newTests.find((newTest) => newTest.id === item.id)
+          .question[0];
+      }
+      return {
+        type: item.type,
+        content: content,
+      };
+    });
+    return updatedItems;
+  };
+
   updatedTasks.map((task) => {
     let el;
     let item;
@@ -236,6 +245,7 @@ const StoryEx = (props) => {
           experience={experience}
           total={total}
           author={lesson.user}
+          instructorName={el.instructorName}
           story={true}
           note={el}
           clicks={el.link_clicks}
@@ -312,6 +322,11 @@ const StoryEx = (props) => {
           isOrderOfAnswersImportant={el.isOrderOfAnswersImportant}
           shouldAnswerSizeMatchSample={el.shouldAnswerSizeMatchSample}
           check={el.check}
+          jsonStoryString={JSON.stringify(
+            lesson.structure
+              ? populateLessonStructure(lesson.structure?.lessonItems)
+              : []
+          )}
           me={me}
           lesson={lesson}
           ifRight={el.ifRight}
@@ -443,6 +458,11 @@ const StoryEx = (props) => {
           complexity={el.complexity}
           lessonID={lesson.id}
           me={me}
+          jsonStoryString={JSON.stringify(
+            lesson.structure
+              ? populateLessonStructure(lesson.structure?.lessonItems)
+              : []
+          )}
           // context={el.context}
           story={true}
           lesson={lesson}
@@ -471,38 +491,38 @@ const StoryEx = (props) => {
       );
       components.push(item);
       move_statuses.push(true);
-      // } else if (task.type.toLowerCase() === "construction") {
-      // el = lesson.constructions.find((con) => con.id === task.id);
-      // if (!el) return;
+    } else if (task.type.toLowerCase() === "construction") {
+      el = lesson.constructions.find((con) => con.id === task.id);
+      if (!el) return;
 
-      // item =
-      //   el.elements !== null ? (
-      //     <NewConstructor
-      //       key={el.id}
-      //       id={el.id}
-      //       lessonID={lesson.id}
-      //       construction={el}
-      //       complexity={el.complexity}
-      //       me={me}
-      //       context={el.context}
-      //       story={true}
-      //       elements={el.elements.elements}
-      //     />
-      //   ) : (
-      //     <SingleConstructor
-      //       key={el.id}
-      //       id={el.id}
-      //       lessonID={lesson.id}
-      //       complexity={el.complexity}
-      //       construction={el}
-      //       variants={el.variants}
-      //       me={me}
-      //       arr={Array(el.answer.length).fill("")}
-      //       story={true}
-      //     />
-      //   );
-      // components.push(item);
-      // move_statuses.push(true);
+      item =
+        el.elements !== null ? (
+          <NewConstructor
+            key={el.id}
+            id={el.id}
+            lessonID={lesson.id}
+            construction={el}
+            complexity={el.complexity}
+            me={me}
+            context={el.context}
+            story={true}
+            elements={el.elements.elements}
+          />
+        ) : (
+          <SingleConstructor
+            key={el.id}
+            id={el.id}
+            lessonID={lesson.id}
+            complexity={el.complexity}
+            construction={el}
+            variants={el.variants}
+            me={me}
+            arr={Array(el.answer.length).fill("")}
+            story={true}
+          />
+        );
+      components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "document") {
       el = lesson.documents.find((con) => con.id === task.id);
       if (!el) return;
@@ -549,6 +569,16 @@ const StoryEx = (props) => {
   const passStep = (num) => {
     props.passStep(num);
   };
+
+  // let previousStories = [];
+  // if (lesson.coursePage.lessons) {
+  //   lesson.coursePage.lessons.map((other_lesson) => {
+  //     if (other_lesson.number < lesson.number) {
+  //       previousStories.push(other_lesson.story);
+  //     }
+  //   });
+  // }
+
   return (
     <Container>
       {me && (

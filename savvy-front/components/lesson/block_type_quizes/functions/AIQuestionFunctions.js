@@ -90,7 +90,8 @@ export const generateHint = async (
   comment,
   allHints,
   router,
-  context
+  context,
+  jsonStoryString
 ) => {
   event.preventDefault();
 
@@ -128,7 +129,10 @@ export const generateHint = async (
   Break your hint into small paragraphs and return every paragraph in a <p> tag.
   LIMIT YOUR RESPONSE TO 500 CHARACTERS.`;
   const hintPrompt = ` Give a hint to the student in a Socratic manner on what is the correct answer.
-   Use this approach: ${hintingMethods[allHints.length]} 
+   Use this approach: ${
+     hintingMethods[allHints.length]
+   }. Connect you explanation to the general story of the simulator. 
+  The story is """ ${jsonStoryString} """.
   Do NOT USE the words from the correct answer. DO NOT reveal the correct answer. `;
   //    Use this approach: ${hintingMethods[allHints.length]}
   try {
