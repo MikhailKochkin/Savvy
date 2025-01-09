@@ -6,31 +6,52 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { onError } from "apollo-link-error";
-import { getDataFromTree } from "@apollo/react-ssr";
-import { useEffect } from "react"; // Import useEffect hook
-import { useRouter } from "next/router"; // Import useRouter hook to access router object
-import { endpoint, prodEndpoint } from "../config";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { endpoint, prodEndpoint, prodEndpointRu } from "../config";
 
 let apolloClient = null;
 
-function createApolloClient(headers) {
+// Define hostname-to-endpoint mappings
+const hostnameMappings = {
+  "www.besavvy.app": prodEndpoint,
+  "besavvy.app": prodEndpoint,
+  "www.besavvy.ru": prodEndpointRu,
+  "besavvy.ru": prodEndpointRu,
+};
+
+// Function to determine endpoint based on hostname
+function getEndpoint(hostname) {
+  return hostnameMappings[hostname] || prodEndpoint; // Fallback endpoint
+}
+
+// Create Apollo Client
+function createApolloClient(headers = {}) {
+  const hostname =
+    typeof window === "undefined"
+      ? headers.host // Server-side detection
+      : window.location.hostname; // Client-side detection
+
+  const finalProdEndpoint = getEndpoint(hostname);
+
   return new ApolloClient({
-    ssrMode: typeof window === "undefined", // Check if running on server or client
+    ssrMode: typeof window === "undefined", // Enable SSR mode for server-side rendering
     link: ApolloLink.from([
       onError(({ graphQLErrors, networkError }) => {
-        if (graphQLErrors)
+        if (graphQLErrors) {
           graphQLErrors.forEach(({ message, locations, path }) =>
-            console.log(
+            console.error(
               `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
             )
           );
-        if (networkError) console.log(`[Network error]: ${networkError}`);
+        }
+        if (networkError) console.error(`[Network error]: ${networkError}`);
       }),
       new HttpLink({
-        uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
-        // Pass in fetchOptions or credentials as needed
+        uri:
+          process.env.NODE_ENV === "development" ? endpoint : finalProdEndpoint, // Pass in fetchOptions or credentials as needed
         fetchOptions: {
-          credentials: "include",
+          credentials: "include", // Include cookies for authentication
         },
         headers,
       }),
@@ -39,52 +60,31 @@ function createApolloClient(headers) {
   });
 }
 
-export function initializeApollo(initialState = null, headers) {
-  // Create Apollo Client instance if not already created
+export function initializeApollo(initialState = null, headers = {}) {
   const _apolloClient = apolloClient ?? createApolloClient(headers);
 
-  // If page is being rendered on client-side, restore initialState
   if (initialState) {
     _apolloClient.cache.restore(initialState);
   }
 
-  // For SSG and SSR always create a new Apollo Client
   if (typeof window === "undefined") return _apolloClient;
 
-  // Store Apollo Client instance once in global variable for subsequent requests
   if (!apolloClient) apolloClient = _apolloClient;
   return _apolloClient;
 }
 
 export function useApollo(pageProps) {
-  const router = useRouter(); // Access router object
+  const router = useRouter();
 
   useEffect(() => {
-    // On route change, clear Apollo Client's cache
     if (apolloClient) {
       apolloClient.cache.reset();
     }
   }, [router.asPath]);
 
-  // Pass initial state from SSR or rehydration to Apollo Client
   return initializeApollo(pageProps.initialApolloState, {
     headers: {
-      // Pass any required headers here
+      // Include client-side headers if needed
     },
   });
-}
-
-export async function getStaticProps(context) {
-  // Call `getDataFromTree` during SSR to ensure all data is fetched
-  const apolloClient = initializeApollo(null, context.req.headers);
-
-  await getDataFromTree(<App {...pageProps} />, {
-    client: apolloClient,
-  });
-
-  return {
-    props: {
-      initialApolloState: apolloClient.cache.extract(),
-    },
-  };
 }

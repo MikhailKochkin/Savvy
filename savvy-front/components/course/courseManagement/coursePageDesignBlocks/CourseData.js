@@ -135,6 +135,7 @@ const CourseData = (props) => {
   const coursePage = data.coursePage;
   return (
     <Data id="info_box">
+      {console.log(coursePage.user)}
       <Header>{coursePage.title}</Header>
       {coursePage && coursePage.authors?.length > 0 ? (
         coursePage.authors.map((a) => (

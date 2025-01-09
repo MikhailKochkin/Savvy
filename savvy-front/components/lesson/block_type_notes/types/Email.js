@@ -126,6 +126,7 @@ const Note = (props) => {
   }
 
   const getInitials = (instructorName) => {
+    if (!instructorName) return null;
     const words = instructorName.split(" ");
     if (words.length === 1) {
       return words[0].slice(0, 2);
@@ -143,7 +144,7 @@ const Note = (props) => {
           <EmailInfo>
             <div className="image_column">
               <div className="circle">
-                {instructorName
+                {instructorName && getInitials(instructorName)
                   ? getInitials(instructorName)
                   : `${author.name[0]}${author.surname[0]}`}
               </div>

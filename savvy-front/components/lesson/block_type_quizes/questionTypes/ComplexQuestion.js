@@ -248,16 +248,13 @@ const ComplexQuestion = (props) => {
     for (let idea of ideas) {
       // Skip empty ideas (null, undefined, or blank string)
       if (!idea || !idea.trim()) {
-        console.log("Skipping empty idea:", idea);
+        // console.log("Skipping empty idea:", idea);
         continue;
       }
-
-      console.log("idea", idea);
 
       // Check if the idea has already been evaluated
       let existingResult =
         overallResults && overallResults.find((res) => res.idea === idea);
-      console.log("existingResult", existingResult);
 
       if (existingResult) {
         old_results.push(existingResult);
@@ -305,7 +302,6 @@ const ComplexQuestion = (props) => {
         }
 
         const mainScore = parseFloat(mainResponse.res) || 0;
-        console.log("mainScore", mainScore);
 
         // Update best match if main answer is better than current best
         if (mainScore > bestMatch.result) {

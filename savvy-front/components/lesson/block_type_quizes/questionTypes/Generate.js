@@ -141,17 +141,13 @@ const Generate = (props) => {
     for (let idea of ideas) {
       // Skip empty ideas (null, undefined, or blank string)
       if (!idea || !idea.trim()) {
-        console.log("Skipping empty idea:", idea);
+        // console.log("Skipping empty idea:", idea);
         continue;
       }
-
-      console.log("idea", idea);
 
       // Check if the idea has already been evaluated
       let existingResult =
         overallResults && overallResults.find((res) => res.idea === idea);
-      console.log("existingResult", existingResult);
-
       if (existingResult) {
         old_results.push(existingResult);
         continue;
