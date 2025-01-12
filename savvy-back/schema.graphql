@@ -1799,10 +1799,7 @@ type Query {
     id: String
   ): [BotDialogue]
   businessClient(id: String!): BusinessClient
-  businessClients(
-    """ID of the business client to fetch."""
-    id: String
-  ): [BusinessClient]
+  businessClients: [BusinessClient]
   certificate(id: String!): Certificate
   certificates(
     """ID of the certificate to fetch."""

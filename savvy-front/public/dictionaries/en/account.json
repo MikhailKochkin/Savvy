@@ -23,5 +23,14 @@
   "saving": "Saving...",
   "team_settings": "Teams settings",
   "my_teams": "My teams",
-  "create_new_team": "Create new team"
+  "create_new_team": "Create new team",
+  "my_courses_in_development": "My courses in development",
+  "my_courses_in_production": "My courses in production",
+  "description": "Description",
+  "last_updated": "Last updated",
+  "action": "Action",
+  "create": "Create",
+  "new_course": "New Course",
+  "no_courses_yet": "No courses in production yet",
+  "no_courses_explanation": "It means that no courses can be accessed by the users"
 }

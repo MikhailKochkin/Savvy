@@ -1,10 +1,27 @@
+import React from "react";
 import styled from "styled-components";
-import { useMutation, gql } from "@apollo/client";
-import Router from "next/router";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+
+const Styles = styled.div`
+  display: flex;
+  margin: 40px 0;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 60%;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Outer = styled.div`
   width: 100%;
@@ -71,7 +88,10 @@ const Inner = styled.div`
     font-size: 2.4rem;
     margin-bottom: 20px;
     border-bottom: 1px solid grey;
-    padding: 0px 50px;
+    padding: 20px 50px;
+    width: 70%;
+    line-height: 1.3;
+    text-align: center;
   }
   @media (max-width: 800px) {
     padding: 50px 0;
@@ -105,56 +125,52 @@ const Data = styled.div`
 
 Outer.displayName = "Outer";
 
-const Certificate = (props) => {
-  const [createCertificate, { data, loading, error }] =
-    useMutation(CREATE_CERT_MUTATION);
+const downloadPDF = async () => {
+  const certificate = document.getElementById("certificate");
+  const canvas = await html2canvas(certificate, {
+    scale: 3, // Increase scale for better quality (optional)
+  });
+  const imgData = canvas.toDataURL("image/png");
+
+  const pdf = new jsPDF("l", "mm", "a4");
+  const width = pdf.internal.pageSize.getWidth();
+  const height = pdf.internal.pageSize.getHeight();
+
+  pdf.addImage(imgData, "PNG", 0, 0, width, height);
+  pdf.save("certificate.pdf");
+};
+
+const Certificate = () => {
   const { t } = useTranslation("course");
-
-  const downloadPDF = async () => {
-    const certificate = document.getElementById("certificate");
-    const canvas = await html2canvas(certificate, {
-      scale: 3, // Increase scale for better quality (optional)
-    });
-    const imgData = canvas.toDataURL("image/png");
-
-    const pdf = new jsPDF("l", "mm", "a4");
-    const width = pdf.internal.pageSize.getWidth();
-    const height = pdf.internal.pageSize.getHeight();
-
-    pdf.addImage(imgData, "PNG", 0, 0, width, height);
-    pdf.save("certificate.pdf");
-  };
-
   moment.locale("ru");
 
   return (
-    <>
-      <button onClick={downloadPDF}>Download Certificate as PDF</button>
-      <Outer id="certificate">
-        <Inner>
-          <div className="bookmark"></div>
-          <h2>{t("certificate")}</h2>
-          <div>{t("certify")}</div>
-          <div className="name">
-            {props.student.name} {props.student.surname}
-          </div>
-          <div>{t("completed")}</div>
-          <div className="course">{props.coursePage.title}</div>
-          <Data>
-            <div className="left">
-              <div>ID: {props.certId}</div>
-              <div>
-                {t("date")} {moment(props.createdAt).format("DD.MM.YY")}
+    <Styles>
+      <Container>
+        <button onClick={downloadPDF}>Download Certificate as PDF</button>
+
+        <Outer id="certificate">
+          <Inner>
+            <div className="bookmark"></div>
+            <h2>{t("certificate")}</h2>
+            <div>{t("certify")}</div>
+            <div className="name"></div>
+            <div>{t("completed")}</div>
+            <div className="course">Полный курс Legal English (8 модулей)</div>
+            <Data>
+              <div className="left">
+                <div>ID: 155sdf345e4gg </div>
+                <div>{t("date")} 10.12.2024</div>
               </div>
-            </div>
-            <div className="right">
-              <div>{t("mikhail")}</div>
-              <div>{t("lead_instructor")}</div>
-            </div>
-          </Data>
-        </Inner>
-      </Outer>
-    </>
+              <div className="right">
+                <div>Михаил Кочкин</div>
+                <div>Директор</div>
+              </div>
+            </Data>
+          </Inner>
+        </Outer>
+      </Container>
+    </Styles>
   );
 };
 

@@ -4711,9 +4711,6 @@ export interface NexusGenArgTypes {
     businessClient: { // args
       id: string; // String!
     }
-    businessClients: { // args
-      id?: string | null; // String
-    }
     certificate: { // args
       id: string; // String!
     }

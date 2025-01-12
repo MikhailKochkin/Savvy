@@ -176,13 +176,16 @@ function userQueries(t) {
   });
   t.list.field("businessClients", {
     type: "BusinessClient",
-    args: {
-      id: stringArg({ description: "ID of the business client to fetch." }),
-    },
-    resolve: (_parent, { id }, ctx) => {
-      const where = id ? { id } : {};
+    args: {},
+    resolve: (_parent, { id, orderBy }, ctx) => {
+      const where = {
+        createdAt: {
+          gt: new Date("2024-06-01"),
+        },
+      };
       return ctx.prisma.businessClient.findMany({
         where,
+        orderBy: { createdAt: "desc" },
       });
     },
   });
@@ -261,6 +264,7 @@ function userQueries(t) {
           include: {
             lessons: true,
             coursePages: true,
+            co_coursePages: true,
             subscriptions: true,
             messages: true,
             new_subjects: true,

@@ -6,6 +6,7 @@ import { useUser } from "../User";
 import LessonBuilder from "./LessonBuilder";
 import Navigation from "./lesson_management/Navigation";
 import LoadingText from "../layout/LoadingText";
+import NoAccess from "../layout/NoAccess";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: String!) {
@@ -581,6 +582,7 @@ const SingleLesson = (props) => {
   if (!data || !data.lesson) return <p>No lesson found</p>;
   const lesson = data.lesson;
   let i_am_author = false;
+
   if (
     me &&
     (me.coursePages.filter((c) => c.id == lesson.coursePage.id).length > 0 ||
@@ -592,7 +594,7 @@ const SingleLesson = (props) => {
     return "Please sign up or log in to access this page";
   }
   if (!me.permissions.includes("ADMIN") && !i_am_author) {
-    return "No access";
+    return <NoAccess />;
   }
   return (
     <Container>

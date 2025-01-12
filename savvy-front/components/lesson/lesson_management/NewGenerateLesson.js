@@ -743,7 +743,7 @@ const CharacterData = ({
         </div>
         <div className="action_area">
           <input
-            // onChange={(e) => setHorizontalImage(e.target.value)}
+            onChange={(e) => updateCharacter("image", e.target.value)}
             value={character.image}
             placeholder=""
           />

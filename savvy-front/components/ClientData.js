@@ -1,33 +1,16 @@
 import { useState } from "react";
-import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import CreateClient from "./CreateClient";
 import Client from "./Client";
-
-const UPDATE_CLIENT_MUTATION = gql`
-  mutation UPDATE_CLIENT_MUTATION(
-    $id: String!
-    $communication_history: ClientMessages
-  ) {
-    sendBusinessClientEmail(
-      id: $id
-      communication_history: $communication_history
-    ) {
-      id
-    }
-  }
-`;
-
-const UPDATE_CLIENT_MUTATION2 = gql`
-  mutation UPDATE_CLIENT_MUTATION2($id: String!, $tags: [String]) {
-    updateBusinessClient(id: $id, tags: $tags) {
-      id
-    }
-  }
-`;
+import {
+  ActionButton,
+  SecondaryButton,
+  NanoButton,
+  Buttons,
+  Row,
+} from "./lesson/styles/DevPageStyles";
 
 const Styles = styled.div`
   display: flex;
@@ -37,10 +20,7 @@ const Styles = styled.div`
   padding: 50px 0;
   background: #f3f4f5;
   width: 100%;
-  .total {
-    width: 80%;
-    margin: 20px 0;
-  }
+
   .create {
     background: #fff;
     width: 90%;
@@ -57,140 +37,110 @@ const Styles = styled.div`
   }
 `;
 
-const Tag = styled.div`
-  border: 1px solid blue;
-  cursor: pointer;
-  color: blue;
-  border-radius: 5px;
+const Container = styled.div`
   display: flex;
-  flex-direction: row;
-  width: 90%;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  transition: ease-in 0.2s;
-  &:hover {
-    border: 2px solid blue;
+  align-items: flex-start;
+  width: 1000px;
+  .total {
+    width: 50%;
   }
-`;
-
-const Row = styled.div`
-  display: flex;
-  width: 90%;
-  flex-direction: row;
-  justify-content: left;
-  padding: 5px 0;
-  background: #fff;
-  border: 1px solid #eff0f1;
-  border-top: 1px solid #fff;
-  .index {
-    width: 2%;
+  .search_area {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .time {
-    width: 15%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .name {
-    width: 15%;
-  }
-  .email {
-    width: 20%;
-  }
-  .number {
-    width: 10%;
-  }
-  .comment {
-    width: 45%;
-    .editor {
-      font-size: 1.6rem;
-      width: 95%;
-      margin-left: 5%;
-      border: 1px solid #c4c4c4;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
-      outline: 0;
-      padding: 0.5%;
-      font-size: 1.6rem;
-      @media (max-width: 800px) {
-        width: 350px;
-      }
-    }
-    button {
-      margin-left: 5%;
-      margin-bottom: 5%;
-    }
-    textarea {
-      font-family: Montserrat;
-      padding: 0 5%;
-      margin: 0 5%;
-      border: none;
-      width: 90%;
-      height: 100px;
-      white-space: pre-line;
-    }
-    .editor {
-    }
-  }
-  .tags {
-    padding-left: 20px;
-    li {
-      width: 100%;
+    flex-direction: row;
+    width: 900px;
+    .search_form {
+      width: 50%;
+      margin-right: 50px;
     }
   }
   @media (max-width: 800px) {
-    flex-direction: column;
     width: 100%;
-    padding: 3%;
+  }
+`;
+
+const Board = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 1000px;
+  margin: 30px 0;
+  .board_row {
+    display: flex;
+    flex-direction: row;
+
+    width: 1000px;
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    .board_TA {
+      width: 30%;
+      border-right: 1px solid #c4c4c4;
+      padding: 10px;
+    }
+    .board_definition {
+      width: 70%;
+      padding: 10px;
+    }
+  }
+  @media (max-width: 800px) {
+    width: 100%;
   }
 `;
 
 const ClientData = (props) => {
   const [clients, setClients] = useState(props.initial_clients);
-  const [startDate, setStartDate] = useState(new Date());
   const [email, setEmail] = useState("");
-  const [emailType, setEmailType] = useState("");
-  const [value, setValue] = useState(0); // integer state
   const [tag, setTag] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
 
+  let messaging = [
+    {
+      target_audience: "HR and Early Talent Team",
+      problem_statement:
+        "HR teams face challenges in attracting, onboarding, and retaining talent amidst fierce competition and rising salary expectations. ",
+      value_proposition:
+        "BeSavvy enables HR teams to streamline onboarding and training with interactive simulators that accelerate time-to-competence, improve skill retention, and strengthen the firm’s employer brand. Simulators can be used as virtual job simualtions or for onboarding and training purposes.",
+      messages: [
+        "Reduce time-to-hire with scalable onboarding solutions.",
+        "Build a strong employer brand with innovative training approaches.",
+        "Ensure consistent quality in new hires with systematic skill development.",
+      ],
+    },
+    {
+      target_audience:
+        "Learning and Development Team and Training Principal/Partner",
+      problem_statement:
+        "L&D teams and training principals face challenges in delivering effective, scalable training that balances real-world application, compliance with regulations, and time efficiency (meaning that the direct involvement of senior lawyers is required). Traditional methods often result in inconsistent outcomes, reluctance to learn, limited skill retention, and reduced productivity.",
+      value_proposition:
+        "BeSavvy offers practical training simulators that standardise learning, enhance skill development, and deliver measurable outcomes while reducing the time required for traditional methods.",
+      messages: [
+        "Track and measure progress to ensure effective learning outcomes.",
+        "Enhance skill development while minimising time away from billable work.",
+        "Prepare lawyers for real-world scenarios with practical simulations.",
+        "Enable the approach `practice makes permanent’",
+      ],
+    },
+    {
+      target_audience: "Innovation Team",
+      problem_statement:
+        "Innovation teams often face resistance to adopting new legaltech tools and integrating them into existing workflows. Without effective training, these tools remain underutilised, leading to lost ROI.",
+      value_proposition:
+        "BeSavvy accelerates legaltech adoption by providing practical training simulators that reduce resistance to change, integrate tools into workflows, and maximise technology ROI.",
+      messages: [
+        "Accelerate adoption of new legaltech tools with effective training.",
+        "Maximise ROI on technology investments through practical implementation.",
+        "Reduce resistance to change with engaging, real-world simulations.",
+      ],
+    },
+  ];
+
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
-
-  const [sendBusinessClientEmail, { updated_data }] = useMutation(
-    UPDATE_CLIENT_MUTATION
-  );
-
-  const [updateBusinessClient, { updated_data2 }] = useMutation(
-    UPDATE_CLIENT_MUTATION2
-  );
-
-  function addTagToClient(coursePageId, tag) {
-    clients.forEach((client) => {
-      // Check if 'type' exists and contains the 'coursePageId'
-      if (
-        client.type &&
-        client.type.includes(coursePageId) &&
-        !client.tags.includes("Школа")
-      ) {
-        // Add the new tag to the 'tags' array
-        const newTags = [...client.tags, tag];
-        // console.log("client.type", client.type, newTags);
-        // Update the client
-        updateBusinessClient({
-          variables: {
-            id: client.id,
-            tags: newTags,
-          },
-        });
-      }
-    });
-  }
 
   // Calculating the items to show based on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -205,27 +155,6 @@ const ClientData = (props) => {
     setClients(new_clients);
   };
 
-  const chooseDate = (d) => {
-    let clients_in_range = props.initial_clients.filter(
-      (cl) => new Date(cl.createdAt) < new Date(d)
-      // {
-      //   let client_date = new Date(cl.createdAt);
-      //   let chosendate = new Date(d);
-      //   let week_before_date = new Date(d);
-
-      //   week_before_date.setDate(chosendate.getDate() - 7);
-
-      //   if (
-      //     client_date.getTime() > week_before_date.getTime() &&
-      //     client_date.getTime() < chosendate.getTime()
-      //   ) {
-      //     return cl;
-      //   }
-      // }
-    );
-    setClients(clients_in_range);
-  };
-
   const search = (val) => {
     let filtered_clients = clients.filter((c) => c.tags.includes(val));
     setClients(filtered_clients);
@@ -238,188 +167,109 @@ const ClientData = (props) => {
     setClients(filtered_clients);
   };
 
-  let clients_in_range = clients.filter((cl) => {
-    let client_date = new Date(cl.createdAt);
-    let chosendate = new Date(startDate);
-    let week_before_date = new Date(startDate);
-
-    week_before_date.setDate(chosendate.getDate() - 7);
-
-    if (
-      client_date.getTime() > week_before_date.getTime() &&
-      client_date.getTime() < chosendate.getTime()
-    ) {
-      return cl;
-    }
-  });
-
   const addClients = (data) => {
     let new_arr = [data].concat(clients);
     setClients([...new_arr]);
   };
 
-  function findNewestItem(array) {
-    if (array.length === 0) {
-      return null;
-    }
-
-    return array.reduce((newest, item) => {
-      return new Date(newest.createdAt) > new Date(item.createdAt)
-        ? newest
-        : item;
-    });
-  }
-
-  function getNextEmailItem(object, subject) {
-    const { emails } = object;
-    for (let i = 0; i < emails.length; i++) {
-      if (emails[i].subject === subject) {
-        return emails[i + 1] || emails[0];
-      }
-    }
-    return emails[0];
-  }
-
-  function isNewestItemMoreThan48HoursOld(newestItem) {
-    if (newestItem === null) {
-      return true;
-    }
-
-    let createdAtDate = new Date(newestItem.date);
-    let currentDate = new Date();
-
-    // Get the difference in milliseconds
-    let difference = currentDate - createdAtDate;
-
-    // Convert the difference from milliseconds to hours
-    let differenceInHours = difference / 1000 / 60 / 60;
-
-    return differenceInHours > 80;
-  }
-
-  // const send = () => {
-  //   if (emailType == "") {
-  //     alert("Выберите тему писем");
-  //     return;
-  //   }
-  //   clients.map((c) => {
-  //     let last_email = findNewestItem(
-  //       c.communication_history && c.communication_history.messages
-  //         ? c.communication_history.messages
-  //         : []
-  //     );
-  //     let next_email = getNextEmailItem(
-  //       emailGroups.find((el) => el.name === emailType),
-  //       last_email?.subject
-  //     );
-
-  //     if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
-  //       let mess = c.communication_history
-  //         ? [
-  //             ...c.communication_history.messages,
-  //             {
-  //               message: next_email.text,
-  //               date: new Date().toISOString(),
-  //               subject: next_email.subject,
-  //             },
-  //           ]
-  //         : [
-  //             {
-  //               message: next_email.text,
-  //               date: new Date().toISOString(),
-  //               subject: next_email.subject,
-  //             },
-  //           ];
-  //       const res = sendBusinessClientEmail({
-  //         variables: {
-  //           id: c.id,
-  //           communication_history: {
-  //             messages: mess,
-  //           },
-  //         },
-  //       });
-  //     }
-  //   });
-  // };
-
   return (
     <Styles>
-      <div className="total">
-        <div>Всего заявок: {props.initial_clients.length}</div>
-        <div>Заявок за выбранный период: {clients_in_range.length}</div>
-        <DatePicker
-          selected={startDate}
-          dateFormat="dd/MM/yyyy"
-          onChange={(date) => {
-            setStartDate(date);
-            return chooseDate(date);
-          }}
-        />
-        <button onClick={(e) => setValue((value) => value + 1)}>
-          Обновить данные
-        </button>
-        <button onClick={(e) => setClients(props.initial_clients)}>
-          Показать всех клиентов
-        </button>
-        <button onClick={(e) => addTagToClient("school", "Школа")}>
-          Add tag to client
-        </button>
-        <div>
-          <input onChange={(e) => setTag(e.target.value)} />
-          <button onClick={(e) => search(tag)}>Искать по тегам</button>
+      <Container>
+        <div className="total">
+          <div className="search_area">
+            <Row className="search_form">
+              <div className="description">Search by tag</div>
+              <div className="action_area">
+                <input onChange={(e) => setTag(e.target.value)} />
+                <Buttons gap="5px" margin="0">
+                  <SecondaryButton onClick={(e) => search(tag)}>
+                    Search
+                  </SecondaryButton>
+                  <ActionButton
+                    onClick={(e) => setClients(props.initial_clients)}
+                  >
+                    Show All
+                  </ActionButton>
+                </Buttons>
+              </div>
+            </Row>
+            <Row className="search_form">
+              <div className="description">Search by email</div>
+              <div className="action_area">
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  type="text"
+                  name="email"
+                  placeholder="..."
+                />
+                <SecondaryButton onClick={(e) => search2(email)}>
+                  Search
+                </SecondaryButton>
+              </div>
+            </Row>
+          </div>
+          {/* Page Buttons */}
         </div>
-        <div>
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            type="text"
-            name="email"
-            placeholder="..."
-          />
-          <button onClick={(e) => search2(email)}>Искать по почте</button>
-        </div>
-        <br />
-        <button onClick={(e) => send()}>Отправить имейлы</button>
-        <select
-          value={emailType}
-          onChange={(e) => setEmailType(e.target.value)}
-        >
-          {/* {emailGroups.map((g) => (
-            <option value={g.name}>{g.name}</option>
-          ))} */}
-        </select>
-        {/* Page Buttons */}
-        <div className="pagination">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              disabled={currentPage === index + 1}
-            >
-              {index + 1}
-            </button>
+        <CreateClient addClients={addClients} />
+        <Board>
+          {messaging.map((m, i) => (
+            <div className="board_row" key={i}>
+              <div className="board_TA">
+                <b> {m.target_audience}</b>
+              </div>
+              <div className="board_definition">
+                <div>
+                  <b>Problem Statement: </b>
+                  {m.problem_statement}
+                </div>
+                <div>
+                  <b>Value Proposition: </b>
+                  {m.value_proposition}
+                </div>
+                <div>
+                  <b>Messages:</b>
+                  {m.messages.map((m, i) => (
+                    <li key={i}>{m}</li>
+                  ))}
+                </div>
+              </div>
+            </div>
           ))}
+        </Board>
+        <div className="pagination">
+          <Buttons gap="5px" margin="10px 0">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <NanoButton
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                disabled={currentPage === index + 1}
+              >
+                {index + 1}
+              </NanoButton>
+            ))}
+          </Buttons>
         </div>
-      </div>
-      <CreateClient addClients={addClients} />
-      {currentItems.map((c, i) => (
-        <Client
-          id={c.id}
-          sort={sort}
-          key={c.id}
-          index={i}
-          name={c.name}
-          surname={c.surname}
-          email={c.email}
-          communication_history={c.communication_history}
-          comment={c.comment}
-          tags={c.tags}
-          number={c.number}
-          createdAt={c.createdAt}
-          url={c.type}
-          communication_medium={c.communication_medium}
-        />
-      ))}
+        {currentItems.map((c, i) => (
+          <Client
+            id={c.id}
+            sort={sort}
+            key={c.id}
+            index={i}
+            name={c.name}
+            surname={c.surname}
+            email={c.email}
+            communication_history={c.communication_history}
+            comment={c.comment}
+            tags={c.tags}
+            number={c.number}
+            createdAt={c.createdAt}
+            url={c.type}
+            communication_medium={c.communication_medium}
+            messaging={messaging}
+          />
+        ))}
+      </Container>
     </Styles>
   );
 };

@@ -145,13 +145,18 @@ const NewBlock = (props) => {
         <Block getOldResult={getOldResult} notes={lesson.notes} />
       )}
       {!saved && type == "Chat" && (
-        <CreateChat lessonID={lesson.id} getResult={getResult} />
+        <CreateChat
+          lessonID={lesson.id}
+          getResult={getResult}
+          characters={props.characters}
+        />
       )}
       {saved && type == "Chat" && data && (
         <Chat
           messages={data.messages}
           name={data.name}
           me={me}
+          characters={props.characters}
           clicks={data.link_clicks}
           user={lesson.user.id}
           id={data.id}

@@ -4,6 +4,7 @@ import { useQuery, gql } from "@apollo/client";
 import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
 import Loading from "./layout/Loading";
+import { useTranslation } from "next-i18next";
 
 import { SecondaryButton } from "./lesson/styles/DevPageStyles";
 
@@ -50,15 +51,11 @@ const Styles = styled.div`
   justify-content: center;
   background: #e8eff6;
   padding: 13px 0;
+  border-radius: 20px;
 `;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   width: 100%;
-  align-items: center;
-  justify-content: center;
 `;
 
 const Background = styled.div`
@@ -74,15 +71,16 @@ const Row = styled.div`
   font-size: 1.4rem;
   font-weight: 400;
   margin-bottom: 3px;
-  background: #e8eff6;
   width: 100%;
+  background: #e8eff6;
+  font-weight: 500;
+
   .name {
     width: 25%;
     margin-right: 3px;
     background: #fff;
     padding: 10px;
     line-height: 1.4;
-    font-weight: 500;
   }
   .description {
     width: 50%;
@@ -117,6 +115,7 @@ const MyCourses = (props) => {
     variables: { id: props.me.id },
   });
   const router = useRouter();
+  const { t } = useTranslation("account");
 
   if (error) return <p>Error: {error.message}</p>;
 
@@ -127,31 +126,44 @@ const MyCourses = (props) => {
         <Background>
           <Row>
             <div className="name">
-              <b>Name</b>
+              <b>{t("name")}</b>
             </div>
             <div className="description">
-              <b>Description</b>
+              <b>{t("description")}</b>
             </div>
 
             <div className="move">
               {" "}
-              <b>Action</b>
+              <b>{t("action")}</b>
             </div>
           </Row>
-          {data.coursePages.map((coursePage) => (
-            <Row key={coursePage.id}>
-              <div className="name">{coursePage.title}</div>
-              <div className="description">{parse(coursePage.description)}</div>
+          {data.coursePages.length > 0 ? (
+            data.coursePages.map((coursePage) => (
+              <Row key={coursePage.id}>
+                <div className="name">{coursePage.title}</div>
+                <div className="description">
+                  {parse(coursePage.description)}
+                </div>
 
-              <div className="move">
-                <SecondaryButton
-                  onClick={() => router.push(`course?id=${coursePage.id}`)}
-                >
-                  Open
-                </SecondaryButton>
+                <div className="move">
+                  <SecondaryButton
+                    onClick={() => router.push(`course?id=${coursePage.id}`)}
+                  >
+                    {t("open")}
+                  </SecondaryButton>
+                </div>
+              </Row>
+            ))
+          ) : (
+            <Row>
+              <div className="name">You have no opened courses yet.</div>
+              <div className="description">
+                Please contact the administrator.
               </div>
+
+              <div className="move"></div>
             </Row>
-          ))}
+          )}
         </Background>
         {/* {data.coursePages.map((c) => (
           <Course key={c.id} id={c.id} coursePage={c} me={props.me} />

@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import parse from "html-react-parser";
 import Modal from "styled-react-modal";
+
 import CreateCourse from "./CreateCourse";
 
 import Loading from "../../layout/Loading";
@@ -84,6 +85,7 @@ const Container = styled.div`
   align-items: center;
   background: #e8eff6;
   padding: 20px 0;
+  border-radius: 20px;
 `;
 const Courses = styled.div`
   width: 95%;
@@ -93,7 +95,9 @@ const Courses = styled.div`
   border-radius: 20px;
   margin-bottom: 20px;
   @media (max-width: 850px) {
-    width: 95%;
+    width: 400px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 `;
 
@@ -117,13 +121,16 @@ const Row = styled.div`
   font-weight: 400;
   margin-bottom: 3px;
   background: #e8eff6;
+  font-weight: 500;
+  @media (max-width: 850px) {
+    width: 700px;
+  }
   .name {
     width: 25%;
     margin-right: 3px;
     background: #fff;
     padding: 10px;
     line-height: 1.4;
-    font-weight: 500;
   }
   .description {
     width: 40%;
@@ -157,7 +164,7 @@ const MyCourses = (props) => {
   const { me } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { t } = useTranslation("educator");
+  const { t } = useTranslation("account");
   const router = useRouter();
 
   let publishedCourses = [];
@@ -200,23 +207,22 @@ const MyCourses = (props) => {
       <Container>
         <Courses>
           <Title primary>
-            My courses in development: {developedCourses.length}
+            {t("my_courses_in_development")}: {developedCourses.length}
           </Title>
 
           <Background>
             <Row>
               <div className="name">
-                <b>Name</b>
+                <b>{t("name")}</b>
               </div>
               <div className="description">
-                <b>Description</b>
+                <b>{t("description")}</b>
               </div>
               <div className="updated">
-                <b>Last updated</b>
+                <b>{t("last_updated")}</b>
               </div>
               <div className="move">
-                {" "}
-                <b>Action</b>
+                <b>{t("action")}</b>
               </div>
             </Row>
             {developedCourses.map((coursePage) => (
@@ -232,7 +238,7 @@ const MyCourses = (props) => {
                   <SecondaryButton
                     onClick={() => router.push(`course?id=${coursePage.id}`)}
                   >
-                    Open
+                    {t("open")}
                   </SecondaryButton>
                 </div>
               </Row>
@@ -240,14 +246,14 @@ const MyCourses = (props) => {
             <Row>
               <div className="name">
                 <b>
-                  <i>New Course</i>
+                  <i>{t("new_course")}</i>
                 </b>
               </div>
               <div className="description"></div>
               <div className="updated"></div>
               <div className="move">
                 <PrimaryButton onClick={() => toggleCourseCreateModal()}>
-                  Create
+                  {t("create")}
                 </PrimaryButton>
               </div>
             </Row>
@@ -255,25 +261,31 @@ const MyCourses = (props) => {
         </Courses>
         <Courses>
           <Title primary>
-            My courses in production: {publishedCourses.length}
+            {t("my_courses_in_production")}: {publishedCourses.length}
           </Title>
           <Background>
             <Row>
               <div className="name">
-                <b>Name</b>
+                <b>{t("name")}</b>
               </div>
               <div className="description">
-                <b>Description</b>
+                <b>{t("description")}</b>
               </div>
               <div className="updated">
-                <b>Last updated</b>
+                <b>{t("last_updated")}</b>
               </div>
               <div className="move">
-                {" "}
-                <b>Action</b>
+                <b>{t("action")}</b>
               </div>
             </Row>
-            {publishedCourses.length === 0 && <p>{t("No_Courses")}</p>}
+            {publishedCourses.length === 0 && (
+              <Row>
+                <div className="name">{t("no_courses_yet")}</div>
+                <div className="description">{t("no_courses_explanation")}</div>
+                <div className="updated"></div>
+                <div className="move"></div>
+              </Row>
+            )}
             {publishedCourses.map((coursePage) => (
               <Row key={coursePage.id}>
                 <div className="name">{coursePage.title}</div>
@@ -285,7 +297,7 @@ const MyCourses = (props) => {
                   <SecondaryButton
                     onClick={() => router.push(`course?id=${coursePage.id}`)}
                   >
-                    Open
+                    {t("open")}
                   </SecondaryButton>
                 </div>
               </Row>

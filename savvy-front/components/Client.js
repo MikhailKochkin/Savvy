@@ -6,6 +6,14 @@ import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
+import {
+  ActionButton,
+  SecondaryButton,
+  NanoButton,
+  Buttons,
+  Row,
+} from "./lesson/styles/DevPageStyles";
+import Loading from "./layout/Loading";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION(
@@ -33,14 +41,6 @@ const UPDATE_CLIENT_MUTATION2 = gql`
   }
 `;
 
-const TEXT_CLIENT_MUTATION = gql`
-  mutation TEXT_CLIENT_MUTATION($id: String!, $comment: String) {
-    textBusinessClient(id: $id, comment: $comment) {
-      id
-    }
-  }
-`;
-
 const DELETE_CLIENT_MUTATION = gql`
   mutation DELETE_CLIENT_MUTATION($id: String!) {
     deleteClient(id: $id) {
@@ -62,11 +62,7 @@ const Tag = styled.div`
   margin: 2px;
   height: 22px;
   border-radius: 5px;
-
   display: inline-block;
-  /* flex-direction: row;
-  justify-content: center;
-  align-items: center; */
 `;
 
 const Editor = styled.div`
@@ -87,7 +83,7 @@ const Editor = styled.div`
   }
 `;
 
-const Row = styled.div`
+const ClientRow = styled.div`
   display: flex;
   width: 90%;
   flex-direction: row;
@@ -102,65 +98,41 @@ const Row = styled.div`
       background: none;
       border: none;
       outline: 0;
+      box-shadow: 0;
       font-family: Montserrat;
       font-size: 1rem;
     }
   }
-  input {
-    width: 350px;
-    background: none;
-    border: 1px solid grey;
-    outline: 0;
-    font-family: Montserrat;
-    padding: 2px 5px;
-    font-size: 1.4rem;
+
+  h4 {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  .editor {
+    font-size: 1.6rem;
     width: 95%;
     border: 1px solid #c4c4c4;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    margin-bottom: 5px;
+    border-radius: 5px;
+    outline: 0;
+    padding: 0.5%;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    @media (max-width: 800px) {
+      width: 350px;
+    }
   }
-  .index {
-    width: 2%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .time {
-    width: 7%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .name {
-    width: 23%;
-  }
-  .email {
-    width: 20%;
-  }
-  .number {
-    width: 10%;
+  .personal_info {
+    width: 50%;
+    padding: 10px 20px;
+    .name {
+      font-weight: 600;
+      font-size: 2rem;
+    }
   }
   .comment {
-    width: 60%;
-    padding: 0 2%;
-    h4 {
-      margin: 0;
-      margin-bottom: 10px;
-    }
-    .editor {
-      font-size: 1.6rem;
-      width: 95%;
-      border: 1px solid #c4c4c4;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
-      outline: 0;
-      padding: 0.5%;
-      font-size: 1.6rem;
-      margin-bottom: 20px;
-      @media (max-width: 800px) {
-        width: 350px;
-      }
-    }
+    width: 50%;
+    padding: 10px 20px;
     button {
       margin-bottom: 5%;
     }
@@ -203,7 +175,7 @@ const DeleteClient = (props) => {
   const { clientId } = props;
   const [deleteClient, { data, loading }] = useMutation(DELETE_CLIENT_MUTATION);
   return (
-    <button
+    <SecondaryButton
       onClick={() => {
         if (confirm("Sure?")) {
           deleteClient({
@@ -218,7 +190,7 @@ const DeleteClient = (props) => {
       }}
     >
       {loading ? t("Deleting...") : t("Delete client")}
-    </button>
+    </SecondaryButton>
   );
 };
 
@@ -227,42 +199,18 @@ const Client = (props) => {
   const [message, setMessage] = useState(`<p>Hi ${props.name},</p>`);
   const [subject, setSubject] = useState(
     props.communication_history?.messages?.length > 0
-      ? "Re: " +
-          props.communication_history.messages[
-            props.communication_history.messages.length - 1
-          ].subject
+      ? props.communication_history.messages[
+          props.communication_history.messages.length - 1
+        ].subject
       : ``
   );
+  const [messaging, setMessaging] = useState(null);
+  const [isEmailHistoryOpen, setIsEmailHistoryOpen] = useState(false);
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
-  const [selectedGroup, setSelectedGroup] = useState(null);
-  const [selectedEmail, setSelectedEmail] = useState(null);
-  const [editorText, setEditorText] = useState(null);
-
-  // const handleGroupChange = (groupName) => {
-  //   const group = emailGroups.find((group) => group.name === groupName);
-  //   setSelectedGroup(group);
-  //   setSelectedEmail(null); // Reset selected email when group changes
-  // };
-
-  const handleEmailChange = (subject) => {
-    const email = selectedGroup?.emails.find(
-      (email) => email.subject === subject
-    );
-    setSelectedEmail(email);
-    setSubject(email.subject);
-    setMessage(email.text);
-  };
-
-  moment.locale("ru");
-
-  var url = new URL("https://besavvy.app" + props.url);
-  var utm_source = url.searchParams.get("utm_source");
-  var utm_medium = url.searchParams.get("utm_medium");
-  var utm_campaign = url.searchParams.get("utm_campaign");
-  var utm_term = url.searchParams.get("utm_term");
-  var utm_content = url.searchParams.get("utm_content");
-  var id = url.searchParams.get("id");
+  const [emailGoal, setEmailGoal] = useState(null);
+  const [emailMessage, setEmailMessage] = useState(null);
+  const [generating, setGenerating] = useState(false);
 
   const [sendBusinessClientEmail, { updated_data }] = useMutation(
     UPDATE_CLIENT_MUTATION
@@ -271,9 +219,6 @@ const Client = (props) => {
   const [updateBusinessClient, { updated_data2 }] = useMutation(
     UPDATE_CLIENT_MUTATION2
   );
-
-  const [textBusinessClient, { updated_data3 }] =
-    useMutation(TEXT_CLIENT_MUTATION);
 
   const myCallback = (dataFromChild) => {
     setComment(dataFromChild);
@@ -295,38 +240,91 @@ const Client = (props) => {
     el.style.display = "none";
   };
 
-  let number;
-  if (!props.number) {
-    number = "No number";
-  } else if (props.number?.startsWith("8")) {
-    number = props.number.replace("8", "+7");
-  } else if (
-    props.number.startsWith("1") ||
-    props.number.startsWith("2") ||
-    props.number.startsWith("3") ||
-    props.number.startsWith("4") ||
-    props.number.startsWith("5") ||
-    props.number.startsWith("6") ||
-    props.number.startsWith("9")
-  ) {
-    number = "+7" + props.number;
-  } else if (props.number.startsWith("7")) {
-    number = "+" + props.number;
-  } else {
-    number = props.number;
-  }
+  const generateEmail = async (e) => {
+    e.preventDefault();
+    console.log("messaging", JSON.stringify(messaging, null, 2));
+    console.log(
+      "email_history",
+      props.communication_history.messages.length > 0
+        ? JSON.stringify(props.communication_history.messages)
+        : null
+    );
+
+    let updated_messaging = messaging;
+    delete updated_messaging.messages;
+
+    let prompt = `
+      You are writing a cold email to ${props.name} ${props.surname} (${
+      props.email
+    }) from Mike Kochkin, 
+      the founder of BeSavvy, an innovative UK company that helps empowers law firms to create AI-powered simualtors that help 
+      develop essential legal hard, soft and technical skills.
+      The goal of this email is to: ${emailGoal}
+      This is the information you have about the addressee: ${comment}
+      These are the problem_statement and value_proposition that should be used as the foundation of this email: ${JSON.stringify(
+        updated_messaging || {},
+        null,
+        2
+      )}
+      The message that you should convey in this email is: ${emailMessage}
+      These are your previous emails: ${
+        props.communication_history.messages.length > 0
+          ? JSON.stringify(props.communication_history.messages)
+          : null
+      }
+      
+      Generate the text of the email in the following JSON format:
+
+      {
+        email: {
+          subject: "",
+          text: "" // text should be an html, every paragraph must be wrapped in a <p> tag, also feel free to use <b> and <i> tags
+        }
+      }
+    `;
+    console.log("prompt", prompt);
+
+    try {
+      const response = await fetch("/api/generateJson", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let new_email = JSON.parse(data.result.content);
+        setSubject(new_email.email.subject);
+        setMessage(new_email.email.text);
+        return data;
+      } else {
+        throw new Error(
+          data.error.message || "An error occurred during your request."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  // ${JSON.stringify(
+  //         exit_strategy_sample_result,
+  //         null,
+  //         2
+  //       )}
 
   return (
-    <Row id={props.id}>
-      <div className="index">{props.index + 1}.</div>
-      <div className="time">
-        {moment(props.createdAt).format("DD-MM-YYYY HH:mm")}
-      </div>
-      <div className="name">
-        <div>
+    <ClientRow id={props.id}>
+      <div className="personal_info">
+        <div className="name">
           {props.name} {props.surname}
         </div>
-        <div>{props.email}</div>
+        <div>
+          <i>{props.email}</i>
+        </div>
+        <div>{moment(props.createdAt).format("DD.MM.YYYY")}</div>
         {tags &&
           tags.map((t, i) => (
             <>
@@ -366,12 +364,6 @@ const Client = (props) => {
             placeholder="..."
           />
         </form>
-        <DeleteClient
-          updateAfterDelete={updateAfterDelete}
-          clientId={props.id}
-        />
-      </div>
-      <div className="comment">
         <h4>Комментарий</h4>
         <div className="editor">
           <DynamicLoadedEditor
@@ -380,31 +372,135 @@ const Client = (props) => {
             name="text"
           />
         </div>
-        <h4>Имейл</h4>
-        {props.communication_history &&
-          props.communication_history.messages &&
-          props.communication_history.messages.map((m) => (
-            <Message>
-              <div>
-                <b>Subject:</b> {m.subject}
-              </div>
-              <div>{parse(m.message)}</div>
-              <div> {moment(m.date).format("DD-MM-YYYY HH:mm")}</div>
-            </Message>
-          ))}
-        <input
-          type="text"
-          onChange={(e) => setSubject(e.target.value)}
-          value={subject}
+        <DeleteClient
+          updateAfterDelete={updateAfterDelete}
+          clientId={props.id}
         />
-        <div className="editor">
-          <DynamicLoadedEditor
-            getEditorText={myCallback2}
-            value={message}
-            name="text"
-          />
-        </div>
-        <button
+      </div>
+      <div className="comment">
+        <h4>Email</h4>
+
+        <Row>
+          <div className="description">Target audience</div>
+          <div className="action_area">
+            <select
+              onChange={(e) =>
+                setMessaging(
+                  props.messaging.find(
+                    (m) => m.target_audience == e.target.value
+                  )
+                )
+              }
+              value={messaging?.target_audience}
+            >
+              <option value={null}>Choose</option>
+              {props.messaging.map((m) => (
+                <option key={m.id} value={m.target_audience}>
+                  {m.target_audience}
+                </option>
+              ))}
+            </select>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Email goal</div>
+          <div className="action_area">
+            <select
+              onChange={(e) => setEmailGoal(e.target.value)}
+              value={
+                "First email to the person that we have never met before, designed to find out if our messaging resonates with them."
+              }
+            >
+              {/* First Email */}
+              <option
+                value={
+                  "First email to the person that we have never met before, designed to find out if our messaging resonates with them."
+                }
+              >
+                First email
+              </option>
+
+              {/* Second Email */}
+              <option
+                value={
+                  "Second email to follow up on our initial message, ensure they've seen it, and encourage a response."
+                }
+              >
+                Second email (follow-up)
+              </option>
+
+              {/* Third Email */}
+              <option
+                value={
+                  "Third email to provide additional value, such as insights, resources, or success stories, to rekindle their interest."
+                }
+              >
+                Third email (value addition)
+              </option>
+
+              {/* Fourth Email */}
+              <option
+                value={
+                  "Fourth email to highlight urgency, such as a time-sensitive offer or upcoming event, to nudge them toward action."
+                }
+              >
+                Fourth email (create urgency)
+              </option>
+
+              {/* Fifth Email */}
+              <option
+                value={
+                  "Fifth email to send a polite closure message, leaving the door open for future communication while expressing gratitude."
+                }
+              >
+                Fifth email (closure)
+              </option>
+            </select>
+          </div>
+        </Row>
+        {messaging && (
+          <Row>
+            <div className="description">Message</div>
+            <div className="action_area">
+              <select
+                onChange={(e) => setEmailMessage(e.target.value)}
+                value={emailMessage}
+              >
+                {console.log("messaging?.messages", messaging)}
+                {messaging?.messages &&
+                  messaging?.messages.map((m, i) => (
+                    <option key={"email_message_" + i} value={m}>
+                      {m}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </Row>
+        )}
+        {!generating ? (
+          <>
+            <Row>
+              <div className="description">Subject</div>
+              <div className="action_area">
+                <input
+                  type="text"
+                  onChange={(e) => setSubject(e.target.value)}
+                  value={subject}
+                />
+              </div>
+            </Row>
+            <div className="editor">
+              <DynamicLoadedEditor
+                getEditorText={myCallback2}
+                value={message}
+                name="text"
+              />
+            </div>
+          </>
+        ) : (
+          <Loading />
+        )}
+        <ActionButton
           onClick={async (e) => {
             e.preventDefault();
             let mess = props.communication_history
@@ -435,11 +531,45 @@ const Client = (props) => {
             alert("Sent!");
           }}
         >
-          Отправить имейл
-        </button>
+          Send
+        </ActionButton>
+        {messaging && (
+          <SecondaryButton
+            onClick={async (e) => {
+              setGenerating(true);
+              await generateEmail(e);
+              setGenerating(false);
+            }}
+          >
+            Generate email
+          </SecondaryButton>
+        )}
+        <br />
+        <SecondaryButton
+          onClick={(e) => {
+            setIsEmailHistoryOpen(!isEmailHistoryOpen);
+          }}
+        >
+          {isEmailHistoryOpen ? "Close history" : "Email history"}
+        </SecondaryButton>
+        {isEmailHistoryOpen &&
+          props.communication_history &&
+          props.communication_history.messages &&
+          [...props.communication_history.messages].reverse().map((m) => (
+            <Message>
+              <div>
+                <b>⏰ {moment(m.date).format("DD-MM-YYYY HH:mm")}</b>
+              </div>
+
+              <div>
+                <b>Subject:</b> {m.subject}
+              </div>
+              <div>{parse(m.message)}</div>
+            </Message>
+          ))}
         <br />
       </div>
-    </Row>
+    </ClientRow>
   );
 };
 

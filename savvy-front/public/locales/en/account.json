@@ -38,5 +38,16 @@
   "annually": "Annually",
   "isActive": "Subscription status",
   "active": "Active",
-  "inactive": "Inactive"
+  "inactive": "Inactive",
+  "my_courses_in_development": "My courses in development",
+  "my_courses_in_production": "My courses in production",
+  "description": "Description",
+  "last_updated": "Last updated",
+  "action": "Action",
+  "create": "Create",
+  "new_course": "New Course",
+  "no_courses_yet": "No courses in production yet",
+  "no_courses_explanation": "It means that no courses can be accessed by the users",
+  "my_courses": "My courses",
+  "developper": "Developer"
 }

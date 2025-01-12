@@ -5,7 +5,7 @@ import { useUser } from "../components/User";
 
 const CLIENTS_QUERY = gql`
   query CLIENTS_QUERY {
-    businessClients(orderBy: { createdAt: desc }) {
+    businessClients {
       id
       name
       surname
@@ -17,7 +17,14 @@ const CLIENTS_QUERY = gql`
       type
       comment
       communication_medium
-      communication_history
+      communication_history {
+        messages {
+          id
+          subject
+          message
+          date
+        }
+      }
       sales_cycle
       createdAt
     }

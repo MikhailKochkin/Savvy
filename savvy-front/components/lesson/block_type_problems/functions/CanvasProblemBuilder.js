@@ -316,6 +316,7 @@ const CanvasProblemBuilder = ({
   lesson,
   me,
   generatedSteps,
+  characters,
 }) => {
   const { t } = useTranslation("lesson");
   const [messages, setMessages] = useState(
@@ -501,6 +502,7 @@ const CanvasProblemBuilder = ({
               getData={getData}
               lesson={lesson}
               me={me}
+              characters={characters}
               data={activeMessage.foundData}
               generatedInfo={{
                 question: activeMessage.question,

@@ -690,6 +690,7 @@ const CreateProblem = (props) => {
               me={props.me}
               lessonID={lesson.id}
               getSteps={getSteps}
+              characters={props.characters}
               items={generatedSteps.length > 0 ? generatedSteps : []}
             />
           </DndProvider>

@@ -156,6 +156,8 @@ const MobileMenu = styled.header`
       font-size: 2.2rem;
       @media (max-width: 990px) {
         font-size: 1.6rem;
+        margin-right: 20px;
+        line-height: 2.2rem;
       }
     }
     @media (max-width: 990px) {

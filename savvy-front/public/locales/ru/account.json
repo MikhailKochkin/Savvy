@@ -38,5 +38,16 @@
   "annually": "Ежегодно",
   "isActive": "Статус подписки",
   "active": "Активна",
-  "inactive": "Отключена"
+  "inactive": "Отключена",
+  "my_courses_in_development": "Мои курсы в разработке",
+  "my_courses_in_production": "Мои запущенные курсы",
+  "description": "Описание",
+  "last_updated": "Последнее обновление",
+  "action": "Действие",
+  "create": "Создать",
+  "new_course": "Новый курс",
+  "no_courses_yet": "Запущенныхь курсов пока нет",
+  "no_courses_explanation": "Это означает, что ни один курс не доступен для пользователей",
+  "my_courses": "Мои курсы",
+  "developper": "Разработка"
 }

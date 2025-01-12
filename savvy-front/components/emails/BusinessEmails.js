@@ -43,8 +43,8 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   padding: 50px 0;
+  width: 1200px;
   background: #f3f4f5;
-  width: 100%;
   .floating {
   }
   .total {
@@ -75,7 +75,7 @@ const Styles = styled.div`
 `;
 
 const EmailBox = styled.div`
-  width: 660px;
+  width: 400px;
   input {
     padding: 3px 10px;
     margin: 10px 0;

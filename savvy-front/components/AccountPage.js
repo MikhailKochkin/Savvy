@@ -46,7 +46,11 @@ const Menu = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
     div {
+      min-width: 120px;
+      text-align: center;
       &:hover {
         border-right: 1px solid white;
         border-bottom: 1px solid #112a62;
@@ -73,10 +77,10 @@ const AccountPage = (props) => {
               {t("account")}
             </div>
             <div onClick={(e) => setPage("my_courses")} name="account">
-              My courses
+              {t("my_courses")}
             </div>
             <div onClick={(e) => setPage("developper")} name="account">
-              Developper
+              {t("developper")}
             </div>
             <div onClick={(e) => setPage("subscription")} name="account">
               {t("subscription")}

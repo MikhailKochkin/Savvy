@@ -30,14 +30,14 @@ const CERT_QUERY = gql`
 `;
 
 const certificate = (props) => {
-  const { loading, error, data } = useQuery(CERT_QUERY, {
-    variables: { id: props.query.id },
-  });
+  // const { loading, error, data } = useQuery(CERT_QUERY, {
+  //   variables: { id: props.query.id },
+  // });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return error;
-  let cert = data.certificates[0];
-  return <Certificate id={props.query.id} cert={cert} />;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return error;
+  // let cert = data.certificates[0];
+  return <Certificate id={"props.query.id"} />;
 };
 
 export default certificate;
