@@ -279,7 +279,6 @@ const SingleLessonAnalyticsDataLoad = (props) => {
 
   let students = data1?.studentsAnalytics;
   let lesson = data2?.lessons[0];
-  console.log("lesson", lesson);
 
   return (
     <Styles>

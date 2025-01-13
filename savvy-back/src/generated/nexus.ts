@@ -4744,6 +4744,7 @@ export interface NexusGenArgTypes {
     constructionResults: { // args
       constructionId?: string | null; // String
       id?: string | null; // String
+      lessonId?: string | null; // String
       studentId?: string | null; // String
     }
     coursePage: { // args

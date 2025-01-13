@@ -215,11 +215,11 @@ const SimulatorInsights = (props) => {
     const fetchData = async () => {
       const res = await getQuizData();
       const res2 = await getTestData();
-      // const res3 = await getConstructionData();
+      const res3 = await getConstructionData();
       // const res4 = await getTestPracticeData();
       setQuizResults(res.data.quizResults);
       setTestResults(res2.data.testResults);
-      // setConstructionResults(res3.data.constructionResults);
+      setConstructionResults(res3.data.constructionResults);
       // setTestPracticeResults(res4.data.testPracticeResults);
     };
 
@@ -351,9 +351,6 @@ const SimulatorInsights = (props) => {
         maxAttempts = numAttempts;
       }
     });
-
-    // console.log("minAttempts", minAttempts);
-    // console.log("maxAttempts", maxAttempts);
 
     // Step 3: Calculate scores
     const scores = studentsResults.map((singleStudentResult) => {
@@ -540,6 +537,7 @@ const SimulatorInsights = (props) => {
             elementName = "Forum";
           } else if (type === "construction") {
             coreElement = lesson.constructions.find((c) => c.id === task.id);
+            console.log(coreElement, lesson);
             innerElements = [
               {
                 type: "construction",

@@ -143,12 +143,14 @@ function resultsQueries(t) {
       studentId: stringArg({
         description: "ID of the student.",
       }),
+      lessonId: stringArg({ description: "ID of the associated lesson." }),
     },
-    resolve: (_parent, { id, constructionId, studentId }, ctx) => {
+    resolve: (_parent, { id, constructionId, studentId, lessonId }, ctx) => {
       const where = {
         ...(id && { id }),
         ...(constructionId && { constructionId }),
         ...(studentId && { studentId }),
+        ...(lessonId && { lessonId }),
       };
       return ctx.prisma.constructionResult.findMany({
         where,

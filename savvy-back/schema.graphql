@@ -1832,6 +1832,9 @@ type Query {
     """ID of the construction result to fetch."""
     id: String
 
+    """ID of the associated lesson."""
+    lessonId: String
+
     """ID of the student."""
     studentId: String
   ): [ConstructionResult]
