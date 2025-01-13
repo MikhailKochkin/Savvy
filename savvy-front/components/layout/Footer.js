@@ -5,8 +5,6 @@ import { useTranslation } from "next-i18next";
 import CookieConsent from "react-cookie-consent";
 
 const FooterStyles = styled.div`
-  /* background-image: url("/static/pattern.svg"); */
-  /* background-size: cover; */
   background-color: #0d1321;
   color: white;
   max-height: 40%;
@@ -182,7 +180,7 @@ const Footer = () => {
             </Link>
           </div>
         </div>
-        <div className="imgGroup">
+        {/* <div className="imgGroup">
           <div className="img">
             <img
               src="../../static/uk.svg"
@@ -203,7 +201,7 @@ const Footer = () => {
               }
             />
           </div>
-        </div>
+        </div> */}
         {/* <div className="mini">
         <div>
           <a target="_blank" href="https://vk.com/besavvylawyer">

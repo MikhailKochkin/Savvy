@@ -31,11 +31,7 @@ function lessonQueries(t) {
               user: true, // Include the lessons field inside coursePage
             },
           },
-          chats: {
-            include: {
-              reactions: true,
-            },
-          },
+          chats: true,
           quizes: {
             include: {
               user: true, // Include the lessons field inside coursePage

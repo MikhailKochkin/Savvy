@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 
 const LESSON_RATINGS_QUERY = gql`
   query LESSON_RATINGS_QUERY($forumId: String!) {
-    ratings(where: { forumId: { equals: $forumId } }) {
+    ratings(forumId: $forumId) {
       id
       rating
       user {
@@ -24,7 +23,9 @@ const AvgRating = ({ lesson, type }) => {
     },
   });
   if (loadingRatings) return <div></div>;
+
   const ratings = dataRatings ? dataRatings.ratings : [];
+
   if (ratings.length === 0) return <div>0</div>;
   const getUniqueRatingsWithHighestValues = (ratings) => {
     const userRatings = {};

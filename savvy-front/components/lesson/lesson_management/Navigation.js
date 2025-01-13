@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { Tooltip } from "react-tooltip";
 import { useState, useEffect } from "react";
+import { throttle } from "lodash";
 
 const Head = styled.div`
   position: ${(props) => (props.isSticky ? "fixed" : "absolute")};
@@ -110,16 +111,12 @@ const Navigation = (props) => {
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      // Adjust scroll threshold as needed
-      setIsSticky(scrollPosition > 120);
-    };
+    const handleScroll = throttle(() => {
+      setIsSticky(window.scrollY > 120);
+    }, 200);
 
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (

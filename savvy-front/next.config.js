@@ -8,7 +8,11 @@ module.exports = {
   compiler: {
     styledComponents: true,
   },
-  i18n, // include any other configuration options here
+  i18n: {
+    locales: ["en", "ru"],
+    defaultLocale: "en",
+    localeDetection: true, // Ensure auto-detection works
+  }, // include any other configuration options here
 };
 
 // module.exports = {
