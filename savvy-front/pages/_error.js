@@ -74,10 +74,9 @@ const SimpleButton = styled.button`
   }
 `;
 
-const Error = ({ statusCode }) => {
+const Error = ({ statusCode, err }) => {
   const [isErrorMessageSent, setIsErrorMessageSent] = useState(false);
   const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
-  console.log("1", 1);
   useEffect(() => {
     if (!isErrorMessageSent) {
       console.log("Sending error message...");
@@ -85,6 +84,8 @@ const Error = ({ statusCode }) => {
       const errorDetails = `
         An error occurred in the application:
         Status Code: ${statusCode || "Unknown"}
+        Message: ${err.message},
+        Stack: ${err.stack},
         Browser: ${navigator.userAgent}
         URL: ${window.location.href}
         Referrer: ${document.referrer || "N/A"}
@@ -133,11 +134,7 @@ const Error = ({ statusCode }) => {
 
 Error.getInitialProps = async ({ res, err }) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-
-  // Extract error details (if any)
-  const hasErrorDetails = Boolean(err);
-
-  return { statusCode, hasErrorDetails };
+  return { statusCode, err };
 };
 
 export default Error;
