@@ -77,41 +77,37 @@ const SimpleButton = styled.button`
 const Error = ({ statusCode }) => {
   const [isErrorMessageSent, setIsErrorMessageSent] = useState(false);
   const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
-
+  console.log("1", 1);
   useEffect(() => {
     if (!isErrorMessageSent) {
+      console.log("Sending error message...");
+      console.log("statusCode", statusCode);
+      const errorDetails = `
+        An error occurred in the application:
+        Status Code: ${statusCode || "Unknown"}
+        Browser: ${navigator.userAgent}
+        URL: ${window.location.href}
+        Referrer: ${document.referrer || "N/A"}
+        Viewport Size: ${window.innerWidth}x${window.innerHeight}
+        Time: ${new Date().toLocaleString()}
+        Screen Resolution: ${window.screen.width}x${window.screen.height}
+        Cookies: ${document.cookie}
+      `;
+
       sendBusinessEmail({
         variables: {
-          subject: "Application Error Occurred",
+          subject: `Application Error Occurred (Status Code: ${
+            statusCode || "Unknown"
+          })`,
           email: "mike@besavvy.app",
           type: "internal",
           name: "Mikhail",
-          connection: `
-          An error occurred in the application on the _error page. Please investigate.
-           Browser: ${navigator.userAgent}
-           URL: ${window.location.href}
-           Referrer: ${document.referrer || "N/A"}
-           Viewport Size: ${window.innerWidth}x${window.innerHeight}
-           Time: ${new Date().toLocaleString()}
-           Screen Resolution: ${window.screen.width}x${window.screen.height}
-        Device Type: ${
-          navigator.userAgent.includes("Mobi") ? "Mobile" : "Desktop"
-        }
-        Network Connection: ${navigator.connection.effectiveType} / ${
-            navigator.connection.type
-          }
-        Network Type: ${navigator.connection.type}
-        Network DownLink: ${navigator.connection.downlink}
-        Network RTT: ${navigator.connection.rtt}
-
-        Cookies: ${document.cookie}
-        Local Storage: ${JSON.stringify(localStorage)}
-        Time: ${new Date().toLocaleString()}
-          `,
+          connection: errorDetails,
         },
       }).catch((error) => {
         console.error("Error sending email:", error);
       });
+
       setIsErrorMessageSent(true);
     }
   }, [isErrorMessageSent, sendBusinessEmail]);
@@ -119,7 +115,7 @@ const Error = ({ statusCode }) => {
   return (
     <div>
       {statusCode ? (
-        `An error ${statusCode} occurred on server`
+        <p>An error {statusCode} occurred on the server.</p>
       ) : (
         <ErrorMessage>
           <img src="/static/404.png" alt="404 Error" />
@@ -136,9 +132,12 @@ const Error = ({ statusCode }) => {
 };
 
 Error.getInitialProps = async ({ res, err }) => {
-  await Sentry.captureUnderscoreErrorException(contextData);
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return Error.getInitialProps(contextData);
+
+  // Extract error details (if any)
+  const hasErrorDetails = Boolean(err);
+
+  return { statusCode, hasErrorDetails };
 };
 
 export default Error;
