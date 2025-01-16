@@ -132,7 +132,10 @@ const Generate = (props) => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ answer1: answer.answer, answer2: idea }),
+          body: JSON.stringify({
+            answer1: answer?.answer ? answer?.answer : answer,
+            answer2: idea,
+          }),
         }
       );
       const result = await response.json();
@@ -194,7 +197,6 @@ const Generate = (props) => {
         // 3️⃣. The first round of checks start. We compare main answers
 
         const mainScore = await compareAnswers(idea, answer);
-        console.log("mainScore", mainScore);
 
         // Update best match if main answer is better than current best
         if (mainScore > bestMatch.result) {
@@ -216,7 +218,6 @@ const Generate = (props) => {
           // If we are between 25 and 65, let's check each related answer
           let fetchPromises = [];
           let textsToFetch = [];
-
           (answer.relatedAnswers || []).forEach((relAns) => {
             fetchPromises.push(compareAnswers(relAns, idea));
             textsToFetch.push(relAns);
@@ -224,7 +225,6 @@ const Generate = (props) => {
 
           try {
             const responses = await Promise.all(fetchPromises);
-            console.log("responses", responses);
             const jsonResults = responses;
 
             // Update best match based on related answers

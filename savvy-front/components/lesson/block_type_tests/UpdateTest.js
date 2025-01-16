@@ -163,6 +163,8 @@ const UpdateTest = (props) => {
     props.instructorName ? props.instructorName : null
   );
   const { t } = useTranslation("lesson");
+  console.log("complexAnswers", complexAnswers);
+  console.log("answers", answers);
 
   const handleArray = (val, name, i) => {
     let arr = [...answers];
@@ -418,6 +420,16 @@ const UpdateTest = (props) => {
             onClick={(e) => {
               e.preventDefault();
               setOptions([...options, ["", false, ""]]);
+              setAnswers([...answers, ""]);
+              setCorrect([...correct, false]);
+              setComments([...comments, ""]);
+              setComplexAnswers([
+                ...complexAnswers,
+                {
+                  id: uuidv4(),
+                  answer: "",
+                },
+              ]);
             }}
           >
             +1
