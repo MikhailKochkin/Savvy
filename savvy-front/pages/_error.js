@@ -80,7 +80,7 @@ const Error = ({ statusCode, err }) => {
   useEffect(() => {
     if (!isErrorMessageSent) {
       console.log("Sending error message...");
-      console.log("statusCode", statusCode);
+      console.log("statusCode", statusCode, err);
       const errorDetails = `
         An error occurred in the application:
         Status Code: ${statusCode || "Unknown"}
