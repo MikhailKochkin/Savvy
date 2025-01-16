@@ -471,6 +471,7 @@ const UpdateNote = (props) => {
             <option value={"longread"}>Choose type</option>
             <option value={"longread"}>Longread</option>
             <option value={"email"}>Email</option>
+            <option value={"doc"}>Doc</option>
             <option value={"mininote"}>Mini Note</option>
             <option value={"library"}>Library</option>
             <option value={"picture"}>Picture</option>

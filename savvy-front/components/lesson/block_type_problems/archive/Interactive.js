@@ -91,10 +91,10 @@ class Interactive extends Component {
     let newTest;
     let finish;
     if (
-      data[1].type === "quiz" &&
-      data[1].value !== null &&
-      data[1].value !== "0" &&
-      data[1].value !== ""
+      data[1]?.type === "quiz" &&
+      data[1]?.value !== null &&
+      data[1]?.value !== "0" &&
+      data[1]?.value !== ""
     ) {
       let el = this.props.lesson.quizes.filter(
         (q) => q.id === data[1].value
@@ -138,11 +138,11 @@ class Interactive extends Component {
       });
     }
     if (
-      data[1].type &&
-      data[1].type.toLowerCase() === "newtest" &&
-      data[1].value !== null &&
-      data[1].value !== "0" &&
-      data[1].value !== ""
+      data[1]?.type &&
+      data[1]?.type.toLowerCase() === "newtest" &&
+      data[1]?.value !== null &&
+      data[1]?.value !== "0" &&
+      data[1]?.value !== ""
     ) {
       let el = this.props.lesson.newTests.filter(
         (n) => n.id === data[1].value
@@ -186,10 +186,10 @@ class Interactive extends Component {
       });
     }
     if (
-      data[1].type === "note" &&
-      data[1].value !== null &&
-      data[1].value !== "0" &&
-      data[1].value !== ""
+      data[1]?.type === "note" &&
+      data[1]?.value !== null &&
+      data[1]?.value !== "0" &&
+      data[1]?.value !== ""
     ) {
       let el = this.props.lesson.notes.filter((q) => q.id === data[1].value)[0];
       newNote = (
@@ -219,11 +219,11 @@ class Interactive extends Component {
       });
     }
     if (
-      data[1].type === "finish" ||
-      data[1].type === null ||
-      data[1].value === null ||
-      data[1].value === "" ||
-      data[1].value == "0"
+      data[1]?.type === "finish" ||
+      data[1]?.type === null ||
+      data[1]?.value === null ||
+      data[1]?.value === "" ||
+      data[1]?.value == "0"
     ) {
       this.props.onFinish(true, "old");
       finish = (

@@ -182,50 +182,6 @@ const Block = styled.div`
 const Construction = (props) => {
   const { elems, construction, id, student_results, resultId, s } = props;
   moment.locale("ru");
-
-  // useEffect(() => {
-  //   let res;
-  //   const comment_elements = document
-  //     .getElementById(id)
-  //     .querySelectorAll("[comment]");
-
-  //   let all_answers = student_results
-  //     .filter((sr) => sr.id == resultId)
-  //     .flatMap((sr) => sr.answers.answers);
-  //   comment_elements.forEach((element) => {
-  //     if (
-  //       all_answers.filter(
-  //         (an) => an.correctAnswer == element.getAttribute("comment")
-  //       ).length > 0
-  //     ) {
-  //       let new_answers = all_answers.filter(
-  //         (an) => an.correctAnswer == element.getAttribute("comment")
-  //       );
-  //       let guesses_arr = new_answers.map(function (obj) {
-  //         return {
-  //           guess: obj.studentAnswer,
-  //           sample: obj.correctAnswer,
-  //           result: obj.res,
-  //         };
-  //       });
-  //       if (guesses_arr.length == 0) {
-  //         guesses_arr = ["––"];
-  //       }
-  //       element.innerHTML = `${element.innerHTML} (<b>Target</b>: ${
-  //         guesses_arr[0].sample
-  //       } / <b>Answers</b>: ${[
-  //         ...new Set(
-  //           guesses_arr.map(
-  //             (g) =>
-  //               `${g.guess} ${g.result} ${
-  //                 parseFloat(g.result) > 55 ? "✅" : "❌"
-  //               }`
-  //           )
-  //         ),
-  //       ].join(", ")})`;
-  //     }
-  //   });
-  // }, [0]);
   return (
     <>
       <div className="time">{moment(s.createdAt).format("LLL")} </div>
@@ -252,6 +208,8 @@ const Construction = (props) => {
                 display={t.inDoc}
               />
             );
+          } else {
+            return <p>No answer given</p>;
           }
         })}
       </Block>
@@ -301,7 +259,7 @@ const ConElement = (props) => {
       borders={borders}
       colored={text !== "<p></p>"}
     >
-      {parse(text)}
+      {text ? parse(text) : <p>Empty</p>}
       {props.construction?.elements?.elements[i].isTest &&
         text == props.construction?.elements?.elements[i]?.text && (
           <span className="tick">✅</span>

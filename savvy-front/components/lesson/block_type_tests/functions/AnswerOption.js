@@ -47,7 +47,6 @@ const AnswerOption = ({
     onAnswerSelected(number, answer, sourceId);
     setChoose((prevChoose) => !prevChoose);
   };
-
   let color;
   if (type === "BRANCH") {
     color = answerOption ? "#122A62" : "#c4c4c4";

@@ -105,6 +105,7 @@ const AnswerElement = objectType({
   definition(t) {
     t.string("answer", { description: "Answer text." });
     t.list.string("relatedAnswers");
+    t.string("feedback", { description: "Feedback for the answer." });
     t.string("next_id", {
       description: "ID of the next step after this answer.",
     });
@@ -130,6 +131,7 @@ const AnswerElementInput = inputObjectType({
   definition(t) {
     t.string("answer", { description: "Answer text." });
     t.list.string("relatedAnswers");
+    t.string("feedback", { description: "Feedback for the answer." });
     t.string("next_id", {
       description: "ID of the next step after this answer.",
     });

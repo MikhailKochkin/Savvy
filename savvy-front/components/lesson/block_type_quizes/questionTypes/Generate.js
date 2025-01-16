@@ -87,7 +87,7 @@ const Ideas = styled.div`
 `;
 
 const Generate = (props) => {
-  const { author, me, story, ifRight, ifWrong, quizId, isScoringShown } = props;
+  const { author, me, story, isScoringShown } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [ideas, setIdeas] = useState([""]);
   const [nextQuestions, setNextQuestions] = useState();
@@ -108,14 +108,13 @@ const Generate = (props) => {
   );
 
   useEffect(() => {
-    // kick off the polyfill!
     smoothscroll.polyfill();
-  });
+  }, []);
 
   const { t } = useTranslation("lesson");
   const router = useRouter();
 
-  function handleIdeaChange(event, index) {
+  const handleIdeaChange = (event, index) => {
     // Copy the current state of ideas
     const updatedIdeas = [...ideas];
 
@@ -124,28 +123,46 @@ const Generate = (props) => {
 
     // Update the state with the modified ideas array
     setIdeas(updatedIdeas);
-  }
+  };
 
-  const getMatchingAnswers = async () => {
+  const compareAnswers = async (idea, answer) => {
+    try {
+      const response = await fetch(
+        "https://arcane-refuge-67529.herokuapp.com/checker",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ answer1: answer.answer, answer2: idea }),
+        }
+      );
+      const result = await response.json();
+      return parseFloat(result.res) || 0;
+    } catch (error) {
+      console.error("Error comparing answers:", error);
+      return 0;
+    }
+  };
+
+  const getMatchingAnswers = async (answers) => {
     // Use a Set to keep track of answers that are “used” if they exceed the threshold
     const usedAnswers = new Set();
 
-    let newCorrectIdeas = [];
-    let new_results = [];
-    let old_results = [];
-    let updatedExpectedAnswers = [...expectedAnswers];
+    let newCorrectIdeas = []; // correct ideas dound during this check
+    let new_results = []; // results of current checking the ideas
+    let old_results = []; // results of previous checking the ideas
+    let updatedExpectedAnswers = [...expectedAnswers]; //
 
-    // 1. Get sample answers for this task
-    let answers = props.answers.answerElements;
-
+    // 1️⃣ FIRST LOOP. Going through each student idea
     for (let idea of ideas) {
-      // Skip empty ideas (null, undefined, or blank string)
+      // 🔥 TESTS TO MAKE SURE THAT WE ARE NOT DOING UNNECESSARY WORK
+
+      // 1. Skip empty ideas (null, undefined, or blank string)
       if (!idea || !idea.trim()) {
-        // console.log("Skipping empty idea:", idea);
         continue;
       }
 
-      // Check if the idea has already been evaluated
+      // 2. Check if the idea has already been evaluated during previous student answers
+      // No need to evaluate this idea again
       let existingResult =
         overallResults && overallResults.find((res) => res.idea === idea);
       if (existingResult) {
@@ -153,56 +170,40 @@ const Generate = (props) => {
         continue;
       }
 
-      // Keep track of the best match for this idea
+      // Keep track of the best match for the current idea.
+      // We now include a feedback property to store the feedback from the matched answer.
       let bestMatch = {
         result: 0,
         matchedText: null,
+        feedback: null,
       };
 
-      // Iterate through each answer
+      // 2️⃣ SECOND LOOP. We compace active idea with sample answers we have
       for (let answer of answers) {
-        // Skip if this answer is already used for a previous idea
+        // 🔥 TESTS TO MAKE SURE THAT WE ARE NOT DOING UNNECESSARY WORK
+        // 1. Skip if this answer has already been matched with the previous idea
         if (usedAnswers.has(answer)) {
           continue;
         }
 
-        // If best match is already >= 65, skip checking more answers
+        // 2. If best match is already >= 65, skip checking more answers
         if (bestMatch.result >= 65) {
           break;
         }
 
-        // 1) Compare main answer text
-        let mainResponse;
-        try {
-          const response = await fetch(
-            "https://arcane-refuge-67529.herokuapp.com/checker",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                answer1: answer.answer, // main answer text
-                answer2: idea,
-              }),
-            }
-          );
-          mainResponse = await response.json();
-        } catch (error) {
-          console.error("Error comparing main answer:", error);
-          continue;
-        }
+        // 3️⃣. The first round of checks start. We compare main answers
 
-        const mainScore = parseFloat(mainResponse.res) || 0;
+        const mainScore = await compareAnswers(idea, answer);
         console.log("mainScore", mainScore);
 
         // Update best match if main answer is better than current best
         if (mainScore > bestMatch.result) {
           bestMatch.result = mainScore;
           bestMatch.matchedText = answer.answer;
+          bestMatch.feedback = answer.feedback;
         }
 
-        // If the main score is below 25, skip related answers
+        // If the main score is below 25, skip checking related answers
         if (mainScore < 25) {
           continue;
         }
@@ -217,33 +218,22 @@ const Generate = (props) => {
           let textsToFetch = [];
 
           (answer.relatedAnswers || []).forEach((relAns) => {
-            fetchPromises.push(
-              fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  answer1: relAns,
-                  answer2: idea,
-                }),
-              })
-            );
+            fetchPromises.push(compareAnswers(relAns, idea));
             textsToFetch.push(relAns);
           });
 
           try {
             const responses = await Promise.all(fetchPromises);
-            const jsonResults = await Promise.all(
-              responses.map((res) => res.json())
-            );
+            console.log("responses", responses);
+            const jsonResults = responses;
 
             // Update best match based on related answers
             jsonResults.forEach((r, index) => {
-              let val = parseFloat(r.res) || 0;
+              let val = parseFloat(r) || 0;
               if (val > bestMatch.result) {
                 bestMatch.result = val;
                 bestMatch.matchedText = textsToFetch[index];
+                bestMatch.feedback = answer.feedback;
               }
             });
 
@@ -258,21 +248,27 @@ const Generate = (props) => {
           }
         }
       } // end of answers loop
-
-      // Add the best match for this idea
+      // Build the result object. Add feedback property only if bestMatch.result is higher than 57.
       let new_obj = {
         idea,
         result: bestMatch.result,
         matchedAnswer: bestMatch.matchedText,
       };
+      if (bestMatch.result > 57) {
+        new_obj.feedback = bestMatch.feedback;
+      }
       new_results.push(new_obj);
 
-      // If the best match exceeds threshold, track as correct
+      // If the best match exceeds threshold, track as correct, including feedback conditionally.
       if (bestMatch.result > 57 && bestMatch.matchedText) {
-        newCorrectIdeas.push({
+        let correctIdea = {
           idea,
           matchedAnswer: bestMatch.matchedText,
-        });
+        };
+        if (bestMatch.result > 57) {
+          correctIdea.feedback = bestMatch.feedback;
+        }
+        newCorrectIdeas.push(correctIdea);
       }
     }
 
@@ -285,6 +281,9 @@ const Generate = (props) => {
       } else if (parseFloat(item.result) > parseFloat(existingItem.result)) {
         existingItem.result = item.result;
         existingItem.matchedAnswer = item.matchedAnswer;
+        if (item.result > 57) {
+          existingItem.feedback = item.feedback;
+        }
       }
     });
 
@@ -439,7 +438,7 @@ const Generate = (props) => {
             onClick={async (e) => {
               e.preventDefault();
               setProgress("true");
-              await getMatchingAnswers(answer);
+              await getMatchingAnswers(props.answers.answerElements);
               setProgress("false");
             }}
           >
@@ -499,6 +498,7 @@ const Generate = (props) => {
             </IconBlock>
           </div>
         )}
+
         {/* 6. Bubble with buttons for additional questions available to the student  */}
         {isFeedbackShown && (
           <>
@@ -506,12 +506,23 @@ const Generate = (props) => {
               <div className="question_text">
                 <p>{correctIdeas.length > 0 && `🎉 ${t("great_job")}`}</p>
                 <p>{correctIdeas.length == 0 && `🤔 ${t("none_correct")}`}</p>
-                {/* <p>
-                  {correctIdeas.length < props.answers.answerElements.length
-                    ? t("not_all_answers")
-                    : null}{" "}
-                  {t("what_are_we_doing_next")}
-                </p> */}
+                <p>
+                  {overallResults.filter((el) => el.feedback).length > 0 ? (
+                    <>
+                      <p>I have some comments:</p>
+                      <ul>
+                        {overallResults
+                          .filter((el) => el.feedback)
+                          .map((el, index) => (
+                            <li key={index}>
+                              <b>{el.idea}</b>: {el.feedback}
+                              <br />
+                            </li>
+                          ))}
+                      </ul>
+                    </>
+                  ) : null}
+                </p>
               </div>
               <IconBlock>
                 {author && author.image != null ? (
@@ -564,28 +575,6 @@ const Generate = (props) => {
               </OptionsGroup>
             </div>
           </>
-        )}
-        {areIdeasShown && (
-          <div className="question_box">
-            <div className="question_text">
-              <p>These are my ideas:</p>
-              <ul>
-                {props.answers.answerElements.map((idea) => (
-                  <li>{idea.answer}</li>
-                ))}
-              </ul>
-            </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </div>
         )}
 
         {nextQuestions &&
@@ -653,6 +642,28 @@ const Generate = (props) => {
               </div>
             </>
           ))}
+        {areIdeasShown && (
+          <div className="question_box">
+            <div className="question_text">
+              <p>These are my ideas:</p>
+              <ul>
+                {props.answers.answerElements.map((idea) => (
+                  <li>{idea.answer}</li>
+                ))}
+              </ul>
+            </div>
+            <IconBlock>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
+            </IconBlock>
+          </div>
+        )}
       </>
     </Question>
   );

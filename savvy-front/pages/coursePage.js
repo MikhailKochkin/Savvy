@@ -1,4 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
+
 import NewCoursePage from "../components/course/NewCoursePage";
 
 export const getServerSideProps = async ({ locale }) => ({
@@ -14,13 +16,21 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const CoursePagePage = (props) => {
-  return (
-    <NewCoursePage
-      id={props.query.id}
-      form={props.query.form}
-      promocode={props.query.down}
-    />
-  );
+  const { id, form, down: promocode } = props.query || {};
+  const router = useRouter();
+
+  // Handle missing `id`
+  if (!id) {
+    return (
+      <div>
+        <p>Error: No course ID provided.</p>
+        <p>Please check the URL or contact support if the issue persists.</p>
+        <button onClick={() => router.push("/")}>Go to Courses</button>
+      </div>
+    );
+  }
+
+  return <NewCoursePage id={id} form={form} promocode={promocode} />;
 };
 
 export default CoursePagePage;

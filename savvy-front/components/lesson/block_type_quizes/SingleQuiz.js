@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import { useMutation, gql } from "@apollo/client";
+import { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
@@ -18,7 +17,7 @@ import { SecondaryButton } from "../styles/DevPageStyles";
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${(props) => props.width};
+  width: ${(props) => props.width || "100%"};
   font-weight: 500;
   margin-bottom: 3%;
   font-size: 1.6rem;
@@ -36,14 +35,28 @@ const Buttons = styled.div`
 `;
 
 const SingleQuiz = (props) => {
-  const [nextQuestions, setNextQuestions] = useState();
   const [update, setUpdate] = useState(false);
   const [isMoveMade, setIsMoveMade] = useState(false);
 
+  const { t } = useTranslation("lesson");
+
+  const {
+    me,
+    story,
+    complexity,
+    ifWrong,
+    ifRight,
+    check,
+    author,
+    isOrderOfAnswersImportant,
+    shouldAnswerSizeMatchSample,
+    studentAnswerPassedFromAnotherComponent,
+    openQuestionType,
+  } = props;
+
   useEffect(() => {
-    // kick off the polyfill!
     smoothscroll.polyfill();
-  });
+  }, []);
 
   // this function is responsible for moving through the problem
   const onMove = (result) => {
@@ -78,31 +91,13 @@ const SingleQuiz = (props) => {
     }
   };
 
-  const { t } = useTranslation("lesson");
+  const toggleUpdate = useCallback(() => {
+    setUpdate((prev) => !prev);
+  }, []);
 
-  const {
-    me,
-    user,
-    exam,
-    story,
-    complexity,
-    ifWrong,
-    ifRight,
-    check,
-    miniforum,
-    lesson,
-    author,
-    answers,
-    problemType,
-    isOrderOfAnswersImportant,
-    shouldAnswerSizeMatchSample,
-    studentAnswerPassedFromAnotherComponent,
-    jsonStoryString,
-  } = props;
   const getResult = (data) => {
     props.getResult(data);
   };
-
   const switchUpdate = () => {
     setUpdate(!update);
   };
@@ -112,12 +107,13 @@ const SingleQuiz = (props) => {
   } else {
     width = "570px";
   }
+
   return (
     <Styles width={width} id={props.quizID}>
       {/* 1. Settings part */}
       {me && !story ? (
         <Buttons>
-          <SecondaryButton onClick={(e) => setUpdate(!update)}>
+          <SecondaryButton onClick={toggleUpdate}>
             {!update ? t("update") : t("back")}
           </SecondaryButton>
           <DeleteSingleQuiz
@@ -132,14 +128,14 @@ const SingleQuiz = (props) => {
           {(props.type?.toLowerCase() == "test" || props.type === null) && (
             <OpenQuestion
               id={props.quizID}
-              question={props.question}
+              question={props.question || "No question provided."}
               author={author}
               me={me}
               check={props.check}
               story={story}
               goalType={props.goalType}
               answer={props.answer}
-              answers={props.answers}
+              answers={props.answers || []}
               ifWrong={props.ifWrong}
               ifRight={props.ifRight}
               lessonId={props.lessonID}
@@ -150,7 +146,7 @@ const SingleQuiz = (props) => {
               image={props.image}
               jsonStoryString={props.jsonStoryString}
               instructorName={props.instructorName}
-              openQuestionType={props.openQuestionType}
+              openQuestionType={openQuestionType}
               studentAnswerPassedFromAnotherComponent={
                 studentAnswerPassedFromAnotherComponent
               }
@@ -159,7 +155,7 @@ const SingleQuiz = (props) => {
           )}
           {props.type?.toLowerCase() == "form" && (
             <Form
-              question={props.question}
+              question={props.question || "No question provided."}
               author={author}
               me={me}
               story={story}
@@ -177,13 +173,13 @@ const SingleQuiz = (props) => {
           )}
           {props.type?.toLowerCase() == "generate" && (
             <Generate
-              question={props.question}
+              question={props.question || "No question provided."}
               author={author}
               me={me}
               story={story}
               goalType={props.goalType}
               answer={props.answer}
-              answers={props.answers}
+              answers={props.answers || []}
               ifWrong={props.ifWrong}
               ifRight={props.ifRight}
               lessonId={props.lessonID}
@@ -194,13 +190,13 @@ const SingleQuiz = (props) => {
           )}
           {props.type?.toLowerCase() == "prompt" && (
             <Prompt
-              question={props.question}
+              question={props.question || "No question provided."}
               author={author}
               me={me}
               story={story}
               goalType={props.goalType}
               answer={props.answer}
-              answers={props.answers}
+              answers={props.answers || []}
               ifWrong={props.ifWrong}
               ifRight={props.ifRight}
               lessonId={props.lessonID}
@@ -213,13 +209,13 @@ const SingleQuiz = (props) => {
           )}
           {props.type?.toLowerCase() == "findall" && (
             <FindAll
-              question={props.question}
+              question={props.question || "No question provided."}
               author={author}
               me={me}
               story={story}
               goalType={props.goalType}
               answer={props.answer}
-              answers={props.answers}
+              answers={props.answers || []}
               ifWrong={props.ifWrong}
               ifRight={props.ifRight}
               lessonId={props.lessonID}
@@ -233,13 +229,13 @@ const SingleQuiz = (props) => {
           )}
           {props.type?.toLowerCase() == "complex" && (
             <ComplexQuestion
-              question={props.question}
+              question={props.question || "No question provided."}
               author={author}
               me={me}
               story={story}
               goalType={props.goalType}
               answer={props.answer}
-              answers={props.answers}
+              answers={props.answers || []}
               ifWrong={props.ifWrong}
               ifRight={props.ifRight}
               lessonId={props.lessonID}
@@ -256,13 +252,13 @@ const SingleQuiz = (props) => {
           )}
           {props.type?.toLowerCase() == "call" && (
             <CallSimulation
-              question={props.question}
+              question={props.question || "No question provided."}
               author={author}
               me={me}
               story={story}
               goalType={props.goalType}
               answer={props.answer}
-              answers={props.answers}
+              answers={props.answers || []}
               ifWrong={props.ifWrong}
               ifRight={props.ifRight}
               lessonId={props.lessonID}
@@ -276,26 +272,17 @@ const SingleQuiz = (props) => {
           )}
         </>
       )}
-      {/* {nextQuestions && nextQuestions.length > 0 && (
-        <NextQuestions
-          nextQuestions={nextQuestions}
-          lesson={lesson}
-          me={me}
-          author={author}
-          isScoringShown={props.isScoringShown}
-        />
-      )} */}
       {update && (
         <UpdateQuiz
           quizId={props.id}
           lessonID={props.lessonID}
           answer={props.answer}
-          answers={props.answers}
+          answers={props.answers || []}
           lesson={props.lesson}
-          question={props.question}
+          question={props.question || "No question provided."}
           name={props.name}
           image={props.image}
-          type={props.type}
+          type={props.type || undefined}
           isOrderOfAnswersImportant={isOrderOfAnswersImportant}
           shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
           isScoringShown={props.isScoringShown}

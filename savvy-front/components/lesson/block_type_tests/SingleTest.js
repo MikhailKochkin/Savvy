@@ -8,6 +8,7 @@ import DeleteSingleTest from "./DeleteSingleTest";
 import Test from "./types/Test";
 import Form from "./types/Form";
 import Branch from "./types/Branch";
+import MiniTest from "./types/MiniTest";
 import { generateHint } from "./functions/AiFunctions";
 import { useRouter } from "next/router";
 import { SecondaryButton } from "../styles/DevPageStyles";
@@ -39,12 +40,15 @@ const CREATE_TESTRESULT_MUTATION = gql`
 const Styles = styled.div`
   /* max-width: 650px;
   min-width: 510px; */
-  width: 570px;
+  width: 100%;
   background: #fff;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-weight: 500;
   @media (max-width: 800px) {
-    width: 100%;
+    width: 90%;
   }
 `;
 
@@ -67,6 +71,7 @@ const SingleTest = (props) => {
     image,
     next,
     type,
+    passStudentAnswertoDocument,
   } = props;
   const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
   const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
@@ -258,7 +263,6 @@ const SingleTest = (props) => {
     if (props.getData && (!isExperienced || attempts === 0)) {
       props.getData(nextData, "test");
     }
-
     // Save the result if not already experienced
     if (!isExperienced) {
       setIsExperienced(true);
@@ -277,6 +281,12 @@ const SingleTest = (props) => {
     addComments(answerNums);
     if (props.problemType !== "ONLY_CORRECT") setAttempts(attempts + 1);
     setSent(true);
+    const firstCorrect = mes.find((el) => el[1] === true);
+    if (isCorrect && passStudentAnswertoDocument) {
+      passStudentAnswertoDocument(firstCorrect ? firstCorrect[0] : "");
+      return;
+      // passStudentAnswertoDocument(answer);
+    }
   };
 
   const passTestData = (type) => {
@@ -431,6 +441,38 @@ const SingleTest = (props) => {
               zero={zero}
               commentsList={commentsList}
               answerOptions={answerOptions}
+            />
+          )}
+          {type == "MINI" && (
+            <MiniTest
+              story={story}
+              me={me}
+              image={image}
+              instructorName={instructorName}
+              author={author}
+              question={props.question}
+              true={props.true}
+              type={type}
+              answerState={answerState}
+              challenge={props.challenge}
+              problemType={props.problemType}
+              getData={props.getData}
+              next={props.next}
+              id={props.id}
+              lessonID={props.lessonID}
+              mes={mes}
+              getTestData={getTestData}
+              zero={zero}
+              passTestData={passTestData}
+              inputColor={inputColor}
+              commentsList={commentsList}
+              ifRight={ifRight}
+              ifWrong={ifWrong}
+              revealCorrectAnswer={revealCorrectAnswer}
+              correctAnswers={correctAnswers}
+              answerOptions={answerOptions}
+              context={props.context}
+              provideHint={provideHint}
             />
           )}
         </>

@@ -67,6 +67,7 @@ const UPDATE_QUIZ_MUTATION = gql`
           answer
           index
           relatedAnswers
+          feedback
         }
       }
       goalType
@@ -109,7 +110,6 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const UpdateQuiz = (props) => {
   const { lessonID, quizId, lesson } = props;
-
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
   const [name, setName] = useState(props.name);
@@ -164,6 +164,7 @@ const UpdateQuiz = (props) => {
           answer: answer.answer,
           index: answer.index,
           relatedAnswers: answer.relatedAnswers,
+          feedback: answer.feedback,
         })),
       },
     },
@@ -501,7 +502,7 @@ const UpdateQuiz = (props) => {
           <select
             name="types"
             id="types"
-            valuelue={type}
+            value={type}
             onChange={(e) => setType(e.target.value)}
           >
             <option value={null}>Undefined</option>
@@ -678,7 +679,24 @@ const UpdateQuiz = (props) => {
                   </NanoButton>
                 </Buttons>
               </div>
-
+              <div className="mainfield">
+                <textarea
+                  className="dynamic-textarea"
+                  value={an.feedback}
+                  placeholder={`Feedback`}
+                  onChange={(e) => {
+                    const newAnswers = [...answers];
+                    newAnswers[i] = {
+                      ...newAnswers[i],
+                      feedback: e.target.value,
+                    }; // Create a new object for the specific element and update its property
+                    setAnswers(newAnswers);
+                    autoResizeTextarea(e);
+                  }}
+                  onInput={autoResizeTextarea}
+                  onLoad={(e) => autoResizeTextarea(e)}
+                />
+              </div>
               <div className="subfield">
                 {an.relatedAnswers &&
                   an.relatedAnswers?.map((rel, j) => (
@@ -753,38 +771,36 @@ const UpdateQuiz = (props) => {
               {generating ? "Generating..." : "Generate different"}
             </MicroButton>
           ) : null}
-          {type == "GENERATE" || type == "FINDALL" ? (
-            <MicroButton
-              onClick={async (e) => {
-                e.preventDefault();
-                setGenerating(true);
-                let newAnswers = await Promise.all(
-                  answers.map(async (an) => {
-                    let new_an = { ...an }; // Make a copy of the object
-                    new_an.answer = await upgradeSampleAnswer(e, an);
-                    return new_an;
-                  })
-                );
-                setAnswers(newAnswers); // Logs the resolved values
-                setGenerating(false);
-              }}
-            >
-              {generating ? "Upgrading..." : "Upgrade Cloud"}
-            </MicroButton>
-          ) : null}
-          {type == "GENERATE" || type == "FINDALL" ? (
-            <MicroButton
-              onClick={async (e) => {
-                e.preventDefault();
-                setGenerating(true);
-                const res = await extendSemanticCloud(e);
-                setAnswers(res);
-                setGenerating(false);
-              }}
-            >
-              {generating ? "Adding..." : "Add subanswers"}
-            </MicroButton>
-          ) : null}
+
+          <MicroButton
+            onClick={async (e) => {
+              e.preventDefault();
+              setGenerating(true);
+              let newAnswers = await Promise.all(
+                answers.map(async (an) => {
+                  let new_an = { ...an }; // Make a copy of the object
+                  new_an.answer = await upgradeSampleAnswer(e, an);
+                  return new_an;
+                })
+              );
+              setAnswers(newAnswers); // Logs the resolved values
+              setGenerating(false);
+            }}
+          >
+            {generating ? "Upgrading..." : "Upgrade Cloud"}
+          </MicroButton>
+
+          <MicroButton
+            onClick={async (e) => {
+              e.preventDefault();
+              setGenerating(true);
+              const res = await extendSemanticCloud(e);
+              setAnswers(res);
+              setGenerating(false);
+            }}
+          >
+            {generating ? "Adding..." : "Add subanswers"}
+          </MicroButton>
           <div className="explainer">
             These answers are used to make the answer assessment more accurate
           </div>

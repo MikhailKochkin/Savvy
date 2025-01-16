@@ -198,6 +198,7 @@ const SINGLE_LESSON_QUERY = gql`
             answer
             relatedAnswers
             index
+            feedback
           }
         }
         isOrderOfAnswersImportant

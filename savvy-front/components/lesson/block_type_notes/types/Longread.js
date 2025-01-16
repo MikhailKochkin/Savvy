@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useMemo } from "react";
 import styled from "styled-components";
-import { useTranslation } from "next-i18next";
 import moment from "moment";
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
 
 const Container = styled.div`
-  width: ${(props) => props.width};
+  width: ${(props) => props.width || "100%"};
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
@@ -62,61 +61,12 @@ const Container = styled.div`
   a {
     width: 30%;
   }
-  .black_back_square {
-    background-image: url("/static/pattern.svg");
-    width: 100vw;
-    padding: 10% 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    img {
-      display: block;
-      width: 70%;
-      max-width: 1200px;
-      object-fit: cover;
-      max-height: 50em;
-      box-shadow: "0 0 0 2px blue;";
-    }
-    iframe {
-      width: 50%;
-      height: 400px;
-    }
-  }
-  .black_back {
-    background-image: url("/static/pattern.svg");
-    width: 100vw;
-    padding: 10% 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    img {
-      display: block;
-      width: 70%;
-      object-fit: cover;
-      max-height: 50em;
-      box-shadow: "0 0 0 2px blue;";
-      /* width: 50vw; */
-    }
-    iframe {
-      width: 50%;
-      height: 400px;
-    }
-  }
-
-  .text {
+  .note_longread {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    /* border: 1px solid red; */
-    /* font-weight: 500;
-    padding: 1% 2%;
-    max-width: 100vw;
-    min-width: 360px;
-    line-height: 1.6; */
   }
   .author {
     flex-basis: 10%;
@@ -146,94 +96,6 @@ const Container = styled.div`
     flex-direction: column;
     width: 90%;
     font-size: 1.6rem;
-    .black_back {
-      padding: 20px 0;
-      img {
-        width: 360px;
-      }
-    }
-    .black_back_square {
-      padding: 20px 0;
-      img {
-        width: 360px;
-        height: 360px;
-        /* width: 50vw; */
-      }
-    }
-  }
-`;
-
-const Secret = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 600px;
-  position: relative;
-
-  #open {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    position: absolute;
-    border: 1px solid #04377f;
-    border-radius: 10px;
-    top: 150px;
-    left: 25%;
-    z-index: 300;
-    img {
-      width: 200px;
-      margin: 20px 0;
-      /* Start the shake animation and make the animation last for 0.5 seconds */
-    }
-    img {
-      /* Start the shake animation and make the animation last for 0.5 seconds */
-      animation: ${(props) => (props.shiver ? "shake 1s" : "none")};
-    }
-    @keyframes shake {
-      0% {
-        transform: translate(1px, 1px) rotate(0deg);
-      }
-      10% {
-        transform: translate(-1px, -2px) rotate(-1deg);
-      }
-      20% {
-        transform: translate(-3px, 0px) rotate(1deg);
-      }
-      30% {
-        transform: translate(3px, 2px) rotate(0deg);
-      }
-      40% {
-        transform: translate(1px, -1px) rotate(1deg);
-      }
-      50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-      }
-      60% {
-        transform: translate(-3px, 1px) rotate(0deg);
-      }
-      70% {
-        transform: translate(3px, 1px) rotate(-1deg);
-      }
-      80% {
-        transform: translate(-1px, -1px) rotate(1deg);
-      }
-      90% {
-        transform: translate(1px, 2px) rotate(0deg);
-      }
-      100% {
-        transform: translate(1px, -2px) rotate(-1deg);
-      }
-    }
-    #button {
-      margin-bottom: 20px;
-      border: 1px solid #04377f;
-      padding: 5px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
   }
 `;
 
@@ -241,7 +103,6 @@ const NoteStyles = styled.div`
   max-width: 100%;
   background: #fff;
   margin: 10px 0 0 0;
-  filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
   .video-container {
     width: 400px;
     margin: 0 auto;
@@ -393,57 +254,8 @@ const NoteStyles = styled.div`
   }
 `;
 
-const Note = (props) => {
-  const [update, setUpdate] = useState(false);
-  const [moved, setMoved] = useState(false);
-  const [isRevealed, setIsRevealed] = useState(!props.note.isSecret);
-  const [shiver, setShiver] = useState(false);
-
-  const { t } = useTranslation("lesson");
+const Longread = (props) => {
   moment.locale("ru");
-
-  useEffect(() => {
-    let el3 = document.getElementById("wide_square");
-    if (el3 && props.story) {
-      let img_div = document.createElement("div");
-      let new_img = document.createElement("img");
-      new_img.src = el3.src;
-      img_div.className = "black_back_square";
-      img_div.appendChild(new_img);
-      el3.remove();
-      const box = document.getElementById(props.id);
-      box.prepend(img_div);
-    }
-
-    let el = document.getElementById("wide");
-    if (el && props.story) {
-      let img_div = document.createElement("div");
-      let new_img = document.createElement("img");
-      new_img.src = el.src;
-      img_div.className = "black_back";
-      img_div.appendChild(new_img);
-      el.remove();
-      const box = document.getElementById(props.id);
-      box.prepend(img_div);
-    }
-
-    let el2 = document.getElementById("blackvideo");
-    if (el2 && props.story) {
-      let video_div = document.createElement("div");
-      let new_video = document.createElement("iframe");
-      new_video.src = el2.src;
-      new_video.frameborder = "0";
-      new_video.tabindex = "0";
-      new_video.allow = "autoplay";
-      new_video.allowfullscreen = "true";
-
-      video_div.className = "black_back";
-      video_div.appendChild(new_video);
-      el2.remove();
-      const box = document.getElementById(props.id);
-      box.prepend(video_div);
-    }
-  });
 
   // Function to wrap tables with class table-wrapper
   const wrapTables = (html) => {
@@ -454,7 +266,7 @@ const Note = (props) => {
     return wrappedHtml.replace(/<\/table>/g, "</table></div>");
   };
 
-  const { story, text, id, getData, isFinal } = props;
+  const { story, text, id } = props;
   let width;
   if (props.problem) {
     width = "660px";
@@ -464,52 +276,21 @@ const Note = (props) => {
     width = "90%";
   }
 
+  const processedText = useMemo(
+    () => (text ? parse(wrapTables(text)) : null),
+    [text]
+  );
+
   return (
-    <>
-      <Container id={id} width={width}>
-        <div className="text">
-          {!update && (
-            <>
-              {isRevealed && (
-                <NoteStyles story={story} isRevealed={isRevealed}>
-                  {parse(wrapTables(text))}
-                </NoteStyles>
-              )}
-              {!isRevealed && (
-                <Secret shiver={shiver}>
-                  <NoteStyles story={story} isRevealed={isRevealed}>
-                    {parse(text)}
-                  </NoteStyles>
-                  <div id="open">
-                    <img src="static/lock.svg" />
-                    <div
-                      id="button"
-                      onClick={(e) => {
-                        if (props.experience >= props.total) {
-                          setIsRevealed(true);
-                        } else {
-                          setShiver(true);
-                          setTimeout(() => {
-                            setShiver(false);
-                          }, 1000);
-                        }
-                      }}
-                    >
-                      {/* {t("toOpen")} */}
-                      Открыть
-                    </div>
-                  </div>
-                </Secret>
-              )}
-            </>
-          )}
-        </div>
-      </Container>
-    </>
+    <Container id={id} width={width}>
+      <div className="note_longread">
+        <NoteStyles story={story}>{processedText}</NoteStyles>
+      </div>
+    </Container>
   );
 };
 
-Note.propTypes = {
+Longread.propTypes = {
   // Indicates if the note is being displayed in a story context
   story: PropTypes.bool,
   // The text content to be displayed in the note (required)
@@ -532,4 +313,4 @@ Note.propTypes = {
   total: PropTypes.number,
 };
 
-export default Note;
+export default Longread;

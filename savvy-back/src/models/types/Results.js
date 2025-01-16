@@ -28,7 +28,7 @@ const TestResult = objectType({
       type: "User",
       description: "Details of the student.",
     });
-    t.boolean("result", { description: "The result of the test (pass/fail)." });
+    t.string("result", { description: "The result of the test (pass/fail)." });
     t.field("test", { type: "NewTest", description: "Details of the test." });
     t.field("createdAt", {
       type: "DateTime",
@@ -100,6 +100,7 @@ const QuizIdea = objectType({
     t.string("result", {
       description: "The result associated with the quiz idea.",
     });
+    t.string("feedback");
     t.string("matchedAnswer");
     t.string("next_id", { description: "ID of the next step or quiz." });
     t.string("next_type", { description: "Type of the next step or quiz." });
@@ -123,6 +124,7 @@ const QuizIdeaInput = inputObjectType({
     t.string("result", {
       description: "The result associated with the quiz idea.",
     });
+    t.string("feedback");
     t.string("matchedAnswer");
     t.string("next_id", { description: "ID of the next step or quiz." });
     t.string("next_type", { description: "Type of the next step or quiz." });

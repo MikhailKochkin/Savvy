@@ -260,10 +260,12 @@ const NewInteractive = (props) => {
                   id={el.id}
                   clicks={el.link_clicks}
                   key={el.id}
+                  type={el.type}
                   text={el.text}
                   me={me}
                   teacher={el.user?.id}
-                  note={el.id}
+                  noteId={el.id}
+                  note={el}
                   next={el.next}
                   getData={updateArray}
                   exam={true}
@@ -285,6 +287,7 @@ const NewInteractive = (props) => {
                   author={author}
                   complexity={el.complexity}
                   messages={el.messages}
+                  characters={lesson.characters}
                   id={el.id}
                   lessonId={lesson.id}
                   story={true}

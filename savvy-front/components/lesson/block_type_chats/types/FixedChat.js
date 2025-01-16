@@ -61,14 +61,13 @@ const Next = styled.div`
 
 const Messages = styled.div`
   margin: 0 10px;
-  filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
+  /* filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")}; */
 `;
 
 const FixedChat = (props) => {
   const { messages, me, lessonId, id, author, library } = props;
   const [update, setUpdate] = useState(false);
   const [num, setNum] = useState(1);
-  const [isRevealed, setIsRevealed] = useState(!props.isSecret);
   const [showButton, setShowButton] = useState(true);
   const [hasCreatedInitialResult, setHasCreatedInitialResult] = useState(false); // State to ensure function runs only once
 
@@ -143,7 +142,7 @@ const FixedChat = (props) => {
 
   return (
     <>
-      <Messages isRevealed={isRevealed}>
+      <Messages>
         {messages.messagesList.slice(0, num).map((m, i) => {
           if (m.author === "author") {
             return (

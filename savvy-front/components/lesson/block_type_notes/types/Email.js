@@ -1,7 +1,8 @@
+import { useMemo } from "react";
 import styled from "styled-components";
-import { useTranslation } from "next-i18next";
 import moment from "moment";
 import parse from "html-react-parser";
+
 const Body = styled.div`
   img {
     display: block;
@@ -106,69 +107,56 @@ const EmailInfo = styled.div`
   }
 `;
 
-const Note = (props) => {
-  const { t } = useTranslation("lesson");
+const Email = (props) => {
   moment.locale("ru");
   function getFormattedToday() {
     return moment().format("D MMMM YYYY [at] HH:mm");
   }
 
-  const todaysDate = getFormattedToday();
+  const todaysDate = useMemo(() => getFormattedToday(), []);
 
   const { me, author, text, id, instructorName } = props;
-  let width;
-  if (props.problem) {
-    width = "100%";
-  } else if (props.story) {
-    width = "100%";
-  } else {
-    width = "90%";
-  }
 
-  const getInitials = (instructorName) => {
-    if (!instructorName) return null;
-    const words = instructorName.split(" ");
+  const getInitials = (name) => {
+    if (!name) return null;
+    const words = name.trim().split(/\s+/); // Trim and split by whitespace
     if (words.length === 1) {
-      return words[0].slice(0, 2);
-    } else if (words.length >= 2) {
-      return words[0][0] + words[1][0];
+      return words[0].slice(0, 2).toUpperCase();
     }
+    return words[0][0].toUpperCase() + words[1][0].toUpperCase();
   };
 
-  const initials = getInitials(instructorName);
+  const initials =
+    instructorName && getInitials(instructorName)
+      ? getInitials(instructorName)
+      : `${author.name[0]}${author.surname[0]}`;
 
   return (
-    <>
-      <EmailContainer id={id}>
-        <EmailForm>
-          <EmailInfo>
-            <div className="image_column">
-              <div className="circle">
-                {instructorName && getInitials(instructorName)
-                  ? getInitials(instructorName)
-                  : `${author.name[0]}${author.surname[0]}`}
-              </div>
+    <EmailContainer id={"note_email-" + id}>
+      <EmailForm>
+        <EmailInfo>
+          <div className="image_column">
+            <div className="circle">{initials}</div>
+          </div>
+          <div className="names_column">
+            <div className="sender_name">
+              {instructorName
+                ? instructorName
+                : `${author.name} ${author.surname}`}
             </div>
-            <div className="names_column">
-              <div className="sender_name">
-                {instructorName
-                  ? instructorName
-                  : `${author.name} ${author.surname}`}
-              </div>
-              <div className="emailSubject">
-                <b>Subject:</b> {props.name ? props.name : "Re: Help ASAP"}
-              </div>
-              <div>
-                <b>To:</b> {me.name} {me.surname}
-              </div>
+            <div className="emailSubject">
+              <b>Subject:</b> {props.name ? props.name : "Re: Help ASAP"}
             </div>
-            <div className="times_column">{todaysDate}</div>
-          </EmailInfo>
-          <Body>{parse(text)}</Body>
-        </EmailForm>
-      </EmailContainer>
-    </>
+            <div>
+              <b>To:</b> {me.name} {me.surname}
+            </div>
+          </div>
+          <div className="times_column">{todaysDate}</div>
+        </EmailInfo>
+        <Body>{parse(text)}</Body>
+      </EmailForm>
+    </EmailContainer>
   );
 };
 
-export default Note;
+export default Email;

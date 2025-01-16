@@ -534,6 +534,7 @@ const SingleProblem = (props) => {
             context={problem.context}
             name={problem.name}
             getResult={getResult}
+            characters={props.characters}
             switchUpdate={switchUpdate}
             steps={problem.steps}
             lesson={lesson}

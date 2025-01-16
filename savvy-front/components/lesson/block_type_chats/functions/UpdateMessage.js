@@ -262,11 +262,12 @@ const UpdateMessage = (props) => {
           >
             <option value="author">👩🏼‍🏫</option>
             <option value="student">👨🏻‍🎓</option>
-            {characters.map((character, index) => (
-              <option key={index} value={character.name}>
-                {character.name[0].toUpperCase()}
-              </option>
-            ))}
+            {characters &&
+              characters?.map((character, index) => (
+                <option key={index} value={character.name}>
+                  {character.name[0].toUpperCase()}
+                </option>
+              ))}
           </select>
 
           {/* Name Input */}

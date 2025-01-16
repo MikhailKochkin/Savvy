@@ -102,6 +102,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
             answer
             index
             relatedAnswers
+            feedback
           }
         }
         complexity

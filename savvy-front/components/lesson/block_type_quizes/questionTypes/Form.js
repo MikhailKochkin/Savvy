@@ -433,7 +433,7 @@ const OpenQuestion = (props) => {
           >
             {t("check")}
           </Button1>
-          <Circle onClick={startListening}>
+          {/* <Circle onClick={startListening}>
             <BiMicrophone
               className="icon"
               value={{ className: "react-icons" }}
@@ -444,7 +444,7 @@ const OpenQuestion = (props) => {
               className="icon"
               value={{ className: "react-icons" }}
             />
-          </Circle>
+          </Circle> */}
         </Group>
       </>
       {/* 3. Comment bubble */}

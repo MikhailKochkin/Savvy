@@ -18,28 +18,43 @@ const DynamicNewSingleLesson = dynamic(
   }
 );
 
-const LessonPage = (props) => (
-  <div>
-    {props.query.type === "old" && <OldSingleLesson id={props.query.id} />}
+const LessonPage = (props) => {
+  const { type, id, size, add, step, authSource } = props.query || {};
 
-    {props.query.type === "regular" && <SingleLesson id={props.query.id} />}
-    {props.query.type === "story" && (
-      <DynamicNewSingleLesson
-        id={props.query.id}
-        size={props.query.size}
-        add={props.query.add}
-        step={props.query.step}
-        authSource={props.query.authSource}
-      />
-    )}
-    {props.query.type === "stats" && (
-      <SimulatorAnalyticsDataLoad id={props.query.id} />
-    )}
-    {props.query.type === "challenge" && <Challenge id={props.query.id} />}
-    {!props.query.type && (
-      <div>The link is incorrect. Please check the URL and try again.</div>
-    )}
-  </div>
-);
+  if (!id) {
+    return (
+      <div>
+        <p>Error: No lesson ID provided.</p>
+        <p>Please check the URL or contact support if the issue persists.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {type === "old" && <OldSingleLesson id={id} />}
+
+      {type === "regular" && <SingleLesson id={id} />}
+
+      {type === "story" && (
+        <DynamicNewSingleLesson
+          id={id}
+          size={size}
+          add={add}
+          step={step}
+          authSource={authSource}
+        />
+      )}
+
+      {type === "stats" && <SimulatorAnalyticsDataLoad id={id} />}
+
+      {type === "challenge" && <Challenge id={id} />}
+
+      {!type && (
+        <div>The link is incorrect. Please check the URL and try again.</div>
+      )}
+    </div>
+  );
+};
 
 export default LessonPage;

@@ -6,6 +6,9 @@ type AnswerElement {
   """Answer text."""
   answer: String
 
+  """Feedback for the answer."""
+  feedback: String
+
   """Position or index of the answer."""
   index: Int
 
@@ -20,6 +23,9 @@ type AnswerElement {
 input AnswerElementInput {
   """Answer text."""
   answer: String
+
+  """Feedback for the answer."""
+  feedback: String
 
   """Position or index of the answer."""
   index: Int
@@ -908,7 +914,7 @@ type Lawrdle {
   emailCampaign: EmailCampaign
 
   """ID of the email campaign associated with the Lawrdle entry."""
-  emailCampaignId: Int
+  emailCampaignId: String
 
   """Unique identifier for the Lawrdle entry."""
   id: Int
@@ -1523,7 +1529,7 @@ type Post {
   emailCampaign: EmailCampaign
 
   """ID of the email campaign associated with the post."""
-  emailCampaignId: Int
+  emailCampaignId: String
 
   """Unique identifier for the post."""
   id: String
@@ -2060,6 +2066,8 @@ type Quiz {
 }
 
 type QuizIdea {
+  feedback: String
+
   """The core idea or concept of the quiz."""
   idea: String
   matchedAnswer: String
@@ -2075,6 +2083,8 @@ type QuizIdea {
 }
 
 input QuizIdeaInput {
+  feedback: String
+
   """The core idea or concept of the quiz."""
   idea: String
   matchedAnswer: String
@@ -2580,7 +2590,7 @@ type TestResult {
   lessonId: String
 
   """The result of the test (pass/fail)."""
-  result: Boolean
+  result: String
 
   """Details of the student."""
   student: User

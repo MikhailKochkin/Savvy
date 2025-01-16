@@ -475,7 +475,6 @@ const SimulatorInsights = (props) => {
           let coreElement;
           let elementName;
           let innerElements;
-
           if (type === "problem") {
             coreElement = lesson.problems.find((p) => p.id === task.id);
             innerElements = lesson.problems.find((p) => p.id === task.id).steps
@@ -537,7 +536,6 @@ const SimulatorInsights = (props) => {
             elementName = "Forum";
           } else if (type === "construction") {
             coreElement = lesson.constructions.find((c) => c.id === task.id);
-            console.log(coreElement, lesson);
             innerElements = [
               {
                 type: "construction",
@@ -583,8 +581,8 @@ const SimulatorInsights = (props) => {
                             : true) &&
                           (item.result ||
                             item.ideasList?.quizIdeas?.length > 0) &&
-                          item.student.id !== "cjqy9i57l000k0821rj0oo8l4" &&
-                          item.student.id !== lesson.user.id
+                          item.student?.id !== "cjqy9i57l000k0821rj0oo8l4" &&
+                          item.student?.id !== lesson.user.id
                       )
                     ).length;
 

@@ -35,7 +35,7 @@ model BusinessClient {
   id                    String      @id @default(cuid())
   email                 String
   createdAt             DateTime    @default(now())
-  updatedAt             DateTime   @updatedAt
+  updatedAt             DateTime    @updatedAt
   name                  String?
   number                String?
   communication_medium  String?

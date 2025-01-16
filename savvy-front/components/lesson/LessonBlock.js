@@ -638,7 +638,7 @@ const LessonBlock = (props) => {
                 key={data.id}
                 problem={data}
                 complexity={data.complexity}
-                // context={data.context}
+                characters={props.characters}
                 lessonID={lesson.id}
                 name={lesson.name}
                 context={lesson.context}

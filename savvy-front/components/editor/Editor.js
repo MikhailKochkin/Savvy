@@ -57,7 +57,7 @@ import {
   BiCustomize,
   BiTable,
 } from "react-icons/bi";
-import { LuHeading2, LuHeading3 } from "react-icons/lu";
+import { LuHeading2, LuHeading3, LuSquareSquare } from "react-icons/lu";
 
 import { FaQuoteLeft } from "react-icons/fa";
 import { withTable, TableEditor } from "slate-table";
@@ -67,6 +67,8 @@ import CreateQuiz from "../lesson/block_type_quizes/CreateQuiz";
 import SingleQuiz from "../lesson/block_type_quizes/SingleQuiz";
 import CreateNote from "../lesson/block_type_notes/CreateNote";
 import SingleNote from "../lesson/block_type_notes/Note";
+import CreateNewTest from "../lesson/block_type_tests/CreateNewTest";
+import SingleTest from "../lesson/block_type_tests/SingleTest";
 import { Row, PrimaryButton } from "../lesson/styles/DevPageStyles";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
@@ -125,7 +127,7 @@ const ButtonStyle = styled.button`
 `;
 
 const Quiz = styled.span`
-  color: #f2cc8f;
+  color: #736ced;
 `;
 
 const Question = styled.div`
@@ -303,7 +305,7 @@ const serialize = (node) => {
         text = `<span className="editor_note" type="note" text="${node.note}" elementId="${node.elementId}">${text}</span>`;
       }
       if (styles.includes("quiz")) {
-        text = `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
+        text = `<span className="editor_quiz" type="quiz" elementId="${node.elementId}">${text}</span>`;
       }
       if (styles.includes("problem")) {
         text = `<span className="editor_problem" type="problem" elementId="${node.elementId}">${text}</span>`;
@@ -353,7 +355,7 @@ const serialize = (node) => {
     case "problem":
       return `<span className="editor_problem" type="problem" elementId="${node.elementId}">${children}</span>`;
     case "quiz":
-      return `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${children}</span>`;
+      return `<span className="editor_quiz" type="quiz" elementId="${node.elementId}">${children}</span>`;
     case "video":
       return `<iframe src="${escapeHtml(
         node.src
@@ -453,10 +455,7 @@ const deserialize = (el) => {
       "element",
       {
         type: "quiz",
-        question: el.getAttribute("question"),
-        answer: el.getAttribute("answer"),
-        ifRight: el.getAttribute("ifRight"),
-        ifWrong: el.getAttribute("ifWrong"),
+        elementId: el.getAttribute("elementId"),
       },
       children.length > 0 ? children : [{ text: "" }]
     );
@@ -840,6 +839,7 @@ const updateError = (editor, modalData, setModalOpen, notePath) => {
   );
   setModalOpen(false);
 };
+
 const wrapError = (editor, data) => {
   const { selection } = editor;
   // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
@@ -856,6 +856,41 @@ const wrapError = (editor, data) => {
   } else {
     Transforms.wrapNodes(editor, com, { split: true });
     // Collapse the selection to a single point. In ourr case the end point.
+    // Transforms.collapse(editor, { edge: "end" });
+  }
+};
+
+const insertQuiz = (editor, data, setModalData) => {
+  if (editor.selection) {
+    wrapQuiz(editor, data);
+    setModalData(data);
+  }
+};
+
+// const updateQuiz = (editor, modalData, setModalOpen, notePath) => {
+//   Transforms.setNodes(
+//     editor,
+//     { question: modalData.question, answer: modalData.answer },
+//     { at: notePath }
+//   );
+//   setModalOpen(false);
+// };
+
+const wrapQuiz = (editor, data) => {
+  const { selection } = editor;
+  // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
+  const isCollapsed = selection && Range.isCollapsed(selection);
+
+  const com = {
+    type: "quiz",
+    elementId: data,
+    children: isCollapsed ? [{ text: data }] : [],
+  };
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, com);
+  } else {
+    Transforms.wrapNodes(editor, com, { split: true });
     // Transforms.collapse(editor, { edge: "end" });
   }
 };
@@ -966,8 +1001,6 @@ const App = (props) => {
   const [areTableOptionsOpen, setAreTableOptionsOpen] = useState(false);
   const [notePath, setNotePath] = useState(null);
   const [modalQuestionAnswerData, setModalQuestionAnswerData] = useState("");
-  const [modalIfWrongData, setModalIfWrongData] = useState("");
-  const [modalIfRightData, setModalIfRightData] = useState("");
 
   // const editor = useMemo(
   //   () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),
@@ -1037,6 +1070,10 @@ const App = (props) => {
       updateError(editor, modalData, setModalOpen, notePath);
     } else if (type == "createProblem") {
       insertProblem(editor, modalData, setModalOpen, notePath);
+    } else if (type == "quiz") {
+      updateQuiz(editor, modalData, setModalOpen, notePath);
+    } else if (type == "createQuiz") {
+      insertQuiz(editor, modalData, setModalOpen, notePath);
     }
 
     handleCloseModal();
@@ -1077,9 +1114,6 @@ const App = (props) => {
             editor={editor}
             setModalData={setModalData}
             setModalOpen={setModalOpen}
-            setModalQuestionAnswerData={setModalQuestionAnswerData}
-            setModalIfRightData={setModalIfRightData}
-            setModalIfWrongData={setModalIfWrongData}
             setNotePath={setNotePath}
             setType={setType}
             {...props}
@@ -1144,6 +1178,17 @@ const App = (props) => {
             {...props}
           />
         );
+      case "quiz":
+        return (
+          <QuizElement
+            editor={editor}
+            setModalData={setModalData}
+            setModalOpen={setModalOpen}
+            setNotePath={setNotePath}
+            setType={setType}
+            {...props}
+          />
+        );
       default:
         return <DefaultElement {...props} />;
     }
@@ -1195,6 +1240,8 @@ const App = (props) => {
       setModalData(res.data.createQuiz.id);
     } else if (res.data.createNote) {
       setModalData(res.data.createNote.id);
+    } else if (res.data.createNewTest) {
+      setModalData(res.data.createNewTest.id);
     }
   };
 
@@ -1233,7 +1280,9 @@ const App = (props) => {
             {type === "createProblem" &&
               "Write down the ID of the target casestudy"}
           </div>
-
+          {type === "createQuiz" && (
+            <CreateNewTest getResult={getResult} lessonID={props.lessonId} />
+          )}
           {type === "createError" && (
             <CreateQuiz getResult={getResult} lessonID={props.lessonId} />
           )}
@@ -1304,6 +1353,58 @@ const App = (props) => {
               name={props.lesson?.notes.find((q) => q.id == modalData).name}
               user={props.lesson.user.id}
               author={props.lesson.user}
+            />
+          )}
+          {type == "quiz" && (
+            <SingleTest
+              key={modalData}
+              id={modalData}
+              testID={modalData}
+              lessonID={
+                props.lesson?.newTests.find((q) => q.id == modalData).lessonId
+              }
+              question={
+                props.lesson?.newTests.find((q) => q.id == modalData).question
+              }
+              answers={
+                props.lesson?.newTests.find((q) => q.id == modalData).answers
+              }
+              true={
+                props.lesson?.newTests.find((q) => q.id == modalData).correct
+              }
+              ifRight={
+                props.lesson?.newTests.find((q) => q.id == modalData).ifRight
+              }
+              ifWrong={
+                props.lesson?.newTests.find((q) => q.id == modalData).ifWrong
+              }
+              user={
+                props.lesson?.newTests.find((q) => q.id == modalData).user.id
+              }
+              user_name={
+                props.lesson?.newTests.find((q) => q.id == modalData).user
+              }
+              name={props.lesson?.newTests.find((q) => q.id == modalData).name}
+              image={
+                props.lesson?.newTests.find((q) => q.id == modalData).image
+              }
+              complexTestAnswers={
+                props.lesson?.newTests.find((q) => q.id == modalData)
+                  .complexTestAnswers
+              }
+              comments={
+                props.lesson?.newTests.find((q) => q.id == modalData).comments
+              }
+              type={props.lesson?.newTests.find((q) => q.id == modalData).type}
+              goalType={
+                props.lesson?.tests.find((q) => q.id == modalData).goalType
+              }
+              me={props.me}
+              length={Array(
+                props.lesson?.newTests.find((q) => q.id == modalData).correct
+                  .length
+              ).fill(false)}
+              userData={[]}
             />
           )}
           <PrimaryButton
@@ -1502,15 +1603,15 @@ const App = (props) => {
                 >
                   <BiCommentError value={{ className: "react-icons" }} />
                 </ButtonStyle>
-                {/* <ButtonStyle
+                <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    setType("createQuestion");
+                    setType("createQuiz");
                     setModalOpen(true);
                   }}
                 >
-                  <BiCommentCheck value={{ className: "react-icons" }} />
-                </ButtonStyle> */}
+                  <LuSquareSquare value={{ className: "react-icons" }} />
+                </ButtonStyle>
                 <ButtonStyle
                   onMouseDown={(event) => {
                     event.preventDefault();
@@ -1642,6 +1743,10 @@ const Leaf = ({ attributes, children, leaf }) => {
 
   if (leaf.error) {
     children = <ErrorElement>{children}</ErrorElement>;
+  }
+
+  if (leaf.quiz) {
+    children = <QuizElement>{children}</QuizElement>;
   }
 
   if (leaf.text.includes("\n")) {
@@ -1783,14 +1888,11 @@ const QuizElement = ({
       {...props.attributes}
       onMouseDown={(event) => {
         event.preventDefault(); // prevent Slate's default mouse down handling
-        setModalData(props.element.question);
-        setModalQuestionAnswerData(props.element.answer);
-        setModalIfRightData(props.element.ifRight);
-        setModalIfWrongData(props.element.ifWrong);
+        setModalData(props.element.quiz_data || props.element.elementId);
         setModalOpen(true);
         const path = ReactEditor.findPath(editor, props.element);
         setNotePath(path); // store the path
-        setType("updateQuestion");
+        setType("quiz");
       }}
     >
       {props.children}

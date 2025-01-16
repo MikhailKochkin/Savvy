@@ -36,11 +36,24 @@ const Container = styled.div`
 
 const PostPage = (props) => {
   const me = useUser();
+  const { id } = props.query || {};
+  const router = useRouter();
 
+  // If no ID is provided, show an error message or redirect
+  if (!id) {
+    return (
+      <Styles>
+        <Container>
+          <p>Error: No post ID provided.</p>
+          <button onClick={() => router.push("/blog")}>Go to Posts</button>
+        </Container>
+      </Styles>
+    );
+  }
   return (
     <Styles>
       <Container>
-        <Post id={props.query.id} me={me} page={"post"} />
+        <Post id={id} me={me} page={"post"} />
       </Container>
     </Styles>
   );

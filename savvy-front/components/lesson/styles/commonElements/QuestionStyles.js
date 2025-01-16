@@ -281,7 +281,6 @@ export const Circle = styled.div`
   }
   @media (max-width: 800px) {
     margin-left: 5px;
-    display: none;
   }
 `;
 

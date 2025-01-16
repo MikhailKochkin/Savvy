@@ -73,7 +73,6 @@ const OpenQuestion = (props) => {
     image,
     jsonStoryString,
   } = props;
-
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [previousAnswers, setPreviousAnswers] = useState([]); // The answers provided by the student
   // const [correct, setCorrect] = useState(""); // is the answer by the student correct? Used to communicate with the student
@@ -184,35 +183,81 @@ const OpenQuestion = (props) => {
 
     const evaluateAnswers = async (answers) => {
       let results = [];
-
       await Promise.all(
         answers.map(async (el) => {
-          const { result, correctnessLevel, color, comment } =
-            await checkAnswer(
-              e,
-              removeSpecialChars2(el.answer),
-              answer,
-              props.check
-            );
+          // First, check el.answer
+          const initialCheck = await checkAnswer(
+            e,
+            removeSpecialChars2(el.answer),
+            answer,
+            props.check
+          );
 
-          // Ensure correctnessLevel is resolved
-          const resolvedCorrectnessLevel = await correctnessLevel;
+          // Deconstruct to get initial values
+          const {
+            result: initialResult,
+            correctnessLevel: initialCL,
+            color: initialColor,
+            comment: initialComment,
+          } = initialCheck;
 
+          // By default, we'll assume the final check is just the initial one
+          let finalResult = initialResult;
+          let finalCL = initialCL;
+          let finalColor = initialColor;
+          let finalComment = initialComment;
+          let finalAnswer = el.answer;
+
+          // If initial result is <= 65, we check el.relatedAnswers
+          if (initialResult <= 65 && Array.isArray(el.relatedAnswers)) {
+            // Iterate through relatedAnswers and pick the highest result
+            for (const relatedAnswer of el.relatedAnswers) {
+              const relatedCheck = await checkAnswer(
+                e,
+                removeSpecialChars2(relatedAnswer),
+                answer,
+                props.check
+              );
+
+              const {
+                result: relatedResult,
+                correctnessLevel: relatedCL,
+                color: relatedColor,
+                comment: relatedComment,
+              } = relatedCheck;
+
+              // If this related answer's result is better than our current finalResult, replace
+              if (relatedResult > finalResult) {
+                finalResult = relatedResult;
+                finalCL = relatedCL;
+                finalColor = relatedColor;
+                finalComment = relatedComment;
+                finalAnswer = relatedAnswer;
+              }
+            }
+          }
+
+          // Push the best result (between el.answer and relatedAnswers)
           results.push({
-            answer: el.answer,
-            result,
-            correctnessLevel: resolvedCorrectnessLevel,
-            color,
-            comment,
+            answer: finalAnswer,
+            result: finalResult,
+            correctnessLevel: finalCL,
+            color: finalColor,
+            comment: finalComment,
           });
         })
       );
+
       setResults(results);
+
+      // Find the highest result overall
       const highestResult = results.reduce((max, current) =>
         current.result > max.result ? current : max
       );
 
       const { result, correctnessLevel, color, comment } = highestResult;
+
+      // Your existing calls
       setCorrectnessLevel(correctnessLevel);
       handleCorrectnessLevel(correctnessLevel, result, color, comment);
     };

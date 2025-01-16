@@ -8,10 +8,6 @@ import { useTranslation } from "next-i18next";
 import Box from "../functions/Box";
 import SingleQuiz from "../../block_type_quizes/SingleQuiz";
 import {
-  MiniOpenQuestionFrame,
-  MiniAIButton,
-} from "../../styles/commonElements/QuestionStyles";
-import {
   WindowColumn,
   WindowBundle,
   Window,
@@ -57,7 +53,6 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
 const Styles = styled.div`
   width: 100%;
   padding: 100px 50px;
-  /* max-width: 950px; */
   display: flex;
   background: #f8f9fa;
   margin-bottom: 4%;
@@ -149,7 +144,9 @@ const NewConstructor = (props) => {
 
   useEffect(() => {
     if (errorId && !miniQuiz) {
-      let newMiniQuiz = props.lesson.quizes.find((quiz) => quiz.id == errorId);
+      let newMiniQuiz = props.lesson?.quizes?.find(
+        (quiz) => quiz.id == errorId
+      );
       setMiniQuiz(newMiniQuiz);
     } else {
       null;
@@ -162,6 +159,21 @@ const NewConstructor = (props) => {
     // 2. the new data structure? Input?
     setAttempts(attempts + 1);
     if (compareArrays(elements, input)) setIsButtonHidden(true);
+    let updatedInput = [...input].map((el) => {
+      if (el == null) {
+        return null;
+      } else {
+        let newEl = { ...el };
+        delete newEl.__typename;
+        newEl.borders = {
+          top: el.borders.top,
+          right: el.borders.right,
+          bottom: el.borders.bottom,
+          left: el.borders.left,
+        };
+        return newEl;
+      }
+    });
     createConstructionResult({
       variables: {
         answer: "",
@@ -169,15 +181,7 @@ const NewConstructor = (props) => {
         lessonId: lessonID,
         constructionId: construction.id,
         elements: {
-          elements: input.map(({ borders, __typename, ...rest }) => ({
-            borders: {
-              top: borders.top,
-              bottom: borders.bottom,
-              left: borders.left,
-              right: borders.right,
-            },
-            ...rest,
-          })),
+          elements: updatedInput,
         },
       },
     });
@@ -206,18 +210,6 @@ const NewConstructor = (props) => {
     z.setAttribute("data-initial", e.target.getAttribute("comment"));
     z.addEventListener("input", changeState);
     let n = e.target.parentNode.replaceChild(z, e.target);
-    // let button = document.createElement("button");
-    // button.innerHTML = "Check";
-    // button.className = "mini_button";
-    // button.tabIndex = 0;
-    // z.after(button);
-    // let wrong_option = htmlToText(e.target.innerHTML, {
-    //   wordwrap: false,
-    //   uppercase: false,
-    // });
-    // setAnswer("");
-    // setCorrectAnswer(e.target.getAttribute("comment"));
-    // setChosenElement(id);
   };
 
   const passModalOpen = (val) => {
@@ -261,7 +253,7 @@ const NewConstructor = (props) => {
 
           if (e.target.classList.contains("edit")) {
             setErrorAnswer(e.target.innerHTML);
-            let newMiniQuiz = props.lesson.quizes.find(
+            let newMiniQuiz = props.lesson?.quizes?.find(
               (quiz) => quiz.id == e.target.getAttribute("errorid")
             );
             setErrorId(e.target.getAttribute("errorid"));
@@ -307,7 +299,6 @@ const NewConstructor = (props) => {
             <ButtonTwo onClick={(e) => onCheck()}>{t("check")}</ButtonTwo>
           )}
         </Block>
-
         <StyledModal
           isOpen={isModalWindowOpen}
           onBackgroundClick={toggleModal}
@@ -370,11 +361,11 @@ const NewConstructor = (props) => {
                     image={miniQuiz.image}
                     hidden={true}
                     lesson={props.lesson}
-                    lessonID={props.lesson.id}
+                    lessonID={props.lesson?.id}
                     quizID={miniQuiz.id}
                     user={miniQuiz.user.id}
                     user_name={miniQuiz.user}
-                    author={props.lesson.user}
+                    author={props.lesson?.user}
                     miniforum={null}
                     getResult={null}
                     passResultToTextEditor={passResultToTextEditor}

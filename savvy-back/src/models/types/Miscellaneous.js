@@ -184,7 +184,7 @@ const Lawrdle = objectType({
       type: "EmailCampaign",
       description: "Email campaign associated with the Lawrdle entry.",
     });
-    t.int("emailCampaignId", {
+    t.string("emailCampaignId", {
       description:
         "ID of the email campaign associated with the Lawrdle entry.",
     });

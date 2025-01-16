@@ -277,6 +277,7 @@ const UpdateTest = (props) => {
             <option value="TEST">{t("test")}</option>
             <option value="FORM">{t("form")}</option>
             <option value="BRANCH">{t("Branch")}</option>
+            <option value="MINI">{t("mini")}</option>
           </select>
           {/* <div className="explainer">The name will be used for navigation</div> */}
         </div>

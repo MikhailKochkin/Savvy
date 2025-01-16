@@ -8,6 +8,7 @@ import Longread from "./types/Longread";
 import Email from "./types/Email";
 import MiniNote from "./types/MiniNote";
 import Picture from "./types/Picture";
+import Doc from "./types/Doc";
 import { SecondaryButton } from "../styles/DevPageStyles";
 
 const Buttons = styled.div`
@@ -48,7 +49,6 @@ const ArrowContainer = styled.div`
 const Note = (props) => {
   const [update, setUpdate] = useState(false);
   const [moved, setMoved] = useState(false);
-  const [isRevealed, setIsRevealed] = useState(!props.note.isSecret);
   const { t } = useTranslation("lesson");
 
   const push = () => {
@@ -64,6 +64,7 @@ const Note = (props) => {
     author,
     text,
     note,
+    type,
     name,
     complexity,
     id,
@@ -114,7 +115,6 @@ const Note = (props) => {
           note?.type?.toLowerCase() == "library" ? (
             <Longread
               story={story}
-              isRevealed={isRevealed}
               text={text}
               id={id}
               getData={getData}
@@ -128,12 +128,27 @@ const Note = (props) => {
           {note?.type?.toLowerCase() == "email" ? (
             <Email
               story={story}
-              isRevealed={isRevealed}
               text={text}
               id={id}
               name={name}
               instructorName={instructorName}
               getData={getData}
+              isFinal={isFinal}
+              problem={props.problem}
+              note={note}
+              experience={props.experience}
+              total={props.total}
+              author={author}
+              me={me}
+            />
+          ) : null}{" "}
+          {note?.type?.toLowerCase() == "doc" ? (
+            <Doc
+              story={story}
+              text={text}
+              id={id}
+              name={name}
+              instructorName={instructorName}
               isFinal={isFinal}
               problem={props.problem}
               note={note}
@@ -165,18 +180,18 @@ const Note = (props) => {
         </ArrowContainer>
       )}
       {/* {miniforum && <Chat me={me} miniforum={miniforum} />} */}
-      {update && !story && !exam && (
+      {update && !story && !exam && note && (
         <UpdateNote
           text={text}
-          isSecret={note.isSecret}
+          isSecret={note?.isSecret}
           complexity={complexity}
           id={id}
-          type={note.type}
+          type={note?.type}
           next={props.next}
-          vertical_image={note.vertical_image}
-          horizontal_image={note.horizontal_image}
+          vertical_image={note?.vertical_image}
+          horizontal_image={note?.horizontal_image}
           name={name}
-          instructorName={note.instructorName}
+          instructorName={note?.instructorName}
           lessonID={lessonID}
           getResult={getResult}
           switchUpdate={switchUpdate}

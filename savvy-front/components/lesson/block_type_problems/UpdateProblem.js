@@ -288,6 +288,7 @@ const UpdateProblem = (props) => {
           <DndProvider backend={HTML5Backend}>
             <CanvasProblemBuilder
               lesson={props.lesson}
+              characters={props.characters}
               me={props.me}
               lessonID={lesson.id}
               getSteps={getSteps}

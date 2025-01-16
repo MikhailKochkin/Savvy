@@ -236,7 +236,7 @@ const LessonBuilder = (props) => {
         content = lesson.quizes.find((quiz) => quiz.id === item.id).question;
       } else if (item.type === "NewTest") {
         content = lesson.newTests.find((newTest) => newTest.id === item.id)
-          .question[0];
+          ?.question[0];
       }
       return {
         type: item.type,

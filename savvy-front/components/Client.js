@@ -18,7 +18,7 @@ import Loading from "./layout/Loading";
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION(
     $id: String!
-    $communication_history: ClientMessages
+    $communication_history: CommunicationHistoryInput
   ) {
     sendBusinessClientEmail(
       id: $id
@@ -212,9 +212,8 @@ const Client = (props) => {
   const [emailMessage, setEmailMessage] = useState(null);
   const [generating, setGenerating] = useState(false);
 
-  const [sendBusinessClientEmail, { updated_data }] = useMutation(
-    UPDATE_CLIENT_MUTATION
-  );
+  const [sendBusinessClientEmail, { updated_data, sending, error }] =
+    useMutation(UPDATE_CLIENT_MUTATION);
 
   const [updateBusinessClient, { updated_data2 }] = useMutation(
     UPDATE_CLIENT_MUTATION2
@@ -242,16 +241,26 @@ const Client = (props) => {
 
   const generateEmail = async (e) => {
     e.preventDefault();
-    console.log("messaging", JSON.stringify(messaging, null, 2));
-    console.log(
-      "email_history",
-      props.communication_history.messages.length > 0
-        ? JSON.stringify(props.communication_history.messages)
-        : null
-    );
 
     let updated_messaging = messaging;
-    delete updated_messaging.messages;
+
+    let good_emails_examples = [
+      `
+      // Email for L&D team
+      <p>Hi {{Name}}, since you work in legal L&D,</p>
+      <p>You've likely developed a few training programs recently and must have thought about how to go from theory to practice in them (commercial awareness and drafting skills are useless unless used in the work).</p>
+      <p>At BeSavvy, we turn existing learning materials (like PowerPoint presentations) into interactive simulators in just a few hours. These simulators help lawyers develop new skills in a safe, repeatable environment. Practice makes permanent, right?</p>
+      <p>Some London law firms have already used our platform to create training activities for vac schemes. The feedback? “A unique learning experience I’ve never had before.”</p>
+      <p>Would you like me to send you a quick presentaion showing how it works?</p>
+      `,
+      `
+      // Email for Early Talent Team
+      <p>Dear {{Name}},</p>
+      <p>You've likely been busy lately finding and assessing candidates for {{law firm name}} next vac scheme.</p>
+      <p>We at BeSavvy build AI-powered virtual job simulations to help with thay. You can use simualtions to help candidates (virally) find your law firm, go through primary assessment and learn more about {{law firm name}}.</p>
+      <p>Maybe you can find such a tool useful. Could I send a product deck?</p>
+      `,
+    ];
 
     let prompt = `
       You are writing a cold email to ${props.name} ${props.surname} (${
@@ -268,11 +277,21 @@ const Client = (props) => {
       )}
       The message that you should convey in this email is: ${emailMessage}
       These are your previous emails: ${
+        props.communication_history &&
         props.communication_history.messages.length > 0
           ? JSON.stringify(props.communication_history.messages)
           : null
       }
-      
+
+      – Use these good emails examples to structure your email: ${good_emails_examples.join(
+        " "
+      )}
+      – Make very sentence short and converstational. For example, instead of 
+      "With the competition for top talent in the legal sector, I wanted to share how BeSavvy can support your efforts in developing essential legal skills."
+      use "Competition for top talent in London is fiercer than ever. That’s why it’s worth knowing about tools like BeSavvy."
+      – Avoid generic phrases such as "I hope this message finds you well.". 
+      – Limit every paragraph to 2 sentences.
+
       Generate the text of the email in the following JSON format:
 
       {
@@ -282,6 +301,7 @@ const Client = (props) => {
         }
       }
     `;
+
     console.log("prompt", prompt);
 
     try {
@@ -379,7 +399,18 @@ const Client = (props) => {
       </div>
       <div className="comment">
         <h4>Email</h4>
-
+        <Row>
+          <div className="description">Last email</div>
+          <div className="action_area">
+            <div className="element_info">
+              {props.communication_history?.messages?.length > 0
+                ? props.communication_history.messages[
+                    props.communication_history.messages.length - 1
+                  ].date
+                : ``}
+            </div>
+          </div>
+        </Row>
         <Row>
           <div className="description">Target audience</div>
           <div className="action_area">
@@ -407,11 +438,10 @@ const Client = (props) => {
           <div className="action_area">
             <select
               onChange={(e) => setEmailGoal(e.target.value)}
-              value={
-                "First email to the person that we have never met before, designed to find out if our messaging resonates with them."
-              }
+              value={emailGoal}
             >
               {/* First Email */}
+              <option value={null}>Choose</option>
               <option
                 value={
                   "First email to the person that we have never met before, designed to find out if our messaging resonates with them."
@@ -466,7 +496,6 @@ const Client = (props) => {
                 onChange={(e) => setEmailMessage(e.target.value)}
                 value={emailMessage}
               >
-                {console.log("messaging?.messages", messaging)}
                 {messaging?.messages &&
                   messaging?.messages.map((m, i) => (
                     <option key={"email_message_" + i} value={m}>
@@ -524,14 +553,18 @@ const Client = (props) => {
               variables: {
                 id: props.id,
                 communication_history: {
-                  messages: mess,
+                  messages: mess.map((m) => ({
+                    subject: m.subject,
+                    message: m.message,
+                    date: m.date,
+                  })),
                 },
               },
             });
             alert("Sent!");
           }}
         >
-          Send
+          {sending ? "Sending..." : "Send"}
         </ActionButton>
         {messaging && (
           <SecondaryButton

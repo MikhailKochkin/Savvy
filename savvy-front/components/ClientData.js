@@ -118,10 +118,9 @@ const ClientData = (props) => {
       value_proposition:
         "BeSavvy offers practical training simulators that standardise learning, enhance skill development, and deliver measurable outcomes while reducing the time required for traditional methods.",
       messages: [
-        "Track and measure progress to ensure effective learning outcomes.",
-        "Enhance skill development while minimising time away from billable work.",
-        "Prepare lawyers for real-world scenarios with practical simulations.",
-        "Enable the approach `practice makes permanent’",
+        "Enhance skill development through simulators while minimising time away from billable work of both senior and junior lawyers.",
+        "Accelerate the learning curve for junior lawyers by immersing them in real-world scenarios through practical simulations.",
+        "Adopt the principle ‘practice makes permanent’ with interactive simulators that act as personal mentors, enabling repeated practice of real-world tasks.",
       ],
     },
     {
@@ -250,6 +249,7 @@ const ClientData = (props) => {
             ))}
           </Buttons>
         </div>
+        {console.log("messaging", messaging)}
         {currentItems.map((c, i) => (
           <Client
             id={c.id}

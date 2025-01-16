@@ -30,6 +30,7 @@ declare global {
 export interface NexusGenInputs {
   AnswerElementInput: { // input type
     answer?: string | null; // String
+    feedback?: string | null; // String
     index?: number | null; // Int
     next_id?: string | null; // String
     next_type?: string | null; // String
@@ -267,6 +268,7 @@ export interface NexusGenInputs {
     questElements?: Array<NexusGenInputs['QuestElement'] | null> | null; // [QuestElement]
   }
   QuizIdeaInput: { // input type
+    feedback?: string | null; // String
     idea?: string | null; // String
     matchedAnswer?: string | null; // String
     next_id?: string | null; // String
@@ -331,6 +333,7 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   AnswerElement: { // root type
     answer?: string | null; // String
+    feedback?: string | null; // String
     index?: number | null; // Int
     next_id?: string | null; // String
     next_type?: string | null; // String
@@ -713,7 +716,7 @@ export interface NexusGenObjects {
     coursePageId?: number | null; // Int
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     emailCampaign?: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
-    emailCampaignId?: number | null; // Int
+    emailCampaignId?: string | null; // String
     id?: number | null; // Int
     leadin?: string | null; // String
     lessonId?: string | null; // String
@@ -941,7 +944,7 @@ export interface NexusGenObjects {
     coursePage?: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     emailCampaign?: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
-    emailCampaignId?: number | null; // Int
+    emailCampaignId?: string | null; // String
     id?: string | null; // String
     image?: string | null; // String
     language?: string | null; // String
@@ -1059,6 +1062,7 @@ export interface NexusGenObjects {
     userId?: number | null; // Int
   }
   QuizIdea: { // root type
+    feedback?: string | null; // String
     idea?: string | null; // String
     matchedAnswer?: string | null; // String
     next_id?: string | null; // String
@@ -1270,7 +1274,7 @@ export interface NexusGenObjects {
     lesson?: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID?: string | null; // String
     lessonId?: string | null; // String
-    result?: boolean | null; // Boolean
+    result?: string | null; // String
     student?: NexusGenRootTypes['User'] | null; // User
     studentId?: string | null; // String
     test?: NexusGenRootTypes['NewTest'] | null; // NewTest
@@ -1396,6 +1400,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   AnswerElement: { // field return type
     answer: string | null; // String
+    feedback: string | null; // String
     index: number | null; // Int
     next_id: string | null; // String
     next_type: string | null; // String
@@ -1778,7 +1783,7 @@ export interface NexusGenFieldTypes {
     coursePageId: number | null; // Int
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     emailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
-    emailCampaignId: number | null; // Int
+    emailCampaignId: string | null; // String
     id: number | null; // Int
     leadin: string | null; // String
     lessonId: string | null; // String
@@ -2135,7 +2140,7 @@ export interface NexusGenFieldTypes {
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     emailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
-    emailCampaignId: number | null; // Int
+    emailCampaignId: string | null; // String
     id: string | null; // String
     image: string | null; // String
     language: string | null; // String
@@ -2314,6 +2319,7 @@ export interface NexusGenFieldTypes {
     userId: number | null; // Int
   }
   QuizIdea: { // field return type
+    feedback: string | null; // String
     idea: string | null; // String
     matchedAnswer: string | null; // String
     next_id: string | null; // String
@@ -2525,7 +2531,7 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: string | null; // String
     lessonId: string | null; // String
-    result: boolean | null; // Boolean
+    result: string | null; // String
     student: NexusGenRootTypes['User'] | null; // User
     studentId: string | null; // String
     test: NexusGenRootTypes['NewTest'] | null; // NewTest
@@ -2641,6 +2647,7 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   AnswerElement: { // field return type name
     answer: 'String'
+    feedback: 'String'
     index: 'Int'
     next_id: 'String'
     next_type: 'String'
@@ -3023,7 +3030,7 @@ export interface NexusGenFieldTypeNames {
     coursePageId: 'Int'
     createdAt: 'DateTime'
     emailCampaign: 'EmailCampaign'
-    emailCampaignId: 'Int'
+    emailCampaignId: 'String'
     id: 'Int'
     leadin: 'String'
     lessonId: 'String'
@@ -3380,7 +3387,7 @@ export interface NexusGenFieldTypeNames {
     coursePage: 'CoursePage'
     createdAt: 'DateTime'
     emailCampaign: 'EmailCampaign'
-    emailCampaignId: 'Int'
+    emailCampaignId: 'String'
     id: 'String'
     image: 'String'
     language: 'String'
@@ -3559,6 +3566,7 @@ export interface NexusGenFieldTypeNames {
     userId: 'Int'
   }
   QuizIdea: { // field return type name
+    feedback: 'String'
     idea: 'String'
     matchedAnswer: 'String'
     next_id: 'String'
@@ -3770,7 +3778,7 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonID: 'String'
     lessonId: 'String'
-    result: 'Boolean'
+    result: 'String'
     student: 'User'
     studentId: 'String'
     test: 'NewTest'
