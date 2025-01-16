@@ -34,7 +34,6 @@ const LessonPage = (props) => {
   return (
     <div>
       {type === "old" && <OldSingleLesson id={id} />}
-      {props.query.house.tree}
       {type === "regular" && <SingleLesson id={id} />}
 
       {type === "story" && (
