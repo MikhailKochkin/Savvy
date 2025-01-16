@@ -74,14 +74,6 @@ const SimpleButton = styled.button`
   }
 `;
 
-Error.getInitialProps = async (contextData) => {
-  await Sentry.captureUnderscoreErrorException(contextData);
-
-  // ...other getInitialProps code
-
-  return Error.getInitialProps(contextData);
-};
-
 const Error = ({ statusCode }) => {
   const [isErrorMessageSent, setIsErrorMessageSent] = useState(false);
   const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
@@ -143,9 +135,10 @@ const Error = ({ statusCode }) => {
   );
 };
 
-Error.getInitialProps = ({ res, err }) => {
+Error.getInitialProps = async ({ res, err }) => {
+  await Sentry.captureUnderscoreErrorException(contextData);
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return { statusCode };
+  return Error.getInitialProps(contextData);
 };
 
 export default Error;
