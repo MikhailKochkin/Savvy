@@ -1,9 +1,10 @@
+import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import SingleLesson from "../components/lesson/SingleLesson";
 import Challenge from "../components/lesson/lesson_type_challenge//Challenge";
 import OldSingleLesson from "../components/lesson/OldSingleLesson";
 import SimulatorAnalyticsDataLoad from "../components/stats/simulatorStats/SimulatorAnalyticsDataLoad";
-import dynamic from "next/dynamic";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
@@ -33,7 +34,7 @@ const LessonPage = (props) => {
   return (
     <div>
       {type === "old" && <OldSingleLesson id={id} />}
-
+      {props.query.house.tree}
       {type === "regular" && <SingleLesson id={id} />}
 
       {type === "story" && (

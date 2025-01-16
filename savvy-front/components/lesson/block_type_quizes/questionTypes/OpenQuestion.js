@@ -181,10 +181,10 @@ const OpenQuestion = (props) => {
       }
     };
 
-    const evaluateAnswers = async (answers) => {
+    const evaluateAnswers = async (sampleAnswers) => {
       let results = [];
       await Promise.all(
-        answers.map(async (el) => {
+        sampleAnswers.map(async (el) => {
           // First, check el.answer
           const initialCheck = await checkAnswer(
             e,
@@ -192,6 +192,8 @@ const OpenQuestion = (props) => {
             answer,
             props.check
           );
+
+          console.log("initialCheck", initialCheck, el.answer);
 
           // Deconstruct to get initial values
           const {
