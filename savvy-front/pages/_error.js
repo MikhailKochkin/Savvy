@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import Link from "next/link";
+import * as Sentry from "@sentry/nextjs";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
