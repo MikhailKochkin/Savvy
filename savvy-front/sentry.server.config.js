@@ -8,5 +8,5 @@ Sentry.init({
   dsn: "https://7c727bf448a957850bdefe2eed062c5e@o4508652768722944.ingest.de.sentry.io/4508652770885712",
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: true,
+  debug: false,
 });
