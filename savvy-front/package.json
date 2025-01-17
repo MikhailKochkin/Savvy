@@ -23,6 +23,7 @@
     "@babel/runtime": "^7.11.2",
     "@emotion/css": "^11.13.5",
     "@next/third-parties": "^15.1.2",
+    "@sentry/nextjs": "^8.50.0",
     "@tcb-web/create-credit": "^2.1.4",
     "@xyflow/react": "^12.3.6",
     "apollo-link-error": "^1.1.13",

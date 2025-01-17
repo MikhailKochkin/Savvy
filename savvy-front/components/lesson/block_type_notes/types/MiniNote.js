@@ -23,7 +23,7 @@ const Container = styled.div`
 `;
 
 const NoteStyles = styled.div`
-  max-width: 660px;
+  width: 100%;
   background: #fff;
   margin: 2% 0 0 0;
   .video-container {

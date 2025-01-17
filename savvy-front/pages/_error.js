@@ -132,9 +132,11 @@ const Error = ({ statusCode, err }) => {
   );
 };
 
-Error.getInitialProps = async ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return { statusCode, err };
+Error.getInitialProps = async (contextData) => {
+  await Sentry.captureUnderscoreErrorException(contextData);
+  // const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+  // return { statusCode, err };
+  return Error.getInitialProps(contextData);
 };
 
 export default Error;
