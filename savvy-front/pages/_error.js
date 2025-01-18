@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import Link from "next/link";
-import * as Sentry from "@sentry/nextjs";
+import { captureException, flush } from "@sentry/nextjs";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -137,8 +137,8 @@ Error.getInitialProps = async (contextData) => {
 
   // Capture the error in Sentry
   if (err) {
-    await Sentry.captureException(err);
-    await Sentry.flush(2000); // Ensure the error is sent before continuing
+    await captureException(err);
+    await flush(2000); // Ensure the error is sent before continuing
   }
 
   return { statusCode, err };

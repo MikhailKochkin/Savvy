@@ -582,19 +582,25 @@ const Subscription = (props) => {
   }, [props.referrerId]);
 
   const getInstallments = (price) => {
-    tinkoff.create({
-      shopId: process.env.NEXT_PUBLIC_SHOP_ID,
-      showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
-      items: [
-        {
-          name: "Подписка на BeSavvy+ на 6 месяцев",
-          price: price,
-          quantity: 1,
-        },
-      ],
-      sum: price,
-      promoCode: "installment_0_0_6_7",
-    });
+    if (typeof window !== "undefined") {
+      // Client-side code
+      tinkoff.create({
+        shopId: process.env.NEXT_PUBLIC_SHOP_ID,
+        showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
+        items: [
+          {
+            name: "Подписка на BeSavvy+ на 6 месяцев",
+            price: price,
+            quantity: 1,
+          },
+        ],
+        sum: price,
+        promoCode: "installment_0_0_6_7",
+      });
+    } else {
+      console.error("Tinkoff logic cannot run on the server.");
+    }
+
     if (props.me) {
       createOrder({
         variables: {

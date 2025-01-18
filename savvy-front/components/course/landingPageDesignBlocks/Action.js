@@ -424,25 +424,25 @@ const Action = (props) => {
     ],
   });
 
-  const getInstallments = () => {
-    tinkoff.create({
-      shopId: process.env.NEXT_PUBLIC_SHOP_ID,
-      showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
-      items: [{ name: props.coursePage.title, price: price, quantity: 1 }],
-      sum: price,
-      promoCode: "installment_0_0_9_9,8",
-    });
-    if (me) {
-      createOrder({
-        variables: {
-          coursePageId: coursePage.id,
-          price: parseInt(price),
-          userId: me.id,
-          comment: "Заявка на рассрочку",
-        },
-      });
-    }
-  };
+  // const getInstallments = () => {
+  //   tinkoff.create({
+  //     shopId: process.env.NEXT_PUBLIC_SHOP_ID,
+  //     showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
+  //     items: [{ name: props.coursePage.title, price: price, quantity: 1 }],
+  //     sum: price,
+  //     promoCode: "installment_0_0_9_9,8",
+  //   });
+  //   if (me) {
+  //     createOrder({
+  //       variables: {
+  //         coursePageId: coursePage.id,
+  //         price: parseInt(price),
+  //         userId: me.id,
+  //         comment: "Заявка на рассрочку",
+  //       },
+  //     });
+  //   }
+  // };
 
   let first_open_lesson = props.coursePage.lessons
     .filter((l) => l.type !== "CHALLENGE")

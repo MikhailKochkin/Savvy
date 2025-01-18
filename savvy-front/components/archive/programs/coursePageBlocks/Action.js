@@ -511,25 +511,6 @@ const Action = (props) => {
     { data: order_data, loading: loading_data, error: error_data },
   ] = useMutation(CREATE_ORDER_MUTATION);
 
-  const getInstallments = () => {
-    tinkoff.create({
-      shopId: "e8ec52dc-846a-42e9-9394-8697300599e8",
-      showcaseId: "571229ce-512f-4741-a513-4b8180fb4446",
-      items: [{ name: props.coursePage.title, price: price, quantity: 1 }],
-      sum: price,
-    });
-    if (me) {
-      createOrder({
-        variables: {
-          coursePageId: coursePage.id,
-          price: parseInt(price),
-          userId: me.id,
-          comment: "Заявка на рассрочку",
-        },
-      });
-    }
-  };
-
   const d = props.data;
   const { me } = props;
 

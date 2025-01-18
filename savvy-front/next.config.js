@@ -2,7 +2,7 @@
 
 const { i18n } = require("./next-i18next.config");
 
-module.exports = {
+const nextConfig = {
   // reactStrictMode: true,
   // swcMinify: true,
   compiler: {
@@ -18,7 +18,7 @@ module.exports = {
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
-module.exports = withSentryConfig(module.exports, {
+const sentryWebpackPluginOptions = {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
@@ -43,6 +43,11 @@ module.exports = withSentryConfig(module.exports, {
   // Hides source maps from generated client bundles
   hideSourceMaps: true,
 
+  // Automatically delete source maps after upload
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
+
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
 
@@ -51,4 +56,6 @@ module.exports = withSentryConfig(module.exports, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
-});
+};
+
+module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions);
