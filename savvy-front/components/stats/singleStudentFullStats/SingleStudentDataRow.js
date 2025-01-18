@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useMutation, useLazyQuery, gql } from "@apollo/client";
 import { Mutation } from "@apollo/client/react/components";
 import dynamic from "next/dynamic";
-import moment from "moment";
+import dayjs from "dayjs";
 import SingleStudentInDepthStats from "./SingleStudentInDepthStats";
 import StudentSimulatorJourney from "./StudentSimulatorJourney";
 
@@ -425,8 +425,6 @@ const SingleStudentDataRow = ({
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   const [sendEmailToStudent] = useMutation(UPDATE_COURSE_VISIT_MUTATION);
 
-  moment.locale("ru");
-
   const sorted_lessons = results
     .slice()
     .sort((a, b) => a.lesson.number - b.lesson.number);
@@ -547,15 +545,15 @@ const SingleStudentDataRow = ({
           className="div5"
           date={
             courseVisit &&
-            courseVisit.createdAt > moment().subtract(2, "months").format()
+            courseVisit.createdAt > dayjs().subtract(2, "months").format()
           }
         >
           {type === "lesson_analytics"
             ? results.length > 0
-              ? moment(results[0].createdAt).format("Do MMMM YYYY")
+              ? dayjs(results[0].createdAt).format("Do MMMM YYYY")
               : "Undefined"
             : courseVisit
-            ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
+            ? dayjs(courseVisit.createdAt).format("Do MMMM YYYY")
             : "Undefined"}
         </RegDate>
       </Header>
@@ -616,7 +614,7 @@ const SingleStudentDataRow = ({
               {courseVisit &&
                 courseVisit.reminders &&
                 courseVisit.reminders.map((r) => (
-                  <li key={r}>{moment(r).format("LLL")}</li>
+                  <li key={r}>{dayjs(r).format("LLL")}</li>
                 ))}
             </EmailBlock>
           )}
@@ -655,10 +653,10 @@ const SingleStudentDataRow = ({
                     date={
                       type !== "lesson_analytics"
                         ? courseVisit
-                          ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
+                          ? dayjs(courseVisit.createdAt).format("Do MMMM YYYY")
                           : "Undefined"
                         : results.length > 0
-                        ? moment(results[0].createdAt).format("Do MMMM YYYY")
+                        ? dayjs(results[0].createdAt).format("Do MMMM YYYY")
                         : "Undefined"
                     }
                   />

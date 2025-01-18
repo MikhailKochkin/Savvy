@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import moment from "moment";
-import parse from "html-react-parser";
+import dayjs from "dayjs";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -330,7 +329,7 @@ const BannerOffer = (props) => {
   //   };
   // }, []);
 
-  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
+  router.locale == "ru" ? dayjs.locale("ru") : dayjs.locale("en");
   return (
     <Styles id="offer_id" ref={bannerRef}>
       <BiggerBlock>

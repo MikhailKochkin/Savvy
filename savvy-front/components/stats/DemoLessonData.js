@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-import moment from "moment";
+import dayjs from "dayjs";
 import { TailSpin } from "react-loader-spinner";
 import Loading from "../layout/Loading";
 import { useLazyQuery, gql, useMutation } from "@apollo/client";
@@ -415,7 +415,6 @@ const LessonData = (props) => {
   const [generating, setGenerating] = useState(false);
 
   const { index, lesson, student, coursePageID, res } = props;
-  moment.locale("ru");
   const [getData, { loading, error, data }] = useLazyQuery(GET_RESULTS);
   const [checkAssignment, { data: data1 }] = useMutation(CHECK_MUTATION);
   useEffect(() => {
@@ -784,11 +783,11 @@ const LessonData = (props) => {
           </div>
           <div className="div5">
             {/* Первый заход:  */}
-            {moment(res[0].createdAt).format("DD.MM.YYYY – h:mm A")}
+            {dayjs(res[0].createdAt).format("DD.MM.YYYY – h:mm A")}
           </div>
           <div className="div6">
             {/* Последний заход:  */}
-            {moment(res[0].updatedAt).format("DD.MM.YYYY – h:mm A")}
+            {dayjs(res[0].updatedAt).format("DD.MM.YYYY – h:mm A")}
           </div>
           <div className="div7">
             <SimpleButton

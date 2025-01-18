@@ -1,8 +1,6 @@
 import { useState } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 import styled from "styled-components";
-
-moment.locale("ru");
 
 const Styles = styled.div`
   margin-bottom: 20px;
@@ -34,7 +32,7 @@ const UserData = (props) => {
     <Styles>
       <li>
         {d.name} {d.surname} – {d.country} –{" "}
-        {moment(d.updatedAt).format("DD.MM.YY HH:mm:ss")}
+        {dayjs(d.updatedAt).format("DD.MM.YY HH:mm:ss")}
         <div>They study:</div>
         <div>
           <ul>

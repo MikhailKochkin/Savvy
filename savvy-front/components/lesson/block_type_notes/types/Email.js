@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import parse from "html-react-parser";
 
 const Body = styled.div`
@@ -108,9 +108,8 @@ const EmailInfo = styled.div`
 `;
 
 const Email = (props) => {
-  moment.locale("ru");
   function getFormattedToday() {
-    return moment().format("D MMMM YYYY [at] HH:mm");
+    return dayjs().format("D MMMM YYYY [at] HH:mm");
   }
 
   const todaysDate = useMemo(() => getFormattedToday(), []);

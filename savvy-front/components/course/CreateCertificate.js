@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import Router from "next/router";
 import { useTranslation } from "next-i18next";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const CREATE_CERT_MUTATION = gql`
   mutation CREATE_CERT_MUTATION($coursePageId: String!, $studentId: String!) {
@@ -113,8 +113,6 @@ const CreateCertificate = (props) => {
   const [createCertificate, { data, loading, error }] =
     useMutation(CREATE_CERT_MUTATION);
   const { t } = useTranslation("course");
-
-  moment.locale("ru");
 
   return (
     <button

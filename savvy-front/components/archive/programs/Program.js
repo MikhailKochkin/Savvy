@@ -15,7 +15,7 @@ import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
 import Advantages from "./coursePageBlocks/Advantages";
 import BottomLine from "./coursePageBlocks/BottomLine";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -120,10 +120,9 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 
 const Program = (props) => {
   const me = useUser();
-  moment.locale("ru");
 
-  var today = moment();
-  var tomorrow = moment(today).add(3, "days");
+  var today = dayjs();
+  var tomorrow = dayjs(today).add(3, "days");
 
   var dates = [
     "March 11, 2022 20:00:00",
@@ -147,8 +146,8 @@ const Program = (props) => {
     }
   };
 
-  let next_date = moment(chooseDate(moment())).format("DD MMMM");
-  let next_date2 = moment(chooseDate(moment())).format("DD.MM");
+  let next_date = dayjs(chooseDate(dayjs())).format("DD MMMM");
+  let next_date2 = dayjs(chooseDate(dayjs())).format("DD.MM");
   const programs = [
     {
       header: `Изучите <span>корпоративное право</span> на реальных кейсах от юристов-практиков`,

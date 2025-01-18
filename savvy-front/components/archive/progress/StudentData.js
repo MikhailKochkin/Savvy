@@ -1,12 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const StudentData = (props) => {
   const [open, setOpen] = useState(false);
 
   const { s, results, courseVisits } = props;
-  moment.locale("ru");
 
   return (
     <div>
@@ -42,7 +41,7 @@ const StudentData = (props) => {
                         ? new_ratings.join(", ")
                         : "Нет оценки"}
                     </b>{" "}
-                    –{moment(r.updatedAt).format("LLL")}
+                    –{dayjs(r.updatedAt).format("LLL")}
                   </div>
                 );
               })}

@@ -6,7 +6,7 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
-import moment from "moment";
+import dayjs from "dayjs";
 import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
 
@@ -442,8 +442,6 @@ const Action = (props) => {
   if (me) {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
   }
-
-  moment.locale("ru");
 
   let in_two_days = new Date();
   in_two_days.setDate(in_two_days.getDate() + 2);

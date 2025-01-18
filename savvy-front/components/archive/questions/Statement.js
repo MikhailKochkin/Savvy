@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 const UPDATE_STATEMENT_MUTATION = gql`
   mutation UPDATE_STATEMENT_MUTATION($comments: [String!], $id: String!) {
@@ -177,7 +177,6 @@ const Statement = (props) => {
     UPDATE_STATEMENT_MUTATION
   );
   const { s, author, me } = props;
-  moment.locale("ru");
 
   return (
     <Comment>
@@ -192,7 +191,7 @@ const Statement = (props) => {
         </IconBlock>{" "}
         <div className="answer_text">
           <div>{parse(s.text)}</div>
-          <span>{moment(s.createdAt).format("LLL")}</span>
+          <span>{dayjs(s.createdAt).format("LLL")}</span>
         </div>
       </div>
       <div className="comment">

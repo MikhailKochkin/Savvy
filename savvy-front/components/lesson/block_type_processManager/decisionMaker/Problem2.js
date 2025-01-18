@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import NumericTool from "./NumericTool";
-import { Line } from "react-chartjs-2";
+// import { Line } from "react-chartjs-2";
 
 const Styles = styled.div`
   display: flex;
@@ -215,9 +215,9 @@ const Simulator = (props) => {
               <b>{Number(result.toFixed(2))}$</b>
             </p>
           </Block2>
-          <div className="graph-container">
+          {/* <div className="graph-container">
             <Line redraw={true} data={data} options={options} />
-          </div>
+          </div> */}
         </Graphics>
       </Container>
     </Styles>

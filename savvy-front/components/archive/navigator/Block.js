@@ -3,7 +3,6 @@ import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import * as EmailValidator from "email-validator";
-import moment from "moment";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
@@ -429,7 +428,6 @@ const Block = (props) => {
     new Array(props.options.length).fill(false)
   );
 
-  moment.locale("ru");
   const { asPath } = useRouter();
 
   const [createBusinessClient, { data, loading, error }] =
@@ -493,7 +491,7 @@ const Block = (props) => {
           new Date(today.toISOString())
         );
         if (date_result == 1) {
-          text = `<p>Следующий поток стартует ${moment(
+          text = `<p>Следующий поток стартует ${dayjs(
             my_course.nextStart
           ).format("LL")} </p>`;
         } else {

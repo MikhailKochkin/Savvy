@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import moment from "moment";
-import Link from "next/link";
 import ReactResizeDetector from "react-resize-detector";
-import parse from 'html-react-parser';
-
+import parse from "html-react-parser";
 
 const Banner = styled.div`
   width: 100%;

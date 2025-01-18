@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const Styles = styled.div`
   width: 46%;
@@ -118,7 +118,7 @@ const PostCard = (props) => {
               <p>
                 {author.name} {author.surname}
               </p>
-              <p>{moment(createdAt).format("DD MMM YYYY")}</p>
+              <p>{dayjs(createdAt).format("DD MMM YYYY")}</p>
             </div>
             <div>
               {" "}

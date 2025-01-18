@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import parse from "html-react-parser";
 import NextBlock from "./NextBlock";
 
@@ -96,8 +96,6 @@ const QuizResult = (props) => {
     testResults,
     problemResults,
   } = props;
-  moment.locale("ru");
-
   const slide = () => {
     var my_element = document.getElementById("nextBlock");
     my_element.scrollIntoView({
@@ -195,7 +193,7 @@ const QuizResult = (props) => {
                           </>
                         )}
                         <div className="time">
-                          {moment(t.createdAt).format("LLL")}{" "}
+                          {dayjs(t.createdAt).format("LLL")}{" "}
                         </div>
                       </div>
                     ))

@@ -5,7 +5,7 @@ import Modal from "styled-react-modal";
 import { useTranslation } from "next-i18next";
 import Router from "next/router";
 import { useRouter } from "next/router";
-import moment from "moment";
+import dayjs from "dayjs";
 import * as EmailValidator from "email-validator";
 
 import { CURRENT_USER_QUERY } from "../../User";
@@ -359,8 +359,6 @@ const MobileBuy = (props) => {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
   }
 
-  moment.locale("ru");
-
   let in_two_days = new Date();
   in_two_days.setDate(in_two_days.getDate() + 2);
 
@@ -376,7 +374,7 @@ const MobileBuy = (props) => {
   return (
     <Styles id="buy_section">
       <>
-        <Title>Скидка -20% до {moment(in_two_days).format("DD.MM")}</Title>
+        <Title>Скидка -20% до {dayjs(in_two_days).format("DD.MM")}</Title>
         <Fieldset>
           <Group>
             <input

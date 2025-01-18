@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Tool from "./Tool";
-import { Bar } from "react-chartjs-2";
+// import { Bar } from "react-chartjs-2";
 
 const Styles = styled.div`
   display: flex;
@@ -306,8 +306,7 @@ const Simulator = (props) => {
               Общая ценность каналов: <b>{result}</b>
             </div>
           </Block2>
-          <div className="graph-container">
-            {/* <div> */}
+          {/* <div className="graph-container">
             <Bar
               data={data}
               options={{
@@ -328,8 +327,7 @@ const Simulator = (props) => {
                 },
               }}
             />
-            {/* </div> */}
-          </div>
+          </div> */}
           <Block className="last">
             <div className="explain">Инсайты:</div>
             {availableFeedback.length > 0 &&

@@ -3,7 +3,6 @@ import StarRatings from "react-star-ratings";
 import { Mutation } from "@apollo/client/react/components";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
@@ -235,7 +234,6 @@ const Forum = (props) => {
     CREATE_STATEMENT_MUTATION
   );
 
-  moment.locale("ru");
   const { text, forum, id, statements, lesson, result, story, me } = props;
   return (
     <Styles story={story} id={id}>

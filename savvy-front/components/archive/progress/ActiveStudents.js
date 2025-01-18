@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import StudentData from "./StudentData";
 const USERS_QUERY = gql`
@@ -154,7 +154,6 @@ const ActiveStudents = () => {
   }
 
   if (loading) return <p>Loading active users...</p>;
-  moment.locale("ru");
   // console.log(
   //   "students",
   //   students.filter((s) => s.tags.includes("Адвокатский_экзамен"))
@@ -177,7 +176,7 @@ const ActiveStudents = () => {
                   <b>
                     {s.name} {s.surname}
                   </b>{" "}
-                  – Последняя активность: {moment(s.updatedAt).format("LLL")}
+                  – Последняя активность: {dayjs(s.updatedAt).format("LLL")}
                 </div>
                 <div>
                   {s.number && (

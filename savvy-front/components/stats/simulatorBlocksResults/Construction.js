@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const Element = styled.div`
   font-size: 1.6rem;
@@ -181,10 +181,9 @@ const Block = styled.div`
 
 const Construction = (props) => {
   const { elems, construction, id, student_results, resultId, s } = props;
-  moment.locale("ru");
   return (
     <>
-      <div className="time">{moment(s.createdAt).format("LLL")} </div>
+      <div className="time">{dayjs(s.createdAt).format("LLL")} </div>
       <Block id={id} columns={construction.columnsNum}>
         {elems.map((t, i) => {
           if (t) {

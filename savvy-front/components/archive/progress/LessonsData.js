@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
-import moment from "moment";
 import styled from "styled-components";
 import Client from "./Client";
 import dynamic from "next/dynamic";

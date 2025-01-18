@@ -1,6 +1,4 @@
-import { useState } from "react";
 import styled from "styled-components";
-import moment from "moment";
 import { gql, useQuery } from "@apollo/client";
 import BotSession from "./BotSession";
 

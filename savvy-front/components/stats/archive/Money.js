@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
-import moment from "moment";
+import dayjs from "dayjs";
 import styled from "styled-components";
 
 import Loading from "../Loading";
@@ -76,7 +76,7 @@ const Money = (props) => {
     }
   };
 
-  let prev_date = chooseDate(moment());
+  let prev_date = chooseDate(dayjs());
 
   let sorted_orders = orders.filter((o) => {
     let order_date = new Date(o.updatedAt);
@@ -114,7 +114,7 @@ const Money = (props) => {
 
   return (
     <Styles>
-      <div>Выплаты от {moment(prev_date).format("LLL")}</div>
+      <div>Выплаты от {dayjs(prev_date).format("LLL")}</div>
       <div>
         Общий заработок по курсу: {total_money} ₽ –{" "}
         {parseInt(total_money * 0.1)} ₽ сервисного сбора

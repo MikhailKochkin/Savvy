@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useState } from "react";
 import * as _ from "lodash";
@@ -15,7 +15,6 @@ const Box = styled.div`
 const CourseBox = (props) => {
   const [show, setShow] = useState(false);
 
-  moment.locale("ru");
   let two_months_ago = new Date();
   two_months_ago.setMonth(two_months_ago.getMonth() - 2);
 
@@ -36,7 +35,7 @@ const CourseBox = (props) => {
 
     forums.map((f) =>
       f.map((r) => {
-        if (r.createdAt > moment(two_months_ago).format()) {
+        if (r.createdAt > dayjs(two_months_ago).format()) {
           return last_ratings.push(r), last_ratings2.push(r.rating);
         }
       })
@@ -97,7 +96,7 @@ const CourseBox = (props) => {
         {show &&
           [...sorted_ratings].map((l) => (
             <li>
-              <b>{l.rating}</b> – {moment(l.createdAt).format("LLL")} –{" "}
+              <b>{l.rating}</b> – {dayjs(l.createdAt).format("LLL")} –{" "}
               {l.user.name} {l.user.surname}
             </li>
           ))}

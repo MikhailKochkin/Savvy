@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import CreateStatement from "./CreateStatement";
 
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import DeleteStatement from "./DeleteStatement";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const Top = styled.div`
   border-top: 1px solid #d3d3d3;
@@ -42,7 +42,6 @@ const Statement = styled.div`
 `;
 
 const Topic = (props) => {
-  moment.locale("ru");
   return (
     <Top>
       <Name>{props.topic.name}</Name>
@@ -57,7 +56,7 @@ const Topic = (props) => {
                   : s.user.name}
                 <span>
                   {`   `}
-                  {moment(s.createdAt).format("LLL")}
+                  {dayjs(s.createdAt).format("LLL")}
                 </span>
               </div>
               {props.me.id === s.user.id && (

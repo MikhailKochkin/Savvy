@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-import moment from "moment";
+import dayjs from "dayjs";
 import parse from "html-react-parser";
 
 const Container = styled.div`
@@ -169,7 +169,6 @@ const NoteStyles = styled.div`
 
 const Note = (props) => {
   const { t } = useTranslation("lesson");
-  moment.locale("ru");
   const { text, id } = props;
 
   return (

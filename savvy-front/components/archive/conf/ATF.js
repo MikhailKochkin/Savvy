@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useMutation, gql } from "@apollo/client";
-import moment from "moment";
 import parse from "html-react-parser";
-
+import dayjs from "dayjs";
 import smoothscroll from "smoothscroll-polyfill";
 import { useRouter } from "next/router";
 
@@ -601,7 +600,6 @@ const Landing = (props) => {
       inline: "nearest",
     });
   };
-  moment.locale("ru");
 
   return (
     <Styles>
@@ -635,7 +633,7 @@ const Landing = (props) => {
             <Details>
               <div className="time">
                 {/* 6 октября, 19:00{" "} */}
-                {moment(conf.nextStart)
+                {dayjs(conf.nextStart)
                   .utcOffset(0, false)
                   .format("Do MMMM, HH:mm")}{" "}
                 {conf.countries[0].toLowerCase() == "kz" ? "UTC +6" : "UTC +3"}

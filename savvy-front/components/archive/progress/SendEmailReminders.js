@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
-import moment from "moment";
+import dayjs from "dayjs";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 
@@ -133,8 +133,6 @@ const SendEmailReminders = () => {
     setShowReminders(!showReminders);
   };
 
-  moment.locale("ru");
-
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
@@ -210,7 +208,7 @@ const SendEmailReminders = () => {
                 {emailReminder.emailCampaign?.id}
               </p>
               <p>Course page: {emailReminder.coursePage.title}</p>
-              <p>Created at: {moment(emailReminder.createdAt).format("LLL")}</p>
+              <p>Created at: {dayjs(emailReminder.createdAt).format("LLL")}</p>
               <p>Emails sent: {emailReminder.emailsSent}</p>
               <p>
                 Lesson results:{" "}

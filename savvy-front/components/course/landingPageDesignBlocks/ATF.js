@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
-import moment from "moment";
+import dayjs from "dayjs";
 import parse from "html-react-parser";
 
 import Loading from "../../layout/Loading";
@@ -130,7 +130,7 @@ const ATF = (props) => {
 
   const course = data.coursePage;
 
-  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
+  router.locale == "ru" ? dayjs.locale("ru") : dayjs.locale("en");
   return (
     <div id="ATF">
       <Container>
@@ -152,7 +152,7 @@ const ATF = (props) => {
               {router.locale == "ru"
                 ? "Последнее обновление: "
                 : "Last updated"}{" "}
-              <span>{moment(course.updatedAt).format("MM/YYYY")}</span>
+              <span>{dayjs(course.updatedAt).format("MM/YYYY")}</span>
             </div>
           </Container2>
         </InfoBlock>

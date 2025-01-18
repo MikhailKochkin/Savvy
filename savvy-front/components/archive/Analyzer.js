@@ -1,8 +1,8 @@
 import { enableExperimentalFragmentVariables } from "@apollo/client";
 import { useState } from "react";
 import styled from "styled-components";
-import { Bar } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
+// import { Bar } from "react-chartjs-2";
+// import { Chart, registerables } from "chart.js";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -279,7 +279,7 @@ const Analyzer = (props) => {
   const { t } = useTranslation("lesson");
 
   const { elements, lesson } = props;
-  Chart.register(...registerables);
+  // Chart.register(...registerables);
   // 1. Build the labels map for the lesson difficulty map
   let lesson_difficulty_map = [];
   let lesson_labels = [];
@@ -828,7 +828,7 @@ const Analyzer = (props) => {
                 </div>
                 <div>{practiceComment}</div>
               </div>
-              <div classname="chart-container" style={{ height: "275px" }}>
+              {/* <div classname="chart-container" style={{ height: "275px" }}>
                 <Bar
                   data={{
                     labels: lesson_labels,
@@ -869,7 +869,7 @@ const Analyzer = (props) => {
                     },
                   }}
                 />
-              </div>
+              </div> */}
               <br />
               <SimpleButton onClick={(e) => getRecommendations(elements)}>
                 {t("get_recommendations")}

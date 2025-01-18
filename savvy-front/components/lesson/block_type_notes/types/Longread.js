@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import styled from "styled-components";
-import moment from "moment";
 import parse from "html-react-parser";
 import PropTypes from "prop-types";
 
@@ -255,8 +254,6 @@ const NoteStyles = styled.div`
 `;
 
 const Longread = (props) => {
-  moment.locale("ru");
-
   // Function to wrap tables with class table-wrapper
   const wrapTables = (html) => {
     const wrappedHtml = html.replace(

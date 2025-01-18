@@ -1,8 +1,8 @@
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
-import dynamic from "next/dynamic";
+import dayjs from "dayjs";
 import "react-datepicker/dist/react-datepicker.css";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
@@ -344,7 +344,7 @@ const Client = (props) => {
         <div>
           <i>{props.email}</i>
         </div>
-        <div>{moment(props.createdAt).format("DD.MM.YYYY")}</div>
+        <div>{dayjs(props.createdAt).format("DD.MM.YYYY")}</div>
         {tags &&
           tags.map((t, i) => (
             <>
@@ -591,7 +591,7 @@ const Client = (props) => {
           [...props.communication_history.messages].reverse().map((m) => (
             <Message>
               <div>
-                <b>⏰ {moment(m.date).format("DD-MM-YYYY HH:mm")}</b>
+                <b>⏰ {dayjs(m.date).format("DD-MM-YYYY HH:mm")}</b>
               </div>
 
               <div>

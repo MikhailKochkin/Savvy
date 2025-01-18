@@ -18,7 +18,7 @@ import MobileLeads from "./landingPageDesignBlocks/MobileLeads";
 import WhatToExpect from "./landingPageDesignBlocks/WhatToExpect";
 import BottomLine from "./landingPageDesignBlocks/BottomLine";
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 const DynamicAction = dynamic(import("./landingPageDesignBlocks/Action"), {
   loading: () => <p>...</p>,
@@ -145,7 +145,7 @@ const NewCoursePage = (props) => {
   const me = useUser();
   const router = useRouter();
 
-  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
+  router.locale == "ru" ? dayjs.locale("ru") : dayjs.locale("en");
   return (
     <Styles>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />

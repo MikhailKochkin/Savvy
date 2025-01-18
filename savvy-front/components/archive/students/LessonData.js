@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 // import Button from "@material-ui/core/Button";
 // import { withStyles } from "@material-ui/core/styles";
-import moment from "moment";
+import dayjs from "dayjs";
 import Loading from "../../layout/Loading";
 import { useLazyQuery, gql } from "@apollo/client";
 
@@ -200,7 +200,6 @@ const Box = styled.div`
 const LessonData = (props) => {
   const [show, setShow] = useState(false);
   const { index, lesson, student, lessonResults } = props;
-  moment.locale("ru");
   let res =
     lessonResults.filter((l) => l.lesson.id == lesson.id).length > 0
       ? lessonResults.filter((l) => l.lesson.id == lesson.id)[0]
@@ -228,13 +227,13 @@ const LessonData = (props) => {
             </div>
             <div className="div3">
               {/* Первый заход:  */}
-              First visit: {moment(res.createdAt).format("LLL")}
+              First visit: {dayjs(res.createdAt).format("LLL")}
             </div>
             <div className="div4">
               Last visit: {/* Последний заход:{" "} */}
-              {moment(res.updatedAt).format("LLL")}
+              {dayjs(res.updatedAt).format("LLL")}
               {"–"}
-              {moment(res.updatedAt).fromNow()}
+              {dayjs(res.updatedAt).fromNow()}
             </div>
           </Box>
         ) : (

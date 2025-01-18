@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const Block = styled.div`
   display: flex;
@@ -92,8 +92,6 @@ const BotSession = (props) => {
     setFilteredSessions(filteredByUtmSourceSessions);
   };
 
-  moment.locale("ru");
-
   return (
     <Block>
       <div>
@@ -126,8 +124,8 @@ const BotSession = (props) => {
                   <div className="session">
                     <div>
                       {i + 1}. Время сессии: с{" "}
-                      {moment(s.createdAt).format("HH:mm:ss")} до{" "}
-                      {moment(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
+                      {dayjs(s.createdAt).format("HH:mm:ss")} до{" "}
+                      {dayjs(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
                       <b>
                         {" "}
                         {parseInt(
@@ -189,8 +187,8 @@ const BotSession = (props) => {
                 <div className="session">
                   <div>
                     {i + 1}. Время сессии: с{" "}
-                    {moment(s.createdAt).format("HH:mm:ss")} до{" "}
-                    {moment(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
+                    {dayjs(s.createdAt).format("HH:mm:ss")} до{" "}
+                    {dayjs(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
                     <b>
                       {" "}
                       {parseInt(
@@ -237,8 +235,8 @@ const BotSession = (props) => {
                   <div className="session">
                     <div>
                       {i + 1}. Время сессии: с{" "}
-                      {moment(s.createdAt).format("HH:mm:ss")} до{" "}
-                      {moment(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
+                      {dayjs(s.createdAt).format("HH:mm:ss")} до{" "}
+                      {dayjs(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
                       <b>
                         {" "}
                         {parseInt(

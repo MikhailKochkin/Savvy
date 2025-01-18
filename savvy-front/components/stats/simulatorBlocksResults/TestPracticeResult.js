@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import moment from "moment";
-import parse from "html-react-parser";
 import TestResult from "./TestResult";
 import QuizResult from "./QuizResult";
 

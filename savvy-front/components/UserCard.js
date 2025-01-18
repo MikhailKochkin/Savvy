@@ -1,7 +1,7 @@
 import { useState, memo } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import parse from "html-react-parser";
@@ -347,8 +347,6 @@ const UserCard = memo((props) => {
     return result;
   }
 
-  moment.locale("ru");
-
   const emails = [
     {
       name: "Добро пожаловать в BeSavvy!",
@@ -532,9 +530,9 @@ const UserCard = memo((props) => {
             placeholder="..."
           />
         </form>
-        cre: {moment(props.createdAt).format("DD-MM-YYYY HH:mm")}
+        cre: {dayjs(props.createdAt).format("DD-MM-YYYY HH:mm")}
         <br />
-        upd: {moment(props.updatedAt).format("DD-MM-YYYY HH:mm")}
+        upd: {dayjs(props.updatedAt).format("DD-MM-YYYY HH:mm")}
         {number && (
           <button>
             <a target="_blank" href={`https://t.me/${number}`}>
@@ -635,14 +633,14 @@ const UserCard = memo((props) => {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              const now = moment();
+              const now = dayjs();
               let end;
               const existingSubscription = props.subscriptions[0];
 
               if (term === "month") {
-                end = moment(existingSubscription.endDate).add(1, "month");
+                end = dayjs(existingSubscription.endDate).add(1, "month");
               } else if (term === "year") {
-                end = moment(existingSubscription.endDate).add(1, "year");
+                end = dayjs(existingSubscription.endDate).add(1, "year");
               }
               const variables = {
                 userId: props.id,
@@ -743,7 +741,7 @@ const UserCard = memo((props) => {
               .map((mes) => (
                 <div className="message">
                   <div className="date">
-                    <b>{moment(mes.createdAt).format("DD-MM-YYYY HH:mm")}</b>
+                    <b>{dayjs(mes.createdAt).format("DD-MM-YYYY HH:mm")}</b>
                   </div>
                   <div className="text">{parse(mes.text)}</div>
                 </div>

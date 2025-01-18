@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import { gql, useQuery } from "@apollo/client";
 
 import UserData from "./UserData";
@@ -138,7 +138,7 @@ const KPI = (props) => {
   let daily_active_users = weekly_active_users.filter(
     (u) =>
       u.lessonResults.filter(
-        (lr) => new Date(moment(lr.updatedAt)).getTime() > subtractDays(1)
+        (lr) => new Date(dayjs(lr.updatedAt)).getTime() > subtractDays(1)
       ).length > 0
   );
 
@@ -158,7 +158,6 @@ const KPI = (props) => {
   let author_user_full = author_users.filter(
     (au) => au.coursePages.filter((c) => c.lessons.length >= 5).length > 0
   );
-  moment.locale("ru");
   return (
     <Styles>
       <Row>
@@ -295,7 +294,7 @@ const KPI = (props) => {
             .map((d) => (
               <li>
                 {d.name} {d.surname} {d.country} –
-                {moment(
+                {dayjs(
                   d.lessonResults.filter(
                     (lr) => new Date(lr.updatedAt).getTime() > subtractDays(7)
                   )[0].updatedAt

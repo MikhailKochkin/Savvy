@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import parse from "html-react-parser";
 
 const AllStyles = styled.div`
@@ -20,7 +20,6 @@ const Styles = styled.div`
 `;
 
 const Feedback = (props) => {
-  moment.locale("ru");
   const { feedback, lesson } = props;
   return (
     <AllStyles>
@@ -32,7 +31,7 @@ const Feedback = (props) => {
               {parse(m.text)}
               <div className="time">
                 {`${m.teacher.name} ${m.teacher.surname} `}
-                {moment(m.createdAt).format("LLL")}
+                {dayjs(m.createdAt).format("LLL")}
               </div>
             </Styles>
           ))

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
-import moment from "moment";
+import dayjs from "dayjs";
 import { useLazyQuery, gql, useMutation } from "@apollo/client";
 import { TailSpin } from "react-loader-spinner";
 
@@ -326,8 +326,6 @@ const SingleStudentInDepthStats = (props) => {
   const [report, setReport] = useState("");
   const [generating, setGenerating] = useState(false);
   const { index, lesson, student, coursePageID, res } = props;
-  moment.locale("ru");
-
   const [getData, { loading, error, data }] = useLazyQuery(GET_RESULTS);
   const [checkAssignment, { data: data1 }] = useMutation(CHECK_MUTATION);
 
@@ -386,11 +384,11 @@ const SingleStudentInDepthStats = (props) => {
           </div>
           <div className="div5">
             {/* Первый заход:  */}
-            {moment(res[0].createdAt).format("DD.MM.YYYY – h:mm A")}
+            {dayjs(res[0].createdAt).format("DD.MM.YYYY – h:mm A")}
           </div>
           <div className="div6">
             {/* Последний заход:  */}
-            {moment(res[0].updatedAt).format("DD.MM.YYYY – h:mm A")}
+            {dayjs(res[0].updatedAt).format("DD.MM.YYYY – h:mm A")}
           </div>
           <div className="div7">
             <SimpleButton
@@ -417,11 +415,11 @@ const SingleStudentInDepthStats = (props) => {
           </div>
           <div className="div4"></div>
           <div className="div5">
-            {moment(challenge_result.createdAt).format("DD.MM.YYYY – h:mm A")}
+            {dayjs(challenge_result.createdAt).format("DD.MM.YYYY – h:mm A")}
           </div>
           <div className="div6">
             {" "}
-            {moment(challenge_result.createdAt).format("DD.MM.YYYY – h:mm A")}
+            {dayjs(challenge_result.createdAt).format("DD.MM.YYYY – h:mm A")}
           </div>
           <div className="div7">
             {" "}

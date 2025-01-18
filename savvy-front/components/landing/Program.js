@@ -4,7 +4,7 @@ import Link from "next/link";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const Card = styled.div`
   background: #ffffff;
@@ -134,7 +134,7 @@ const Button = styled.button`
 const Program = (props) => {
   const { t } = useTranslation("landing");
   const router = useRouter();
-  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
+  router.locale == "ru" ? dayjs.locale("ru") : dayjs.locale("en");
 
   const getNoun = (number, one, two, five) => {
     let n = Math.abs(number);
@@ -196,8 +196,8 @@ const Program = (props) => {
             <div className="price_box">
               <div className="price_box_discount">
                 {props.nextStart
-                  ? moment(props.nextStart).format("DD.MM.YYYY")
-                  : moment(new Date()).format("DD.MM.YYYY")}
+                  ?  dayjs(props.nextStart).format("DD.MM.YYYY")
+                  :  dayjs(new Date()).format("DD.MM.YYYY")}
               </div>
               <div className="price_box_description">{t("cohort_start")}</div>
             </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import parse from "html-react-parser";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -325,7 +325,6 @@ const Post = (props) => {
   if (post_loading) return <Loading />;
   if (post_error) return post_error;
   let post = post_data.post;
-  moment.locale("ru");
   return (
     <>
       <Head>
@@ -396,7 +395,7 @@ const Post = (props) => {
                   </article>
                   <>
                     <span className="date">
-                      {moment(post.createdAt).format("DD MMM YYYY")}
+                      {dayjs(post.createdAt).format("DD MMM YYYY")}
                     </span>
                     <SideColumnBlock>
                       <div className="author_info">

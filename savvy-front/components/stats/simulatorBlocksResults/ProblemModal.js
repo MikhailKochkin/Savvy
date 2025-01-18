@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 import Modal from "styled-react-modal";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const Box = styled.div`
   display: flex;
@@ -91,8 +91,6 @@ const Results = styled.div`
 `;
 
 const ProblemModal = (props) => {
-  moment.locale("ru");
-
   const {
     problem,
     student,
@@ -180,7 +178,7 @@ const ProblemModal = (props) => {
             .map((t) => (
               <>
                 <Span>
-                  {parse(t.answer)} {moment(t.createdAt).format("LLL")}
+                  {parse(t.answer)} {dayjs(t.createdAt).format("LLL")}
                 </Span>
               </>
             ))
@@ -230,7 +228,7 @@ const ProblemModal = (props) => {
                                   ? "✅"
                                   : "❌"}{" "}
                                 <div className="time">
-                                  {moment(result.createdAt).format("LLL")}{" "}
+                                  {dayjs(result.createdAt).format("LLL")}{" "}
                                 </div>
                               </Block>
                             ) : (
@@ -246,7 +244,7 @@ const ProblemModal = (props) => {
                                   (el) => parse(el) + ", "
                                 )}
                                 <div className="time">
-                                  {moment(result.createdAt).format("LLL")}{" "}
+                                  {dayjs(result.createdAt).format("LLL")}{" "}
                                 </div>
                               </Block>
                             )
@@ -393,7 +391,7 @@ const ProblemModal = (props) => {
                                 </>
                               )}
                               <div className="time">
-                                {moment(result.createdAt).format("LLL")}{" "}
+                                {dayjs(result.createdAt).format("LLL")}{" "}
                               </div>
                             </div>
                           ))}

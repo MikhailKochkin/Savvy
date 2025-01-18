@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 import Loading from "../../layout/Loading";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const Styles = styled.div`
   width: 100%;
@@ -242,7 +242,7 @@ const SimulatorInsightsBlock = ({ item, quizResults }) => {
                         </div>
                         <div>
                           <b>Date:</b>{" "}
-                          {moment(quizRes.createdAt).format("DD/MM/YYYY")}
+                          {dayjs(quizRes.createdAt).format("DD/MM/YYYY")}
                         </div>
                       </div>
                     </div>
@@ -279,7 +279,7 @@ const SimulatorInsightsBlock = ({ item, quizResults }) => {
                         </div>
                         <div>
                           <b>Date:</b>{" "}
-                          {moment(quizRes.createdAt).format("DD/MM/YYYY")}
+                          {dayjs(quizRes.createdAt).format("DD/MM/YYYY")}
                         </div>
                       </div>
                     </div>
@@ -304,7 +304,7 @@ const SimulatorInsightsBlock = ({ item, quizResults }) => {
                     </div>
                     <div>
                       <b>Date:</b>{" "}
-                      {moment(quizRes.createdAt).format("DD/MM/YYYY")}
+                      {dayjs(quizRes.createdAt).format("DD/MM/YYYY")}
                     </div>
                   </div>
                 </div>

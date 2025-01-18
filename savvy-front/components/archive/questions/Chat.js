@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import StarRatings from "react-star-ratings";
-import { Mutation } from "@apollo/client/react/components";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
 import { useTranslation } from "next-i18next";
-
-import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";
-import CreateStatement from "./CreateStatement";
-import DeleteStatement from "./DeleteStatement";
 import Statement from "./Statement";
 
 const CREATE_STATEMENT_MUTATION = gql`
@@ -250,7 +243,6 @@ const Forum = (props) => {
     CREATE_STATEMENT_MUTATION
   );
 
-  moment.locale("ru");
   const { miniforum, me } = props;
   return (
     <Styles>

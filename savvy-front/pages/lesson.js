@@ -19,6 +19,34 @@ const DynamicNewSingleLesson = dynamic(
   }
 );
 
+const DynamicSingleLesson = dynamic(
+  () => import("../components/lesson/SingleLesson"),
+  {
+    ssr: false, // Disable SSR if the component doesn't need it
+  }
+);
+
+const DynamicOldSingleLesson = dynamic(
+  () => import("../components/lesson/OldSingleLesson"),
+  {
+    ssr: false, // Disable SSR if the component doesn't need it
+  }
+);
+
+const DynamicSimulatorAnalyticsDataLoad = dynamic(
+  () => import("../components/stats/simulatorStats/SimulatorAnalyticsDataLoad"),
+  {
+    ssr: false, // Disable SSR if the component doesn't need it
+  }
+);
+
+const DynamicChallenge = dynamic(
+  () => import("../components/lesson/lesson_type_challenge/Challenge"),
+  {
+    ssr: false, // Disable SSR if the component doesn't need it
+  }
+);
+
 const LessonPage = (props) => {
   const { type, id, size, add, step, authSource } = props.query || {};
 
@@ -33,8 +61,8 @@ const LessonPage = (props) => {
 
   return (
     <div>
-      {type === "old" && <OldSingleLesson id={id} />}
-      {type === "regular" && <SingleLesson id={id} />}
+      {type === "old" && <DynamicOldSingleLesson id={id} />}
+      {type === "regular" && <DynamicSingleLesson id={id} />}
 
       {type === "story" && (
         <DynamicNewSingleLesson
@@ -46,9 +74,9 @@ const LessonPage = (props) => {
         />
       )}
 
-      {type === "stats" && <SimulatorAnalyticsDataLoad id={id} />}
+      {type === "stats" && <DynamicSimulatorAnalyticsDataLoad id={id} />}
 
-      {type === "challenge" && <Challenge id={id} />}
+      {type === "challenge" && <DynamicChallenge id={id} />}
 
       {!type && (
         <div>The link is incorrect. Please check the URL and try again.</div>

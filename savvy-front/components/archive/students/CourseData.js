@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 // import Button from "@material-ui/core/Button";
 // import { withStyles } from "@material-ui/core/styles";
-import moment from "moment";
+import dayjs from "dayjs";
 // import Loading from "../layout/Loading";
 import { useLazyQuery, gql } from "@apollo/client";
 import LessonData from "./LessonData";

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 const Container = styled.div`
   display: flex;
@@ -92,7 +92,6 @@ const TestResult = (props) => {
   };
 
   const { newTests, student, results } = props;
-  moment.locale("ru");
   return (
     <Container>
       {newTests.length > 0 &&
@@ -139,7 +138,7 @@ const TestResult = (props) => {
                               : "❌"
                             : null}{" "}
                           {t.answerArray.map((item) => parse(item))}
-                          <br />({moment(t.createdAt).format("LLL")})
+                          <br />({dayjs(t.createdAt).format("LLL")})
                         </Block>
                       ) : (
                         <Block final={i == results.length - 1}>
@@ -154,7 +153,7 @@ const TestResult = (props) => {
                           {stringToArray(t.answer).map(
                             (el) => parse(el) + ", "
                           )}
-                          <br />({moment(t.createdAt).format("LLL")})
+                          <br />({dayjs(t.createdAt).format("LLL")})
                         </Block>
                       )
                     )

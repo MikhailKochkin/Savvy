@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
+import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 
 const ORDERS_QUERY = gql`
@@ -72,7 +72,6 @@ const EmptyOrders = () => {
   if (data) {
     orders = data.orders;
   }
-  moment.locale("ru");
 
   return (
     <div>
@@ -85,7 +84,7 @@ const EmptyOrders = () => {
               <>
                 <div key={i}>
                   {i + 1}. {o.user.name} {o.user.surname} {o.user.email} –{" "}
-                  {moment(o.createdAt).format("LLL")} – {o.coursePage.title}{" "}
+                  {dayjs(o.createdAt).format("LLL")} – {o.coursePage.title}{" "}
                   {o.price} – {o.isPaid ? "Оплачен" : "Не оплачен"}
                 </div>
                 <div key={i}>

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 import styled from "styled-components";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -128,7 +128,7 @@ const ReminderClient = (props) => {
     <Row id={reminder.id}>
       <div className="index">{props.index + 1}.</div>
       <div className="time">
-        {moment(reminder.createdAt).format("DD-MM-YYYY HH:mm")}
+        {dayjs(reminder.createdAt).format("DD-MM-YYYY HH:mm")}
       </div>
       <div className="name">
         <div>{props.reminder.user.name}</div>
@@ -204,7 +204,7 @@ const ReminderClient = (props) => {
           props.communication_history.messages.map((m) => (
             <Message>
               <div>{parse(m.message)}</div>
-              <div> {moment(m.date).format("DD-MM-YYYY HH:mm")}</div>
+              <div> {dayjs(m.date).format("DD-MM-YYYY HH:mm")}</div>
             </Message>
           ))} */}
         <div>Subject</div>

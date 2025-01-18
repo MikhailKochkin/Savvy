@@ -3,7 +3,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
 import parse from "html-react-parser";
-import moment from "moment";
+import dayjs from "dayjs";
 import { OrangeButton } from "./../styles/DevPageStyles";
 
 const CREATE_COMMENT_MUTATION = gql`
@@ -409,7 +409,7 @@ const CommentSection = (props) => {
                   {comment.user.name} {comment.user.surname}
                 </div>
                 <div className="comment_creation_time">
-                  {moment(comment.createdAt).format("LLL")}
+                  {dayjs(comment.createdAt).format("LLL")}
                 </div>
                 <div>
                   {comment.status == "PENDING"
@@ -496,7 +496,7 @@ const CommentSection = (props) => {
                         {reply.user.name} {reply.user.surname}
                       </div>
                       <div className="comment_creation_time">
-                        {moment(reply.createdAt).format("LLL")}
+                        {dayjs(reply.createdAt).format("LLL")}
                       </div>
                     </div>
                     <div className="comment_info">

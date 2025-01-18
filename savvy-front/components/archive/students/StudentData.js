@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 // import Button from "@material-ui/core/Button";
 // import { withStyles } from "@material-ui/core/styles";
-import moment from "moment";
+import dayjs from "dayjs";
 import CourseData from "./CourseData";
 
 const Name = styled.div`
@@ -150,7 +150,6 @@ const Person = (props) => {
   const [show, setShow] = useState(false);
 
   const { student, coursePages, courseVisit, lessonResults } = props;
-  moment.locale("ru");
   let mail = `mailto:${student.email}`;
 
   //check how the student is progressing throught the course

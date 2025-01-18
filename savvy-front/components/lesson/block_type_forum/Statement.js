@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 
-import moment from "moment";
+import dayjs from "dayjs";
 import parse from "html-react-parser";
 
 const UPDATE_STATEMENT_MUTATION = gql`
@@ -206,8 +206,6 @@ const Statement = (props) => {
   };
 
   const { s, author, me } = props;
-  moment.locale("ru");
-
   return (
     <Comment>
       <div className="answer">
@@ -221,7 +219,7 @@ const Statement = (props) => {
         </IconBlock>{" "}
         <div className="answer_text">
           <div>{parse(s.text)}</div>
-          <span>{moment(s.createdAt).format("LLL")}</span>
+          <span>{dayjs(s.createdAt).format("LLL")}</span>
           <br />
           {me && (me.id == author || me.permissions.includes("ADMIN")) && (
             <button onClick={handleDelete}>Delete</button>
