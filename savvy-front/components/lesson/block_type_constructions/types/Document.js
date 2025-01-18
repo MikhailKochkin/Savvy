@@ -207,7 +207,19 @@ const NewConstructor = (props) => {
     z.contentEditable = true;
     z.innerHTML = e.target.innerHTML;
     z.className = "edit";
-    z.setAttribute("data-initial", e.target.getAttribute("comment"));
+    z.setAttribute(
+      "data-initial",
+      e.target.getAttribute("error_data")
+        ? e.target.getAttribute("error_data")
+        : e.target.getAttribute("error_text")
+    );
+    if (e.target.getAttribute("elementid")) {
+      if (e.target.getAttribute("type") == "error") {
+        z.setAttribute("errorid", e.target.getAttribute("elementid"));
+      } else if (e.target.getAttribute("type") == "quiz") {
+        z.setAttribute("quizid", e.target.getAttribute("elementid"));
+      }
+    }
     z.addEventListener("input", changeState);
     let n = e.target.parentNode.replaceChild(z, e.target);
   };
@@ -239,25 +251,32 @@ const NewConstructor = (props) => {
       <OuterContainer
         onClick={async (e) => {
           // 2. Error
-          if (
-            e.target.getAttribute("type") === "error" ||
-            e.target.parentElement.getAttribute("type") === "error"
-          ) {
+
+          const target = e.target;
+          const parent = target.parentElement;
+          const type =
+            target.getAttribute("type") || parent?.getAttribute("type");
+
+          const elementId = target.getAttribute("elementid");
+          const innerText = target.innerHTML;
+
+          if (type === "error" || target.id === "id") {
             setIsErrorWindowShown(true);
-            setErrorAnswer(e.target.innerHTML);
-            setResult(null);
-            setErrorId(e.target.getAttribute("elementid"));
-            onMouseClick(e);
-            setType("error");
+            setErrorAnswer(innerText); // Store error text
+            setErrorId(elementId); // Store error ID
+            setType("error"); // Set interaction type to 'error'
+            onMouseClick(e); // Execute appropriate action based on `total`
+            return;
           }
 
           if (e.target.classList.contains("edit")) {
             setErrorAnswer(e.target.innerHTML);
+
             let newMiniQuiz = props.lesson?.quizes?.find(
               (quiz) => quiz.id == e.target.getAttribute("errorid")
             );
             setErrorId(e.target.getAttribute("errorid"));
-            if (!miniQuiz) setMiniQuiz(newMiniQuiz);
+            setMiniQuiz(newMiniQuiz);
             setCorrectErrorOption(e.target.getAttribute("data-initial"));
             setIsErrorWindowShown(true);
             setResult(null);

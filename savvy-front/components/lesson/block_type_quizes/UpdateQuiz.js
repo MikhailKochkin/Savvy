@@ -120,7 +120,9 @@ const UpdateQuiz = (props) => {
   const [type, setType] = useState(props.type);
   const [goalType, setGoalType] = useState(props.goalType);
   const [answers, setAnswers] = useState(
-    props.answers ? props.answers.answerElements : []
+    props.answers && props.answers.answerElements
+      ? props.answers.answerElements
+      : []
   );
   const [isOrderOfAnswersImportant, setIsOrderOfAnswersImportant] = useState(
     props.isOrderOfAnswersImportant
@@ -142,6 +144,7 @@ const UpdateQuiz = (props) => {
     textareas.forEach((textarea) => adjustTextareaHeight(textarea));
   }, [answers]); // Run this effect whenever answers change
 
+  console.log("answers", answers, props.answers);
   const [updateQuiz, { loading, error }] = useMutation(UPDATE_QUIZ_MUTATION, {
     variables: {
       id: quizId,
@@ -160,7 +163,7 @@ const UpdateQuiz = (props) => {
       isOrderOfAnswersImportant: isOrderOfAnswersImportant,
       isScoringShown: isScoringShown,
       answers: {
-        answerElements: answers.map((answer) => ({
+        answerElements: answers?.map((answer) => ({
           answer: answer.answer,
           index: answer.index,
           relatedAnswers: answer.relatedAnswers,

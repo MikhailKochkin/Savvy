@@ -78,7 +78,6 @@ const NewConstructor = (props) => {
     : [];
   const [update, setUpdate] = useState(false);
   const { t } = useTranslation("lesson");
-
   const {
     data: queryData,
     loading: queryLoading,

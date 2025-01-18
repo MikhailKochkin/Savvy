@@ -1247,8 +1247,6 @@ const App = (props) => {
 
   return (
     <>
-      {/* <button onClick={handleOpenModal}>Open Modal</button> */}
-      {/* <div>{type}</div> */}
       <StyledModal
         isOpen={modalOpen}
         onBackgroundClick={handleCloseModal}
@@ -1296,47 +1294,47 @@ const App = (props) => {
               me={props.me}
               quizId={modalData}
               lessonID={
-                props.lesson?.quizes.find((q) => q.id == modalData).lessonId
+                props.lesson?.quizes.find((q) => q.id == modalData)?.lessonId
               }
               answer={
-                props.lesson?.quizes.find((q) => q.id == modalData).answer
+                props.lesson?.quizes.find((q) => q.id == modalData)?.answer
               }
               answers={
-                props.lesson?.quizes.find((q) => q.id == modalData).answers
+                props.lesson?.quizes.find((q) => q.id == modalData)?.answers
               }
               lesson={props.lesson}
               question={
-                props.lesson?.quizes.find((q) => q.id == modalData).question
+                props.lesson?.quizes.find((q) => q.id == modalData)?.question
               }
-              name={props.lesson?.quizes.find((q) => q.id == modalData).name}
-              image={props.lesson?.quizes.find((q) => q.id == modalData).image}
-              type={props.lesson?.quizes.find((q) => q.id == modalData).type}
+              name={props.lesson?.quizes.find((q) => q.id == modalData)?.name}
+              image={props.lesson?.quizes.find((q) => q.id == modalData)?.image}
+              type={props.lesson?.quizes.find((q) => q.id == modalData)?.type}
               isOrderOfAnswersImportant={
                 props.lesson?.quizes.find((q) => q.id == modalData)
-                  .isOrderOfAnswersImportant
+                  ?.isOrderOfAnswersImportant
               }
               shouldAnswerSizeMatchSample={
                 props.lesson?.quizes.find((q) => q.id == modalData)
-                  .shouldAnswerSizeMatchSample
+                  ?.shouldAnswerSizeMatchSample
               }
               isScoringShown={
                 props.lesson?.quizes.find((q) => q.id == modalData)
-                  .isScoringShown
+                  ?.isScoringShown
               }
               goalType={
-                props.lesson?.quizes.find((q) => q.id == modalData).goalType
+                props.lesson?.quizes.find((q) => q.id == modalData)?.goalType
               }
               complexity={
-                props.lesson?.quizes.find((q) => q.id == modalData).complexity
+                props.lesson?.quizes.find((q) => q.id == modalData)?.complexity
               }
               ifRight={
-                props.lesson?.quizes.find((q) => q.id == modalData).ifRight
+                props.lesson?.quizes.find((q) => q.id == modalData)?.ifRight
               }
               ifWrong={
-                props.lesson?.quizes.find((q) => q.id == modalData).ifWrong
+                props.lesson?.quizes.find((q) => q.id == modalData)?.ifWrong
               }
-              next={props.lesson?.quizes.find((q) => q.id == modalData).next}
-              check={props.lesson?.quizes.find((q) => q.id == modalData).check}
+              next={props.lesson?.quizes.find((q) => q.id == modalData)?.next}
+              check={props.lesson?.quizes.find((q) => q.id == modalData)?.check}
             />
           )}
           {type == "note" && (
@@ -1346,11 +1344,11 @@ const App = (props) => {
               me={props.me}
               noteId={modalData}
               lessonID={
-                props.lesson?.notes.find((q) => q.id == modalData).lessonId
+                props.lesson?.notes.find((q) => q.id == modalData)?.lessonId
               }
               note={props.lesson?.notes.find((q) => q.id == modalData)}
-              text={props.lesson?.notes.find((q) => q.id == modalData).text}
-              name={props.lesson?.notes.find((q) => q.id == modalData).name}
+              text={props.lesson?.notes.find((q) => q.id == modalData)?.text}
+              name={props.lesson?.notes.find((q) => q.id == modalData)?.name}
               user={props.lesson.user.id}
               author={props.lesson.user}
             />
@@ -1361,47 +1359,47 @@ const App = (props) => {
               id={modalData}
               testID={modalData}
               lessonID={
-                props.lesson?.newTests.find((q) => q.id == modalData).lessonId
+                props.lesson?.newTests.find((q) => q.id == modalData)?.lessonId
               }
               question={
-                props.lesson?.newTests.find((q) => q.id == modalData).question
+                props.lesson?.newTests.find((q) => q.id == modalData)?.question
               }
               answers={
-                props.lesson?.newTests.find((q) => q.id == modalData).answers
+                props.lesson?.newTests.find((q) => q.id == modalData)?.answers
               }
               true={
-                props.lesson?.newTests.find((q) => q.id == modalData).correct
+                props.lesson?.newTests.find((q) => q.id == modalData)?.correct
               }
               ifRight={
-                props.lesson?.newTests.find((q) => q.id == modalData).ifRight
+                props.lesson?.newTests.find((q) => q.id == modalData)?.ifRight
               }
               ifWrong={
                 props.lesson?.newTests.find((q) => q.id == modalData).ifWrong
               }
               user={
-                props.lesson?.newTests.find((q) => q.id == modalData).user.id
+                props.lesson?.newTests.find((q) => q.id == modalData)?.user.id
               }
               user_name={
-                props.lesson?.newTests.find((q) => q.id == modalData).user
+                props.lesson?.newTests.find((q) => q.id == modalData)?.user
               }
-              name={props.lesson?.newTests.find((q) => q.id == modalData).name}
+              name={props.lesson?.newTests.find((q) => q.id == modalData)?.name}
               image={
-                props.lesson?.newTests.find((q) => q.id == modalData).image
+                props.lesson?.newTests.find((q) => q.id == modalData)?.image
               }
               complexTestAnswers={
                 props.lesson?.newTests.find((q) => q.id == modalData)
-                  .complexTestAnswers
+                  ?.complexTestAnswers
               }
               comments={
-                props.lesson?.newTests.find((q) => q.id == modalData).comments
+                props.lesson?.newTests.find((q) => q.id == modalData)?.comments
               }
-              type={props.lesson?.newTests.find((q) => q.id == modalData).type}
+              type={props.lesson?.newTests.find((q) => q.id == modalData)?.type}
               goalType={
-                props.lesson?.tests.find((q) => q.id == modalData).goalType
+                props.lesson?.tests.find((q) => q.id == modalData)?.goalType
               }
               me={props.me}
               length={Array(
-                props.lesson?.newTests.find((q) => q.id == modalData).correct
+                props.lesson?.newTests.find((q) => q.id == modalData)?.correct
                   .length
               ).fill(false)}
               userData={[]}
@@ -1835,7 +1833,7 @@ const ProblemElement = ({
       {...props.attributes}
       onMouseDown={(event) => {
         event.preventDefault(); // prevent Slate's default mouse down handling
-        setModalData(props.element.problem_data);
+        setModalData(props.element.elementId);
         setModalOpen(true);
         const path = ReactEditor.findPath(editor, props.element);
         setNotePath(path); // store the path

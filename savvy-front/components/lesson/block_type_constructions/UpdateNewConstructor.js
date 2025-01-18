@@ -262,7 +262,7 @@ const Settings = styled.div`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
+const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
@@ -278,15 +278,9 @@ const UpdateNewConstructor = (props) => {
     construction.type ? construction.type : "DOCUMENT"
   );
 
-  const router = useRouter();
+  console.log(elements);
 
   const { t } = useTranslation("lesson");
-
-  const myCallback2 = (dataFromChild, name) => {
-    if (name == "hint") {
-      setHint(dataFromChild);
-    }
-  };
 
   let mod_el = {
     place: 2,
@@ -419,6 +413,7 @@ const UpdateNewConstructor = (props) => {
       <ButtonTwo
         onClick={async (e) => {
           e.preventDefault();
+
           const res = await updateConstruction({
             variables: {
               id: props.id,

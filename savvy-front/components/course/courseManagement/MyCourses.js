@@ -175,6 +175,7 @@ const MyCourses = (props) => {
 
   const { loading, error, data } = useQuery(MY_COURSES_QUERY, {
     variables: { id: me.id },
+    fetchPolicy: "cache-first", // Default: Check cache first, then network if not found
   });
 
   const {
@@ -183,6 +184,7 @@ const MyCourses = (props) => {
     data: data2,
   } = useQuery(MY_CO_AUTHORED_COURSES_QUERY, {
     variables: { id: me.id },
+    fetchPolicy: "cache-first", // Default: Check cache first, then network if not found
   });
   if (loading) return <Loading />;
   if (error) return <p>Error: {error.message}</p>;

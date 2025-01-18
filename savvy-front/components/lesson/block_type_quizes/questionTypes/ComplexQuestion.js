@@ -412,7 +412,12 @@ const ComplexQuestion = (props) => {
         quiz: props.quizId,
         lessonId: props.lessonId,
         type: "answer",
-        ideasList: { quizIdeas },
+        ideasList: {
+          quizIdeas: unique_values.map((uv) => ({
+            ...uv,
+            result: String(uv.result),
+          })),
+        },
         comment: ``,
       },
     });

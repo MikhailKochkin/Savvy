@@ -80,14 +80,12 @@ const Error = ({ statusCode, err }) => {
   const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
   useEffect(() => {
     if (!isErrorMessageSent) {
-      console.log("Sending error message...");
-      console.log("statusCode", statusCode, err);
       const errorDetails = `
         An error occurred in the application:
         Status Code: ${statusCode || "Unknown"}
-        Message: ${err.message},
-        Stack: ${err.stack},
-        Browser: ${navigator.userAgent}
+        Message: ${err?.message},
+        Stack: ${err?.stack},
+        Browser: ${navigator?.userAgent}
         URL: ${window.location.href}
         Referrer: ${document.referrer || "N/A"}
         Viewport Size: ${window.innerWidth}x${window.innerHeight}
@@ -134,10 +132,16 @@ const Error = ({ statusCode, err }) => {
 };
 
 Error.getInitialProps = async (contextData) => {
-  await Sentry.captureUnderscoreErrorException(contextData);
-  // const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  // return { statusCode, err };
-  return Error.getInitialProps(contextData);
+  const { res, err } = contextData;
+  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+
+  // Capture the error in Sentry
+  if (err) {
+    await Sentry.captureException(err);
+    await Sentry.flush(2000); // Ensure the error is sent before continuing
+  }
+
+  return { statusCode, err };
 };
 
 export default Error;

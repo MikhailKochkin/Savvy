@@ -1,6 +1,9 @@
 require("dotenv").config({ path: "variables.env" });
+require("./instrument.js");
+
 const cookieParser = require("cookie-parser");
 const express = require("express");
+const Sentry = require("@sentry/node");
 const jwt = require("jsonwebtoken");
 const { server, prisma } = require("./createServer");
 const cors = require("cors");
@@ -71,6 +74,16 @@ const httpServer = http.createServer(app);
     );
     req.user = user;
     next();
+  });
+
+  Sentry.setupExpressErrorHandler(app);
+
+  // Optional fallthrough error handler
+  app.use(function onError(err, req, res, next) {
+    // The error id is attached to `res.sentry` to be returned
+    // and optionally displayed to the user for support.
+    res.statusCode = 500;
+    res.end(res.sentry + "\n");
   });
 
   const PORT = process.env.PORT || 4000;
