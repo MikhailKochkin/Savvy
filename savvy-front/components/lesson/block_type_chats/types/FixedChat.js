@@ -146,7 +146,7 @@ const FixedChat = (props) => {
         {messages.messagesList.slice(0, num).map((m, i) => {
           if (m.author === "author") {
             return (
-              <>
+              <div key={i}>
                 <Message
                   id={"messagee" + i + id}
                   key={i}
@@ -180,7 +180,7 @@ const FixedChat = (props) => {
                     lessonId={lessonId}
                   />
                 )}
-              </>
+              </div>
             );
           } else {
             return (
@@ -252,7 +252,7 @@ FixedChat.propTypes = {
   isSecret: PropTypes.bool,
   moveNext: PropTypes.func,
   story: PropTypes.bool,
-  passTextToBeTranslated: PropTypes.func.isRequired,
+  passTextToBeTranslated: PropTypes.func,
 };
 
 export default FixedChat;

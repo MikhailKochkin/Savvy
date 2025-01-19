@@ -4,7 +4,7 @@ import { useMutation, gql } from "@apollo/client";
 import Modal from "styled-react-modal";
 import { useTranslation } from "next-i18next";
 import Router from "next/router";
-import tinkoff from "@tcb-web/create-credit";
+// import tinkoff from "@tcb-web/create-credit";
 
 import { CURRENT_USER_QUERY } from "../../User";
 

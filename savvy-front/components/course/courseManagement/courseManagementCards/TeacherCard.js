@@ -152,7 +152,7 @@ const TeacherCard = (props) => {
                 number: parseInt(number),
               },
             });
-            router.push(`lesson?id=${res.data.createLesson.id}&type=regular`);
+            router.push(`dev?id=${res.data.createLesson.id}`);
           }}
         >
           {loading ? t("Creating") : t("Create")}

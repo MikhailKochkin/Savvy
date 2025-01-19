@@ -16,8 +16,8 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const CoursePagePage = (props) => {
-  const { id, form, down: promocode } = props.query || {};
   const router = useRouter();
+  const { id, form, down: promocode } = router.query || {};
 
   // Handle missing `id`
   if (!id) {

@@ -302,8 +302,6 @@ const Client = (props) => {
       }
     `;
 
-    console.log("prompt", prompt);
-
     try {
       const response = await fetch("/api/generateJson", {
         method: "POST",

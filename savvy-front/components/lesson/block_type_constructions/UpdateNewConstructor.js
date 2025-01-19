@@ -278,8 +278,6 @@ const UpdateNewConstructor = (props) => {
     construction.type ? construction.type : "DOCUMENT"
   );
 
-  console.log(elements);
-
   const { t } = useTranslation("lesson");
 
   let mod_el = {

@@ -193,8 +193,6 @@ const OpenQuestion = (props) => {
             props.check
           );
 
-          console.log("initialCheck", initialCheck, el.answer);
-
           // Deconstruct to get initial values
           const {
             result: initialResult,
@@ -343,26 +341,28 @@ const OpenQuestion = (props) => {
       context,
       jsonStoryString
     );
-    setHints([...hints, hintGenerationResult.newHint]);
-    createQuizResult({
-      variables: {
-        quiz: props.quizId,
-        lessonId: props.lessonId,
-        answer: answer,
-        correct: false,
-        type: "hint",
-        hint: hintGenerationResult.newHint,
-        explanation:
-          explanations.length > 0
-            ? explanations[explanations.length - 1]
-            : null,
-        improvement:
-          improvements.length > 0
-            ? improvements[improvements.length - 1]
-            : null,
-        comment: `Student asked for a hint`,
-      },
-    });
+    if (hintGenerationResult?.newHint !== null) {
+      setHints([...hints, hintGenerationResult.newHint]);
+      createQuizResult({
+        variables: {
+          quiz: props.quizId,
+          lessonId: props.lessonId,
+          answer: answer,
+          correct: false,
+          type: "hint",
+          hint: hintGenerationResult.newHint,
+          explanation:
+            explanations.length > 0
+              ? explanations[explanations.length - 1]
+              : null,
+          improvement:
+            improvements.length > 0
+              ? improvements[improvements.length - 1]
+              : null,
+          comment: `Student asked for a hint`,
+        },
+      });
+    }
   };
 
   // 4. Explain what is wrong with the answer based on the score of the student's answer

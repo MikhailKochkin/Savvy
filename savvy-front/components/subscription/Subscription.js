@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, gql, useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import tinkoff from "@tcb-web/create-credit";
 import { Tooltip } from "react-tooltip";
 import parse from "html-react-parser";
 import smoothscroll from "smoothscroll-polyfill";
@@ -581,39 +580,39 @@ const Subscription = (props) => {
     fetchReferrer();
   }, [props.referrerId]);
 
-  const getInstallments = (price) => {
-    if (typeof window !== "undefined") {
-      // Client-side code
-      tinkoff.create({
-        shopId: process.env.NEXT_PUBLIC_SHOP_ID,
-        showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
-        items: [
-          {
-            name: "Подписка на BeSavvy+ на 6 месяцев",
-            price: price,
-            quantity: 1,
-          },
-        ],
-        sum: price,
-        promoCode: "installment_0_0_6_7",
-      });
-    } else {
-      console.error("Tinkoff logic cannot run on the server.");
-    }
+  // const getInstallments = (price) => {
+  //   if (typeof window !== "undefined") {
+  //     // Client-side code
+  //     tinkoff.create({
+  //       shopId: process.env.NEXT_PUBLIC_SHOP_ID,
+  //       showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
+  //       items: [
+  //         {
+  //           name: "Подписка на BeSavvy+ на 6 месяцев",
+  //           price: price,
+  //           quantity: 1,
+  //         },
+  //       ],
+  //       sum: price,
+  //       promoCode: "installment_0_0_6_7",
+  //     });
+  //   } else {
+  //     console.error("Tinkoff logic cannot run on the server.");
+  //   }
 
-    if (props.me) {
-      createOrder({
-        variables: {
-          coursePageId: props.courseId
-            ? props.courseId
-            : "clwl0no8h00002xuxtmyq8778",
-          price: price,
-          userId: props.me.id,
-          comment: "Заявка на рассрочку",
-        },
-      });
-    }
-  };
+  //   if (props.me) {
+  //     createOrder({
+  //       variables: {
+  //         coursePageId: props.courseId
+  //           ? props.courseId
+  //           : "clwl0no8h00002xuxtmyq8778",
+  //         price: price,
+  //         userId: props.me.id,
+  //         comment: "Заявка на рассрочку",
+  //       },
+  //     });
+  //   }
+  // };
 
   const completePayment = async (price) => {
     if (!props.me) {
@@ -969,9 +968,9 @@ const Subscription = (props) => {
                 <ButtonBuy onClick={(e) => completePayment(13990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(13990)}>
+                {/* <ButtonOpen onClick={(e) => getInstallments(13990)}>
                   Оформить рассрочку за 2331/мес
-                </ButtonOpen>
+                </ButtonOpen> */}
               </Form>
               <Form>
                 <Banner>
@@ -1027,9 +1026,9 @@ const Subscription = (props) => {
                 <ButtonBuy onClick={(e) => completePayment(35990)}>
                   {loading_data ? "..." : "Подписаться"}
                 </ButtonBuy>
-                <ButtonOpen onClick={(e) => getInstallments(35990)}>
+                {/* <ButtonOpen onClick={(e) => getInstallments(35990)}>
                   Оформить рассрочку за 5998/мес
-                </ButtonOpen>
+                </ButtonOpen> */}
               </Form>
             </>
           )}

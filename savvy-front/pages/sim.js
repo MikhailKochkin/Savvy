@@ -1,9 +1,6 @@
-import SingleLesson from "../components/lesson/SingleLesson";
-import Challenge from "../components/lesson/lesson_type_challenge//Challenge";
-import OldSingleLesson from "../components/lesson/OldSingleLesson";
-import SimulatorAnalyticsDataLoad from "../components/stats/simulatorStats/SimulatorAnalyticsDataLoad";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
@@ -18,24 +15,36 @@ const DynamicNewSingleLesson = dynamic(
   }
 );
 
-const PageFile = (props) => (
-  <div>
-    {props.query.type === "old" && <OldSingleLesson id={props.query.id} />}
+// const DynamicOldSingleLesson = dynamic(
+//   () => import("../components/lesson/OldSingleLesson"),
+//   {
+//     ssr: false, // Disable SSR if the component doesn't need it
+//   }
+// );
 
-    {props.query.type === "regular" && <SingleLesson id={props.query.id} />}
-    {props.query.type === "story" && (
-      <DynamicNewSingleLesson
-        id={props.query.id}
-        size={props.query.size}
-        add={props.query.add}
-        step={props.query.step}
-      />
-    )}
-    {props.query.type === "stats" && (
-      <SimulatorAnalyticsDataLoad id={props.query.id} />
-    )}
-    {props.query.type === "challenge" && <Challenge id={props.query.id} />}
-  </div>
-);
+const LessonPage = (props) => {
+  const router = useRouter();
 
-export default PageFile;
+  const { id, size, add, step, authSource } = router.query;
+
+  if (!id) {
+    return (
+      <div>
+        <p>Error: No lesson ID provided.</p>
+        <p>Please check the URL or contact support if the issue persists.</p>
+      </div>
+    );
+  }
+
+  return (
+    <DynamicNewSingleLesson
+      id={id}
+      size={size}
+      add={add}
+      step={step}
+      authSource={authSource}
+    />
+  );
+};
+
+export default LessonPage;

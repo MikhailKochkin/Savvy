@@ -163,8 +163,6 @@ const UpdateTest = (props) => {
     props.instructorName ? props.instructorName : null
   );
   const { t } = useTranslation("lesson");
-  console.log("complexAnswers", complexAnswers);
-  console.log("answers", answers);
 
   const handleArray = (val, name, i) => {
     let arr = [...answers];

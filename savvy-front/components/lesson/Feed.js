@@ -929,7 +929,7 @@ const Feed = (props) => {
                 </div>
                 {translationMode && (
                   <div className="translationBlockRow">
-                    Now just select any text in the lesson and it willl be
+                    Now just select any text in the lesson and it will be
                     translated below.
                   </div>
                 )}
@@ -960,7 +960,7 @@ const Feed = (props) => {
               <SimulatorLinks>
                 {other_simulators.map((s) => (
                   <a
-                    href={`https://besavvy.app/ru/lesson?id=${s.id}&type=story`}
+                    href={`https://besavvy.app/ru/lesson?id=${s.id}`}
                     target="_blank"
                   >
                     <div className="simulator_row_link">
@@ -986,7 +986,11 @@ const Feed = (props) => {
         <Content
           open={open}
           className="second"
-          angle={props.experience * (360 / props.total)}
+          angle={
+            isNaN(props.experience * (360 / props.total))
+              ? 0
+              : props.experience * (360 / props.total)
+          }
         >
           {width > 800 && (
             <CustomProgressBar myResult={num} lessonItems={lesson_structure} />

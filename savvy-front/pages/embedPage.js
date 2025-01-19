@@ -1,4 +1,3 @@
-import React from "react";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
@@ -16,21 +15,16 @@ const DynamicNewSingleLesson = dynamic(
   }
 );
 
-const embedPage = (props) => {
+const embedPage = () => {
   const router = useRouter();
-  const { url, referrer } = router.query;
-
-  // Handle the case when url or referrer is not provided
-  // if (!url || !referrer) {
-  //   return <div>Invalid url or referrer</div>;
-  // }
+  const { id, url, add } = router.query;
 
   return (
     <DynamicNewSingleLesson
-      id={props.query.id}
+      id={id}
       embedded={true}
-      authSource={props.query.authSource}
-      // add={props.query.add}
+      authSource={url}
+      add={add}
     />
   );
 };

@@ -284,6 +284,17 @@ const LessonRow = (props) => {
       });
     }
   };
+
+  let pathname =
+    lesson?.type?.toLowerCase() === "regular"
+      ? "/dev"
+      : lesson?.type?.toLowerCase() === "challenge"
+      ? "/challenge"
+      : "/lesson";
+
+  if (!pathname) {
+    pathname = "/lesson";
+  }
   return (
     <Box>
       <div
@@ -356,10 +367,9 @@ const LessonRow = (props) => {
               i_am_author) && (
               <Link
                 href={{
-                  pathname: "/lesson",
+                  pathname: pathname,
                   query: {
                     id: lesson.id,
-                    type: lesson.type.toLowerCase(),
                   },
                 }}
               >
@@ -378,10 +388,9 @@ const LessonRow = (props) => {
             lesson.open ? (
               <Link
                 href={{
-                  pathname: "/lesson",
+                  pathname: pathname,
                   query: {
                     id: lesson.id,
-                    type: lesson.type.toLowerCase(),
                   },
                 }}
               >
@@ -391,10 +400,9 @@ const LessonRow = (props) => {
               0 ? (
               <Link
                 href={{
-                  pathname: "/lesson",
+                  pathname: pathname,
                   query: {
                     id: lesson.id,
-                    type: lesson.type.toLowerCase(),
                   },
                 }}
               >
@@ -408,10 +416,9 @@ const LessonRow = (props) => {
           {!me && lesson.open && lesson.type.toLowerCase() !== "regular" && (
             <Link
               href={{
-                pathname: "/lesson",
+                pathname: pathname,
                 query: {
                   id: lesson.id,
-                  type: lesson.type.toLowerCase(),
                 },
               }}
             >

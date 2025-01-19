@@ -586,15 +586,17 @@ const SingleLesson = (props) => {
 
   if (
     me &&
-    (me.coursePages.filter((c) => c.id == lesson.coursePage.id).length > 0 ||
-      me.co_coursePages?.filter((c) => c.id == lesson.coursePage.id).length > 0)
+    (me.coursePages.filter((c) => c.id == lesson?.coursePage?.id).length > 0 ||
+      me.co_coursePages?.filter((c) => c.id == lesson?.coursePage.id).length >
+        0 ||
+      me.permissions.includes("ADMIN"))
   ) {
     i_am_author = true;
   }
   if (!me) {
     return "Please sign up or log in to access this page";
   }
-  if (!me.permissions.includes("ADMIN") && !i_am_author) {
+  if (!i_am_author) {
     return <NoAccess />;
   }
   return (

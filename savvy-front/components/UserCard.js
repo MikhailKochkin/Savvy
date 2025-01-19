@@ -877,7 +877,7 @@ const UserCard = memo((props) => {
                 <li>
                   <button>
                     <a
-                      href={`https://www.besavvy.app/ru/lesson?id=${l.lesson.id}&type=stats`}
+                      href={`https://www.besavvy.app/analytics?id=${l.lesson.id}`}
                       target="_blank"
                     >
                       Перейти

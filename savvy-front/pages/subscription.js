@@ -10,22 +10,23 @@ const DynamicSubscription = dynamic(
   }
 );
 
-export const getServerSideProps = async ({ locale }) => ({
+export const getServerSideProps = async ({ query, locale }) => ({
   props: {
     ...(await serverSideTranslations(locale, ["nav", "blog", "landing"])),
+    query,
   },
 });
 
-const SubscriptionPage = (props) => {
+const SubscriptionPage = ({ query }) => {
   const me = useUser();
   return (
     <DynamicSubscription
       me={me}
-      courseId={props.query.courseId}
-      referrerId={props.query.referrerId}
-      referrerName={props.query.referrerName}
+      courseId={query.courseId}
+      referrerId={query.referrerId}
+      referrerName={query.referrerName}
       // avalable types: "gift", "special"
-      type={props.query.type}
+      type={query.type}
     />
   );
 };

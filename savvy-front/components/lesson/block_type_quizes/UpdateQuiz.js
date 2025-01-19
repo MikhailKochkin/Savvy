@@ -144,7 +144,6 @@ const UpdateQuiz = (props) => {
     textareas.forEach((textarea) => adjustTextareaHeight(textarea));
   }, [answers]); // Run this effect whenever answers change
 
-  console.log("answers", answers, props.answers);
   const [updateQuiz, { loading, error }] = useMutation(UPDATE_QUIZ_MUTATION, {
     variables: {
       id: quizId,

@@ -36,8 +36,9 @@ const Container = styled.div`
 
 const PostPage = (props) => {
   const me = useUser();
-  const { id } = props.query || {};
   const router = useRouter();
+  const { query } = router;
+  const { id } = query || {};
 
   // If no ID is provided, show an error message or redirect
   if (!id) {

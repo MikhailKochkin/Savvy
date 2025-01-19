@@ -1,5 +1,6 @@
 import Reset from "../components/auth/Reset";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
@@ -7,10 +8,13 @@ export const getServerSideProps = async ({ locale }) => ({
   },
 });
 
-const ResetPage = (props) => (
-  <div>
-    <Reset resetToken={props.query.resetToken} />
-  </div>
-);
+const ResetPage = (props) => {
+  const router = useRouter();
+  return (
+    <div>
+      <Reset resetToken={router.query.resetToken} />
+    </div>
+  );
+};
 
 export default ResetPage;

@@ -5,11 +5,8 @@ import { useMutation, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 import {
   ActionButton,
-  SecondaryButton,
-  Buttons,
   Row,
   Frame,
-  Title,
   MicroButton,
 } from "../../lesson/styles/DevPageStyles";
 

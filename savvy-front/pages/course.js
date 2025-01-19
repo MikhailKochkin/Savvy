@@ -14,8 +14,8 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const Course = (props) => {
-  const { id } = props.query || {};
   const router = useRouter();
+  const { id } = router.query || {};
 
   // Handle missing `id`
   if (!id) {

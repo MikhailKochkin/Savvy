@@ -169,7 +169,10 @@ const RegisterCard = (props) => {
                 <Link
                   legacyBehavior
                   href={{
-                    pathname: "/lesson",
+                    pathname:
+                      props.first_lesson.type.toLowerCase() == "challenge"
+                        ? "/challenge"
+                        : "/lesson",
                     query: {
                       id: props.first_lesson.id,
                       type: props.first_lesson.type.toLowerCase(),

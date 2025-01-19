@@ -241,10 +241,12 @@ const LessonHeader = (props) => {
           <Link
             legacyBehavior
             href={{
-              pathname: "/lesson",
+              pathname:
+                lesson.type.toLowerCase() === "challenge"
+                  ? "/challenge"
+                  : "/lesson",
               query: {
                 id: lesson.id,
-                type: lesson.type.toLowerCase(),
               },
             }}
           >

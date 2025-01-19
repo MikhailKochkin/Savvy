@@ -6,8 +6,7 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
-import tinkoff from "@tcb-web/create-credit";
-import parse from "html-react-parser";
+// import tinkoff from "@tcb-web/create-credit";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(

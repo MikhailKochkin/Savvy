@@ -9,7 +9,6 @@ import "react-phone-number-input/style.css";
 
 import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
-import tinkoff from "@tcb-web/create-credit";
 // import { shopId, showcaseId } from "../../../config";
 
 const CREATE_ORDER_MUTATION = gql`

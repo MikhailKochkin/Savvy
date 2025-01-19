@@ -3,7 +3,6 @@ import { withRouter, useRouter } from "next/router";
 import { ModalProvider } from "styled-react-modal";
 import dynamic from "next/dynamic";
 
-import Meta from "./layout/Meta";
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
 import Layout from "./layout/Layout";
@@ -74,7 +73,6 @@ const Page = ({ children }) => {
       <StyledPage>
         <>
           <GlobalStyle />
-          <Meta />
           <Layout>
             <ModalProvider>
               <Header />

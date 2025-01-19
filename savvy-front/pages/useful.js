@@ -1,5 +1,6 @@
 import React from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useRouter } from "next/router";
 import { useUser } from "../components/User";
 import Useful from "../components/useful/Useful";
 
@@ -8,12 +9,14 @@ export const getServerSideProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale, ["nav", "auth"])),
   },
 });
+
 const useful = (props) => {
+  const router = useRouter();
   const me = useUser();
 
   return (
     <>
-      <Useful me={me} id={props.query.id} />
+      <Useful me={me} id={router.query.id} />
     </>
   );
 };

@@ -1,10 +1,14 @@
 import React from "react";
 import Onboarding from "../components/Onboarding";
+import { useRouter } from "next/router";
 
-const onboarding = (props) => {
+const onboarding = () => {
+  const router = useRouter();
+  const { id, program } = router.query;
+
   return (
     <div>
-      <Onboarding id={props.query.id} program={props.query.program} />
+      <Onboarding id={id} program={program} />
     </div>
   );
 };

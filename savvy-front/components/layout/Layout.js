@@ -43,7 +43,7 @@ export default class Layout extends React.Component {
       <div>
         <YMInitializer
           accounts={[85932800]}
-          options={{ webvisor: true }}
+          options={{ webvisor: false }}
           version="2"
         />
         <GoogleAnalytics gaId="G-YH6N45QPFR" />

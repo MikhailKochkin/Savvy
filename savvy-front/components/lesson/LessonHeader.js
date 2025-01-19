@@ -368,6 +368,18 @@ const LessonHeader = (props) => {
   } else {
     color = "white";
   }
+
+  let pathname =
+    lesson?.type?.toLowerCase() === "regular"
+      ? "/dev"
+      : lesson?.type?.toLowerCase() === "challenge"
+      ? "/challenge"
+      : "/lesson";
+
+  if (!pathname) {
+    pathname = "/lesson";
+  }
+
   return (
     <>
       <TextBar id={"simulator_" + lesson.id} color={color}>
@@ -455,10 +467,9 @@ const LessonHeader = (props) => {
             <Link
               legacyBehavior
               href={{
-                pathname: "/lesson",
+                pathname: pathname,
                 query: {
                   id: lesson.id,
-                  type: lesson.type.toLowerCase(),
                 },
               }}
             >

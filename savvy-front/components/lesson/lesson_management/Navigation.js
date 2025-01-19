@@ -6,15 +6,15 @@ import { useState, useEffect } from "react";
 import { throttle } from "lodash";
 
 const Head = styled.div`
-  position: ${(props) => (props.isSticky ? "fixed" : "absolute")};
-  top: ${(props) =>
-    props.story && props.isSticky
-      ? "40px"
-      : props.story && !props.isSticky
-      ? "0px"
-      : !props.story && !props.isSticky
-      ? "80px"
-      : "20px"};
+  position: ${(props) => (props.issticky === true ? "fixed" : "absolute")};
+  top: ${(props) => {
+    const isStory = props.story === "true";
+    const isSticky = props.issticky === "true";
+    if (isStory && isSticky) return "40px";
+    if (isStory && !isSticky) return "0px";
+    if (!isStory && !isSticky) return "80px";
+    return "20px";
+  }};
   z-index: 1000;
   pointer-events: none;
   display: flex;
@@ -120,7 +120,10 @@ const Navigation = (props) => {
   }, []);
 
   return (
-    <Head isSticky={isSticky} story={props.story}>
+    <Head
+      issticky={isSticky ? "true" : undefined}
+      story={props.story ? "true" : undefined}
+    >
       <Left>
         {props.page !== "demo" && (
           <div className="block">
@@ -163,7 +166,6 @@ const Navigation = (props) => {
                   pathname: "/lesson",
                   query: {
                     id: lesson.id,
-                    type: "story",
                   },
                 }}
               >
@@ -183,10 +185,9 @@ const Navigation = (props) => {
               me.permissions.includes("ADMIN")) && (
               <Link
                 href={{
-                  pathname: "/lesson",
+                  pathname: "/dev",
                   query: {
                     id: lesson.id,
-                    type: "regular",
                   },
                 }}
               >
@@ -206,10 +207,9 @@ const Navigation = (props) => {
               me.permissions.includes("ADMIN")) && (
               <Link
                 href={{
-                  pathname: "/lesson",
+                  pathname: "/analytics",
                   query: {
                     id: lesson.id,
-                    type: "stats",
                   },
                 }}
               >

@@ -249,7 +249,6 @@ const ClientData = (props) => {
             ))}
           </Buttons>
         </div>
-        {console.log("messaging", messaging)}
         {currentItems.map((c, i) => (
           <Client
             id={c.id}

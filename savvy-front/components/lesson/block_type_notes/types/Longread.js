@@ -281,7 +281,7 @@ const Longread = (props) => {
   return (
     <Container id={id} width={width}>
       <div className="note_longread">
-        <NoteStyles story={story}>{processedText}</NoteStyles>
+        <NoteStyles>{processedText}</NoteStyles>
       </div>
     </Container>
   );

@@ -8,24 +8,17 @@ export const getServerSideProps = async ({ locale }) => ({
   },
 });
 
-const DynamicNewSingleLesson = dynamic(
-  import("../components/lesson/NewSingleLesson"),
+const DynamicSimulatorAnalyticsDataLoad = dynamic(
+  () => import("../components/stats/simulatorStats/SimulatorAnalyticsDataLoad"),
   {
-    ssr: false,
+    ssr: false, // Disable SSR if the component doesn't need it
   }
 );
-
-// const DynamicOldSingleLesson = dynamic(
-//   () => import("../components/lesson/OldSingleLesson"),
-//   {
-//     ssr: false, // Disable SSR if the component doesn't need it
-//   }
-// );
 
 const LessonPage = (props) => {
   const router = useRouter();
 
-  const { type, id, size, add, step, authSource } = router.query;
+  const { id } = router.query;
 
   if (!id) {
     return (
@@ -36,15 +29,7 @@ const LessonPage = (props) => {
     );
   }
 
-  return (
-    <DynamicNewSingleLesson
-      id={id}
-      size={size}
-      add={add}
-      step={step}
-      authSource={authSource}
-    />
-  );
+  return <DynamicSimulatorAnalyticsDataLoad id={id} />;
 };
 
 export default LessonPage;
