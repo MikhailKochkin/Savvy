@@ -26,7 +26,7 @@ const AuthorNotification = (lesson, course, lessonID, text) => `
     <p>Вопрос звучит так:</p>
     <p><i>"${text}"</i></p>
     <p>Ответить можно прямо в чате. Перейдите к курсу по ссылке.</p>
-    <button><a href="https://besavvy.app/lesson?id=${lessonID}&type=story">Перейти</a></button>
+    <button><a href="https://besavvy.app/lesson?id=${lessonID}">Перейти</a></button>
   </div>
 `;
 

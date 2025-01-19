@@ -56,6 +56,11 @@ const httpServer = http.createServer(app);
     next();
   });
 
+  // app.use((err, req, res, next) => {
+  //   console.error("Error:", err.message);
+  //   res.status(500).send("Something went wrong!");
+  // });
+
   app.use(cors(corsOptions)); // Use cors middleware with corsOptions
 
   app.use(

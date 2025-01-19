@@ -2,14 +2,14 @@ const { ApolloServer } = require("@apollo/server");
 const {
   ApolloServerPluginLandingPageGraphQLPlayground,
 } = require("@apollo/server-plugin-landing-page-graphql-playground");
-const { PrismaClient } = require("@prisma/client");
-const { makeSchema } = require("nexus");
-// We'll remove connectionPlugin if we don't specifically need Relay-style pagination
-// but you can keep it if you do use Relay edges/connections
 const { schema } = require("./schema");
 // We'll create a separate 'schema.js' that exports our Nexus schema
 
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+//   {
+//   log: ["query", "info", "warn", "error"],
+// }
 
 const areIntrospectionAndPlaygroundEnabled =
   process.env.NODE_ENV !== "production";

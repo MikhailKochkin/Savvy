@@ -498,7 +498,7 @@ const CommentEmail = (name, lesson, lessonId, text, comment) => `
                           <tr>
                             <td align="center">
                               <a
-                                href="https://besavvy.app/lesson?id=${lessonId}&type=story"
+                                href="https://besavvy.app/lesson?id=${lessonId}"
                                 class="f-fallback button button--blue"
                                 target="_blank"
                                 >Перейти</a
