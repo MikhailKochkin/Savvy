@@ -608,6 +608,7 @@ const SingleLesson = (props) => {
       <Navigation
         i_am_author={true}
         lesson={lesson}
+        coursePageId={lesson?.coursePage?.id}
         me={me}
         page="development"
         story={false}

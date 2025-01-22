@@ -53,7 +53,7 @@ const STUDENTS_QUERY = gql`
 
 const LESSONS_QUERY = gql`
   query LESSONS_QUERY($id: String!) {
-    lessons(id: $id) {
+    lesson(id: $id) {
       id
       text
       name
@@ -278,11 +278,17 @@ const SingleLessonAnalyticsDataLoad = (props) => {
   if (loading1 || loading2) return <Loading />;
 
   let students = data1?.studentsAnalytics;
-  let lesson = data2?.lessons[0];
+  let lesson = data2?.lesson;
 
   return (
     <Styles>
-      <Navigation i_am_author={true} lesson={lesson} me={me} page="analytics" />
+      <Navigation
+        i_am_author={true}
+        lesson={lesson}
+        me={me}
+        page="analytics"
+        coursePageId={lesson?.coursePage?.id}
+      />
       {students && lesson ? (
         <SimulatorAnalyticsMainComponent
           lesson={lesson}

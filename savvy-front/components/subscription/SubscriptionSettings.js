@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useMutation } from "@apollo/client";
-import { gql } from "@apollo/client";
+import { useMutation, useQuery, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
-import { CURRENT_USER_QUERY } from "../User";
+const SUBSCRIPTION_QUERY = gql`
+  query SUBSCRIPTION_QUERY($userId: String!) {
+    subscriptionsByUser(userId: $userId) {
+      id
+      isActive
+      type
+      term
+      userId
+    }
+  }
+`;
 
 const UPDATE_SUBSCRIPTION_MUTATION = gql`
   mutation UPDATE_SUBSCRIPTION_MUTATION(
@@ -149,74 +158,60 @@ const Message = styled.div`
   margin: 10px 0;
 `;
 
-const UPDATE_USER_MUTATION = gql`
-  mutation UPDATE_USER_MUTATION(
-    $id: String!
-    $name: String
-    $surname: String
-    $email: String
-    $status: Status
-    $image: String
-    $work: String
-    $description: String
-    $isFamiliar: Boolean
-    $tags: [String]
-  ) {
-    updateUser(
-      id: $id
-      email: $email
-      name: $name
-      surname: $surname
-      status: $status
-      image: $image
-      description: $description
-      work: $work
-      isFamiliar: $isFamiliar
-      tags: $tags
-    ) {
-      id
-      name
-    }
-  }
-`;
 const Account = (props) => {
-  const [isActive, setIsActive] = useState(
-    props.me.subscriptions[0]?.isActive
-      ? props.me.subscriptions[0].isActive
-      : false
-  );
-  const [subscriptionType, setSubscriptionType] = useState(
-    props.me.subscriptions[0]?.type ? props.me.subscriptions[0].type : "regular"
-  );
-  const [subscriptionLength, setSubscriptionLength] = useState(
-    props.me.subscriptions[0]?.term ? props.me.subscriptions[0].term : "monthly"
-  );
-
+  const [isActive, setIsActive] = useState(false);
+  const [subscriptionType, setSubscriptionType] = useState("regular");
+  const [subscriptionLength, setSubscriptionLength] = useState("monthly");
   const [isSpecialOfferShown, setIsSpecialOfferShown] = useState(false);
   const router = useRouter();
-
   const { t } = useTranslation("account");
 
-  const [updateUser, { error, loading }] = useMutation(UPDATE_USER_MUTATION, {
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+  const {
+    data: subsData,
+    loading: loadingSubscriptions,
+    error: errorSubscriptions,
+  } = useQuery(SUBSCRIPTION_QUERY, {
+    variables: {
+      userId: props.me.id,
+    },
   });
+
+  useEffect(() => {
+    if (
+      subsData?.subscriptionsByUser &&
+      subsData?.subscriptionsByUser.length > 0
+    ) {
+      const subscription = subsData.subscriptionsByUser[0];
+      setIsActive(subscription?.isActive || false);
+      setSubscriptionType(subscription?.type || "regular");
+      setSubscriptionLength(subscription?.term || "monthly");
+    }
+  }, [subsData]);
 
   const [updateSubscription, { error: subscriptionError }] = useMutation(
     UPDATE_SUBSCRIPTION_MUTATION
   );
 
+  if (errorSubscriptions) return <p>Error: {errorSubscriptions.message}</p>;
+  if (loadingSubscriptions) return <p>Loading...</p>;
+
   const handleUpdateSubscription = async (e) => {
     e.preventDefault();
-    if (props.me.subscriptions[0]?.id) {
+    if (
+      subsData?.subscriptionsByUser &&
+      subsData?.subscriptionsByUser.length > 0 &&
+      subsData?.subscriptionsByUser[0]?.id
+    ) {
       await updateSubscription({
         variables: {
-          id: props.me.subscriptions[0].id,
+          id: subsData.subscriptionsByUser[0].id,
           isActive: isActive,
           type: subscriptionType,
           term: subscriptionLength,
         },
       });
       alert("Subscription updated");
+      window.location.reload(); // Reloads the page
     } else {
       router.push("/subscription", {
         locale: "ru",
@@ -228,17 +223,9 @@ const Account = (props) => {
 
   return (
     <Form>
-      <Fieldset disabled={loading} aria-busy={loading}>
+      <Fieldset>
         <div className="Title">{t("subscription_settings")}</div>
         <Container>
-          {/* <Comment>Реферальная ссылка</Comment>
-          <div className="explainer_text">
-            Вы можете поделиться реферальной ссылкой со своими друзьями,
-            знакомыми и подписчиками. Они получат скидку -20% на свою первую
-            подписку. А вы -20% за каждого, кто воспользуется ссылкой.
-            Максимальная скидка за 1 месяц – 40%. Неиспользованные проценты
-            перенесутся на следующий месяц.
-          </div> */}
           <input
             value={`https://besavvy.app/ru/subscription?referrerId=${me.id}`}
           />
@@ -273,7 +260,6 @@ const Account = (props) => {
             value={subscriptionType}
             onChange={(e) => setSubscriptionType(e.target.value)}
           >
-            {/* <option value={null}>{t("no_info")}</option> */}
             <option value="mini">{t("mini")}</option>
             <option value="regular">{t("regular")}</option>
             <option value="team">{t("team")}</option>
@@ -292,9 +278,6 @@ const Account = (props) => {
             {t("update_subscription")}
           </BlueButton>
           <br />
-          {/* <SimpleButton onClick={handleCancelSubscription}>
-            {t("cancel_subscription")}
-          </SimpleButton> */}
         </Container>
       </Fieldset>
     </Form>

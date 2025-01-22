@@ -692,12 +692,13 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     id?: string | null; // String
     lesson?: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lessonId?: string | null; // String
     rating?: Array<NexusGenRootTypes['Rating'] | null> | null; // [Rating]
     statements?: Array<NexusGenRootTypes['Statement'] | null> | null; // [Statement]
     text?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     user?: NexusGenRootTypes['User'] | null; // User
-    userId?: number | null; // Int
+    userId?: string | null; // String
   }
   GrowthArea: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -781,6 +782,19 @@ export interface NexusGenObjects {
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     user?: NexusGenRootTypes['User'] | null; // User
     userId?: number | null; // Int
+  }
+  LessonData: { // root type
+    chats?: Array<NexusGenRootTypes['Chat'] | null> | null; // [Chat]
+    constructions?: Array<NexusGenRootTypes['Construction'] | null> | null; // [Construction]
+    documents?: Array<NexusGenRootTypes['Document'] | null> | null; // [Document]
+    forum?: NexusGenRootTypes['Forum'] | null; // Forum
+    newTests?: Array<NexusGenRootTypes['NewTest'] | null> | null; // [NewTest]
+    notes?: Array<NexusGenRootTypes['Note'] | null> | null; // [Note]
+    problems?: Array<NexusGenRootTypes['Problem'] | null> | null; // [Problem]
+    quizes?: Array<NexusGenRootTypes['Quiz'] | null> | null; // [Quiz]
+    shots?: Array<NexusGenRootTypes['Shot'] | null> | null; // [Shot]
+    testPractices?: Array<NexusGenRootTypes['TestPractice'] | null> | null; // [TestPractice]
+    textEditors?: Array<NexusGenRootTypes['TextEditor'] | null> | null; // [TextEditor]
   }
   LessonItem: { // root type
     comment?: string | null; // String
@@ -1759,12 +1773,13 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     id: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lessonId: string | null; // String
     rating: Array<NexusGenRootTypes['Rating'] | null> | null; // [Rating]
     statements: Array<NexusGenRootTypes['Statement'] | null> | null; // [Statement]
     text: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
     user: NexusGenRootTypes['User'] | null; // User
-    userId: number | null; // Int
+    userId: string | null; // String
   }
   GrowthArea: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -1848,6 +1863,19 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
     user: NexusGenRootTypes['User'] | null; // User
     userId: number | null; // Int
+  }
+  LessonData: { // field return type
+    chats: Array<NexusGenRootTypes['Chat'] | null> | null; // [Chat]
+    constructions: Array<NexusGenRootTypes['Construction'] | null> | null; // [Construction]
+    documents: Array<NexusGenRootTypes['Document'] | null> | null; // [Document]
+    forum: NexusGenRootTypes['Forum'] | null; // Forum
+    newTests: Array<NexusGenRootTypes['NewTest'] | null> | null; // [NewTest]
+    notes: Array<NexusGenRootTypes['Note'] | null> | null; // [Note]
+    problems: Array<NexusGenRootTypes['Problem'] | null> | null; // [Problem]
+    quizes: Array<NexusGenRootTypes['Quiz'] | null> | null; // [Quiz]
+    shots: Array<NexusGenRootTypes['Shot'] | null> | null; // [Shot]
+    testPractices: Array<NexusGenRootTypes['TestPractice'] | null> | null; // [TestPractice]
+    textEditors: Array<NexusGenRootTypes['TextEditor'] | null> | null; // [TextEditor]
   }
   LessonItem: { // field return type
     comment: string | null; // String
@@ -2247,6 +2275,7 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonResults: Array<NexusGenRootTypes['LessonResult'] | null> | null; // [LessonResult]
     lessons: Array<NexusGenRootTypes['Lesson'] | null> | null; // [Lesson]
+    loadLessonData: NexusGenRootTypes['LessonData'] | null; // LessonData
     me: NexusGenRootTypes['User'] | null; // User
     newTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     newTests: Array<NexusGenRootTypes['NewTest'] | null> | null; // [NewTest]
@@ -2269,9 +2298,11 @@ export interface NexusGenFieldTypes {
     ratings: Array<NexusGenRootTypes['Rating'] | null> | null; // [Rating]
     referral: NexusGenRootTypes['Referral'] | null; // Referral
     referrals: Array<NexusGenRootTypes['Referral'] | null> | null; // [Referral]
+    shortLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     stats: NexusGenRootTypes['Stats'] | null; // Stats
     studentsAnalytics: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     subscribers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    subscriptionsByUser: Array<NexusGenRootTypes['Subscription'] | null> | null; // [Subscription]
     testPracticeResult: NexusGenRootTypes['TestPracticeResult'] | null; // TestPracticeResult
     testPracticeResults: Array<NexusGenRootTypes['TestPracticeResult'] | null> | null; // [TestPracticeResult]
     testResult: NexusGenRootTypes['TestResult'] | null; // TestResult
@@ -3006,12 +3037,13 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     id: 'String'
     lesson: 'Lesson'
+    lessonId: 'String'
     rating: 'Rating'
     statements: 'Statement'
     text: 'String'
     updatedAt: 'DateTime'
     user: 'User'
-    userId: 'Int'
+    userId: 'String'
   }
   GrowthArea: { // field return type name
     createdAt: 'DateTime'
@@ -3095,6 +3127,19 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'Int'
+  }
+  LessonData: { // field return type name
+    chats: 'Chat'
+    constructions: 'Construction'
+    documents: 'Document'
+    forum: 'Forum'
+    newTests: 'NewTest'
+    notes: 'Note'
+    problems: 'Problem'
+    quizes: 'Quiz'
+    shots: 'Shot'
+    testPractices: 'TestPractice'
+    textEditors: 'TextEditor'
   }
   LessonItem: { // field return type name
     comment: 'String'
@@ -3494,6 +3539,7 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonResults: 'LessonResult'
     lessons: 'Lesson'
+    loadLessonData: 'LessonData'
     me: 'User'
     newTest: 'NewTest'
     newTests: 'NewTest'
@@ -3516,9 +3562,11 @@ export interface NexusGenFieldTypeNames {
     ratings: 'Rating'
     referral: 'Referral'
     referrals: 'Referral'
+    shortLesson: 'Lesson'
     stats: 'Stats'
     studentsAnalytics: 'User'
     subscribers: 'User'
+    subscriptionsByUser: 'Subscription'
     testPracticeResult: 'TestPracticeResult'
     testPracticeResults: 'TestPracticeResult'
     testResult: 'TestResult'
@@ -4781,11 +4829,14 @@ export interface NexusGenArgTypes {
     lessonResults: { // args
       coursePageId?: string | null; // String
       lessonId?: string | null; // String
-      userId?: string | null; // String
+      studentId?: string | null; // String
     }
     lessons: { // args
       coursePageId?: string | null; // String
       id?: string | null; // String
+    }
+    loadLessonData: { // args
+      lessonId?: string | null; // String
     }
     newTest: { // args
       id: string; // String!
@@ -4855,12 +4906,18 @@ export interface NexusGenArgTypes {
     referrals: { // args
       id?: string | null; // String
     }
+    shortLesson: { // args
+      id: string; // String!
+    }
     stats: { // args
       lessonId?: string | null; // String
       userId?: string | null; // String
     }
     studentsAnalytics: { // args
       lessonId?: string | null; // String
+    }
+    subscriptionsByUser: { // args
+      userId: string; // String!
     }
     testPracticeResult: { // args
       id: string; // String!

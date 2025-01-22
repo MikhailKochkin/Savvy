@@ -1,4 +1,4 @@
-const { objectType, inputObjectType } = require("nexus");
+const { objectType, inputObjectType, list } = require("nexus");
 
 const TestResult = objectType({
   name: "TestResult",
@@ -526,6 +526,41 @@ const DialogueStep = inputObjectType({
   },
 });
 
+const LessonData = objectType({
+  name: "LessonData",
+  definition(t) {
+    t.field("notes", { type: list("Note"), description: "List of notes." });
+    t.field("chats", { type: list("Chat"), description: "List of chats." });
+    t.field("quizes", { type: list("Quiz"), description: "List of quizzes." });
+    t.field("problems", {
+      type: list("Problem"),
+      description: "List of problems.",
+    });
+    t.field("newTests", {
+      type: list("NewTest"),
+      description: "List of new tests.",
+    });
+    t.field("testPractices", {
+      type: list("TestPractice"),
+      description: "List of test practices.",
+    });
+    t.field("constructions", {
+      type: list("Construction"),
+      description: "List of constructions.",
+    });
+    t.field("textEditors", {
+      type: list("TextEditor"),
+      description: "List of text editors.",
+    });
+    t.field("documents", {
+      type: list("Document"),
+      description: "List of documents.",
+    });
+    t.field("shots", { type: list("Shot"), description: "List of shots." });
+    t.field("forum", { type: "Forum", description: "Forum" });
+  },
+});
+
 module.exports = {
   TestResult,
   QuizResult,
@@ -545,4 +580,5 @@ module.exports = {
   QuizIdeas,
   QuizIdeasInput,
   QuizIdeaInput,
+  LessonData,
 };

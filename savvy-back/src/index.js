@@ -56,10 +56,10 @@ const httpServer = http.createServer(app);
     next();
   });
 
-  // app.use((err, req, res, next) => {
-  //   console.error("Error:", err.message);
-  //   res.status(500).send("Something went wrong!");
-  // });
+  app.use((err, req, res, next) => {
+    console.error("Error:", err.message);
+    res.status(500).send("Something went wrong!");
+  });
 
   app.use(cors(corsOptions)); // Use cors middleware with corsOptions
 
@@ -73,11 +73,15 @@ const httpServer = http.createServer(app);
 
   app.use(async (req, res, next) => {
     if (!req.userId) return next();
-    const user = await prisma.user.findUnique(
-      { where: { id: req.userId } },
-      "{ id, permissions, email, name }"
-    );
-    req.user = user;
+    try {
+      req.user = await prisma.user.findUnique({
+        where: { id: req.userId },
+        select: { id: true, permissions: true, email: true, name: true },
+      });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      next(error); // Pass error to your error handler
+    }
     next();
   });
 

@@ -129,7 +129,6 @@ const FindAll = (props) => {
   // 2. Evaluate the ideas and find matching answers from the list of correct answers
   const getMatchingAnswers = async () => {
     let matchedAnswers = [];
-    setProgress("true");
     // 1. Get sample answers for this task
     let answers = props.answers.answerElements;
     // 2. Create a set to hold the indexes of matched answers
@@ -209,7 +208,6 @@ const FindAll = (props) => {
     });
 
     setOverallResults(unique_values);
-    setProgress("false");
     setCorrectIdeas([...correctIdeas, ...newCorrectIdeas]);
     setIsFeedbackShown(true);
     setExpectedAnswers(updatedExpectedAnswers); // Update state with accumulated changes
@@ -380,16 +378,21 @@ const FindAll = (props) => {
 
         {/* 4. Answer and Hint buttons */}
         <Group progress={progress}>
-          <Button1
-            inputColor={inputColor}
-            onClick={async (e) => {
-              e.preventDefault();
-              getMatchingAnswers();
-              setIsAnswerCountShown(false);
-            }}
-          >
-            {t("check")}
-          </Button1>
+          {progress == "false" ? (
+            <Button1
+              inputColor={inputColor}
+              onClick={async (e) => {
+                e.preventDefault();
+                setProgress("true");
+                getMatchingAnswers();
+                setProgress("false");
+
+                setIsAnswerCountShown(false);
+              }}
+            >
+              {t("check")}
+            </Button1>
+          ) : null}
           {props.goalType !== "ASSESS" && (
             <Button1
               inputColor={inputColor}

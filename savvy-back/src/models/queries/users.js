@@ -261,22 +261,38 @@ function userQueries(t) {
       try {
         const user = await ctx.prisma.user.findUnique({
           where: { id: ctx.req.userId },
-          include: {
-            lessons: true,
-            coursePages: true,
-            co_coursePages: true,
-            subscriptions: true,
-            messages: true,
-            new_subjects: true,
-            orders: {
-              include: {
-                coursePage: true,
+          select: {
+            id: true,
+            name: true,
+            surname: true,
+            image: true,
+            email: true,
+            isFamiliar: true,
+            permissions: true,
+            tags: true,
+            lessons: {
+              select: {
+                id: true,
               },
             },
-            studentFeedback: true,
-            teacherFeedback: true,
+            coursePages: {
+              select: {
+                id: true,
+              },
+            },
+            co_coursePages: {
+              select: {
+                id: true,
+              },
+            },
+            new_subjects: {
+              select: {
+                id: true,
+              },
+            },
           },
         });
+        console.log("user", user);
         return user;
       } catch (error) {
         console.error("Error fetching user:", error);

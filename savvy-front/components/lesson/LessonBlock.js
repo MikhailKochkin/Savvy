@@ -840,6 +840,7 @@ const LessonBlock = (props) => {
                 }
               />
             )}
+
             {(isSaved || d != null) && data && data.__typename == "Chat" && (
               <Chat
                 name={data.name}

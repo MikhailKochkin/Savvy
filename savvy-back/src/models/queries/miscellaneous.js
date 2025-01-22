@@ -119,6 +119,22 @@ function miscellaneousQueries(t) {
       });
     },
   });
+
+  t.list.field("subscriptionsByUser", {
+    type: "Subscription",
+    args: {
+      userId: nonNull(stringArg()),
+    },
+    resolve: (_parent, { userId }, ctx) => {
+      return ctx.prisma.subscription.findMany({
+        where: {
+          user: {
+            id: userId,
+          },
+        },
+      });
+    },
+  });
 }
 
 module.exports = {

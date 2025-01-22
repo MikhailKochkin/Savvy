@@ -602,7 +602,7 @@ const Feed = (props) => {
   } = props;
   const { t } = useTranslation("lesson");
 
-  let lessonElements;
+  let lessonElements = [];
   let next_lesson = false;
 
   if (props.me.id == "clkvdew14837181f13vcbbcw0x") {
@@ -723,20 +723,21 @@ const Feed = (props) => {
     }
   }, [props.my_result]);
 
-  let other_simulators = props.lesson.coursePage.lessons
-    .filter(
-      (les) =>
-        les.published == true && les.type !== "REGULAR" && les.id !== lessonId
-    )
-    .sort((a, b) => a.number - b.number);
+  let other_simulators = [];
+  // props.lesson.coursePage.lessons
+  //   .filter(
+  //     (les) =>
+  //       les.published == true && les.type !== "REGULAR" && les.id !== lessonId
+  //   )
+  //   .sort((a, b) => a.number - b.number);
 
-  if (
-    !props.i_am_student &&
-    !props.i_am_author &&
-    !me.permissions.includes("ADMIN")
-  ) {
-    other_simulators = other_simulators.filter((sim) => sim.open);
-  }
+  // if (
+  //   !props.i_am_student &&
+  //   !props.i_am_author &&
+  //   !me.permissions.includes("ADMIN")
+  // ) {
+  //   other_simulators = other_simulators.filter((sim) => sim.open);
+  // }
 
   const handleToggleTranslation = () => {
     setTranslationMode(!translationMode);
@@ -859,10 +860,10 @@ const Feed = (props) => {
                             : null}
                           {el.type.toLowerCase() == "texteditor"
                             ? `${
-                                props.lesson.texteditors.find(
+                                props.lesson.textEditors.find(
                                   (ch) => ch.id == el.id
                                 )?.name
-                                  ? props.lesson.texteditors.find(
+                                  ? props.lesson.textEditors.find(
                                       (ch) => ch.id == el.id
                                     ).name
                                   : "Text Editor"
@@ -997,6 +998,7 @@ const Feed = (props) => {
           )}
           <div style={{ position: "relative", width: "100%" }}>
             <Border>
+              {console.log("lessonElements.slice(0, num + 2)", lessonElements)}
               {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block"}
@@ -1053,6 +1055,7 @@ const Feed = (props) => {
               <Navigation
                 i_am_author={props.i_am_author}
                 lesson={props.lesson}
+                coursePageId={props.lesson.coursePage.id}
                 me={me}
                 width={width}
                 passMenuChange={passMenuChange}

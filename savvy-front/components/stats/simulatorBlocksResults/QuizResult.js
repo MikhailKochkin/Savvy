@@ -192,9 +192,7 @@ const QuizResult = (props) => {
                               : null}
                           </>
                         )}
-                        <div className="time">
-                          {dayjs(t.createdAt).format("LLL")}{" "}
-                        </div>
+                        <div className="time">{dayjs(t.createdAt)} </div>
                       </div>
                     ))
                 ) : (

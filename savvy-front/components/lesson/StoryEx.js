@@ -19,8 +19,8 @@ import Feed from "./Feed";
 import TestPractice from "./block_type_testblocks/TB";
 
 const LESSON_RESULTS_QUERY = gql`
-  query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(lessonId: $lessonId, userId: $userId) {
+  query LESSON_RESULTS_QUERY($lessonId: String!, $studentId: String!) {
+    lessonResults(lessonId: $lessonId, studentId: $studentId) {
       id
       visitsNumber
       progress
@@ -55,7 +55,7 @@ const Container = styled.div`
 `;
 
 const StoryEx = (props) => {
-  const { tasks, me, lesson, next, coursePageID, coursePage, context } = props;
+  const { tasks, me, lesson, coursePageId, coursePage, context } = props;
   const [experience, setExperience] = useState(0); // User's experience points
   const [textToBeTranslated, setTextToBeTranslated] = useState(""); // Text selected for translation
   const [solved, setSolved] = useState([]); // List of solved task IDs
@@ -83,6 +83,14 @@ const StoryEx = (props) => {
     };
   }, [handleSelection]);
 
+  const prevSelection = useRef("");
+
+  const passTextToBeTranslated = (text) => {
+    setTextToBeTranslated(text);
+  };
+
+  // 2. Generate a dynamic query
+
   // 1. Function to handle the "next" button visibility
   // It adds the task ID to the solved array when completed
   // This works the following way:
@@ -98,14 +106,6 @@ const StoryEx = (props) => {
     }
   };
 
-  // Function to update user experience points
-
-  const prevSelection = useRef("");
-
-  const passTextToBeTranslated = (text) => {
-    setTextToBeTranslated(text);
-  };
-
   // 5.  Fetch lesson results for the current user
   const [
     fetchQuery,
@@ -113,7 +113,7 @@ const StoryEx = (props) => {
   ] = useLazyQuery(LESSON_RESULTS_QUERY, {
     variables: {
       lessonId: props.id,
-      userId: me.id,
+      studentId: me.id,
     },
     fetchPolicy: "no-cache", // Use cached data first, then fetch from the network
     // nextFetchPolicy: "cache-first", // Use cached data for subsequent queries
@@ -140,8 +140,6 @@ const StoryEx = (props) => {
       fetchLessonResults();
     }
   }, [props.id, me]);
-
-  if (stats_error) return <p>{stats_error}</p>;
 
   // Find the lesson result with the highest progress value for the current user
   const findNewestLessonResult = (stats_data, lesson) => {
@@ -173,6 +171,9 @@ const StoryEx = (props) => {
 
   // Usage
   let my_result = findNewestLessonResult(stats_data, lesson);
+
+  if (stats_error) return <p>{stats_error}</p>;
+
   // 6. Now, my_result should contain the item with the highest progress value that is not equal to maxProgress, or null if no such item exists.
   // Now we build the structure of the lesson
 
@@ -180,7 +181,11 @@ const StoryEx = (props) => {
   let move_statuses = [];
   let updatedTasks = [...tasks];
   let updatedStructure = [...lesson.structure.lessonItems];
-  if (!props.i_am_student && coursePage?.courseType === "FORMONEY") {
+  if (
+    !props.i_am_student &&
+    !props.i_am_author &&
+    coursePage?.courseType === "FORMONEY"
+  ) {
     // Determine the middle index
     let middleIndex = Math.floor(updatedTasks.length / 2);
 
@@ -207,7 +212,7 @@ const StoryEx = (props) => {
           (problem) => problem.id === item.id
         ).text;
       } else if (item.type === "TextEditor") {
-        content = lesson.texteditors.find(
+        content = lesson.textEditors.find(
           (textEditor) => textEditor.id === item.id
         ).text;
       } else if (item.type === "Shot") {
@@ -250,7 +255,7 @@ const StoryEx = (props) => {
           note={el}
           clicks={el.link_clicks}
           complexity={el.complexity}
-          miniforum={lesson.miniforums.find((m) => m.value == el.id)}
+          miniforum={null}
         />
       );
       components.push(item);
@@ -301,7 +306,7 @@ const StoryEx = (props) => {
           lessonID={lesson.id}
           length={Array(el.correct.length).fill(false)}
           story={true}
-          miniforum={lesson.miniforums.find((m) => m.value == el.id)}
+          miniforum={null}
         />
       );
       components.push(item);
@@ -341,7 +346,7 @@ const StoryEx = (props) => {
           context={context}
           user_name={el.user}
           author={lesson.user}
-          miniforum={lesson.miniforums.find((m) => m.value == el.id)}
+          miniforum={null}
         />
       );
       components.push(item);
@@ -407,7 +412,6 @@ const StoryEx = (props) => {
     } else if (task.type.toLowerCase() === "chat") {
       el = lesson.chats.find((chat) => chat.id === task.id);
       if (!el) return;
-
       item = (
         <Chat
           key={el.id}
@@ -474,7 +478,7 @@ const StoryEx = (props) => {
       components.push(item);
       move_statuses.push(solved.includes(el.id) ? true : false);
     } else if (task.type.toLowerCase() === "texteditor") {
-      el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);
+      el = lesson.textEditors.find((texteditor) => texteditor.id === task.id);
       item = (
         <SingleTextEditor
           key={el.id}
@@ -570,43 +574,43 @@ const StoryEx = (props) => {
     props.passStep(num);
   };
 
-  // let previousStories = [];
-  // if (lesson.coursePage.lessons) {
-  //   lesson.coursePage.lessons.map((other_lesson) => {
-  //     if (other_lesson.number < lesson.number) {
-  //       previousStories.push(other_lesson.story);
-  //     }
-  //   });
-  // }
-
+  let previousStories = [];
+  if (lesson.coursePage.lessons) {
+    lesson.coursePage.lessons.map((other_lesson) => {
+      if (other_lesson.number < lesson.number) {
+        previousStories.push(other_lesson.story);
+      }
+    });
+  }
+  console.log("lesson", lesson);
   return (
     <Container>
       {me && (
         <Feed
           move_statuses={move_statuses}
           components={components}
+          // components={[]}
           experience={experience}
           total={total}
           next={next}
           step={props.step}
           number_of_tasks={updatedTasks.length}
-          coursePageID={coursePageID}
-          coursePageId={coursePageID}
+          coursePageID={coursePageId}
+          coursePageId={coursePageId}
           coursePage={coursePage}
           me={me}
           lesson_structure={updatedStructure}
           openLesson={props.openLesson}
           move={false}
-          notes={lesson.notes}
-          chats={lesson.chats}
-          hasSecret={lesson.hasSecret}
+          // notes={lesson.notes}
+          // chats={lesson.chats}
+          hasSecret={false}
           lesson_number={lesson.number}
           lesson_name={lesson.name}
           lessonID={lesson.id}
           my_result={my_result}
           passStep={passStep}
           lessonId={props.id}
-          openSize={lesson.openSize}
           lesson={lesson}
           i_am_author={props.i_am_author}
           i_am_student={props.i_am_student}

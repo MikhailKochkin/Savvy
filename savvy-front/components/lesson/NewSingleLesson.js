@@ -4,341 +4,36 @@ import { useQuery, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 
-import StoryEx from "./StoryEx";
+import LessonDataLoad from "./LessonDataLoad";
 import { useUser } from "../User";
-import LoadingText from "../layout/LoadingText";
+import Loading from "../layout/Loading";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import LoadingErrorMessage from "../layout/LoadingErrorMessage";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
-    lesson(id: $id) {
+    shortLesson(id: $id) {
       id
       text
-      openSize
       name
       number
       type
       context
-      structure {
-        lessonItems {
-          id
-          type
-          comment
-        }
-      }
-      change
       open
-      totalPoints
-      hasSecret
       createdAt
+      coursePageId
       user {
         id
         name
         surname
         image
       }
-      notes {
-        id
-        link_clicks
-        text
-        name
-        instructorName
-        type
-        isSecret
-        complexity
-        next {
-          true {
-            type
-            value
-          }
-          false {
-            type
-            value
-          }
-          branches {
-            source
-            type
-            value
-          }
-        }
-        vertical_image
-        horizontal_image
-        user {
+      structure {
+        lessonItems {
           id
-        }
-      }
-      chats {
-        id
-        name
-        isSecret
-        link_clicks
-        complexity
-        messages {
-          messagesList {
-            author
-            name
-            text
-            image
-            reactions {
-              reaction
-              comment
-              name
-              image
-            }
-          }
-        }
-        user {
-          id
-        }
-      }
-      quizes {
-        id
-        question
-        answer
-        answers {
-          answerElements {
-            answer
-            index
-            relatedAnswers
-            feedback
-          }
-        }
-        complexity
-        ifRight
-        ifWrong
-        check
-        type
-        name
-        image
-        goalType
-        next {
-          true {
-            type
-            value
-          }
-          false {
-            type
-            value
-          }
-          branches {
-            source
-            type
-            value
-          }
-        }
-        isOrderOfAnswersImportant
-        shouldAnswerSizeMatchSample
-        user {
-          id
-        }
-        isScoringShown
-        instructorName
-      }
-      newTests {
-        id
-        answers
-        complexTestAnswers {
-          complexTestAnswers {
-            id
-            answer
-          }
-        }
-        type
-        correct
-        comments
-        complexity
-        ifRight
-        ifWrong
-        question
-        instructorName
-        name
-        image
-        next {
-          true {
-            type
-            value
-          }
-          false {
-            type
-            value
-          }
-          branches {
-            source
-            type
-            value
-          }
-        }
-        id
-        user {
-          id
-        }
-      }
-      testPractices {
-        id
-        tasks
-        tasksNum
-        intro
-        successText
-        failureText
-      }
-      # teamQuests {
-      #   id
-      #   introduction
-      #   solution
-      #   # tasks
-      # }
-      problems {
-        id
-        text
-        name
-        nodeID
-        steps {
-          problemItems {
-            id
-            type
-            next {
-              true {
-                type
-                value
-              }
-              false {
-                type
-                value
-              }
-              branches {
-                source
-                type
-                value
-              }
-            }
-          }
-        }
-        complexity
-        nodeType
-        type
-        user {
-          id
-        }
-        createdAt
-      }
-      offers {
-        id
-        header
-        text
-        type
-        courseId
-        price
-        program {
-          id
-          months
-          syllabus
-        }
-        discountPrice
-        user {
-          id
-        }
-        lesson {
-          id
-        }
-      }
-      constructions {
-        id
-        name
-        answer
-        elements {
-          elements {
-            type
-            value
-            text
-            comment
-            place
-            size
-            rows
-            inDoc
-            isTest
-            edit
-            borders {
-              top
-              bottom
-              left
-              right
-            }
-          }
-        }
-        columnsNum
-        complexity
-        variants
-        hint
-        type
-        user {
-          id
-        }
-      }
-      texteditors {
-        id
-        name
-        complexity
-        text
-        totalMistakes
-        user {
-          id
-        }
-      }
-      documents {
-        id
-        title
-        complexity
-        user {
-          id
-        }
-        clauses {
-          id
-          number
-          user {
-            id
-          }
-          commentary
-          keywords
-          sample
-        }
-      }
-      shots {
-        id
-        name
-        title
-        parts
-        comments
-        user {
-          id
-        }
-      }
-      miniforums {
-        id
-        type
-        value
-        statements {
-          id
-          text
-          comments
-          createdAt
-          user {
-            id
-            name
-            surname
-          }
-        }
-        lesson {
-          id
-          user {
-            id
-          }
-        }
-        user {
-          id
-          name
-          surname
+          type
+          comment
         }
       }
       forum {
@@ -384,22 +79,20 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       coursePage {
         id
         title
-        price
         authors {
           id
         }
         user {
           id
         }
-        courseType
+
         lessons {
           id
           number
-          type
           published
-          story
           name
           open
+          story
         }
       }
     }
@@ -516,7 +209,7 @@ const NewSingleLesson = (props) => {
   const passStep = (num) => {
     if (props.passStep) props.passStep(num);
   };
-
+  console.log("props", props.id);
   // 3. Download lesson data
 
   const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {
@@ -528,8 +221,8 @@ const NewSingleLesson = (props) => {
     me = loadedMe;
   }
 
-  if (loading) return <LoadingText />;
-  if (!data || !data.lesson) {
+  if (loading) return <Loading />;
+  if (!data || !data.shortLesson) {
     let errorData = {
       type: "simulator",
       page: "lesson",
@@ -540,10 +233,10 @@ const NewSingleLesson = (props) => {
     };
     return <LoadingErrorMessage errorData={errorData} />;
   }
-  let lesson = data.lesson;
-  let next = lesson.coursePage.lessons.find(
-    (l) => l.number === lesson.number + 1
-  );
+  let lesson = data.shortLesson;
+  // let next = lesson.coursePage.lessons.find(
+  //   (l) => l.number === lesson.number + 1
+  // );
   // 4. Check if I am the student or the author
 
   let i_am_author = false;
@@ -562,7 +255,7 @@ const NewSingleLesson = (props) => {
 
   if (
     me &&
-    me.new_subjects.filter((c) => c.id == lesson.coursePage.id).length > 0
+    me.new_subjects.filter((c) => c.id == lesson.coursePageId).length > 0
   ) {
     i_am_student = true;
   }
@@ -571,7 +264,7 @@ const NewSingleLesson = (props) => {
     return (
       <PleaseSignIn
         authSource={props.authSource}
-        coursePageId={lesson.coursePage.id}
+        coursePageId={lesson.coursePageId}
       />
     );
   }
@@ -583,51 +276,41 @@ const NewSingleLesson = (props) => {
     !me.permissions.includes("ADMIN") &&
     !lesson.open
   ) {
-    return <AreYouEnrolled coursePageId={lesson.coursePage.id} />;
+    return <AreYouEnrolled coursePageId={lesson.coursePageId} />;
   }
 
   return (
     <>
       <Head>
         <title>{lesson ? lesson.name : "Simulator"}</title>
-        <meta name="description" content={lesson.description} />
+        <meta name="description" content={lesson.description || ""} />
       </Head>
       <div id="root"></div>
-      <>
-        {lesson && (
-          <>
-            <Container>
-              <LessonPart>
-                <StoryEx
-                  id={props.id}
-                  // step is the ability to set the part of the lesson you want to open via menu
-                  step={props.step}
-                  tasks={
-                    props.add == "offer"
-                      ? [
-                          ...lesson.structure.lessonItems,
-                          { id: 1, type: "offer" },
-                        ]
-                      : lesson.structure.lessonItems
-                  }
-                  me={me}
-                  size={props.size == "short" ? "short" : "long"}
-                  lesson={lesson}
-                  next={next}
-                  coursePageID={lesson.coursePage.id}
-                  coursePage={lesson.coursePage}
-                  passStep={passStep}
-                  openLesson={lesson.open}
-                  i_am_author={i_am_author}
-                  i_am_student={i_am_student}
-                  authSource={props.authSource}
-                  embedded={props.embedded}
-                />
-              </LessonPart>
-            </Container>{" "}
-          </>
-        )}
-      </>
+      {lesson && (
+        <>
+          <Container>
+            <LessonPart>
+              <LessonDataLoad
+                id={props.id}
+                // step is the ability to set the part of the lesson you want to open via menu
+                step={props.step}
+                tasks={lesson.structure.lessonItems}
+                me={me}
+                lesson={lesson}
+                // next={next}
+                coursePageId={lesson.coursePageId}
+                coursePage={lesson.coursePage}
+                passStep={passStep}
+                openLesson={lesson.open}
+                i_am_author={i_am_author}
+                i_am_student={i_am_student}
+                authSource={props.authSource}
+                embedded={props.embedded}
+              />
+            </LessonPart>
+          </Container>{" "}
+        </>
+      )}
     </>
   );
 };

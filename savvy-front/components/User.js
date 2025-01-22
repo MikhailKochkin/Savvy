@@ -15,106 +15,15 @@ const CURRENT_USER_QUERY = gql`
   query {
     me {
       id
-      email
       name
       surname
+      email
       permissions
-      tags
       image
-      work
-      score
-      description
-      subscriptions {
-        id
-        isActive
-        type
-        term
-        startDate
-        paymentID
-        renewals {
-          date
-          type
-          price
-        }
-        endDate
-        createdAt
-        updatedAt
-      }
-      certificates {
-        id
-        createdAt
-        coursePage {
-          id
-        }
-      }
-      courseVisits {
-        id
-        # reminders {
-        #   id
-        # }
-        coursePage {
-          id
-        }
-      }
-      teacherFeedback {
-        id
-        text
-        lesson {
-          id
-          name
-        }
-      }
-      level {
-        id
-        level
-      }
-      studentFeedback {
-        id
-        text
-        lesson {
-          id
-          name
-          number
-          coursePage {
-            id
-          }
-        }
-      }
       new_subjects {
         id
       }
-      company {
-        id
-        name
-      }
-      status
-      lessonResults {
-        id
-      }
-      orders {
-        id
-        coursePage {
-          id
-        }
-        isPaid
-      }
-      # uni {
-      #   id
-      #   title
-      # teachers {
-      #   id
-      # }
-      # capacity
-      # paidMonths
-      # uniCoursePages {
-      #   id
-      # }
-      # }
       isFamiliar
-      # favourites
-      # coverLetter
-      # resume
-      # visitedLessons
       coursePages {
         id
       }
@@ -124,9 +33,6 @@ const CURRENT_USER_QUERY = gql`
       lessons {
         id
       }
-      subscriptions {
-        id
-      }
     }
   }
 `;
@@ -134,28 +40,28 @@ const CURRENT_USER_QUERY = gql`
 function useUser() {
   // 1. Get user data
   const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
-  let visits = [
-    {
-      date: new Date(),
-      utm_source: getCookie("traffic_source"),
-      utm_medium: getCookie("traffic_medium"),
-      utm_campaign: getCookie("traffic_campaign"),
-    },
-  ];
+  // let visits = [
+  //   {
+  //     date: new Date(),
+  //     utm_source: getCookie("traffic_source"),
+  //     utm_medium: getCookie("traffic_medium"),
+  //     utm_campaign: getCookie("traffic_campaign"),
+  //   },
+  // ];
   // 2. Update user mutation
-  const [recordSession, { record_data }] = useMutation(RECORD_SESSION);
+  // const [recordSession, { record_data }] = useMutation(RECORD_SESSION);
   // 3. run mutation inside useEffect once get me data
 
-  useEffect(() => {
-    if (data && data.me && data.me.id) {
-      const new_record = recordSession({
-        variables: {
-          id: data.me.id,
-          traffic_sources: { visitsList: visits },
-        },
-      });
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && data.me && data.me.id) {
+  //     const new_record = recordSession({
+  //       variables: {
+  //         id: data.me.id,
+  //         traffic_sources: { visitsList: visits },
+  //       },
+  //     });
+  //   }
+  // }, [data]);
   if (error) return console.log(error);
   if (data) {
     return data.me;

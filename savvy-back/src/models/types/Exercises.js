@@ -540,7 +540,8 @@ const Forum = objectType({
     t.string("id");
     t.string("text");
     t.field("user", { type: "User" });
-    t.int("userId");
+    t.string("userId");
+    t.string("lessonId");
     t.field("lesson", { type: "Lesson" });
     t.list.field("rating", { type: "Rating" });
     t.list.field("statements", { type: "Statement" });

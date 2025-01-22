@@ -1,4 +1,4 @@
-const { queryType, stringArg, nonNull, arg } = require("nexus");
+const { stringArg, nonNull, list } = require("nexus");
 
 function exercisesQueries(t) {
   t.list.field("quizes", {
@@ -141,6 +141,56 @@ function exercisesQueries(t) {
       return ctx.prisma.processManager.findUnique({
         where: { id },
       });
+    },
+  });
+  t.field("loadLessonData", {
+    type: "LessonData",
+    args: {
+      lessonId: stringArg(),
+    },
+    resolve: async (_, { lessonId }, ctx) => {
+      const results = {};
+      results.notes = await ctx.prisma.note.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.chats = await ctx.prisma.chat.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.quizes = await ctx.prisma.quiz.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.problems = await ctx.prisma.problem.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.newTests = await ctx.prisma.newTest.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.testPractices = await ctx.prisma.testPractice.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.constructions = await ctx.prisma.construction.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.textEditors = await ctx.prisma.textEditor.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.documents = await ctx.prisma.document.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      results.shots = await ctx.prisma.shot.findMany({
+        where: { lessonId },
+        include: { user: { select: { id: true } } },
+      });
+      return results;
     },
   });
 }

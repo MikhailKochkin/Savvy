@@ -166,10 +166,10 @@ const NewConstructor = (props) => {
         let newEl = { ...el };
         delete newEl.__typename;
         newEl.borders = {
-          top: el.borders.top,
-          right: el.borders.right,
-          bottom: el.borders.bottom,
-          left: el.borders.left,
+          top: el.borders?.top,
+          right: el.borders?.right,
+          bottom: el.borders?.bottom,
+          left: el.borders?.left,
         };
         return newEl;
       }

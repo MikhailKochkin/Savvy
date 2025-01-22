@@ -7,8 +7,8 @@ import dynamic from "next/dynamic";
 import parse from "html-react-parser";
 
 const LESSON_RESULTS_QUERY = gql`
-  query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(lessonId: $lessonId, userId: $userId) {
+  query LESSON_RESULTS_QUERY($lessonId: String!, $studentId: String!) {
+    lessonResults(lessonId: $lessonId, studentId: $studentId) {
       id
       progress
       lesson {
@@ -330,7 +330,7 @@ const LessonHeader = (props) => {
   let color;
 
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
-    variables: { lessonId: props.lesson.id, userId: props.me.id },
+    variables: { lessonId: props.lesson.id, studentId: props.me.id },
   });
   // if (error) return <p>Error</p>;
   useEffect(() => {

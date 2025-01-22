@@ -96,6 +96,7 @@ const MiniQuestion = (props) => {
   const [generatingExplanation, setGeneratingExplanation] = useState(false);
   const [generatingImprovement, setGeneratingImprovement] = useState(false);
   const [generatingChallenge, setGeneratingChallenge] = useState(false);
+  const [generatingAnswerResult, setGeneratingAnswerResult] = useState(false);
   const [challengeResult, setChallengeResult] = useState(null);
   const [newWording, setNewWording] = useState(null);
   const { t } = useTranslation("lesson");
@@ -197,7 +198,17 @@ const MiniQuestion = (props) => {
   const renderButtons = () => {
     return (
       <ButtonsBox>
-        <MiniAIButton onClick={(e) => props.onAnswer()}>Check</MiniAIButton>
+        {!generatingAnswerResult ? (
+          <MiniAIButton
+            onClick={(e) => {
+              setGeneratingAnswerResult(true);
+              props.onAnswer();
+              setGeneratingAnswerResult(false);
+            }}
+          >
+            Check
+          </MiniAIButton>
+        ) : null}
         <MiniAIButton
           onClick={async (e) => {
             setGeneratingHint(true);

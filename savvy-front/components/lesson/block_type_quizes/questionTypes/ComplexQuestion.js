@@ -649,19 +649,20 @@ const ComplexQuestion = (props) => {
         )}
         {/* 4. Answer buttons */}
         <Group>
-          {correctIdeas.length != props.answers.answerElements.length && (
-            <Button1
-              onClick={async (e) => {
-                e.preventDefault();
-                setIsAnswerBeingChecked(true);
-                const results = await getMatchingAnswers();
-                const results2 = await getFeedbackOnIdeas(e, results);
-                setIsAnswerBeingChecked(false);
-              }}
-            >
-              {t("check")}
-            </Button1>
-          )}
+          {!isAnswerBeingChecked &&
+            correctIdeas.length != props.answers.answerElements.length && (
+              <Button1
+                onClick={async (e) => {
+                  e.preventDefault();
+                  setIsAnswerBeingChecked(true);
+                  const results = await getMatchingAnswers();
+                  const results2 = await getFeedbackOnIdeas(e, results);
+                  setIsAnswerBeingChecked(false);
+                }}
+              >
+                {t("check")}
+              </Button1>
+            )}
         </Group>
 
         {/* 6. Bubble with buttons for additional questions available to the student  */}

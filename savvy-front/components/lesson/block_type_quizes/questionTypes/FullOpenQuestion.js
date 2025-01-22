@@ -1,33 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useMutation, gql } from "@apollo/client";
-import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
 import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import IconBlockElement from "../../styles/commonElements/IconBlockElement";
-
-const SEND_MESSAGE_MUTATION = gql`
-  mutation SEND_MESSAGE_MUTATION(
-    $subject: String
-    $name: String
-    $email: String
-    $firm: String
-    $connection: String
-    $type: String
-  ) {
-    sendBusinessEmail(
-      subject: $subject
-      name: $name
-      email: $email
-      firm: $firm
-      connection: $connection
-      type: $type
-    ) {
-      name
-    }
-  }
-`;
 
 import {
   guessAlphabet,
@@ -247,16 +223,18 @@ const FullOpenQuestion = (props) => {
         )}
 
         <Group progress={isAnswerBeingChecked}>
-          <Button1
-            inputColor={inputColor}
-            onClick={async (e) => {
-              e.preventDefault();
-              props.onAnswer();
-            }}
-            correct={correct}
-          >
-            {t("check")}
-          </Button1>
+          {!isAnswerBeingChecked ? (
+            <Button1
+              inputColor={inputColor}
+              onClick={async (e) => {
+                e.preventDefault();
+                props.onAnswer();
+              }}
+              correct={correct}
+            >
+              {t("check")}
+            </Button1>
+          ) : null}
           {goalType !== "ASSESS" && (
             <Button1
               inputColor={inputColor}

@@ -240,14 +240,14 @@ function exercisesMutations(t) {
           },
           `{ id, level {id, level} }`
         );
-        const updateUserLevel = await ctx.prisma.userLevel.update({
-          data: {
-            level: user.level.level + 1,
-          },
-          where: {
-            id: user.level.id,
-          },
-        });
+        // const updateUserLevel = await ctx.prisma.userLevel.update({
+        //   data: {
+        //     level: user.level.level + 1,
+        //   },
+        //   where: {
+        //     id: user.level.id,
+        //   },
+        // });
       }
 
       return TestResult;
@@ -643,14 +643,14 @@ function exercisesMutations(t) {
           },
           `{ id, level {id, level} }`
         );
-        const updateUserLevel = await ctx.prisma.userLevel.update({
-          data: {
-            level: user.level.level + 2,
-          },
-          where: {
-            id: user.level.id,
-          },
-        });
+        // const updateUserLevel = await ctx.prisma.userLevel.update({
+        //   data: {
+        //     level: user.level.level + 2,
+        //   },
+        //   where: {
+        //     id: user.level.id,
+        //   },
+        // });
       }
 
       return QuizResult;
@@ -999,14 +999,14 @@ function exercisesMutations(t) {
           `{ id, level {id, level} }`
         );
 
-        const updateUserLevel = await ctx.prisma.userLevel.update({
-          data: {
-            level: parseFloat(user.level.level) + 0.25,
-          },
-          where: {
-            id: user.level.id,
-          },
-        });
+        // const updateUserLevel = await ctx.prisma.userLevel.update({
+        //   data: {
+        //     level: parseFloat(user.level.level) + 0.25,
+        //   },
+        //   where: {
+        //     id: user.level.id,
+        //   },
+        // });
       }
       return TextEditorResult;
     },
@@ -1682,14 +1682,14 @@ function exercisesMutations(t) {
           },
           `{ id, level {id, level} }`
         );
-        const updateUserLevel = await ctx.prisma.userLevel.update({
-          data: {
-            level: user.level.level + 0.25,
-          },
-          where: {
-            id: user.level.id,
-          },
-        });
+        // const updateUserLevel = await ctx.prisma.userLevel.update({
+        //   data: {
+        //     level: user.level.level + 0.25,
+        //   },
+        //   where: {
+        //     id: user.level.id,
+        //   },
+        // });
       }
       return ConstructionResult;
     },

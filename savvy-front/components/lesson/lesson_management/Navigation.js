@@ -131,7 +131,7 @@ const Navigation = (props) => {
               href={{
                 pathname: "/course",
                 query: {
-                  id: lesson.coursePage.id,
+                  id: props.coursePageId,
                 },
               }}
             >
@@ -180,7 +180,7 @@ const Navigation = (props) => {
         <div className="block">
           {props.page !== "development" &&
             me &&
-            (lesson.user.id === me.id ||
+            (lesson?.user?.id === me.id ||
               i_am_author ||
               me.permissions.includes("ADMIN")) && (
               <Link
@@ -202,7 +202,7 @@ const Navigation = (props) => {
         <div className="block">
           {props.page !== "analytics" &&
             me &&
-            (lesson.user.id === me.id ||
+            (lesson?.user?.id === me.id ||
               i_am_author ||
               me.permissions.includes("ADMIN")) && (
               <Link

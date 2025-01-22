@@ -860,12 +860,13 @@ type Forum {
   createdAt: DateTime
   id: String
   lesson: Lesson
+  lessonId: String
   rating: [Rating]
   statements: [Statement]
   text: String
   updatedAt: DateTime
   user: User
-  userId: Int
+  userId: String
 }
 
 type GrowthArea {
@@ -1016,6 +1017,41 @@ type Lesson {
   updatedAt: DateTime
   user: User
   userId: Int
+}
+
+type LessonData {
+  """List of chats."""
+  chats: [Chat]
+
+  """List of constructions."""
+  constructions: [Construction]
+
+  """List of documents."""
+  documents: [Document]
+
+  """Forum"""
+  forum: Forum
+
+  """List of new tests."""
+  newTests: [NewTest]
+
+  """List of notes."""
+  notes: [Note]
+
+  """List of problems."""
+  problems: [Problem]
+
+  """List of quizzes."""
+  quizes: [Quiz]
+
+  """List of shots."""
+  shots: [Shot]
+
+  """List of test practices."""
+  testPractices: [TestPractice]
+
+  """List of text editors."""
+  textEditors: [TextEditor]
 }
 
 input LessonInModule {
@@ -1882,7 +1918,7 @@ type Query {
     lessonId: String
 
     """ID of the user."""
-    userId: String
+    studentId: String
   ): [LessonResult]
   lessons(
     """ID of the coursePage to fetch."""
@@ -1891,6 +1927,7 @@ type Query {
     """ID of the lesson to fetch."""
     id: String
   ): [Lesson]
+  loadLessonData(lessonId: String): LessonData
   me: User
   newTest(id: String!): NewTest
   newTests(
@@ -1955,12 +1992,14 @@ type Query {
     """ID of the referral to fetch."""
     id: String
   ): [Referral]
+  shortLesson(id: String!): Lesson
   stats(lessonId: String, userId: String): Stats
   studentsAnalytics(
     """Id"""
     lessonId: String
   ): [User]
   subscribers: [User]
+  subscriptionsByUser(userId: String!): [Subscription]
   testPracticeResult(id: String!): TestPracticeResult
   testPracticeResults(
     """ID of the test practice result to fetch."""

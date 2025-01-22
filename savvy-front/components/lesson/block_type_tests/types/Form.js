@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
+import styled from "styled-components";
 
 import {
   IconBlock,
@@ -12,6 +13,13 @@ import {
 } from "../styles/testStyles";
 import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 import AnswerOption from "../functions/AnswerOption";
+
+const Styles = styled.div`
+  width: 570px;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
 
 const Test = (props) => {
   const { t } = useTranslation("lesson");
@@ -31,92 +39,94 @@ const Test = (props) => {
     answerOptions,
   } = props;
   return (
-    <TextBar className="Test" story={story}>
-      <div className="question_box">
-        <div className="question_text">{parse(props.question[0])}</div>
-        <IconBlockElement
-          image={image}
-          instructorName={instructorName}
-          author={author}
-        />
-      </div>
-      <div className="answer">
-        <IconBlock>
-          <div className="icon2">
-            {me &&
-              (me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              ))}
-          </div>
-          <div className="name">{me?.name}</div>
-        </IconBlock>
-        <Options>
-          {mes.map((answer, index) => (
-            <AnswerOption
-              stop={answerState !== "think"}
-              answerOption={answerOptions[index]}
-              true={props.true[index]}
-              hidden={!showAnswer}
-              key={index}
-              answer={answer[0]}
-              correct={answer[1]}
-              number={index}
-              onAnswerSelected={getTestData}
-            />
-          ))}
-        </Options>
-      </div>
-      {/* 2. Студент не выбрал ни одного из вариантов. Просим дать ответ  */}
-
-      {zero && (
+    <Styles>
+      <TextBar className="Test" story={story}>
         <div className="question_box">
-          <div className="question_text">{t("choose_option")}</div>
+          <div className="question_text">{parse(props.question[0])}</div>
           <IconBlockElement
             image={image}
             instructorName={instructorName}
             author={author}
           />
         </div>
-      )}
+        <div className="answer">
+          <IconBlock>
+            <div className="icon2">
+              {me &&
+                (me.image ? (
+                  <img className="icon" src={me.image} />
+                ) : me.surname ? (
+                  `${me.name[0]}${me.surname[0]}`
+                ) : (
+                  `${me.name[0]}${me.name[1]}`
+                ))}
+            </div>
+            <div className="name">{me?.name}</div>
+          </IconBlock>
+          <Options>
+            {mes.map((answer, index) => (
+              <AnswerOption
+                stop={answerState !== "think"}
+                answerOption={answerOptions[index]}
+                true={props.true[index]}
+                hidden={!showAnswer}
+                key={index}
+                answer={answer[0]}
+                correct={answer[1]}
+                number={index}
+                onAnswerSelected={getTestData}
+              />
+            ))}
+          </Options>
+        </div>
+        {/* 2. Студент не выбрал ни одного из вариантов. Просим дать ответ  */}
 
-      {/* 3. Кнопка ответа  */}
-      <Group>
-        {answerState == "think" && (
-          <MiniButton
-            className="button"
-            id="but1"
-            onClick={async (e) => {
-              // Stop the form from submitting
-              e.preventDefault();
-              props.passTestData("FORM");
-            }}
-          >
-            {t("check")}
-          </MiniButton>
-        )}
-      </Group>
-
-      {/* 6. Работаем с формами */}
-      {commentsList.filter((com) => com !== "").length > 0 && (
-        <Question inputColor="#F3F3F3">
-          <div className="question_text">
-            {commentsList.length > 0 &&
-              commentsList.map((com, i) => {
-                return com ? parse(com) : null;
-              })}
+        {zero && (
+          <div className="question_box">
+            <div className="question_text">{t("choose_option")}</div>
+            <IconBlockElement
+              image={image}
+              instructorName={instructorName}
+              author={author}
+            />
           </div>
-          <IconBlockElement
-            image={image}
-            instructorName={instructorName}
-            author={author}
-          />
-        </Question>
-      )}
-    </TextBar>
+        )}
+
+        {/* 3. Кнопка ответа  */}
+        <Group>
+          {answerState == "think" && (
+            <MiniButton
+              className="button"
+              id="but1"
+              onClick={async (e) => {
+                // Stop the form from submitting
+                e.preventDefault();
+                props.passTestData("FORM");
+              }}
+            >
+              {t("check")}
+            </MiniButton>
+          )}
+        </Group>
+
+        {/* 6. Работаем с формами */}
+        {commentsList.filter((com) => com !== "").length > 0 && (
+          <Question inputColor="#F3F3F3">
+            <div className="question_text">
+              {commentsList.length > 0 &&
+                commentsList.map((com, i) => {
+                  return com ? parse(com) : null;
+                })}
+            </div>
+            <IconBlockElement
+              image={image}
+              instructorName={instructorName}
+              author={author}
+            />
+          </Question>
+        )}
+      </TextBar>
+    </Styles>
   );
 };
 

@@ -178,7 +178,7 @@ const ProblemModal = (props) => {
             .map((t) => (
               <>
                 <Span>
-                  {parse(t.answer)} {dayjs(t.createdAt).format("LLL")}
+                  {parse(t.answer)} {t.createdAt}
                 </Span>
               </>
             ))
@@ -227,9 +227,7 @@ const ProblemModal = (props) => {
                                 )
                                   ? "✅"
                                   : "❌"}{" "}
-                                <div className="time">
-                                  {dayjs(result.createdAt).format("LLL")}{" "}
-                                </div>
+                                <div className="time">{result.createdAt} </div>
                               </Block>
                             ) : (
                               <Block>
@@ -243,9 +241,7 @@ const ProblemModal = (props) => {
                                 {stringToArray(result.answer).map(
                                   (el) => parse(el) + ", "
                                 )}
-                                <div className="time">
-                                  {dayjs(result.createdAt).format("LLL")}{" "}
-                                </div>
+                                <div className="time">{result.createdAt}</div>
                               </Block>
                             )
                           )}
@@ -390,9 +386,7 @@ const ProblemModal = (props) => {
                                   ) : null}
                                 </>
                               )}
-                              <div className="time">
-                                {dayjs(result.createdAt).format("LLL")}{" "}
-                              </div>
+                              <div className="time">{result.createdAt}</div>
                             </div>
                           ))}
                         </div>

@@ -433,17 +433,20 @@ const Generate = (props) => {
         </Progress>
         {/* 4. Answer buttons */}
         <Group progress={progress}>
-          <Button1
-            inputColor={inputColor}
-            onClick={async (e) => {
-              e.preventDefault();
-              setProgress("true");
-              await getMatchingAnswers(props.answers.answerElements);
-              setProgress("false");
-            }}
-          >
-            {t("evaluate_ideas")}
-          </Button1>
+          {progress == "false" ? (
+            <Button1
+              inputColor={inputColor}
+              onClick={async (e) => {
+                e.preventDefault();
+                setProgress("true");
+                await getMatchingAnswers(props.answers.answerElements);
+                setProgress("false");
+              }}
+            >
+              {t("evaluate_ideas")}
+            </Button1>
+          ) : null}
+
           {props.goalType !== "ASSESS" && (
             <Button1
               inputColor={inputColor}

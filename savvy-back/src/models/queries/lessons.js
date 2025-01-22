@@ -19,7 +19,11 @@ function lessonQueries(t) {
         where, // Prisma supports `where` filtering
         include: {
           comments: true,
-          user: true,
+          user: {
+            select: {
+              id: true,
+            },
+          },
           coursePage: {
             include: {
               lessons: true, // Include the lessons field inside coursePage
@@ -28,42 +32,70 @@ function lessonQueries(t) {
           },
           notes: {
             include: {
-              user: true, // Include the lessons field inside coursePage
+              user: {
+                select: {
+                  id: true,
+                },
+              }, // Include the lessons field inside coursePage
             },
           },
           chats: true,
           quizes: {
             include: {
-              user: true, // Include the lessons field inside coursePage
+              user: {
+                select: {
+                  id: true,
+                },
+              }, // Include the lessons field inside coursePage
             },
           },
           newTests: {
             include: {
-              user: true, // Include the lessons field inside coursePage
+              user: {
+                select: {
+                  id: true,
+                },
+              }, // Include the lessons field inside coursePage
             },
           },
           testPractices: true,
           teamQuests: true,
           problems: {
             include: {
-              user: true, // Include the lessons field inside coursePage
+              user: {
+                select: {
+                  id: true,
+                },
+              }, // Include the lessons field inside coursePage
             },
           },
           offers: true,
           constructions: {
             include: {
-              user: true, // Include the lessons field inside coursePage
+              user: {
+                select: {
+                  id: true,
+                },
+              }, // Include the lessons field inside coursePage
             },
           },
           texteditors: {
             include: {
-              user: true, // Include the lessons field inside coursePage
+              user: {
+                select: {
+                  id: true,
+                },
+              }, // Include the lessons field inside coursePage
             },
           },
           documents: true,
           shots: {
             include: {
-              user: true, // Include the lessons field inside coursePage
+              user: {
+                select: {
+                  id: true,
+                },
+              }, // Include the lessons field inside coursePage
             },
           },
           miniforums: true,
@@ -145,15 +177,15 @@ function lessonQueries(t) {
           miniforums: true,
           forum: {
             include: {
-              user: true,
+              user: true, // Include the lessons field inside coursePage
               rating: {
                 include: {
-                  user: true,
+                  user: true, // Include the lessons field inside coursePage
                 },
               },
               statements: {
                 include: {
-                  user: true,
+                  user: true, // Include the lessons field inside coursePage
                 },
               },
             },
@@ -164,6 +196,93 @@ function lessonQueries(t) {
               replies: {
                 include: {
                   user: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    },
+  });
+
+  t.field("shortLesson", {
+    type: "Lesson",
+    args: {
+      id: nonNull(stringArg()),
+    },
+    resolve: (_parent, { id }, ctx) => {
+      return ctx.prisma.lesson.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          text: true,
+          openSize: true,
+          name: true,
+          number: true,
+          type: true,
+          context: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+              image: true,
+            },
+          },
+          structure: {
+            select: {
+              lessonItems: {
+                select: {
+                  id: true,
+                  type: true,
+                  comment: true,
+                },
+              },
+            },
+          },
+          coursePage: {
+            include: {
+              lessons: {
+                select: {
+                  id: true,
+                  number: true,
+                  published: true,
+                  name: true,
+                  open: true,
+                  story: true,
+                },
+              }, // Include the lessons field inside coursePage
+              authors: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
+          open: true,
+          forum: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                },
+              },
+              rating: {
+                include: {
+                  user: {
+                    select: {
+                      id: true,
+                    },
+                  },
+                },
+              },
+              statements: {
+                include: {
+                  user: {
+                    select: {
+                      id: true,
+                    },
+                  },
                 },
               },
             },
@@ -210,7 +329,11 @@ function lessonQueries(t) {
       return ctx.prisma.feedback.findMany({
         where,
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+            },
+          },
           lesson: true,
         },
       });
@@ -221,22 +344,20 @@ function lessonQueries(t) {
     type: "LessonResult",
     args: {
       lessonId: stringArg({ description: "ID of the lesson." }), // Optional
-      userId: stringArg({ description: "ID of the user." }), // Optional
+      studentId: stringArg({ description: "ID of the user." }), // Optional
       coursePageId: stringArg({ description: "ID of the course page." }),
     },
-    resolve: (_parent, { lessonId, userId, coursePageId }, ctx) => {
+    resolve: (_parent, { lessonId, studentId, coursePageId }, ctx) => {
       const where = {};
 
       // Add conditions to the `where` clause dynamically based on the provided args
       if (lessonId) {
         where.lessonId = lessonId;
       }
-      if (userId) {
-        where.studentId = userId;
+      if (studentId) {
+        where.studentId = studentId;
       }
-
       if (coursePageId) {
-        // Use relational filtering to filter based on `coursePageId` in the related `lesson`
         where.lesson = {
           coursePageId: coursePageId,
         };

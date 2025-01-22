@@ -2,7 +2,7 @@ import { useQuery, gql } from "@apollo/client";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(lessonId: $lessonId, userId: $userId) {
+    lessonResults(lessonId: $lessonId, studentId: $userId) {
       id
       progress
       lesson {
@@ -32,7 +32,7 @@ const CompletionRate = (props) => {
 
   let maxResult = null;
   let completionRate = 0;
-  if (data?.lessonResults.length > 0 && lesson?.structure?.lessonItems) {
+  if (data?.lessonResults?.length > 0 && lesson?.structure?.lessonItems) {
     maxResult = getLessonWithHighestProgress(data.lessonResults);
     completionRate = (
       (maxResult.progress / lesson.structure.lessonItems.length) *

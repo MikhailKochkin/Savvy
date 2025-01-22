@@ -91,14 +91,14 @@ function userMutations(t) {
         },
       });
 
-      const UserLevel = await ctx.prisma.userLevel.create({
-        data: {
-          user: {
-            connect: { id: user.id },
-          },
-          level: 1,
-        },
-      });
+      // const UserLevel = await ctx.prisma.userLevel.create({
+      //   data: {
+      //     user: {
+      //       connect: { id: user.id },
+      //     },
+      //     level: 1,
+      //   },
+      // });
 
       let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
         expiresIn: 1000 * 60 * 60 * 24 * 365,
@@ -190,14 +190,14 @@ function userMutations(t) {
         },
       });
 
-      const UserLevel = await ctx.prisma.userLevel.create({
-        data: {
-          user: {
-            connect: { id: user.id },
-          },
-          level: 1,
-        },
-      });
+      // const UserLevel = await ctx.prisma.userLevel.create({
+      //   data: {
+      //     user: {
+      //       connect: { id: user.id },
+      //     },
+      //     level: 1,
+      //   },
+      // });
 
       let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
         expiresIn: 1000 * 60 * 60 * 24 * 365,
@@ -259,14 +259,14 @@ function userMutations(t) {
         },
       });
 
-      const UserLevel = await ctx.prisma.userLevel.create({
-        data: {
-          user: {
-            connect: { id: user.id },
-          },
-          level: 1,
-        },
-      });
+      // const UserLevel = await ctx.prisma.userLevel.create({
+      //   data: {
+      //     user: {
+      //       connect: { id: user.id },
+      //     },
+      //     level: 1,
+      //   },
+      // });
       return { user };
     },
   });
@@ -335,14 +335,14 @@ function userMutations(t) {
           },
         });
 
-        const UserLevel = await ctx.prisma.userLevel.create({
-          data: {
-            user: {
-              connect: { id: user.id },
-            },
-            level: 1,
-          },
-        });
+        // const UserLevel = await ctx.prisma.userLevel.create({
+        //   data: {
+        //     user: {
+        //       connect: { id: user.id },
+        //     },
+        //     level: 1,
+        //   },
+        // });
 
         let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
           expiresIn: 1000 * 60 * 60 * 24 * 365,
