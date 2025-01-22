@@ -292,7 +292,6 @@ function userQueries(t) {
             },
           },
         });
-        console.log("user", user);
         return user;
       } catch (error) {
         console.error("Error fetching user:", error);

@@ -8,6 +8,7 @@ import { MicroButton } from "../../styles/DevPageStyles";
 import Loading from "../../../layout/Loading";
 
 import { generateDiscussion } from "../functions/AIChatFunctions";
+import { set } from "lodash";
 
 const CREATE_CHATRESULT_MUTATION = gql`
   mutation CREATE_CHATRESULT_MUTATION(
@@ -204,6 +205,35 @@ const DynamicChat = (props) => {
   const [studentResponse, setStudentResponse] = useState("");
   const [generatingResponse, setGeneratingResponse] = useState(false);
 
+  const assessHowRelatedQuestionIs = async (studentQuestion, chatTopic) => {
+    let result;
+    console.log({
+      answer1: chatTopic,
+      answer2: studentQuestion,
+    });
+    try {
+      const response = await fetch(
+        "https://arcane-refuge-67529.herokuapp.com/checker",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            answer1: studentQuestion,
+            answer2: chatTopic,
+          }),
+        }
+      );
+      console.log(result);
+
+      result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error comparing main answer:", error);
+    }
+  };
+
   const generateStudentResponse = async () => {
     setDialogueMessages((prevMessages) => [
       ...prevMessages,
@@ -274,10 +304,11 @@ const DynamicChat = (props) => {
     }
   };
 
+  console.log("messages.messagesList[2]", messages.messagesList);
+
   return (
     <>
       <Messages>
-        {console.log("dialogueMessages", dialogueMessages)}
         {dialogueMessages.map((m, i) => {
           if (m.author === "author") {
             return (
@@ -328,7 +359,12 @@ const DynamicChat = (props) => {
         <MicroButton
           onClick={async (e) => {
             setGeneratingResponse(true);
-            await generateStudentResponse();
+            let relationTestResult = await assessHowRelatedQuestionIs(
+              studentResponse,
+              messages.messagesList[3].text
+            );
+            console.log("relationTestResult", relationTestResult);
+            // await generateStudentResponse();
             setGeneratingResponse(false);
           }}
         >

@@ -14,6 +14,7 @@ import {
   Row,
 } from "./lesson/styles/DevPageStyles";
 import Loading from "./layout/Loading";
+import { set } from "lodash";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION(
@@ -211,6 +212,7 @@ const Client = (props) => {
   const [emailGoal, setEmailGoal] = useState(null);
   const [emailMessage, setEmailMessage] = useState(null);
   const [generating, setGenerating] = useState(false);
+  const [emailPrompt, setEmailPrompt] = useState("");
 
   const [sendBusinessClientEmail, { updated_data, sending, error }] =
     useMutation(UPDATE_CLIENT_MUTATION);
@@ -260,6 +262,13 @@ const Client = (props) => {
       <p>We at BeSavvy build AI-powered virtual job simulations to help with thay. You can use simualtions to help candidates (virally) find your law firm, go through primary assessment and learn more about {{law firm name}}.</p>
       <p>Maybe you can find such a tool useful. Could I send a product deck?</p>
       `,
+      `
+      // Follow Up Email
+      <p>Hi Jons,</p>
+      <p>Just wanted to follow up on my previous email on how simulators can improve juniors' training.</p>
+      <p>Juniors learn something new at their job every day. Some – by chaotically learning on the job. And others by getting structured practical experience through simulators.</p>
+      <p>Will Gowling juniors be in the second group? May I send a short deck or demo to show how it works?</p>
+      `,
     ];
 
     let prompt = `
@@ -286,6 +295,7 @@ const Client = (props) => {
       – Use these good emails examples to structure your email: ${good_emails_examples.join(
         " "
       )}
+      – Use these instructions to write the email: ${emailPrompt} 
       – Make very sentence short and converstational. For example, instead of 
       "With the competition for top talent in the legal sector, I wanted to share how BeSavvy can support your efforts in developing essential legal skills."
       use "Competition for top talent in London is fiercer than ever. That’s why it’s worth knowing about tools like BeSavvy."
@@ -504,6 +514,15 @@ const Client = (props) => {
             </div>
           </Row>
         )}
+        <Row>
+          <div className="description">Prompt</div>
+          <div className="action_area">
+            <input
+              onChange={(e) => setEmailPrompt(e.target.value)}
+              value={emailPrompt}
+            />
+          </div>
+        </Row>
         {!generating ? (
           <>
             <Row>

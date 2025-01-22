@@ -20,8 +20,8 @@ import TestPractice from "../lesson/block_type_testblocks/TB";
 import LessonData from "../stats/DemoLessonData";
 
 const LESSON_RESULTS_QUERY = gql`
-  query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
-    lessonResults(lessonId: $lessonId, userId: $userId) {
+  query LESSON_RESULTS_QUERY($lessonId: String!, $studentId: String!) {
+    lessonResults(lessonId: $lessonId, studentId: $studentId) {
       id
       visitsNumber
       progress
@@ -209,7 +209,7 @@ const StoryEx = (props) => {
   ] = useLazyQuery(LESSON_RESULTS_QUERY, {
     variables: {
       lessonId: props.id,
-      userId: me.id,
+      studentId: me.id,
     },
   });
   useEffect(() => {

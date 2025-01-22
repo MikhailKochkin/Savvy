@@ -221,6 +221,8 @@ const UpdateChat = (props) => {
                   ? "Info about the bot:"
                   : i == 2
                   ? "Info about the user:"
+                  : i == 3
+                  ? "Possible topics:"
                   : null
                 : null}
             </div>
