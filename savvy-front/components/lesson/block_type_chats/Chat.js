@@ -207,6 +207,7 @@ const Chat = (props) => {
           </>
         )}
       </Buttons>
+      {console.log("type", type)}
       {!update &&
         (type == "dynamicchat" ? (
           <DynamicChat
@@ -236,7 +237,6 @@ const Chat = (props) => {
             // passTextToBeTranslated={passTextToBeTranslated}
           />
         ))}
-
       {getData &&
         props.next.true.value &&
         !moved &&

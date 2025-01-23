@@ -157,14 +157,15 @@ const FixedChat = (props) => {
                   author={author}
                   passTextToBeTranslated={passTextToBeTranslated}
                 />
+                {console.log("m.name", m)}
                 {m.reactions && m.reactions.length > 0 && (
                   <Reaction
                     reactions={m.reactions}
                     me={me}
                     author={author}
                     m={m}
-                    author_image={m.image}
-                    author_name={m.name}
+                    author_image={author.image}
+                    author_name={author.name}
                     initialQuestion={m.text}
                     lessonId={lessonId}
                     chatId={id}

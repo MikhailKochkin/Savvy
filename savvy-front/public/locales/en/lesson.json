@@ -202,5 +202,6 @@
   "try_challenging_again": "But you can try challenging the answer one more time. I may have missed something.",
   "rephrased_answer": "I have rephrased your answer a little bit:",
   "going_in_right_direction": "If this is what you meant, then yes, I believe you are going in the right direction.",
-  "answer_is_correct": "If this is what you meant, then yes, I believe your answer is correct."
+  "answer_is_correct": "If this is what you meant, then yes, I believe your answer is correct.",
+  "send": "Send"
 }

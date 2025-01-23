@@ -419,6 +419,7 @@ const StoryEx = (props) => {
           name={el.name}
           moveNext={moveNext}
           isSecret={el.isSecret}
+          type={el.type}
           experience={experience}
           total={total}
           clicks={el.link_clicks}
@@ -582,7 +583,6 @@ const StoryEx = (props) => {
       }
     });
   }
-  console.log("lesson", lesson);
   return (
     <Container>
       {me && (

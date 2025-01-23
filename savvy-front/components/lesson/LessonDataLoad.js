@@ -41,6 +41,7 @@ const LOAD_LESSON_QUERY = gql`
         name
         isSecret
         link_clicks
+        type
         complexity
         messages {
           messagesList {

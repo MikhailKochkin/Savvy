@@ -68,7 +68,7 @@ const TextEditorStyles = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   background: #f8f9fa;
   padding: 2% 0;
 `;
@@ -78,7 +78,7 @@ const TextBar = styled.div`
   font-size: 1.6rem;
   border-radius: 5px;
   @media (max-width: 800px) {
-    width: 100%;
+    width: 90%;
     font-size: 1.6rem;
   }
   .question {
@@ -125,13 +125,19 @@ const TextBar = styled.div`
   }
   .table-wrapper {
     border: 1px solid #d6d6d6;
-    width: 640px;
     overflow-x: scroll;
+    @media (max-width: 800px) {
+      width: 300px;
+    }
   }
   table {
     width: 640px;
     border-collapse: collapse;
     font-size: 1.6rem;
+    @media (max-width: 800px) {
+      width: 300px;
+      font-size: 1.4rem;
+    }
     p {
       margin: 0;
       margin-bottom: 5px;
@@ -543,165 +549,162 @@ const SingleTextEditor = (props) => {
         )}
       {!update && (
         <TextEditorStyles id={textEditor.id + 1} width={story}>
-          <div>
-            {/* The document itself */}
-            <TextBar id={textEditor.id}>
-              <EditText story={story}>
-                <div
-                  // All the logic of what happens to the text when clicked is handled here
-                  onClick={async (e) => {
-                    // 0. Increment the number of attempts made by the student
-                    setAttempts((prev) => prev + 1);
+          {/* The document itself */}
+          <TextBar id={textEditor.id}>
+            <EditText story={story}>
+              <div
+                // All the logic of what happens to the text when clicked is handled here
+                onClick={async (e) => {
+                  // 0. Increment the number of attempts made by the student
+                  setAttempts((prev) => prev + 1);
 
-                    // 1. Extract commonly used attributes and elements for cleaner code
-                    const target = e.target;
-                    const parent = target.parentElement;
-                    const type =
-                      target.getAttribute("type") ||
-                      parent?.getAttribute("type");
-                    const elementId = target.getAttribute("elementid");
-                    const innerText = target.innerHTML;
+                  // 1. Extract commonly used attributes and elements for cleaner code
+                  const target = e.target;
+                  const parent = target.parentElement;
+                  const type =
+                    target.getAttribute("type") || parent?.getAttribute("type");
+                  const elementId = target.getAttribute("elementid");
+                  const innerText = target.innerHTML;
 
-                    // 2. Update the DB => new click on the doc
-                    const createResult = (
-                      type,
-                      correct = "",
-                      wrong = "",
-                      guess = "",
-                      result = true,
-                      delay = 1000
-                    ) => {
-                      setTimeout(() => {
-                        createTextEditorResult({
-                          variables: {
-                            lessonId: props.lessonID,
-                            textEditorId: props.textEditor.id,
-                            attempts,
-                            correct,
-                            wrong,
-                            type,
-                            guess,
-                            result,
-                          },
-                        });
-                      }, delay);
-                    };
+                  // 2. Update the DB => new click on the doc
+                  const createResult = (
+                    type,
+                    correct = "",
+                    wrong = "",
+                    guess = "",
+                    result = true,
+                    delay = 1000
+                  ) => {
+                    setTimeout(() => {
+                      createTextEditorResult({
+                        variables: {
+                          lessonId: props.lessonID,
+                          textEditorId: props.textEditor.id,
+                          attempts,
+                          correct,
+                          wrong,
+                          type,
+                          guess,
+                          result,
+                        },
+                      });
+                    }, delay);
+                  };
 
-                    // Old use case. Handle mini-button clicks to check the answer and give feedback
-                    if (target.classList.contains("mini_button")) {
-                      const ch = await check(e);
-                      if (errorFeedback) setShowFeedback(true); // Show feedback if errorFeedback is enabled
-                      createResult(
-                        "error",
-                        correctErrorOption,
-                        wrongErrorOption,
-                        errorAnswer,
-                        ch
-                      );
-                      return;
+                  // Old use case. Handle mini-button clicks to check the answer and give feedback
+                  if (target.classList.contains("mini_button")) {
+                    const ch = await check(e);
+                    if (errorFeedback) setShowFeedback(true); // Show feedback if errorFeedback is enabled
+                    createResult(
+                      "error",
+                      correctErrorOption,
+                      wrongErrorOption,
+                      errorAnswer,
+                      ch
+                    );
+                    return;
+                  }
+
+                  // 3.There are 4 types of interactions:
+                  // 3.1. Note interactions –> open note window
+                  // 3.2. Error interactions -> open error window
+                  // 3.3. Quiz interactions -> open quiz window
+                  // 3.4. Problem interactions -> slide to case study
+                  // They are all handled below
+
+                  // 3.1. Note interactions –> open note window
+
+                  if (type === "note") {
+                    setIsNoteWindowShown(true);
+                    setCurrentlyActiveStringinNotes(innerText); // Store the active note string
+                    setNoteId(elementId); // Store note ID for reference
+                    setType("note"); // Set interaction type to 'note'
+                    setNote(
+                      target.getAttribute("text") || parent.getAttribute("text")
+                    ); // Retrieve note content
+                    target.className = "edit"; // Mark as editable
+                    createResult(
+                      "note",
+                      target.getAttribute("text") || "",
+                      "",
+                      "opened",
+                      true,
+                      3000
+                    ); // Log the note interaction
+                    return;
+                  }
+
+                  // 3.2 Error interactions -> open error window
+
+                  if (type === "error" || target.id === "id") {
+                    setIsErrorWindowShown(true);
+                    setErrorAnswer(innerText); // Store error text
+                    setErrorId(elementId); // Store error ID
+                    setType("error"); // Set interaction type to 'error'
+                    total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
+                    return;
+                  }
+
+                  // 3.3. Quiz interactions -> open quiz window
+
+                  if (type === "quiz") {
+                    setIsQuizWindowShown(true);
+                    setQuizId(elementId); // Store error ID
+                    setType("quiz"); // Set interaction type to 'error'
+                    total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
+                    return;
+                  }
+
+                  // 3.4. Problem interactions -> slide to case study
+
+                  if (type === "problem") {
+                    target.className = "edit"; // Mark problem text as editable
+                    setType("problem"); // Set interaction type to 'problem'
+                    setProblemId(elementId); // Store problem ID
+                    setTimeout(() => slide(elementId), 500); // Transition to the case study
+                    return;
+                  }
+
+                  // 3.5 Logic to reopen error and quiz windows once closed for the same source text
+
+                  if (
+                    target.classList.contains("edit") &&
+                    !["note", "problem"].includes(type)
+                  ) {
+                    if (target.hasAttribute("errorid")) {
+                      setErrorAnswer(innerText); // Store the user's answer
+                      setErrorId(target.getAttribute("errorid")); // Store the error ID
+                      setMiniQuiz(
+                        props.lesson.quizes.find(
+                          (quiz) => quiz.id === target.getAttribute("errorid")
+                        )
+                      ); // Find related quiz
+                      setCorrectErrorOption(
+                        target.getAttribute("data-initial")
+                      ); // Store correct option for feedback
+
+                      setIsErrorWindowShown(true); // Show the error feedback window
+                      setResult(null); // Reset result state
+                    } else if (target.hasAttribute("quizid")) {
+                      setQuizId(target.getAttribute("quizid")); // Store the error ID
+                      setMiniTest(
+                        props.lesson.newTests.find(
+                          (quiz) => quiz.id === target.getAttribute("quizid")
+                        )
+                      ); // Find related quiz
+                      setIsQuizWindowShown(true); // Show the error feedback window
+                      setResult(null); // Reset result state
                     }
-
-                    // 3.There are 4 types of interactions:
-                    // 3.1. Note interactions –> open note window
-                    // 3.2. Error interactions -> open error window
-                    // 3.3. Quiz interactions -> open quiz window
-                    // 3.4. Problem interactions -> slide to case study
-                    // They are all handled below
-
-                    // 3.1. Note interactions –> open note window
-
-                    if (type === "note") {
-                      setIsNoteWindowShown(true);
-                      setCurrentlyActiveStringinNotes(innerText); // Store the active note string
-                      setNoteId(elementId); // Store note ID for reference
-                      setType("note"); // Set interaction type to 'note'
-                      setNote(
-                        target.getAttribute("text") ||
-                          parent.getAttribute("text")
-                      ); // Retrieve note content
-                      target.className = "edit"; // Mark as editable
-                      createResult(
-                        "note",
-                        target.getAttribute("text") || "",
-                        "",
-                        "opened",
-                        true,
-                        3000
-                      ); // Log the note interaction
-                      return;
-                    }
-
-                    // 3.2 Error interactions -> open error window
-
-                    if (type === "error" || target.id === "id") {
-                      setIsErrorWindowShown(true);
-                      setErrorAnswer(innerText); // Store error text
-                      setErrorId(elementId); // Store error ID
-                      setType("error"); // Set interaction type to 'error'
-                      total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
-                      return;
-                    }
-
-                    // 3.3. Quiz interactions -> open quiz window
-
-                    if (type === "quiz") {
-                      setIsQuizWindowShown(true);
-                      setQuizId(elementId); // Store error ID
-                      setType("quiz"); // Set interaction type to 'error'
-                      total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
-                      return;
-                    }
-
-                    // 3.4. Problem interactions -> slide to case study
-
-                    if (type === "problem") {
-                      target.className = "edit"; // Mark problem text as editable
-                      setType("problem"); // Set interaction type to 'problem'
-                      setProblemId(elementId); // Store problem ID
-                      setTimeout(() => slide(elementId), 500); // Transition to the case study
-                      return;
-                    }
-
-                    // 3.5 Logic to reopen error and quiz windows once closed for the same source text
-
-                    if (
-                      target.classList.contains("edit") &&
-                      !["note", "problem"].includes(type)
-                    ) {
-                      if (target.hasAttribute("errorid")) {
-                        setErrorAnswer(innerText); // Store the user's answer
-                        setErrorId(target.getAttribute("errorid")); // Store the error ID
-                        setMiniQuiz(
-                          props.lesson.quizes.find(
-                            (quiz) => quiz.id === target.getAttribute("errorid")
-                          )
-                        ); // Find related quiz
-                        setCorrectErrorOption(
-                          target.getAttribute("data-initial")
-                        ); // Store correct option for feedback
-
-                        setIsErrorWindowShown(true); // Show the error feedback window
-                        setResult(null); // Reset result state
-                      } else if (target.hasAttribute("quizid")) {
-                        setQuizId(target.getAttribute("quizid")); // Store the error ID
-                        setMiniTest(
-                          props.lesson.newTests.find(
-                            (quiz) => quiz.id === target.getAttribute("quizid")
-                          )
-                        ); // Find related quiz
-                        setIsQuizWindowShown(true); // Show the error feedback window
-                        setResult(null); // Reset result state
-                      }
-                    }
-                  }}
-                >
-                  {/* Render the text content */}
-                  {parse(wrapTables(text))}
-                </div>
-              </EditText>
-            </TextBar>
-            {/* The button to reveal hidden information in the document */}
-            {/* <Buttons>
+                  }
+                }}
+              >
+                {/* Render the text content */}
+                {parse(wrapTables(text))}
+              </div>
+            </EditText>
+          </TextBar>
+          {/* The button to reveal hidden information in the document */}
+          {/* <Buttons>
               <ActionButton
                 onClick={onShow}
                 variant="contained"
@@ -710,7 +713,6 @@ const SingleTextEditor = (props) => {
                 {mistakesShown ? "Hide" : "Show"}
               </ActionButton>
             </Buttons> */}
-          </div>
 
           {/* All comments and logic are now presented in the WindowColumn */}
           {(isErrorWindowShown ||

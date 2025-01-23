@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types"; // Add this import
 import Message from "../functions/Message"; // Add this import at the top of the Chat component file
 import { autoResizeTextarea } from "../../SimulatorDevelopmentFunctions";
 import { MicroButton } from "../../styles/DevPageStyles";
 import Loading from "../../../layout/Loading";
-
-import { generateDiscussion } from "../functions/AIChatFunctions";
-import { set } from "lodash";
 
 const CREATE_CHATRESULT_MUTATION = gql`
   mutation CREATE_CHATRESULT_MUTATION(
@@ -204,13 +203,12 @@ const DynamicChat = (props) => {
   ]);
   const [studentResponse, setStudentResponse] = useState("");
   const [generatingResponse, setGeneratingResponse] = useState(false);
+  const router = useRouter();
+
+  const { t } = useTranslation("lesson");
 
   const assessHowRelatedQuestionIs = async (studentQuestion, chatTopic) => {
     let result;
-    console.log({
-      answer1: chatTopic,
-      answer2: studentQuestion,
-    });
     try {
       const response = await fetch(
         "https://arcane-refuge-67529.herokuapp.com/checker",
@@ -225,7 +223,6 @@ const DynamicChat = (props) => {
           }),
         }
       );
-      console.log(result);
 
       result = await response.json();
       return result;
@@ -304,7 +301,26 @@ const DynamicChat = (props) => {
     }
   };
 
-  console.log("messages.messagesList[2]", messages.messagesList);
+  const addCommentToUnrelatedQuestion = async () => {
+    setDialogueMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        author: "student",
+        text: studentResponse,
+        name: me.name,
+      },
+      {
+        author: "author",
+        text:
+          router.locale == "ru"
+            ? "Хм. Не могу сейчас ответить на этот вопрос... Могу чем-то еще помочь?"
+            : "Sorry, I can’t respond. Can I help with anything else?",
+        name: messages.messagesList[0].name,
+        image: messages.messagesList[0].image,
+      },
+    ]);
+    setStudentResponse("");
+  };
 
   return (
     <>
@@ -356,20 +372,29 @@ const DynamicChat = (props) => {
             }}
           />
         </div>
-        <MicroButton
-          onClick={async (e) => {
-            setGeneratingResponse(true);
-            let relationTestResult = await assessHowRelatedQuestionIs(
-              studentResponse,
-              messages.messagesList[3].text
-            );
-            console.log("relationTestResult", relationTestResult);
-            // await generateStudentResponse();
-            setGeneratingResponse(false);
-          }}
-        >
-          {generatingResponse ? "..." : "Send"}
-        </MicroButton>
+        {!generatingResponse ? (
+          <MicroButton
+            onClick={async (e) => {
+              setGeneratingResponse(true);
+              let relationTestResult = await assessHowRelatedQuestionIs(
+                studentResponse,
+                messages.messagesList[3].text
+              );
+              // console.log(
+              //   "parseInt(relationTestResult.res)",
+              //   parseInt(relationTestResult.res)
+              // );
+              if (parseInt(relationTestResult.res) < 25) {
+                await addCommentToUnrelatedQuestion();
+              } else {
+                await generateStudentResponse();
+              }
+              setGeneratingResponse(false);
+            }}
+          >
+            {generatingResponse ? "..." : t("send")}
+          </MicroButton>
+        ) : null}
       </MessageRow>
     </>
   );

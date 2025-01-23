@@ -234,6 +234,7 @@ const NewSingleLesson = (props) => {
     return <LoadingErrorMessage errorData={errorData} />;
   }
   let lesson = data.shortLesson;
+  console.log("lesson", lesson);
   // let next = lesson.coursePage.lessons.find(
   //   (l) => l.number === lesson.number + 1
   // );
@@ -255,7 +256,7 @@ const NewSingleLesson = (props) => {
 
   if (
     me &&
-    me.new_subjects.filter((c) => c.id == lesson.coursePageId).length > 0
+    me.new_subjects.filter((c) => c.id == lesson.coursePage.id).length > 0
   ) {
     i_am_student = true;
   }
@@ -264,11 +265,11 @@ const NewSingleLesson = (props) => {
     return (
       <PleaseSignIn
         authSource={props.authSource}
-        coursePageId={lesson.coursePageId}
+        coursePageId={lesson.coursePage.id}
       />
     );
   }
-
+  console.log("lesson", lesson);
   if (
     me &&
     !i_am_student &&
@@ -276,7 +277,7 @@ const NewSingleLesson = (props) => {
     !me.permissions.includes("ADMIN") &&
     !lesson.open
   ) {
-    return <AreYouEnrolled coursePageId={lesson.coursePageId} />;
+    return <AreYouEnrolled coursePageId={lesson.coursePage.id} />;
   }
 
   return (
@@ -298,7 +299,7 @@ const NewSingleLesson = (props) => {
                 me={me}
                 lesson={lesson}
                 // next={next}
-                coursePageId={lesson.coursePageId}
+                coursePageId={lesson.coursePage.id}
                 coursePage={lesson.coursePage}
                 passStep={passStep}
                 openLesson={lesson.open}

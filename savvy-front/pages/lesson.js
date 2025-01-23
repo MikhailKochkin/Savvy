@@ -15,13 +15,6 @@ const DynamicNewSingleLesson = dynamic(
   }
 );
 
-// const DynamicOldSingleLesson = dynamic(
-//   () => import("../components/lesson/OldSingleLesson"),
-//   {
-//     ssr: false, // Disable SSR if the component doesn't need it
-//   }
-// );
-
 const LessonPage = (props) => {
   const router = useRouter();
 

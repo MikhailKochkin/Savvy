@@ -29,6 +29,7 @@ const EmailForm = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   padding: 20px;
+  width: 100%;
 `;
 
 const EmailInfo = styled.div`
@@ -77,6 +78,9 @@ const EmailInfo = styled.div`
     width: 400px;
     line-height: 1.4;
     margin: 10px 0;
+    @media (max-width: 800px) {
+      width: 100%;
+    }
   }
   .times_column {
     width: 50%;

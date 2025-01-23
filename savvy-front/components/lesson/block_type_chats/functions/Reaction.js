@@ -221,10 +221,8 @@ const Icon = styled.div`
 
 const Reaction = (props) => {
   const [usedReactions, setUsedReactions] = useState([]);
-  const [reaction, setReaction] = useState(undefined);
   const [leftReactions, setLeftReactions] = useState(props.reactions);
   const { me, author, m } = props;
-  const { t } = useTranslation("lesson");
 
   const [createChatResult, { data: data2, loading: loading2, error: error2 }] =
     useMutation(CREATE_CHATRESULT_MUTATION);

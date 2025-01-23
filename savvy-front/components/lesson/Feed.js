@@ -998,7 +998,6 @@ const Feed = (props) => {
           )}
           <div style={{ position: "relative", width: "100%" }}>
             <Border>
-              {console.log("lessonElements.slice(0, num + 2)", lessonElements)}
               {lessonElements.slice(0, num + 2).map((c, i) => (
                 <Block
                   key={i + "block"}
