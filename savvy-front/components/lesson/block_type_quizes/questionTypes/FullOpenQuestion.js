@@ -204,14 +204,14 @@ const FullOpenQuestion = (props) => {
               }}
               placeholder="..."
             />
-            {result && isScoringShown ? (
+            {isScoringShown ? (
               <ResultCircle
                 data-tooltip-id="my-tooltip"
                 data-tooltip-content={t("answer_above_65")}
                 data-tooltip-place="right"
                 inputColor={inputColor}
               >
-                {parseInt(result)}
+                {result ? parseInt(result) : 0}
               </ResultCircle>
             ) : null}
           </Frame>

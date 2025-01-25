@@ -209,7 +209,6 @@ const NewSingleLesson = (props) => {
   const passStep = (num) => {
     if (props.passStep) props.passStep(num);
   };
-  console.log("props", props.id);
   // 3. Download lesson data
 
   const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {

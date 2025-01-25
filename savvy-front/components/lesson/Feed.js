@@ -161,6 +161,7 @@ const MenuColumn = styled.div`
   position: sticky;
   overflow-y: auto; /* Enable vertical scrolling */
   top: 0%;
+  z-index: 500;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;

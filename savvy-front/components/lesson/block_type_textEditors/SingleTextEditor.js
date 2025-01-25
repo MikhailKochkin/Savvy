@@ -73,6 +73,15 @@ const TextEditorStyles = styled.div`
   padding: 2% 0;
 `;
 
+const DocWrapper = styled.div`
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+`;
+
 const TextBar = styled.div`
   width: 100%;
   font-size: 1.6rem;
@@ -550,161 +559,164 @@ const SingleTextEditor = (props) => {
       {!update && (
         <TextEditorStyles id={textEditor.id + 1} width={story}>
           {/* The document itself */}
-          <TextBar id={textEditor.id}>
-            <EditText story={story}>
-              <div
-                // All the logic of what happens to the text when clicked is handled here
-                onClick={async (e) => {
-                  // 0. Increment the number of attempts made by the student
-                  setAttempts((prev) => prev + 1);
+          <DocWrapper>
+            <TextBar id={textEditor.id}>
+              <EditText story={story}>
+                <div
+                  // All the logic of what happens to the text when clicked is handled here
+                  onClick={async (e) => {
+                    // 0. Increment the number of attempts made by the student
+                    setAttempts((prev) => prev + 1);
 
-                  // 1. Extract commonly used attributes and elements for cleaner code
-                  const target = e.target;
-                  const parent = target.parentElement;
-                  const type =
-                    target.getAttribute("type") || parent?.getAttribute("type");
-                  const elementId = target.getAttribute("elementid");
-                  const innerText = target.innerHTML;
+                    // 1. Extract commonly used attributes and elements for cleaner code
+                    const target = e.target;
+                    const parent = target.parentElement;
+                    const type =
+                      target.getAttribute("type") ||
+                      parent?.getAttribute("type");
+                    const elementId = target.getAttribute("elementid");
+                    const innerText = target.innerHTML;
 
-                  // 2. Update the DB => new click on the doc
-                  const createResult = (
-                    type,
-                    correct = "",
-                    wrong = "",
-                    guess = "",
-                    result = true,
-                    delay = 1000
-                  ) => {
-                    setTimeout(() => {
-                      createTextEditorResult({
-                        variables: {
-                          lessonId: props.lessonID,
-                          textEditorId: props.textEditor.id,
-                          attempts,
-                          correct,
-                          wrong,
-                          type,
-                          guess,
-                          result,
-                        },
-                      });
-                    }, delay);
-                  };
+                    // 2. Update the DB => new click on the doc
+                    const createResult = (
+                      type,
+                      correct = "",
+                      wrong = "",
+                      guess = "",
+                      result = true,
+                      delay = 1000
+                    ) => {
+                      setTimeout(() => {
+                        createTextEditorResult({
+                          variables: {
+                            lessonId: props.lessonID,
+                            textEditorId: props.textEditor.id,
+                            attempts,
+                            correct,
+                            wrong,
+                            type,
+                            guess,
+                            result,
+                          },
+                        });
+                      }, delay);
+                    };
 
-                  // Old use case. Handle mini-button clicks to check the answer and give feedback
-                  if (target.classList.contains("mini_button")) {
-                    const ch = await check(e);
-                    if (errorFeedback) setShowFeedback(true); // Show feedback if errorFeedback is enabled
-                    createResult(
-                      "error",
-                      correctErrorOption,
-                      wrongErrorOption,
-                      errorAnswer,
-                      ch
-                    );
-                    return;
-                  }
-
-                  // 3.There are 4 types of interactions:
-                  // 3.1. Note interactions –> open note window
-                  // 3.2. Error interactions -> open error window
-                  // 3.3. Quiz interactions -> open quiz window
-                  // 3.4. Problem interactions -> slide to case study
-                  // They are all handled below
-
-                  // 3.1. Note interactions –> open note window
-
-                  if (type === "note") {
-                    setIsNoteWindowShown(true);
-                    setCurrentlyActiveStringinNotes(innerText); // Store the active note string
-                    setNoteId(elementId); // Store note ID for reference
-                    setType("note"); // Set interaction type to 'note'
-                    setNote(
-                      target.getAttribute("text") || parent.getAttribute("text")
-                    ); // Retrieve note content
-                    target.className = "edit"; // Mark as editable
-                    createResult(
-                      "note",
-                      target.getAttribute("text") || "",
-                      "",
-                      "opened",
-                      true,
-                      3000
-                    ); // Log the note interaction
-                    return;
-                  }
-
-                  // 3.2 Error interactions -> open error window
-
-                  if (type === "error" || target.id === "id") {
-                    setIsErrorWindowShown(true);
-                    setErrorAnswer(innerText); // Store error text
-                    setErrorId(elementId); // Store error ID
-                    setType("error"); // Set interaction type to 'error'
-                    total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
-                    return;
-                  }
-
-                  // 3.3. Quiz interactions -> open quiz window
-
-                  if (type === "quiz") {
-                    setIsQuizWindowShown(true);
-                    setQuizId(elementId); // Store error ID
-                    setType("quiz"); // Set interaction type to 'error'
-                    total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
-                    return;
-                  }
-
-                  // 3.4. Problem interactions -> slide to case study
-
-                  if (type === "problem") {
-                    target.className = "edit"; // Mark problem text as editable
-                    setType("problem"); // Set interaction type to 'problem'
-                    setProblemId(elementId); // Store problem ID
-                    setTimeout(() => slide(elementId), 500); // Transition to the case study
-                    return;
-                  }
-
-                  // 3.5 Logic to reopen error and quiz windows once closed for the same source text
-
-                  if (
-                    target.classList.contains("edit") &&
-                    !["note", "problem"].includes(type)
-                  ) {
-                    if (target.hasAttribute("errorid")) {
-                      setErrorAnswer(innerText); // Store the user's answer
-                      setErrorId(target.getAttribute("errorid")); // Store the error ID
-                      setMiniQuiz(
-                        props.lesson.quizes.find(
-                          (quiz) => quiz.id === target.getAttribute("errorid")
-                        )
-                      ); // Find related quiz
-                      setCorrectErrorOption(
-                        target.getAttribute("data-initial")
-                      ); // Store correct option for feedback
-
-                      setIsErrorWindowShown(true); // Show the error feedback window
-                      setResult(null); // Reset result state
-                    } else if (target.hasAttribute("quizid")) {
-                      setQuizId(target.getAttribute("quizid")); // Store the error ID
-                      setMiniTest(
-                        props.lesson.newTests.find(
-                          (quiz) => quiz.id === target.getAttribute("quizid")
-                        )
-                      ); // Find related quiz
-                      setIsQuizWindowShown(true); // Show the error feedback window
-                      setResult(null); // Reset result state
+                    // Old use case. Handle mini-button clicks to check the answer and give feedback
+                    if (target.classList.contains("mini_button")) {
+                      const ch = await check(e);
+                      if (errorFeedback) setShowFeedback(true); // Show feedback if errorFeedback is enabled
+                      createResult(
+                        "error",
+                        correctErrorOption,
+                        wrongErrorOption,
+                        errorAnswer,
+                        ch
+                      );
+                      return;
                     }
-                  }
-                }}
-              >
-                {/* Render the text content */}
-                {parse(wrapTables(text))}
-              </div>
-            </EditText>
-          </TextBar>
-          {/* The button to reveal hidden information in the document */}
-          {/* <Buttons>
+
+                    // 3.There are 4 types of interactions:
+                    // 3.1. Note interactions –> open note window
+                    // 3.2. Error interactions -> open error window
+                    // 3.3. Quiz interactions -> open quiz window
+                    // 3.4. Problem interactions -> slide to case study
+                    // They are all handled below
+
+                    // 3.1. Note interactions –> open note window
+
+                    if (type === "note") {
+                      setIsNoteWindowShown(true);
+                      setCurrentlyActiveStringinNotes(innerText); // Store the active note string
+                      setNoteId(elementId); // Store note ID for reference
+                      setType("note"); // Set interaction type to 'note'
+                      setNote(
+                        target.getAttribute("text") ||
+                          parent.getAttribute("text")
+                      ); // Retrieve note content
+                      target.className = "edit"; // Mark as editable
+                      createResult(
+                        "note",
+                        target.getAttribute("text") || "",
+                        "",
+                        "opened",
+                        true,
+                        3000
+                      ); // Log the note interaction
+                      return;
+                    }
+
+                    // 3.2 Error interactions -> open error window
+
+                    if (type === "error" || target.id === "id") {
+                      setIsErrorWindowShown(true);
+                      setErrorAnswer(innerText); // Store error text
+                      setErrorId(elementId); // Store error ID
+                      setType("error"); // Set interaction type to 'error'
+                      total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
+                      return;
+                    }
+
+                    // 3.3. Quiz interactions -> open quiz window
+
+                    if (type === "quiz") {
+                      setIsQuizWindowShown(true);
+                      setQuizId(elementId); // Store error ID
+                      setType("quiz"); // Set interaction type to 'error'
+                      total > 0 ? onMouseClick(e) : onReveal(e); // Execute appropriate action based on `total`
+                      return;
+                    }
+
+                    // 3.4. Problem interactions -> slide to case study
+
+                    if (type === "problem") {
+                      target.className = "edit"; // Mark problem text as editable
+                      setType("problem"); // Set interaction type to 'problem'
+                      setProblemId(elementId); // Store problem ID
+                      setTimeout(() => slide(elementId), 500); // Transition to the case study
+                      return;
+                    }
+
+                    // 3.5 Logic to reopen error and quiz windows once closed for the same source text
+
+                    if (
+                      target.classList.contains("edit") &&
+                      !["note", "problem"].includes(type)
+                    ) {
+                      if (target.hasAttribute("errorid")) {
+                        setErrorAnswer(innerText); // Store the user's answer
+                        setErrorId(target.getAttribute("errorid")); // Store the error ID
+                        setMiniQuiz(
+                          props.lesson.quizes.find(
+                            (quiz) => quiz.id === target.getAttribute("errorid")
+                          )
+                        ); // Find related quiz
+                        setCorrectErrorOption(
+                          target.getAttribute("data-initial")
+                        ); // Store correct option for feedback
+
+                        setIsErrorWindowShown(true); // Show the error feedback window
+                        setResult(null); // Reset result state
+                      } else if (target.hasAttribute("quizid")) {
+                        setQuizId(target.getAttribute("quizid")); // Store the error ID
+                        setMiniTest(
+                          props.lesson.newTests.find(
+                            (quiz) => quiz.id === target.getAttribute("quizid")
+                          )
+                        ); // Find related quiz
+                        setIsQuizWindowShown(true); // Show the error feedback window
+                        setResult(null); // Reset result state
+                      }
+                    }
+                  }}
+                >
+                  {/* Render the text content */}
+                  {parse(wrapTables(text))}
+                </div>
+              </EditText>
+            </TextBar>
+            {/* The button to reveal hidden information in the document */}
+            {/* <Buttons>
               <ActionButton
                 onClick={onShow}
                 variant="contained"
@@ -714,225 +726,228 @@ const SingleTextEditor = (props) => {
               </ActionButton>
             </Buttons> */}
 
-          {/* All comments and logic are now presented in the WindowColumn */}
-          {(isErrorWindowShown ||
-            isNoteWindowShown ||
-            isQuizWindowShown ||
-            showFeedback) && (
-            <WindowColumn>
-              <WindowBundle>
-                {isNoteWindowShown && (
-                  <Window>
-                    <div className="questionBox">
-                      <IconBlock>
-                        <div className="nameBlock">
-                          <img
-                            className="icon"
-                            src="../../static/hipster.svg"
-                          />
-                          <div className="name">BeSavvy</div>
-                        </div>
-                        <div
-                          className="cancelBlock"
-                          onClick={(e) => setIsNoteWindowShown(false)}
-                        >
-                          <img
-                            className="cancel"
-                            src="../../static/cancel.svg"
-                          />
-                        </div>
-                      </IconBlock>
-                    </div>
-                    <div className="answerBox">
-                      <Comment>
-                        <i>"{currentlyActiveStringinNotes}"</i>
-                      </Comment>
-                    </div>
-                    <div className="answerBox">
-                      <Comment>
-                        {miniNote && miniNote.text ? (
-                          <Note
-                            text={miniNote.text}
-                            name={miniNote.name}
+            {/* All comments and logic are now presented in the WindowColumn */}
+            {(isErrorWindowShown ||
+              isNoteWindowShown ||
+              isQuizWindowShown ||
+              showFeedback) && (
+              <WindowColumn>
+                <WindowBundle>
+                  {isNoteWindowShown && (
+                    <Window>
+                      <div className="questionBox">
+                        <IconBlock>
+                          <div className="nameBlock">
+                            <img
+                              className="icon"
+                              src="../../static/hipster.svg"
+                            />
+                            <div className="name">BeSavvy</div>
+                          </div>
+                          <div
+                            className="cancelBlock"
+                            onClick={(e) => setIsNoteWindowShown(false)}
+                          >
+                            <img
+                              className="cancel"
+                              src="../../static/cancel.svg"
+                            />
+                          </div>
+                        </IconBlock>
+                      </div>
+                      <div className="answerBox">
+                        <Comment>
+                          <i>"{currentlyActiveStringinNotes}"</i>
+                        </Comment>
+                      </div>
+                      <div className="answerBox">
+                        <Comment>
+                          {miniNote && miniNote.text ? (
+                            <Note
+                              text={miniNote.text}
+                              name={miniNote.name}
+                              me={me}
+                              user={lesson.user.id}
+                              note={miniNote}
+                              author={lesson.user}
+                              id={miniNote.id}
+                              complexity={miniNote.complexity}
+                              lessonID={lesson.id}
+                              miniforum={null}
+                              getResult={null}
+                              story={true}
+                            />
+                          ) : note ? (
+                            parse(note)
+                          ) : null}
+                        </Comment>
+                      </div>
+                    </Window>
+                  )}
+                  {isErrorWindowShown && (
+                    <Window>
+                      <div className="questionBox">
+                        <IconBlock>
+                          <div className="nameBlock">
+                            <img
+                              className="icon"
+                              src="../../static/hipster.svg"
+                            />
+                            <div className="name">BeSavvy</div>
+                          </div>
+                          <div
+                            className="cancelBlock"
+                            onClick={(e) => {
+                              setResult(null);
+                              setErrorAnswer("");
+                              setIsErrorWindowShown(false);
+                            }}
+                          >
+                            <img
+                              className="cancel"
+                              src="../../static/cancel.svg"
+                            />
+                          </div>
+                        </IconBlock>
+                        {!miniQuiz ? (
+                          <div className="studentsWording">
+                            <div className="studentsWordingHeader">
+                              {t("make_changes_to_the_text")}
+                            </div>
+                            {errorAnswer !== "" && (
+                              <MiniOpenQuestionFrame
+                                inputColor={
+                                  result === null
+                                    ? "rgba(0, 0, 0, 0.1)"
+                                    : result === true
+                                    ? "rgba(50, 172, 102, 1)"
+                                    : "rgba(222, 107, 72, 0.5)"
+                                }
+                              >
+                                {errorAnswer ? parse(errorAnswer) : null}
+                              </MiniOpenQuestionFrame>
+                            )}
+
+                            {chekingAnswer && (
+                              <Progress2>
+                                <TailSpin width="35" color="#2E80EC" />
+                              </Progress2>
+                            )}
+                            <MiniAIButton
+                              onClick={(e) => {
+                                evaluateErrorFix(e);
+                              }}
+                            >
+                              {t("check")}
+                            </MiniAIButton>
+                            <MiniAIButton
+                              onClick={(e) => {
+                                alert(correctErrorOption);
+                              }}
+                            >
+                              {t("show")}
+                            </MiniAIButton>
+                          </div>
+                        ) : null}
+                        {miniQuiz ? (
+                          <SingleQuiz
+                            id={errorId}
+                            key={errorId}
+                            complexity={miniQuiz.complexity}
+                            question={miniQuiz.question}
+                            answer={miniQuiz.answer}
+                            answers={miniQuiz.answers}
+                            type={miniQuiz.type}
+                            goalType={miniQuiz.goalType}
+                            check={miniQuiz.check}
                             me={me}
-                            user={lesson.user.id}
-                            note={miniNote}
-                            author={lesson.user}
-                            id={miniNote.id}
-                            complexity={miniNote.complexity}
+                            story={true}
+                            ifRight={miniQuiz.ifRight}
+                            ifWrong={miniQuiz.ifWrong}
+                            name={miniQuiz.name}
+                            instructorName={miniQuiz.instructorName}
+                            image={miniQuiz.image}
+                            hidden={true}
+                            lesson={lesson}
                             lessonID={lesson.id}
+                            quizID={miniQuiz.id}
+                            user={miniQuiz.user.id}
+                            user_name={miniQuiz.user}
+                            author={lesson.user}
                             miniforum={null}
                             getResult={null}
-                            story={true}
+                            passResultToTextEditor={passResultToTextEditor}
+                            openQuestionType="mini"
+                            questionFormat="mini"
+                            studentAnswerPassedFromAnotherComponent={
+                              errorAnswer
+                            }
                           />
-                        ) : note ? (
-                          parse(note)
                         ) : null}
-                      </Comment>
-                    </div>
-                  </Window>
-                )}
-                {isErrorWindowShown && (
-                  <Window>
-                    <div className="questionBox">
-                      <IconBlock>
-                        <div className="nameBlock">
-                          <img
-                            className="icon"
-                            src="../../static/hipster.svg"
-                          />
-                          <div className="name">BeSavvy</div>
-                        </div>
-                        <div
-                          className="cancelBlock"
-                          onClick={(e) => {
-                            setResult(null);
-                            setErrorAnswer("");
-                            setIsErrorWindowShown(false);
-                          }}
-                        >
-                          <img
-                            className="cancel"
-                            src="../../static/cancel.svg"
-                          />
-                        </div>
-                      </IconBlock>
-                      {!miniQuiz ? (
-                        <div className="studentsWording">
-                          <div className="studentsWordingHeader">
-                            {t("make_changes_to_the_text")}
+                      </div>
+                    </Window>
+                  )}
+                  {isQuizWindowShown && (
+                    <Window>
+                      <div className="questionBox">
+                        <IconBlock>
+                          <div className="nameBlock">
+                            <img
+                              className="icon"
+                              src="../../static/hipster.svg"
+                            />
+                            <div className="name">BeSavvy</div>
                           </div>
-                          {errorAnswer !== "" && (
-                            <MiniOpenQuestionFrame
-                              inputColor={
-                                result === null
-                                  ? "rgba(0, 0, 0, 0.1)"
-                                  : result === true
-                                  ? "rgba(50, 172, 102, 1)"
-                                  : "rgba(222, 107, 72, 0.5)"
-                              }
-                            >
-                              {errorAnswer ? parse(errorAnswer) : null}
-                            </MiniOpenQuestionFrame>
-                          )}
-
-                          {chekingAnswer && (
-                            <Progress2>
-                              <TailSpin width="35" color="#2E80EC" />
-                            </Progress2>
-                          )}
-                          <MiniAIButton
+                          <div
+                            className="cancelBlock"
                             onClick={(e) => {
-                              evaluateErrorFix(e);
+                              setResult(null);
+                              setIsQuizWindowShown(false);
                             }}
                           >
-                            {t("check")}
-                          </MiniAIButton>
-                          <MiniAIButton
-                            onClick={(e) => {
-                              alert(correctErrorOption);
-                            }}
-                          >
-                            {t("show")}
-                          </MiniAIButton>
-                        </div>
-                      ) : null}
-                      {miniQuiz ? (
-                        <SingleQuiz
-                          id={errorId}
-                          key={errorId}
-                          complexity={miniQuiz.complexity}
-                          question={miniQuiz.question}
-                          answer={miniQuiz.answer}
-                          answers={miniQuiz.answers}
-                          type={miniQuiz.type}
-                          goalType={miniQuiz.goalType}
-                          check={miniQuiz.check}
-                          me={me}
-                          story={true}
-                          ifRight={miniQuiz.ifRight}
-                          ifWrong={miniQuiz.ifWrong}
-                          name={miniQuiz.name}
-                          instructorName={miniQuiz.instructorName}
-                          image={miniQuiz.image}
-                          hidden={true}
-                          lesson={lesson}
-                          lessonID={lesson.id}
-                          quizID={miniQuiz.id}
-                          user={miniQuiz.user.id}
-                          user_name={miniQuiz.user}
-                          author={lesson.user}
-                          miniforum={null}
-                          getResult={null}
-                          passResultToTextEditor={passResultToTextEditor}
-                          openQuestionType="mini"
-                          questionFormat="mini"
-                          studentAnswerPassedFromAnotherComponent={errorAnswer}
-                        />
-                      ) : null}
-                    </div>
-                  </Window>
-                )}
-                {isQuizWindowShown && (
-                  <Window>
-                    <div className="questionBox">
-                      <IconBlock>
-                        <div className="nameBlock">
-                          <img
-                            className="icon"
-                            src="../../static/hipster.svg"
-                          />
-                          <div className="name">BeSavvy</div>
-                        </div>
-                        <div
-                          className="cancelBlock"
-                          onClick={(e) => {
-                            setResult(null);
-                            setIsQuizWindowShown(false);
-                          }}
-                        >
-                          <img
-                            className="cancel"
-                            src="../../static/cancel.svg"
-                          />
-                        </div>
-                      </IconBlock>
+                            <img
+                              className="cancel"
+                              src="../../static/cancel.svg"
+                            />
+                          </div>
+                        </IconBlock>
 
-                      {miniTest ? (
-                        <SingleTest
-                          id={quizId}
-                          key={quizId}
-                          testID={quizId}
-                          lessonID={props.lessonID}
-                          question={miniTest.question}
-                          answers={miniTest.answers}
-                          true={miniTest.correct}
-                          ifRight={miniTest.ifRight}
-                          ifWrong={miniTest.ifWrong}
-                          user={miniTest.user.id}
-                          user_name={miniTest.user}
-                          name={miniTest.name}
-                          image={miniTest.image}
-                          complexTestAnswers={miniTest.complexTestAnswers}
-                          comments={miniTest.comments}
-                          type={miniTest.type}
-                          goalType={miniTest.goalType}
-                          me={props.me}
-                          length={Array(miniTest.correct.length).fill(false)}
-                          userData={[]}
-                          testFormat="mini"
-                          story={true}
-                          passStudentAnswertoDocument={
-                            passStudentAnswertoDocument
-                          }
-                        />
-                      ) : null}
-                    </div>
-                  </Window>
-                )}
-              </WindowBundle>
-            </WindowColumn>
-          )}
+                        {miniTest ? (
+                          <SingleTest
+                            id={quizId}
+                            key={quizId}
+                            testID={quizId}
+                            lessonID={props.lessonID}
+                            question={miniTest.question}
+                            answers={miniTest.answers}
+                            true={miniTest.correct}
+                            ifRight={miniTest.ifRight}
+                            ifWrong={miniTest.ifWrong}
+                            user={miniTest.user.id}
+                            user_name={miniTest.user}
+                            name={miniTest.name}
+                            image={miniTest.image}
+                            complexTestAnswers={miniTest.complexTestAnswers}
+                            comments={miniTest.comments}
+                            type={miniTest.type}
+                            goalType={miniTest.goalType}
+                            me={props.me}
+                            length={Array(miniTest.correct.length).fill(false)}
+                            userData={[]}
+                            testFormat="mini"
+                            story={true}
+                            passStudentAnswertoDocument={
+                              passStudentAnswertoDocument
+                            }
+                          />
+                        ) : null}
+                      </div>
+                    </Window>
+                  )}
+                </WindowBundle>
+              </WindowColumn>
+            )}
+          </DocWrapper>
         </TextEditorStyles>
       )}
       {type == "problem" && problemId && (

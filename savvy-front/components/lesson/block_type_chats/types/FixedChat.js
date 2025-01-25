@@ -65,7 +65,7 @@ const Messages = styled.div`
 `;
 
 const FixedChat = (props) => {
-  const { messages, me, lessonId, id, author, library } = props;
+  const { messages, me, lessonId, author, id, library } = props;
   const [update, setUpdate] = useState(false);
   const [num, setNum] = useState(1);
   const [showButton, setShowButton] = useState(true);
@@ -157,15 +157,15 @@ const FixedChat = (props) => {
                   author={author}
                   passTextToBeTranslated={passTextToBeTranslated}
                 />
-                {console.log("m.name", m)}
+                {console.log("author", author)}
                 {m.reactions && m.reactions.length > 0 && (
                   <Reaction
                     reactions={m.reactions}
                     me={me}
                     author={author}
                     m={m}
-                    author_image={author.image}
-                    author_name={author.name}
+                    author_image={m.image}
+                    author_name={m.name}
                     initialQuestion={m.text}
                     lessonId={lessonId}
                     chatId={id}

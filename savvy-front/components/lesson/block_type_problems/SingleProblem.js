@@ -61,6 +61,12 @@ const TextBar = styled.div`
       margin: 10px 0;
     }
   }
+  a {
+    border-bottom: 2px solid #26ba8d;
+    padding: 0%;
+    transition: 0.3s;
+    cursor: pointer;
+  }
   #text {
     width: 100%;
   }

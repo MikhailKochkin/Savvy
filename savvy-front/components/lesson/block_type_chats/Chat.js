@@ -207,7 +207,6 @@ const Chat = (props) => {
           </>
         )}
       </Buttons>
-      {console.log("type", type)}
       {!update &&
         (type == "dynamicchat" ? (
           <DynamicChat

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { throttle } from "lodash";
 
 const Head = styled.div`
-  position: ${(props) => (props.issticky === true ? "fixed" : "absolute")};
+  position: ${(props) => (props.issticky === "true" ? "fixed" : "absolute")};
   top: ${(props) => {
     const isStory = props.story === "true";
     const isSticky = props.issticky === "true";
