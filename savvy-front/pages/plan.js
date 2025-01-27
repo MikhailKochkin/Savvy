@@ -9,7 +9,7 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const DynamicLessonPlan = dynamic(
-  () => import("../components/lesson/lesson_plan/PlanDataLoad"),
+  () => import("../components/course/course_plan/PlanDataLoad"),
   {
     ssr: false, // Disable SSR if the component doesn't need it
   }

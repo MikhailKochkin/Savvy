@@ -17,7 +17,7 @@ import {
   useFocused,
   useSelected,
 } from "slate-react";
-import isEqual from "lodash/isEqual";
+import { withTable, TableEditor } from "slate-table";
 import {
   Editor,
   Transforms,
@@ -290,9 +290,26 @@ const HoveringMenu = (props) => {
   const initial = deserialize(document.body);
   const [value, setValue] = useState(initial);
 
-  const [editor] = useState(() =>
-    withLinks(withHistory(withReact(createEditor())))
-  );
+  const [editor] = useState(() => {
+    return withTable(withLinks(withHistory(withReact(createEditor()))), {
+      blocks: {
+        table: "table",
+        thead: "table-head",
+        tbody: "table-body",
+        tfoot: "table-footer",
+        tr: "table-row",
+        th: "header-cell",
+        td: "table-cell",
+        content: "paragraph",
+      },
+      withDelete: true,
+      withFragments: true,
+      withInsertText: true,
+      withNormalization: true,
+      withSelection: true,
+      withSelectionAdjustment: true,
+    });
+  });
 
   // 4.1 Element renderer
 
@@ -348,6 +365,41 @@ const HoveringMenu = (props) => {
   const renderLeaf = useCallback((props) => {
     return <Leaf {...props} />;
   }, []);
+
+  // 4.3 Define button actions for table editing
+  const createTable = () => {
+    TableEditor.insertTable(editor, { rows: 2, cols: 2 });
+  };
+
+  const deleteTable = () => {
+    TableEditor.removeTable(editor);
+  };
+
+  const addRow = () => {
+    TableEditor.insertRow(editor);
+  };
+
+  const deleteRow = () => {
+    TableEditor.removeRow(editor);
+  };
+
+  const addColumn = () => {
+    TableEditor.insertColumn(editor, { at: editor.selection });
+  };
+
+  const deleteColumn = () => {
+    TableEditor.removeColumn(editor);
+  };
+
+  const mergeCells = () => {
+    if (TableEditor.canMerge(editor)) {
+      TableEditor.merge(editor);
+    }
+  };
+
+  const splitCells = () => {
+    TableEditor.split(editor);
+  };
 
   return (
     <Slate

@@ -125,22 +125,7 @@ const RegisterCard = (props) => {
     setWidth(width);
   };
 
-  const [createLessonResult, { create_data }] = useMutation(
-    CREATE_LESSONRESULT_MUTATION
-  );
-
-  const [updateLessonResult, { update_data }] = useMutation(
-    UPDATE_LESSONRESULT_MUTATION
-  );
-
-  const { coursePage, me, studentsArray, subjectArray } = props;
-  let applied;
-  me &&
-  me.orders.filter(
-    (o) => o.coursePage.id === coursePage.id && o.isPaid === null
-  ).length > 0
-    ? (applied = true)
-    : (applied = false);
+  let applied = false;
 
   return (
     <>
