@@ -439,9 +439,9 @@ const Action = (props) => {
   const d = props.data;
   const { me, coursePage, program } = props;
   let my_orders = [];
-  if (me) {
-    my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
-  }
+  // if (me) {
+  //   my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
+  // }
 
   let in_two_days = new Date();
   in_two_days.setDate(in_two_days.getDate() + 2);

@@ -355,9 +355,9 @@ const MobileBuy = (props) => {
     useMutation(CREATE_CLIENT);
 
   let my_orders = [];
-  if (me) {
-    my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
-  }
+  // if (me) {
+  //   my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
+  // }
 
   let in_two_days = new Date();
   in_two_days.setDate(in_two_days.getDate() + 2);

@@ -341,7 +341,7 @@ const OpenQuestion = (props) => {
       context,
       jsonStoryString
     );
-    if (hintGenerationResult?.newHint !== null) {
+    if (hintGenerationResult?.newHint) {
       setHints([...hints, hintGenerationResult.newHint]);
       createQuizResult({
         variables: {

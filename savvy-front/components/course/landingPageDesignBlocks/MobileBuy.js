@@ -358,9 +358,9 @@ const MobileBuy = (props) => {
   const { me, coursePage } = props;
 
   let my_orders = [];
-  if (me) {
-    my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
-  }
+  // if (me) {
+  //   my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
+  // }
 
   let currency_symbol;
   if (coursePage.currency == "ruble") {
