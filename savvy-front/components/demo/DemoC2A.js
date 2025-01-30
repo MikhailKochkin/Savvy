@@ -9,8 +9,12 @@ const Container = styled.div`
   right: 0;
   padding-left: 5px;
   @media (max-width: 800px) {
-    width: 100%;
-    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Adjust as needed */
+    height: auto; /* Adjust as needed */
+    z-index: 10; /* Ensure it's above Menu */
   }
 `;
 

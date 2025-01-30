@@ -578,7 +578,7 @@ const BottomButtonArea = styled.div`
   justify-content: flex-end;
   margin-top: 20px;
   margin-right: 20px;
-
+  z-index: 11;
   button {
     margin-right: 60px;
     margin-bottom: 30px;
@@ -587,7 +587,6 @@ const BottomButtonArea = styled.div`
     justify-content: center;
     align-items: center;
     transition: transform 0.2s;
-
     &.shiver {
       animation: ${shiverAnimation} 0.5s ease-in-out;
     }
@@ -596,9 +595,11 @@ const BottomButtonArea = styled.div`
   @media (max-width: 800px) {
     justify-content: flex-start;
     margin-left: 10px;
+    pointer-events: none;
 
     button {
       margin-left: 10px;
+      pointer-events: auto;
     }
   }
 `;

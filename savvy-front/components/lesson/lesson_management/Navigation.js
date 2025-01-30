@@ -15,7 +15,7 @@ const Head = styled.div`
     if (!isStory && !isSticky) return "80px";
     return "20px";
   }};
-  z-index: 1000;
+  z-index: 9;
   pointer-events: none;
   display: flex;
   flex-direction: row;
