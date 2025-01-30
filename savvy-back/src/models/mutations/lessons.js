@@ -95,6 +95,39 @@ function lessonMutations(t) {
       }
     },
   });
+  t.field("updateLessonUser", {
+    type: "Lesson",
+    args: {
+      id: stringArg(),
+      ownerEmail: stringArg(),
+    },
+    resolve: async (_, args, ctx) => {
+      try {
+        const new_owner = await ctx.prisma.user.findUnique({
+          select: { id: true },
+          where: {
+            email: args.ownerEmail,
+          },
+        });
+        const updatedLesson = await ctx.prisma.lesson.update({
+          data: {
+            user: {
+              connect: {
+                id: new_owner.id,
+              },
+            },
+          },
+          where: {
+            id: args.id,
+          },
+        });
+
+        return updatedLesson;
+      } catch (error) {
+        throw new Error(`Failed to update lesson: ${error.message}`);
+      }
+    },
+  });
   t.field("copyLesson", {
     type: "Lesson",
     args: {

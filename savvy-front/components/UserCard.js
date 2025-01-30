@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
+import { course_tags } from "../config";
 
 const CREATE_SUBSCRIPTION_MUTATION = gql`
   mutation CREATE_SUBSCRIPTION_MUTATION(
@@ -130,29 +131,7 @@ const Tag = styled.div`
   margin: 2px;
   height: 22px;
   border-radius: 5px;
-
   display: inline-block;
-  /* flex-direction: row;
-  justify-content: center;
-  align-items: center; */
-`;
-
-const Editor = styled.div`
-  display: ${(props) => {
-    return props.show ? "block" : "none";
-  }};
-  font-size: 1.6rem;
-  width: 95%;
-  border: 1px solid #c4c4c4;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  outline: 0;
-  padding: 0.5%;
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-  @media (max-width: 800px) {
-    width: 350px;
-  }
 `;
 
 const Row = styled.div`
@@ -480,6 +459,39 @@ const UserCard = memo((props) => {
     alert("Email has been sent!");
   };
 
+  const groupCoursesByTags = (courses, allowedTags) => {
+    const grouped = { other: [] }; // "other" group for unmatched courses
+    const tagSet = new Set(allowedTags);
+    const assignedCourses = new Set(); // Track assigned courses
+
+    courses.forEach((course) => {
+      if (
+        !course.tags ||
+        !Array.isArray(course.tags) ||
+        course.tags.length === 0
+      ) {
+        grouped.other.push(course); // No tags at all? Add to "other"
+        return;
+      }
+
+      // Find the first tag that is in the allowedTags list
+      const firstValidTag = course.tags.find((tag) => tagSet.has(tag));
+
+      if (firstValidTag && !assignedCourses.has(course.id)) {
+        if (!grouped[firstValidTag]) {
+          grouped[firstValidTag] = [];
+        }
+        grouped[firstValidTag].push(course);
+        assignedCourses.add(course.id); // Mark as assigned
+      } else if (!firstValidTag && !assignedCourses.has(course.id)) {
+        grouped.other.push(course); // No valid tag? Add to "other"
+        assignedCourses.add(course.id);
+      }
+    });
+
+    return grouped;
+  };
+
   return (
     <Row id={props.id}>
       <div className="index">{props.index + 1}.</div>
@@ -487,6 +499,7 @@ const UserCard = memo((props) => {
       <div className="name">
         <div>{props.name}</div>
         <div>{props.surname}</div>
+        <div>id: {props.id}</div>
         <div>{number ? number : "Нет номера"}</div>
         <div>{props.email}</div>
         {tags &&
@@ -641,6 +654,8 @@ const UserCard = memo((props) => {
                 end = dayjs(existingSubscription.endDate).add(1, "month");
               } else if (term === "year") {
                 end = dayjs(existingSubscription.endDate).add(1, "year");
+              } else if (term === "6 months") {
+                end = dayjs(existingSubscription.endDate).add(6, "month");
               }
               const variables = {
                 userId: props.id,
@@ -674,6 +689,7 @@ const UserCard = memo((props) => {
             <select onChange={(e) => setTerm(e.target.value)}>
               <option>Choose term</option>
               <option value="month">Month</option>
+              <option value="6 months">6 months</option>
               <option value="year">Year</option>
             </select>
             <button type="submit">Обновить</button>
@@ -757,65 +773,121 @@ const UserCard = memo((props) => {
           </button>
           {areCourseSettingsOpen && (
             <div>
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const promises = props.coursePages.map((course) =>
+                    enrollOnCourse({
+                      variables: {
+                        id: props.id,
+                        coursePageId: course.id,
+                      },
+                    })
+                  );
+                  await Promise.all(promises);
+                  alert("Открыли доступ ко всем курсам!");
+                }}
+              >
+                Открыть доступ ко всем курсам
+              </button>
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const promises = props.coursePages.map((course) =>
+                    unenrollFromCourse({
+                      variables: {
+                        id: props.id,
+                        coursePageId: course.id,
+                      },
+                    })
+                  );
+                  await Promise.all(promises);
+                  alert("Закрыли доступ ко всем курсам!");
+                }}
+              >
+                Закрыть доступ ко всем курсам
+              </button>
               <h4>Курсы</h4>
-              {props.coursePages.map((c) => {
-                const ids = props.new_subjects.map((course) => course.id);
+
+              {Object.entries(
+                groupCoursesByTags(props.coursePages, course_tags)
+              ).map(([tag, courses]) => {
                 return (
-                  <div className="miniblock">
-                    <div className="main">
-                      {c.title}
-                      <br />
-                      {ids.includes(c.id) ? (
-                        <button
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            let unenroll = await unenrollFromCourse({
-                              variables: {
-                                id: props.id,
-                                coursePageId: c.id,
-                              },
-                            });
-                            alert("Закрыли доступ!");
-                          }}
-                        >
-                          Закрыть
-                        </button>
-                      ) : (
-                        <>
-                          <button
-                            onClick={async (e) => {
-                              e.preventDefault();
-                              let enroll = await enrollOnCourse({
-                                variables: {
-                                  id: props.id,
-                                  coursePageId: c.id,
-                                },
-                              });
-                              alert("Открыли доступ!");
-                            }}
-                          >
-                            Открыть
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleSendEmail(props.name, props.email, c.id)
-                            }
-                          >
-                            Welcome Email
-                          </button>
-                        </>
-                      )}
-                    </div>
-                    <div className="second">
-                      <div class="enrollment-status">
-                        <input
-                          checked={ids.includes(c.id)}
-                          type="checkbox"
-                          id="enrolled"
-                          class="checkbox"
-                        />
-                      </div>
-                    </div>
+                  <div key={tag}>
+                    <h2>{tag}</h2>
+                    {courses
+                      .sort((a, b) =>
+                        a.title.localeCompare(b.title, "ru", {
+                          sensitivity: "base",
+                        })
+                      )
+                      .map((c) => {
+                        const ids = props.new_subjects.map(
+                          (course) => course.id
+                        );
+                        return (
+                          <div className="miniblock" key={c.id}>
+                            <div className="main">
+                              {c.title}
+                              <br />
+                              {ids.includes(c.id) ? (
+                                <button
+                                  onClick={async (e) => {
+                                    e.preventDefault();
+                                    let unenroll = await unenrollFromCourse({
+                                      variables: {
+                                        id: props.id,
+                                        coursePageId: c.id,
+                                      },
+                                    });
+                                    alert("Закрыли доступ!");
+                                  }}
+                                >
+                                  Закрыть
+                                </button>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={async (e) => {
+                                      e.preventDefault();
+                                      let enroll = await enrollOnCourse({
+                                        variables: {
+                                          id: props.id,
+                                          coursePageId: c.id,
+                                        },
+                                      });
+                                      alert("Открыли доступ!");
+                                    }}
+                                  >
+                                    Открыть
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handleSendEmail(
+                                        props.name,
+                                        props.email,
+                                        c.id
+                                      )
+                                    }
+                                  >
+                                    Welcome Email
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                            <div className="second">
+                              <div className="enrollment-status">
+                                <input
+                                  checked={ids.includes(c.id)}
+                                  type="checkbox"
+                                  id={`enrolled-${c.id}`}
+                                  className="checkbox"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 );
               })}

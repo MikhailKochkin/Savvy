@@ -268,6 +268,7 @@ const LessonBuilder = (props) => {
           coursePageId={lesson.coursePage.id}
           description={lesson.description}
           lesson={lesson}
+          ownerEmail={lesson.user?.email}
           // getTemplate={getTemplate}
           onUpdateLessonData={updateLessonData}
         />

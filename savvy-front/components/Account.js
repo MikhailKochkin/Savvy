@@ -157,7 +157,6 @@ const UPDATE_USER_MUTATION = gql`
     $work: String
     $description: String
     $isFamiliar: Boolean
-    $tags: [String]
   ) {
     updateUser(
       id: $id
@@ -169,7 +168,6 @@ const UPDATE_USER_MUTATION = gql`
       description: $description
       work: $work
       isFamiliar: $isFamiliar
-      tags: $tags
     ) {
       id
       name
@@ -235,7 +233,6 @@ const Account = (props) => {
         image,
         work,
         description,
-        tags: props.me.tags,
       },
     });
   };

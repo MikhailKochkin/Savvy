@@ -179,7 +179,7 @@ const IconBlock = styled.div`
 const Icon = styled.div`
   margin: 5px;
   border-radius: 50%;
-  background: #2f80ed; /* fallback for old browsers */
+  background: ${({ hasImage }) => (hasImage ? "#fff" : "#2f80ed")};
   color: #fff;
   font-size: 2rem;
   font-weight: bold;
@@ -357,7 +357,7 @@ const DynamicChat = (props) => {
       {generatingResponse && <Loading />}
       <MessageRow>
         <IconBlock>
-          <Icon className="icon2" background={"student"}>
+          <Icon className="icon2" hasImage={me.image !== null}>
             {me.image && <img className="icon" src={me.image} />}
           </Icon>
           <div className="name">{me.name}</div>

@@ -1316,6 +1316,7 @@ type Mutation {
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, banner: String, challenge_num: Int, change: String, characters: [CharacterInput], context: String, description: String, goal: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructureInput, story: String, structure: LessonStructureInput, tags: [String], tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
+  updateLessonUser(id: String, ownerEmail: String): Lesson
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswersInput, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextTypeInput, question: [String], type: String): NewTest
   updateNote(complexity: Int, horizontal_image: String, id: String, instructorName: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextTypeInput, text: String, type: String, vertical_image: String): Note
@@ -1884,6 +1885,9 @@ type Query {
   coursePages(
     """ID of the course creator to filter by."""
     co_authorId: String
+
+    """Filter by course type."""
+    courseType: String
 
     """ID of the course page to fetch."""
     id: String

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Mutation } from "@apollo/client/react/components";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import { useTranslation } from "next-i18next";
 
+import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import DeleteSingleLesson from "./DeleteSingleLesson";
 import { Title, Row, Frame, SecondaryButton } from "./styles/DevPageStyles";
 
@@ -25,6 +24,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $open: Boolean
     $hasSecret: Boolean
     $totalPoints: Int
+    $authorEmail: String
   ) {
     updateLesson(
       id: $id
@@ -41,7 +41,16 @@ const UPDATE_LESSON_MUTATION = gql`
       open: $open
       hasSecret: $hasSecret
       totalPoints: $totalPoints
+      authorEmail: $authorEmail
     ) {
+      id
+    }
+  }
+`;
+
+const UPDATE_LESSON_USER_MUTATION = gql`
+  mutation UPDATE_LESSON_USER_MUTATION($id: String!, $ownerEmail: String) {
+    updateLessonUser(id: $id, ownerEmail: $ownerEmail) {
       id
     }
   }
@@ -170,11 +179,16 @@ const UpdateLesson = (props) => {
   const [context, setContext] = useState(
     props.lesson.context ? props.lesson.context : ""
   );
+  const [ownerEmail, setOwnerEmail] = useState(props.ownerEmail);
   const [copyLesson, { data: copyData }] = useMutation(COPY_LESSON_MUTATION);
 
   const { t } = useTranslation("lesson");
 
   const [updateLesson, { loading }] = useMutation(UPDATE_LESSON_MUTATION);
+
+  const [updateLessonUser, { loading: loadingUser }] = useMutation(
+    UPDATE_LESSON_USER_MUTATION
+  );
 
   useEffect(() => {
     // Update lessonData whenever name or description changes
@@ -229,6 +243,33 @@ const UpdateLesson = (props) => {
               placeholder="target coursePage Id"
               defaultValue={coursePageId}
               onChange={(e) => setCoursePageId(e.target.value)}
+            />
+          </div>
+        </Row>
+        <Row>
+          <div className="description">
+            {" "}
+            <SecondaryButton
+              onClick={async (e) => {
+                e.preventDefault();
+                if (!ownerEmail) {
+                  alert("Set the new sim owner!");
+                  return;
+                }
+                const res = await updateLessonUser({
+                  variables: { id: lessonId, ownerEmail: ownerEmail },
+                });
+                alert("Changed!");
+              }}
+            >
+              Change Owner
+            </SecondaryButton>
+          </div>
+          <div className="action_area">
+            <input
+              placeholder="Simulator owner email"
+              defaultValue={ownerEmail}
+              onChange={(e) => setOwnerEmail(e.target.value)}
             />
           </div>
         </Row>

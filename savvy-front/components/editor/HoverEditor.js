@@ -82,23 +82,6 @@ const Label = styled.label`
   }
 `;
 
-const ELEMENT_TAGS = {
-  A: (el) => ({ type: "link", url: el.getAttribute("href") }),
-  BLOCKQUOTE: () => ({ type: "quote" }),
-  H1: () => ({ type: "heading-one" }),
-  H2: () => ({ type: "heading-two" }),
-  H3: () => ({ type: "heading-three" }),
-  H4: () => ({ type: "heading-four" }),
-  H5: () => ({ type: "heading-five" }),
-  H6: () => ({ type: "heading-six" }),
-  IMG: (el) => ({ type: "image", url: el.getAttribute("src") }),
-  LI: () => ({ type: "list-item" }),
-  OL: () => ({ type: "numbered-list" }),
-  P: () => ({ type: "paragraph" }),
-  PRE: () => ({ type: "code" }),
-  UL: () => ({ type: "bulleted-list" }),
-};
-
 const TEXT_TAGS = {
   CODE: () => ({ code: true }),
   DEL: () => ({ delete: true }),
@@ -289,6 +272,7 @@ const HoveringMenu = (props) => {
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
   const [value, setValue] = useState(initial);
+  const [showToolbar2, setShowToolbar2] = useState(false);
 
   const [editor] = useState(() => {
     return withTable(withLinks(withHistory(withReact(createEditor()))), {
@@ -418,6 +402,14 @@ const HoveringMenu = (props) => {
         renderLeaf={renderLeaf}
         renderElement={renderElement}
         placeholder={props.placeholder}
+        onDoubleClick={() => {
+          setShowToolbar2(true);
+
+          // Optionally auto-hide the toolbar after a short delay
+          setTimeout(() => {
+            setShowToolbar2(false);
+          }, 3000);
+        }}
       />
     </Slate>
   );
@@ -692,6 +684,55 @@ const HoveringToolbar = (props) => {
           {props.type == "DocBuilder" && (
             <AddButton format="add" icon={"add"} />
           )}
+        </Menu>
+      </IconContext.Provider>
+    </Portal>
+  );
+};
+
+const HoveringToolbar2 = ({ showToolbar2, setShowToolbar2 }) => {
+  const ref = useRef();
+
+  // Decide how to position the toolbar when it is shown
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (!showToolbar2) {
+      // Hide the toolbar
+      el.removeAttribute("style");
+      return;
+    }
+
+    // If you want to position it absolutely somewhere in the viewport:
+    el.style.opacity = "1";
+    el.style.top = "100px"; // example position
+    el.style.left = "200px"; // example position
+  }, [showToolbar2]);
+
+  // If you want to hide the toolbar when the user clicks inside it:
+  const handleClickInside = (event) => {
+    event.preventDefault();
+    setShowToolbar2(false);
+  };
+
+  return (
+    <Portal>
+      <IconContext.Provider value={{ size: "18px" }}>
+        <Menu
+          ref={ref}
+          onMouseDown={handleClickInside}
+          // or onClick, depending on your preference
+          style={{ position: "absolute", opacity: 0 }}
+          className={css`
+            z-index: 1;
+            background-color: #222;
+            border-radius: 4px;
+            transition: opacity 0.75s;
+            /* other styling */
+          `}
+        >
+          <p>Hello from Toolbar2 (no selection logic!)</p>
         </Menu>
       </IconContext.Provider>
     </Portal>

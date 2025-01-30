@@ -7,6 +7,7 @@ const Body = styled.div`
   img {
     display: block;
     max-width: 600px;
+    width: 100%;
     box-shadow: "0 0 0 2px blue;";
     object-fit: contain;
     @media (max-width: 800px) {

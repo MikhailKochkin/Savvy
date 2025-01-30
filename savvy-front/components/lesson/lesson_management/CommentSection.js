@@ -409,7 +409,7 @@ const CommentSection = (props) => {
                   {comment.user.name} {comment.user.surname}
                 </div>
                 <div className="comment_creation_time">
-                  {dayjs(comment.createdAt).format("LLL")}
+                  {dayjs(comment.createdAt).format("DD-MM-YYYY")}
                 </div>
                 <div>
                   {comment.status == "PENDING"
@@ -496,7 +496,7 @@ const CommentSection = (props) => {
                         {reply.user.name} {reply.user.surname}
                       </div>
                       <div className="comment_creation_time">
-                        {dayjs(reply.createdAt).format("LLL")}
+                        {dayjs(reply.createdAt).format("DD-MM-YYYY")}
                       </div>
                     </div>
                     <div className="comment_info">

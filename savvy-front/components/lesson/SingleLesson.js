@@ -42,6 +42,7 @@ const SINGLE_LESSON_QUERY = gql`
       user {
         name
         surname
+        email
         image
         id
       }

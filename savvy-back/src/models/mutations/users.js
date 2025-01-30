@@ -614,7 +614,7 @@ function userMutations(t) {
       const user = await ctx.prisma.user.update({
         data: {
           tags: {
-            set: [...args.tags],
+            set: args.tags ? [...args.tags] : [],
           },
           ...updates,
         },

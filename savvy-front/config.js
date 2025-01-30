@@ -4,6 +4,19 @@ export const prodEndpoint = `https://api.besavvy.app/graphql`;
 export const prodEndpointRu = `https://api.besavvy.ru/graphql`;
 export const NEXTAUTH_URL = "http://localhost:7777";
 
+export const course_tags = [
+  "english",
+  "corp",
+  "civil",
+  "ip",
+  "real_estate",
+  "law_school",
+  "litigation",
+  "first_job",
+  "tech",
+  "soft",
+];
+
 export const Unis = [
   { "Выберите вуз": "cjyimfz2e00lp07174jpder3m" },
   { ВГУ: "cjysm4jdi03oi0719phcoyk5a" },

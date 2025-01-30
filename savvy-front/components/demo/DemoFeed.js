@@ -9,6 +9,8 @@ import ReactResizeDetector from "react-resize-detector";
 import calculateSum from "../../functions.js";
 import Navigation from "../lesson/lesson_management/Navigation";
 import TranslateText from "../lesson/lesson_management/TranslateText";
+import DemoC2A from "./DemoC2A.js";
+import { ActionButton, SecondaryButton } from "../lesson/styles/DevPageStyles";
 
 const Buttons = styled.div`
   display: flex;
@@ -158,6 +160,7 @@ const MenuColumn = styled.div`
   position: sticky;
   overflow-y: auto; /* Enable vertical scrolling */
   top: 0%;
+  z-index: 500;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -329,7 +332,7 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 80%;
   .arrowmenu {
     cursor: pointer;
     padding: 10px 2%;
@@ -437,7 +440,7 @@ const ProgressBarContainer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 45px;
+  height: 30px;
   z-index: 10;
   display: flex;
   flex-direction: row;
@@ -557,6 +560,49 @@ const SimulatorLinks = styled.div`
   }
 `;
 
+const shiverAnimation = keyframes`
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px) rotate(-2deg); }
+  40% { transform: translateX(4px) rotate(2deg); }
+  60% { transform: translateX(-4px) rotate(-2deg); }
+  80% { transform: translateX(4px) rotate(2deg); }
+  100% { transform: translateX(0); }
+`;
+
+const BottomButtonArea = styled.div`
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 20px;
+  margin-right: 20px;
+
+  button {
+    margin-right: 60px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+
+    &.shiver {
+      animation: ${shiverAnimation} 0.5s ease-in-out;
+    }
+  }
+
+  @media (max-width: 800px) {
+    justify-content: flex-start;
+    margin-left: 10px;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+`;
+
 const Feed = (props) => {
   const {
     me,
@@ -573,12 +619,24 @@ const Feed = (props) => {
   const [result, setResult] = useState(null);
   const [width, setWidth] = useState(0);
 
-  const [open, setOpen] = useState(width < 500 ? false : true);
+  const [open, setOpen] = useState(false);
   const [openNavigation, setOpenNavigation] = useState(false);
   const [openTranslation, setOpenTranslation] = useState(false);
   const [translationMode, setTranslationMode] = useState(false);
   const [translationLanguage, setTranslationLanguage] = useState("French");
   const [linkMenuOpen, setLinkMenuOpen] = useState(false);
+  const [isCalendlyVisible, setIsCalendlyVisible] = useState(false);
+  const [shiver, setShiver] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShiver(true);
+      setTimeout(() => setShiver(false), 500); // Remove class after animation
+    }, 6000); // Every 10 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   const next_lesson = false;
   const other_simulators = [];
 
@@ -628,9 +686,9 @@ const Feed = (props) => {
 
   // 4. Determine screen width
 
-  useEffect(() => {
-    setOpen(width < 500 ? false : true);
-  }, [width]);
+  // useEffect(() => {
+  //   setOpen(width < 500 ? false : true);
+  // }, [width]);
 
   const handleToggleTranslation = () => {
     setTranslationMode(!translationMode);
@@ -886,49 +944,65 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
-          {width > 800 && (
+          {/* {width > 800 && (
             <CustomProgressBar myResult={num} lessonItems={lesson_structure} />
-          )}{" "}
-          <Navigation
-            i_am_author={props.i_am_author}
-            lesson={props.lesson}
-            me={me}
-            width={width}
-            passMenuChange={passMenuChange}
-            page="demo"
-          />
-          {props.components.slice(0, num + 2).map((c, i) => (
-            <Block
-              open={open}
-              show={i === num + 1 ? "final" : "no"}
-              className={i === num + 1 ? "final" : "no"}
-            >
-              {c}
-              {props.move_statuses[i] && (
-                <Buttons>
-                  {/* Show move button if it is not the last block in the lesson */}
-                  {props.components.length > num + 1 && i === num && (
-                    <>
-                      <div
-                        id="arrow_box"
-                        className="arrow_box"
-                        onClick={async (e) => {
-                          let res2 = move(props.components[i + 1]?.props?.id);
-                        }}
-                      >
-                        <img
-                          className="arrow"
-                          src="../../static/down-arrow.svg"
-                        />
-                      </div>
-                    </>
+          )}{" "} */}
+          <div style={{ position: "relative", width: "100%" }}>
+            <Border>
+              {props.components.slice(0, num + 2).map((c, i) => (
+                <Block
+                  open={open}
+                  show={i === num + 1 ? "final" : "no"}
+                  className={i === num + 1 ? "final" : "no"}
+                >
+                  {c}
+                  {props.move_statuses[i] && (
+                    <Buttons>
+                      {/* Show move button if it is not the last block in the lesson */}
+                      {props.components.length > num + 1 && i === num && (
+                        <>
+                          <div
+                            id="arrow_box"
+                            className="arrow_box"
+                            onClick={async (e) => {
+                              let res2 = move(
+                                props.components[i + 1]?.props?.id
+                              );
+                            }}
+                          >
+                            <img
+                              className="arrow"
+                              src="../../static/down-arrow.svg"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </Buttons>
                   )}
-                </Buttons>
-              )}
-            </Block>
-          ))}
+                </Block>
+              ))}
+            </Border>
+            <Navigation
+              i_am_author={props.i_am_author}
+              lesson={props.lesson}
+              me={me}
+              width={width}
+              passMenuChange={passMenuChange}
+              page="demo"
+              story={true}
+            />
+          </div>
         </Content>
+        <DemoC2A isDisplayed={isCalendlyVisible} />
       </Styles>
+      <BottomButtonArea>
+        <ActionButton
+          onClick={(e) => setIsCalendlyVisible(!isCalendlyVisible)}
+          className={shiver && !isCalendlyVisible ? "shiver" : ""}
+        >
+          {isCalendlyVisible ? "Close" : "🎙️ Talk to us"}
+        </ActionButton>
+      </BottomButtonArea>
     </>
   );
 };

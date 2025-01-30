@@ -28,8 +28,9 @@ const DocPage = styled.div`
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   background: #fff;
   border: 1px solid rgb(228, 227, 227);
-  padding: 20px;
+  padding: 40px 60px;
   width: 90%;
+  max-width: 940px;
   margin: 40px 0;
 `;
 

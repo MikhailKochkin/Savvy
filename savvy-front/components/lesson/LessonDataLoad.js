@@ -276,7 +276,6 @@ const LessonDataLoad = (props) => {
   if (lessonData_loading) return <Loading />;
   if (lessonData_error) return <p>{lessonData_error}</p>;
   let lesson = props.lesson;
-  console.log("initila lesson", props.lesson);
 
   if (lessonData && lessonData?.loadLessonData) {
     lesson = {
@@ -288,7 +287,6 @@ const LessonDataLoad = (props) => {
   const passStep = (num) => {
     props.passStep(num);
   };
-  console.log("lesson", lesson);
   return (
     lesson && (
       <StoryEx

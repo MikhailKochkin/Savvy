@@ -156,7 +156,7 @@ const IconBlock = styled.div`
 const Icon = styled.div`
   margin: 5px;
   border-radius: 50%;
-  background: #2f80ed; /* fallback for old browsers */
+  background: ${({ hasImage }) => (hasImage ? "#fff" : "#2f80ed")};
   color: #fff;
   font-size: 2rem;
   font-weight: bold;
@@ -171,7 +171,6 @@ const Icon = styled.div`
 
 const Message = ({ id, key, role, m, me, author, lessonId }) => {
   const modifiedText = m.text.replace("[name]", me.name);
-
   return (
     <Styles id={id} key={key}>
       <MessageRow role={role}>
@@ -199,7 +198,7 @@ const Message = ({ id, key, role, m, me, author, lessonId }) => {
         {role === "student" && (
           <>
             <IconBlock>
-              <Icon className="icon2" background={m.author}>
+              <Icon className="icon2" hasImage={me.image !== null}>
                 {m.image && <img className="icon" src={m.image} />}
                 {!m.image &&
                   (me && me.image ? (

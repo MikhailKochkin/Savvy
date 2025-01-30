@@ -20,15 +20,18 @@ export const IconBlock = styled.div`
   .icon2 {
     margin: 5px;
     border-radius: 50%;
-    background: #cb2d3e; /* fallback for old browsers */
+    background: #642b73; /* fallback for old browsers */
     background: -webkit-linear-gradient(
-      #ef473a,
-      #cb2d3e
+      to right,
+      #c6426e,
+      #642b73
     ); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(
-      #ef473a,
-      #cb2d3e
+      to right,
+      #c6426e,
+      #642b73
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
     color: #fff;
     font-size: 2rem;

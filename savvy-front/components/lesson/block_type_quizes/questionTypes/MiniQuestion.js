@@ -110,7 +110,7 @@ const MiniQuestion = (props) => {
       return (
         <Comment>
           <div>
-            <b>Hint:</b>
+            <b>{t("Hint")}</b>
           </div>
           {parse(hints[hints.length - 1])}
         </Comment>
@@ -206,7 +206,7 @@ const MiniQuestion = (props) => {
               setGeneratingAnswerResult(false);
             }}
           >
-            Check
+            {t("check")}
           </MiniAIButton>
         ) : null}
         <MiniAIButton
@@ -274,7 +274,7 @@ const MiniQuestion = (props) => {
               props.revealCorrectAnswer();
             }}
           >
-            Show correct answer
+            {t("show_an_ideal_answer")}
           </MiniAIButton>
         )}
       </ButtonsBox>

@@ -20,10 +20,21 @@ function courseQueries(t) {
       co_authorId: stringArg({
         description: "ID of the course creator to filter by.",
       }),
+      courseType: stringArg({
+        description: "Filter by course type.",
+      }),
     },
     resolve: async (
       _parent,
-      { id, published, orderByCreatedAt, studentId, userId, co_authorId },
+      {
+        id,
+        published,
+        orderByCreatedAt,
+        studentId,
+        userId,
+        co_authorId,
+        courseType,
+      },
       ctx
     ) => {
       const where = {
@@ -47,6 +58,9 @@ function courseQueries(t) {
               id: { equals: co_authorId },
             },
           },
+        }),
+        ...(courseType && {
+          courseType: { equals: courseType },
         }),
       };
 

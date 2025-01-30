@@ -3,6 +3,13 @@ import styled from "styled-components";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import {
+  ActionButton,
+  Row,
+  Frame,
+  MicroButton,
+} from "../lesson/styles/DevPageStyles";
+import { course_tags } from "../../config";
 
 const SUBSCRIPTION_QUERY = gql`
   query SUBSCRIPTION_QUERY($userId: String!) {
@@ -12,6 +19,17 @@ const SUBSCRIPTION_QUERY = gql`
       type
       term
       userId
+      createdAt
+    }
+  }
+`;
+
+const ACTIVE_COURSES_QUERY = gql`
+  query ACTIVE_COURSES_QUERY {
+    coursePages(published: true, courseType: "FORMONEY") {
+      id
+      title
+      tags
     }
   }
 `;
@@ -28,6 +46,14 @@ const UPDATE_SUBSCRIPTION_MUTATION = gql`
       isActive
       type
       term
+    }
+  }
+`;
+
+const ENROLL_COURSE_MUTATION = gql`
+  mutation ENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
+    enrollOnCourse(id: $id, coursePageId: $coursePageId) {
+      id
     }
   }
 `;
@@ -127,27 +153,22 @@ const Container = styled.div`
     line-height: 1.4;
     font-size: 1.4rem;
   }
-`;
-
-const BlueButton = styled.button`
-  background: #3b5bb3;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #fff;
-  border: 1px solid #3b5bb3;
-  font-family: Montserrat;
-  outline: 0;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 15px 0;
-  transition: 0.3s ease-in;
-  cursor: pointer;
-  &:hover {
-    border: 1px solid #283d78;
-    background: #283d78;
+  .miniblock {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .main {
+      margin-right: 10px;
+      border: 1px solid lightgrey;
+      width: 85%;
+    }
+    .second {
+      width: 15%;
+      border: 1px solid lightgrey;
+    }
   }
 `;
-
 const Message = styled.div`
   background: #def2d6;
   color: #5a7052;
@@ -163,6 +184,8 @@ const Account = (props) => {
   const [subscriptionType, setSubscriptionType] = useState("regular");
   const [subscriptionLength, setSubscriptionLength] = useState("monthly");
   const [isSpecialOfferShown, setIsSpecialOfferShown] = useState(false);
+  const [areButtonsVisible, setAreButtonsVisible] = useState(true);
+  const [newSubscribedCourses, setNewSubscribedCourses] = useState([]);
   const router = useRouter();
   const { t } = useTranslation("account");
 
@@ -175,6 +198,15 @@ const Account = (props) => {
       userId: props.me.id,
     },
   });
+
+  const {
+    loading: loading5,
+    error: error5,
+    data: data5,
+  } = useQuery(ACTIVE_COURSES_QUERY);
+
+  const subscription = subsData?.subscriptionsByUser[0] || null;
+  const available_courses = data5?.coursePages || []; // Available courses
 
   useEffect(() => {
     if (
@@ -191,6 +223,11 @@ const Account = (props) => {
   const [updateSubscription, { error: subscriptionError }] = useMutation(
     UPDATE_SUBSCRIPTION_MUTATION
   );
+
+  const [
+    enrollOnCourse,
+    { data: enroll_data, loading: enroll_loading, error: enroll_error },
+  ] = useMutation(ENROLL_COURSE_MUTATION);
 
   if (errorSubscriptions) return <p>Error: {errorSubscriptions.message}</p>;
   if (loadingSubscriptions) return <p>Loading...</p>;
@@ -219,6 +256,81 @@ const Account = (props) => {
     }
   };
 
+  const calculateAvailableCourses = (subscription) => {
+    const { createdAt, type, isActive, term } = subscription;
+
+    // If the subscription is inactive, return 0
+    if (!isActive) {
+      return {
+        months: 0,
+        availableCoursesNum: 0,
+      };
+    }
+
+    // Parse createdAt and calculate the difference
+    const start = new Date(createdAt);
+    const today = new Date();
+
+    // Calculate year and month difference
+    let monthsElapsed =
+      (today.getFullYear() - start.getFullYear()) * 12 +
+      (today.getMonth() - start.getMonth());
+
+    // Account for partial months
+    if (today.getDate() >= start.getDate()) {
+      monthsElapsed += 1;
+    }
+
+    // If term is annually or biannually, set availableCoursesNum to 40
+    if (term === "annually" || term === "biannually") {
+      return {
+        months: monthsElapsed,
+        availableCoursesNum: 40,
+      };
+    }
+
+    // Determine multiplier based on type
+    const multiplier = type === "mini" ? 1 : type === "regular" ? 3 : 0;
+
+    return {
+      months: monthsElapsed,
+      availableCoursesNum: monthsElapsed * multiplier,
+    };
+  };
+
+  const groupCoursesByTags = (courses, allowedTags) => {
+    const grouped = { other: [] }; // "other" group for unmatched courses
+    const tagSet = new Set(allowedTags);
+    const assignedCourses = new Set(); // Track assigned courses
+
+    courses.forEach((course) => {
+      if (
+        !course.tags ||
+        !Array.isArray(course.tags) ||
+        course.tags.length === 0
+      ) {
+        grouped.other.push(course); // No tags at all? Add to "other"
+        return;
+      }
+
+      // Find the first tag that is in the allowedTags list
+      const firstValidTag = course.tags.find((tag) => tagSet.has(tag));
+
+      if (firstValidTag && !assignedCourses.has(course.id)) {
+        if (!grouped[firstValidTag]) {
+          grouped[firstValidTag] = [];
+        }
+        grouped[firstValidTag].push(course);
+        assignedCourses.add(course.id); // Mark as assigned
+      } else if (!firstValidTag && !assignedCourses.has(course.id)) {
+        grouped.other.push(course); // No valid tag? Add to "other"
+        assignedCourses.add(course.id);
+      }
+    });
+
+    return grouped;
+  };
+
   const { me } = props;
 
   return (
@@ -226,58 +338,164 @@ const Account = (props) => {
       <Fieldset>
         <div className="Title">{t("subscription_settings")}</div>
         <Container>
-          <input
-            value={`https://besavvy.app/ru/subscription?referrerId=${me.id}`}
-          />
-          <Comment>{t("isActive")}</Comment>
-          <select
-            value={isActive}
-            onChange={(e) => {
-              if (isSpecialOfferShown) {
-                setIsActive(e.target.value === "true" ? true : false);
-              }
-              if (e.target.value !== "true") {
-                setIsSpecialOfferShown(true);
-                setSubscriptionType("special");
-              }
-            }}
-          >
-            <option value={true}>{t("active")}</option>
-            <option value={false}>{t("inactive")}</option>
-          </select>
-          {isSpecialOfferShown ? (
-            <Message>
-              Продлите подписку на специальных условиях.
-              <br /> Всего за 990 рублей сохраните доступ ко всем курсам еще на
-              1 месяц.
-              <br />
-              Нажмите на кнопку ниже, чтобы воспользоваться специальным
-              предложением.
-            </Message>
+          {subscription ? (
+            <>
+              <Row>
+                <div className="description">Available courses: </div>
+                <div className="action_area">
+                  <div className="element_info">
+                    {
+                      calculateAvailableCourses(subscription)
+                        ?.availableCoursesNum
+                    }
+                  </div>
+                </div>
+              </Row>
+              <Row>
+                <div className="description">Enrolled courses: </div>
+                <div className="action_area">
+                  {" "}
+                  <div className="element_info">
+                    {me.new_subjects.length}{" "}
+                  </div>{" "}
+                </div>
+              </Row>
+            </>
           ) : null}
-          <Comment>{t("choose_subscription_type")}</Comment>
-          <select
-            value={subscriptionType}
-            onChange={(e) => setSubscriptionType(e.target.value)}
-          >
-            <option value="mini">{t("mini")}</option>
-            <option value="regular">{t("regular")}</option>
-            <option value="team">{t("team")}</option>
-            <option value="special">Специальный тариф – 990 / мес</option>
-          </select>
-          <Comment>{t("choose_subscription_length")}</Comment>
-          <select
-            value={subscriptionLength}
-            onChange={(e) => setSubscriptionLength(e.target.value)}
-          >
-            <option value="monthly">{t("monthly")}</option>
-            <option value="annually">{t("annually")}</option>
-            <option value="biannually">{t("biannually")}</option>
-          </select>
-          <BlueButton onClick={handleUpdateSubscription}>
+          <Row>
+            <div className="description">{t("isActive")}</div>
+            <div className="action_area">
+              <select
+                value={isActive}
+                onChange={(e) => {
+                  if (isSpecialOfferShown) {
+                    setIsActive(e.target.value === "true" ? true : false);
+                  }
+                  if (e.target.value !== "true") {
+                    setIsSpecialOfferShown(true);
+                    setSubscriptionType("special");
+                  }
+                }}
+              >
+                <option value={true}>{t("active")}</option>
+                <option value={false}>{t("inactive")}</option>
+              </select>
+              {isSpecialOfferShown ? (
+                <Message>
+                  Продлите подписку на специальных условиях.
+                  <br /> Всего за 990 рублей сохраните доступ ко всем курсам еще
+                  на 1 месяц.
+                  <br />
+                  Нажмите на кнопку ниже, чтобы воспользоваться специальным
+                  предложением.
+                </Message>
+              ) : null}
+            </div>
+          </Row>
+          <Row>
+            <div className="description">{t("choose_subscription_type")}</div>
+            <div className="action_area">
+              <select
+                value={subscriptionType}
+                onChange={(e) => setSubscriptionType(e.target.value)}
+              >
+                <option value="mini">{t("mini")}</option>
+                <option value="regular">{t("regular")}</option>
+                <option value="team">{t("team")}</option>
+                <option value="special">Специальный тариф – 990 / мес</option>
+              </select>
+            </div>
+          </Row>
+          <Row>
+            <div className="description">{t("choose_subscription_length")}</div>
+            <div className="action_area">
+              <select
+                value={subscriptionLength}
+                onChange={(e) => setSubscriptionLength(e.target.value)}
+              >
+                <option value="monthly">{t("monthly")}</option>
+                <option value="annually">{t("annually")}</option>
+                <option value="biannually">{t("biannually")}</option>
+              </select>
+            </div>
+          </Row>
+          <ActionButton onClick={handleUpdateSubscription}>
             {t("update_subscription")}
-          </BlueButton>
+          </ActionButton>
           <br />
+          {subscription &&
+          calculateAvailableCourses(subscription)?.availableCoursesNum >
+            me.new_subjects.length ? (
+            <>
+              <div>Choose one more course</div>
+
+              <div>
+                {[...available_courses]
+                  .sort((a, b) =>
+                    a.title.localeCompare(b.title, "ru", {
+                      sensitivity: "base",
+                    })
+                  )
+                  .map((c) => {
+                    const ids = me.new_subjects.map((course) => course.id);
+                    return (
+                      <div className="miniblock" key={c.id}>
+                        <div className="main">
+                          {c.title}
+                          <br />
+                          {
+                            calculateAvailableCourses(subscription)
+                              ?.availableCoursesNum.length
+                          }
+                          {ids.includes(c.id) || !areButtonsVisible ? null : (
+                            <button
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                let enroll = await enrollOnCourse({
+                                  variables: {
+                                    id: me.id,
+                                    coursePageId: c.id,
+                                  },
+                                });
+                                if (
+                                  me.new_subjects.length +
+                                    newSubscribedCourses.length >=
+                                  calculateAvailableCourses(subscription)
+                                    ?.availableCoursesNum -
+                                    1
+                                ) {
+                                  setAreButtonsVisible(false);
+                                }
+                                setNewSubscribedCourses([
+                                  ...newSubscribedCourses,
+                                  c.id,
+                                ]);
+                                alert("Открыли доступ!");
+                              }}
+                            >
+                              Открыть
+                            </button>
+                          )}
+                        </div>
+                        <div className="second">
+                          <div className="enrollment-status">
+                            <input
+                              checked={
+                                ids.includes(c.id) ||
+                                newSubscribedCourses.includes(c.id)
+                              }
+                              type="checkbox"
+                              id={`enrolled-${c.id}`}
+                              className="checkbox"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </>
+          ) : null}
         </Container>
       </Fieldset>
     </Form>

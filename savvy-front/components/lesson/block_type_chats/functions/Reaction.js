@@ -205,8 +205,7 @@ const StyledButton = styled.div`
 const Icon = styled.div`
   margin: 5px;
   border-radius: 50%;
-  background: #2f80ed; /* fallback for old browsers */
-
+  background: ${({ hasImage }) => (hasImage ? "#fff" : "#2f80ed")};
   color: #fff;
   font-size: 2rem;
   font-weight: bold;
@@ -234,7 +233,7 @@ const Reaction = (props) => {
           <div className="used">
             <Message key={i} time={i} className="student">
               <IconBlock>
-                <Icon className="icon2" background={m.author}>
+                <Icon className="icon2" hasImage={me.image !== null}>
                   {me.image && <img className="icon" src={me.image} />}
                   {!me.image &&
                     (me && me.image ? (

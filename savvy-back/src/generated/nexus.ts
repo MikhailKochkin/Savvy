@@ -2040,6 +2040,7 @@ export interface NexusGenFieldTypes {
     updateForum: NexusGenRootTypes['Forum'] | null; // Forum
     updateLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     updateLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
+    updateLessonUser: NexusGenRootTypes['Lesson'] | null; // Lesson
     updateMiniStatement: NexusGenRootTypes['Statement'] | null; // Statement
     updateNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     updateNote: NexusGenRootTypes['Note'] | null; // Note
@@ -3304,6 +3305,7 @@ export interface NexusGenFieldTypeNames {
     updateForum: 'Forum'
     updateLesson: 'Lesson'
     updateLessonResult: 'LessonResult'
+    updateLessonUser: 'Lesson'
     updateMiniStatement: 'Statement'
     updateNewTest: 'NewTest'
     updateNote: 'Note'
@@ -4584,6 +4586,10 @@ export interface NexusGenArgTypes {
       progress?: number | null; // Int
       visitsNumber?: number | null; // Int
     }
+    updateLessonUser: { // args
+      id?: string | null; // String
+      ownerEmail?: string | null; // String
+    }
     updateMiniStatement: { // args
       comments?: Array<string | null> | null; // [String]
       id?: string | null; // String
@@ -4808,6 +4814,7 @@ export interface NexusGenArgTypes {
     }
     coursePages: { // args
       co_authorId?: string | null; // String
+      courseType?: string | null; // String
       id?: string | null; // String
       orderByCreatedAt?: string | null; // String
       published?: boolean | null; // Boolean
