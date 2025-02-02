@@ -3970,6 +3970,7 @@ export interface NexusGenArgTypes {
     }
     botSignup: { // args
       email?: string | null; // String
+      image?: string | null; // String
       name?: string | null; // String
       number?: string | null; // String
       password?: string | null; // String
@@ -4968,6 +4969,7 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       initialDate?: NexusGenScalars['DateTime'] | null; // DateTime
       lastDate?: NexusGenScalars['DateTime'] | null; // DateTime
+      tag?: string | null; // String
     }
   }
 }

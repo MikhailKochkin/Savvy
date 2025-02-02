@@ -45,7 +45,16 @@ const NewUserCreate = () => {
   const [signup, { error, loading }] = useMutation(SIGNUP_MUTATION);
 
   const handleSubmit = async (e) => {
-    const res = await signup();
+    const res = await signup({
+      variables: {
+        email,
+        name,
+        surname,
+        image,
+        password: uuidv4(),
+        number: "",
+      },
+    });
   };
 
   const handleFileChange = (e) => {

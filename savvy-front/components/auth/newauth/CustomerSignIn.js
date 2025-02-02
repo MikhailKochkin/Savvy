@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMutation, gql, useLazyQuery } from "@apollo/client";
 import styled from "styled-components";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { v4 as uuidv4 } from "uuid";
 import { getCookie } from "cookies-next";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -24,30 +23,9 @@ const SINGLE_SIGNIN_MUTATION = gql`
   }
 `;
 
-// const SINGLE_SIGNUP_MUTATION = gql`
-//   mutation SINGLE_SIGNUP_MUTATION(
-//     $email: String!
-//     $name: String!
-//     $surname: String!
-//     $password: String!
-//   ) {
-//     singleSignup(
-//       email: $email
-//       name: $name
-//       surname: $surname
-//       password: $password
-//     ) {
-//       token
-//       user {
-//         id
-//       }
-//     }
-//   }
-// `;
-
 const CLIENTS_TAGS_QUERY = gql`
-  query CLIENTS_TAGS_QUERY($tag: [String!]!) {
-    users(where: { tags: { hasSome: $tag } }) {
+  query CLIENTS_TAGS_QUERY($tag: String!) {
+    users(tag: $tag) {
       id
       email
       name
@@ -171,9 +149,10 @@ const CustomerSingleSignIn = (props) => {
       if (props.authSource) {
         const customUsers = await getCustomUsers({
           variables: {
-            tag: [props.authSource.toLowerCase()],
+            tag: props.authSource.toLowerCase(),
           },
         });
+        console.log("customUsers", customUsers);
         setCustomUsers([...customUsers.data.users]);
       }
     };
@@ -193,7 +172,9 @@ const CustomerSingleSignIn = (props) => {
       alert("No user found with this email address");
       return;
     } else {
-      let auth_seeking_user = customUsers.find((user) => user.email === email);
+      let auth_seeking_user = customUsers.find(
+        (user) => user.email === email.toLowerCase()
+      );
 
       if (!auth_seeking_user) {
         alert("No user found with this email address");
@@ -238,10 +219,18 @@ const CustomerSingleSignIn = (props) => {
           </PurpleButton> */}
         </Fieldset>
       </Form>{" "}
-      <GoogleButton onClick={() => signInWithCustomProvider()}>
-        <img src="https://assets.circle.so/g4wjpw3vylqle5puc5z8n2r5p66v" />
-        <span>Continue with Wealthbrite</span>
-      </GoogleButton>
+      {props.authSource.toLowerCase() === "wealthbrite" && (
+        <GoogleButton onClick={() => signInWithCustomProvider()}>
+          <img src="https://assets.circle.so/g4wjpw3vylqle5puc5z8n2r5p66v" />
+          <span>Continue with Wealthbrite</span>
+        </GoogleButton>
+      )}
+      {props.authSource.toLowerCase() === "alrud" && (
+        <GoogleButton onClick={() => signInWithCustomProvider()}>
+          <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1738510355/alrud_y0thvj.jpg" />
+          <span>Открыть с почтой Алруд</span>
+        </GoogleButton>
+      )}
     </>
   );
 };

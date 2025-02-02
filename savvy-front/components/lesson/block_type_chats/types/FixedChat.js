@@ -157,7 +157,6 @@ const FixedChat = (props) => {
                   author={author}
                   passTextToBeTranslated={passTextToBeTranslated}
                 />
-                {console.log("author", author)}
                 {m.reactions && m.reactions.length > 0 && (
                   <Reaction
                     reactions={m.reactions}

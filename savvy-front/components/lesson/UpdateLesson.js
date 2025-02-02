@@ -24,7 +24,6 @@ const UPDATE_LESSON_MUTATION = gql`
     $open: Boolean
     $hasSecret: Boolean
     $totalPoints: Int
-    $authorEmail: String
   ) {
     updateLesson(
       id: $id
@@ -41,7 +40,6 @@ const UPDATE_LESSON_MUTATION = gql`
       open: $open
       hasSecret: $hasSecret
       totalPoints: $totalPoints
-      authorEmail: $authorEmail
     ) {
       id
     }

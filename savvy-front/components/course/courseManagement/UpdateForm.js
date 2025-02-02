@@ -329,7 +329,7 @@ const UpdateForm = (props) => {
               return addUserToCourse({
                 variables: {
                   coursePageId: props.coursePage.id,
-                  email,
+                  email: email.toLowerCase(),
                 },
               });
             }}

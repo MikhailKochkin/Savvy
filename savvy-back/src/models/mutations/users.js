@@ -234,8 +234,13 @@ function userMutations(t) {
       email: stringArg(),
       password: stringArg(),
       number: stringArg(),
+      image: stringArg(),
     },
-    resolve: async (_, { name, email, password, number, surname }, ctx) => {
+    resolve: async (
+      _,
+      { name, email, password, number, surname, image },
+      ctx
+    ) => {
       const hashed_password = await bcrypt.hash(password, 10);
       const valid = await bcrypt.compare(password, hashed_password);
 
@@ -251,11 +256,12 @@ function userMutations(t) {
           name,
           surname,
           number,
+          image,
           email: email.toLowerCase(),
           permissions: { set: ["USER"] },
           password: hashed_password,
           isFamiliar: true,
-          tags: { set: ["wealthbrite"] },
+          tags: { set: ["alrud"] },
         },
       });
 

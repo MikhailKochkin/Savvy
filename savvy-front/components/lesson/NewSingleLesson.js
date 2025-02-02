@@ -233,7 +233,6 @@ const NewSingleLesson = (props) => {
     return <LoadingErrorMessage errorData={errorData} />;
   }
   let lesson = data.shortLesson;
-  console.log("lesson", lesson);
   // let next = lesson.coursePage.lessons.find(
   //   (l) => l.number === lesson.number + 1
   // );
@@ -259,7 +258,6 @@ const NewSingleLesson = (props) => {
   ) {
     i_am_student = true;
   }
-
   if (!lesson.open && (!me || me.id == "clkvdew14837181f13vcbbcw0x")) {
     return (
       <PleaseSignIn
@@ -268,7 +266,6 @@ const NewSingleLesson = (props) => {
       />
     );
   }
-  console.log("lesson", lesson);
   if (
     me &&
     !i_am_student &&

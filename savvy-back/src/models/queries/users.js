@@ -16,10 +16,11 @@ function userQueries(t) {
       activeDate: arg({
         type: "DateTime",
       }),
+      tag: stringArg({ description: "tag" }),
     },
     resolve: (
       _parent,
-      { id, email, initialDate, lastDate, activeDate, coursePageId },
+      { id, email, initialDate, lastDate, activeDate, coursePageId, tag },
       ctx
     ) => {
       const where = {
@@ -48,6 +49,7 @@ function userQueries(t) {
             },
           },
         }),
+        ...(tag && { tags: { has: tag } }),
       };
       return ctx.prisma.user.findMany({
         where,
