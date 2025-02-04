@@ -6,6 +6,8 @@ import dynamic from "next/dynamic";
 import Footer from "./layout/Footer";
 import Header from "./layout/Header";
 import Layout from "./layout/Layout";
+import Meta from "./layout/Meta";
+
 // import { useUser } from "./User";
 
 const theme = {
@@ -73,6 +75,7 @@ const Page = ({ children }) => {
       <StyledPage>
         <>
           <GlobalStyle />
+          <Meta />
           <Layout>
             <ModalProvider>
               <Header />
