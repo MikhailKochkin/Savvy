@@ -2301,6 +2301,7 @@ export interface NexusGenFieldTypes {
     referrals: Array<NexusGenRootTypes['Referral'] | null> | null; // [Referral]
     shortLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     stats: NexusGenRootTypes['Stats'] | null; // Stats
+    students: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     studentsAnalytics: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     subscribers: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     subscriptionsByUser: Array<NexusGenRootTypes['Subscription'] | null> | null; // [Subscription]
@@ -3566,6 +3567,7 @@ export interface NexusGenFieldTypeNames {
     referrals: 'Referral'
     shortLesson: 'Lesson'
     stats: 'Stats'
+    students: 'User'
     studentsAnalytics: 'User'
     subscribers: 'User'
     subscriptionsByUser: 'Subscription'
@@ -4920,6 +4922,9 @@ export interface NexusGenArgTypes {
     stats: { // args
       lessonId?: string | null; // String
       userId?: string | null; // String
+    }
+    students: { // args
+      coursePageId?: string | null; // String
     }
     studentsAnalytics: { // args
       lessonId?: string | null; // String

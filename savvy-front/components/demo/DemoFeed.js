@@ -579,6 +579,7 @@ const BottomButtonArea = styled.div`
   margin-top: 20px;
   margin-right: 20px;
   z-index: 11;
+  pointer-events: none;
   button {
     margin-right: 60px;
     margin-bottom: 30px;
@@ -587,6 +588,8 @@ const BottomButtonArea = styled.div`
     justify-content: center;
     align-items: center;
     transition: transform 0.2s;
+    pointer-events: auto;
+
     &.shiver {
       animation: ${shiverAnimation} 0.5s ease-in-out;
     }

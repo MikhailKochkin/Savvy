@@ -87,7 +87,57 @@ function userQueries(t) {
       });
     },
   });
-
+  t.list.field("students", {
+    type: "User",
+    args: {
+      coursePageId: stringArg({ description: "Id" }),
+    },
+    resolve: (_parent, { coursePageId }, ctx) => {
+      const where = {
+        ...(coursePageId && {
+          new_subjects: {
+            some: {
+              id: { equals: coursePageId },
+            },
+          },
+        }),
+      };
+      return ctx.prisma.user.findMany({
+        where,
+        orderBy: {
+          createdAt: "desc", // Order by creation date in descending order
+        },
+        include: {
+          subscriptions: true,
+          challengeResults: {
+            include: {
+              lesson: {
+                include: {
+                  coursePage: true,
+                },
+              },
+            },
+          },
+          lessonResults: {
+            include: {
+              lesson: {
+                include: {
+                  coursePage: true,
+                },
+              },
+            },
+          },
+          orders: {
+            include: {
+              coursePage: true,
+            },
+          },
+          messages: true,
+          new_subjects: true,
+        },
+      });
+    },
+  });
   t.list.field("studentsAnalytics", {
     type: "User",
     args: {

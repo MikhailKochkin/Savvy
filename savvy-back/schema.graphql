@@ -1998,6 +1998,10 @@ type Query {
   ): [Referral]
   shortLesson(id: String!): Lesson
   stats(lessonId: String, userId: String): Stats
+  students(
+    """Id"""
+    coursePageId: String
+  ): [User]
   studentsAnalytics(
     """Id"""
     lessonId: String

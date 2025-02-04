@@ -246,7 +246,6 @@ const Chat = (props) => {
             </div>
           </ArrowBox>
         )}
-
       {update && (
         <UpdateChat
           id={id}

@@ -28,7 +28,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 
 const STUDENTS_QUERY = gql`
   query STUDENTS_QUERY($coursePageId: String!) {
-    users(
+    students(
       # where: { new_subjects: { some: { id: { equals: $coursePageId } } } }
       coursePageId: $coursePageId
     ) {
@@ -82,8 +82,9 @@ const AllEnrolledStudentsData = (props) => {
   if (loading2) return <p>Loading lessons data...</p>;
 
   let coursePage = data.coursePage;
-  let students = data1.users;
+  let students = data1.students;
   let lessons = data2.lessons;
+  console.log(students);
 
   return (
     <div>
