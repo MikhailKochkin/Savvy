@@ -433,7 +433,11 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
-      move_statuses.push(solved.includes(el.id) ? true : false);
+      move_statuses.push(
+        solved.includes(el.id) || el.type.toLowerCase() == "dynamicchat"
+          ? true
+          : false
+      );
     }
     // else if (task.type.toLowerCase() === "offer") {
     //   item = (
