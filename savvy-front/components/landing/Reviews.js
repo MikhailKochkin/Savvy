@@ -252,10 +252,10 @@ const Reviews = () => {
         </h2>
         <Logos>
           {/* P&C */}
-          <img
+          {/* <img
             src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1725619037/Screenshot_2024-09-06_at_14.36.20.png"
             alt=""
-          />
+          /> */}
           {/* LawtechUK */}
           <img src="static/lawtechuk.png" alt="" />
           {/* Wealthbrite */}
