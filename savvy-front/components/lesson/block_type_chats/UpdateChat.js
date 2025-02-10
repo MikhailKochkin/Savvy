@@ -192,6 +192,7 @@ const UpdateChat = (props) => {
             <option value={null || undefined}>Undefined</option>
             <option value="fixedchat">Fixed Chat</option>
             <option value="dynamicchat">Dynamic (AI-generated) Chat</option>
+            <option value="voicechat">Voice Chat</option>
           </select>
         </div>
       </Row>

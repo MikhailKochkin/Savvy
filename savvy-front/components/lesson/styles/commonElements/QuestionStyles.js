@@ -232,7 +232,7 @@ export const PositionCircle = styled.div`
 `;
 
 export const Button1 = styled.div`
-  min-width: 120px;
+  min-width: 60px;
   line-height: 1.6;
   margin-right: 20px;
   text-align: left;
@@ -240,7 +240,7 @@ export const Button1 = styled.div`
   border-radius: 5px;
   padding: 10px 30px;
   margin-bottom: 15px;
-  /* height: 45px; */
+  min-height: 45px;
   cursor: pointer;
   color: #000a60;
   border: none;

@@ -255,7 +255,7 @@ const Navigator = (props) => {
         {
           answer: props.me ? "Давай" : "Давай",
           move:
-            props.me && props.me.tags.length > 0
+            props.me && props.me.tags?.length > 0
               ? "next_steps_tags_uploaded"
               : "segmentation_interests",
           update: "",
@@ -691,7 +691,7 @@ const Navigator = (props) => {
     () => {
       if (props.me) {
         // Make sure the props.me.tags is spread into an array, if it's not an array
-        setUserDescription([...props.me.tags]);
+        setUserDescription([]);
       }
     },
     // Only re-run this hook when props.me changes, not userDescription

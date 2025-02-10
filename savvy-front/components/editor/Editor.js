@@ -832,11 +832,7 @@ const insertError = (editor, data, setModalData) => {
 };
 
 const updateError = (editor, modalData, setModalOpen, notePath) => {
-  Transforms.setNodes(
-    editor,
-    { error_data: modalData, error_text: modalData },
-    { at: notePath }
-  );
+  Transforms.setNodes(editor, { elementId: modalData }, { at: notePath });
   setModalOpen(false);
 };
 

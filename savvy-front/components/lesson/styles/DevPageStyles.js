@@ -264,6 +264,6 @@ export const Buttons = styled.div`
   display: flex;
   flex-direction: ${(props) => (props.direction ? props.direction : "row")};
   justify-content: flex-start;
-  gap: ${(props) => (props.gapSize ? props.gapSize : "20px")};
+  gap: ${(props) => (props.gap ? props.gap : "20px")};
   margin: ${(props) => (props.margin ? props.margin : "0 20px")};
 `;

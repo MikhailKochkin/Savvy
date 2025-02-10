@@ -721,7 +721,7 @@ const CreateConstructor = (props) => {
         <Row>
           <div className="description">Number of blocks</div>
           <div className="action_area">
-            <Buttons gapSize="10px" margin="0">
+            <Buttons gap="10px" margin="0">
               <SecondaryButton
                 onClick={() => {
                   const arr = [...elements];

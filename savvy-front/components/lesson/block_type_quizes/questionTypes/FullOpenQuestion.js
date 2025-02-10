@@ -4,6 +4,7 @@ import parse from "html-react-parser";
 import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import IconBlockElement from "../../styles/commonElements/IconBlockElement";
+import Transcribe from "../functions/Transcribe";
 
 import {
   guessAlphabet,
@@ -129,6 +130,10 @@ const FullOpenQuestion = (props) => {
     });
   };
 
+  const getTranscribedText = async (text) => {
+    passAnswer(text);
+  };
+
   return (
     <Question story={story}>
       {/* 1. Question part */}
@@ -186,6 +191,7 @@ const FullOpenQuestion = (props) => {
               type="text"
               required
               maxLength={500}
+              value={answer}
               onChange={(e) => {
                 if (e.target.value.length <= 500) {
                   passAnswer(e.target.value);
@@ -248,6 +254,9 @@ const FullOpenQuestion = (props) => {
             >
               {hints.length > 0 ? t("i_need_another_hint") : t("i_need_a_hint")}
             </Button1>
+          )}
+          {lessonId == "cm6xivygp0012sg0ywe85j80l" && (
+            <Transcribe passTranscribedText={getTranscribedText} />
           )}
           {/* <Circle onClick={startListening}>
             <BiMicrophone

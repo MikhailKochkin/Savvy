@@ -356,7 +356,7 @@ const Post = (props) => {
             <BlogPost>
               <PostIntroContainer>
                 <h1>{post.title}</h1>
-                <img src={post.image} />
+                {post?.image && <img src={post.image} />}
               </PostIntroContainer>
               <PostBodyContainer>
                 <SideColumn>

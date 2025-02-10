@@ -571,7 +571,7 @@ const Subscription = (props) => {
         const res = await getReferrer({
           variables: { id: props.referrerId },
         });
-        if (res.data.users[0]?.name) {
+        if (res.data && res.data.users && res.data.users[0]?.name) {
           setReferrerName(res.data.users[0]?.name);
         }
       }

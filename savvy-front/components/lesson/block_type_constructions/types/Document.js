@@ -144,9 +144,13 @@ const NewConstructor = (props) => {
 
   useEffect(() => {
     if (errorId && !miniQuiz) {
+      console.log("errorId", errorId);
+      console.log("props.lesson?.quizes", props.lesson?.quizes);
+
       let newMiniQuiz = props.lesson?.quizes?.find(
         (quiz) => quiz.id == errorId
       );
+      console.log("newMiniQuiz", newMiniQuiz);
       setMiniQuiz(newMiniQuiz);
     } else {
       null;
@@ -271,7 +275,6 @@ const NewConstructor = (props) => {
 
           if (e.target.classList.contains("edit")) {
             setErrorAnswer(e.target.innerHTML);
-
             let newMiniQuiz = props.lesson?.quizes?.find(
               (quiz) => quiz.id == e.target.getAttribute("errorid")
             );
@@ -291,6 +294,7 @@ const NewConstructor = (props) => {
               elems={elements}
               id={i + 1}
               i={i}
+              key={i}
               // 2. Element design options
               text={t.text}
               size={t.size}
@@ -328,6 +332,7 @@ const NewConstructor = (props) => {
               {variants.map((option, index) => {
                 return (
                   <Box
+                    key={index}
                     index={index}
                     option={option.text}
                     passElementValue={passElementValue}
@@ -360,6 +365,7 @@ const NewConstructor = (props) => {
                     <img className="cancel" src="../../static/cancel.svg" />
                   </div>
                 </IconBlock>
+                {console.log("miniQuiz", miniQuiz)}
                 {miniQuiz ? (
                   <SingleQuiz
                     id={errorId}

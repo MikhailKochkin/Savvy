@@ -5,10 +5,9 @@ import { useMutation, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 
 import Post from "../blog/Post";
-import { useUser } from "../LoadingUser";
 import BotSignUp from "../auth/BotSignUp";
 import Challenge from "../lesson/lesson_type_challenge/Challenge";
-import Lawrdle from "../games/Lawrdle";
+// import Lawrdle from "../games/Lawrdle";
 
 const Material = styled.div`
   display: flex;
@@ -261,7 +260,7 @@ const StudyBlock = (props) => {
             />
           )}
 
-        {props.type == "lawrdle" && props.id && (
+        {/* {props.type == "lawrdle" && props.id && (
           <Lawrdle
             me={props.me}
             id={props.id}
@@ -269,7 +268,7 @@ const StudyBlock = (props) => {
             getLeadIn={getLeadIn}
             getCampaignId={getCampaignId}
           />
-        )}
+        )} */}
       </Material>
       <div id="move_to_lesson"></div>
       {!open && !props.me && leadIn && (

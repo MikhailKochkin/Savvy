@@ -8,6 +8,7 @@ import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
 import FixedChat from "./types/FixedChat";
 import DynamicChat from "./types/DynamicChat";
+import VoiceChat from "./types/VoiceChat";
 import { SecondaryButton } from "../styles/DevPageStyles";
 
 const UPDATE_CHAT_MUTATION = gql`
@@ -207,35 +208,53 @@ const Chat = (props) => {
           </>
         )}
       </Buttons>
-      {!update &&
-        (type == "dynamicchat" ? (
-          <DynamicChat
-            messages={messages}
-            me={me}
-            lessonId={lessonId}
-            id={id}
-            author={author}
-            library={library}
-            isSecret={props.isSecret}
-            moveNext={props.moveNext}
-            story={story}
-            previousStories={previousStories}
-          />
-        ) : (
-          <FixedChat
-            messages={messages}
-            me={me}
-            lessonId={lessonId}
-            id={id}
-            author={author}
-            library={library}
-            isSecret={props.isSecret}
-            moveNext={props.moveNext}
-            story={story}
-            passNum={passNum}
-            // passTextToBeTranslated={passTextToBeTranslated}
-          />
-        ))}
+      {!update && (
+        <>
+          {type == "dynamicchat" ? (
+            <DynamicChat
+              messages={messages}
+              me={me}
+              lessonId={lessonId}
+              id={id}
+              author={author}
+              library={library}
+              isSecret={props.isSecret}
+              moveNext={props.moveNext}
+              story={story}
+              previousStories={previousStories}
+            />
+          ) : null}
+          {type == "voicechat" ? (
+            <VoiceChat
+              messages={messages}
+              me={me}
+              lessonId={lessonId}
+              id={id}
+              author={author}
+              library={library}
+              isSecret={props.isSecret}
+              moveNext={props.moveNext}
+              story={story}
+              previousStories={previousStories}
+            />
+          ) : null}
+          {type == "fixedchat" && (
+            <FixedChat
+              messages={messages}
+              me={me}
+              lessonId={lessonId}
+              id={id}
+              author={author}
+              library={library}
+              isSecret={props.isSecret}
+              moveNext={props.moveNext}
+              story={story}
+              passNum={passNum}
+              // passTextToBeTranslated={passTextToBeTranslated}
+            />
+          )}
+        </>
+      )}
       {getData &&
         props.next.true.value &&
         !moved &&

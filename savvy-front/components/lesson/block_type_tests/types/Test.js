@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 import { TailSpin } from "react-loader-spinner";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   IconBlock,
@@ -76,7 +77,7 @@ const Test = (props) => {
         {hints.length > 0 &&
           hints.map((hint, index) => {
             return (
-              <div className="question_box">
+              <div key={index + "_test_hint"} className="question_box">
                 <div className="question_text">
                   <p>{parse(hint)}</p>
                 </div>

@@ -672,7 +672,7 @@ const UpdateQuiz = (props) => {
                   onInput={autoResizeTextarea}
                   onLoad={(e) => autoResizeTextarea(e)}
                 />
-                <Buttons direction={"column"} gapSize={"5px"} margin={"0"}>
+                <Buttons direction={"column"} gap={"5px"} margin={"0"}>
                   <NanoButton onClick={() => removeRelatedAnswer(i)}>
                     -1
                   </NanoButton>

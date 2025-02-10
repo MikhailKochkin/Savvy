@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 import * as EmailValidator from "email-validator";
 
-import Loading from "../Loading";
+import Loading from "../layout/Loading";
 import { CURRENT_USER_QUERY } from "../User";
 import Error from "../ErrorMessage";
 
