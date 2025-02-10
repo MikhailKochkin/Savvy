@@ -238,7 +238,7 @@ const Chat = (props) => {
               previousStories={previousStories}
             />
           ) : null}
-          {type == "fixedchat" && (
+          {type !== "voicechat" && type !== "dynamicchat" && (
             <FixedChat
               messages={messages}
               me={me}

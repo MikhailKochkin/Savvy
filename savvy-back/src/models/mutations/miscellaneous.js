@@ -273,6 +273,7 @@ function miscellaneousMutations(t) {
     },
     resolve: async (_, args, ctx) => {
       // 1. find all orders for our user
+
       const order = await ctx.prisma.order.findUnique({
         where: { id: args.id },
         include: {
@@ -280,10 +281,12 @@ function miscellaneousMutations(t) {
           coursePage: true,
         },
       });
-
+      console.log("order", order.paymentID);
       // 2. check at yookassa if any order is paid
       if (order.paymentID) {
+        console.log("community_checkout", community_checkout);
         const payment = await community_checkout.getPayment(order.paymentID);
+        console.log("payment", payment);
         const createPayload = {
           amount: {
             value: "1990.00",
