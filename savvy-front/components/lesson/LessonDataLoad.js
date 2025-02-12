@@ -297,6 +297,7 @@ const LessonDataLoad = (props) => {
         me={props.me}
         lesson={lesson}
         // next={next}
+        openSize={lesson.openSize}
         coursePageId={lesson.coursePageId}
         coursePage={lesson.coursePage}
         passStep={props.passStep}

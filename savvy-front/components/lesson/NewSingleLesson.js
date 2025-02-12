@@ -21,6 +21,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       type
       context
       open
+      openSize
       createdAt
       coursePageId
       user {

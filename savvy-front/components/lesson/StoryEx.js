@@ -609,6 +609,7 @@ const StoryEx = (props) => {
           move={false}
           // notes={lesson.notes}
           // chats={lesson.chats}
+          openSize={props.openSize}
           hasSecret={false}
           lesson_number={lesson.number}
           lesson_name={lesson.name}
