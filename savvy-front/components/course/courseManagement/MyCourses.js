@@ -167,7 +167,6 @@ const MyCourses = (props) => {
         index === self.findIndex((c) => c.id === coursePage.id)
     );
 
-  console.log("coursePagesFromAccessData", coursePagesFromAccessData);
   const mergedCourses = [...data.coursePages, ...coursePagesFromAccessData];
   const uniqueCourses = mergedCourses.filter(
     (course, index, self) => index === self.findIndex((c) => c.id === course.id)

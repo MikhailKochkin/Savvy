@@ -84,7 +84,6 @@ const Plan = () => {
   // }
   const [rows, setRows] = useState([]);
   const [chosenRows, setChosenRows] = useState([]);
-  console.log("chosenRows", chosenRows);
 
   const addRow = (index) => {
     let newRow = {

@@ -118,7 +118,6 @@ const PasswordSignIn = (props) => {
     const separator = url.includes("?") ? "&" : "?";
     url = `${url}${separator}referrerId=${props.referrerId}`;
   }
-  console.log("url", url, props);
   // Log the constructed URL
   return (
     <>

@@ -142,7 +142,6 @@ const CourseManagerInfo = (props) => {
         email: email.toLowerCase(),
       },
     });
-    console.log(res);
     props.addAccessControl(res.data.changeCourseAccessControl);
     setEmail("");
     setRole("Choose");

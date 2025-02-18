@@ -80,7 +80,6 @@ const Prompt = (props) => {
       "feedback": "" // your feedback
       }
     `;
-    console.log("prompt", prompt);
     try {
       const response = await fetch("/api/generateJson", {
         method: "POST",
@@ -101,7 +100,6 @@ const Prompt = (props) => {
       const data = await response.json();
       if (response.ok) {
         let feedback = JSON.parse(data.result.content);
-        console.log("feedback", feedback);
         createQuizResult({
           variables: {
             quiz: props.quizId,

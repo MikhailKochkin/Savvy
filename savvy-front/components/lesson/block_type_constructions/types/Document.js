@@ -144,13 +144,9 @@ const NewConstructor = (props) => {
 
   useEffect(() => {
     if (errorId && !miniQuiz) {
-      console.log("errorId", errorId);
-      console.log("props.lesson?.quizes", props.lesson?.quizes);
-
       let newMiniQuiz = props.lesson?.quizes?.find(
         (quiz) => quiz.id == errorId
       );
-      console.log("newMiniQuiz", newMiniQuiz);
       setMiniQuiz(newMiniQuiz);
     } else {
       null;
@@ -365,7 +361,6 @@ const NewConstructor = (props) => {
                     <img className="cancel" src="../../static/cancel.svg" />
                   </div>
                 </IconBlock>
-                {console.log("miniQuiz", miniQuiz)}
                 {miniQuiz ? (
                   <SingleQuiz
                     id={errorId}

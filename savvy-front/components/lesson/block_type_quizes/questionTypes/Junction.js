@@ -195,14 +195,12 @@ const Junction = (props) => {
                   expectedAnswers,
                   overallResults
                 );
-                console.log("results.overallResults", results.ideas);
                 // 2. We find the most matching idea
                 const highestResult = results.overallResults.reduce(
                   (max, current) =>
                     current.result > max.result ? current : max,
                   { result: 0 }
                 );
-                console.log("highestResult", highestResult);
                 // 3. Pass it problem
                 passQuizDataToParent([true, highestResult.id], "branch");
                 setProgress("false");

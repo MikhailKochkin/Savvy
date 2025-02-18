@@ -303,8 +303,6 @@ const SingleLessonAnalyticsDataLoad = (props) => {
   let areAllLessonsAccessible = true;
   let accessibleLessons = null;
 
-  console.log("lesson.coursePage", lesson.coursePage);
-
   if (me && lesson.coursePage?.courseAccessControls?.length > 0) {
     lesson.coursePage?.courseAccessControls?.forEach((c) => {
       if (c.user?.id == me.id) {
@@ -315,8 +313,6 @@ const SingleLessonAnalyticsDataLoad = (props) => {
       }
     });
   }
-
-  console.log("role", role, changeScope);
 
   if (
     ((role == "AUTHOR" || role === "MENTOR") &&

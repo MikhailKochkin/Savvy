@@ -247,7 +247,6 @@ const LessonsData = (props) => {
   if (!data || !data.coursePage) return <p></p>;
 
   const coursePage = data.coursePage;
-  console.log("coursePage", coursePage);
 
   // 6. determiine which lessons are open
 

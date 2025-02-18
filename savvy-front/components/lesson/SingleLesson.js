@@ -649,8 +649,6 @@ const SingleLesson = (props) => {
     may_i_edit = true;
   }
 
-  console.log("is_analytics_page_open", is_analytics_page_open);
-
   if (!me) {
     return "Please sign up or log in to access this page";
   }

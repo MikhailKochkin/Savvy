@@ -152,7 +152,6 @@ const CustomerSingleSignIn = (props) => {
             tag: props.authSource.toLowerCase(),
           },
         });
-        console.log("customUsers", customUsers);
         setCustomUsers([...customUsers.data.users]);
       }
     };

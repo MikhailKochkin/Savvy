@@ -66,7 +66,6 @@ const SingleQuiz = (props) => {
     getResult: parentGetResult,
     lesson,
   } = props;
-  console.log("name", name);
   useEffect(() => {
     smoothscroll.polyfill();
   }, []);

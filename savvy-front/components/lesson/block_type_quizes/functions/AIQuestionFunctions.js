@@ -58,8 +58,6 @@ export const checkAnswer = async (
       // Parse the response as JSON
       const { res, comment, size_difference_percent } = await response.json();
       const result = parseFloat(res);
-      console.log("data", data);
-      console.log("result", result);
 
       // Determine the correctness level and color based on the result
       let correctnessLevel = await determineCorrectness(result);
@@ -807,13 +805,11 @@ export const getMatchingAnswers = async (
       // Compare the main answer.
       const mainScore = await compareAnswers(idea, answer);
       if (mainScore > bestMatch.result) {
-        console.log("mainScore", answer);
         bestMatch.result = mainScore;
         bestMatch.matchedText = answer.answer;
         bestMatch.feedback = answer.feedback;
         bestMatch.id = answer.id;
       }
-      console.log("bestMatch", bestMatch);
 
       // If the score is low, skip checking any related answers.
       if (mainScore < 25) {
@@ -905,7 +901,6 @@ export const getMatchingAnswers = async (
   // console.log("newCorrectIdeas", newCorrectIdeas);
 
   // Return computed values instead of updating state
-  console.log("correctIdeas", uniqueValues, newCorrectIdeas);
   return {
     overallResults: uniqueValues,
     correctIdeas: newCorrectIdeas,

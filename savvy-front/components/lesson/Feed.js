@@ -607,7 +607,6 @@ const Feed = (props) => {
 
   let lessonElements = [];
   let next_lesson = false;
-  console.log("openSize", openSize);
   if (props.me.id == "clkvdew14837181f13vcbbcw0x") {
     lessonElements = [
       ...props.components.slice(0, openSize ? openSize : 2),

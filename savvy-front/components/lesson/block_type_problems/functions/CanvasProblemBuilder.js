@@ -399,7 +399,6 @@ const CanvasProblemBuilder = ({
   });
 
   useEffect(() => {
-    console.log("messages", messages);
     getProblemSteps(messages);
   }, [messages]);
 
@@ -447,7 +446,6 @@ const CanvasProblemBuilder = ({
     connectorType,
     sourceAnswerId = null
   ) => {
-    console.log("sourceId == destId", sourceId, destId);
     if (sourceId === destId) return;
     setMessages((prevMessages) =>
       prevMessages.map((msg) => {
@@ -651,9 +649,6 @@ const Message = ({
     accept: "CONNECTOR",
     drop: (item) => {
       if (onConnect) {
-        {
-          console.log("item", item);
-        }
         onConnect(item.sourceId, id, item.connectorType, item.sourceAnswerId); // pass the connectorType
       }
     },

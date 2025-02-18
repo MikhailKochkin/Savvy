@@ -129,7 +129,6 @@ const NewInteractive = (props) => {
       let next_el = problem.steps.problemItems.find(
         (el) => el.id === nextValue.value
       );
-      console.log("next_el", next_el);
       if (next_el) {
         setComponentList([...componentList, next_el]);
       }
