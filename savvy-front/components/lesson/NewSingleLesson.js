@@ -303,12 +303,12 @@ const NewSingleLesson = (props) => {
     is_dev_page_open = true;
   }
 
-  // if (
-  //   me &&
-  //   me.new_subjects.filter((c) => c.id == lesson.coursePage.id).length > 0
-  // ) {
-  //   i_am_student = true;
-  // }
+  if (
+    me &&
+    me.new_subjects.filter((c) => c.id == lesson.coursePage.id).length > 0
+  ) {
+    i_am_student = true;
+  }
 
   if (!lesson.open && (!me || me.id == "clkvdew14837181f13vcbbcw0x")) {
     return (
@@ -318,13 +318,7 @@ const NewSingleLesson = (props) => {
       />
     );
   }
-  if (
-    me &&
-    !i_am_student &&
-    !i_am_author &&
-    !me.permissions.includes("ADMIN") &&
-    !lesson.open
-  ) {
+  if (me && !i_am_student && !i_am_author && !lesson.open) {
     return <AreYouEnrolled coursePageId={lesson.coursePage.id} />;
   }
 

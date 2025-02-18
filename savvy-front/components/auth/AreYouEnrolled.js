@@ -56,7 +56,7 @@ const AreYouEnrolled = (props) => (
       <Link
         legacyBehavior
         href={{
-          pathname: "/coursePage",
+          pathname: "/course",
           query: { id: props.coursePageId },
         }}
       >
