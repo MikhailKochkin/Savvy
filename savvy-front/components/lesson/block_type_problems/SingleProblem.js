@@ -330,7 +330,12 @@ const SingleProblem = (props) => {
                 />
               </Frame>
               <>
-                <Buttons story={story} block={revealAnswer}>
+                <Buttons
+                  gap="10px"
+                  margin="20px 0 20px 0"
+                  story={story}
+                  block={revealAnswer}
+                >
                   <ActionButton
                     variant="contained"
                     color="primary"
@@ -349,15 +354,15 @@ const SingleProblem = (props) => {
                   >
                     {loading ? t("checking") : t("check")}
                   </ActionButton>
-                  {showAnActionButtonswerButton && (
-                    <SecondaryButton
-                      onClick={(e) => setShowAnswerText(!showAnswerText)}
-                    >
-                      {t("show_answer")}
-                    </SecondaryButton>
-                  )}
+                  {/* {showAnActionButtonswerButton && ( */}
+                  <SecondaryButton
+                    onClick={(e) => setShowAnswerText(!showAnswerText)}
+                  >
+                    {t("show_answer")}
+                  </SecondaryButton>
+                  {/* )} */}
                 </Buttons>
-                );
+
                 {showAnswerText && (
                   <div>
                     <h2>{t("answer")}</h2>
