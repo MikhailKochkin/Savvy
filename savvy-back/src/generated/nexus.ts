@@ -31,6 +31,7 @@ export interface NexusGenInputs {
   AnswerElementInput: { // input type
     answer?: string | null; // String
     feedback?: string | null; // String
+    id?: string | null; // String
     index?: number | null; // Int
     next_id?: string | null; // String
     next_type?: string | null; // String
@@ -44,6 +45,7 @@ export interface NexusGenInputs {
   }
   BranchItemInput: { // input type
     source?: string | null; // String
+    sourceAnswerId?: string | null; // String
     type?: string | null; // String
     value?: string | null; // String
   }
@@ -269,6 +271,7 @@ export interface NexusGenInputs {
   }
   QuizIdeaInput: { // input type
     feedback?: string | null; // String
+    id?: string | null; // String
     idea?: string | null; // String
     matchedAnswer?: string | null; // String
     next_id?: string | null; // String
@@ -315,7 +318,9 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  ChangeScope: "COMMENT" | "EDIT"
   CommentStatus: "APPROVED" | "PENDING" | "REJECTED"
+  CourseRole: "AUTHOR" | "MENTOR"
   CourseType: "CHALLENGE" | "FORMONEY" | "PRIVATE" | "PUBLIC" | "UNI"
   Permission: "ADMIN" | "USER"
   Status: "AUTHOR" | "HR" | "LAWYER" | "SAVVY_AUTHOR" | "STUDENT"
@@ -334,6 +339,7 @@ export interface NexusGenObjects {
   AnswerElement: { // root type
     answer?: string | null; // String
     feedback?: string | null; // String
+    id?: string | null; // String
     index?: number | null; // Int
     next_id?: string | null; // String
     next_type?: string | null; // String
@@ -368,6 +374,7 @@ export interface NexusGenObjects {
   }
   BranchItem: { // root type
     source?: string | null; // String
+    sourceAnswerId?: string | null; // String
     type?: string | null; // String
     value?: string | null; // String
   }
@@ -572,6 +579,19 @@ export interface NexusGenObjects {
     studentId?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  CourseAccessControl: { // root type
+    accessibleLessons?: Array<string | null> | null; // [String]
+    areAllLessonsAccessible?: boolean | null; // Boolean
+    changeScope?: NexusGenEnums['ChangeScope'] | null; // ChangeScope
+    coursePage?: NexusGenRootTypes['CoursePage'] | null; // CoursePage
+    coursePageId?: string | null; // String
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    id?: string | null; // String
+    role?: NexusGenEnums['CourseRole'] | null; // CourseRole
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    user?: NexusGenRootTypes['User'] | null; // User
+    userId?: string | null; // String
+  }
   CoursePage: { // root type
     applications?: Array<NexusGenRootTypes['Application'] | null> | null; // [Application]
     audience?: string | null; // String
@@ -580,6 +600,7 @@ export interface NexusGenObjects {
     batch?: string | null; // String
     company?: NexusGenRootTypes['Company'] | null; // Company
     countries?: Array<string | null> | null; // [String]
+    courseAccessControls?: Array<NexusGenRootTypes['CourseAccessControl'] | null> | null; // [CourseAccessControl]
     courseType?: string | null; // String
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     currency?: string | null; // String
@@ -1077,6 +1098,7 @@ export interface NexusGenObjects {
   }
   QuizIdea: { // root type
     feedback?: string | null; // String
+    id?: string | null; // String
     idea?: string | null; // String
     matchedAnswer?: string | null; // String
     next_id?: string | null; // String
@@ -1355,6 +1377,7 @@ export interface NexusGenObjects {
     comments?: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
     company?: NexusGenRootTypes['Company'] | null; // Company
     country?: string | null; // String
+    courseAccessControls?: Array<NexusGenRootTypes['CourseAccessControl'] | null> | null; // [CourseAccessControl]
     coursePages?: Array<NexusGenRootTypes['CoursePage'] | null> | null; // [CoursePage]
     courseVisits?: Array<NexusGenRootTypes['CourseVisit'] | null> | null; // [CourseVisit]
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -1415,6 +1438,7 @@ export interface NexusGenFieldTypes {
   AnswerElement: { // field return type
     answer: string | null; // String
     feedback: string | null; // String
+    id: string | null; // String
     index: number | null; // Int
     next_id: string | null; // String
     next_type: string | null; // String
@@ -1449,6 +1473,7 @@ export interface NexusGenFieldTypes {
   }
   BranchItem: { // field return type
     source: string | null; // String
+    sourceAnswerId: string | null; // String
     type: string | null; // String
     value: string | null; // String
   }
@@ -1653,6 +1678,19 @@ export interface NexusGenFieldTypes {
     studentId: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
+  CourseAccessControl: { // field return type
+    accessibleLessons: Array<string | null> | null; // [String]
+    areAllLessonsAccessible: boolean | null; // Boolean
+    changeScope: NexusGenEnums['ChangeScope'] | null; // ChangeScope
+    coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
+    coursePageId: string | null; // String
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    id: string | null; // String
+    role: NexusGenEnums['CourseRole'] | null; // CourseRole
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
+  }
   CoursePage: { // field return type
     applications: Array<NexusGenRootTypes['Application'] | null> | null; // [Application]
     audience: string | null; // String
@@ -1661,6 +1699,7 @@ export interface NexusGenFieldTypes {
     batch: string | null; // String
     company: NexusGenRootTypes['Company'] | null; // Company
     countries: Array<string | null> | null; // [String]
+    courseAccessControls: Array<NexusGenRootTypes['CourseAccessControl'] | null> | null; // [CourseAccessControl]
     courseType: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     currency: string | null; // String
@@ -1939,6 +1978,7 @@ export interface NexusGenFieldTypes {
     advancedSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     botSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     cancelSubscription: NexusGenRootTypes['Subscription'] | null; // Subscription
+    changeCourseAccessControl: NexusGenRootTypes['CourseAccessControl'] | null; // CourseAccessControl
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     copyLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     createBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
@@ -1993,6 +2033,7 @@ export interface NexusGenFieldTypes {
     deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     deleteComment: NexusGenRootTypes['Comment'] | null; // Comment
     deleteConstruction: NexusGenRootTypes['Construction'] | null; // Construction
+    deleteCourseAccessControl: NexusGenRootTypes['CourseAccessControl'] | null; // CourseAccessControl
     deleteCoursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     deleteDocument: NexusGenRootTypes['Document'] | null; // Document
     deleteLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -2268,6 +2309,8 @@ export interface NexusGenFieldTypes {
     comments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
     constructionResult: NexusGenRootTypes['ConstructionResult'] | null; // ConstructionResult
     constructionResults: Array<NexusGenRootTypes['ConstructionResult'] | null> | null; // [ConstructionResult]
+    courseAccessControl: NexusGenRootTypes['CourseAccessControl'] | null; // CourseAccessControl
+    courseAccessControls: Array<NexusGenRootTypes['CourseAccessControl'] | null> | null; // [CourseAccessControl]
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     coursePages: Array<NexusGenRootTypes['CoursePage'] | null> | null; // [CoursePage]
     courseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
@@ -2353,6 +2396,7 @@ export interface NexusGenFieldTypes {
   }
   QuizIdea: { // field return type
     feedback: string | null; // String
+    id: string | null; // String
     idea: string | null; // String
     matchedAnswer: string | null; // String
     next_id: string | null; // String
@@ -2631,6 +2675,7 @@ export interface NexusGenFieldTypes {
     comments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
     company: NexusGenRootTypes['Company'] | null; // Company
     country: string | null; // String
+    courseAccessControls: Array<NexusGenRootTypes['CourseAccessControl'] | null> | null; // [CourseAccessControl]
     coursePages: Array<NexusGenRootTypes['CoursePage'] | null> | null; // [CoursePage]
     courseVisits: Array<NexusGenRootTypes['CourseVisit'] | null> | null; // [CourseVisit]
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -2681,6 +2726,7 @@ export interface NexusGenFieldTypeNames {
   AnswerElement: { // field return type name
     answer: 'String'
     feedback: 'String'
+    id: 'String'
     index: 'Int'
     next_id: 'String'
     next_type: 'String'
@@ -2715,6 +2761,7 @@ export interface NexusGenFieldTypeNames {
   }
   BranchItem: { // field return type name
     source: 'String'
+    sourceAnswerId: 'String'
     type: 'String'
     value: 'String'
   }
@@ -2919,6 +2966,19 @@ export interface NexusGenFieldTypeNames {
     studentId: 'String'
     updatedAt: 'DateTime'
   }
+  CourseAccessControl: { // field return type name
+    accessibleLessons: 'String'
+    areAllLessonsAccessible: 'Boolean'
+    changeScope: 'ChangeScope'
+    coursePage: 'CoursePage'
+    coursePageId: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    role: 'CourseRole'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+  }
   CoursePage: { // field return type name
     applications: 'Application'
     audience: 'String'
@@ -2927,6 +2987,7 @@ export interface NexusGenFieldTypeNames {
     batch: 'String'
     company: 'Company'
     countries: 'String'
+    courseAccessControls: 'CourseAccessControl'
     courseType: 'String'
     createdAt: 'DateTime'
     currency: 'String'
@@ -3205,6 +3266,7 @@ export interface NexusGenFieldTypeNames {
     advancedSignup: 'AuthPayload'
     botSignup: 'AuthPayload'
     cancelSubscription: 'Subscription'
+    changeCourseAccessControl: 'CourseAccessControl'
     checkAssignment: 'LessonResult'
     copyLesson: 'Lesson'
     createBotDialogue: 'BotDialogue'
@@ -3259,6 +3321,7 @@ export interface NexusGenFieldTypeNames {
     deleteClient: 'BusinessClient'
     deleteComment: 'Comment'
     deleteConstruction: 'Construction'
+    deleteCourseAccessControl: 'CourseAccessControl'
     deleteCoursePage: 'CoursePage'
     deleteDocument: 'Document'
     deleteLesson: 'Lesson'
@@ -3534,6 +3597,8 @@ export interface NexusGenFieldTypeNames {
     comments: 'Comment'
     constructionResult: 'ConstructionResult'
     constructionResults: 'ConstructionResult'
+    courseAccessControl: 'CourseAccessControl'
+    courseAccessControls: 'CourseAccessControl'
     coursePage: 'CoursePage'
     coursePages: 'CoursePage'
     courseVisit: 'CourseVisit'
@@ -3619,6 +3684,7 @@ export interface NexusGenFieldTypeNames {
   }
   QuizIdea: { // field return type name
     feedback: 'String'
+    id: 'String'
     idea: 'String'
     matchedAnswer: 'String'
     next_id: 'String'
@@ -3897,6 +3963,7 @@ export interface NexusGenFieldTypeNames {
     comments: 'Comment'
     company: 'Company'
     country: 'String'
+    courseAccessControls: 'CourseAccessControl'
     coursePages: 'CoursePage'
     courseVisits: 'CourseVisit'
     createdAt: 'DateTime'
@@ -3980,6 +4047,14 @@ export interface NexusGenArgTypes {
     }
     cancelSubscription: { // args
       id?: string | null; // String
+    }
+    changeCourseAccessControl: { // args
+      accessibleLessons?: Array<string | null> | null; // [String]
+      areAllLessonsAccessible?: boolean | null; // Boolean
+      changeScope?: NexusGenEnums['ChangeScope'] | null; // ChangeScope
+      coursePageId?: string | null; // String
+      email?: string | null; // String
+      role?: NexusGenEnums['CourseRole'] | null; // CourseRole
     }
     checkAssignment: { // args
       checked?: boolean | null; // Boolean
@@ -4321,6 +4396,9 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
     }
     deleteConstruction: { // args
+      id?: string | null; // String
+    }
+    deleteCourseAccessControl: { // args
       id?: string | null; // String
     }
     deleteCoursePage: { // args
@@ -4811,6 +4889,16 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       lessonId?: string | null; // String
       studentId?: string | null; // String
+    }
+    courseAccessControl: { // args
+      coursePageId?: string | null; // String
+      id?: string | null; // String
+      userId?: string | null; // String
+    }
+    courseAccessControls: { // args
+      coursePageId?: string | null; // String
+      id?: string | null; // String
+      userId?: string | null; // String
     }
     coursePage: { // args
       id: string; // String!

@@ -227,12 +227,12 @@ const LessonRow = (props) => {
   const {
     lesson,
     author,
-    lessonResult,
-    coursePage,
-    lessonLength,
     coursePageId,
     me,
     i_am_author,
+    i_am_enrolled,
+    areAllLessonsAccessible,
+    accessibleLessons,
   } = props;
   const [tags, setTags] = useState(lesson.tags ? lesson.tags : []);
   const [tag, setTag] = useState("");
@@ -262,16 +262,6 @@ const LessonRow = (props) => {
     }
   };
 
-  const myCallback = (data) => {
-    setDescription(data);
-    return updateLesson({
-      variables: {
-        id: lesson.id,
-        description: description,
-      },
-    });
-  };
-
   const handleTagDoubleClick = (val) => {
     if (me && me.permissions.includes("ADMIN")) {
       let newTags = [...tags];
@@ -283,6 +273,16 @@ const LessonRow = (props) => {
         },
       });
     }
+  };
+
+  const myCallback = (data) => {
+    setDescription(data);
+    return updateLesson({
+      variables: {
+        id: lesson.id,
+        description: description,
+      },
+    });
   };
 
   let pathname =
@@ -359,74 +359,41 @@ const LessonRow = (props) => {
       </div>
       <div className="cell div4">
         <Buttons>
-          {/* Case 3. Admin or course opens the lesson */}
+          {(() => {
+            const isPublicLesson =
+              lesson.open && lesson.type.toLowerCase() !== "regular";
+            const userHasAccess =
+              me &&
+              !i_am_author &&
+              lesson.type.toLowerCase() !== "regular" &&
+              i_am_enrolled;
 
-          {me &&
-            (me.id === author ||
-              me.permissions.includes("ADMIN") ||
-              i_am_author) && (
+            const authorHasAccess =
+              me &&
+              i_am_author &&
+              (areAllLessonsAccessible ||
+                accessibleLessons?.includes(lesson.id));
+
+            const isAnonymousUserWithAccess = !me && isPublicLesson;
+
+            const shouldShowButton =
+              userHasAccess || isAnonymousUserWithAccess || authorHasAccess;
+            if (!shouldShowButton) return null;
+
+            return (
               <Link
                 href={{
                   pathname: pathname,
-                  query: {
-                    id: lesson.id,
-                  },
-                }}
-              >
-                <Button>{t("open")} </Button>
-              </Link>
-            )}
-
-          {/* Case 4. Web site user opens the lesson */}
-          {/* First check if the lesson is not under development and i am not the developer */}
-
-          {lesson.type.toLowerCase() !== "regular" &&
-          me &&
-          me.id !== author &&
-          !me.permissions.includes("ADMIN") &&
-          !i_am_author ? (
-            lesson.open ? (
-              <Link
-                href={{
-                  pathname: pathname,
-                  query: {
-                    id: lesson.id,
-                  },
+                  query: { id: lesson.id },
                 }}
               >
                 <Button>{t("open")}</Button>
               </Link>
-            ) : me.new_subjects.filter((s) => s.id == coursePageId).length >
-              0 ? (
-              <Link
-                href={{
-                  pathname: pathname,
-                  query: {
-                    id: lesson.id,
-                  },
-                }}
-              >
-                <Button>{t("open")}</Button>
-              </Link>
-            ) : null
-          ) : null}
-
-          {/* Case 5. Open lesson */}
-
-          {!me && lesson.open && lesson.type.toLowerCase() !== "regular" && (
-            <Link
-              href={{
-                pathname: pathname,
-                query: {
-                  id: lesson.id,
-                },
-              }}
-            >
-              <Button>{t("open")}</Button>
-            </Link>
-          )}
+            );
+          })()}
         </Buttons>
       </div>
+
       <Tags className="cell div5">
         {tags.map((t) => (
           <Tag className="tag" onDoubleClick={(e) => handleTagDoubleClick(t)}>

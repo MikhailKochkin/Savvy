@@ -395,7 +395,7 @@ const CreateProblem = (props) => {
     setText(dataFromChild);
   };
 
-  const getSteps = (val) => {
+  const getProblemSteps = (val) => {
     setSteps([...val]);
   };
 
@@ -689,7 +689,7 @@ const CreateProblem = (props) => {
               lesson={props.lesson}
               me={props.me}
               lessonID={lesson.id}
-              getSteps={getSteps}
+              getProblemSteps={getProblemSteps}
               characters={props.characters}
               items={generatedSteps.length > 0 ? generatedSteps : []}
             />

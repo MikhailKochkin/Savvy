@@ -71,11 +71,26 @@ function courseQueries(t) {
           createdAt: orderByCreatedAt === "asc" ? "asc" : "desc",
         },
         include: {
-          user: true,
-          authors: true,
-          new_students: true,
-          orders: true,
-          lessons: true,
+          user: {
+            select: {
+              id: true,
+            },
+          },
+          new_students: {
+            select: {
+              id: true,
+            },
+          },
+          orders: {
+            select: {
+              id: true,
+            },
+          },
+          lessons: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     },
@@ -94,6 +109,23 @@ function courseQueries(t) {
           authors: true,
           new_students: true,
           lessons: true,
+          courseAccessControls: {
+            select: {
+              id: true,
+              areAllLessonsAccessible: true,
+              accessibleLessons: true,
+              changeScope: true,
+              role: true,
+              user: {
+                select: {
+                  email: true,
+                  name: true,
+                  id: true,
+                  surname: true,
+                },
+              },
+            },
+          },
         },
       });
     },
@@ -120,6 +152,65 @@ function courseQueries(t) {
     resolve: (_parent, { id }, ctx) => {
       return ctx.prisma.courseVisit.findUnique({
         where: { id },
+      });
+    },
+  });
+  t.field("courseAccessControl", {
+    type: "CourseAccessControl",
+    args: {
+      id: stringArg(),
+      userId: stringArg(),
+      coursePageId: stringArg(),
+    },
+    resolve: async (_parent, { id, userId, coursePageId }, ctx) => {
+      return ctx.prisma.courseAccessControl.findUnique({
+        where: {
+          ...(id && { id }),
+          ...(userId && { userId }),
+          ...(coursePageId && { coursePageId }),
+        },
+      });
+    },
+  });
+  t.list.field("courseAccessControls", {
+    type: "CourseAccessControl",
+    args: {
+      id: stringArg({
+        description: "ID of the course access control entry to fetch.",
+      }),
+      userId: stringArg({ description: "User ID to filter course access." }),
+      coursePageId: stringArg({
+        description: "Course Page ID to filter access.",
+      }),
+    },
+    resolve: async (_parent, { id, userId, coursePageId }, ctx) => {
+      const where = {
+        ...(id && { id }),
+        ...(userId && { userId }),
+        ...(coursePageId && { coursePageId }),
+      };
+      return ctx.prisma.courseAccessControl.findMany({
+        where,
+        include: {
+          coursePage: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              published: true,
+              courseType: true,
+              updatedAt: true,
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+              image: true,
+            },
+          },
+        },
       });
     },
   });

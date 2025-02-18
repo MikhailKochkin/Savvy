@@ -279,29 +279,8 @@ const Button1 = styled.div`
   }
 `;
 
-const Circle = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50px;
-  border: 1px solid gray;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: 15px;
-  cursor: pointer;
-  transition: ease-in 0.4s;
-  &:hover {
-    border: 1px solid blue;
-  }
-  @media (max-width: 800px) {
-    margin-left: 5px;
-    display: none;
-  }
-`;
-
 const OpenQuestion = (props) => {
-  const { author, me, story, ifRight, ifWrong } = props;
+  const { author, me, story, passQuizDataToParent } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [correct, setCorrect] = useState(""); // is the answer by the student correct?
   const [sent, setSent] = useState(false);
@@ -332,7 +311,7 @@ const OpenQuestion = (props) => {
           comment: `Form question`,
         },
       });
-      props.passResult("true");
+      passQuizDataToParent(["true", undefined], "form");
       setHidden(false);
       setSent(true);
     }

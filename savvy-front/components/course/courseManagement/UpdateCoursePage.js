@@ -15,6 +15,20 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       goals
       header
       discountPrice
+      courseAccessControls {
+        id
+        user {
+          id
+          name
+          surname
+          email
+        }
+        role
+        changeScope
+        areAllLessonsAccessible
+        accessibleLessons
+        createdAt
+      }
       lessons {
         id
         name
@@ -39,7 +53,6 @@ const Width = styled.div`
 `;
 
 const UpdateCoursePage = (props) => {
-  // const me = useUser();
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
     variables: { id: props.id },
   });
@@ -47,12 +60,7 @@ const UpdateCoursePage = (props) => {
   return (
     <Width>
       <div id="root"></div>
-      {data && (
-        <UpdateForm
-          coursePage={data.coursePage}
-          // me={me}
-        />
-      )}
+      {data && <UpdateForm coursePage={data.coursePage} me={props.me} />}
     </Width>
   );
 };

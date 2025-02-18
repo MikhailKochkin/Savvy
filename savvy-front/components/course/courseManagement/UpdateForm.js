@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 
 import DeleteSingleCoursePage from "./DeleteSingleCoursePage";
+import CourseManagerInfo from "./CourseManagerInfo";
 import {
   Row,
   ActionButton,
@@ -33,8 +34,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $header: [String]
     $subheader: [String]
     $image: String
-    $video: String # $banner: String
-    $reviews: ReviewsList
+    $video: String # $banner: String # $reviews: ReviewsList
   ) {
     updateCoursePage(
       id: $id
@@ -54,8 +54,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       header: $header
       subheader: $subheader
       image: $image
-      video: $video #   banner: $banner
-      reviews: $reviews
+      video: $video #   banner: $banner # reviews: $reviews
     ) {
       id
       title
@@ -93,81 +92,61 @@ const Form = styled.form`
   }
 `;
 
-const Fieldset = styled.fieldset`
-  border: none;
-  display: flex;
-  flex-direction: column;
-
-  select {
-    width: 30%;
-    font-size: 1.6rem;
-  }
-  input {
-    height: 60%;
-    width: 100%;
-    margin-bottom: 5px;
-    border: 1px solid #e5e5e5;
-    border-radius: 3.5px;
-    padding: 2%;
-    font-size: 1.6rem;
-    outline: 0;
-    font-family: Montserrat;
-  }
-  textarea {
-    height: 300px;
-    width: 100%;
-    margin-bottom: 15px;
-    border: 1px solid #e5e5e5;
-    border-radius: 3.5px;
-    padding: 2%;
-    font-size: 1.6rem;
-    outline: 0;
-    font-family: Montserrat;
-  }
-  .upload {
-    border: 1px dashed #e5e5e5;
-    padding: 1% 2%;
-    border-radius: 3.5px;
-    cursor: pointer;
-    &:hover {
-      border: 1px dashed #112a62;
-    }
-  }
-  .open_landing {
-    cursor: pointer;
-    font-weight: bold;
-    color: #112a62;
-  }
-`;
-
-const Title = styled.div`
-  margin: 25px 0;
-  font-size: 2.2rem;
-  font-weight: 600;
-`;
-
 const Img = styled.img`
   height: 200px;
   object-fit: cover;
   margin: 3% 0;
 `;
 
-const Frame = styled.div`
-  height: 60%;
-  width: 100%;
+const ManagersInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CourseManagerRow = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-  border: 1px solid #e5e5e5;
-  border-radius: 3.5px;
-  padding-left: 1%;
-  font-size: 1.6rem;
-  outline: 0;
-  p {
-    margin: 0.8%;
-    margin-left: 0.6%;
+  justify-content: flex-start;
+  input,
+  select {
+    margin: 0;
+  }
+  font-size: 1.4rem;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  .courseManagerRow_Email {
+    width: 20%;
+    margin-right: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .courseManagerRow_Role {
+    width: 18%;
+    margin-right: 8px;
+    select {
+      width: 100%;
+    }
+  }
+  .courseManagerRow_Permission {
+    width: 15%;
+    margin-right: 8px;
+  }
+  .courseManagerRow_AreAllLessonsAccessible {
+    width: 12%;
+    margin-right: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .courseManagerRow_Button {
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
   }
 `;
 
@@ -194,6 +173,9 @@ const UpdateForm = (props) => {
   );
   const [discountPrice, setDiscountPrice] = useState(
     props.coursePage.discountPrice
+  );
+  const [accessControls, setAccessControls] = useState(
+    props.coursePage.courseAccessControls
   );
   const [modules, setModules] = useState(
     props.coursePage.modules && props.coursePage.modules.modules
@@ -293,6 +275,20 @@ const UpdateForm = (props) => {
       setTariffs(dataFromChild);
     }
   };
+
+  const removeAuthor = (controlId) => {
+    const updatedAccessControls = [...accessControls].filter(
+      (control) => control.id !== controlId
+    );
+    setAccessControls(updatedAccessControls);
+  };
+
+  const addAccessControl = (control) => {
+    if (accessControls.find((c) => c.id === control.id)) {
+      return;
+    }
+    setAccessControls([...accessControls, control]);
+  };
   const { coursePage, me } = props;
   return (
     <Form>
@@ -320,6 +316,24 @@ const UpdateForm = (props) => {
         </div>
       </Row>
       <Row>
+        <div className="description">Course Image</div>
+
+        <div className="action_area">
+          <input
+            // style={{ display: "none" }}
+            className="second"
+            type="file"
+            id="file"
+            name="file"
+            onChange={uploadFile}
+          />{" "}
+        </div>
+      </Row>
+      {upload && t("uploading")}
+      {image && (
+        <Img src={image ? image : coursePage.image} alt="Upload Preview" />
+      )}
+      <Row>
         <div className="description">
           {" "}
           <SecondaryButton
@@ -341,13 +355,58 @@ const UpdateForm = (props) => {
           <input onChange={(e) => setEmail(e.target.value)} />
         </div>
       </Row>
-      <Row>
+      {(props.coursePage.user.id == me.id ||
+        me.permissions.includes("ADMIN")) && (
+        <Row>
+          <div className="description"> Course Managers</div>
+          <div className="action_area">
+            <ManagersInfo>
+              <CourseManagerRow>
+                <div className="courseManagerRow_Email">Email</div>
+                <div className="courseManagerRow_Role">Role</div>
+                <div className="courseManagerRow_Permission">Permission</div>
+                <div className="courseManagerRow_AreAllLessonsAccessible">
+                  Full Access{" "}
+                </div>
+                <div className="courseManagerRow_Button"></div>
+              </CourseManagerRow>
+              {accessControls
+                .slice()
+                .sort((a, b) =>
+                  new Date(a.createdAt) > new Date(b.createdAt) ? -1 : 1
+                )
+                .map((control) => (
+                  <CourseManagerInfo
+                    key={control?.id}
+                    id={control?.id}
+                    role={control?.role}
+                    changeScope={control?.changeScope}
+                    email={control?.user?.email}
+                    coursePageId={props.coursePage.id}
+                    lessons={props.coursePage.lessons}
+                    accessibleLessons={control?.accessibleLessons}
+                    areAllLessonsAccessible={control?.areAllLessonsAccessible}
+                    removeAuthor={removeAuthor}
+                  />
+                ))}
+              <CourseManagerInfo
+                coursePageId={props.coursePage.id}
+                action="Add"
+                lessons={props.coursePage.lessons}
+                areAllLessonsAccessible={true}
+                addAccessControl={addAccessControl}
+              />
+            </ManagersInfo>
+          </div>
+        </Row>
+      )}
+      {/* <Row>
         <div className="description">
           {" "}
           <SecondaryButton
             onClick={async (e) => {
               e.preventDefault();
-              await addCoAuthor({
+              await addNewAuthor({
                 variables: {
                   coursePageId: props.coursePage.id,
                   email,
@@ -362,27 +421,9 @@ const UpdateForm = (props) => {
         <div className="action_area">
           <input onChange={(e) => setEmail(e.target.value)} />
         </div>
-      </Row>
-      <Row>
-        <div className="description">Course Image</div>
+      </Row> */}
 
-        <div className="action_area">
-          <input
-            // style={{ display: "none" }}
-            className="second"
-            type="file"
-            id="file"
-            name="file"
-            onChange={uploadFile}
-          />{" "}
-        </div>
-      </Row>
-      {upload && t("uploading")}
-      {image && (
-        <Img src={image ? image : coursePage.image} alt="Upload Preview" />
-      )}
-
-      <Title>Landing Page information</Title>
+      {/* <Title>Landing Page information</Title>
       <Row>
         <div className="description">Header</div>
         <div className="action_area">
@@ -506,7 +547,7 @@ const UpdateForm = (props) => {
         <div className="action_area">
           Danger zone. Avoid deleting the simulator unless you are 100% sure.
         </div>
-      </Row>
+      </Row> */}
       {/* <Explainer>Reviews</Explainer>
         {reviews.map((review, index) => (
           <div key={index}>

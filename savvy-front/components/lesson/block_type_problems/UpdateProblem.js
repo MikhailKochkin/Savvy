@@ -104,13 +104,9 @@ const UpdateProblem = (props) => {
     newTests,
     notes,
     nodeID,
-    me,
     nodeType,
     steps,
     lesson,
-    problem,
-    story,
-    author,
   } = props;
   const [text, setText] = useState(props.text);
   const [goal, setGoal] = useState(props.goal);
@@ -170,9 +166,30 @@ const UpdateProblem = (props) => {
   const getText = (d) => setText(d);
 
   const handleChange = () => {};
-  const getSteps = (val) => {
-    setUpdatedSteps([...val]);
+  const getProblemSteps = (val) => {
+    const sanitizedSteps = val.map((step) => {
+      // Check if step.next and step.next.branches exist
+      if (step.next?.branches) {
+        // Remove __typename from each branch
+        const sanitizedBranches = step.next.branches.map(
+          ({ __typename, ...branch }) => branch
+        );
+
+        return {
+          ...step,
+          next: {
+            ...step.next,
+            branches: sanitizedBranches,
+          },
+        };
+      }
+
+      return step;
+    });
+
+    setUpdatedSteps(sanitizedSteps);
   };
+
   return (
     <Styles>
       <div className="editor_container">
@@ -238,8 +255,8 @@ const UpdateProblem = (props) => {
               onChange={(e) => setType(e.target.value)}
             >
               <option value="BRANCHING_SCENARIO">Branching scenario</option>
-              {/* <option value="GENERATE">Generate Ideas</option> */}
               <option value="ONLY_CORRECT">Quiz-based learning scenario</option>
+              <option value="FLOW">Flow Mode</option>
             </select>
             <div className="explainer">
               This determines how the case study works
@@ -278,20 +295,13 @@ const UpdateProblem = (props) => {
       </div>
       {!nodeID && !nodeType && (
         <div className="canvas_container">
-          {/* <NewCanvasProblemBuilder
-            lesson={props.lesson}
-            me={props.me}
-            lessonID={lesson.id}
-            getSteps={getSteps}
-            items={steps ? steps.problemItems : []}
-          /> */}
           <DndProvider backend={HTML5Backend}>
             <CanvasProblemBuilder
               lesson={props.lesson}
               characters={props.characters}
               me={props.me}
               lessonID={lesson.id}
-              getSteps={getSteps}
+              getProblemSteps={getProblemSteps}
               items={steps ? steps.problemItems : []}
             />
           </DndProvider>

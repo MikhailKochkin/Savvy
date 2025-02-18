@@ -75,7 +75,7 @@ const SecondaryButton = styled.button`
 `;
 
 const TeacherCard = (props) => {
-  const { id, coursePage } = props;
+  const { id, coursePage, i_am_author, i_am_mentor } = props;
   const { t } = useTranslation("create");
   const [isOpen, setIsOpen] = useState(false);
   const [isCourseUpdateModalOpen, setIsCourseUpdateModalOpen] = useState(false);
@@ -94,13 +94,17 @@ const TeacherCard = (props) => {
     <Styles>
       <Header>{t("Tools")}</Header>
       <Buttons>
-        <SecondaryButton onClick={(e) => toggleModal(true)}>
-          Create lesson
-        </SecondaryButton>
+        {i_am_author ? (
+          <SecondaryButton onClick={(e) => toggleModal(true)}>
+            Create lesson
+          </SecondaryButton>
+        ) : null}
 
-        <SecondaryButton onClick={(e) => toggleCourseUpdateModal(true)}>
-          Update course
-        </SecondaryButton>
+        {i_am_author ? (
+          <SecondaryButton onClick={(e) => toggleCourseUpdateModal(true)}>
+            Update course
+          </SecondaryButton>
+        ) : null}
         {/* <MakePublic published={coursePage.published} id={coursePage.id} /> */}
         <Link
           legacyBehavior
@@ -163,7 +167,7 @@ const TeacherCard = (props) => {
         onBackgroundClick={toggleCourseUpdateModal}
         onEscapeKeydown={toggleCourseUpdateModal}
       >
-        <UpdateCoursePage id={id} />
+        <UpdateCoursePage me={props.me} id={id} />
       </StyledModalCourseUpdate>
     </Styles>
   );
@@ -189,7 +193,7 @@ const StyledModalCourseUpdate = Modal.styled`
   border: 1px solid grey;
   border-radius: 10px;
   height: 800px;
-  width: 640px;
+  width: 1200px;
   padding: 2%;
       overflow-y: scroll;
 

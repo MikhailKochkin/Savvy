@@ -103,6 +103,9 @@ const Quiz = objectType({
 const AnswerElement = objectType({
   name: "AnswerElement",
   definition(t) {
+    t.string("id", {
+      description: "Unique identifier for the answer element.",
+    });
     t.string("answer", { description: "Answer text." });
     t.list.string("relatedAnswers");
     t.string("feedback", { description: "Feedback for the answer." });
@@ -129,6 +132,9 @@ const ComplexAnswer = objectType({
 const AnswerElementInput = inputObjectType({
   name: "AnswerElementInput",
   definition(t) {
+    t.string("id", {
+      description: "Unique identifier for the answer element.",
+    });
     t.string("answer", { description: "Answer text." });
     t.list.string("relatedAnswers");
     t.string("feedback", { description: "Feedback for the answer." });
@@ -448,6 +454,9 @@ const BranchItem = objectType({
   name: "BranchItem",
   definition(t) {
     t.string("source", { description: "The source of the branch item." });
+    t.string("sourceAnswerId", {
+      description: "The source answer ID of the branch item.",
+    });
     t.string("type", { description: "The type of the branch item." });
     t.string("value", { description: "The value of the branch item." });
   },
@@ -529,6 +538,9 @@ const BranchItemInput = inputObjectType({
   name: "BranchItemInput",
   definition(t) {
     t.string("source", { description: "The source of the branch item." });
+    t.string("sourceAnswerId", {
+      description: "The source answer ID of the branch item.",
+    });
     t.string("type", { description: "The type of the branch item." });
     t.string("value", { description: "The value of the branch item." });
   },

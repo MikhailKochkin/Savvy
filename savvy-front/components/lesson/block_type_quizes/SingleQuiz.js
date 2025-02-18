@@ -12,7 +12,8 @@ import Prompt from "./questionTypes/Prompt";
 import FindAll from "./questionTypes/FindAll";
 import CallSimulation from "./questionTypes/CallSimulation";
 import ComplexQuestion from "./questionTypes/ComplexQuestion";
-import { SecondaryButton } from "../styles/DevPageStyles";
+import Junction from "./questionTypes/Junction";
+import { SecondaryButton, Buttons } from "../styles/DevPageStyles";
 
 const Styles = styled.div`
   display: flex;
@@ -26,12 +27,6 @@ const Styles = styled.div`
     width: 95%;
     font-size: 1.6rem;
   }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 30px;
 `;
 
 const SingleQuiz = (props) => {
@@ -52,250 +47,207 @@ const SingleQuiz = (props) => {
     shouldAnswerSizeMatchSample,
     studentAnswerPassedFromAnotherComponent,
     openQuestionType,
+    pushNextElementToProblem,
+    problemType,
+    type,
+    question,
+    answer,
+    answers,
+    goalType,
+    lessonID,
+    quizID,
+    image,
+    name,
+    jsonStoryString,
+    instructorName,
+    isScoringShown,
+    next,
+    passResultToTextEditor,
+    getResult: parentGetResult,
+    lesson,
   } = props;
-
+  console.log("name", name);
   useEffect(() => {
     smoothscroll.polyfill();
   }, []);
 
-  // this function is responsible for moving through the problem
-  const onMove = (result) => {
-    // helper function to handle getData
-    if (props.passResultToTextEditor) {
-      props.passResultToTextEditor(result);
-    }
-
-    const handleGetData = (resultBool) => {
-      if (!props.getData) return;
-
-      const nextStep = props.next?.[resultBool] || "finish";
-      props.getData([resultBool, nextStep]);
-    };
-
-    if (isMoveMade) {
-      return;
-    }
-
-    // first we check the type of the problem
-    if (props.problemType === "ONLY_CORRECT") {
-      if (result === "true") {
-        handleGetData(true);
-        setIsMoveMade(true);
-      }
-      // if result is "false", we do nothing
-    } else {
-      if (result === "true" || result === "false") {
-        handleGetData(result === "true");
-        setIsMoveMade(true);
-      }
-    }
-  };
-
+  // Toggle update mode
   const toggleUpdate = useCallback(() => {
     setUpdate((prev) => !prev);
   }, []);
 
-  const getResult = (data) => {
-    props.getResult(data);
+  // Move to next problem step
+  const passQuizDataToParent = (result, type) => {
+    if (isMoveMade) return;
+
+    // 1. Text Editor Scenario. Pass result to parent if required
+    if (passResultToTextEditor) {
+      passResultToTextEditor(result);
+    }
+
+    // 2. Problem scenario.
+
+    const handleGetData = (resultBool, branchSourceId = null) => {
+      if (!pushNextElementToProblem) return;
+
+      // === Approach 1: Old one – Element knows what element goes next ===
+      if (next) {
+        const nextStep = next[resultBool] || "finish";
+        pushNextElementToProblem([resultBool, nextStep]);
+        return;
+      }
+
+      // === Approach 2: New one – Problem handles flow logic ===
+      // We only pass:
+      // 1. resultBool (true/false) –> always true
+      // 2. branchSourceId if applicable (e.g., branch scenario)
+      pushNextElementToProblem(
+        [resultBool, branchSourceId],
+        branchSourceId ? "branch" : "regular"
+      );
+    };
+    // Handle move based on problem type
+    if (problemType === "ONLY_CORRECT") {
+      if (result === "true") {
+        handleGetData(true);
+        setIsMoveMade(true);
+      }
+    } else if (problemType === "FLOW") {
+      handleGetData(true, result[1]);
+    } else {
+      if (result[0] === "true" || result[0] === "false") {
+        handleGetData(result[0] === "true");
+        setIsMoveMade(true);
+      }
+    }
   };
-  const switchUpdate = () => {
-    setUpdate(!update);
+
+  const moveBranch = (data) => {
+    pushNextElementToProblem([true, next?.true || "finish"]);
   };
-  let width;
-  if (props.questionFormat == "mini") {
-    width = "100%";
-  } else {
-    width = "570px";
-  }
+
+  // Pass result up to parent component if needed
+  const handleGetResult = (data, type = null) => {
+    if (parentGetResult) {
+      parentGetResult(data, type);
+    }
+  };
+
+  const width = props.questionFormat === "mini" ? "100%" : "570px";
+
+  // Components map based on type
+  const renderQuizComponent = () => {
+    const commonProps = {
+      id: quizID,
+      question: question || "No question provided.",
+      author,
+      me,
+      story,
+      goalType,
+      answer,
+      answers: answers || [],
+      ifWrong,
+      ifRight,
+      lessonId: lessonID,
+      quizId: quizID,
+      passQuizDataToParent,
+      name,
+      image,
+      isScoringShown,
+    };
+    console.log(
+      "studentAnswerPassedFromAnotherComponent",
+      studentAnswerPassedFromAnotherComponent
+    );
+    switch (type?.toLowerCase()) {
+      case "form":
+        return <Form {...commonProps} />;
+      case "generate":
+        return <Generate {...commonProps} />;
+      case "branch":
+        return <Junction {...commonProps} />;
+      case "prompt":
+        return (
+          <Prompt
+            {...commonProps}
+            openQuestionType={openQuestionType}
+            instructorName={instructorName}
+            studentAnswerPassedFromAnotherComponent={
+              studentAnswerPassedFromAnotherComponent
+            }
+          />
+        );
+      case "findall":
+        return <FindAll {...commonProps} problemType={problemType} />;
+      case "complex":
+        return (
+          <ComplexQuestion
+            {...commonProps}
+            problemType={problemType}
+            isOrderOfAnswersImportant={isOrderOfAnswersImportant}
+            shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
+            check={check}
+          />
+        );
+      case "call":
+        return <CallSimulation {...commonProps} problemType={problemType} />;
+      case "test":
+      default:
+        return (
+          <OpenQuestion
+            {...commonProps}
+            check={check}
+            jsonStoryString={jsonStoryString}
+            instructorName={instructorName}
+            studentAnswerPassedFromAnotherComponent={
+              studentAnswerPassedFromAnotherComponent
+            }
+            openQuestionType={openQuestionType}
+          />
+        );
+    }
+  };
 
   return (
-    <Styles width={width} id={props.quizID}>
-      {/* 1. Settings part */}
-      {me && !story ? (
-        <Buttons>
+    <Styles width={width} id={quizID}>
+      {/* Admin Controls */}
+      {me && !story && (
+        <Buttons gap="20px" margin="20px 0">
           <SecondaryButton onClick={toggleUpdate}>
-            {!update ? t("update") : t("back")}
+            {update ? t("back") : t("update")}
           </SecondaryButton>
-          <DeleteSingleQuiz
-            id={me.id}
-            quizID={props.quizID}
-            lessonID={props.lessonID}
-          />
+          <DeleteSingleQuiz id={me.id} quizID={quizID} lessonID={lessonID} />
         </Buttons>
-      ) : null}
-      {!update && (
-        <>
-          {(props.type?.toLowerCase() == "test" || props.type === null) && (
-            <OpenQuestion
-              id={props.quizID}
-              question={props.question || "No question provided."}
-              author={author}
-              me={me}
-              check={props.check}
-              story={story}
-              goalType={props.goalType}
-              answer={props.answer}
-              answers={props.answers || []}
-              ifWrong={props.ifWrong}
-              ifRight={props.ifRight}
-              lessonId={props.lessonID}
-              quizId={props.quizID}
-              passResult={onMove}
-              name={props.name}
-              context={props.context}
-              image={props.image}
-              jsonStoryString={props.jsonStoryString}
-              instructorName={props.instructorName}
-              openQuestionType={openQuestionType}
-              studentAnswerPassedFromAnotherComponent={
-                studentAnswerPassedFromAnotherComponent
-              }
-              isScoringShown={props.isScoringShown}
-            />
-          )}
-          {props.type?.toLowerCase() == "form" && (
-            <Form
-              question={props.question || "No question provided."}
-              author={author}
-              me={me}
-              story={story}
-              goalType={props.goalType}
-              answer={props.answer}
-              ifWrong={props.ifWrong}
-              ifRight={props.ifRight}
-              lessonId={props.lessonID}
-              quizId={props.quizID}
-              passResult={onMove}
-              name={props.name}
-              image={props.image}
-              isScoringShown={props.isScoringShown}
-            />
-          )}
-          {props.type?.toLowerCase() == "generate" && (
-            <Generate
-              question={props.question || "No question provided."}
-              author={author}
-              me={me}
-              story={story}
-              goalType={props.goalType}
-              answer={props.answer}
-              answers={props.answers || []}
-              ifWrong={props.ifWrong}
-              ifRight={props.ifRight}
-              lessonId={props.lessonID}
-              quizId={props.quizID}
-              passResult={onMove}
-              isScoringShown={props.isScoringShown}
-            />
-          )}
-          {props.type?.toLowerCase() == "prompt" && (
-            <Prompt
-              question={props.question || "No question provided."}
-              author={author}
-              me={me}
-              story={story}
-              goalType={props.goalType}
-              answer={props.answer}
-              answers={props.answers || []}
-              ifWrong={props.ifWrong}
-              ifRight={props.ifRight}
-              lessonId={props.lessonID}
-              quizId={props.quizID}
-              passResult={onMove}
-              name={props.name}
-              image={props.image}
-              isScoringShown={props.isScoringShown}
-            />
-          )}
-          {props.type?.toLowerCase() == "findall" && (
-            <FindAll
-              question={props.question || "No question provided."}
-              author={author}
-              me={me}
-              story={story}
-              goalType={props.goalType}
-              answer={props.answer}
-              answers={props.answers || []}
-              ifWrong={props.ifWrong}
-              ifRight={props.ifRight}
-              lessonId={props.lessonID}
-              quizId={props.quizID}
-              passResult={onMove}
-              name={props.name}
-              image={props.image}
-              problemType={props.problemType}
-              isScoringShown={props.isScoringShown}
-            />
-          )}
-          {props.type?.toLowerCase() == "complex" && (
-            <ComplexQuestion
-              question={props.question || "No question provided."}
-              author={author}
-              me={me}
-              story={story}
-              goalType={props.goalType}
-              answer={props.answer}
-              answers={props.answers || []}
-              ifWrong={props.ifWrong}
-              ifRight={props.ifRight}
-              lessonId={props.lessonID}
-              quizId={props.quizID}
-              passResult={onMove}
-              name={props.name}
-              image={props.image}
-              problemType={props.problemType}
-              isOrderOfAnswersImportant={isOrderOfAnswersImportant}
-              shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
-              isScoringShown={props.isScoringShown}
-              check={props.check}
-            />
-          )}
-          {props.type?.toLowerCase() == "call" && (
-            <CallSimulation
-              question={props.question || "No question provided."}
-              author={author}
-              me={me}
-              story={story}
-              goalType={props.goalType}
-              answer={props.answer}
-              answers={props.answers || []}
-              ifWrong={props.ifWrong}
-              ifRight={props.ifRight}
-              lessonId={props.lessonID}
-              quizId={props.quizID}
-              passResult={onMove}
-              name={props.name}
-              image={props.image}
-              problemType={props.problemType}
-              isScoringShown={props.isScoringShown}
-            />
-          )}
-        </>
       )}
+
+      {/* Update Mode */}
       {update && (
         <UpdateQuiz
           quizId={props.id}
-          lessonID={props.lessonID}
-          answer={props.answer}
-          answers={props.answers || []}
-          lesson={props.lesson}
-          question={props.question || "No question provided."}
-          name={props.name}
-          image={props.image}
-          type={props.type || undefined}
+          lessonID={lessonID}
+          answer={answer}
+          answers={answers || []}
+          lesson={lesson}
+          question={question || "No question provided."}
+          name={name}
+          image={image}
+          type={type || undefined}
           isOrderOfAnswersImportant={isOrderOfAnswersImportant}
           shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
-          isScoringShown={props.isScoringShown}
-          goalType={props.goalType}
+          isScoringShown={isScoringShown}
+          goalType={goalType}
           complexity={complexity}
           ifRight={ifRight}
           ifWrong={ifWrong}
-          next={props.next}
+          next={next}
           check={check}
-          getResult={getResult}
-          switchUpdate={switchUpdate}
+          getResult={handleGetResult}
+          switchUpdate={toggleUpdate}
         />
       )}
+
+      {/* Display Quiz Component based on Type */}
+      {!update && renderQuizComponent()}
     </Styles>
   );
 };

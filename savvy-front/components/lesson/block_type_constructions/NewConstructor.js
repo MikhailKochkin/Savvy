@@ -7,7 +7,7 @@ import UpdateNewConstructor from "./UpdateNewConstructor";
 import Summary from "./types/Summary";
 import Document from "./types/Document";
 import Longread from "./types/Longread";
-import { SecondaryButton } from "../styles/DevPageStyles";
+import { SecondaryButton, Buttons } from "../styles/DevPageStyles";
 import DeleteSingleConstructor from "./DeleteSingleConstructor";
 
 const CONSTRUCTION_RESULT_QUERY = gql`
@@ -66,13 +66,8 @@ const Container = styled.div`
   }
 `;
 
-const Buttons = styled.div`
-  width: 950px;
-  margin-bottom: 20px;
-`;
-
 const NewConstructor = (props) => {
-  const { construction, me, lessonID, story } = props;
+  const { construction, me, lessonID, story, may_i_edit } = props;
   let elements = construction.elements?.elements
     ? construction.elements?.elements
     : [];
@@ -99,22 +94,16 @@ const NewConstructor = (props) => {
   return (
     <Styles id={props.construction.id}>
       <Container id={"construction_" + construction.id}>
-        {story !== true && (
-          <Buttons>
+        {may_i_edit && (
+          <Buttons gap="10px" margin="0 0 20px 0">
             <SecondaryButton onClick={(e) => setUpdate(!update)}>
               {!update ? t("update") : t("back")}
             </SecondaryButton>
-            {me &&
-            (me.id === construction?.user?.id ||
-              me.permissions.includes("ADMIN")) &&
-            !story ? (
-              <DeleteSingleConstructor
-                id={construction.id}
-                lessonID={lessonID}
-              />
-            ) : null}
+
+            <DeleteSingleConstructor id={construction.id} lessonID={lessonID} />
           </Buttons>
         )}
+
         {!update && construction.type == "SUMMARY" ? (
           <Summary
             key={props.key}

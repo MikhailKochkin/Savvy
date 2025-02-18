@@ -86,6 +86,7 @@ const CoursePage = objectType({
     t.string("batch"); // Batch info
     t.field("reviews", { type: "ReviewsList" }); // Reviews
     t.string("video"); // Video URL
+    t.list.field("courseAccessControls", { type: "CourseAccessControl" });
     t.field("createdAt", { type: "DateTime" }); // Creation timestamp
     t.field("updatedAt", { type: "DateTime" }); // Update timestamp
   },
@@ -146,6 +147,27 @@ const CourseVisit = objectType({
   },
 });
 
+const CourseAccessControl = objectType({
+  name: "CourseAccessControl",
+  definition(t) {
+    t.string("id"); // Unique identifier
+    t.field("role", { type: "CourseRole" }); // Enum for role type
+    t.field("changeScope", { type: "ChangeScope" }); // Enum for edit/comment permissions
+    t.boolean("areAllLessonsAccessible"); // Whether all lessons are open
+    t.list.string("accessibleLessons"); // List of accessible lesson IDs
+
+    // Relations
+    t.string("userId"); // Connected user ID
+    t.string("coursePageId"); // Connected course page ID
+    t.field("user", { type: "User" }); // Relation to User
+    t.field("coursePage", { type: "CoursePage" }); // Relation to CoursePage
+
+    // Metadata
+    t.field("createdAt", { type: "DateTime" }); // Timestamp for creation
+    t.field("updatedAt", { type: "DateTime" }); // Timestamp for last update
+  },
+});
+
 module.exports = {
   CoursePage,
   CourseVisit,
@@ -154,4 +176,5 @@ module.exports = {
   Review,
   ReviewInput,
   ReviewsListInput,
+  CourseAccessControl,
 };

@@ -26,24 +26,6 @@ const Styles = styled.div`
   width: 100%;
 `;
 
-const ButtonTwo = styled.button`
-  background: none;
-  padding: 10px 20px;
-  border: 2px solid #69696a;
-  border-radius: 5px;
-  font-family: Montserrat;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: #323334;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-right: 10px;
-  transition: 0.3s;
-  &:hover {
-    background: #f4f4f4;
-  }
-`;
-
 const NewBlock = (props) => {
   const [type, setType] = useState(props.type);
   const [data, setData] = useState(null);
@@ -164,6 +146,7 @@ const NewBlock = (props) => {
           lessonId={lesson.id}
           getResult={getResult}
           library={props.library}
+          may_i_edit={true}
         />
       )}
       {type == "Chat" && (
@@ -198,6 +181,7 @@ const NewBlock = (props) => {
           lessonID={lesson.id}
           length={Array(data.correct.length).fill(false)}
           getResult={getResult}
+          may_i_edit={true}
         />
       )}
       {type == "NewTest" && (
@@ -236,6 +220,7 @@ const NewBlock = (props) => {
           me={me}
           lessonID={lesson.id}
           getResult={getResult}
+          may_i_edit={true}
         />
       )}
       {type == "Quiz" && (

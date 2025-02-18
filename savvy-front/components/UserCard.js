@@ -463,8 +463,7 @@ const UserCard = memo((props) => {
     const grouped = { other: [] }; // "other" group for unmatched courses
     const tagSet = new Set(allowedTags);
     const assignedCourses = new Set(); // Track assigned courses
-
-    courses.forEach((course) => {
+    courses?.forEach((course) => {
       if (
         !course.tags ||
         !Array.isArray(course.tags) ||
@@ -808,7 +807,6 @@ const UserCard = memo((props) => {
                 Закрыть доступ ко всем курсам
               </button>
               <h4>Курсы</h4>
-
               {Object.entries(
                 groupCoursesByTags(props.coursePages, course_tags)
               ).map(([tag, courses]) => {

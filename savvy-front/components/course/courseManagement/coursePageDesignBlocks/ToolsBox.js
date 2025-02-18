@@ -41,16 +41,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         surname
         image
         description
-        # work
-        # status
-        # uni {
-        #   id
-        #   title
-        # }
-        # company {
-        #   id
-        #   name
-        # }
       }
       authors {
         id
@@ -59,14 +49,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         image
         description
         status
-        # uni {
-        #   id
-        #   title
-        # }
-        # company {
-        #   id
-        #   name
-        # }
       }
       lessons {
         id
@@ -75,6 +57,19 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         description
         type
         assignment
+      }
+      courseAccessControls {
+        id
+        user {
+          id
+          name
+          surname
+          email
+        }
+        role
+        changeScope
+        areAllLessonsAccessible
+        accessibleLessons
       }
     }
   }
@@ -202,23 +197,50 @@ const ToolsBox = (props) => {
   // 6. authorization checks
 
   let i_am_author = false;
-  if (me && coursePage.authors.filter((auth) => auth.id == me.id).length > 0) {
+  let i_am_mentor = false;
+  // if (me && coursePage.authors.filter((auth) => auth.id == me.id).length > 0) {
+  //   i_am_author = true;
+  // }
+
+  // 6.5 new authorization checks
+
+  let role;
+  let changeScope;
+  let areAllLessonsAccessible = true;
+  let accessibleLessons = null;
+
+  if (me && coursePage.courseAccessControls.length > 0) {
+    coursePage.courseAccessControls.forEach((c) => {
+      if (c.user?.id == me.id) {
+        role = c.role;
+        changeScope = c.changeScope;
+        areAllLessonsAccessible = c.areAllLessonsAccessible;
+        accessibleLessons = c.accessibleLessons;
+      }
+    });
+  }
+
+  if (
+    role == "AUTHOR" ||
+    me?.permissions.includes("ADMIN") ||
+    coursePage?.user?.id == me?.id
+  ) {
     i_am_author = true;
   }
 
+  if (role == "MENTOR") {
+    i_am_mentor = true;
+  }
+
   let first_lesson = [...lessons].sort((a, b) => a.number - b.number)[0];
-  // let first_lesson = lessons[0];
   return (
     <PayBox>
       {/* Карточка регистрации на сайте */}
       {!me && <SignInCard />}
       {/* Карточка первого урока */}
       {me &&
-        me.permissions &&
-        me.id !== coursePage.user.id &&
         !i_am_author &&
-        !me.new_subjects.find((c) => c.id == coursePage.id) &&
-        !me.permissions.includes("ADMIN") && (
+        !me?.new_subjects.find((c) => c.id == coursePage.id) && (
           <RegisterCard
             me={me}
             coursePage={coursePage}
@@ -227,20 +249,20 @@ const ToolsBox = (props) => {
           />
         )}
       {/* Карточка преподавателя */}
-      {me &&
-        me.permissions &&
-        (me.id === coursePage.user.id ||
-          me.permissions.includes("ADMIN") ||
-          i_am_author) && (
-          <TeacherCard id={coursePage.id} coursePage={coursePage} />
-        )}
+      {i_am_author && (
+        <TeacherCard
+          id={coursePage.id}
+          i_am_author={i_am_author}
+          coursePage={coursePage}
+          me={me}
+        />
+      )}
       {/* Карточка ученика */}
-      {/* {console.log("student", stats_data)} */}
+
       {stats_data &&
         me &&
-        me.permissions &&
-        me.new_subjects.find((c) => c.id == coursePage.id) &&
-        !me.permissions.includes("ADMIN") && (
+        !i_am_author &&
+        me?.new_subjects.find((c) => c.id == coursePage.id) && (
           <StudentCard
             coursePage={coursePage}
             lessonResults={lessonResults}

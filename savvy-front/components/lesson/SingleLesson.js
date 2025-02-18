@@ -57,6 +57,20 @@ const SINGLE_LESSON_QUERY = gql`
           }
           story
         }
+        courseAccessControls {
+          id
+          user {
+            id
+            name
+            surname
+            email
+          }
+          role
+          changeScope
+          areAllLessonsAccessible
+          accessibleLessons
+          createdAt
+        }
       }
       comments {
         id
@@ -196,6 +210,7 @@ const SINGLE_LESSON_QUERY = gql`
         answer
         answers {
           answerElements {
+            id
             answer
             relatedAnswers
             index
@@ -391,6 +406,7 @@ const SINGLE_LESSON_QUERY = gql`
                 source
                 type
                 value
+                sourceAnswerId
               }
             }
             position {
@@ -460,6 +476,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100vw;
+  min-height: 90vh;
   background: #fafafa;
   /* The side navigation menu */
   .sidenav {
@@ -583,22 +600,59 @@ const SingleLesson = (props) => {
   if (error) return <Error error={error} />;
   if (!data || !data.lesson) return <p>No lesson found</p>;
   const lesson = data.lesson;
+
   let i_am_author = false;
+  let is_analytics_page_open = false;
+  let may_i_edit = false;
+
+  let role;
+  let changeScope;
+  let areAllLessonsAccessible = true;
+  let accessibleLessons = null;
+
+  if (me && lesson.coursePage?.courseAccessControls?.length > 0) {
+    lesson.coursePage?.courseAccessControls?.forEach((c) => {
+      if (c.user?.id == me.id) {
+        role = c.role;
+        changeScope = c.changeScope;
+        areAllLessonsAccessible = c.areAllLessonsAccessible;
+        accessibleLessons = c.accessibleLessons;
+      }
+    });
+  }
 
   if (
-    me &&
-    (me.coursePages.filter((c) => c.id == lesson?.coursePage?.id).length > 0 ||
-      me.co_coursePages?.filter((c) => c.id == lesson?.coursePage.id).length >
-        0 ||
-      me.permissions.includes("ADMIN"))
+    (role == "AUTHOR" &&
+      (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id))) ||
+    me?.permissions.includes("ADMIN") ||
+    lesson.coursePage?.user?.id == me?.id
   ) {
     i_am_author = true;
   }
+
+  if (
+    ((role == "AUTHOR" || role == "MENTOR") &&
+      (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id))) ||
+    me?.permissions.includes("ADMIN") ||
+    lesson.coursePage?.user?.id == me?.id
+  ) {
+    is_analytics_page_open = true;
+  }
+
+  if (
+    (role == "AUTHOR" &&
+      (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id)) &&
+      changeScope == "EDIT") ||
+    me?.permissions.includes("ADMIN") ||
+    lesson.coursePage?.user?.id == me?.id
+  ) {
+    may_i_edit = true;
+  }
+
+  console.log("is_analytics_page_open", is_analytics_page_open);
+
   if (!me) {
     return "Please sign up or log in to access this page";
-  }
-  if (!i_am_author) {
-    return <NoAccess />;
   }
   return (
     <Container>
@@ -607,18 +661,28 @@ const SingleLesson = (props) => {
         <meta name="Development Page" content="Simulator Development Page" />
       </Head>
       <Navigation
-        i_am_author={true}
+        i_am_author={i_am_author}
+        is_analytics_page_open={is_analytics_page_open}
         lesson={lesson}
         coursePageId={lesson?.coursePage?.id}
         me={me}
         page="development"
         story={false}
       />
-      <LessonStyles>
-        <LessonPart>
-          <LessonBuilder lesson={lesson} me={me} />
-        </LessonPart>
-      </LessonStyles>
+      {i_am_author ? (
+        <LessonStyles>
+          <LessonPart>
+            <LessonBuilder
+              lesson={lesson}
+              me={me}
+              i_am_author={i_am_author}
+              may_i_edit={may_i_edit}
+            />
+          </LessonPart>
+        </LessonStyles>
+      ) : (
+        <NoAccess />
+      )}
     </Container>
   );
 };

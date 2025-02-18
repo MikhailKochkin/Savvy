@@ -140,7 +140,8 @@ const TextBar = styled.div`
     }
   }
   table {
-    width: 640px;
+    width: 100%;
+    min-width: 640px;
     border-collapse: collapse;
     font-size: 1.6rem;
     @media (max-width: 800px) {
@@ -152,7 +153,8 @@ const TextBar = styled.div`
       margin-bottom: 5px;
     }
     tbody {
-      width: 640px;
+      width: 100%;
+      min-width: 640px;
     }
     tr {
       border: 1px solid #edefed;
@@ -281,7 +283,16 @@ const wrapTables = (html) => {
 const removePTags = (str) => str.replace(/<\/?p>/g, "");
 
 const SingleTextEditor = (props) => {
-  const { textEditor, me, lessonID, story, complexity, text, lesson } = props;
+  const {
+    textEditor,
+    me,
+    lessonID,
+    story,
+    complexity,
+    text,
+    lesson,
+    may_i_edit,
+  } = props;
 
   const [attempts, setAttempts] = useState(0); // number of attempts to dinf concealed information
 
@@ -541,21 +552,18 @@ const SingleTextEditor = (props) => {
 
   return (
     <>
-      {me &&
-        (me.id === textEditor.user.id ||
-          me.permissions.includes("ADMIN") ||
-          lesson.user.id == me.id) &&
-        !story && (
-          <Buttons margin="15px 0">
-            <SecondaryButton onClick={(e) => setUpdate(!update)}>
-              {update ? t("back") : t("update")}
-            </SecondaryButton>
-            <DeleteSingleTextEditor
-              id={props.textEditor.id}
-              lessonID={props.lessonID}
-            />
-          </Buttons>
-        )}
+      {may_i_edit && (
+        <Buttons gap="10px" margin="0 0 20px 0">
+          <SecondaryButton onClick={(e) => setUpdate(!update)}>
+            {update ? t("back") : t("update")}
+          </SecondaryButton>
+          <DeleteSingleTextEditor
+            id={props.textEditor.id}
+            lessonID={props.lessonID}
+          />
+        </Buttons>
+      )}
+
       {!update && (
         <TextEditorStyles id={textEditor.id + 1} width={story}>
           {/* The document itself */}

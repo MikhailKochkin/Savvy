@@ -191,7 +191,7 @@ const Answer_text = styled.textarea`
 `;
 
 const ComplexQuestion = (props) => {
-  const { author, me, story } = props;
+  const { author, me, story, passQuizDataToParent } = props;
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
   const [correctIdeas, setCorrectIdeas] = useState([]); // ideas that match the correct answers
   const [overallResults, setOverallResults] = useState(null); // results of checking the ideas
@@ -425,10 +425,10 @@ const ComplexQuestion = (props) => {
     // Pass the result based on the problem type
     if (props.problemType === "ONLY_CORRECT") {
       if (newCorrectIdeas.length >= props.answers.answerElements.length) {
-        props.passResult("true");
+        passQuizDataToParent(["true", undefined]);
       }
     } else {
-      props.passResult("true");
+      passQuizDataToParent(["true", undefined]);
     }
   };
 

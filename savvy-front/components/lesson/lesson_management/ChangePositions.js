@@ -4,7 +4,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { gql, useMutation } from "@apollo/client";
 import smoothscroll from "smoothscroll-polyfill";
-import { ActionButton, SecondaryButton } from "./../styles/DevPageStyles";
+import { ActionButton, Buttons } from "./../styles/DevPageStyles";
 import {
   autoResizeTextarea,
   adjustTextareaHeight,
@@ -329,10 +329,14 @@ const ChangePositions = ({
           />
         ))}
         <br />
-        <ActionButton onClick={() => createNewItem(items.length)}>
-          Add New Item
-        </ActionButton>
-        <ActionButton onClick={(e) => onItemsUpdate(items)}>Save</ActionButton>
+        <Buttons>
+          <ActionButton onClick={() => createNewItem(items.length)}>
+            Add New Item
+          </ActionButton>
+          <ActionButton onClick={(e) => onItemsUpdate(items)}>
+            Save
+          </ActionButton>
+        </Buttons>
       </Styles>
     </DndProvider>
   );

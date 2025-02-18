@@ -33,6 +33,19 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
         }
       }
+      courseAccessControls {
+        id
+        user {
+          id
+          name
+          surname
+          email
+        }
+        role
+        changeScope
+        areAllLessonsAccessible
+        accessibleLessons
+      }
       description
       courseType
       user {
@@ -234,6 +247,7 @@ const LessonsData = (props) => {
   if (!data || !data.coursePage) return <p></p>;
 
   const coursePage = data.coursePage;
+  console.log("coursePage", coursePage);
 
   // 6. determiine which lessons are open
 
@@ -245,20 +259,51 @@ const LessonsData = (props) => {
     openLesson = null;
   }
 
-  // 7. authorization checks
+  // 7. student authorization checks
 
-  let isEnrolled;
+  let i_am_enrolled;
   if (me && me.new_subjects) {
-    isEnrolled = me.new_subjects.some((c) => c.id == coursePage.id);
+    i_am_enrolled = me.new_subjects.some((c) => c.id == coursePage.id);
   } else {
-    isEnrolled = false;
+    i_am_enrolled = false;
   }
 
+  // 8. course manager authorization checks
+
   let i_am_author = false;
+
+  // 8.1. Old approach
+  // if (
+  //   me &&
+  //   (coursePage.authors.filter((auth) => auth.id == me.id).length > 0 ||
+  //     coursePage.user.id == me.id || me?.permissions.includes("ADMIN"))
+  // ) {
+  //   i_am_author = true;
+  // }
+
+  // 8.2 New approach
+
+  let role;
+  let changeScope;
+  let areAllLessonsAccessible = true;
+  let accessibleLessons = null;
+
+  if (me && coursePage.courseAccessControls.length > 0) {
+    coursePage.courseAccessControls.forEach((c) => {
+      if (c.user?.id == me.id) {
+        role = c.role;
+        changeScope = c.changeScope;
+        areAllLessonsAccessible = c.areAllLessonsAccessible;
+        accessibleLessons = c.accessibleLessons;
+      }
+    });
+  }
+
   if (
-    me &&
-    (coursePage.authors.filter((auth) => auth.id == me.id).length > 0 ||
-      coursePage.user.id == me.id)
+    role == "AUTHOR" ||
+    role == "MENTOR" ||
+    me?.permissions.includes("ADMIN") ||
+    coursePage?.user?.id == me?.id
   ) {
     i_am_author = true;
   }
@@ -278,7 +323,7 @@ const LessonsData = (props) => {
         <>
           <Total>
             <Buttons>
-              {me && (
+              {me && i_am_author && (
                 <Button
                   primary={format === "gallery"}
                   onClick={(e) => setFormat("gallery")}
@@ -306,6 +351,9 @@ const LessonsData = (props) => {
                         name={lesson.name}
                         lesson={lesson}
                         i_am_author={i_am_author}
+                        i_am_enrolled={i_am_enrolled}
+                        areAllLessonsAccessible={areAllLessonsAccessible}
+                        accessibleLessons={accessibleLessons}
                         coursePage={props.id}
                         author={coursePage.user.id}
                         open={index + 1 === 1}
@@ -316,31 +364,32 @@ const LessonsData = (props) => {
                   ))}
                 </Lessons>
               </Syllabus>
-              {me &&
-                (i_am_author ||
-                  (me.permissions && me.permissions.includes("ADMIN"))) && (
-                  <Syllabus>
-                    <div className="week_number">Unpublished lessons</div>
-                    <Lessons>
-                      {unpublished_lessons.map((lesson, index) => (
-                        <>
-                          <LessonHeader
-                            me={me}
-                            key={lesson.id}
-                            name={lesson.name}
-                            lesson={lesson}
-                            i_am_author={i_am_author}
-                            coursePage={props.id}
-                            author={coursePage.user.id}
-                            open={index + 1 === 1}
-                            index={index + 1}
-                            coursePageId={coursePage.id}
-                          />
-                        </>
-                      ))}
-                    </Lessons>
-                  </Syllabus>
-                )}
+              {me && i_am_author && (
+                <Syllabus>
+                  <div className="week_number">Unpublished lessons</div>
+                  <Lessons>
+                    {unpublished_lessons.map((lesson, index) => (
+                      <>
+                        <LessonHeader
+                          me={me}
+                          key={lesson.id}
+                          name={lesson.name}
+                          lesson={lesson}
+                          i_am_author={i_am_author}
+                          i_am_enrolled={i_am_enrolled}
+                          areAllLessonsAccessible={areAllLessonsAccessible}
+                          accessibleLessons={accessibleLessons}
+                          coursePage={props.id}
+                          author={coursePage.user.id}
+                          open={index + 1 === 1}
+                          index={index + 1}
+                          coursePageId={coursePage.id}
+                        />
+                      </>
+                    ))}
+                  </Lessons>
+                </Syllabus>
+              )}
             </>
           )}
           {format == "table" && (
@@ -363,8 +412,10 @@ const LessonsData = (props) => {
                         name={lesson.name}
                         lesson={lesson}
                         i_am_author={i_am_author}
-                        coursePage={props.id}
-                        author={coursePage.user.id}
+                        i_am_enrolled={i_am_enrolled}
+                        areAllLessonsAccessible={areAllLessonsAccessible}
+                        accessibleLessons={accessibleLessons}
+                        author={coursePage.user}
                         open={index + 1 === 1}
                         index={index + 1}
                         coursePageId={coursePage.id}
@@ -373,37 +424,40 @@ const LessonsData = (props) => {
                   ))}
                 </LessonsTable>
               </Syllabus>
-              {me &&
-                (i_am_author ||
-                  (me.permissions && me.permissions.includes("ADMIN"))) && (
-                  <Syllabus>
-                    {unpublished_lessons?.length > 0 && (
-                      <>
-                        <div className="week_number">Unpublished lessons</div>
-                        <Lessons>
-                          <LessonsTable>
-                            {unpublished_lessons.map((lesson, index) => (
-                              <>
-                                <LessonRow
-                                  me={me}
-                                  key={lesson.id}
-                                  name={lesson.name}
-                                  lesson={lesson}
-                                  i_am_author={i_am_author}
-                                  coursePage={props.id}
-                                  author={coursePage.user.id}
-                                  open={index + 1 === 1}
-                                  index={index + 1}
-                                  coursePageId={coursePage.id}
-                                />
-                              </>
-                            ))}
-                          </LessonsTable>
-                        </Lessons>
-                      </>
-                    )}
-                  </Syllabus>
-                )}
+              {me && i_am_author && (
+                <Syllabus>
+                  {unpublished_lessons?.length > 0 && (
+                    <>
+                      <div className="week_number">Unpublished lessons</div>
+                      <Lessons>
+                        <LessonsTable>
+                          {unpublished_lessons.map((lesson, index) => (
+                            <>
+                              <LessonRow
+                                me={me}
+                                key={lesson.id}
+                                name={lesson.name}
+                                lesson={lesson}
+                                i_am_author={i_am_author}
+                                i_am_enrolled={i_am_enrolled}
+                                areAllLessonsAccessible={
+                                  areAllLessonsAccessible
+                                }
+                                accessibleLessons={accessibleLessons}
+                                coursePage={props.id}
+                                author={coursePage.user.id}
+                                open={index + 1 === 1}
+                                index={index + 1}
+                                coursePageId={coursePage.id}
+                              />
+                            </>
+                          ))}
+                        </LessonsTable>
+                      </Lessons>
+                    </>
+                  )}
+                </Syllabus>
+              )}
             </>
           )}
           {/* } */}

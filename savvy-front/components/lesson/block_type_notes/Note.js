@@ -47,16 +47,13 @@ const ArrowContainer = styled.div`
 `;
 
 const Note = (props) => {
+  // State for update mode and whether the note has been "moved" (next step triggered)
   const [update, setUpdate] = useState(false);
   const [moved, setMoved] = useState(false);
+
   const { t } = useTranslation("lesson");
 
-  const push = () => {
-    if (moved == false) {
-      props.getData(props.next ? [true, props.next.true] : [true, undefined]);
-    }
-    setMoved(true);
-  };
+  // Destructure props here as you prefer
   const {
     exam,
     story,
@@ -69,117 +66,59 @@ const Note = (props) => {
     complexity,
     id,
     miniforum,
-    getData,
+    pushNextElementToProblem,
     lessonID,
     isFinal,
     instructorName,
+    may_i_edit,
+    next,
+    problem,
+    experience,
+    total,
+    getResult: parentGetResult,
   } = props;
-  let width;
-  if (props.problem) {
-    width = "100%";
-  } else if (props.story) {
-    width = "100%";
-  } else {
-    width = "90%";
-  }
 
-  const getResult = (data) => {
-    if (props.getResult) props.getResult(data);
+  // Determine the width based on the context (problem/story/general)
+  const width = problem || story ? "100%" : "90%";
+
+  // Handlers
+
+  // Toggle update mode
+  const toggleUpdate = () => setUpdate((prev) => !prev);
+
+  // Trigger the next element in the problem flow
+  const handlePushNextElement = () => {
+    if (!moved) {
+      pushNextElementToProblem(next ? [true, next.true] : [true, undefined]);
+      setMoved(true);
+    }
   };
 
-  const switchUpdate = () => {
-    setUpdate(!update);
+  // Pass result up to parent component if needed
+  const handleGetResult = (data) => {
+    if (parentGetResult) {
+      parentGetResult(data);
+    }
   };
 
+  // Pass generated data up if needed in the future
   const passGeneratedData = (data) => {
-    // if (props.passGeneratedData) props.passGeneratedData(data);
+    // Placeholder - if needed later
   };
+
   return (
     <>
-      {!story && (
+      {/* Edit and Delete Controls */}
+      {may_i_edit && (
         <Buttons>
-          {!exam && !story && (
-            <SecondaryButton onClick={(e) => setUpdate(!update)}>
-              {!update ? t("update") : t("back")}
-            </SecondaryButton>
-          )}
-          {me && !props.story && !props.exam && (
-            <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
-          )}
+          <SecondaryButton onClick={toggleUpdate}>
+            {update ? t("back") : t("update")}
+          </SecondaryButton>
+          <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
         </Buttons>
       )}
-      {!update && (
-        <>
-          {!note?.type ||
-          note?.type?.toLowerCase() == "longread" ||
-          note?.type?.toLowerCase() == "library" ? (
-            <Longread
-              story={story}
-              text={text}
-              id={id}
-              getData={getData}
-              isFinal={isFinal}
-              problem={props.problem}
-              note={note}
-              experience={props.experience}
-              total={props.total}
-            />
-          ) : null}
-          {note?.type?.toLowerCase() == "email" ? (
-            <Email
-              story={story}
-              text={text}
-              id={id}
-              name={name}
-              instructorName={instructorName}
-              getData={getData}
-              isFinal={isFinal}
-              problem={props.problem}
-              note={note}
-              experience={props.experience}
-              total={props.total}
-              author={author}
-              me={me}
-            />
-          ) : null}{" "}
-          {note?.type?.toLowerCase() == "doc" ? (
-            <Doc
-              story={story}
-              text={text}
-              id={id}
-              name={name}
-              instructorName={instructorName}
-              isFinal={isFinal}
-              problem={props.problem}
-              note={note}
-              experience={props.experience}
-              total={props.total}
-              author={author}
-              me={me}
-            />
-          ) : null}{" "}
-          {note?.type?.toLowerCase() == "mininote" ? (
-            <MiniNote text={text} id={id} />
-          ) : null}
-          {note?.type?.toLowerCase() == "picture" ? (
-            <Picture
-              story={story}
-              horizontal_image={note.horizontal_image}
-              vertical_image={note.vertical_image}
-              text={text}
-              id={id}
-            />
-          ) : null}{" "}
-        </>
-      )}
-      {getData && !isFinal && !moved && (
-        <ArrowContainer>
-          <div className="arrow_box" onClick={(e) => push()}>
-            <img className="arrow" src="../../static/down-arrow.svg" />
-          </div>
-        </ArrowContainer>
-      )}
-      {/* {miniforum && <Chat me={me} miniforum={miniforum} />} */}
+
+      {/* Update/Edit Mode */}
       {update && !story && !exam && note && (
         <UpdateNote
           text={text}
@@ -187,16 +126,104 @@ const Note = (props) => {
           complexity={complexity}
           id={id}
           type={note?.type}
-          next={props.next}
+          next={next}
           vertical_image={note?.vertical_image}
           horizontal_image={note?.horizontal_image}
           name={name}
           instructorName={note?.instructorName}
           lessonID={lessonID}
-          getResult={getResult}
-          switchUpdate={switchUpdate}
+          getResult={handleGetResult}
+          switchUpdate={toggleUpdate}
           passGeneratedData={passGeneratedData}
         />
+      )}
+
+      {/* Display Content Mode */}
+      {!update && (
+        <>
+          {/* Longread or Library Type */}
+          {(!note?.type ||
+            note?.type.toLowerCase() === "longread" ||
+            note?.type.toLowerCase() === "library") && (
+            <Longread
+              story={story}
+              text={text}
+              id={id}
+              getData={pushNextElementToProblem}
+              isFinal={isFinal}
+              problem={problem}
+              note={note}
+              experience={experience}
+              total={total}
+            />
+          )}
+
+          {/* Email Type */}
+          {note?.type?.toLowerCase() === "email" && (
+            <Email
+              story={story}
+              text={text}
+              id={id}
+              name={name}
+              instructorName={instructorName}
+              getData={pushNextElementToProblem}
+              isFinal={isFinal}
+              problem={problem}
+              note={note}
+              experience={experience}
+              total={total}
+              author={author}
+              me={me}
+            />
+          )}
+
+          {/* Doc Type */}
+          {note?.type?.toLowerCase() === "doc" && (
+            <Doc
+              story={story}
+              text={text}
+              id={id}
+              name={name}
+              instructorName={instructorName}
+              isFinal={isFinal}
+              problem={problem}
+              note={note}
+              experience={experience}
+              total={total}
+              author={author}
+              me={me}
+            />
+          )}
+
+          {/* MiniNote Type */}
+          {note?.type?.toLowerCase() === "mininote" && (
+            <MiniNote text={text} id={id} />
+          )}
+
+          {/* Picture Type */}
+          {note?.type?.toLowerCase() === "picture" && (
+            <Picture
+              story={story}
+              horizontal_image={note.horizontal_image}
+              vertical_image={note.vertical_image}
+              text={text}
+              id={id}
+            />
+          )}
+        </>
+      )}
+
+      {/* "Next Step" Arrow - For progressing to the next element in a problem */}
+      {pushNextElementToProblem && !isFinal && !moved && (
+        <ArrowContainer>
+          <div className="arrow_box" onClick={handlePushNextElement}>
+            <img
+              className="arrow"
+              src="../../static/down-arrow.svg"
+              alt="Next"
+            />
+          </div>
+        </ArrowContainer>
       )}
     </>
   );

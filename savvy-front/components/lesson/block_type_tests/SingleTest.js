@@ -11,7 +11,7 @@ import Branch from "./types/Branch";
 import MiniTest from "./types/MiniTest";
 import { generateHint } from "./functions/AiFunctions";
 import { useRouter } from "next/router";
-import { SecondaryButton } from "../styles/DevPageStyles";
+import { SecondaryButton, Buttons } from "../styles/DevPageStyles";
 
 const CREATE_TESTRESULT_MUTATION = gql`
   mutation CREATE_TESTRESULT_MUTATION(
@@ -52,19 +52,13 @@ const Styles = styled.div`
   }
 `;
 
-const Buttons = styled.div`
-  margin-bottom: 30px;
-`;
-
 const SingleTest = (props) => {
   const {
-    exam,
     story,
     ifWrong,
     ifRight,
     me,
     comments,
-    miniforum,
     author,
     instructorName,
     name,
@@ -72,6 +66,8 @@ const SingleTest = (props) => {
     next,
     type,
     passStudentAnswertoDocument,
+    pushNextElementToProblem,
+    may_i_edit,
   } = props;
   const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
   const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
@@ -176,9 +172,9 @@ const SingleTest = (props) => {
   const onSend = async () => {
     if (answerState !== "think") return;
     if (props.moveNext) props.moveNext(props.id);
-    if (props.getData) {
+    if (pushNextElementToProblem) {
       const nextStep = props.next?.[resultBool] || undefined;
-      props.getData([true, nextStep], "form");
+      pushNextElementToProblem([true, nextStep], "form");
     }
 
     addComments(answerNums);
@@ -221,7 +217,9 @@ const SingleTest = (props) => {
   const onMoveBranch = async () => {
     if (answerState !== "think") return;
     if (props.moveNext) props.moveNext(props.id);
-    props.getData ? props.getData([true, branchSourceId], "branch") : null;
+    pushNextElementToProblem
+      ? pushNextElementToProblem([true, branchSourceId], "branch")
+      : null;
 
     addComments(answerNums);
     createTestResult({
@@ -260,8 +258,8 @@ const SingleTest = (props) => {
     setInputColor(inputColor);
 
     // Handle data submission for the first attempt
-    if (props.getData && (!isExperienced || attempts === 0)) {
-      props.getData(nextData, "test");
+    if (pushNextElementToProblem && (!isExperienced || attempts === 0)) {
+      pushNextElementToProblem(nextData, "test");
     }
     // Save the result if not already experienced
     if (!isExperienced) {
@@ -345,20 +343,18 @@ const SingleTest = (props) => {
 
   return (
     <Styles width={width} id={props.id}>
-      <Buttons>
-        {!exam && story !== true && (
+      {may_i_edit && (
+        <Buttons gap="10px" margin="0 0 20px 0">
           <SecondaryButton onClick={(e) => setUpdate(!update)}>
             {!update ? t("update") : t("back")}
           </SecondaryButton>
-        )}
-        {me && !story && !exam && (
           <DeleteSingleTest
             id={me.id}
             testId={props.id}
             lessonId={props.lessonID}
           />
-        )}{" "}
-      </Buttons>
+        </Buttons>
+      )}
       {!update && me && (
         <>
           {(type == "TEST" || type == null) && (
@@ -374,7 +370,7 @@ const SingleTest = (props) => {
               answerState={answerState}
               challenge={props.challenge}
               problemType={props.problemType}
-              getData={props.getData}
+              getData={pushNextElementToProblem}
               next={props.next}
               id={props.id}
               lessonID={props.lessonID}
@@ -406,7 +402,7 @@ const SingleTest = (props) => {
               answerState={answerState}
               challenge={props.challenge}
               problemType={props.problemType}
-              getData={props.getData}
+              getData={pushNextElementToProblem}
               next={props.next}
               id={props.id}
               lessonID={props.lessonID}
@@ -431,7 +427,7 @@ const SingleTest = (props) => {
               answerState={answerState}
               challenge={props.challenge}
               problemType={props.problemType}
-              getData={props.getData}
+              getData={pushNextElementToProblem}
               next={props.next}
               id={props.id}
               lessonID={props.lessonID}
@@ -456,7 +452,7 @@ const SingleTest = (props) => {
               answerState={answerState}
               challenge={props.challenge}
               problemType={props.problemType}
-              getData={props.getData}
+              getData={pushNextElementToProblem}
               next={props.next}
               id={props.id}
               lessonID={props.lessonID}

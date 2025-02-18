@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
-
+import { useTranslation } from "next-i18next";
 import styled from "styled-components";
 import parse from "html-react-parser";
+
 import Loading from "../../../layout/Loading";
 import LoadingErrorMessage from "../../../layout/LoadingErrorMessage";
 
@@ -22,14 +23,21 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         work
         status
       }
-      authors {
+    }
+  }
+`;
+
+const COURSE_ACCESS_CONTROLS_QUERY = gql`
+  query COURSE_ACCESS_CONTROLS_QUERY($coursePageId: String) {
+    courseAccessControls(coursePageId: $coursePageId) {
+      id
+      role
+      coursePageId
+      user {
         id
         name
         surname
         image
-        description
-        status
-        work
       }
     }
   }
@@ -117,8 +125,19 @@ const CourseData = (props) => {
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
     variables: { id: props.id },
   });
+  const { t } = useTranslation("course");
+  const {
+    data: accessData,
+    loading: accessLoading,
+    error: accessError,
+  } = useQuery(COURSE_ACCESS_CONTROLS_QUERY, {
+    variables: { coursePageId: props.id },
+  });
   if (loading) return <Loading />;
-  if (!data || !data.coursePage) {
+  if (error) return <p>Error: {error.message}</p>;
+  if (accessLoading) return <Loading />;
+  if (accessError) return <p>Error: {accessError.message}</p>;
+  if (!data || !data.coursePage || !accessData) {
     let errorData = {
       type: "course",
       page: "course",
@@ -130,33 +149,30 @@ const CourseData = (props) => {
 
     return <LoadingErrorMessage errorData={errorData} />;
   }
-  // const { t } = useTranslation("course");
+
+  let visible_authors = [];
+
+  accessData.courseAccessControls.map((a) =>
+    a.role === "AUTHOR" ? visible_authors.push(a.user) : null
+  );
+
+  if (visible_authors.length === 0) {
+    visible_authors.push(data.coursePage.user);
+  }
 
   const coursePage = data.coursePage;
   return (
     <Data id="info_box">
       <Header>{coursePage.title}</Header>
-      {coursePage && coursePage.authors?.length > 0 ? (
-        coursePage.authors.map((a) => (
-          <div className="name">
-            <img src={a.image} />
-            <p>
-              {a.name} {a.surname}
-            </p>
-          </div>
-        ))
-      ) : (
-        <>
-          <div className="name">
-            <img src={coursePage.user.image} />
-            <p>
-              {coursePage.user && coursePage.user.surname
-                ? `${coursePage.user.name} ${coursePage.user.surname}`
-                : coursePage.user.name}{" "}
-            </p>
-          </div>
-        </>
-      )}
+      {visible_authors.map((a) => (
+        <div className="name">
+          <img src={a.image} />
+          <p>
+            {a.name} {a.surname}
+          </p>
+        </div>
+      ))}
+
       <div className="description">
         {coursePage.description && parse(coursePage.description)}
       </div>

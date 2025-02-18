@@ -315,6 +315,15 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 });
 
 const LessonHeader = (props) => {
+  const {
+    lesson,
+    name,
+    author,
+    me,
+    i_am_author,
+    areAllLessonsAccessible,
+    accessibleLessons,
+  } = props;
   const [published, setPublished] = useState(props.lesson.published);
   const [number, setNumber] = useState(props.lesson.number);
   const [description, setDescription] = useState(props.lesson.description);
@@ -342,7 +351,6 @@ const LessonHeader = (props) => {
       ).toFixed(0);
     }
   }, [props.me, data]);
-  const { lesson, name, author, me, i_am_author } = props;
 
   const myCallback = (data) => {
     setDescription(parseInt(data));
@@ -380,16 +388,18 @@ const LessonHeader = (props) => {
     pathname = "/lesson";
   }
 
+  const authorHasAccess =
+    me &&
+    i_am_author &&
+    (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id));
+
   return (
     <>
       <TextBar id={"simulator_" + lesson.id} color={color}>
         <div>
           <Text>
             <div className="lesson_name">
-              {me &&
-              (me.id === author ||
-                me.permissions.includes("ADMIN") ||
-                i_am_author) ? (
+              {authorHasAccess ? (
                 <input
                   name="number"
                   type="number"
@@ -410,10 +420,7 @@ const LessonHeader = (props) => {
               {name}{" "}
             </div>
             <div className="lesson_description">
-              {me &&
-              (me.id === author ||
-                me.permissions.includes("ADMIN") ||
-                i_am_author) ? (
+              {authorHasAccess ? (
                 <Frame>
                   <DynamicLoadedEditor
                     index={0}
@@ -433,10 +440,7 @@ const LessonHeader = (props) => {
           <Buttons>
             {/* Case 2. Admin or course author publishes the course */}
 
-            {me &&
-            (me.id === author ||
-              me.permissions.includes("ADMIN") ||
-              i_am_author) ? (
+            {authorHasAccess ? (
               <>
                 <ToggleQuestion>
                   <label className="switch">

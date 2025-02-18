@@ -20,16 +20,6 @@ const MY_COURSES_QUERY = gql`
     coursePages(userId: $id) {
       id
       title
-      user {
-        id
-        name
-        surname
-      }
-      authors {
-        id
-        name
-        surname
-      }
       description
       courseType
       image
@@ -39,37 +29,18 @@ const MY_COURSES_QUERY = gql`
   }
 `;
 
-const MY_CO_AUTHORED_COURSES_QUERY = gql`
-  query MY_CO_AUTHORED_COURSES_QUERY($id: String!) {
-    coursePages(co_authorId: $id) {
+const COURSE_ACCESS_CONTROLS_QUERY = gql`
+  query COURSE_ACCESS_CONTROLS_QUERY($userId: String) {
+    courseAccessControls(userId: $userId) {
       id
-      title
-      user {
+      coursePage {
         id
-        name
-        surname
-        image
+        title
+        description
+        published
+        courseType
+        updatedAt
       }
-      authors {
-        id
-        name
-        surname
-        image
-      }
-      lessons {
-        id
-        forum {
-          id
-          rating {
-            id
-            rating
-          }
-        }
-      }
-      description
-      courseType
-      image
-      published
     }
   }
 `;
@@ -169,28 +140,35 @@ const MyCourses = (props) => {
 
   let publishedCourses = [];
   let developedCourses = [];
-  let coauthoredCourses = [];
 
   const toggleCourseCreateModal = (e) => setIsModalOpen(!isModalOpen);
 
   const { loading, error, data } = useQuery(MY_COURSES_QUERY, {
     variables: { id: me.id },
-    fetchPolicy: "cache-first", // Default: Check cache first, then network if not found
   });
 
   const {
-    loading: loading2,
-    error: error2,
-    data: data2,
-  } = useQuery(MY_CO_AUTHORED_COURSES_QUERY, {
-    variables: { id: me.id },
-    fetchPolicy: "cache-first", // Default: Check cache first, then network if not found
+    data: accessData,
+    loading: accessLoading,
+    error: accessError,
+  } = useQuery(COURSE_ACCESS_CONTROLS_QUERY, {
+    variables: { userId: me.id },
   });
+
   if (loading) return <Loading />;
   if (error) return <p>Error: {error.message}</p>;
-  if (loading2) return <Loading />;
-  if (error2) return <p>Error: {error2.message}</p>;
-  const mergedCourses = [...data.coursePages, ...data2.coursePages];
+  if (accessLoading) return <Loading />;
+  if (accessError) return <p>Error: {accessError.message}</p>;
+
+  const coursePagesFromAccessData = accessData?.courseAccessControls
+    ?.map((courseAccessControl) => courseAccessControl.coursePage)
+    .filter(
+      (coursePage, index, self) =>
+        index === self.findIndex((c) => c.id === coursePage.id)
+    );
+
+  console.log("coursePagesFromAccessData", coursePagesFromAccessData);
+  const mergedCourses = [...data.coursePages, ...coursePagesFromAccessData];
   const uniqueCourses = mergedCourses.filter(
     (course, index, self) => index === self.findIndex((c) => c.id === course.id)
   );
@@ -205,7 +183,6 @@ const MyCourses = (props) => {
 
   return (
     <Styles>
-      {/* <EducatorImage /> */}
       <Container>
         <Courses>
           <Title primary>

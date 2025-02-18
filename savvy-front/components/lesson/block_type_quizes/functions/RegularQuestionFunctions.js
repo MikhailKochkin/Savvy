@@ -35,3 +35,23 @@ export const stopListening = () => {
     recognition.stop();
   }
 };
+
+export const getScore = (idea, overallResults) => {
+  const resultObj =
+    overallResults && overallResults.find((res) => res.idea == idea);
+  if (resultObj && resultObj.result) {
+    return parseFloat(resultObj.result).toFixed(0);
+  }
+  return "0";
+};
+
+export const getInputColor = (score, goalType) => {
+  const numericScore = Number(score);
+  if (goalType !== "ASSESS" && numericScore > 65) {
+    return "#D0EADB";
+  } else if (goalType !== "ASSESS" && numericScore < 65 && numericScore > 58) {
+    return "#ffd166";
+  } else {
+    return "#F3F3F3";
+  }
+};

@@ -9,6 +9,9 @@ type AnswerElement {
   """Feedback for the answer."""
   feedback: String
 
+  """Unique identifier for the answer element."""
+  id: String
+
   """Position or index of the answer."""
   index: Int
 
@@ -26,6 +29,9 @@ input AnswerElementInput {
 
   """Feedback for the answer."""
   feedback: String
+
+  """Unique identifier for the answer element."""
+  id: String
 
   """Position or index of the answer."""
   index: Int
@@ -106,6 +112,9 @@ type BranchItem {
   """The source of the branch item."""
   source: String
 
+  """The source answer ID of the branch item."""
+  sourceAnswerId: String
+
   """The type of the branch item."""
   type: String
 
@@ -116,6 +125,9 @@ type BranchItem {
 input BranchItemInput {
   """The source of the branch item."""
   source: String
+
+  """The source answer ID of the branch item."""
+  sourceAnswerId: String
 
   """The type of the branch item."""
   type: String
@@ -217,6 +229,12 @@ type ChallengeResult {
 
   """Indicates whether the challenge was completed incorrectly."""
   wrong: Boolean
+}
+
+"""Defines the level of access a user has for modifying course content."""
+enum ChangeScope {
+  COMMENT
+  EDIT
 }
 
 type Character {
@@ -623,6 +641,20 @@ input ConsumedContentList {
   consumedContentList: [ConsumedContent]
 }
 
+type CourseAccessControl {
+  accessibleLessons: [String]
+  areAllLessonsAccessible: Boolean
+  changeScope: ChangeScope
+  coursePage: CoursePage
+  coursePageId: String
+  createdAt: DateTime
+  id: String
+  role: CourseRole
+  updatedAt: DateTime
+  user: User
+  userId: String
+}
+
 type CoursePage {
   applications: [Application]
   audience: String
@@ -631,6 +663,7 @@ type CoursePage {
   batch: String
   company: Company
   countries: [String]
+  courseAccessControls: [CourseAccessControl]
   courseType: String
   createdAt: DateTime
   currency: String
@@ -665,6 +698,14 @@ type CoursePage {
   video: String
   view: Int
   weeks: Int
+}
+
+"""
+Defines the role of a user in a course, either as a Mentor or an Author.
+"""
+enum CourseRole {
+  AUTHOR
+  MENTOR
 }
 
 """
@@ -1215,6 +1256,7 @@ type Mutation {
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   botSignup(email: String, image: String, name: String, number: String, password: String, surname: String): AuthPayload
   cancelSubscription(id: String): Subscription
+  changeCourseAccessControl(accessibleLessons: [String], areAllLessonsAccessible: Boolean, changeScope: ChangeScope, coursePageId: String, email: String, role: CourseRole): CourseAccessControl
   checkAssignment(checked: Boolean, id: String): LessonResult
   copyLesson(coursePageId: String!, id: String!): Lesson
   createBotDialogue(journey: [String], source: String): BotDialogue
@@ -1269,6 +1311,7 @@ type Mutation {
   deleteClient(id: String): BusinessClient
   deleteComment(id: String): Comment
   deleteConstruction(id: String): Construction
+  deleteCourseAccessControl(id: String): CourseAccessControl
   deleteCoursePage(id: String): CoursePage
   deleteDocument(id: String): Document
   deleteLesson(id: String): Lesson
@@ -1881,6 +1924,17 @@ type Query {
     """ID of the student."""
     studentId: String
   ): [ConstructionResult]
+  courseAccessControl(coursePageId: String, id: String, userId: String): CourseAccessControl
+  courseAccessControls(
+    """Course Page ID to filter access."""
+    coursePageId: String
+
+    """ID of the course access control entry to fetch."""
+    id: String
+
+    """User ID to filter course access."""
+    userId: String
+  ): [CourseAccessControl]
   coursePage(id: String!): CoursePage
   coursePages(
     """ID of the course creator to filter by."""
@@ -2118,6 +2172,9 @@ type Quiz {
 type QuizIdea {
   feedback: String
 
+  """Unique identifier for the quiz idea."""
+  id: String
+
   """The core idea or concept of the quiz."""
   idea: String
   matchedAnswer: String
@@ -2134,6 +2191,9 @@ type QuizIdea {
 
 input QuizIdeaInput {
   feedback: String
+
+  """Unique identifier for the quiz idea."""
+  id: String
 
   """The core idea or concept of the quiz."""
   idea: String
@@ -2792,6 +2852,7 @@ type User {
 
   """Country of residence of the user."""
   country: String
+  courseAccessControls: [CourseAccessControl]
 
   """Course pages owned by the user."""
   coursePages: [CoursePage]

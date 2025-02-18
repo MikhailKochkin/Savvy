@@ -313,7 +313,9 @@ const MenuColumn = styled.div`
   }
 `;
 
-const Border = styled.div``;
+const Border = styled.div`
+  margin-top: 50px;
+`;
 
 const Block = styled.div`
   min-height: 50vh;
@@ -1054,6 +1056,8 @@ const Feed = (props) => {
             {!props.embedded && (
               <Navigation
                 i_am_author={props.i_am_author}
+                is_analytics_page_open={props.is_analytics_page_open}
+                is_dev_page_open={props.is_dev_page_open}
                 lesson={props.lesson}
                 coursePageId={props.lesson.coursePage.id}
                 me={me}

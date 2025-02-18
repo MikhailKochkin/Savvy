@@ -22,13 +22,13 @@ export const checkAnswer = async (
   studentAnswer,
   checkType
 ) => {
-  // Prepare the data object for comparison
-  const data = {
-    answer1: correctAnswer.toLowerCase(),
-    answer2: studentAnswer.toLowerCase(),
-  };
+  let data;
 
   if (checkType === "WORD") {
+    data = {
+      answer1: correctAnswer.toLowerCase(),
+      answer2: studentAnswer.toLowerCase(),
+    };
     // Perform a simple word-level comparison
     const result =
       correctAnswer.toLowerCase() === studentAnswer.toLowerCase() ? 90 : 10;
@@ -38,6 +38,10 @@ export const checkAnswer = async (
       color: result === 90 ? "rgba(50, 172, 102, 0.7)" : "#EFB8A9",
     };
   } else {
+    data = {
+      answer1: correctAnswer,
+      answer2: studentAnswer,
+    };
     try {
       // Send a POST request to the comparison API
       const response = await fetch(
@@ -54,6 +58,8 @@ export const checkAnswer = async (
       // Parse the response as JSON
       const { res, comment, size_difference_percent } = await response.json();
       const result = parseFloat(res);
+      console.log("data", data);
+      console.log("result", result);
 
       // Determine the correctness level and color based on the result
       let correctnessLevel = await determineCorrectness(result);
@@ -726,4 +732,183 @@ export const rephraseAnswer = async (old_wording, sample_answer) => {
     console.error(error);
     throw error;
   }
+};
+
+// helper function for getMatchingAnswers function
+const compareAnswers = async (idea, answer) => {
+  try {
+    const response = await fetch(
+      "https://arcane-refuge-67529.herokuapp.com/checker",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          answer1: answer?.answer ? answer?.answer : answer,
+          answer2: idea,
+        }),
+      }
+    );
+    const result = await response.json();
+    return parseFloat(result.res) || 0;
+  } catch (error) {
+    console.error("Error comparing answers:", error);
+    return 0;
+  }
+};
+// main assessment functions
+export const getMatchingAnswers = async (
+  answers,
+  ideas,
+  expectedAnswers,
+  overallResults
+) => {
+  // Local variables
+  const usedAnswers = new Set();
+  let newCorrectIdeas = [];
+  let newResults = [];
+  let oldResults = [];
+  let updatedExpectedAnswers = expectedAnswers;
+
+  // 1️⃣ FIRST LOOP. Iterate through each student idea.
+  for (let idea of ideas) {
+    // Skip empty ideas (null, undefined, or blank string)
+    if (!idea || !idea.trim()) {
+      continue;
+    }
+
+    // If the idea has already been evaluated, skip further processing.
+    const existingResult =
+      overallResults && overallResults.find((res) => res.idea === idea);
+    if (existingResult) {
+      oldResults.push(existingResult);
+      continue;
+    }
+
+    // Track the best match for the current idea (includes feedback).
+    let bestMatch = {
+      result: 0,
+      matchedText: null,
+      feedback: null,
+      id: null,
+    };
+
+    // 2️⃣ SECOND LOOP. Compare the current idea with each provided answer.
+    for (let answer of answers) {
+      // Skip if this answer has already been “used.”
+      if (usedAnswers.has(answer)) {
+        continue;
+      }
+
+      // If a good match has been found already, no need to check further.
+      if (bestMatch.result >= 65) {
+        break;
+      }
+
+      // Compare the main answer.
+      const mainScore = await compareAnswers(idea, answer);
+      if (mainScore > bestMatch.result) {
+        console.log("mainScore", answer);
+        bestMatch.result = mainScore;
+        bestMatch.matchedText = answer.answer;
+        bestMatch.feedback = answer.feedback;
+        bestMatch.id = answer.id;
+      }
+      console.log("bestMatch", bestMatch);
+
+      // If the score is low, skip checking any related answers.
+      if (mainScore < 25) {
+        continue;
+      }
+
+      // If the main score is very high, mark this answer as “used.”
+      if (mainScore > 65) {
+        usedAnswers.add(answer);
+        break;
+      } else {
+        // For scores between 25 and 65, check related answers.
+        let fetchPromises = [];
+        let textsToFetch = [];
+        (answer.relatedAnswers || []).forEach((relAns) => {
+          fetchPromises.push(compareAnswers(relAns, idea));
+          textsToFetch.push(relAns);
+        });
+
+        try {
+          const responses = await Promise.all(fetchPromises);
+          responses.forEach((r, index) => {
+            let val = parseFloat(r) || 0;
+            if (val > bestMatch.result) {
+              bestMatch.result = val;
+              bestMatch.matchedText = textsToFetch[index];
+              bestMatch.feedback = answer.feedback;
+              bestMatch.id = answer.id;
+            }
+          });
+
+          // If any related answer scores above the threshold, mark this answer as “used.”
+          if (bestMatch.result > 65) {
+            usedAnswers.add(answer);
+            break;
+          }
+        } catch (error) {
+          console.error("Error comparing related answers:", error);
+        }
+      }
+    } // End answers loop
+
+    // Build the result object, conditionally including feedback.
+    let newObj = {
+      idea,
+      result: parseFloat(bestMatch.result).toFixed(2) || bestMatch.result,
+      matchedAnswer: bestMatch.matchedText,
+      id: bestMatch.id,
+    };
+    if (bestMatch.result > 57) {
+      newObj.feedback = bestMatch.feedback;
+    }
+    newResults.push(newObj);
+
+    // Track correct ideas if the match is above threshold.
+    if (bestMatch.result > 57 && bestMatch.matchedText) {
+      let correctIdea = {
+        idea,
+        matchedAnswer: bestMatch.matchedText,
+        id: bestMatch.id,
+      };
+      if (bestMatch.result > 57) {
+        correctIdea.feedback = bestMatch.feedback;
+      }
+      newCorrectIdeas.push(correctIdea);
+    }
+  }
+
+  // Merge previous and new results (keeping the highest score for each idea).
+  let uniqueValues = [];
+  [...oldResults, ...newResults].forEach((item) => {
+    const existingItem = uniqueValues.find((uv) => uv.idea === item.idea);
+    if (!existingItem) {
+      uniqueValues.push({ ...item });
+    } else if (parseFloat(item.result) > parseFloat(existingItem.result)) {
+      existingItem.result = item.result;
+      existingItem.matchedAnswer = item.matchedAnswer;
+      if (item.result > 57) {
+        existingItem.feedback = item.feedback;
+      }
+    }
+  });
+
+  // let quizIdeas = uniqueValues.map((uv) => ({
+  //   ...uv,
+  //   result: String(uv.result),
+  // }));
+  // console.log("uniqueValues", uniqueValues);
+  // console.log("newCorrectIdeas", newCorrectIdeas);
+
+  // Return computed values instead of updating state
+  console.log("correctIdeas", uniqueValues, newCorrectIdeas);
+  return {
+    overallResults: uniqueValues,
+    correctIdeas: newCorrectIdeas,
+    updatedExpectedAnswers,
+  };
 };

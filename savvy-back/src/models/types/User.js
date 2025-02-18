@@ -128,6 +128,7 @@ const User = objectType({
       type: "Comment",
       description: "Comments made by the user.",
     });
+    t.list.field("courseAccessControls", { type: "CourseAccessControl" });
   },
 });
 

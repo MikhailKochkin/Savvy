@@ -301,6 +301,24 @@ model CoursePage {
   authors           User[]            @relation("AuthorsCoursePage")
   careerTrackUnit   CareerTrackUnit[] @relation("CareerTrackUnitToCoursePage")
   careerTrack       CareerTrack[]     @relation("CoursePageForCareer")
+  courseAccessControls CourseAccessControl[]
+}
+
+model CourseAccessControl {
+  id                String   @id @default(cuid()) @db.VarChar(30)
+
+  role              CourseRole
+  changeScope       ChangeScope @default(EDIT)
+  areAllLessonsAccessible Boolean @default(true)
+  accessibleLessons String[]
+
+  userId            String   @db.VarChar(30)
+  coursePageId      String   @db.VarChar(30)
+  user              User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coursePage        CoursePage @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model CourseVisit {
@@ -1267,6 +1285,7 @@ model User {
   userIsReferee      Referral[]           @relation("RefereeInReferral")
   comments           Comment[]
   processManagers    ProcessManager[]
+  courseAccessControls CourseAccessControl[]
 }
 
 model Referral {
@@ -1341,6 +1360,16 @@ enum PageView {
 enum Permission {
   ADMIN
   USER
+}
+
+enum CourseRole {
+  AUTHOR
+  MENTOR
+}
+
+enum ChangeScope {
+  EDIT
+  COMMENT
 }
 
 enum Status {

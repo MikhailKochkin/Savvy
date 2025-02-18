@@ -94,7 +94,7 @@ const Message = styled.div`
   }
   &.student {
     justify-content: flex-start;
-    justify-content: stretch;
+    /* justify-content: stretch; */
   }
   .author_text {
     background: #f3f3f3;

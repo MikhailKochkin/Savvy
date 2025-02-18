@@ -620,6 +620,8 @@ const StoryEx = (props) => {
           lesson={lesson}
           i_am_author={props.i_am_author}
           i_am_student={props.i_am_student}
+          is_analytics_page_open={props.is_analytics_page_open}
+          is_dev_page_open={props.is_dev_page_open}
           stats_data={stats_data}
           textToBeTranslated={textToBeTranslated}
           authSource={props.authSource}

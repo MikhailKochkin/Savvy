@@ -28,9 +28,25 @@ const CommentStatus = enumType({
     "Represents the status of a comment, such as pending, approved, or rejected.",
 });
 
+const CourseRole = enumType({
+  name: "CourseRole",
+  members: ["MENTOR", "AUTHOR"],
+  description:
+    "Defines the role of a user in a course, either as a Mentor or an Author.",
+});
+
+const ChangeScope = enumType({
+  name: "ChangeScope",
+  members: ["EDIT", "COMMENT"],
+  description:
+    "Defines the level of access a user has for modifying course content.",
+});
+
 module.exports = {
   CourseType,
   Permission,
   Status,
   CommentStatus,
+  CourseRole,
+  ChangeScope,
 };

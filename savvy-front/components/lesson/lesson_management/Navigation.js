@@ -105,7 +105,8 @@ const Right = styled.div`
 `;
 
 const Navigation = (props) => {
-  const { lesson, i_am_author, me } = props;
+  const { lesson, i_am_author, me, is_analytics_page_open, is_dev_page_open } =
+    props;
   const { t } = useTranslation("lesson");
 
   const [isSticky, setIsSticky] = useState(false);
@@ -156,70 +157,58 @@ const Navigation = (props) => {
       </Left>
       <Right>
         <div className="block">
-          {props.page !== "simulator" &&
-            me &&
-            (lesson.user.id === me.id ||
-              i_am_author ||
-              me.permissions.includes("ADMIN")) && (
-              <Link
-                href={{
-                  pathname: "/lesson",
-                  query: {
-                    id: lesson.id,
-                  },
-                }}
-              >
-                <img
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content={"Open simulator page"}
-                  src="/static/blocks.svg"
-                />
-              </Link>
-            )}
+          {props.page !== "simulator" && (
+            <Link
+              href={{
+                pathname: "/lesson",
+                query: {
+                  id: lesson.id,
+                },
+              }}
+            >
+              <img
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content={"Open simulator page"}
+                src="/static/blocks.svg"
+              />
+            </Link>
+          )}
         </div>
         <div className="block">
-          {props.page !== "development" &&
-            me &&
-            (lesson?.user?.id === me.id ||
-              i_am_author ||
-              me.permissions.includes("ADMIN")) && (
-              <Link
-                href={{
-                  pathname: "/dev",
-                  query: {
-                    id: lesson.id,
-                  },
-                }}
-              >
-                <img
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content={t("open_development_page")}
-                  src="/static/change.svg"
-                />
-              </Link>
-            )}
+          {props.page !== "development" && is_dev_page_open && (
+            <Link
+              href={{
+                pathname: "/dev",
+                query: {
+                  id: lesson.id,
+                },
+              }}
+            >
+              <img
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content={t("open_development_page")}
+                src="/static/change.svg"
+              />
+            </Link>
+          )}
         </div>
         <div className="block">
-          {props.page !== "analytics" &&
-            me &&
-            (lesson?.user?.id === me.id ||
-              i_am_author ||
-              me.permissions.includes("ADMIN")) && (
-              <Link
-                href={{
-                  pathname: "/analytics",
-                  query: {
-                    id: lesson.id,
-                  },
-                }}
-              >
-                <img
-                  data-tooltip-id="my-tooltip"
-                  data-tooltip-content={"Open analytics page"}
-                  src="/static/stats_circle.svg"
-                />
-              </Link>
-            )}
+          {props.page !== "analytics" && is_analytics_page_open && (
+            <Link
+              href={{
+                pathname: "/analytics",
+                query: {
+                  id: lesson.id,
+                },
+              }}
+            >
+              <img
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content={"Open analytics page"}
+                src="/static/stats_circle.svg"
+              />
+            </Link>
+          )}
         </div>
         <Tooltip id="my-tooltip" />
       </Right>

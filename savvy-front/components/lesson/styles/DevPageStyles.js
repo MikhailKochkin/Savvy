@@ -109,8 +109,6 @@ export const ActionButton = styled.button`
   font-weight: 500;
   color: #fff;
   cursor: pointer;
-  margin: 5px 0;
-  margin-right: 10px;
   transition: 0.3s;
   &:hover {
     background: #2e3b83;
@@ -263,6 +261,7 @@ export const SettingsBlock = styled.div`
 export const Buttons = styled.div`
   display: flex;
   flex-direction: ${(props) => (props.direction ? props.direction : "row")};
+  flex-wrap: wrap;
   justify-content: flex-start;
   gap: ${(props) => (props.gap ? props.gap : "20px")};
   margin: ${(props) => (props.margin ? props.margin : "0 20px")};

@@ -96,6 +96,7 @@ const QuizResult = objectType({
 const QuizIdea = objectType({
   name: "QuizIdea",
   definition(t) {
+    t.string("id", { description: "Unique identifier for the quiz idea." });
     t.string("idea", { description: "The core idea or concept of the quiz." });
     t.string("result", {
       description: "The result associated with the quiz idea.",
@@ -120,6 +121,7 @@ const QuizIdeas = objectType({
 const QuizIdeaInput = inputObjectType({
   name: "QuizIdeaInput",
   definition(t) {
+    t.string("id", { description: "Unique identifier for the quiz idea." });
     t.string("idea", { description: "The core idea or concept of the quiz." });
     t.string("result", {
       description: "The result associated with the quiz idea.",

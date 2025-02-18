@@ -201,14 +201,15 @@ const SVGConnections = ({ messages, breakConnection }) => {
         </marker>
       </defs>
       {messages.flatMap((message) => {
-        if (!message.next.branches || message.next.branches.length == 0) {
-          return ["true", "false"].map((key) => {
+        // First, draw standard connections if there are no branch connections.
+        const standardConnections =
+          (!message.next.branches || message.next.branches.length === 0) &&
+          ["true", "false"].map((key) => {
             const targetId = message.next[key]?.value;
             const target = messages.find((m) => m.id === targetId);
             if (!target) return null;
 
             let zoom = 1;
-
             let zoom_coef = parseFloat(((1 - zoom) * 10).toFixed(2));
 
             let x1;
@@ -233,17 +234,10 @@ const SVGConnections = ({ messages, breakConnection }) => {
                   : message.position.y + 150 + 80 - zoom_coef * 20;
             }
 
-            // Define start and end points
-
-            // console.log("x1", x1, y1, zoom);
-
             const x2 = target.position.x - 5;
             const y2 = target.position.y + 50 - zoom_coef * 5;
 
-            // Calculate control points for cubic Bézier curve
             const { c1x, c1y, c2x, c2y } = getControlPoints(x1, y1, x2, y2);
-
-            // Calculate midpoint for the interactive circle
             const { midpointX, midpointY } = getMidpoint(
               x1,
               y1,
@@ -277,9 +271,69 @@ const SVGConnections = ({ messages, breakConnection }) => {
               </g>
             );
           });
-        } else {
-          // Handle branches logic here (similar to above)
-        }
+
+        // Next, draw branch connections if they exist.
+        const branchConnections =
+          message.next.branches &&
+          message.next.branches.length > 0 &&
+          message.next.branches.map((branch, index) => {
+            const targetId = branch.value;
+            const target = messages.find((m) => m.id === targetId);
+            if (!target) return null;
+
+            let zoom = 1;
+            let zoom_coef = parseFloat(((1 - zoom) * 10).toFixed(2));
+
+            // Apply a vertical offset for each branch connection so they don’t overlap.
+            const branchOffset = index * 50;
+            const x1 = message.position.x + 280 - 50 - zoom_coef * 24;
+            const y1 =
+              message.position.y + 150 + 42 - zoom_coef * 20 + branchOffset;
+
+            const x2 = target.position.x - 5;
+            const y2 = target.position.y + 50 - zoom_coef * 5;
+
+            const { c1x, c1y, c2x, c2y } = getControlPoints(x1, y1, x2, y2);
+            const { midpointX, midpointY } = getMidpoint(
+              x1,
+              y1,
+              c1x,
+              c1y,
+              c2x,
+              c2y,
+              x2,
+              y2
+            );
+
+            return (
+              <g key={`${message.id}-branch-${index}`}>
+                <path
+                  d={`M ${x1} ${y1} C ${c1x} ${c1y} ${c2x} ${c2y} ${x2} ${y2}`}
+                  fill="none"
+                  stroke="#0000FF" // blue for branch connections
+                  markerEnd="url(#arrowhead)"
+                  onClick={() =>
+                    breakConnection(message.id, targetId, "branch")
+                  }
+                  style={{ pointerEvents: "visiblePainted" }}
+                  strokeDasharray="5,5"
+                />
+                <circle
+                  cx={midpointX}
+                  cy={midpointY}
+                  r={5}
+                  fill="#0000FF"
+                  onClick={() =>
+                    breakConnection(message.id, targetId, "branch")
+                  }
+                  style={{ pointerEvents: "auto" }}
+                />
+              </g>
+            );
+          });
+
+        // Combine standard and branch connections (if both exist)
+        return [].concat(standardConnections || [], branchConnections || []);
       })}
     </svg>
   );
@@ -304,7 +358,12 @@ const initializeMessages = (items) => {
           value: item.next.false.value,
           type: item.next.false.type,
         },
-        branches: item.next?.branches ? item.next.branches : [],
+        branches: item.next?.branches
+          ? item.next.branches.map((branch) => {
+              const { __typename, ...rest } = branch;
+              return rest;
+            })
+          : [],
       },
     };
   });
@@ -312,7 +371,7 @@ const initializeMessages = (items) => {
 
 const CanvasProblemBuilder = ({
   items,
-  getSteps,
+  getProblemSteps,
   lesson,
   me,
   generatedSteps,
@@ -340,7 +399,8 @@ const CanvasProblemBuilder = ({
   });
 
   useEffect(() => {
-    getSteps(messages);
+    console.log("messages", messages);
+    getProblemSteps(messages);
   }, [messages]);
 
   const addMessage = (type) => {
@@ -352,6 +412,7 @@ const CanvasProblemBuilder = ({
       next: {
         true: { value: null, type: null },
         false: { value: null, type: null },
+        branches: [],
       },
       type,
     };
@@ -380,51 +441,53 @@ const CanvasProblemBuilder = ({
     );
   };
 
-  const connectMessages = (sourceId, destId, type, sourceAnswerId) => {
+  const connectMessages = (
+    sourceId,
+    destId,
+    connectorType,
+    sourceAnswerId = null
+  ) => {
+    console.log("sourceId == destId", sourceId, destId);
     if (sourceId === destId) return;
-    setMessages((prevMessages) => {
-      if (sourceAnswerId) {
-        const newMessages = prevMessages.map((msg) => {
-          if (msg.id === sourceId) {
-            const destMessage = prevMessages.find((m) => m.id === destId);
-            if (destMessage) {
-              const newBranch = {
-                source: sourceAnswerId,
-                type: destMessage.type,
-                value: destId,
-              };
-              return {
-                ...msg,
-                next: {
-                  ...msg.next,
-                  branches: msg.next.branches
-                    ? [...msg.next.branches, newBranch]
-                    : [newBranch],
-                },
-              };
-            }
-          }
-          return msg;
-        });
-        return newMessages;
-      } else {
-        return prevMessages.map((msg) => {
-          if (msg.id === sourceId && (type === "true" || type === "false")) {
-            const destMessage = prevMessages.find((m) => m.id === destId);
-            if (destMessage) {
-              return {
-                ...msg,
-                next: {
-                  ...msg.next,
-                  [type]: { value: destId, type: destMessage.type },
-                },
-              };
-            }
-          }
-          return msg;
-        });
-      }
-    });
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) => {
+        if (msg.id !== sourceId) return msg;
+
+        const destMessage = prevMessages.find((m) => m.id === destId);
+
+        if (!destMessage) return msg;
+        if (connectorType === "branch") {
+          // For branch connections, add a new branch entry.
+          const newBranch = {
+            source: sourceId, // ideally provided by the draggable branch answer
+            sourceAnswerId: sourceAnswerId,
+            type: destMessage.type,
+            value: destId,
+          };
+          return {
+            ...msg,
+            next: {
+              ...msg.next,
+              branches: msg.next.branches
+                ? [...msg.next.branches, newBranch]
+                : [newBranch],
+            },
+          };
+        } else if (connectorType === "true" || connectorType === "false") {
+          // For standard connections, set the proper key.
+          return {
+            ...msg,
+            next: {
+              ...msg.next,
+              [connectorType]: { value: destId, type: destMessage.type },
+            },
+          };
+        }
+
+        // If connectorType is none of the expected ones, return the message unchanged.
+        return msg;
+      })
+    );
   };
 
   const breakConnection = (sourceId, destId, connectionType) => {
@@ -432,21 +495,15 @@ const CanvasProblemBuilder = ({
       prevMessages.map((msg) => {
         if (msg.id === sourceId) {
           if (connectionType === "branch") {
-            // For branch connections, we need to remove only one connection at a time
-            const branchIndex = msg.next.branches.findIndex(
-              (branch) => branch.value === destId
-            );
-            if (branchIndex !== -1) {
-              const newBranches = [...msg.next.branches];
-              newBranches.splice(branchIndex, 1);
-              return {
-                ...msg,
-                next: {
-                  ...msg.next,
-                  branches: newBranches,
-                },
-              };
-            }
+            return {
+              ...msg,
+              next: {
+                ...msg.next,
+                branches: msg.next.branches.filter(
+                  (branch) => branch.value !== destId
+                ),
+              },
+            };
           } else if (msg.next[connectionType]?.value === destId) {
             return {
               ...msg,
@@ -594,6 +651,9 @@ const Message = ({
     accept: "CONNECTOR",
     drop: (item) => {
       if (onConnect) {
+        {
+          console.log("item", item);
+        }
         onConnect(item.sourceId, id, item.connectorType, item.sourceAnswerId); // pass the connectorType
       }
     },
@@ -624,7 +684,6 @@ const Message = ({
     <MessageStyles
       onClick={(e) => passElementValue()}
       ref={mergeRefs([dragRef, dropRef])}
-      // zoom={zoom}
       isDragging={isDragging}
       style={{
         position: "absolute",
@@ -678,7 +737,8 @@ const Message = ({
       </InformationSection>
       <QuestionButtons>
         {type.toLowerCase() == "newtest" &&
-          lesson.newTests.find((el) => el.id == id)?.type == "branch" &&
+          lesson.newTests.find((el) => el.id == id)?.type.toLowerCase() ==
+            "branch" &&
           lesson.newTests.find((el) => el.id == id)?.complexTestAnswers &&
           lesson.newTests
             .find((el) => el.id == id)
@@ -690,8 +750,22 @@ const Message = ({
                 sourceId={id}
               />
             ))}
+        {type.toLowerCase() == "quiz" &&
+          lesson.quizes.find((el) => el.id == id)?.type.toLowerCase() ==
+            "branch" &&
+          lesson.quizes
+            .find((el) => el.id == id)
+            .answers.answerElements.map((el, index) => (
+              <DraggableAnswer
+                answerId={el.id}
+                key={index}
+                el={el}
+                sourceId={id}
+              />
+            ))}
         {type.toLowerCase() == "newtest" &&
-          lesson.newTests.find((el) => el.id == id)?.type !== "branch" && (
+          lesson.newTests.find((el) => el.id == id)?.type.toLowerCase() !==
+            "branch" && (
             <>
               <div className="directionButton" ref={dragConnectorTrue}>
                 <div>True Answer</div>
@@ -703,18 +777,20 @@ const Message = ({
               </div>
             </>
           )}
-        {type.toLowerCase() == "quiz" && (
-          <>
-            <div className="directionButton" ref={dragConnectorTrue}>
-              <div>True Answer</div>
-              <div className="circle_connector"></div>
-            </div>
-            <div className="directionButton" ref={dragConnectorFalse}>
-              <div>False Answer</div>
-              <div className="circle_connector"></div>
-            </div>
-          </>
-        )}
+        {type.toLowerCase() == "quiz" &&
+          lesson.quizes.find((el) => el.id == id)?.type.toLowerCase() !==
+            "branch" && (
+            <>
+              <div className="directionButton" ref={dragConnectorTrue}>
+                <div>True Answer</div>
+                <div className="circle_connector"></div>
+              </div>
+              <div className="directionButton" ref={dragConnectorFalse}>
+                <div>False Answer</div>
+                <div className="circle_connector"></div>
+              </div>
+            </>
+          )}
         {(type.toLowerCase() == "chat" || type.toLowerCase() == "note") && (
           <>
             <div className="directionButton" ref={dragConnectorTrue}>

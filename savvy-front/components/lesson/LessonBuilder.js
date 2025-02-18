@@ -263,25 +263,30 @@ const LessonBuilder = (props) => {
   return (
     <Styles>
       <Container>
-        <UpdateLesson
-          lessonId={lesson.id}
-          coursePageId={lesson.coursePage.id}
-          description={lesson.description}
-          lesson={lesson}
-          ownerEmail={lesson.user?.email}
-          // getTemplate={getTemplate}
-          onUpdateLessonData={updateLessonData}
-        />
+        {props.may_i_edit && (
+          <UpdateLesson
+            lessonId={lesson.id}
+            coursePageId={lesson.coursePage.id}
+            description={lesson.description}
+            lesson={lesson}
+            ownerEmail={lesson.user?.email}
+            // getTemplate={getTemplate}
+            onUpdateLessonData={updateLessonData}
+          />
+        )}
         {/* <Analyzer elements={elements} lesson={lesson} /> */}
-        <GenerateLesson
-          passData={passData}
-          lessonId={lesson.id}
-          story={lesson.story}
-          structure={lesson.structure}
-          elements={elements}
-          lesson={lesson}
-          characters={combinedCharacters}
-        />
+        {props.may_i_edit && (
+          <GenerateLesson
+            passData={passData}
+            lessonId={lesson.id}
+            story={lesson.story}
+            structure={lesson.structure}
+            elements={elements}
+            lesson={lesson}
+            characters={combinedCharacters}
+          />
+        )}
+
         {/* {elements ? (
           <ChangePositions
             initialItems={elements}
@@ -299,6 +304,8 @@ const LessonBuilder = (props) => {
                 comment={el.comment ? el.comment : null}
                 saved={el.id && !el.id.includes("temp") ? true : false}
                 index={i}
+                i_am_author={props.i_am_author}
+                may_i_edit={props.may_i_edit}
                 me={props.me}
                 el={el}
                 simulationStory={simulationStory}

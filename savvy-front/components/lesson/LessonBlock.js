@@ -114,6 +114,7 @@ const LessonBlock = (props) => {
     simulationStory,
     jsonCharactersString,
     jsonStoryString,
+    may_i_edit,
   } = props;
   const [isSaved, setIsSaved] = useState(saved);
   const [isAdded, setIsAdded] = useState(saved);
@@ -437,7 +438,7 @@ const LessonBlock = (props) => {
   };
   return (
     <>
-      {props.index == 0 && (
+      {props.index == 0 && props.may_i_edit && (
         <SecondaryButton
           onClick={(e) => {
             props.addPlace(0);
@@ -577,6 +578,7 @@ const LessonBlock = (props) => {
                 complexity={data.complexity}
                 lessonID={lesson.id}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
+                may_i_edit={may_i_edit}
                 getResult={getResult}
                 passGeneratedData={passGeneratedData}
               />
@@ -613,6 +615,7 @@ const LessonBlock = (props) => {
                   userData={[]}
                   story={false}
                   getResult={getResult}
+                  may_i_edit={may_i_edit}
                 />
               </>
             )}
@@ -646,6 +649,7 @@ const LessonBlock = (props) => {
                 lesson={lesson}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
                 getResult={getResult}
+                may_i_edit={may_i_edit}
               />
             )}
           </>
@@ -687,6 +691,7 @@ const LessonBlock = (props) => {
                 story={false}
                 miniforum={lesson.miniforums.find((m) => m.value == el.id)}
                 getResult={getResult}
+                may_i_edit={may_i_edit}
               />
             )}
           </>
@@ -731,6 +736,7 @@ const LessonBlock = (props) => {
                 author={lesson.user}
                 miniforum={lesson.miniforums.find((m) => m.value == el.id)}
                 getResult={getResult}
+                may_i_edit={may_i_edit}
               />
             )}
           </>
@@ -786,6 +792,7 @@ const LessonBlock = (props) => {
                   tests={lesson.newTests}
                   lesson={lesson}
                   story={true}
+                  may_i_edit={may_i_edit}
                 />
               )}
           </>
@@ -856,6 +863,7 @@ const LessonBlock = (props) => {
                 lessonId={lesson.id}
                 getResult={getResult}
                 library={lesson.notes}
+                may_i_edit={may_i_edit}
               />
             )}
           </>
@@ -888,6 +896,7 @@ const LessonBlock = (props) => {
                     story={false}
                     lessonID={lesson.id}
                     getResult={getResult}
+                    may_i_edit={may_i_edit}
                   />
                 </>
               )}
@@ -916,6 +925,7 @@ const LessonBlock = (props) => {
                     documentID={data.id}
                     user={lesson.user.id}
                     lessonID={lesson.id}
+                    may_i_edit={may_i_edit}
                   />
                 </>
               )}
@@ -960,6 +970,7 @@ const LessonBlock = (props) => {
                       me={me}
                       story={false}
                       getResult={getResult}
+                      may_i_edit={may_i_edit}
                     />
                   )}
                 </>
@@ -986,6 +997,7 @@ const LessonBlock = (props) => {
                   lessonID={lesson.id}
                   getResult={getResult}
                   i_am_author={i_am_author}
+                  may_i_edit={may_i_edit}
                 />
               )}
           </>
@@ -1036,32 +1048,33 @@ const LessonBlock = (props) => {
           blockId={el.id}
           me={me}
         />
-
-        <Buttons>
-          <div className="first">
-            {" "}
-            <SecondaryButton
-              onClick={(e) => {
-                if (confirm("Are you sure?")) {
-                  props.remove(idNum);
-                }
-              }}
-            >
-              {t("remove_block")}
-            </SecondaryButton>
-          </div>
-          {isSaved && (
-            <div>
+        {props.may_i_edit && (
+          <Buttons>
+            <div className="first">
+              {" "}
               <SecondaryButton
                 onClick={(e) => {
-                  props.addPlace(idNum);
+                  if (confirm("Are you sure?")) {
+                    props.remove(idNum);
+                  }
                 }}
               >
-                {t("new_block")}
+                {t("remove_block")}
               </SecondaryButton>
             </div>
-          )}
-        </Buttons>
+            {isSaved && (
+              <div>
+                <SecondaryButton
+                  onClick={(e) => {
+                    props.addPlace(idNum);
+                  }}
+                >
+                  {t("new_block")}
+                </SecondaryButton>
+              </div>
+            )}
+          </Buttons>
+        )}
       </Styles>
     </>
   );

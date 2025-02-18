@@ -3,6 +3,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   Row,
@@ -163,6 +164,7 @@ const UpdateQuiz = (props) => {
       isScoringShown: isScoringShown,
       answers: {
         answerElements: answers?.map((answer) => ({
+          id: answer.id,
           answer: answer.answer,
           index: answer.index,
           relatedAnswers: answer.relatedAnswers,
@@ -480,7 +482,7 @@ const UpdateQuiz = (props) => {
         <div className="action_area">
           <input
             onChange={(e) => setName(e.target.value)}
-            valuelue={name}
+            value={name}
             placeholder="Untitled"
           />
         </div>
@@ -488,7 +490,7 @@ const UpdateQuiz = (props) => {
       <Row>
         <div className="description">Checking mode</div>
         <div className="action_area">
-          <select valuelue={check} onChange={(e) => setCheck(e.target.value)}>
+          <select value={check} onChange={(e) => setCheck(e.target.value)}>
             <option value={undefined}>Not chosen</option>
             <option value={"WORD"}>Literally</option>
             <option value={"IDEA"}>By implication</option>
@@ -514,6 +516,7 @@ const UpdateQuiz = (props) => {
             <option value="FORM">Form</option>
             <option value="GENERATE">Generate Ideas</option>
             <option value="PROMPT">Check with AI</option>
+            <option value="BRANCH">Junction</option>
             {/* <option value="CALL">Call Simulation</option> */}
           </select>
           <div className="explainer">Choose the type of the question</div>
@@ -525,7 +528,7 @@ const UpdateQuiz = (props) => {
           <select
             name="types"
             id="types"
-            valuelue={goalType}
+            value={goalType}
             onChange={(e) => setGoalType(e.target.value)}
           >
             <option value="EDUCATE">Educate</option>
@@ -538,7 +541,7 @@ const UpdateQuiz = (props) => {
         <div className="description">Is Scoring Shown</div>
         <div className="action_area">
           <select
-            valuelue={isScoringShown ? "true" : "false"}
+            value={isScoringShown ? "true" : "false"}
             onChange={(e) => setIsScoringShown(e.target.value == "true")}
           >
             <option value={"true"}>True</option>
@@ -554,7 +557,7 @@ const UpdateQuiz = (props) => {
             <select
               name="types"
               id="types"
-              valuelue={isOrderOfAnswersImportant}
+              value={isOrderOfAnswersImportant}
               onChange={(e) =>
                 setIsOrderOfAnswersImportant(e.target.value === "true")
               }
@@ -575,7 +578,7 @@ const UpdateQuiz = (props) => {
           <select
             name="types"
             id="types"
-            valuelue={shouldAnswerSizeMatchSample}
+            value={shouldAnswerSizeMatchSample}
             onChange={(e) => setShouldAnswerSizeMatchSample(e.target.value)}
           >
             <option value={false}>No</option>
@@ -591,7 +594,7 @@ const UpdateQuiz = (props) => {
         <div className="description">Instructor Name</div>
         <div className="action_area">
           <input
-            valuelue={instructorName}
+            value={instructorName}
             onChange={(e) => setInstructorName(e.target.value)}
           />
           <div className="explainer"></div>
@@ -600,7 +603,7 @@ const UpdateQuiz = (props) => {
       <Row>
         <div className="description">Instructor Image</div>
         <div className="action_area">
-          <input valuelue={image} onChange={(e) => setImage(e.target.value)} />
+          <input value={image} onChange={(e) => setImage(e.target.value)} />
           <div className="explainer"></div>
         </div>
       </Row>
@@ -739,6 +742,7 @@ const UpdateQuiz = (props) => {
               return setAnswers([
                 ...answers,
                 {
+                  id: uuidv4(),
                   answer: ``,
                   next_id: "",
                   next_type: "",

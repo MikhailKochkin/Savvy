@@ -5,7 +5,12 @@ import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { Row, ActionButton, SecondaryButton } from "../styles/DevPageStyles";
+import {
+  Row,
+  ActionButton,
+  SecondaryButton,
+  Buttons,
+} from "../styles/DevPageStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 
 const UPDATE_TEXTEDITOR_MUTATION = gql`
@@ -189,12 +194,14 @@ const UpdateTextEditor = (props) => {
             We do not reveal the text immediately to prevent errors from
             breaking the website
           </div> */}
-        <SecondaryButton onClick={(e) => setOpen(!open)}>
-          {open ? "Close Editor" : "Open Editor"}
-        </SecondaryButton>
-        <SecondaryButton onClick={(e) => setOpenHTML(!openHTML)}>
-          {openHTML ? "Close HTML" : "Open HTML"}
-        </SecondaryButton>
+        <Buttons gap="10px" margin="0px">
+          <SecondaryButton onClick={(e) => setOpen(!open)}>
+            {open ? "Close Editor" : "Open Editor"}
+          </SecondaryButton>
+          <SecondaryButton onClick={(e) => setOpenHTML(!openHTML)}>
+            {openHTML ? "Close HTML" : "Open HTML"}
+          </SecondaryButton>
+        </Buttons>
         {open && (
           <EditorSection>
             <DynamicLoadedEditor

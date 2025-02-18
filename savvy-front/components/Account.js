@@ -1,11 +1,39 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useMutation } from "@apollo/client";
-import { gql } from "@apollo/client";
+import { useMutation, useQuery, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
 import { CURRENT_USER_QUERY } from "./User";
+
+const UPDATE_USER_MUTATION = gql`
+  mutation UPDATE_USER_MUTATION(
+    $id: String!
+    $name: String
+    $surname: String
+    $email: String
+    $status: Status
+    $image: String
+    $work: String
+    $description: String
+    $isFamiliar: Boolean
+  ) {
+    updateUser(
+      id: $id
+      email: $email
+      name: $name
+      surname: $surname
+      status: $status
+      image: $image
+      description: $description
+      work: $work
+      isFamiliar: $isFamiliar
+    ) {
+      id
+      name
+    }
+  }
+`;
 
 const Form = styled.div`
   display: flex;
@@ -146,41 +174,14 @@ const Img = styled.img`
   margin: 3% 0;
 `;
 
-const UPDATE_USER_MUTATION = gql`
-  mutation UPDATE_USER_MUTATION(
-    $id: String!
-    $name: String
-    $surname: String
-    $email: String
-    $status: Status
-    $image: String
-    $work: String
-    $description: String
-    $isFamiliar: Boolean
-  ) {
-    updateUser(
-      id: $id
-      email: $email
-      name: $name
-      surname: $surname
-      status: $status
-      image: $image
-      description: $description
-      work: $work
-      isFamiliar: $isFamiliar
-    ) {
-      id
-      name
-    }
-  }
-`;
-
 const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
 
 const Account = (props) => {
+  const { me } = props;
+
   const [status, setStatus] = useState(props.me.status);
   const [name, setName] = useState(props.me.name);
   const [surname, setSurname] = useState(props.me.surname);
@@ -236,9 +237,6 @@ const Account = (props) => {
       },
     });
   };
-
-  const { me } = props;
-
   return (
     <Form>
       <Fieldset disabled={loading} aria-busy={loading}>

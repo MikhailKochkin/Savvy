@@ -127,6 +127,23 @@ function lessonQueries(t) {
             include: {
               lessons: true, // Include the lessons field inside coursePage
               authors: true,
+              courseAccessControls: {
+                select: {
+                  id: true,
+                  accessibleLessons: true,
+                  areAllLessonsAccessible: true,
+                  changeScope: true,
+                  role: true,
+                  user: {
+                    select: {
+                      id: true,
+                      name: true,
+                      surname: true,
+                      email: true,
+                    },
+                  },
+                },
+              },
             },
           },
           notes: {
@@ -255,6 +272,23 @@ function lessonQueries(t) {
               authors: {
                 select: {
                   id: true,
+                },
+              },
+              courseAccessControls: {
+                select: {
+                  id: true,
+                  accessibleLessons: true,
+                  areAllLessonsAccessible: true,
+                  changeScope: true,
+                  role: true,
+                  user: {
+                    select: {
+                      id: true,
+                      name: true,
+                      surname: true,
+                      email: true,
+                    },
+                  },
                 },
               },
             },

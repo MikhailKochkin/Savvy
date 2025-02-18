@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 
 import ChangePositions from "./ChangePositions";
 import {
+  Buttons,
   Title,
   ActionButton,
   SecondaryButton,
@@ -536,33 +537,33 @@ const GenerateLesson = (props) => {
           </div>
         </Row>
       )}
+      <Buttons margin="20px 0">
+        <ActionButton
+          onClick={async (e) => {
+            setIsStoryBeingGenerated(true);
+            await generateSimulatorStory(e, blocks);
+            setIsStoryBeingGenerated(false);
+          }}
+        >
+          Generate Story
+        </ActionButton>
+        <ActionButton
+          onClick={async (e) => {
+            setIsStoryBeingGenerated(true);
 
-      <ActionButton
-        onClick={async (e) => {
-          setIsStoryBeingGenerated(true);
-          await generateSimulatorStory(e, blocks);
-          setIsStoryBeingGenerated(false);
-        }}
-      >
-        Generate Story
-      </ActionButton>
-      <ActionButton
-        onClick={async (e) => {
-          setIsStoryBeingGenerated(true);
-
-          const res = await updateLesson({
-            variables: {
-              id: props.lessonId,
-              story: backgroundStory,
-            },
-          });
-          setIsStoryBeingGenerated(false);
-        }}
-      >
-        Save Story
-      </ActionButton>
-      <ActionButton onClick={async (e) => {}}>Summarize</ActionButton>
-      <Break />
+            const res = await updateLesson({
+              variables: {
+                id: props.lessonId,
+                story: backgroundStory,
+              },
+            });
+            setIsStoryBeingGenerated(false);
+          }}
+        >
+          Save Story
+        </ActionButton>
+        <ActionButton onClick={async (e) => {}}>Summarize</ActionButton>
+      </Buttons>
       <Title>Characters</Title>
       {[...characters].map((ch, index) => (
         <CharacterData
@@ -573,25 +574,26 @@ const GenerateLesson = (props) => {
           removeCharacter={removeCharacter}
         />
       ))}
-      <SecondaryButton onClick={addCharacter}>Add Character</SecondaryButton>
-      <ActionButton
-        onClick={async (e) => {
-          await updateLesson({
-            variables: {
-              id: props.lessonId,
-              characters: characters.map(
-                ({ __typename, ...character }) => character
-              ),
-            },
-          });
-        }}
-      >
-        Save Characters
-      </ActionButton>
-
+      <Buttons>
+        <SecondaryButton onClick={addCharacter}>Add Character</SecondaryButton>
+        <ActionButton
+          onClick={async (e) => {
+            await updateLesson({
+              variables: {
+                id: props.lessonId,
+                characters: characters.map(
+                  ({ __typename, ...character }) => character
+                ),
+              },
+            });
+          }}
+        >
+          Save Characters
+        </ActionButton>
+      </Buttons>
       <Break />
 
-      <Row>
+      {/* <Row>
         <div className="description">Simulator prompt</div>
         <div className="action_area">
           <textarea
@@ -614,45 +616,47 @@ const GenerateLesson = (props) => {
           <TailSpin width="50" color="#2E80EC" />
         </Progress2>
       )}
-      <ActionButton
-        onClick={async (e) => {
-          setGenerating(true);
-          await generateSimStructure(e);
-          setGenerating(false);
-        }}
-      >
-        Generate Sim Structure
-      </ActionButton>
-      <ActionButton
-        onClick={async (e) => {
-          setGenerating(true);
-          await generateUpdatedSimStructure(e, blocks);
-          setGenerating(false);
-        }}
-      >
-        Update Sim Structure
-      </ActionButton>
-      <ActionButton
-        onClick={async (e) => {
-          setGenerating(true);
-          await updateLesson({
-            variables: {
-              id: props.lessonId,
-              // story: simulatorStory,
-              structure: {
-                lessonItems: blocks,
+      <Buttons>
+        <ActionButton
+          onClick={async (e) => {
+            setGenerating(true);
+            await generateSimStructure(e);
+            setGenerating(false);
+          }}
+        >
+          Generate Sim Structure
+        </ActionButton>
+        <ActionButton
+          onClick={async (e) => {
+            setGenerating(true);
+            await generateUpdatedSimStructure(e, blocks);
+            setGenerating(false);
+          }}
+        >
+          Update Sim Structure
+        </ActionButton>
+        <ActionButton
+          onClick={async (e) => {
+            setGenerating(true);
+            await updateLesson({
+              variables: {
+                id: props.lessonId,
+                // story: simulatorStory,
+                structure: {
+                  lessonItems: blocks,
+                },
               },
-            },
-          });
-          setGenerating(false);
-        }}
-      >
-        Save Lesson Structure
-      </ActionButton>
+            });
+            setGenerating(false);
+          }}
+        >
+          Save Lesson Structure
+        </ActionButton>
 
-      <ActionButton onClick={(e) => passData(blocks, simulatorStory)}>
-        Pass Blocks
-      </ActionButton>
+        <ActionButton onClick={(e) => passData(blocks, simulatorStory)}>
+          Pass Blocks
+        </ActionButton>
+      </Buttons>
       {!generating && (
         <ChangePositions
           initialItems={blocks}
@@ -661,7 +665,7 @@ const GenerateLesson = (props) => {
           lesson={lesson}
           passNewBlockInfo={passNewBlockInfo}
         />
-      )}
+      )} */}
     </Styles>
   );
 };

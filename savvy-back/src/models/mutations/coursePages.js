@@ -386,6 +386,111 @@ function courseMutations(t) {
       return updateCourseVisit;
     },
   });
+  t.field("changeCourseAccessControl", {
+    type: "CourseAccessControl",
+    args: {
+      email: stringArg(),
+      coursePageId: stringArg(),
+      role: arg({ type: "CourseRole" }),
+      changeScope: arg({ type: "ChangeScope" }),
+      areAllLessonsAccessible: booleanArg(),
+      accessibleLessons: list(stringArg()),
+    },
+    resolve: async (_, args, ctx) => {
+      const coursePageId = args.coursePageId;
+      delete args.coursePageId;
+      const NewAuthor = await ctx.prisma.user.findUnique({
+        where: {
+          email: args.email,
+        },
+        select: {
+          id: true,
+        },
+      });
+      const findExistingControl =
+        await ctx.prisma.courseAccessControl.findFirst({
+          where: {
+            user: {
+              id: NewAuthor.id, //NewAuthor.id,
+            },
+            coursePage: {
+              id: coursePageId,
+            },
+          },
+        });
+      if (!findExistingControl) {
+        let new_control = await ctx.prisma.courseAccessControl.create({
+          data: {
+            user: {
+              connect: { id: NewAuthor.id },
+            },
+            coursePage: {
+              connect: { id: coursePageId },
+            },
+            role: args.role,
+            changeScope: args.changeScope,
+            areAllLessonsAccessible: args.areAllLessonsAccessible,
+            accessibleLessons: { set: args.accessibleLessons },
+          },
+          select: {
+            id: true,
+            accessibleLessons: true,
+            areAllLessonsAccessible: true,
+            changeScope: true,
+            role: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                surname: true,
+                email: true,
+              },
+            },
+          },
+        });
+        return new_control;
+      } else {
+        let updated_control = await ctx.prisma.courseAccessControl.update({
+          where: {
+            id: findExistingControl.id,
+          },
+          select: {
+            id: true,
+            accessibleLessons: true,
+            areAllLessonsAccessible: true,
+            changeScope: true,
+            role: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                surname: true,
+                email: true,
+              },
+            },
+          },
+          data: {
+            role: args.role,
+            changeScope: args.changeScope,
+            areAllLessonsAccessible: args.areAllLessonsAccessible,
+            accessibleLessons: { set: args.accessibleLessons },
+          },
+        });
+        return updated_control;
+      }
+    },
+  });
+  t.field("deleteCourseAccessControl", {
+    type: "CourseAccessControl",
+    args: {
+      id: stringArg(),
+    },
+    resolve: async (_, args, ctx) => {
+      return await ctx.prisma.courseAccessControl.delete({
+        where: { id: args.id },
+      });
+    },
+  });
 }
 
 module.exports = { courseMutations };

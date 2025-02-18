@@ -47,37 +47,8 @@ const Questions = styled.div`
   justify-content: center;
 `;
 
-const Final = styled.div`
-  max-width: 400px;
-  margin-top: 2%;
-  text-align: center;
-  background: #f0f8ff;
-  border-radius: 16px;
-  padding: 3% 5%;
-`;
-
-const Button = styled.div`
-  width: 170px;
-  text-align: center;
-  box-sizing: border-box;
-  border-radius: 10px;
-  background: #000000;
-  padding: 10px 10px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  @media (max-width: 800px) {
-    width: 65%;
-  }
-  transition: 0.3s;
-  &:hover {
-    background: #444444;
-  }
-`;
-
 const NewInteractive = (props) => {
   const { problem, lesson, me, author } = props;
-
   const [componentList, setComponentList] = useState([]);
 
   useEffect(() => {
@@ -90,22 +61,21 @@ const NewInteractive = (props) => {
     smoothscroll.polyfill();
   });
 
-  const slide = (id, offset = 200) => {
-    setTimeout(() => {
-      const my_element = document.getElementById(id);
-      if (!my_element) return;
+  // const slide = (id, offset = 200) => {
+  //   setTimeout(() => {
+  //     const my_element = document.getElementById(id);
+  //     if (!my_element) return;
 
-      const elementPosition = my_element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
+  //     const elementPosition = my_element.getBoundingClientRect().top;
+  //     const offsetPosition = elementPosition + window.scrollY - offset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }, 100);
-  };
+  //     window.scrollTo({
+  //       top: offsetPosition,
+  //       behavior: "smooth",
+  //     });
+  //   }, 100);
+  // };
 
-  // 1. to initialize the problem
   const findUnconnectedItems = (arr) => {
     // Step 1: Create a set of all item IDs
     const ids = new Set(arr.map((item) => item.id));
@@ -134,7 +104,7 @@ const NewInteractive = (props) => {
     return arr.filter((item) => ids.has(item.id));
   };
 
-  // helper function to getNextElementOfProblem
+  // supportive function to getNextElementOfProblem
   const handleNextElement = (nextElement) => {
     if (nextElement) {
       setComponentList([...componentList, nextElement]);
@@ -148,7 +118,6 @@ const NewInteractive = (props) => {
     }
   };
 
-  // 2. Key function to control the flow through the problem
   const getNextElementOfProblem = (data, type) => {
     // 2 parameters are accepted:
     // 1. Data is an array which looks like this: ["is answer correct?", "the id of next element in the case study"]
@@ -157,11 +126,10 @@ const NewInteractive = (props) => {
       let nextValue = componentList
         .at(-1)
         .next.branches.find((branch) => branch.sourceAnswerId === data[1]);
-
       let next_el = problem.steps.problemItems.find(
         (el) => el.id === nextValue.value
       );
-
+      console.log("next_el", next_el);
       if (next_el) {
         setComponentList([...componentList, next_el]);
       }
@@ -169,7 +137,6 @@ const NewInteractive = (props) => {
       // Use optional chaining to safely access properties
       let nextTrueValue = componentList.at(-1)?.next?.true?.value;
       let nextFalseValue = componentList.at(-1)?.next?.false?.value;
-
       // Set nextValue based on the value of data
       let nextValue = data[0] ? nextTrueValue : nextFalseValue;
       let next_el = problem.steps.problemItems.find((el) => el.id == nextValue);

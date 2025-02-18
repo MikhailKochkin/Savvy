@@ -72,6 +72,7 @@ const OpenQuestion = (props) => {
     context,
     image,
     jsonStoryString,
+    passQuizDataToParent,
   } = props;
   const [answer, setAnswer] = useState(""); // The answer provided by the student
   const [previousAnswers, setPreviousAnswers] = useState([]); // The answers provided by the student
@@ -188,7 +189,7 @@ const OpenQuestion = (props) => {
           // First, check el.answer
           const initialCheck = await checkAnswer(
             e,
-            removeSpecialChars2(el.answer),
+            el.answer,
             answer,
             props.check
           );
@@ -214,7 +215,7 @@ const OpenQuestion = (props) => {
             for (const relatedAnswer of el.relatedAnswers) {
               const relatedCheck = await checkAnswer(
                 e,
-                removeSpecialChars2(relatedAnswer),
+                relatedAnswer,
                 answer,
                 props.check
               );
@@ -261,6 +262,7 @@ const OpenQuestion = (props) => {
       setCorrectnessLevel(correctnessLevel);
       handleCorrectnessLevel(correctnessLevel, result, color, comment);
     };
+
     if (
       props.answers?.answerElements?.length > 0 &&
       props.answers?.answerElements[0].answer !== ""
@@ -270,7 +272,7 @@ const OpenQuestion = (props) => {
       try {
         const { result, correctnessLevel, color, comment } = await checkAnswer(
           e,
-          removeSpecialChars2(props.answer),
+          props.answer,
           answer,
           props.check
         );
@@ -289,8 +291,12 @@ const OpenQuestion = (props) => {
         console.error(error);
       }
     }
+    if (correctnessLevel === "correct" || correctnessLevel === "looks_true") {
+      passQuizDataToParent(["true", null]);
+    } else {
+      passQuizDataToParent(["false", null]);
+    }
     setPreviousAnswers([...previousAnswers, answer]);
-
     setIsAnswerBeingChecked(false);
   };
 
@@ -299,7 +305,7 @@ const OpenQuestion = (props) => {
 
     const { result, correctnessLevel, color, comment } = await checkAnswer(
       e,
-      removeSpecialChars2(props.answer),
+      props.answer,
       new_wording,
       props.check
     );
@@ -487,12 +493,7 @@ const OpenQuestion = (props) => {
       await Promise.all(
         props.answers.answerElements.map(async (el) => {
           const { result, correctnessLevel, color, comment } =
-            await checkAnswer(
-              true,
-              removeSpecialChars2(el.answer),
-              new_wording,
-              props.check
-            );
+            await checkAnswer(true, el.answer, new_wording, props.check);
 
           // Ensure correctnessLevel is resolved
           const resolvedCorrectnessLevel = await correctnessLevel;
@@ -513,7 +514,7 @@ const OpenQuestion = (props) => {
     } else {
       new_result = await checkAnswer(
         value,
-        removeSpecialChars2(props.answer),
+        props.answer,
         new_wording,
         props.check
       );

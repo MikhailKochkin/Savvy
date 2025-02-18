@@ -5,6 +5,7 @@ import Loading from "../../layout/Loading";
 import SimulatorAnalyticsMainComponent from "./SimulatorAnalyticsMainComponent";
 import Navigation from "../../lesson/lesson_management/Navigation";
 import { useUser } from "../../User";
+import NoAccess from "../../layout/NoAccess";
 
 const STUDENTS_QUERY = gql`
   query STUDENTS_QUERY($lessonId: String!) {
@@ -77,6 +78,20 @@ const LESSONS_QUERY = gql`
       }
       coursePage {
         id
+        courseAccessControls {
+          id
+          user {
+            id
+            name
+            surname
+            email
+          }
+          role
+          changeScope
+          areAllLessonsAccessible
+          accessibleLessons
+          createdAt
+        }
       }
       forum {
         id
@@ -280,6 +295,53 @@ const SingleLessonAnalyticsDataLoad = (props) => {
   let students = data1?.studentsAnalytics;
   let lesson = data2?.lesson;
 
+  let i_am_author = false;
+  let is_dev_page_open = false;
+
+  let role;
+  let changeScope;
+  let areAllLessonsAccessible = true;
+  let accessibleLessons = null;
+
+  console.log("lesson.coursePage", lesson.coursePage);
+
+  if (me && lesson.coursePage?.courseAccessControls?.length > 0) {
+    lesson.coursePage?.courseAccessControls?.forEach((c) => {
+      if (c.user?.id == me.id) {
+        role = c.role;
+        changeScope = c.changeScope;
+        areAllLessonsAccessible = c.areAllLessonsAccessible;
+        accessibleLessons = c.accessibleLessons;
+      }
+    });
+  }
+
+  console.log("role", role, changeScope);
+
+  if (
+    ((role == "AUTHOR" || role === "MENTOR") &&
+      (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id))) ||
+    me?.permissions.includes("ADMIN") ||
+    lesson.coursePage?.user?.id == me?.id
+  ) {
+    i_am_author = true;
+  }
+
+  if (
+    (role == "AUTHOR" &&
+      (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id))) ||
+    me?.permissions.includes("ADMIN") ||
+    lesson.coursePage?.user?.id == me?.id
+  ) {
+    is_dev_page_open = true;
+  }
+
+  if (!me) {
+    return "Please sign up or log in to access this page";
+  }
+  if (!i_am_author) {
+    return <NoAccess />;
+  }
   return (
     <Styles>
       <Navigation
@@ -288,6 +350,7 @@ const SingleLessonAnalyticsDataLoad = (props) => {
         me={me}
         page="analytics"
         coursePageId={lesson?.coursePage?.id}
+        is_dev_page_open={is_dev_page_open}
       />
       {students && lesson ? (
         <SimulatorAnalyticsMainComponent

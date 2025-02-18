@@ -9,7 +9,7 @@ import DeleteChat from "./DeleteChat";
 import FixedChat from "./types/FixedChat";
 import DynamicChat from "./types/DynamicChat";
 import VoiceChat from "./types/VoiceChat";
-import { SecondaryButton } from "../styles/DevPageStyles";
+import { SecondaryButton, Buttons } from "../styles/DevPageStyles";
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
@@ -19,15 +19,11 @@ const UPDATE_CHAT_MUTATION = gql`
   }
 `;
 
-const Buttons = styled.div`
-  margin-bottom: 20px;
-`;
-
 const Styles = styled.div`
   width: 570px;
-  margin: 20px 0;
+  /* margin: 20px 0; */
   font-weight: 500;
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
   display: flex;
   flex-direction: column;
   img {
@@ -121,6 +117,18 @@ const ArrowBox = styled.div`
 `;
 
 const Chat = (props) => {
+  // Local state management
+  const [update, setUpdate] = useState(false);
+  const [num, setNum] = useState(1);
+  const [moved, setMoved] = useState(false);
+  const [clicks, setClicks] = useState(props.clicks);
+
+  // Refs, translations, and mutations
+  const chatRef = useRef(null);
+  const { t } = useTranslation("lesson");
+  const [updateChat] = useMutation(UPDATE_CHAT_MUTATION);
+
+  // Destructure props here as you prefer
   const {
     name,
     messages,
@@ -129,88 +137,84 @@ const Chat = (props) => {
     lessonId,
     id,
     author,
-    getData,
+    pushNextElementToProblem,
     library,
     type,
     previousStories,
+    may_i_edit,
+    next,
+    isSecret,
+    moveNext,
+    characters,
+    problem,
+    getResult,
   } = props;
-  const [update, setUpdate] = useState(false);
-  const [num, setNum] = useState(1);
-  const [moved, setMoved] = useState(false);
-  const [clicks, setClicks] = useState(props.clicks);
 
-  const chatRef = useRef(null);
-  const { t } = useTranslation("lesson");
-  const [updateChat, { data, loading, error }] =
-    useMutation(UPDATE_CHAT_MUTATION);
+  // Determine chat box width based on context (problem view, story view, or general)
+  const width = problem || story ? "50%" : "90%";
 
-  const getResult = (data) => {
-    props.getResult(data);
-  };
+  // Toggle update/edit mode
+  const toggleUpdate = () => setUpdate((prev) => !prev);
 
-  const switchUpdate = () => {
-    setUpdate(!update);
-  };
-
-  const push = () => {
-    if (moved == false) {
-      props.getData(props.next ? [true, props.next.true] : [true, undefined]);
+  // Push the next element to the problem flow
+  const handlePushNextElement = () => {
+    if (!moved) {
+      pushNextElementToProblem(next ? [true, next.true] : [true, undefined]);
+      setMoved(true);
     }
+  };
+
+  // Used specifically for `VoiceChat` flow continuation
+  const handleFlowFurther = () => {
+    pushNextElementToProblem(next ? [true, next.true] : [true, undefined]);
     setMoved(true);
   };
 
-  const passNum = (num) => {
-    setNum(num);
+  // Pass number (progress in `FixedChat`)
+  const handlePassNum = (value) => setNum(value);
+
+  // Track link clicks (e.g., on buttons within the chat)
+  const handleClickTracking = async (e) => {
+    if (e.target.className === "button") {
+      await updateChat({
+        variables: { id, link_clicks: clicks + 1 },
+      });
+      setClicks((prev) => prev + 1);
+    }
   };
 
-  // const detectKeyDown = (e) => {
-  //   if (e.key === "n") {
-  //     setNum((num) => num + 1);
-  //   } else if (e.key === "b") {
-  //     setNum((num) => num - 1);
-  //   } else if (e.key === "s") {
-  //     setShowButton((showButton) => !showButton);
-  //   }
-  // };
-
-  let width;
-  if (props.problem) {
-    width = "50%";
-  } else if (props.story) {
-    width = "50%";
-  } else {
-    width = "90%";
-  }
   return (
-    <Styles
-      id={id}
-      width={width}
-      ref={chatRef}
-      onClick={async (e) => {
-        if (e.target.className === "button") {
-          const res = await updateChat({
-            variables: {
-              id: id,
-              link_clicks: clicks + 1,
-            },
-          });
-          setClicks(clicks + 1);
-        }
-      }}
-    >
-      <Buttons>
-        {me && !story && (
-          <>
-            <SecondaryButton onClick={(e) => setUpdate(!update)}>
-              {!update ? t("update") : "Back"}
-            </SecondaryButton>
-            <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
-          </>
-        )}
-      </Buttons>
+    <Styles id={id} width={width} ref={chatRef} onClick={handleClickTracking}>
+      {/* Admin control buttons (e.g., Update, Delete) */}
+      {may_i_edit && (
+        <Buttons gap="10px" margin="0 0 20px 0">
+          <SecondaryButton onClick={toggleUpdate}>
+            {update ? t("back") : t("update")}
+          </SecondaryButton>
+          <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
+        </Buttons>
+      )}
+
+      {/* Update/Edit Mode */}
+      {update && (
+        <UpdateChat
+          id={id}
+          name={name}
+          me={me}
+          type={type}
+          isSecret={isSecret}
+          messages={messages}
+          lessonId={lessonId}
+          characters={characters}
+          getResult={getResult}
+          switchUpdate={toggleUpdate}
+        />
+      )}
+
+      {/* Display chat based on type when NOT in edit mode */}
       {!update && (
         <>
-          {type == "dynamicchat" ? (
+          {type === "dynamicchat" && (
             <DynamicChat
               messages={messages}
               me={me}
@@ -218,13 +222,14 @@ const Chat = (props) => {
               id={id}
               author={author}
               library={library}
-              isSecret={props.isSecret}
-              moveNext={props.moveNext}
+              isSecret={isSecret}
+              moveNext={moveNext}
               story={story}
               previousStories={previousStories}
             />
-          ) : null}
-          {type == "voicechat" ? (
+          )}
+
+          {type === "voicechat" && (
             <VoiceChat
               messages={messages}
               me={me}
@@ -232,12 +237,14 @@ const Chat = (props) => {
               id={id}
               author={author}
               library={library}
-              isSecret={props.isSecret}
-              moveNext={props.moveNext}
+              isSecret={isSecret}
+              moveNext={moveNext}
               story={story}
               previousStories={previousStories}
+              flowFurther={handleFlowFurther}
             />
-          ) : null}
+          )}
+
           {type !== "voicechat" && type !== "dynamicchat" && (
             <FixedChat
               messages={messages}
@@ -246,39 +253,30 @@ const Chat = (props) => {
               id={id}
               author={author}
               library={library}
-              isSecret={props.isSecret}
-              moveNext={props.moveNext}
+              isSecret={isSecret}
+              moveNext={moveNext}
               story={story}
-              passNum={passNum}
-              // passTextToBeTranslated={passTextToBeTranslated}
+              passNum={handlePassNum}
             />
           )}
         </>
       )}
-      {getData &&
-        props.next.true.value &&
+
+      {/* Arrow to progress to the next element in the problem flow */}
+      {pushNextElementToProblem &&
+        next?.true?.value &&
         !moved &&
-        num == messages.messagesList.length && (
+        num === messages.messagesList.length && (
           <ArrowBox>
-            <div className="arrow_box" onClick={(e) => push()}>
-              <img className="arrow" src="../../static/down-arrow.svg" />
+            <div className="arrow_box" onClick={handlePushNextElement}>
+              <img
+                className="arrow"
+                src="../../static/down-arrow.svg"
+                alt="Next"
+              />
             </div>
           </ArrowBox>
         )}
-      {update && (
-        <UpdateChat
-          id={id}
-          name={name}
-          me={me}
-          type={type}
-          isSecret={props.isSecret}
-          messages={messages}
-          lessonId={lessonId}
-          characters={props.characters}
-          getResult={getResult}
-          switchUpdate={switchUpdate}
-        />
-      )}
     </Styles>
   );
 };

@@ -47,7 +47,7 @@
   "create": "Create",
   "new_course": "New Course",
   "no_courses_yet": "No courses in production yet",
-  "no_courses_explanation": "It means that no courses can be accessed by the users",
+  "no_courses_explanation": "It means that no courses can be accessed by users",
   "my_courses": "My courses",
   "developper": "Developer"
 }

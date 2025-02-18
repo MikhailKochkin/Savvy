@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Mutation } from "@apollo/client/react/components";
-import { gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -10,8 +9,14 @@ import parse from "html-react-parser";
 import DeleteSingleProblem from "./DeleteSingleProblem";
 import Interactive from "./archive/Interactive";
 import NewInteractive from "./functions/NewInteractive";
+import FlowMode from "./functions/FlowMode";
 import UpdateProblem from "./UpdateProblem";
-import { SecondaryButton } from "../styles/DevPageStyles";
+import {
+  SecondaryButton,
+  Buttons,
+  ActionButton,
+  Frame,
+} from "../styles/DevPageStyles";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
@@ -173,112 +178,35 @@ const ResponseArea = styled.div`
   }
 `;
 
-const BlueButton = styled.button`
-  min-width: 200px;
-  line-height: 1.6;
-  margin-right: 20px;
-  text-align: left;
-  background: #d2edfd;
-  border-radius: 5px;
-  padding: 10px 30px;
-  margin-bottom: 15px;
-  cursor: pointer;
-  color: #000a60;
-  border: none;
-  white-space: nowrap;
-  font-size: 1.6rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  display: ${(props) => (props.correct === "true" ? "none" : "flex")};
-  pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  &:hover {
-    background: #a5dcfe;
-  }
-  font-family: Montserrat;
-  @media (max-width: 800px) {
-    min-width: 100px;
-    margin-right: 10px;
-    padding: 10px 15px;
-    height: auto;
-
-    white-space: normal;
-    text-align: left;
-  }
-`;
-
-const Frame = styled.div`
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  width: 100%;
-  margin: 1.5% 0;
-  min-height: 120px;
-  padding: 0% 3%;
-  .com {
-    border-top: 1px solid #c4c4c4;
-  }
-  @media (max-width: 800px) {
-    width: 100%;
-  }
-`;
-
-const ButtonGroup = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Buttons = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 20px;
-  @media (max-width: 800px) {
-    width: 50%;
-  }
-`;
-
-const Button2 = styled.div`
-  min-width: 170px;
-  text-align: center;
-  box-sizing: border-box;
-  border-radius: 10px;
-  background: #000000;
-  margin-left: 2%;
-  padding: 10px 10px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  @media (max-width: 800px) {
-    width: 65%;
-  }
-  transition: 0.3s;
-  &:hover {
-    background: #444444;
-  }
-`;
-
 const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
 
 const SingleProblem = (props) => {
+  const { problem, me, lesson, story, complexity, author, may_i_edit } = props;
+
   const [update, setUpdate] = useState(false);
   const [answer, setAnswer] = useState("");
   const [showAnswerButton, setShowAnswerButton] = useState(false);
   const [showAnswerText, setShowAnswerText] = useState(false);
   const [teacherAnswer, setTeacherAnswer] = useState("");
-  const [isOldFinished, setIsOldFinished] = useState(false);
-  const [isNewFinished, setIsNewFinished] = useState(false);
   const [revealAnswer, setRevealAnswer] = useState(false);
   const { t } = useTranslation("lesson");
+
+  const {
+    loading,
+    error,
+    mutate: createProblemResult,
+  } = useMutation(CREATE_PROBLEMRESULT_MUTATION, {
+    variables: {
+      lessonId: props.lessonID,
+      answer: answer,
+      revealed: [],
+      problemID: props.problem.id,
+    },
+  });
+  //  const [showAnswerButton, setShowAnswerButton] = useState(false);
 
   const myCallback = (dataFromChild, name) => {
     setAnswer(dataFromChild);
@@ -287,11 +215,6 @@ const SingleProblem = (props) => {
   const onFinish = (status, type) => {
     props.updateArray ? props.updateArray(true) : null;
     if (props.moveNext) props.moveNext(props.id);
-    if (type == "old") {
-      setIsOldFinished(true);
-    } else if (type == "new") {
-      setIsNewFinished(true);
-    }
   };
 
   const onMouseClick = (e) => {
@@ -346,8 +269,6 @@ const SingleProblem = (props) => {
       props.moveNext(props.id);
   }, []);
 
-  const { problem, me, lesson, story, complexity, author } = props;
-
   const switchUpdate = () => {
     setUpdate(!update);
   };
@@ -362,16 +283,14 @@ const SingleProblem = (props) => {
 
   return (
     <>
-      <Buttons>
-        {me && !story && (
+      {may_i_edit && (
+        <Buttons gap="10px" margin="0 0 20px 0">
           <SecondaryButton onClick={(e) => setUpdate(!update)}>
             {!update ? t("update") : t("back")}
           </SecondaryButton>
-        )}
-        {me && !story ? (
           <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />
-        ) : null}
-      </Buttons>
+        </Buttons>
+      )}
       {!update && (
         <TextBar id={problem.id} story={story}>
           <div id="text">{parse(problem.text)}</div>
@@ -385,7 +304,6 @@ const SingleProblem = (props) => {
               onFinish={onFinish}
             />
           )}
-
           {problem.steps && problem.steps.problemItems?.length >= 1 && (
             <NewInteractive
               lesson={lesson}
@@ -399,6 +317,7 @@ const SingleProblem = (props) => {
               context={lesson.context ? lesson.context : ""}
             />
           )}
+
           {(!problem.steps || problem.steps.problemItems?.length == 0) && (
             <ResponseArea>
               <h2>{t("write_answer")}</h2>
@@ -411,45 +330,34 @@ const SingleProblem = (props) => {
                 />
               </Frame>
               <>
-                <Mutation
-                  mutation={CREATE_PROBLEMRESULT_MUTATION}
-                  variables={{
-                    lessonId: props.lessonID,
-                    answer: answer,
-                    revealed: [],
-                    problemID: props.problem.id,
-                  }}
-                >
-                  {(createProblemResult, { loading, error }) => (
-                    <Buttons story={story} block={revealAnswer}>
-                      <BlueButton
-                        variant="contained"
-                        color="primary"
-                        onClick={async (e) => {
-                          // Stop the form from submitting
-                          e.preventDefault();
-                          // call the mutation
-                          if (answer !== "") {
-                            const res = await createProblemResult();
-                            setShowAnswerButton(true);
-                            setRevealAnswer(true);
-                          } else {
-                            console.log("No");
-                          }
-                        }}
-                      >
-                        {loading ? t("checking") : t("check")}
-                      </BlueButton>
-                      {showAnswerButton && (
-                        <Button2
-                          onClick={(e) => setShowAnswerText(!showAnswerText)}
-                        >
-                          {t("show_answer")}
-                        </Button2>
-                      )}
-                    </Buttons>
+                <Buttons story={story} block={revealAnswer}>
+                  <ActionButton
+                    variant="contained"
+                    color="primary"
+                    onClick={async (e) => {
+                      // Stop the form from submitting
+                      e.preventDefault();
+                      // call the mutation
+                      if (answer !== "") {
+                        const res = await createProblemResult();
+                        setShowAnswerButton(true);
+                        setRevealAnswer(true);
+                      } else {
+                        console.log("No");
+                      }
+                    }}
+                  >
+                    {loading ? t("checking") : t("check")}
+                  </ActionButton>
+                  {showAnActionButtonswerButton && (
+                    <SecondaryButton
+                      onClick={(e) => setShowAnswerText(!showAnswerText)}
+                    >
+                      {t("show_answer")}
+                    </SecondaryButton>
                   )}
-                </Mutation>
+                </Buttons>
+                );
                 {showAnswerText && (
                   <div>
                     <h2>{t("answer")}</h2>
@@ -459,69 +367,6 @@ const SingleProblem = (props) => {
               </>
             </ResponseArea>
           )}
-          {/* {problem.steps &&
-            (problem.steps.problemItems.length == 0 ||
-              (problem.steps.problemItems.length >= 1 &&
-                (isNewFinished || isOldFinished))) && (
-              <ResponseArea>
-                <h2>{t("write_answer")}</h2>
-                <Frame story={story}>
-                  <DynamicHoverEditor
-                    index={1}
-                    name="answer"
-                    getEditorText={myCallback}
-                    placeholder={`Write something`}
-                  />
-                </Frame>
-                <>
-                  <Mutation
-                    mutation={CREATE_PROBLEMRESULT_MUTATION}
-                    variables={{
-                      lessonId: props.lessonID,
-                      answer: answer,
-                      revealed: [],
-                      problemID: props.problem.id,
-                    }}
-                  >
-                    {(createProblemResult, { loading, error }) => (
-                      <Buttons story={story} block={revealAnswer}>
-                        <BlueButton
-                          variant="contained"
-                          color="primary"
-                          onClick={async (e) => {
-                            // Stop the form from submitting
-                            e.preventDefault();
-                            // call the mutation
-                            if (answer !== "") {
-                              const res = await createProblemResult();
-                              setShowAnswerButton(true);
-                              setRevealAnswer(true);
-                            } else {
-                              console.log("No");
-                            }
-                          }}
-                        >
-                          {loading ? t("checking") : t("check")}
-                        </BlueButton>
-                        {showAnswerButton && (
-                          <Button2
-                            onClick={(e) => setShowAnswerText(!showAnswerText)}
-                          >
-                            {t("show_answer")}
-                          </Button2>
-                        )}
-                      </Buttons>
-                    )}
-                  </Mutation>
-                  {showAnswerText && (
-                    <div>
-                      <h2>{t("answer")}</h2>
-                      {parse(teacherAnswer)}
-                    </div>
-                  )}
-                </>
-              </ResponseArea>
-            )} */}
         </TextBar>
       )}
       {update && (

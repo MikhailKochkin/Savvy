@@ -86,7 +86,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         user {
           id
         }
-
         lessons {
           id
           number
@@ -94,6 +93,20 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           name
           open
           story
+        }
+        courseAccessControls {
+          id
+          user {
+            id
+            name
+            surname
+            email
+          }
+          role
+          changeScope
+          areAllLessonsAccessible
+          accessibleLessons
+          createdAt
         }
       }
     }
@@ -241,24 +254,62 @@ const NewSingleLesson = (props) => {
 
   let i_am_author = false;
   let i_am_student = false;
+  let is_dev_page_open = false;
+  let is_analytics_page_open = false;
+
+  // OLD APPROACH
+  // if (
+  //   me &&
+  //   (lesson.coursePage?.authors?.filter((auth) => auth.id == me.id).length >
+  //     0 ||
+  //     lesson.coursePage?.co_authors?.filter((auth) => auth.id == me.id).length >
+  //       0 ||
+  //     lesson.coursePage?.user?.id == me.id)
+  // ) {
+  //   i_am_author = true;
+  // }
+
+  let role;
+  let changeScope;
+  let areAllLessonsAccessible = true;
+  let accessibleLessons = null;
+  if (me && lesson.coursePage?.courseAccessControls?.length > 0) {
+    lesson.coursePage?.courseAccessControls?.forEach((c) => {
+      if (c.user?.id == me.id) {
+        role = c.role;
+        changeScope = c.changeScope;
+        areAllLessonsAccessible = c.areAllLessonsAccessible;
+        accessibleLessons = c.accessibleLessons;
+      }
+    });
+  }
 
   if (
-    me &&
-    (lesson.coursePage?.authors?.filter((auth) => auth.id == me.id).length >
-      0 ||
-      lesson.coursePage?.co_authors?.filter((auth) => auth.id == me.id).length >
-        0 ||
-      lesson.coursePage?.user?.id == me.id)
+    ((role == "AUTHOR" || role == "MENTOR") &&
+      (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id))) ||
+    me?.permissions.includes("ADMIN") ||
+    lesson.coursePage?.user?.id == me?.id
   ) {
     i_am_author = true;
+    is_analytics_page_open = true;
   }
 
   if (
-    me &&
-    me.new_subjects.filter((c) => c.id == lesson.coursePage.id).length > 0
+    (role == "AUTHOR" &&
+      (areAllLessonsAccessible || accessibleLessons?.includes(lesson.id))) ||
+    me?.permissions.includes("ADMIN") ||
+    lesson.coursePage?.user?.id == me?.id
   ) {
-    i_am_student = true;
+    is_dev_page_open = true;
   }
+
+  // if (
+  //   me &&
+  //   me.new_subjects.filter((c) => c.id == lesson.coursePage.id).length > 0
+  // ) {
+  //   i_am_student = true;
+  // }
+
   if (!lesson.open && (!me || me.id == "clkvdew14837181f13vcbbcw0x")) {
     return (
       <PleaseSignIn
@@ -302,6 +353,8 @@ const NewSingleLesson = (props) => {
                 openLesson={lesson.open}
                 i_am_author={i_am_author}
                 i_am_student={i_am_student}
+                is_analytics_page_open={is_analytics_page_open}
+                is_dev_page_open={is_dev_page_open}
                 authSource={props.authSource}
                 embedded={props.embedded}
               />

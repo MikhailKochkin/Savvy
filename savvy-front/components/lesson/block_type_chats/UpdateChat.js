@@ -215,7 +215,7 @@ const UpdateChat = (props) => {
         mess.map((m, i) => (
           <>
             <div>
-              {type == "dynamicchat"
+              {type !== "fixedchat"
                 ? i == 0
                   ? "First chat message:"
                   : i == 1
@@ -223,7 +223,9 @@ const UpdateChat = (props) => {
                   : i == 2
                   ? "Info about the user:"
                   : i == 3
-                  ? "Possible topics:"
+                  ? "Expected Agent behaviour:"
+                  : i == 4
+                  ? "Expected User behaviour:"
                   : null
                 : null}
             </div>
