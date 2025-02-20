@@ -218,7 +218,8 @@ export const Row = styled.div`
     background-size: 0.65em auto, 100%;
   }
   .description {
-    width: 30%;
+    width: ${(props) =>
+      props.descriptionWidth ? props.descriptionWidth : "20%"};
     min-height: 40px;
     line-height: 1.4;
     font-weight: 600;
@@ -228,7 +229,8 @@ export const Row = styled.div`
     justify-content: center;
   }
   .action_area {
-    width: 70%;
+    width: ${(props) =>
+      props.actionAreawidth ? props.actionAreawidth : "80%"};
     margin-left: 15px;
     line-height: 1.6;
     .multilevel_fields {

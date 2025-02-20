@@ -160,7 +160,7 @@ const UpdateLesson = (props) => {
     <Styles>
       <Container>
         <Title>{t("settings")}</Title>
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">{t("name")}</div>
           <div className="action_area">
             <input
@@ -173,7 +173,7 @@ const UpdateLesson = (props) => {
             />
           </div>
         </Row>
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">{t("description")}</div>
           <div className="action_area">
             <Frame>
@@ -187,7 +187,7 @@ const UpdateLesson = (props) => {
           </div>
         </Row>
 
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">
             {" "}
             <SecondaryButton
@@ -215,7 +215,7 @@ const UpdateLesson = (props) => {
           </div>
         </Row>
         {}
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">
             {" "}
             <SecondaryButton
@@ -242,7 +242,7 @@ const UpdateLesson = (props) => {
             />
           </div>
         </Row>
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">{t("number")}</div>
           <div className="action_area">
             <input
@@ -254,7 +254,7 @@ const UpdateLesson = (props) => {
             />
           </div>
         </Row>
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">{t("set_goal")}</div>
           <div className="action_area">
             <input
@@ -267,7 +267,7 @@ const UpdateLesson = (props) => {
             <div className="explainer">{t("lesson_goal_explainer")}</div>
           </div>
         </Row>
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">{t("lesson_status")}</div>
           <div className="action_area">
             <select
@@ -281,7 +281,7 @@ const UpdateLesson = (props) => {
             <div className="explainer">{t("open_lesson")}</div>
           </div>
         </Row>
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">{t("type")}</div>
           <div className="action_area">
             <select
@@ -297,7 +297,7 @@ const UpdateLesson = (props) => {
           </div>
         </Row>
         {type === "CHALLENGE" && (
-          <Row>
+          <Row descriptionWidth="30%" actionAreawidth="70%">
             <div className="description">{t("num_challenge")}</div>
             <div className="input">
               <input
@@ -311,7 +311,7 @@ const UpdateLesson = (props) => {
             </div>
           </Row>
         )}
-        <Row>
+        <Row descriptionWidth="30%" actionAreawidth="70%">
           <div className="description">{t("context")}</div>
           <div className="action_area">
             <textarea
@@ -322,7 +322,7 @@ const UpdateLesson = (props) => {
           </div>
         </Row>
         {i_built_this_lesson && (
-          <Row>
+          <Row descriptionWidth="30%" actionAreawidth="70%">
             <div className="description">
               <DeleteSingleLesson
                 lessonId={lessonId}
