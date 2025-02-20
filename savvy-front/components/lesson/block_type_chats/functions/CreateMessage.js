@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import _ from "lodash";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   margin-top: 1%;
@@ -181,6 +182,7 @@ const DynamicHoverEditor = dynamic(import("../../../editor/HoverEditor"), {
 
 const CreateMessage = (props) => {
   const { m, characters } = props;
+  const { t } = useTranslation("lesson");
 
   const [message, setMessage] = useState({
     author: m?.author?.toLowerCase() || "author",
@@ -218,8 +220,8 @@ const CreateMessage = (props) => {
             value={message.author}
             onChange={(e) => updateMessage({ author: e.target.value })}
           >
-            <option value={"student"}>Left</option>
-            <option value={"author"}>Right</option>
+            <option value={"student"}>{t("left")}</option>
+            <option value={"author"}>{t("right")}</option>
           </select>
           {/* Author and Name Selection */}
           <div className="select_box">
@@ -294,7 +296,7 @@ const CreateMessage = (props) => {
               updateMessage({ reactions: updatedReactions });
             }}
           >
-            -1 reaction
+            -1 {t("reaction")}
           </button>
         </div>
         <div className="number">
@@ -307,7 +309,7 @@ const CreateMessage = (props) => {
               updateMessage({ reactions: updatedReactions });
             }}
           >
-            +1 reaction
+            +1 {t("reaction")}
           </button>
         </div>
       </Buttons>
@@ -315,7 +317,9 @@ const CreateMessage = (props) => {
       {/* Reactions */}
       {message.reactions.map((r, i) => (
         <ReactBlock key={i}>
-          <Header>Reaction № {i + 1}</Header>
+          <Header>
+            {t("reaction")} № {i + 1}
+          </Header>
           <Phrase>
             <IconBlock>
               <div className="select_box">
@@ -332,7 +336,9 @@ const CreateMessage = (props) => {
             </Frame>
           </Phrase>
 
-          <Header>Response № {i + 1}</Header>
+          <Header>
+            {t("response")} № {i + 1}
+          </Header>
           <Phrase>
             <IconBlock>
               <div className="select_box">

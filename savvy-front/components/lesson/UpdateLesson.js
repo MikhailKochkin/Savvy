@@ -86,49 +86,6 @@ const Container = styled.div`
   @media (max-width: 600px) {
     width: 100%;
   }
-  input {
-    padding: 1.5% 2%;
-    width: 100%;
-    outline: 0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1.4rem;
-    font-family: Montserrat;
-  }
-  textarea {
-    width: 100%;
-    min-height: 70px;
-    border: none;
-    outline: 0;
-    font-size: 1.4rem;
-    font-family: Montserrat;
-    padding: 10px;
-    font-weight: 500;
-  }
-  select {
-    width: 100%;
-    font-size: 1.4rem;
-    outline: none;
-    font-family: Montserrat;
-
-    line-height: 1.3;
-    padding: 1.5% 2%;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    border: 1px solid #c5c5c5;
-    border-radius: 4px;
-    background: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
-      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
-    background-repeat: no-repeat, repeat;
-    background-position: right 0.7em top 50%, 0 0;
-    background-size: 0.65em auto, 100%;
-  }
   .green {
     border: 2px solid #6a994e;
   }
@@ -198,7 +155,7 @@ const UpdateLesson = (props) => {
     setDescription(dataFromChild);
   };
 
-  const { lessonId, lesson, change } = props;
+  const { lessonId, lesson, change, i_built_this_lesson } = props;
   return (
     <Styles>
       <Container>
@@ -214,6 +171,19 @@ const UpdateLesson = (props) => {
               defaultValue={name}
               onChange={(e) => setName(e.target.value)}
             />
+          </div>
+        </Row>
+        <Row>
+          <div className="description">{t("description")}</div>
+          <div className="action_area">
+            <Frame>
+              <DynamicHoverEditor
+                index={1}
+                name="description"
+                getEditorText={myCallback2}
+                value={description}
+              />
+            </Frame>
           </div>
         </Row>
 
@@ -233,7 +203,7 @@ const UpdateLesson = (props) => {
                 alert("Copied!");
               }}
             >
-              Copy Lesson
+              {t("copy_lesson")}
             </SecondaryButton>
           </div>
           <div className="action_area">
@@ -244,6 +214,7 @@ const UpdateLesson = (props) => {
             />
           </div>
         </Row>
+        {}
         <Row>
           <div className="description">
             {" "}
@@ -260,7 +231,7 @@ const UpdateLesson = (props) => {
                 alert("Changed!");
               }}
             >
-              Change Owner
+              {t("change_owner")}
             </SecondaryButton>
           </div>
           <div className="action_area">
@@ -293,22 +264,9 @@ const UpdateLesson = (props) => {
               defaultValue={goal}
               onChange={(e) => setGoal(e.target.value)}
             />
+            <div className="explainer">{t("lesson_goal_explainer")}</div>
           </div>
         </Row>
-        {/* <Row>
-          <div className="description">{t("choose_template")}</div>
-          <div className="input">
-            <select
-              name="open"
-              className="green"
-              defaultValue={"standard"}
-              onChange={(e) => props.getTemplate(e.target.value)}
-            >
-              <option value={"standard"}>{t("standard_template")}</option>
-              <option value={"memorize"}>{t("memorize_template")}</option>
-            </select>
-          </div>
-        </Row> */}
         <Row>
           <div className="description">{t("lesson_status")}</div>
           <div className="action_area">
@@ -324,7 +282,7 @@ const UpdateLesson = (props) => {
           </div>
         </Row>
         <Row>
-          <div className="description">Lesson type</div>
+          <div className="description">{t("type")}</div>
           <div className="action_area">
             <select
               name="type"
@@ -333,55 +291,11 @@ const UpdateLesson = (props) => {
             >
               <option value="REGULAR">{t("regular")}</option>
               <option value="STORY">{t("story")}</option>
-              <option value="CHALLENGE">{t("challenge")}</option>
+              {/* <option value="CHALLENGE">{t("challenge")}</option> */}
             </select>
             <div className="explainer">{t("status_explainer")}</div>
           </div>
         </Row>
-        {/* <Row>
-          <div className="description">{t("assignment")}</div>
-          <div className="input">
-            <select
-              name="assignment"
-              defaultValue={assignment}
-              onChange={(e) => setAssignment(e.target.value == "true")}
-            >
-              <option value={true}>{t("yes")}</option>
-              <option value={false}>{t("no")}</option>
-            </select>
-          </div>
-        </Row> */}
-        {/* <Row>
-          <div className="description">{t("lesson_has_bonus")}</div>
-          <div className="input">
-            <select
-              name="hasSecret"
-              defaultValue={hasSecret === true}
-              onChange={(e) => {
-                e.preventDefault();
-                setHasSecret(e.target.value == "true");
-              }}
-            >
-              <option value={true}>{t("yes")}</option>
-              <option value={false}>{t("no")}</option>
-            </select>
-          </div>
-        </Row> */}
-        {/* {hasSecret && (
-          <Row>
-            <div className="description">{t("required_points")}</div>
-            <div className="input">
-              <input
-                type="number"
-                id="totalPoints"
-                name="totalPoints"
-                placeholder={0}
-                defaultValue={totalPoints}
-                onChange={(e) => setTotalPoints(parseInt(e.target.value))}
-              />
-            </div>
-          </Row>
-        )} */}
         {type === "CHALLENGE" && (
           <Row>
             <div className="description">{t("num_challenge")}</div>
@@ -398,55 +312,28 @@ const UpdateLesson = (props) => {
           </Row>
         )}
         <Row>
-          <div className="description">{t("description")}</div>
-          <div className="action_area">
-            <Frame>
-              <DynamicHoverEditor
-                index={1}
-                name="description"
-                getEditorText={myCallback2}
-                value={description}
-              />
-            </Frame>
-          </div>
-        </Row>
-        {/* <Frame>
-            <DynamicHoverEditor
-              index={1}
-              name="change"
-              getEditorText={myCallback2}
-              placeholder="Как измениться ученик после прохождения урока"
-              value={change}
-            />
-          </Frame> */}
-        <Row>
-          <div className="description">Context</div>
+          <div className="description">{t("context")}</div>
           <div className="action_area">
             <textarea
               value={context}
               onChange={(e) => setContext(e.target.value)}
             />
+            <div className="explainer">{t("context_rules")}</div>
           </div>
         </Row>
-        {/* <Row>
-          <div className="description">{t("comments")}</div>
-          <div className="input">
-            <Frame>
-              <DynamicHoverEditor value={text} getEditorText={myCallback} />
-            </Frame>
-          </div>
-        </Row> */}
-        <Row>
-          <div className="description">
-            <DeleteSingleLesson
-              lessonId={lessonId}
-              coursePageId={props.coursePageId}
-            />
-          </div>
-          <div className="action_area">
-            Danger zone. Avoid deleting the simulator unless you are 100% sure.
-          </div>
-        </Row>
+        {i_built_this_lesson && (
+          <Row>
+            <div className="description">
+              <DeleteSingleLesson
+                lessonId={lessonId}
+                coursePageId={props.coursePageId}
+              />
+            </div>
+            <div className="action_area">
+              <div className="element_info">{t("danger_zone")}</div>
+            </div>
+          </Row>
+        )}
         <ButtonTwo
           onClick={async (e) => {
             e.preventDefault();

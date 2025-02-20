@@ -285,11 +285,17 @@ function miscellaneousMutations(t) {
       // 2. check at yookassa if any order is paid
       if (order.paymentID) {
         console.log("community_checkout", community_checkout);
-        const payment = await community_checkout.getPayment(order.paymentID);
+        try {
+          const payment = await community_checkout.getPayment(order.paymentID);
+          console.log("payment", payment);
+        } catch (error) {
+          console.error("Error from getPayment:", error);
+          // Possibly handle or rethrow with a normalized error message
+        }
         console.log("payment", payment);
         const createPayload = {
           amount: {
-            value: "3990.00",
+            value: "1990.00",
             currency: "RUB",
           },
           payment_method_id: payment.payment_method.id,
@@ -302,7 +308,7 @@ function miscellaneousMutations(t) {
                 description: "BeSavvy Plus",
                 quantity: "1",
                 amount: {
-                  value: "3990.00",
+                  value: "1990.00",
                   currency: "RUB",
                 },
                 vat_code: 1,

@@ -41,6 +41,39 @@ export const MicroButton = styled.button`
   }
 `;
 
+export const MicroSelect = styled.select`
+  background-color: white;
+  color: #333;
+  border: 1px solid #e8e8e8;
+  padding: 6px 8px;
+  font-size: 12px;
+  border-radius: 12px;
+  font-family: Montserrat;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 30px;
+  max-width: 140px;
+  margin-right: 10px;
+  max-height: 50px;
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ccc;
+  }
+
+  option {
+    font-weight: 400;
+    background-color: white;
+    color: #333;
+  }
+`;
+
 export const SecondaryButton = styled.button`
   background-color: white;
   color: #333;
@@ -53,8 +86,7 @@ export const SecondaryButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 140px;
-
+  max-width: 180px;
   &:hover {
     background-color: #f2f2f2;
   }
@@ -89,6 +121,7 @@ export const PrimaryButton = styled.button`
   border-radius: 12px;
   font-family: Montserrat;
   font-weight: 600;
+  max-width: 180px;
   cursor: pointer;
   transition: background-color 0.3s;
 
@@ -121,7 +154,8 @@ export const OrangeButton = styled.button`
   color: white;
   border-radius: 12px;
   border: 2px solid #e75605;
-  width: 140px;
+  min-width: 80px;
+  max-width: 200px;
   font-family: Montserrat;
   font-weight: 500;
   padding: 10px 0;
@@ -159,7 +193,6 @@ export const Row = styled.div`
     font-size: 1.4rem;
     font-family: Montserrat;
     resize: none;
-    margin-bottom: 10px;
   }
   select {
     width: 100%;
@@ -183,10 +216,9 @@ export const Row = styled.div`
     background-repeat: no-repeat, repeat;
     background-position: right 0.7em top 50%, 0 0;
     background-size: 0.65em auto, 100%;
-    margin-bottom: 10px;
   }
   .description {
-    width: 25%;
+    width: 30%;
     min-height: 40px;
     line-height: 1.4;
     font-weight: 600;
@@ -196,8 +228,9 @@ export const Row = styled.div`
     justify-content: center;
   }
   .action_area {
-    width: 75%;
+    width: 70%;
     margin-left: 15px;
+    line-height: 1.6;
     .multilevel_fields {
       width: 100%;
       display: flex;
@@ -208,6 +241,8 @@ export const Row = styled.div`
       margin-bottom: 10px;
       textarea {
         margin: 0;
+        width: 100%;
+        margin-bottom: 0;
       }
       .mainfield {
         width: 100%;
@@ -242,7 +277,7 @@ export const Row = styled.div`
 `;
 
 export const Frame = styled.div`
-  width: 100%;
+  width: ${(props) => (props.width ? props.width : "100%")};
   border: 1px solid #e5e5e5;
   border-radius: 12px;
   padding: 6px;

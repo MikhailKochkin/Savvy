@@ -270,12 +270,13 @@ const LessonBuilder = (props) => {
             description={lesson.description}
             lesson={lesson}
             ownerEmail={lesson.user?.email}
+            i_built_this_lesson={props.me?.id === lesson?.user?.id}
             // getTemplate={getTemplate}
             onUpdateLessonData={updateLessonData}
           />
         )}
         {/* <Analyzer elements={elements} lesson={lesson} /> */}
-        {props.may_i_edit && (
+        {/* {props.may_i_edit && (
           <GenerateLesson
             passData={passData}
             lessonId={lesson.id}
@@ -285,7 +286,7 @@ const LessonBuilder = (props) => {
             lesson={lesson}
             characters={combinedCharacters}
           />
-        )}
+        )} */}
 
         {/* {elements ? (
           <ChangePositions

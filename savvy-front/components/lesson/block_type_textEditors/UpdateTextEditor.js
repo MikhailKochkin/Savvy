@@ -144,20 +144,18 @@ const UpdateTextEditor = (props) => {
           </div>
         </Row>
         <Row>
-          <div className="description">Name</div>
+          <div className="description">{t("name")}</div>
           <div className="action_area">
             <input
               onChange={(e) => setName(e.target.value)}
               defaultValue={name}
               placeholder="Untitled"
             />
-            <div className="explainer">
-              The name will be used for navigation
-            </div>
+            <div className="explainer">{t("name_navigation")}</div>
           </div>
         </Row>
         <Row>
-          <div className="description">Goal</div>
+          <div className="description">{t("goal")}</div>
           <div className="action_area">
             <textarea
               value={goal}
@@ -167,14 +165,11 @@ const UpdateTextEditor = (props) => {
               }}
               onInput={autoResizeTextarea}
             />
-            <div className="explainer">
-              What learning results are students expected to achieve through
-              this document editor
-            </div>
+            <div className="explainer">{t("learning_results")}</div>
           </div>
         </Row>
         <Row>
-          <div className="description">Context</div>
+          <div className="description">{t("context")}</div>
           <div className="action_area">
             <textarea
               value={context}
@@ -184,9 +179,7 @@ const UpdateTextEditor = (props) => {
               }}
               onInput={autoResizeTextarea}
             />
-            <div className="explainer">
-              This context will be used by AI to generate hints and feedback
-            </div>
+            <div className="explainer">{t("context_for_ai")}</div>
           </div>
         </Row>
         {/* <h3 className="label">Text</h3>
@@ -194,12 +187,12 @@ const UpdateTextEditor = (props) => {
             We do not reveal the text immediately to prevent errors from
             breaking the website
           </div> */}
-        <Buttons gap="10px" margin="0px">
+        <Buttons gap="10px" margin="20px 0">
           <SecondaryButton onClick={(e) => setOpen(!open)}>
-            {open ? "Close Editor" : "Open Editor"}
+            {open ? t("close_editor") : t("open_editor")}
           </SecondaryButton>
           <SecondaryButton onClick={(e) => setOpenHTML(!openHTML)}>
-            {openHTML ? "Close HTML" : "Open HTML"}
+            {openHTML ? t("close_html") : t("open_html")}
           </SecondaryButton>
         </Buttons>
         {open && (

@@ -171,7 +171,7 @@ const UpdateChat = (props) => {
         </div>
       </Row>
       <Row>
-        <div className="description">Name</div>
+        <div className="description">{t("name")}</div>
         <div className="action_area">
           <input
             onChange={(e) => setName(e.target.value)}
@@ -192,12 +192,12 @@ const UpdateChat = (props) => {
             <option value={null || undefined}>Undefined</option>
             <option value="fixedchat">Fixed Chat</option>
             <option value="dynamicchat">Dynamic (AI-generated) Chat</option>
-            <option value="voicechat">Voice Chat</option>
+            {/* <option value="voicechat">Voice Chat</option> */}
           </select>
         </div>
       </Row>
       <Row>
-        <div className="description">Prompt</div>
+        <div className="description">{t("Prompt")}</div>
         <div className="action_area">
           <textarea onChange={(e) => setPrompt(e.target.value)} />
           <ActionButton
@@ -207,7 +207,7 @@ const UpdateChat = (props) => {
               setGenerating(false);
             }}
           >
-            {!generating ? "Update with AI" : "..."}
+            {!generating ? t("update_with_AI") : "..."}
           </ActionButton>
         </div>
       </Row>
@@ -236,6 +236,7 @@ const UpdateChat = (props) => {
               text={m.text}
               name={m.name}
               image={m.image}
+              me={props.me}
               characters={props.characters}
               isAiAssistantOn={m.isAiAssistantOn}
               reactions={m.reactions}
@@ -251,7 +252,7 @@ const UpdateChat = (props) => {
               setMess(mess.slice(0, -1));
             }}
           >
-            -1 message
+            -1 {t("message")}
           </SecondaryButton>
           <SecondaryButton
             onClick={(e) => {
@@ -268,7 +269,7 @@ const UpdateChat = (props) => {
               ]);
             }}
           >
-            +1 message
+            +1 {t("message")}
           </SecondaryButton>
         </div>
         <ButtonTwo

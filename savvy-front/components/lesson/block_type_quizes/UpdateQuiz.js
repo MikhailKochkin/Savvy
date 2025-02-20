@@ -119,7 +119,9 @@ const UpdateQuiz = (props) => {
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
-  const [goalType, setGoalType] = useState(props.goalType);
+  const [goalType, setGoalType] = useState(
+    props.goalType ? props.goalType : "EDUCATE"
+  );
   const [answers, setAnswers] = useState(
     props.answers && props.answers.answerElements
       ? props.answers.answerElements
@@ -135,9 +137,11 @@ const UpdateQuiz = (props) => {
   );
   const [isScoringShown, setIsScoringShown] = useState(props.isScoringShown);
   const [generating, setGenerating] = useState(false);
-  const [check, setCheck] = useState(props.check);
+  const [checkingMode, setCheckingMode] = useState(
+    props.check ? props.check : "IDEA"
+  );
 
-  const { t } = useTranslation("lesson");
+  const { t } = useTranslation("dev");
 
   // Adjust textarea heights on mount
   useEffect(() => {
@@ -153,13 +157,13 @@ const UpdateQuiz = (props) => {
       ifRight: ifRight,
       ifWrong: ifWrong,
       complexity,
-      check: check,
+      check: checkingMode,
       type: type,
       instructorName: instructorName,
       name: name,
       image: image,
       goalType: goalType,
-      shouldAnswerSizeMatchSample: shouldAnswerSizeMatchSample,
+      shouldAnswerSizeMatchSample: false,
       isOrderOfAnswersImportant: isOrderOfAnswersImportant,
       isScoringShown: isScoringShown,
       answers: {
@@ -478,7 +482,7 @@ const UpdateQuiz = (props) => {
         </div>
       </Row>
       <Row>
-        <div className="description">Name</div>
+        <div className="description">{t("name")}</div>
         <div className="action_area">
           <input
             onChange={(e) => setName(e.target.value)}
@@ -487,19 +491,22 @@ const UpdateQuiz = (props) => {
           />
         </div>
       </Row>
-      <Row>
-        <div className="description">Checking mode</div>
-        <div className="action_area">
-          <select value={check} onChange={(e) => setCheck(e.target.value)}>
-            <option value={undefined}>Not chosen</option>
-            <option value={"WORD"}>Literally</option>
-            <option value={"IDEA"}>By implication</option>
-          </select>
-          <div className="explainer">
-            This determines how the answer of the student is checked
+      {type === "TEST" && (
+        <Row>
+          <div className="description">{t("checking_mode")}</div>
+          <div className="action_area">
+            <select
+              value={checkingMode}
+              onChange={(e) => setCheckingMode(e.target.value)}
+            >
+              <option value={undefined}>{t("not_chosen")}</option>
+              <option value={"WORD"}>{t("literally")}</option>
+              <option value={"IDEA"}>{t("by_implication")}</option>
+            </select>
+            <div className="explainer">{t("checking_determination")} </div>
           </div>
-        </div>
-      </Row>
+        </Row>
+      )}
       <Row>
         <div className="description">{t("type")}</div>
         <div className="action_area">
@@ -509,20 +516,29 @@ const UpdateQuiz = (props) => {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-            <option value={null}>Undefined</option>
-            <option value="TEST">Question</option>
-            <option value="FINDALL">Find All</option>
-            <option value="COMPLEX">Complex</option>
-            <option value="FORM">Form</option>
-            <option value="GENERATE">Generate Ideas</option>
-            <option value="PROMPT">Check with AI</option>
-            <option value="BRANCH">Junction</option>
+            <option value={null}>{t("undefined")}</option>
+            <option value="TEST"> {t("basic_question")}</option>
+            <option value="GENERATE">{t("generate_ideas")}</option>
+            <option value="FINDALL">{t("find_all")}</option>
+            <option value="COMPLEX">{t("complex")}</option>
+            <option value="FORM">{t("form")}</option>
+            <option value="PROMPT">{t("check_with_ai")}</option>
+            <option value="BRANCH">{t("junction")}</option>
             {/* <option value="CALL">Call Simulation</option> */}
           </select>
-          <div className="explainer">Choose the type of the question</div>
+          <div className="explainer">
+            {type === null && t("choose_question_type")}
+            {type === "TEST" && t("test_question")}
+            {type === "GENERATE" && t("generate_question")}
+            {type === "FINDALL" && t("findall_question")}
+            {type === "COMPLEX" && t("complex_question")}
+            {type === "FORM" && t("form_question")}
+            {type === "PROMPT" && t("prompt_question")}
+            {type === "BRANCH" && t("branch_question")}
+          </div>
         </div>
       </Row>
-      <Row>
+      {/* <Row>
         <div className="description">Format</div>
         <div className="action_area">
           <select
@@ -536,23 +552,25 @@ const UpdateQuiz = (props) => {
           </select>
           <div className="explainer">Determine the format of assessment</div>
         </div>
-      </Row>
-      <Row>
-        <div className="description">Is Scoring Shown</div>
-        <div className="action_area">
-          <select
-            value={isScoringShown ? "true" : "false"}
-            onChange={(e) => setIsScoringShown(e.target.value == "true")}
-          >
-            <option value={"true"}>True</option>
-            <option value={"false"}>False</option>
-          </select>
-          <div className="explainer">Is the scoring show to the student?</div>
-        </div>
-      </Row>
+      </Row> */}
+      {type !== "FORM" && type !== "PROMPT" && type !== "BRANCH" && (
+        <Row>
+          <div className="description">{t("is_scoring_shown")}</div>
+          <div className="action_area">
+            <select
+              value={isScoringShown ? "true" : "false"}
+              onChange={(e) => setIsScoringShown(e.target.value == "true")}
+            >
+              <option value={"true"}>{t("yes")}</option>
+              <option value={"false"}>{t("no")}</option>
+            </select>
+            <div className="explainer">{t("scoring_shown_description")}</div>
+          </div>
+        </Row>
+      )}
       {type === "COMPLEX" && (
         <Row>
-          <div className="description">Order of ideas</div>
+          <div className="description">{t("order_of_ideas")}</div>
           <div className="action_area">
             <select
               name="types"
@@ -562,17 +580,14 @@ const UpdateQuiz = (props) => {
                 setIsOrderOfAnswersImportant(e.target.value === "true")
               }
             >
-              <option value={"false"}>No</option>
-              <option value={"true"}>Yes</option>
+              <option value={"false"}>{t("no")}</option>
+              <option value={"true"}>{t("yes")}</option>
             </select>
-            <div className="explainer">
-              {" "}
-              Is order of ideas in the answer important?
-            </div>
+            <div className="explainer"> {t("order_of_ideas_importance")}</div>
           </div>
         </Row>
       )}
-      <Row>
+      {/* <Row>
         <div className="description">Size of answer</div>
         <div className="action_area">
           <select
@@ -589,9 +604,9 @@ const UpdateQuiz = (props) => {
             Should the size of the answer match the sample answer?
           </div>
         </div>
-      </Row>
+      </Row> */}
       <Row>
-        <div className="description">Instructor Name</div>
+        <div className="description">{t("instructor_name")}</div>
         <div className="action_area">
           <input
             value={instructorName}
@@ -601,14 +616,14 @@ const UpdateQuiz = (props) => {
         </div>
       </Row>
       <Row>
-        <div className="description">Instructor Image</div>
+        <div className="description">{t("instructor_image")}</div>
         <div className="action_area">
           <input value={image} onChange={(e) => setImage(e.target.value)} />
           <div className="explainer"></div>
         </div>
       </Row>
       <Row>
-        <div className="description">Question</div>
+        <div className="description">{t("question")}</div>
         <div className="action_area">
           <Frame>
             <DynamicLoadedEditor
@@ -623,7 +638,7 @@ const UpdateQuiz = (props) => {
         </div>
       </Row>
       <Row>
-        <div className="description">Sample Answer</div>
+        <div className="description">{t("sample_answer")}</div>
         <div className="action_area">
           <textarea
             className="dynamic-textarea"
@@ -636,25 +651,25 @@ const UpdateQuiz = (props) => {
             }}
             onInput={autoResizeTextarea}
           />
-          <MicroButton
-            onClick={async (e) => {
-              e.preventDefault();
-              setGenerating(true);
-              const res = await upgradeSampleAnswer(e, answer);
-              setAnswer(res);
-              setGenerating(false);
-            }}
-          >
-            {generating ? "Upgrading..." : "Upgrade"}
-          </MicroButton>
-          <div className="explainer">
-            This sample answer is used to check student answers and generate
-            semantic cloud
-          </div>
+          <div className="explainer">{t("sample_answer_description")}</div>
+
+          <Buttons margin="10px 0">
+            <MicroButton
+              onClick={async (e) => {
+                e.preventDefault();
+                setGenerating(true);
+                const res = await upgradeSampleAnswer(e, answer);
+                setAnswer(res);
+                setGenerating(false);
+              }}
+            >
+              {generating ? "..." : t("upgrade")}
+            </MicroButton>
+          </Buttons>
         </div>
       </Row>
       <Row>
-        <div className="description">Semantic Cloud</div>
+        <div className="description">{t("semantic_cloud")}</div>
         <div className="action_area">
           {answers.map((an, i) => (
             <div className="multilevel_fields">
@@ -762,7 +777,7 @@ const UpdateQuiz = (props) => {
                 setGenerating(false);
               }}
             >
-              {generating ? "Generating..." : "Generate similar"}
+              {generating ? "..." : t("generate_similar")}
             </MicroButton>
           )}
           {type == "GENERATE" || type == "FINDALL" ? (
@@ -774,7 +789,7 @@ const UpdateQuiz = (props) => {
                 setGenerating(false);
               }}
             >
-              {generating ? "Generating..." : "Generate different"}
+              {generating ? "..." : t("generate_different")}
             </MicroButton>
           ) : null}
 
@@ -793,7 +808,7 @@ const UpdateQuiz = (props) => {
               setGenerating(false);
             }}
           >
-            {generating ? "Upgrading..." : "Upgrade Cloud"}
+            {generating ? "..." : t("upgrade_cloud")}
           </MicroButton>
 
           <MicroButton
@@ -805,47 +820,43 @@ const UpdateQuiz = (props) => {
               setGenerating(false);
             }}
           >
-            {generating ? "Adding..." : "Add subanswers"}
+            {generating ? "..." : t("add_subanswers")}
           </MicroButton>
-          <div className="explainer">
-            These answers are used to make the answer assessment more accurate
-          </div>
+          <div className="explainer">{t("cloud_description")}</div>
         </div>
       </Row>
       {/* )} */}
       <Row>
-        <div className="description">Correct answer comments</div>
+        <div className="description">{t("improvement_advice")}</div>
         <div className="action_area">
           <Frame>
             <DynamicLoadedEditor
               id="answer"
               name="answer"
               value={ifRight}
-              placeholder="This text helps provide feedback if the answer is correct"
+              placeholder=""
               getEditorText={setIfRight}
             />
           </Frame>
-          <div className="explainer">
-            This info is used to provide improvement advice to students if the
-            answer is partially correct
-          </div>
+          <div className="explainer">{t("improvement_advice_description")}</div>
         </div>
       </Row>
       <Row>
-        <div className="description">Incorrect answer comments </div>
+        <div className="description"> {t("fix_incorrect_answer")}</div>
         <div className="action_area">
           <Frame>
             <DynamicLoadedEditor
               id="answer"
               name="answer"
               value={ifWrong}
-              placeholder="This text helps provide feedback if the answer is incorrect"
+              placeholder=""
               getEditorText={setIfWrong}
             />
           </Frame>
           <div className="explainer">
-            This info is used to explain what the answer is missing if the
-            student answer is incorrect
+            <div className="explainer">
+              {t("fix_incorrect_answer_description")}
+            </div>
           </div>
         </div>
       </Row>

@@ -4,7 +4,13 @@ import { useRouter } from "next/router";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["lesson", "nav", "auth"])),
+    ...(await serverSideTranslations(locale, [
+      "lesson",
+      "nav",
+      "auth",
+      "editor",
+      "dev",
+    ])),
   },
 });
 

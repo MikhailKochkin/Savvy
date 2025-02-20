@@ -141,6 +141,7 @@ const TextBar = styled.div`
     background: #f5f5f5;
     padding: 15px 20px;
     border-radius: 20px;
+    margin-bottom: 20px;
     .line_top {
       border-top: 1px solid #d0d0d0;
       padding-top: 20px;
@@ -150,6 +151,7 @@ const TextBar = styled.div`
     background: #f5f5f5;
     padding: 15px 20px;
     border-radius: 20px;
+    margin-bottom: 20px;
     .line_top {
       border-top: 1px solid #d0d0d0;
       padding-top: 20px;

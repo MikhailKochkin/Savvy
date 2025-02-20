@@ -1,7 +1,9 @@
 import React from "react";
 import { useMutation, gql } from "@apollo/client";
 import Router from "next/router";
-import { PrimaryButton } from "./styles/DevPageStyles";
+import { useTranslation } from "next-i18next";
+
+import { SecondaryButton } from "./styles/DevPageStyles";
 
 const DELETE_LESSON_MUTATION = gql`
   mutation DELETE_LESSON_MUTATION($id: String!) {
@@ -12,12 +14,14 @@ const DELETE_LESSON_MUTATION = gql`
 `;
 
 const DeleteSingleLesson = (props) => {
+  const { t } = useTranslation("lesson");
+
   const [deleteLesson, { data, loading, error }] = useMutation(
     DELETE_LESSON_MUTATION
   );
 
   return (
-    <PrimaryButton
+    <SecondaryButton
       onClick={async () => {
         if (confirm("Sure?")) {
           try {
@@ -36,8 +40,8 @@ const DeleteSingleLesson = (props) => {
         }
       }}
     >
-      Delete Lesson
-    </PrimaryButton>
+      {t("delete_lesson")}
+    </SecondaryButton>
   );
 };
 

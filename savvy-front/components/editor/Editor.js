@@ -34,7 +34,6 @@ import escapeHtml from "escape-html";
 import { css } from "emotion";
 import styled from "styled-components";
 import { jsx } from "slate-hyperscript";
-import FormatToolBar from "./FormatToolbar";
 import { IconContext } from "react-icons";
 import {
   BiBold,
@@ -58,18 +57,21 @@ import {
   BiTable,
 } from "react-icons/bi";
 import { LuHeading2, LuHeading3, LuSquareSquare } from "react-icons/lu";
-
 import { FaQuoteLeft } from "react-icons/fa";
 import { withTable, TableEditor } from "slate-table";
+
+import { useTranslation } from "next-i18next";
 import Modal from "styled-react-modal";
 import isHotkey from "is-hotkey";
+
+import FormatToolBar from "./FormatToolbar";
 import CreateQuiz from "../lesson/block_type_quizes/CreateQuiz";
 import SingleQuiz from "../lesson/block_type_quizes/SingleQuiz";
 import CreateNote from "../lesson/block_type_notes/CreateNote";
 import SingleNote from "../lesson/block_type_notes/Note";
 import CreateNewTest from "../lesson/block_type_tests/CreateNewTest";
 import SingleTest from "../lesson/block_type_tests/SingleTest";
-import { Row, PrimaryButton } from "../lesson/styles/DevPageStyles";
+import { Row, SecondaryButton } from "../lesson/styles/DevPageStyles";
 
 const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
@@ -123,6 +125,14 @@ const ButtonStyle = styled.button`
   }
   .react-icons {
     width: 100px;
+  }
+  &#editor-tooltip {
+    font-family: Montserrat;
+    font-size: 1.2rem;
+    color: #e4e4e4;
+    padding: 5px 10px;
+    background-color: #0f0f0f;
+    border-radius: 5px;
   }
 `;
 
@@ -998,6 +1008,8 @@ const App = (props) => {
   const [notePath, setNotePath] = useState(null);
   const [modalQuestionAnswerData, setModalQuestionAnswerData] = useState("");
 
+  const { t } = useTranslation("editor");
+
   // const editor = useMemo(
   //   () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),
   //   []
@@ -1241,6 +1253,16 @@ const App = (props) => {
     }
   };
 
+  let type_name;
+  if (type == "error") {
+    type_name = "Question";
+  } else if (type == "note") {
+    type_name = "Comment";
+  } else if (type == "quiz") {
+    type_name = "Quiz";
+  } else if (type == "problem") {
+    type_name = "Problem";
+  }
   return (
     <>
       <StyledModal
@@ -1253,7 +1275,7 @@ const App = (props) => {
             <Row>
               <div className="description">Element Type</div>
               <div className="action_area">
-                <div className="element_info">{type}</div>
+                <div className="element_info">{type_name}</div>
               </div>
             </Row>
             <Row>
@@ -1266,6 +1288,29 @@ const App = (props) => {
                   value={modalData}
                 />
               </div>
+            </Row>
+            <Row>
+              <div className="description">
+                {" "}
+                <SecondaryButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("Element ID is added to the editor");
+                    handleSubmitModal(type);
+                  }}
+                >
+                  Add
+                </SecondaryButton>
+              </div>
+              <div className="action_area">
+                <div className="element_info">
+                  Add element with this id to the highlighted editor text
+                </div>
+              </div>
+            </Row>
+            <Row>
+              <div className="description">Task</div>
+              <div className="action_area"></div>
             </Row>
 
             {/* {type === "note" && "Write down the ID of the target note"} */}
@@ -1401,15 +1446,6 @@ const App = (props) => {
               userData={[]}
             />
           )}
-          <PrimaryButton
-            onClick={(e) => {
-              e.preventDefault();
-              alert("Element ID is added to the editor");
-              handleSubmitModal(type);
-            }}
-          >
-            Add Element Id to the Editor
-          </PrimaryButton>
         </div>
       </StyledModal>
 
@@ -1426,6 +1462,8 @@ const App = (props) => {
         <FormatToolBar>
           <IconContext.Provider value={{ size: "18px" }}>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("bold")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleMark(editor, "bold");
@@ -1433,7 +1471,10 @@ const App = (props) => {
             >
               <BiBold value={{ className: "react-icons" }} />
             </ButtonStyle>
+
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("italic")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleMark(editor, "italic");
@@ -1442,6 +1483,8 @@ const App = (props) => {
               <BiItalic value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("underline")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleMark(editor, "underline");
@@ -1450,6 +1493,8 @@ const App = (props) => {
               <BiUnderline value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("h2")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleElement(editor, "header");
@@ -1458,6 +1503,8 @@ const App = (props) => {
               <LuHeading2 value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("h3")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleElement(editor, "headerThree");
@@ -1466,6 +1513,8 @@ const App = (props) => {
               <LuHeading3 value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("insertLink")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 const url = window.prompt("Enter the URL of the link:");
@@ -1476,6 +1525,8 @@ const App = (props) => {
               <BiLinkAlt value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("bulletList")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 CustomEditor.makeList(editor, "bulleted-list");
@@ -1484,6 +1535,8 @@ const App = (props) => {
               <BiListUl value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("numberedList")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 CustomEditor.makeList(editor, "numbered-list");
@@ -1492,6 +1545,8 @@ const App = (props) => {
               <BiListOl value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("alignCenter")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleElement(editor, "center");
@@ -1500,6 +1555,8 @@ const App = (props) => {
               <BiAlignMiddle value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("alignRight")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleElement(editor, "right");
@@ -1508,6 +1565,8 @@ const App = (props) => {
               <BiAlignRight value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("insertTable")}
               onMouseDown={(event) => {
                 setAreTableOptionsOpen(!areTableOptionsOpen);
               }}
@@ -1516,8 +1575,11 @@ const App = (props) => {
             </ButtonStyle>
             <Label for="inputTag">
               {/* Select Image */}
-              <BiImageAdd value={{ className: "react-icons" }} />
-              {/* </ButtonStyle>{" "} */}
+              <BiImageAdd
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content={t("insertImage")}
+                value={{ className: "react-icons" }}
+              />
               <input
                 id="inputTag"
                 type="file"
@@ -1526,6 +1588,8 @@ const App = (props) => {
               />
             </Label>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("insertVideo")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 CustomEditor.addVideoElement(editor);
@@ -1534,6 +1598,8 @@ const App = (props) => {
               <BiVideoPlus value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("quote")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleElement(editor, "quote");
@@ -1542,6 +1608,8 @@ const App = (props) => {
               <FaQuoteLeft value={{ className: "react-icons" }} />
             </ButtonStyle>
             <ButtonStyle
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={t("mainIdea")}
               onMouseDown={(event) => {
                 event.preventDefault();
                 toggleElement(editor, "flag");
@@ -1572,6 +1640,8 @@ const App = (props) => {
             {props.complex && (
               <>
                 <ButtonStyle
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={t("task")}
                   onMouseDown={(event) => {
                     event.preventDefault();
                     toggleElement(editor, "question");
@@ -1580,6 +1650,8 @@ const App = (props) => {
                   <BiCommentDots value={{ className: "react-icons" }} />
                 </ButtonStyle>
                 <ButtonStyle
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={t("comment")}
                   onMouseDown={(event) => {
                     event.preventDefault();
                     setType("createNote");
@@ -1589,6 +1661,8 @@ const App = (props) => {
                   <BiCommentAdd value={{ className: "react-icons" }} />
                 </ButtonStyle>
                 <ButtonStyle
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={t("question")}
                   onMouseDown={(event) => {
                     event.preventDefault();
                     setType("createError");
@@ -1598,6 +1672,8 @@ const App = (props) => {
                   <BiCommentError value={{ className: "react-icons" }} />
                 </ButtonStyle>
                 <ButtonStyle
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={t("quiz")}
                   onMouseDown={(event) => {
                     event.preventDefault();
                     setType("createQuiz");
@@ -1607,6 +1683,8 @@ const App = (props) => {
                   <LuSquareSquare value={{ className: "react-icons" }} />
                 </ButtonStyle>
                 <ButtonStyle
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content={t("case_study")}
                   onMouseDown={(event) => {
                     event.preventDefault();
                     setType("createProblem");
@@ -1623,30 +1701,38 @@ const App = (props) => {
           <TableButtons>
             <TableButton
               editor={editor}
-              text="Create Table"
+              text={t("createTable")}
               action={createTable}
             />
             <TableButton
               editor={editor}
-              text="Delete Table"
+              text={t("deleteTable")}
               action={deleteTable}
             />
-            <TableButton editor={editor} text="Add Row" action={addRow} />
-            <TableButton editor={editor} text="Delete Row" action={deleteRow} />
-            <TableButton editor={editor} text="Add Column" action={addColumn} />
+            <TableButton editor={editor} text={t("addRow")} action={addRow} />
             <TableButton
               editor={editor}
-              text="Delete Column"
+              text={t("deleteRow")}
+              action={deleteRow}
+            />
+            <TableButton
+              editor={editor}
+              text={t("addColumn")}
+              action={addColumn}
+            />
+            <TableButton
+              editor={editor}
+              text={t("deleteColumn")}
               action={deleteColumn}
             />
             <TableButton
               editor={editor}
-              text="Merge Cells"
+              text={t("mergeCells")}
               action={mergeCells}
             />
             <TableButton
               editor={editor}
-              text="Split Cells"
+              text={t("splitCells")}
               action={splitCells}
             />
           </TableButtons>
@@ -2016,10 +2102,9 @@ const StyledModal = Modal.styled`
   min-width: 650px;
   padding: 2%;
   textarea {
-    width: 80%;
+    width: 100%;
     height: 110px;
     font-family: Montserrat;
-    margin: 15px 0;
   }
   .scrollable_block {
     width: 100%;

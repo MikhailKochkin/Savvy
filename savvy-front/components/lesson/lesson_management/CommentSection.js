@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
 import parse from "html-react-parser";
 import dayjs from "dayjs";
+import { useTranslation } from "next-i18next";
+
 import { OrangeButton } from "./../styles/DevPageStyles";
 
 const CREATE_COMMENT_MUTATION = gql`
@@ -278,6 +280,8 @@ const CommentSection = (props) => {
     CREATE_COMMENT_MUTATION
   );
 
+  const { t } = useTranslation("lesson");
+
   const [deleteComment] = useMutation(DELETE_COMMENT_MUTATION);
   const [updateComment] = useMutation(UPDATE_COMMENT_STATUS_MUTATION);
   const [deleteReply] = useMutation(DELETE_REPLY_MUTATION);
@@ -383,10 +387,10 @@ const CommentSection = (props) => {
           <DynamicLoadedEditor
             value={newComment}
             getEditorText={myCallback}
-            placeholder={`Add comment`}
+            placeholder={`...`}
           />
           <OrangeButton onClick={addComment}>
-            {loading ? "..." : "Add Comment"}
+            {loading ? "..." : t("add_comment")}
           </OrangeButton>
         </CreateCommentStyles>
       ) : null}
@@ -425,7 +429,7 @@ const CommentSection = (props) => {
 
               <div className="comment_buttons">
                 <ActionButton onClick={() => setReplyTo(comment.id)}>
-                  Reply
+                  {t("reply")}
                 </ActionButton>
                 {(props.me.id == comment.user.id ||
                   props.me.permissions.includes("ADMIN")) && (
@@ -439,7 +443,7 @@ const CommentSection = (props) => {
                         )
                       }
                     >
-                      Approve
+                      {t("approve")}
                     </ActionButton>
                     <ActionButton
                       onClick={() =>
@@ -450,7 +454,7 @@ const CommentSection = (props) => {
                         )
                       }
                     >
-                      Reject
+                      {t("reject")}
                     </ActionButton>
                     {/* <ActionButton
                       onClick={() =>
@@ -466,7 +470,7 @@ const CommentSection = (props) => {
                     <DeleteButton
                       onClick={() => handleDeleteComment(comment.id)}
                     >
-                      Delete
+                      {t("delete")}
                     </DeleteButton>
                   </>
                 )}
@@ -509,7 +513,7 @@ const CommentSection = (props) => {
                             handleDeleteReply(comment.id, reply.id)
                           }
                         >
-                          Delete
+                          {t("delete")}
                         </DeleteButton>
                       )}
                     </div>
@@ -524,10 +528,10 @@ const CommentSection = (props) => {
               <DynamicLoadedEditor
                 value={newReply}
                 getEditorText={setNewReply}
-                placeholder={`Add a reply`}
+                placeholder={`...`}
               />
               <OrangeButton onClick={() => addReply(comment.id)}>
-                {replyLoading ? "..." : "Add Reply"}
+                {replyLoading ? "..." : t("reply")}
               </OrangeButton>
             </CreateCommentStyles>
           )}
