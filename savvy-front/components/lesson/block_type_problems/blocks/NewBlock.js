@@ -205,12 +205,13 @@ const NewBlock = (props) => {
           true={data.correct}
           goalType={data.goalType}
           check={data.check}
+          characters={props.characters}
           comments={data.comments}
           complexity={data.complexity}
           ifRight={data.ifRight}
           ifWrong={data.ifWrong}
           name={data.name}
-          instructorName={data.instructorName}
+          instructorId={data.instructorId}
           isScoringShown={data.isScoringShown}
           image={data.image}
           next={data.next}

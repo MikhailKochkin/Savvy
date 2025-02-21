@@ -69,7 +69,7 @@ const Note = (props) => {
     pushNextElementToProblem,
     lessonID,
     isFinal,
-    instructorName,
+    instructorId,
     may_i_edit,
     next,
     problem,
@@ -130,7 +130,7 @@ const Note = (props) => {
           vertical_image={note?.vertical_image}
           horizontal_image={note?.horizontal_image}
           name={name}
-          instructorName={note?.instructorName}
+          instructorId={note?.instructorId}
           lessonID={lessonID}
           getResult={handleGetResult}
           switchUpdate={toggleUpdate}
@@ -165,7 +165,7 @@ const Note = (props) => {
               text={text}
               id={id}
               name={name}
-              instructorName={instructorName}
+              instructorId={instructorId}
               getData={pushNextElementToProblem}
               isFinal={isFinal}
               problem={problem}
@@ -184,7 +184,7 @@ const Note = (props) => {
               text={text}
               id={id}
               name={name}
-              instructorName={instructorName}
+              instructorId={instructorId}
               isFinal={isFinal}
               problem={problem}
               note={note}

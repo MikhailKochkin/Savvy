@@ -119,7 +119,7 @@ const Email = (props) => {
 
   const todaysDate = useMemo(() => getFormattedToday(), []);
 
-  const { me, author, text, id, instructorName } = props;
+  const { me, author, text, id, instructorId } = props;
 
   const getInitials = (name) => {
     if (!name) return null;
@@ -131,8 +131,8 @@ const Email = (props) => {
   };
 
   const initials =
-    instructorName && getInitials(instructorName)
-      ? getInitials(instructorName)
+    instructorId && getInitials(instructorId)
+      ? getInitials(instructorId)
       : `${author.name[0]}${author.surname[0]}`;
 
   return (
@@ -144,9 +144,7 @@ const Email = (props) => {
           </div>
           <div className="names_column">
             <div className="sender_name">
-              {instructorName
-                ? instructorName
-                : `${author.name} ${author.surname}`}
+              {instructorId ? instructorId : `${author.name} ${author.surname}`}
             </div>
             <div className="emailSubject">
               <b>Subject:</b> {props.name ? props.name : "Re: Help ASAP"}

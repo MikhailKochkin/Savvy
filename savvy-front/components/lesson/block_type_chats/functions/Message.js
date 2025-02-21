@@ -169,8 +169,34 @@ const Icon = styled.div`
   justify-content: center;
 `;
 
-const Message = ({ id, key, role, m, me, author, lessonId }) => {
+const Message = ({ id, key, role, m, me, author, lessonId, characters }) => {
   const modifiedText = m.text.replace("[name]", me.name);
+  let image;
+  let name;
+  let active_character = characters?.find(
+    (character) => character.id === m.characterId
+  );
+
+  if (active_character) {
+    image = active_character.image;
+    name = active_character.name;
+  } else {
+    if (m.image) {
+      image = m.image;
+    } else if (author && author.image) {
+      image = author.image;
+    } else if (role === "author") {
+      image = "../../static/hipster.svg";
+    } else {
+    }
+    if (m.name) {
+      name = m.name;
+    } else if (author && author.name) {
+      name = author.name;
+    } else {
+      name = "BeSavvy";
+    }
+  }
   return (
     <Styles id={id} key={key}>
       <MessageRow role={role}>
@@ -178,20 +204,8 @@ const Message = ({ id, key, role, m, me, author, lessonId }) => {
           <>
             <div className="author_text">{parse(modifiedText)}</div>
             <IconBlock>
-              {m.image && <img className="icon" src={m.image} />}
-              {!m.image &&
-                (author && author.image ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                ))}
-              <div className="name">
-                {m.name && m.name.toLowerCase() !== "author"
-                  ? m.name
-                  : author && author.name
-                  ? author.name
-                  : "BeSavvy"}
-              </div>
+              <img className="icon" src={image} />
+              <div className="name">{name}</div>
             </IconBlock>
           </>
         )}

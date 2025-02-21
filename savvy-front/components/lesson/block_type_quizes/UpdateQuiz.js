@@ -30,7 +30,7 @@ const UPDATE_QUIZ_MUTATION = gql`
     $goalType: String
     $ifRight: String
     $ifWrong: String
-    $instructorName: String
+    $instructorId: String
     $isScoringShown: Boolean
     $name: String
     $image: String
@@ -49,7 +49,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       ifWrong: $ifWrong
       answers: $answers
       name: $name
-      instructorName: $instructorName
+      instructorId: $instructorId
       isScoringShown: $isScoringShown
       image: $image
       isOrderOfAnswersImportant: $isOrderOfAnswersImportant
@@ -114,7 +114,7 @@ const UpdateQuiz = (props) => {
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
   const [name, setName] = useState(props.name);
-  const [instructorName, setInstructorName] = useState(props.instructorName);
+  const [instructorId, setinstructorId] = useState(props.instructorId);
   const [image, setImage] = useState(props.image);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
@@ -159,7 +159,7 @@ const UpdateQuiz = (props) => {
       complexity,
       check: checkingMode,
       type: type,
-      instructorName: instructorName,
+      instructorId: instructorId,
       name: name,
       image: image,
       goalType: goalType,
@@ -609,8 +609,8 @@ const UpdateQuiz = (props) => {
         <div className="description">{t("instructor_name")}</div>
         <div className="action_area">
           <input
-            value={instructorName}
-            onChange={(e) => setInstructorName(e.target.value)}
+            value={instructorId}
+            onChange={(e) => setinstructorId(e.target.value)}
           />
           <div className="explainer"></div>
         </div>

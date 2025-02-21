@@ -131,7 +131,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         question
-        instructorName
         name
         image
         next {

@@ -119,6 +119,7 @@ const LessonResult = objectType({
 const Character = objectType({
   name: "Character",
   definition(t) {
+    t.string("id");
     t.string("name");
     t.string("description");
     t.string("image");
@@ -128,6 +129,7 @@ const Character = objectType({
 const CharacterInput = inputObjectType({
   name: "CharacterInput",
   definition(t) {
+    t.string("id");
     t.string("name");
     t.string("description");
     t.string("image");

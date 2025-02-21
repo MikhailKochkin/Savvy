@@ -149,7 +149,6 @@ const Chat = (props) => {
     problem,
     getResult,
   } = props;
-
   // Determine chat box width based on context (problem view, story view, or general)
   const width = problem || story ? "50%" : "90%";
 
@@ -251,6 +250,7 @@ const Chat = (props) => {
               me={me}
               lessonId={lessonId}
               id={id}
+              characters={characters}
               author={author}
               library={library}
               isSecret={isSecret}

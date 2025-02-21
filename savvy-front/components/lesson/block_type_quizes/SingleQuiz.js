@@ -59,12 +59,13 @@ const SingleQuiz = (props) => {
     image,
     name,
     jsonStoryString,
-    instructorName,
+    instructorId,
     isScoringShown,
     next,
     passResultToTextEditor,
     getResult: parentGetResult,
     lesson,
+    characters,
   } = props;
   useEffect(() => {
     smoothscroll.polyfill();
@@ -154,10 +155,7 @@ const SingleQuiz = (props) => {
       image,
       isScoringShown,
     };
-    console.log(
-      "studentAnswerPassedFromAnotherComponent",
-      studentAnswerPassedFromAnotherComponent
-    );
+
     switch (type?.toLowerCase()) {
       case "form":
         return <Form {...commonProps} />;
@@ -170,7 +168,7 @@ const SingleQuiz = (props) => {
           <Prompt
             {...commonProps}
             openQuestionType={openQuestionType}
-            instructorName={instructorName}
+            instructorId={instructorId}
             studentAnswerPassedFromAnotherComponent={
               studentAnswerPassedFromAnotherComponent
             }
@@ -197,7 +195,7 @@ const SingleQuiz = (props) => {
             {...commonProps}
             check={check}
             jsonStoryString={jsonStoryString}
-            instructorName={instructorName}
+            instructorId={instructorId}
             studentAnswerPassedFromAnotherComponent={
               studentAnswerPassedFromAnotherComponent
             }
@@ -229,6 +227,7 @@ const SingleQuiz = (props) => {
           lesson={lesson}
           question={question || "No question provided."}
           name={name}
+          characters={characters}
           image={image}
           type={type || undefined}
           isOrderOfAnswersImportant={isOrderOfAnswersImportant}

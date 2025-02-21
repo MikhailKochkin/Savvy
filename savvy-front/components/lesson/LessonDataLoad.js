@@ -11,7 +11,7 @@ const LOAD_LESSON_QUERY = gql`
         link_clicks
         text
         name
-        instructorName
+        instructorId
         type
         isSecret
         complexity
@@ -102,7 +102,7 @@ const LOAD_LESSON_QUERY = gql`
           id
         }
         isScoringShown
-        instructorName
+        instructorId
       }
       newTests {
         id
@@ -120,7 +120,7 @@ const LOAD_LESSON_QUERY = gql`
         ifRight
         ifWrong
         question
-        instructorName
+        instructorId
         name
         image
         next {

@@ -60,7 +60,7 @@ const SingleTest = (props) => {
     me,
     comments,
     author,
-    instructorName,
+    instructorId,
     name,
     image,
     next,
@@ -316,11 +316,11 @@ const SingleTest = (props) => {
   const getResult = (data) => {
     props.getResult(data);
   };
-
+  console.log("props", props);
   let mes;
-  if (type == "BRANCH") {
+  if (type == "BRANCH" && props.complexTestAnswers) {
     mes = _.zip(
-      props.complexTestAnswers.complexTestAnswers.map((el) => el.answer),
+      props.complexTestAnswers?.complexTestAnswers.map((el) => el.answer),
       props.true,
       comments ? comments : new Array(props.answers.length).fill(""),
       props.complexTestAnswers.complexTestAnswers.map((el) => el.id)
@@ -362,7 +362,7 @@ const SingleTest = (props) => {
               story={story}
               me={me}
               image={image}
-              instructorName={instructorName}
+              instructorId={instructorId}
               author={author}
               question={props.question}
               true={props.true}
@@ -394,7 +394,7 @@ const SingleTest = (props) => {
               story={story}
               me={me}
               image={image}
-              instructorName={instructorName}
+              instructorId={instructorId}
               author={author}
               question={props.question}
               true={props.true}
@@ -419,7 +419,7 @@ const SingleTest = (props) => {
               story={story}
               me={me}
               image={image}
-              instructorName={instructorName}
+              instructorId={instructorId}
               author={author}
               question={props.question}
               true={props.true}
@@ -444,7 +444,7 @@ const SingleTest = (props) => {
               story={story}
               me={me}
               image={image}
-              instructorName={instructorName}
+              instructorId={instructorId}
               author={author}
               question={props.question}
               true={props.true}

@@ -127,6 +127,7 @@ function lessonQueries(t) {
             include: {
               lessons: true, // Include the lessons field inside coursePage
               authors: true,
+              characters: true,
               courseAccessControls: {
                 select: {
                   id: true,

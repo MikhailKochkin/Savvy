@@ -214,6 +214,27 @@ function courseQueries(t) {
       });
     },
   });
+  t.list.field("characters", {
+    type: "Character",
+    args: {
+      coursePageId: nonNull(
+        stringArg({
+          description: "ID of the course page to fetch characters for.",
+        })
+      ),
+    },
+    resolve: async (_parent, { coursePageId }, ctx) => {
+      const where = {
+        ...(coursePageId && { coursePageId }),
+      };
+      return ctx.prisma.character.findMany({
+        where,
+        include: {
+          coursePage: true,
+        },
+      });
+    },
+  });
 }
 
 module.exports = {

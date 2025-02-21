@@ -13,7 +13,7 @@ const NewTest = objectType({
     t.int("lessonID");
     t.field("next", { type: "NextType" });
     t.string("name");
-    t.string("instructorName");
+    t.string("instructorId");
     t.string("image");
     t.list.string("comments");
     t.list.string("question");
@@ -83,7 +83,7 @@ const Quiz = objectType({
     t.boolean("isOrderOfAnswersImportant");
     t.boolean("shouldAnswerSizeMatchSample");
     t.boolean("isScoringShown");
-    t.string("instructorName");
+    t.string("instructorId");
     t.string("image");
     t.int("complexity");
     t.string("ifRight");
@@ -181,7 +181,7 @@ const Note = objectType({
     t.string("id");
     t.string("text");
     t.string("name");
-    t.string("instructorName");
+    t.string("instructorId");
     t.field("next", { type: "NextType" });
     t.string("type");
     t.string("horizontal_image");
@@ -692,11 +692,13 @@ const Messages = objectType({
 const MessageElement = objectType({
   name: "MessageElement",
   definition(t) {
+    t.string("id");
     t.int("number");
     t.string("author");
     t.string("name");
     t.string("text");
     t.string("image");
+    t.string("characterId");
     t.boolean("isAiAssistantOn");
     t.list.field("reactions", { type: "Reaction" });
   },
@@ -705,6 +707,7 @@ const MessageElement = objectType({
 const Reaction = objectType({
   name: "Reaction",
   definition(t) {
+    t.string("id");
     t.string("reaction");
     t.string("comment");
     t.string("name");
@@ -722,11 +725,13 @@ const MessagesInput = inputObjectType({
 const MessageElementInput = inputObjectType({
   name: "MessageElementInput",
   definition(t) {
+    t.string("id");
     t.int("number");
     t.string("author");
     t.string("name");
     t.string("text");
     t.string("image");
+    t.string("characterId");
     t.boolean("isAiAssistantOn");
     t.list.field("reactions", { type: "ReactionInput" });
   },
@@ -735,6 +740,7 @@ const MessageElementInput = inputObjectType({
 const ReactionInput = inputObjectType({
   name: "ReactionInput",
   definition(t) {
+    t.string("id");
     t.string("reaction");
     t.string("comment");
     t.string("name");

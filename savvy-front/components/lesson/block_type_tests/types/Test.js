@@ -44,7 +44,7 @@ const Test = (props) => {
   const {
     me,
     image,
-    instructorName,
+    instructorId,
     author,
     story,
     question,
@@ -69,7 +69,7 @@ const Test = (props) => {
           <div className="question_text">{parse(props.question[0])}</div>
           <IconBlockElement
             image={image}
-            instructorName={instructorName}
+            instructorId={instructorId}
             author={author}
           />
         </div>
@@ -131,7 +131,7 @@ const Test = (props) => {
             <div className="question_text">{t("choose_option")}</div>
             <IconBlockElement
               image={image}
-              instructorName={instructorName}
+              instructorId={instructorId}
               author={author}
             />
           </div>
@@ -186,7 +186,7 @@ const Test = (props) => {
             </div>
             <IconBlockElement
               image={image}
-              instructorName={instructorName}
+              instructorId={instructorId}
               author={author}
             />
           </Question>
@@ -203,7 +203,7 @@ const Test = (props) => {
             </div>
             <IconBlockElement
               image={image}
-              instructorName={instructorName}
+              instructorId={instructorId}
               author={author}
             />
           </Question>
@@ -215,7 +215,7 @@ const Test = (props) => {
               <div className="question_text">{t("show_correct")}</div>
               <IconBlockElement
                 image={image}
-                instructorName={instructorName}
+                instructorId={instructorId}
                 author={author}
               />
             </div>
@@ -270,7 +270,7 @@ const Test = (props) => {
                 </div>
                 <IconBlockElement
                   image={image}
-                  instructorName={instructorName}
+                  instructorId={instructorId}
                   author={author}
                 />
               </div>

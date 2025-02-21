@@ -50,11 +50,9 @@ const HeaderComment = styled.div`
 `;
 
 const HeaderStats = ({ students, results, lesson }) => {
-  const calculateAverageCompletionTime = (results) => {
+  const calculateAverageTrainingTime = (results) => {
     // 1. Filter results where progress equals lesson.structure.length
-    const filteredResults = results.filter(
-      (result) => result.progress === result.lesson.structure.lessonItems.length
-    );
+    const filteredResults = results;
 
     // 2. Keep unique user IDs and select the earliest result for each user
     const uniqueResults = {};
@@ -78,8 +76,8 @@ const HeaderStats = ({ students, results, lesson }) => {
         const updatedAt = new Date(result.updatedAt);
         const difference = (updatedAt - createdAt) / (1000 * 60); // Difference in minutes
 
-        // Exclude values with more than 3 hours difference or less than 5 minutes
-        if (difference <= 180 && difference >= 5) {
+        // Exclude values with more than 2 hours difference or less than 5 minutes
+        if (difference <= 120 && difference >= 3) {
           return difference;
         }
         return null;
@@ -117,7 +115,7 @@ const HeaderStats = ({ students, results, lesson }) => {
     const totalUniqueResults = Object.keys(userProgressMap).length;
 
     const unfinishedCount = Object.values(userProgressMap).filter(
-      ({ progress, lessonLength }) => progress < lessonLength
+      ({ progress, lessonLength }) => progress < lessonLength - 2
     ).length;
 
     // Step 3: Calculate percentage
@@ -137,10 +135,10 @@ const HeaderStats = ({ students, results, lesson }) => {
       <HeaderBlock>
         <HeaderCircle>
           {results?.length > 0
-            ? calculateAverageCompletionTime(results).toFixed(0)
+            ? calculateAverageTrainingTime(results).toFixed(0)
             : 0}
         </HeaderCircle>
-        <HeaderComment>avg completion time (mins)</HeaderComment>
+        <HeaderComment>avg training time (mins)</HeaderComment>
       </HeaderBlock>
       <HeaderBlock>
         <HeaderCircle>{100 - unfinishedPercentage.toFixed(0)}%</HeaderCircle>

@@ -26,7 +26,7 @@ const UPDATE_TEST_MUTATION = gql`
     $goal: String
     $complexity: Int
     $type: String
-    $instructorName: String
+    $instructorId: String
     $name: String
     $image: String
     $ifRight: String
@@ -44,7 +44,7 @@ const UPDATE_TEST_MUTATION = gql`
       ifRight: $ifRight
       ifWrong: $ifWrong
       type: $type
-      instructorName: $instructorName
+      instructorId: $instructorId
       name: $name
       image: $image
     ) {
@@ -64,7 +64,7 @@ const UPDATE_TEST_MUTATION = gql`
       ifRight
       ifWrong
       question
-      instructorName
+      instructorId
       name
       image
       createdAt
@@ -117,7 +117,6 @@ const TopRow = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-bottom: 10px;
-
   .answer_box {
     width: 85%;
   }
@@ -159,8 +158,8 @@ const UpdateTest = (props) => {
   const [type, setType] = useState(props.type);
   const [image, setImage] = useState(props.image ? props.image : null);
   const [name, setName] = useState(props.name ? props.name : null);
-  const [instructorName, setInstructorName] = useState(
-    props.instructorName ? props.instructorName : null
+  const [instructorId, setinstructorId] = useState(
+    props.instructorId ? props.instructorId : null
   );
   const { t } = useTranslation("lesson");
 
@@ -293,8 +292,8 @@ const UpdateTest = (props) => {
         <div className="description">Instructor Name</div>
         <div className="action_area">
           <input
-            defaultValue={instructorName}
-            onChange={(e) => setInstructorName(e.target.value)}
+            defaultValue={instructorId}
+            onChange={(e) => setinstructorId(e.target.value)}
           />{" "}
           {/* <div className="explainer">The name will be used for navigation</div> */}
         </div>
@@ -352,7 +351,7 @@ const UpdateTest = (props) => {
                 </TopRow>
                 {whichCommentIsGenerated !== i ? (
                   <TopRow>
-                    <Frame>
+                    <Frame width="85%">
                       <DynamicLoadedEditor
                         index={i + 1}
                         name={i}
@@ -361,7 +360,7 @@ const UpdateTest = (props) => {
                         placeholder={`Comment to answer option ${i + 1}`}
                       />
                     </Frame>
-                    <Buttons margin="0 0 0 19px">
+                    <Buttons width="12%" margin="0 0 0 20px">
                       <SecondaryButton
                         onClick={async (e) => {
                           e.preventDefault();

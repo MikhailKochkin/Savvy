@@ -239,12 +239,14 @@ enum ChangeScope {
 
 type Character {
   description: String
+  id: String
   image: String
   name: String
 }
 
 input CharacterInput {
   description: String
+  id: String
   image: String
   name: String
 }
@@ -661,6 +663,7 @@ type CoursePage {
   authors: [User]
   banner: String
   batch: String
+  characters: [Character]
   company: Company
   countries: [String]
   courseAccessControls: [CourseAccessControl]
@@ -1194,6 +1197,8 @@ type Message {
 
 type MessageElement {
   author: String
+  characterId: String
+  id: String
   image: String
   isAiAssistantOn: Boolean
   name: String
@@ -1204,6 +1209,8 @@ type MessageElement {
 
 input MessageElementInput {
   author: String
+  characterId: String
+  id: String
   image: String
   isAiAssistantOn: Boolean
   name: String
@@ -1263,6 +1270,19 @@ type Mutation {
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): BusinessClient
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
+  createCharacter(
+    """Unique identifier of the associated course page"""
+    coursePageId: String
+
+    """Short description of the character"""
+    description: String
+
+    """Image URL of the character"""
+    image: String
+
+    """Name of the character"""
+    name: String
+  ): Character
   createChat(lessonId: String, messages: MessagesInput, name: String, type: String): Chat
   createChatResult(chatId: String, lessonId: String, name: String, text: String): ChatResult
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
@@ -1306,6 +1326,10 @@ type Mutation {
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, type: String, wrong: String): TextEditorResult
   createUseful(buttonText: String, header: String, image: String, link: String, name: String, tags: [String]): Useful
   createUserLevel(consumedContent: ConsumedContentList, isProgressPublic: Boolean, level: Float, myProgress: MyProgressList): UserLevel
+  deleteCharacter(
+    """Unique identifier of the character"""
+    id: String
+  ): Character
   deleteChat(id: String): Chat
   deleteClause(id: String): Clause
   deleteClient(id: String): BusinessClient
@@ -1349,6 +1373,19 @@ type Mutation {
   updateActiveUser(active: Boolean, email: String): User
   updateBotDialogue(id: String, journey: [String], rating: Int): BotDialogue
   updateBusinessClient(comment: String, communication_history: CommunicationHistoryInput, id: String, number: String, sales_cycle: SalesCycle, tags: [String]): BusinessClient
+  updateCharacter(
+    """Short description of the character"""
+    description: String
+
+    """Unique identifier of the character"""
+    id: String
+
+    """Image URL of the character"""
+    image: String
+
+    """Name of the character"""
+    name: String
+  ): Character
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: MessagesInput, name: String, type: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateComment(id: String, status: CommentStatus, text: String): Comment
@@ -1417,7 +1454,7 @@ type NewTest {
   ifRight: String
   ifWrong: String
   image: String
-  instructorName: String
+  instructorId: String
   lesson: Lesson
   lessonID: Int
   lessonId: Int
@@ -1490,7 +1527,7 @@ type Note {
   createdAt: DateTime
   horizontal_image: String
   id: String
-  instructorName: String
+  instructorId: String
   isSecret: Boolean
   lesson: Lesson
   lessonId: Int
@@ -1895,6 +1932,10 @@ type Query {
     """ID of the challenge result to fetch."""
     id: String
   ): [ChallengeResult]
+  characters(
+    """ID of the course page to fetch characters for."""
+    coursePageId: String!
+  ): [Character]
   chat(id: String!): Chat
   chatResult(id: String!): ChatResult
   chatResults(
@@ -2152,7 +2193,7 @@ type Quiz {
   ifRight: String
   ifWrong: String
   image: String
-  instructorName: String
+  instructorId: String
   isOrderOfAnswersImportant: Boolean
   isScoringShown: Boolean
   lesson: Lesson
@@ -2297,6 +2338,7 @@ type Rating {
 
 type Reaction {
   comment: String
+  id: String
   image: String
   name: String
   reaction: String
@@ -2304,6 +2346,7 @@ type Reaction {
 
 input ReactionInput {
   comment: String
+  id: String
   image: String
   name: String
   reaction: String

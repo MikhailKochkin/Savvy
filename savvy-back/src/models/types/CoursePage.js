@@ -87,8 +87,40 @@ const CoursePage = objectType({
     t.field("reviews", { type: "ReviewsList" }); // Reviews
     t.string("video"); // Video URL
     t.list.field("courseAccessControls", { type: "CourseAccessControl" });
+    t.list.field("characters", { type: "Character" });
     t.field("createdAt", { type: "DateTime" }); // Creation timestamp
     t.field("updatedAt", { type: "DateTime" }); // Update timestamp
+  },
+});
+
+const Character = objectType({
+  name: "Character",
+  definition(t) {
+    t.string("id", {
+      description: "Unique identifier of the character",
+    });
+    t.string("name", { description: "Name of the character" });
+    t.string("image", {
+      description: "Image URL of the character",
+    });
+    t.string("description", {
+      description: "Short description of the character",
+    });
+    t.string("coursePageId", {
+      description: "Unique identifier of the associated course page",
+    });
+    t.field("coursePage", {
+      type: "CoursePage",
+      description: "Course page associated with the character",
+    });
+    t.field("createdAt", {
+      type: "DateTime",
+      description: "Timestamp when the character was created",
+    });
+    t.field("updatedAt", {
+      type: "DateTime",
+      description: "Timestamp when the character was last updated",
+    });
   },
 });
 
@@ -177,4 +209,5 @@ module.exports = {
   ReviewInput,
   ReviewsListInput,
   CourseAccessControl,
+  Character,
 };

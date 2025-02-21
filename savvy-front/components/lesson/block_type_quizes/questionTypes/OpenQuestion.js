@@ -68,7 +68,7 @@ const OpenQuestion = (props) => {
     openQuestionType,
     studentAnswerPassedFromAnotherComponent,
     isScoringShown,
-    instructorName,
+    instructorId,
     context,
     image,
     jsonStoryString,
@@ -587,7 +587,7 @@ const OpenQuestion = (props) => {
       serverComment={serverComment}
       isScoringShown={isScoringShown}
       image={image}
-      instructorName={instructorName}
+      instructorId={instructorId}
       doubleCheck={doubleCheck}
       challengeAnswer={challengeAnswer}
     />

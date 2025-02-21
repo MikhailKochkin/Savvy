@@ -874,7 +874,6 @@ const SingleTextEditor = (props) => {
                             ifRight={miniQuiz.ifRight}
                             ifWrong={miniQuiz.ifWrong}
                             name={miniQuiz.name}
-                            instructorName={miniQuiz.instructorName}
                             image={miniQuiz.image}
                             hidden={true}
                             lesson={lesson}

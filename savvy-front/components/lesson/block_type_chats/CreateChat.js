@@ -3,6 +3,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateMessage from "./functions/CreateMessage";
@@ -126,7 +127,32 @@ const CreateChat = (props) => {
   const updateMessageProperties = (message, index) => {
     const updatedMessages = [...messages];
     updatedMessages[index] = message;
+
     setMessages(updatedMessages);
+  };
+
+  const insertNewMessageAfter = (id) => {
+    const index = messages.findIndex((item) => item.id === id);
+
+    const newMessage = {
+      id: uuidv4(),
+      number: index + 1,
+      author: "author",
+      text: "",
+      image: "",
+      reactions: [],
+    };
+    if (index === -1) {
+      return;
+    }
+    const newMessages = [...messages];
+    newMessages.splice(index + 1, 0, newMessage);
+    setMessages(newMessages);
+  };
+
+  const removeMessageWithId = (id) => {
+    const newMessages = messages.filter((item) => item.id !== id);
+    setMessages(newMessages);
   };
 
   const generateChat = async (e) => {
@@ -277,6 +303,8 @@ const CreateChat = (props) => {
               m={m}
               characters={props.characters}
               passUpdatedMessage={updateMessageProperties}
+              insertNewMessageAfter={insertNewMessageAfter}
+              removeMessageWithId={removeMessageWithId}
             />
           ))}
           <Bottom>

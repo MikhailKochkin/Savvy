@@ -18,7 +18,7 @@ const Branch = (props) => {
   const {
     me,
     image,
-    instructorName,
+    instructorId,
     author,
     story,
     question,
@@ -36,7 +36,7 @@ const Branch = (props) => {
         <div className="question_text">{parse(props.question[0])}</div>
         <IconBlockElement
           image={image}
-          instructorName={instructorName}
+          instructorId={instructorId}
           author={author}
         />
       </div>
@@ -81,7 +81,7 @@ const Branch = (props) => {
           <div className="question_text">{t("choose_option")}</div>
           <IconBlockElement
             image={image}
-            instructorName={instructorName}
+            instructorId={instructorId}
             author={author}
           />
         </div>
@@ -114,7 +114,7 @@ const Branch = (props) => {
           </div>
           <IconBlockElement
             image={image}
-            instructorName={instructorName}
+            instructorId={instructorId}
             author={author}
           />
         </Question>

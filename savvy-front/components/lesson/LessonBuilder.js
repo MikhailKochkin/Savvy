@@ -184,21 +184,9 @@ const LessonBuilder = (props) => {
     setElements(updatedItems);
   };
 
-  let combinedCharacters = [];
-  if (lesson.characters) {
-    combinedCharacters.push(...lesson.characters);
-  } else {
-    combinedCharacters.push(
-      ...lesson.coursePage.lessons
-        .flatMap((lesson) => lesson.characters)
-        .filter((character) => character) // Remove falsy values
-    );
+  let combinedCharacters = lesson.coursePage.characters;
 
-    combinedCharacters = combinedCharacters.filter(
-      (character, index, self) =>
-        index === self.findIndex((c) => c.image === character.image) // Ensure unique characters by `id`
-    );
-  }
+  console.log("combinedCharacters", combinedCharacters);
 
   // INFO FOR NEW BLOCKS AI GENERATION
   // 1. Create character string
@@ -271,23 +259,22 @@ const LessonBuilder = (props) => {
             lesson={lesson}
             ownerEmail={lesson.user?.email}
             i_built_this_lesson={props.me?.id === lesson?.user?.id}
-            // getTemplate={getTemplate}
             onUpdateLessonData={updateLessonData}
           />
         )}
         {/* <Analyzer elements={elements} lesson={lesson} /> */}
-        {/* {props.may_i_edit && (
+        {props.may_i_edit && (
           <GenerateLesson
             passData={passData}
             lessonId={lesson.id}
+            coursePageId={lesson.coursePage.id}
             story={lesson.story}
             structure={lesson.structure}
             elements={elements}
             lesson={lesson}
-            characters={combinedCharacters}
+            characters={lesson.characters}
           />
-        )} */}
-
+        )}
         {/* {elements ? (
           <ChangePositions
             initialItems={elements}

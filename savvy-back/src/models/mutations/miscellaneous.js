@@ -7,6 +7,11 @@ const community_checkout = new YooCheckout({
   secretKey: process.env.SHOP_KEY_IP,
 });
 
+const old_checkout = new YooCheckout({
+  shopId: process.env.SHOP_ID_IP_OLD,
+  secretKey: process.env.SHOP_KEY_IP_OLD,
+});
+
 const ClientEmail = require("../../emails/ClientEmail");
 
 const PurchaseEmail = require("../../emails/Purchase");
@@ -283,57 +288,47 @@ function miscellaneousMutations(t) {
       });
       console.log("order", order.paymentID);
       // 2. check at yookassa if any order is paid
-      if (order.paymentID) {
-        console.log("community_checkout", community_checkout);
-        try {
-          const payment = await community_checkout.getPayment(order.paymentID);
-          console.log("payment", payment);
-        } catch (error) {
-          console.error("Error from getPayment:", error);
-          // Possibly handle or rethrow with a normalized error message
-        }
-        console.log("payment", payment);
-        const createPayload = {
-          amount: {
-            value: "1990.00",
-            currency: "RUB",
+      console.log("community_checkout", community_checkout);
+      const payment = await old_checkout.getPayment(order.paymentID);
+
+      console.log("payment", payment);
+      const createPayload = {
+        amount: {
+          value: "1990.00",
+          currency: "RUB",
+        },
+        payment_method_id: payment.payment_method.id,
+        receipt: {
+          customer: {
+            email: order.user.email,
           },
-          payment_method_id: payment.payment_method.id,
-          receipt: {
-            customer: {
-              email: order.user.email,
-            },
-            items: [
-              {
-                description: "BeSavvy Plus",
-                quantity: "1",
-                amount: {
-                  value: "1990.00",
-                  currency: "RUB",
-                },
-                vat_code: 1,
+          items: [
+            {
+              description: "BeSavvy Plus",
+              quantity: "1",
+              amount: {
+                value: "1990.00",
+                currency: "RUB",
               },
-            ],
-          },
-          capture: true,
-        };
+              vat_code: 1,
+              payment_mode: "full_prepayment",
+              payment_subject: "service",
+            },
+          ],
+        },
+        capture: true,
+      };
 
-        // Log the payload
-        console.log("createPayload", JSON.stringify(createPayload, null, 2));
+      // Log the payload
+      console.log("createPayload", JSON.stringify(createPayload, null, 2));
 
-        try {
-          const newPayment = await community_checkout.createPayment(
-            createPayload
-          );
-          console.log("newPayment", newPayment);
-        } catch (error) {
-          console.error("Error creating new payment:", error.message, error);
-        }
-
-        const payment2 = await community_checkout.getPayment(
-          payment.payment_method.id
+      try {
+        const newPayment = await community_checkout.createPayment(
+          createPayload
         );
-        console.log("payment2", payment2);
+        console.log("newPayment", newPayment);
+      } catch (error) {
+        console.error("Error creating new payment:", error.message, error);
       }
     },
   });

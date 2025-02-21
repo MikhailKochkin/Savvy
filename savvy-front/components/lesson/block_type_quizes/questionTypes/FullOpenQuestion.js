@@ -98,7 +98,7 @@ const FullOpenQuestion = (props) => {
     serverComment,
     isScoringShown,
     image,
-    instructorName,
+    instructorId,
   } = props;
 
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
@@ -141,7 +141,7 @@ const FullOpenQuestion = (props) => {
         <div className="question_text">{parse(question)}</div>
         <IconBlockElement
           image={image}
-          instructorName={instructorName}
+          instructorId={instructorId}
           author={author}
         />
       </div>

@@ -51,6 +51,7 @@ export interface NexusGenInputs {
   }
   CharacterInput: { // input type
     description?: string | null; // String
+    id?: string | null; // String
     image?: string | null; // String
     name?: string | null; // String
   }
@@ -161,6 +162,8 @@ export interface NexusGenInputs {
   }
   MessageElementInput: { // input type
     author?: string | null; // String
+    characterId?: string | null; // String
+    id?: string | null; // String
     image?: string | null; // String
     isAiAssistantOn?: boolean | null; // Boolean
     name?: string | null; // String
@@ -283,6 +286,7 @@ export interface NexusGenInputs {
   }
   ReactionInput: { // input type
     comment?: string | null; // String
+    id?: string | null; // String
     image?: string | null; // String
     name?: string | null; // String
     reaction?: string | null; // String
@@ -420,6 +424,7 @@ export interface NexusGenObjects {
   }
   Character: { // root type
     description?: string | null; // String
+    id?: string | null; // String
     image?: string | null; // String
     name?: string | null; // String
   }
@@ -598,6 +603,7 @@ export interface NexusGenObjects {
     authors?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     banner?: string | null; // String
     batch?: string | null; // String
+    characters?: Array<NexusGenRootTypes['Character'] | null> | null; // [Character]
     company?: NexusGenRootTypes['Company'] | null; // Company
     countries?: Array<string | null> | null; // [String]
     courseAccessControls?: Array<NexusGenRootTypes['CourseAccessControl'] | null> | null; // [CourseAccessControl]
@@ -850,6 +856,8 @@ export interface NexusGenObjects {
   }
   MessageElement: { // root type
     author?: string | null; // String
+    characterId?: string | null; // String
+    id?: string | null; // String
     image?: string | null; // String
     isAiAssistantOn?: boolean | null; // Boolean
     name?: string | null; // String
@@ -886,7 +894,7 @@ export interface NexusGenObjects {
     ifRight?: string | null; // String
     ifWrong?: string | null; // String
     image?: string | null; // String
-    instructorName?: string | null; // String
+    instructorId?: string | null; // String
     lesson?: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID?: number | null; // Int
     lessonId?: number | null; // Int
@@ -917,7 +925,7 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     horizontal_image?: string | null; // String
     id?: string | null; // String
-    instructorName?: string | null; // String
+    instructorId?: string | null; // String
     isSecret?: boolean | null; // Boolean
     lesson?: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonId?: number | null; // Int
@@ -1080,7 +1088,7 @@ export interface NexusGenObjects {
     ifRight?: string | null; // String
     ifWrong?: string | null; // String
     image?: string | null; // String
-    instructorName?: string | null; // String
+    instructorId?: string | null; // String
     isOrderOfAnswersImportant?: boolean | null; // Boolean
     isScoringShown?: boolean | null; // Boolean
     lesson?: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -1143,6 +1151,7 @@ export interface NexusGenObjects {
   }
   Reaction: { // root type
     comment?: string | null; // String
+    id?: string | null; // String
     image?: string | null; // String
     name?: string | null; // String
     reaction?: string | null; // String
@@ -1519,6 +1528,7 @@ export interface NexusGenFieldTypes {
   }
   Character: { // field return type
     description: string | null; // String
+    id: string | null; // String
     image: string | null; // String
     name: string | null; // String
   }
@@ -1697,6 +1707,7 @@ export interface NexusGenFieldTypes {
     authors: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     banner: string | null; // String
     batch: string | null; // String
+    characters: Array<NexusGenRootTypes['Character'] | null> | null; // [Character]
     company: NexusGenRootTypes['Company'] | null; // Company
     countries: Array<string | null> | null; // [String]
     courseAccessControls: Array<NexusGenRootTypes['CourseAccessControl'] | null> | null; // [CourseAccessControl]
@@ -1949,6 +1960,8 @@ export interface NexusGenFieldTypes {
   }
   MessageElement: { // field return type
     author: string | null; // String
+    characterId: string | null; // String
+    id: string | null; // String
     image: string | null; // String
     isAiAssistantOn: boolean | null; // Boolean
     name: string | null; // String
@@ -1985,6 +1998,7 @@ export interface NexusGenFieldTypes {
     createBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
+    createCharacter: NexusGenRootTypes['Character'] | null; // Character
     createChat: NexusGenRootTypes['Chat'] | null; // Chat
     createChatResult: NexusGenRootTypes['ChatResult'] | null; // ChatResult
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
@@ -2028,6 +2042,7 @@ export interface NexusGenFieldTypes {
     createTextEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
     createUseful: NexusGenRootTypes['Useful'] | null; // Useful
     createUserLevel: NexusGenRootTypes['UserLevel'] | null; // UserLevel
+    deleteCharacter: NexusGenRootTypes['Character'] | null; // Character
     deleteChat: NexusGenRootTypes['Chat'] | null; // Chat
     deleteClause: NexusGenRootTypes['Clause'] | null; // Clause
     deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
@@ -2071,6 +2086,7 @@ export interface NexusGenFieldTypes {
     updateActiveUser: NexusGenRootTypes['User'] | null; // User
     updateBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
     updateBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    updateCharacter: NexusGenRootTypes['Character'] | null; // Character
     updateChat: NexusGenRootTypes['Chat'] | null; // Chat
     updateClause: NexusGenRootTypes['Clause'] | null; // Clause
     updateComment: NexusGenRootTypes['Comment'] | null; // Comment
@@ -2117,7 +2133,7 @@ export interface NexusGenFieldTypes {
     ifRight: string | null; // String
     ifWrong: string | null; // String
     image: string | null; // String
-    instructorName: string | null; // String
+    instructorId: string | null; // String
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonID: number | null; // Int
     lessonId: number | null; // Int
@@ -2148,7 +2164,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     horizontal_image: string | null; // String
     id: string | null; // String
-    instructorName: string | null; // String
+    instructorId: string | null; // String
     isSecret: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonId: number | null; // Int
@@ -2301,6 +2317,7 @@ export interface NexusGenFieldTypes {
     certificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     certificates: Array<NexusGenRootTypes['Certificate'] | null> | null; // [Certificate]
     challengeResults: Array<NexusGenRootTypes['ChallengeResult'] | null> | null; // [ChallengeResult]
+    characters: Array<NexusGenRootTypes['Character'] | null> | null; // [Character]
     chat: NexusGenRootTypes['Chat'] | null; // Chat
     chatResult: NexusGenRootTypes['ChatResult'] | null; // ChatResult
     chatResults: Array<NexusGenRootTypes['ChatResult'] | null> | null; // [ChatResult]
@@ -2378,7 +2395,7 @@ export interface NexusGenFieldTypes {
     ifRight: string | null; // String
     ifWrong: string | null; // String
     image: string | null; // String
-    instructorName: string | null; // String
+    instructorId: string | null; // String
     isOrderOfAnswersImportant: boolean | null; // Boolean
     isScoringShown: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -2441,6 +2458,7 @@ export interface NexusGenFieldTypes {
   }
   Reaction: { // field return type
     comment: string | null; // String
+    id: string | null; // String
     image: string | null; // String
     name: string | null; // String
     reaction: string | null; // String
@@ -2807,6 +2825,7 @@ export interface NexusGenFieldTypeNames {
   }
   Character: { // field return type name
     description: 'String'
+    id: 'String'
     image: 'String'
     name: 'String'
   }
@@ -2985,6 +3004,7 @@ export interface NexusGenFieldTypeNames {
     authors: 'User'
     banner: 'String'
     batch: 'String'
+    characters: 'Character'
     company: 'Company'
     countries: 'String'
     courseAccessControls: 'CourseAccessControl'
@@ -3237,6 +3257,8 @@ export interface NexusGenFieldTypeNames {
   }
   MessageElement: { // field return type name
     author: 'String'
+    characterId: 'String'
+    id: 'String'
     image: 'String'
     isAiAssistantOn: 'Boolean'
     name: 'String'
@@ -3273,6 +3295,7 @@ export interface NexusGenFieldTypeNames {
     createBusinessClient: 'BusinessClient'
     createCertificate: 'Certificate'
     createChallengeResult: 'ChallengeResult'
+    createCharacter: 'Character'
     createChat: 'Chat'
     createChatResult: 'ChatResult'
     createClause: 'Clause'
@@ -3316,6 +3339,7 @@ export interface NexusGenFieldTypeNames {
     createTextEditorResult: 'TextEditorResult'
     createUseful: 'Useful'
     createUserLevel: 'UserLevel'
+    deleteCharacter: 'Character'
     deleteChat: 'Chat'
     deleteClause: 'Clause'
     deleteClient: 'BusinessClient'
@@ -3359,6 +3383,7 @@ export interface NexusGenFieldTypeNames {
     updateActiveUser: 'User'
     updateBotDialogue: 'BotDialogue'
     updateBusinessClient: 'BusinessClient'
+    updateCharacter: 'Character'
     updateChat: 'Chat'
     updateClause: 'Clause'
     updateComment: 'Comment'
@@ -3405,7 +3430,7 @@ export interface NexusGenFieldTypeNames {
     ifRight: 'String'
     ifWrong: 'String'
     image: 'String'
-    instructorName: 'String'
+    instructorId: 'String'
     lesson: 'Lesson'
     lessonID: 'Int'
     lessonId: 'Int'
@@ -3436,7 +3461,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     horizontal_image: 'String'
     id: 'String'
-    instructorName: 'String'
+    instructorId: 'String'
     isSecret: 'Boolean'
     lesson: 'Lesson'
     lessonId: 'Int'
@@ -3589,6 +3614,7 @@ export interface NexusGenFieldTypeNames {
     certificate: 'Certificate'
     certificates: 'Certificate'
     challengeResults: 'ChallengeResult'
+    characters: 'Character'
     chat: 'Chat'
     chatResult: 'ChatResult'
     chatResults: 'ChatResult'
@@ -3666,7 +3692,7 @@ export interface NexusGenFieldTypeNames {
     ifRight: 'String'
     ifWrong: 'String'
     image: 'String'
-    instructorName: 'String'
+    instructorId: 'String'
     isOrderOfAnswersImportant: 'Boolean'
     isScoringShown: 'Boolean'
     lesson: 'Lesson'
@@ -3729,6 +3755,7 @@ export interface NexusGenFieldTypeNames {
   }
   Reaction: { // field return type name
     comment: 'String'
+    id: 'String'
     image: 'String'
     name: 'String'
     reaction: 'String'
@@ -4090,6 +4117,12 @@ export interface NexusGenArgTypes {
       time?: number | null; // Int
       wrong?: number | null; // Int
     }
+    createCharacter: { // args
+      coursePageId?: string | null; // String
+      description?: string | null; // String
+      image?: string | null; // String
+      name?: string | null; // String
+    }
     createChat: { // args
       lessonId?: string | null; // String
       messages?: NexusGenInputs['MessagesInput'] | null; // MessagesInput
@@ -4383,6 +4416,9 @@ export interface NexusGenArgTypes {
       level?: number | null; // Float
       myProgress?: NexusGenInputs['MyProgressList'] | null; // MyProgressList
     }
+    deleteCharacter: { // args
+      id?: string | null; // String
+    }
     deleteChat: { // args
       id?: string | null; // String
     }
@@ -4565,6 +4601,12 @@ export interface NexusGenArgTypes {
       number?: string | null; // String
       sales_cycle?: NexusGenInputs['SalesCycle'] | null; // SalesCycle
       tags?: Array<string | null> | null; // [String]
+    }
+    updateCharacter: { // args
+      description?: string | null; // String
+      id?: string | null; // String
+      image?: string | null; // String
+      name?: string | null; // String
     }
     updateChat: { // args
       id?: string | null; // String
@@ -4862,6 +4904,9 @@ export interface NexusGenArgTypes {
     }
     challengeResults: { // args
       id?: string | null; // String
+    }
+    characters: { // args
+      coursePageId: string; // String!
     }
     chat: { // args
       id: string; // String!

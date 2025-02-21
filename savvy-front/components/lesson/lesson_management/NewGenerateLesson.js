@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import { TailSpin } from "react-loader-spinner";
 import dynamic from "next/dynamic";
+import { v4 as uuidv4 } from "uuid";
 
 import ChangePositions from "./ChangePositions";
 import {
@@ -16,6 +17,7 @@ import {
 } from "./../styles/DevPageStyles";
 import { autoResizeTextarea } from "../SimulatorDevelopmentFunctions";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import CharacterManagement from "./CharacterManagement";
 
 const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>Loading...</p>,
@@ -77,17 +79,6 @@ const Progress2 = styled.div`
 
 const Break = styled.div`
   margin-bottom: 30px;
-`;
-
-const SingleCharatcerStyles = styled.div`
-  border-bottom: 2px solid #f1f1f1;
-  padding-bottom: 20px;
-  margin-bottom: 30px;
-  .character_image_icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-  }
 `;
 
 let updatedStructureExample = {
@@ -169,21 +160,10 @@ const GenerateLesson = (props) => {
   const [storyPrompt, setStoryPrompt] = useState();
   const [isStoryBeingGenerated, setIsStoryBeingGenerated] = useState(false);
   const [backgroundStory, setBackgroundStory] = useState(props.story || "");
-  const [conflict, setConflict] = useState(null);
   const [language, setLanguage] = useState("English");
   const [country, setCountry] = useState("");
 
-  //characters
-
-  const [characters, setCharacters] = useState(
-    props.characters || [
-      {
-        name: "",
-        description: "",
-        image: "",
-      },
-    ]
-  );
+  const [characters, setCharacters] = useState(lesson.coursePage.characters);
 
   const [updateLesson, { data, loading }] = useMutation(
     UPDATE_LESSON_MUTATION,
@@ -456,26 +436,15 @@ const GenerateLesson = (props) => {
     setBackgroundStory(dataFromChild);
   };
 
-  // Add a new character
-  const addCharacter = () => {
-    const newCharacter = {
-      name: "",
-      description: "",
-      image: "",
-    };
-    setCharacters([...characters, newCharacter]);
-  };
-
-  const updateCharacters = (character, index) => {
-    const updatedCharacters = [...characters];
-    updatedCharacters[index] = character;
-    setCharacters(updatedCharacters);
-  };
-
-  const removeCharacter = (index) => {
-    const updatedCharacters = [...characters];
-    updatedCharacters.splice(index, 1);
-    setCharacters(updatedCharacters);
+  const passUpdatedCharacters = (character) => {
+    const index = characters.findIndex((c) => c.id === character.id);
+    if (index === -1) {
+      setCharacters([...characters, character]);
+    } else {
+      const updatedCharacters = [...characters];
+      updatedCharacters[index] = character;
+      setCharacters(updatedCharacters);
+    }
   };
 
   return (
@@ -564,17 +533,25 @@ const GenerateLesson = (props) => {
         </ActionButton>
         <ActionButton onClick={async (e) => {}}>Summarize</ActionButton>
       </Buttons>
+      {console.log("props.coursePageId", props.coursePageId)}
       <Title>Characters</Title>
-      {[...characters].map((ch, index) => (
-        <CharacterData
-          character={ch}
-          index={index}
-          key={`${index}_character_index`}
-          updateCharacters={updateCharacters}
-          removeCharacter={removeCharacter}
-        />
-      ))}
-      <Buttons>
+      {[...characters].map((ch, index) => {
+        return (
+          <CharacterManagement
+            id={ch.id}
+            character={ch}
+            index={index}
+            key={`character_${ch.id ? ch.id : index}`}
+            coursePageId={props.coursePageId}
+            passUpdatedCharacters={passUpdatedCharacters}
+          />
+        );
+      })}
+      <CharacterManagement
+        coursePageId={props.coursePageId}
+        passUpdatedCharacters={passUpdatedCharacters}
+      />
+      {/* <Buttons>
         <SecondaryButton onClick={addCharacter}>Add Character</SecondaryButton>
         <ActionButton
           onClick={async (e) => {
@@ -588,11 +565,10 @@ const GenerateLesson = (props) => {
             });
           }}
         >
-          Save Characters
+          {loading ? "..." : "Save Characters"}
         </ActionButton>
-      </Buttons>
+      </Buttons> */}
       <Break />
-
       {/* <Row>
         <div className="description">Simulator prompt</div>
         <div className="action_area">
@@ -667,106 +643,6 @@ const GenerateLesson = (props) => {
         />
       )} */}
     </Styles>
-  );
-};
-
-const CharacterData = ({
-  character,
-  index,
-  updateCharacters,
-  removeCharacter,
-}) => {
-  const [image, setImage] = useState("");
-  const [imageUploading, setImageUploading] = useState(false);
-  // Update an existing character's field
-  const updateCharacter = (field, value) => {
-    const updatedCharacter = { ...character }; // Clone the current character
-    updatedCharacter[field] = value; // Update the specific field
-    // Use the explicit index
-    updateCharacters(updatedCharacter, index);
-  };
-  // Remove a character
-  const deleteCharacter = (index) => {
-    removeCharacter(index);
-  };
-
-  const uploadImage = async (e, characterIndex) => {
-    setImageUploading(true);
-    const files = e.target.files;
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "savvy-app");
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-    const file = await res.json();
-    setImage(file.secure_url);
-
-    // Pass the explicit characterIndex instead of relying on the closure
-    updateCharacter("image", file.secure_url, characterIndex);
-    setImageUploading(false);
-  };
-
-  return (
-    <SingleCharatcerStyles>
-      <Row>
-        <div className="description">Name</div>
-        <div className="action_area">
-          <input
-            name={`character_name_${index}`}
-            onChange={(e) => updateCharacter("name", e.target.value)}
-            value={character.name}
-          />
-          <MicroButton onClick={() => deleteCharacter(index)}>
-            Remove Character
-          </MicroButton>
-        </div>
-      </Row>
-      <Row>
-        <div className="description">Description</div>
-        <div className="action_area">
-          <input
-            name={`character_desc_${index}`}
-            onChange={(e) => updateCharacter("description", e.target.value)}
-            value={character.description}
-          />
-        </div>
-      </Row>
-      <Row>
-        <div className="description">
-          <div>Image</div>
-          <div>
-            {character.image ? (
-              <img className="character_image_icon" src={character.image} />
-            ) : null}
-          </div>
-        </div>
-        <div className="action_area">
-          <input
-            onChange={(e) => updateCharacter("image", e.target.value)}
-            value={character.image}
-            placeholder=""
-          />
-          <input
-            type="file"
-            onChange={(e) => {
-              uploadImage(e, index);
-            }}
-            style={{ display: "none" }}
-            id={`characterImageUpload_${index}`}
-          />
-          <label htmlFor={`characterImageUpload_${index}`}>
-            <MicroButton as="span">
-              {imageUploading ? "Uploading..." : "Upload"}
-            </MicroButton>
-          </label>
-        </div>
-      </Row>
-    </SingleCharatcerStyles>
   );
 };
 

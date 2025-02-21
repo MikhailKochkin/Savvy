@@ -152,6 +152,7 @@ const FixedChat = (props) => {
                   key={i}
                   time={i}
                   role="author"
+                  characters={props.characters}
                   m={m}
                   me={me}
                   author={author}
@@ -188,6 +189,7 @@ const FixedChat = (props) => {
                 id={"message" + i + id}
                 key={i}
                 time={i}
+                characters={props.characters}
                 role="student"
                 shouldSlide={true}
                 m={m}

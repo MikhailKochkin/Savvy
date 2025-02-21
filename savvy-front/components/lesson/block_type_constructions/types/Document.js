@@ -377,7 +377,7 @@ const NewConstructor = (props) => {
                     ifRight={miniQuiz.ifRight}
                     ifWrong={miniQuiz.ifWrong}
                     name={miniQuiz.name}
-                    instructorName={miniQuiz.instructorName}
+                    instructorId={miniQuiz.instructorId}
                     image={miniQuiz.image}
                     hidden={true}
                     lesson={props.lesson}

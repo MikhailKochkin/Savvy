@@ -491,6 +491,59 @@ function courseMutations(t) {
       });
     },
   });
+  t.field("createCharacter", {
+    type: "Character",
+    args: {
+      name: stringArg({ description: "Name of the character" }),
+      image: stringArg({ description: "Image URL of the character" }),
+      description: stringArg({
+        description: "Short description of the character",
+      }),
+      coursePageId: stringArg({
+        description: "Unique identifier of the associated course page",
+      }),
+    },
+    resolve: async (_, args, ctx) => {
+      return await ctx.prisma.character.create({
+        data: {
+          name: args.name,
+          image: args.image,
+          description: args.description,
+          coursePageId: args.coursePageId,
+        },
+      });
+    },
+  });
+
+  t.field("updateCharacter", {
+    type: "Character",
+    args: {
+      id: stringArg({ description: "Unique identifier of the character" }),
+      name: stringArg({ description: "Name of the character" }),
+      image: stringArg({ description: "Image URL of the character" }),
+      description: stringArg({
+        description: "Short description of the character",
+      }),
+    },
+    resolve: async (_, { id, ...updates }, ctx) => {
+      return await ctx.prisma.character.update({
+        where: { id },
+        data: updates,
+      });
+    },
+  });
+
+  t.field("deleteCharacter", {
+    type: "Character",
+    args: {
+      id: stringArg({ description: "Unique identifier of the character" }),
+    },
+    resolve: async (_, args, ctx) => {
+      return await ctx.prisma.character.delete({
+        where: { id: args.id },
+      });
+    },
+  });
 }
 
 module.exports = { courseMutations };

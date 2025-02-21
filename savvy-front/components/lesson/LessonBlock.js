@@ -568,7 +568,7 @@ const LessonBlock = (props) => {
               <Note
                 text={data.text}
                 name={data.name}
-                instructorName={data.instructorName}
+                instructorId={data.instructorId}
                 me={me}
                 clicks={data.link_clicks}
                 user={lesson.user.id}
@@ -677,7 +677,7 @@ const LessonBlock = (props) => {
                 comments={data.comments}
                 true={data.correct}
                 name={data.name}
-                instructorName={data.instructorName}
+                instructorId={data.instructorId}
                 image={data.image}
                 goal={data.goal}
                 user={data.user.id}
@@ -724,7 +724,7 @@ const LessonBlock = (props) => {
                 ifRight={data.ifRight}
                 ifWrong={data.ifWrong}
                 name={data.name}
-                instructorName={data.instructorName}
+                instructorId={data.instructorId}
                 image={data.image}
                 hidden={true}
                 lesson={lesson}
@@ -853,7 +853,7 @@ const LessonBlock = (props) => {
                 name={data.name}
                 me={me}
                 author={lesson.user}
-                characters={props.characters}
+                characters={props.lesson.coursePage.characters}
                 previousStories={props.previousStories}
                 isSecret={data.isSecret}
                 type={data.type}

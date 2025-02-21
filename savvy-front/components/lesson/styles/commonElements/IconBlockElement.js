@@ -1,6 +1,6 @@
 import { IconBlock } from "./QuestionStyles";
 
-const IconBlockElement = ({ image, instructorName, author }) => {
+const IconBlockElement = ({ image, instructorId, author }) => {
   return (
     <IconBlock className="icon-block">
       {image ? (
@@ -15,8 +15,8 @@ const IconBlockElement = ({ image, instructorName, author }) => {
         />
       )}
       <div className="name">
-        {instructorName
-          ? instructorName
+        {instructorId
+          ? instructorId
           : author && author.name
           ? author.name
           : "BeSavvy"}

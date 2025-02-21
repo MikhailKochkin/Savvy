@@ -33,6 +33,7 @@ const SINGLE_LESSON_QUERY = gql`
         }
       }
       characters {
+        id
         name
         description
         image
@@ -49,13 +50,21 @@ const SINGLE_LESSON_QUERY = gql`
       coursePage {
         id
         lessons {
+          id
           number
           characters {
+            id
             name
             description
             image
           }
           story
+        }
+        characters {
+          id
+          name
+          description
+          image
         }
         courseAccessControls {
           id
@@ -144,7 +153,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         name
         type
-        instructorName
+        instructorId
         link_clicks
         complexity
         isSecret
@@ -180,6 +189,9 @@ const SINGLE_LESSON_QUERY = gql`
 
         messages {
           messagesList {
+            id
+            characterId
+            number
             author
             name
             text
@@ -221,7 +233,7 @@ const SINGLE_LESSON_QUERY = gql`
         shouldAnswerSizeMatchSample
         name
         image
-        instructorName
+        instructorId
         next {
           true {
             type
@@ -373,7 +385,7 @@ const SINGLE_LESSON_QUERY = gql`
           }
         }
         name
-        instructorName
+        instructorId
         image
         question
         createdAt

@@ -175,7 +175,7 @@ const NewInteractive = (props) => {
                   ifWrong={el.ifWrong}
                   me={me}
                   problemType={props.type}
-                  instructorName={el.instructorName}
+                  instructorId={el.instructorId}
                   hidden={true}
                   userData={[]}
                   lessonID={lesson.id}

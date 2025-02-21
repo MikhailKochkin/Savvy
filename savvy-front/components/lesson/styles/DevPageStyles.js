@@ -296,10 +296,12 @@ export const SettingsBlock = styled.div`
 `;
 
 export const Buttons = styled.div`
+  width: ${(props) => (props.width ? props.width : "100%")};
   display: flex;
   flex-direction: ${(props) => (props.direction ? props.direction : "row")};
   flex-wrap: wrap;
   justify-content: flex-start;
+  align-items: flex-start;
   gap: ${(props) => (props.gap ? props.gap : "20px")};
   margin: ${(props) => (props.margin ? props.margin : "0 20px")};
 `;

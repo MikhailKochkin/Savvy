@@ -22,6 +22,7 @@ const AvgRating = ({ lesson, type }) => {
       forumId: lesson.forum.id,
     },
   });
+
   if (loadingRatings) return <div></div>;
 
   const ratings = dataRatings ? dataRatings.ratings : [];
@@ -31,7 +32,7 @@ const AvgRating = ({ lesson, type }) => {
     const userRatings = {};
 
     ratings.forEach((rating) => {
-      const userId = rating.user.id;
+      const userId = rating?.user?.id;
       const currentRating = rating.rating;
 
       if (!userRatings[userId] || currentRating > userRatings[userId].rating) {
@@ -50,31 +51,43 @@ const AvgRating = ({ lesson, type }) => {
     // Count the frequency of each rating
     ratings.forEach((rating) => {
       const value = rating.rating;
-      if (frequency[value]) {
-        frequency[value]++;
-      } else {
-        frequency[value] = 1;
-      }
+      frequency[value] = (frequency[value] || 0) + 1;
     });
 
-    // Find the rating with the highest frequency
-    let mode = null;
+    // Determine the maximum frequency
     let maxFrequency = 0;
-
-    for (const [value, count] of Object.entries(frequency)) {
+    for (const count of Object.values(frequency)) {
       if (count > maxFrequency) {
-        mode = value;
         maxFrequency = count;
       }
     }
 
-    return mode;
+    // Find all ratings that share the maximum frequency
+    const modeCandidates = [];
+    for (const [value, count] of Object.entries(frequency)) {
+      if (count === maxFrequency) {
+        modeCandidates.push(Number(value));
+      }
+    }
+
+    // If more than one candidate, return the mean of the candidates
+    if (modeCandidates.length > 1) {
+      const sum = modeCandidates.reduce((total, num) => total + num, 0);
+      return sum / modeCandidates.length;
+    }
+
+    // Otherwise, return the single mode candidate
+    return modeCandidates[0];
   };
 
   const sum = uniqueRatings.reduce((acc, rating) => acc + rating.rating, 0);
   const avg = sum / uniqueRatings.length;
   return (
-    <div>{type === "mean" ? avg.toFixed(1) : calculateMode(uniqueRatings)}</div>
+    <div>
+      {type === "mean"
+        ? avg.toFixed(1)
+        : calculateMode(uniqueRatings).toFixed(0)}
+    </div>
   );
 };
 

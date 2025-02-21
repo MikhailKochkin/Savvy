@@ -302,6 +302,18 @@ model CoursePage {
   careerTrackUnit   CareerTrackUnit[] @relation("CareerTrackUnitToCoursePage")
   careerTrack       CareerTrack[]     @relation("CoursePageForCareer")
   courseAccessControls CourseAccessControl[]
+  characters        Character[]
+}
+
+model Character {
+  id           String   @id @default(cuid()) @db.VarChar(30)
+  name         String
+  image        String?
+  description  String
+  coursePageId String   @db.VarChar(30)
+  coursePage   CoursePage @relation(fields: [coursePageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model CourseAccessControl {
@@ -315,7 +327,7 @@ model CourseAccessControl {
   userId            String   @db.VarChar(30)
   coursePageId      String   @db.VarChar(30)
   user              User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  coursePage        CoursePage @relation(fields: [coursePageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  coursePage        CoursePage @relation(fields: [coursePageId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -638,8 +650,7 @@ model NewTest {
   goalType    String?      @default("EDUCATE")
   goal        String?
   name        String?
-  instructorName  String?
-  image       String?
+  instructorId String?
   ifRight     String?
   ifWrong     String?
   question    String[]
@@ -668,7 +679,7 @@ model Note {
   chat        Boolean?
   complexity  Int?     @default(1)
   link_clicks Int?     @default(0)
-  instructorName String? 
+  instructorId String? 
   horizontal_image String?
   vertical_image   String?
   isSecret    Boolean? @default(false)
@@ -870,8 +881,7 @@ model Quiz {
   ifRight     String?
   ifWrong     String?
   name        String?
-  instructorName  String?
-  image       String?
+  instructorId String?
   check       String?      @default("IDEA")
   userId      String       @db.VarChar(30)
   lessonId    String?      @db.VarChar(30)

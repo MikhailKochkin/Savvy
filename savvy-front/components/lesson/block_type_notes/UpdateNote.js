@@ -18,7 +18,7 @@ const UPDATE_NOTE_MUTATION = gql`
     $id: String!
     $text: String
     $name: String
-    $instructorName: String
+    $instructorId: String
     $complexity: Int
     $isSecret: Boolean
     $type: String
@@ -29,7 +29,7 @@ const UPDATE_NOTE_MUTATION = gql`
       id: $id
       text: $text
       name: $name
-      instructorName: $instructorName
+      instructorId: $instructorId
       complexity: $complexity
       isSecret: $isSecret
       type: $type
@@ -39,7 +39,7 @@ const UPDATE_NOTE_MUTATION = gql`
       id
       text
       name
-      instructorName
+      instructorId
       type
       complexity
       isSecret
@@ -139,9 +139,7 @@ const UpdateNote = (props) => {
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
-  const [instructorName, setInstructorName] = useState(
-    props.instructorName || ""
-  );
+  const [instructorId, setInstructorId] = useState(props.instructorId || "");
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
   const [breakBlocks, setBreakBlocks] = useState([]);
@@ -396,7 +394,7 @@ const UpdateNote = (props) => {
           text,
           complexity,
           isSecret,
-          instructorName,
+          instructorId,
           type,
           name,
           horizontal_image: horizontalImage,
@@ -483,8 +481,8 @@ const UpdateNote = (props) => {
           <div className="description">Sender Name</div>
           <div className="action_area">
             <input
-              onChange={(e) => setInstructorName(e.target.value)}
-              value={instructorName}
+              onChange={(e) => setinstructorId(e.target.value)}
+              value={instructorId}
               placeholder=""
             />
           </div>

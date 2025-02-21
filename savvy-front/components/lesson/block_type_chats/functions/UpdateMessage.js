@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   MicroButton,
@@ -41,19 +42,6 @@ const IconBlock = styled.div`
   align-items: center;
   width: 80px;
   margin: 0;
-  /* margin: ${(props) => (props.right ? "0 0 0 10px" : "0 10px 0 0 ")}; */
-  .mini_select {
-    border: 1px solid grey;
-    outline: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
-  .icon_section {
-  }
-  .image_section {
-    margin: 10px 0;
-  }
   img {
     width: 50px;
     height: 50px;
@@ -67,6 +55,11 @@ const IconBlock = styled.div`
     font-size: 1.2rem;
     outline: 0;
     text-align: center;
+  }
+  .reaction_image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
   }
   .icon {
     margin: 5px;
@@ -98,8 +91,6 @@ const IconBlock = styled.div`
     align-items: center;
     width: 100%;
     margin-top: 10px;
-    /* height: 25px; */
-    /* margin-right: 15px; */
     button {
       border: none;
       cursor: pointer;
@@ -107,6 +98,14 @@ const IconBlock = styled.div`
       font-size: 1.2rem;
       font-family: Montserrat;
     }
+  }
+  .icon_section {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+  }
+  .image_section {
+    margin: 10px 0;
   }
 `;
 
@@ -153,6 +152,14 @@ const Slider = styled.span`
   }
 `;
 
+const MessageManagementPanel = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 10px 0;
+`;
+
 const DynamicHoverEditor = dynamic(import("../../../editor/HoverEditor"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
@@ -163,24 +170,27 @@ const UpdateMessage = (props) => {
   const { t } = useTranslation("lesson");
 
   const [message, setMessage] = useState({
+    id: props.id,
     author: props.author?.toLowerCase() || "author",
     name: props.name || (props.author === "author" ? "author" : "student"),
     text: props.text,
     reactions: props.reactions || [],
     image: props.image,
+    characterId: props.characterId,
     isAiAssistantOn: props.isAiAssistantOn || false,
   });
-  console.log("message", message);
 
   let isChecked = message.author === "author";
 
   useEffect(() => {
     setMessage({
+      id: props.id,
       author: props.author?.toLowerCase() || "author",
       name: props.name || (props.author === "author" ? "author" : "student"),
       text: props.text,
       reactions: props.reactions || [],
       image: props.image,
+      characterId: props.characterId,
       isAiAssistantOn: props.isAiAssistantOn || false,
     });
   }, [
@@ -190,6 +200,7 @@ const UpdateMessage = (props) => {
     props.reactions,
     props.image,
     props.isAiAssistantOn,
+    props.characterId,
   ]);
 
   const updateMessage = (fields) => {
@@ -198,6 +209,7 @@ const UpdateMessage = (props) => {
       ...fields, // Update multiple fields simultaneously
     };
     setMessage(updatedMessage);
+
     props.passUpdatedMessage(updatedMessage, props.index);
   };
 
@@ -262,119 +274,155 @@ const UpdateMessage = (props) => {
       </Phrase>
 
       {/* Reactions Management */}
-      <Buttons margin="0 0 40px 0" gap="10px">
-        {message.author !== "student" ? (
-          <>
-            <MicroButton
-              onClick={() => {
-                const updatedReactions = message.reactions.slice(0, -1);
-                updateMessage({ reactions: updatedReactions });
-              }}
-            >
-              -1 {t("reaction")}
-            </MicroButton>
-            <MicroButton
-              onClick={() => {
-                const updatedReactions = [
-                  ...message.reactions,
-                  { reaction: "", comment: "" },
-                ];
-                updateMessage({ reactions: updatedReactions });
-              }}
-            >
-              +1 {t("reaction")}
-            </MicroButton>
-          </>
-        ) : null}
-        <MicroButton
-          onClick={() => {
-            const link = prompt("Image link: ", message.image || "");
-            if (link) updateMessage({ image: link });
-          }}
-        >
-          {/* {t("image")} */}
-          Change image
-        </MicroButton>
-        <MicroSelect
-          value={message.name}
-          onChange={(e) => {
-            if (e.target.value === "author" || e.target.value === "student") {
-              updateMessage({ name: e.target.value, image: null });
-            } else {
-              const character = characters.find(
-                (character) => character.name === e.target.value
-              );
-              if (character) {
-                updateMessage({
-                  name: character.name,
-                  image: character.image,
-                });
+      <MessageManagementPanel>
+        <Buttons margin="0" gap="10px" width="50%">
+          <MicroButton
+            onClick={() => {
+              if (confirm("Are you sure?")) {
+                props.removeMessageWithId(props.id);
               }
-            }
-          }}
-        >
-          <option value="author">author</option>
-          <option value="student">student</option>
-          {characters &&
-            characters?.map((character, index) => (
-              <option key={index} value={character.name}>
-                {character.name}
-              </option>
-            ))}
-        </MicroSelect>
-      </Buttons>
+            }}
+          >
+            Delete
+          </MicroButton>
+          <MicroButton
+            onClick={() => {
+              props.insertNewMessageAfter(props.id);
+            }}
+          >
+            +1 Message
+          </MicroButton>
+          {message.author !== "student" ? (
+            <>
+              <MicroButton
+                onClick={() => {
+                  const updatedReactions = [
+                    ...message.reactions,
+                    { reaction: "", comment: "" },
+                  ];
+                  updateMessage({ reactions: updatedReactions });
+                }}
+              >
+                +1 {t("reaction")}
+              </MicroButton>
+            </>
+          ) : null}
+        </Buttons>
+        <Buttons margin="0" gap="10px" width="40%">
+          <MicroSelect
+            value={message.name}
+            onChange={(e) => {
+              if (e.target.value === "author" || e.target.value === "student") {
+                updateMessage({ name: e.target.value, image: null });
+              } else {
+                const character = characters.find(
+                  (character) => character.name === e.target.value
+                );
+                if (character) {
+                  updateMessage({
+                    name: character.name,
+                    image: character.image,
+                    characterId: character.id,
+                  });
+                }
+              }
+            }}
+          >
+            <option value="author">author</option>
+            <option value="student">student</option>
+            {characters &&
+              characters?.map((character, index) => (
+                <option key={index} value={character.name}>
+                  {character.name}
+                </option>
+              ))}
+          </MicroSelect>
+          <MicroButton
+            onClick={() => {
+              const link = prompt("Image link: ", message.image || "");
+              if (link) updateMessage({ image: link });
+            }}
+          >
+            {/* {t("image")} */}
+            Change image
+          </MicroButton>
+        </Buttons>
+      </MessageManagementPanel>
 
       {/* Display Reactions */}
       {message.reactions.length > 0 &&
-        message.reactions.map((r, i) => (
-          <ReactBlock key={i}>
-            <Header>
-              {t("reaction")} № {i + 1}
-            </Header>
-            <Phrase>
-              <IconBlock>
-                <div className="icon">ST</div>
-              </IconBlock>
-              <Frame>
-                <DynamicHoverEditor
-                  index={i}
-                  name="reaction"
-                  getEditorText={(value) =>
-                    updateReaction(i, "reaction", value)
-                  }
-                  value={r.reaction}
-                />
-              </Frame>
-            </Phrase>
-            <Header>
-              {t("response")} № {i + 1}
-            </Header>
-            <Phrase>
-              <IconBlock>
-                {message.author === "author" ? (
-                  message?.image ? (
-                    <img src={message?.image} />
+        message.reactions.map((r, i) => {
+          let reaction = { ...r };
+          if (!reaction.id) {
+            reaction.id = uuidv4();
+          }
+          return (
+            <ReactBlock key={i}>
+              <Header>
+                {t("reaction")} № {i + 1}
+              </Header>
+              <Phrase>
+                <IconBlock>
+                  <div className="icon">ST</div>
+                </IconBlock>
+                <Frame>
+                  <DynamicHoverEditor
+                    index={i}
+                    name="reaction"
+                    getEditorText={(value) =>
+                      updateReaction(i, "reaction", value)
+                    }
+                    value={r.reaction}
+                  />
+                </Frame>
+              </Phrase>
+              <Header>
+                {t("response")} № {i + 1}
+              </Header>
+              <Phrase>
+                <IconBlock>
+                  {message.author === "author" ? (
+                    message?.image ? (
+                      <img src={message?.image} />
+                    ) : (
+                      <div className="icon">
+                        {message.name[0].toUpperCase() +
+                          message.name[1].toUpperCase()}
+                      </div>
+                    )
                   ) : (
-                    <div className="icon">
-                      {message.name[0].toUpperCase() +
-                        message.name[1].toUpperCase()}
-                    </div>
-                  )
-                ) : (
-                  "ST"
-                )}
-              </IconBlock>
-              <Frame>
-                <DynamicHoverEditor
-                  index={i}
-                  name="comment"
-                  getEditorText={(value) => updateReaction(i, "comment", value)}
-                  value={r.comment}
-                />
-              </Frame>
-            </Phrase>
-          </ReactBlock>
-        ))}
+                    "ST"
+                  )}
+                </IconBlock>
+                <Frame>
+                  <DynamicHoverEditor
+                    index={i}
+                    name="comment"
+                    getEditorText={(value) =>
+                      updateReaction(i, "comment", value)
+                    }
+                    value={r.comment}
+                  />
+                </Frame>
+              </Phrase>
+              <MicroButton
+                onClick={() => {
+                  const confirmed = confirm(
+                    "Are you sure you want to delete this reaction?"
+                  );
+                  if (confirmed) {
+                    const updatedReactions = message.reactions.filter(
+                      (_, index) => index !== i
+                    );
+                    updateMessage({ reactions: updatedReactions });
+                  }
+                }}
+              >
+                Delete
+              </MicroButton>
+            </ReactBlock>
+          );
+        })}
     </Styles>
   );
 };
