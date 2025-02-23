@@ -260,6 +260,7 @@ function lessonQueries(t) {
           },
           coursePage: {
             include: {
+              characters: true,
               lessons: {
                 select: {
                   id: true,

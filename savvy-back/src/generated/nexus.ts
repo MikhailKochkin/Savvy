@@ -4230,14 +4230,14 @@ export interface NexusGenArgTypes {
       goal?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
-      image?: string | null; // String
-      instructorName?: string | null; // String
+      instructorId?: string | null; // String
       lessonId?: string | null; // String
       name?: string | null; // String
       question?: Array<string | null> | null; // [String]
       type?: string | null; // String
     }
     createNote: { // args
+      instructorId?: string | null; // String
       lessonId?: string | null; // String
       name?: string | null; // String
       text?: string | null; // String
@@ -4287,8 +4287,7 @@ export interface NexusGenArgTypes {
       goalType?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
-      image?: string | null; // String
-      instructorName?: string | null; // String
+      instructorId?: string | null; // String
       lessonId?: string | null; // String
       name?: string | null; // String
       question?: string | null; // String
@@ -4728,8 +4727,7 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
-      image?: string | null; // String
-      instructorName?: string | null; // String
+      instructorId?: string | null; // String
       name?: string | null; // String
       next?: NexusGenInputs['NextTypeInput'] | null; // NextTypeInput
       question?: Array<string | null> | null; // [String]
@@ -4739,7 +4737,7 @@ export interface NexusGenArgTypes {
       complexity?: number | null; // Int
       horizontal_image?: string | null; // String
       id?: string | null; // String
-      instructorName?: string | null; // String
+      instructorId?: string | null; // String
       isSecret?: boolean | null; // Boolean
       link_clicks?: number | null; // Int
       name?: string | null; // String
@@ -4798,8 +4796,7 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
-      image?: string | null; // String
-      instructorName?: string | null; // String
+      instructorId?: string | null; // String
       isOrderOfAnswersImportant?: boolean | null; // Boolean
       isScoringShown?: boolean | null; // Boolean
       lessonId?: string | null; // String

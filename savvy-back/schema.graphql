@@ -1299,15 +1299,15 @@ type Mutation {
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
   createMiniForum(lessonId: String, type: String, value: String): MiniForum
   createMiniStatement(miniforumId: String, text: String): Statement
-  createNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswersInput, correct: [Boolean], goal: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: [String], type: String): NewTest
-  createNote(lessonId: String, name: String, text: String): Note
+  createNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswersInput, correct: [Boolean], goal: String, ifRight: String, ifWrong: String, instructorId: String, lessonId: String, name: String, question: [String], type: String): NewTest
+  createNote(instructorId: String, lessonId: String, name: String, text: String): Note
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
   createPost(image: String, summary: String, text: String, title: String): Post
   createPrivateOrder(coursePageId: String, promocode: String, userId: String): PaymentInfo
   createProblem(goal: String, lessonId: String, name: String, steps: ProblemStructureInput, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createProcessManager(backgroundStory: String, edges: ProcessEdges, lessonId: String, name: String, nodes: ProcessNodes, remainingResources: Int): ProcessManager
-  createQuiz(answer: String, answers: ComplexAnswerInput, goalType: String, ifRight: String, ifWrong: String, image: String, instructorName: String, lessonId: String, name: String, question: String, type: String): Quiz
+  createQuiz(answer: String, answers: ComplexAnswerInput, goalType: String, ifRight: String, ifWrong: String, instructorId: String, lessonId: String, name: String, question: String, type: String): Quiz
   createQuizResult(answer: String, comment: String, correct: Boolean, explanation: String, goal: String, hint: String, ideasList: QuizIdeasInput, improvement: String, lessonId: String, quiz: String, result: String, type: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createReferral(referrerId: String): Referral
@@ -1398,15 +1398,15 @@ type Mutation {
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateLessonUser(id: String, ownerEmail: String): Lesson
   updateMiniStatement(comments: [String], id: String): Statement
-  updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswersInput, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, name: String, next: NextTypeInput, question: [String], type: String): NewTest
-  updateNote(complexity: Int, horizontal_image: String, id: String, instructorName: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextTypeInput, text: String, type: String, vertical_image: String): Note
+  updateNewTest(answers: [String], comments: [String], complexTestAnswers: ComplexTestAnswersInput, complexity: Int, correct: [Boolean], goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, instructorId: String, name: String, next: NextTypeInput, question: [String], type: String): NewTest
+  updateNote(complexity: Int, horizontal_image: String, id: String, instructorId: String, isSecret: Boolean, link_clicks: Int, name: String, next: NextTypeInput, text: String, type: String, vertical_image: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
   updateProblem(complexity: Int, context: String, goal: String, id: String, isSecret: Boolean, name: String, steps: ProblemStructureInput, text: String, type: String): Problem
   updateProcessManager(backgroundStory: String, edges: ProcessEdges, id: String, name: String, nodes: ProcessNodes, remainingResources: Int): ProcessManager
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, answers: ComplexAnswerInput, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, image: String, instructorName: String, isOrderOfAnswersImportant: Boolean, isScoringShown: Boolean, lessonId: String, name: String, next: NextTypeInput, question: String, shouldAnswerSizeMatchSample: Boolean, type: String): Quiz
+  updateQuiz(answer: String, answers: ComplexAnswerInput, check: String, complexity: Int, goal: String, goalType: String, id: String, ifRight: String, ifWrong: String, instructorId: String, isOrderOfAnswersImportant: Boolean, isScoringShown: Boolean, lessonId: String, name: String, next: NextTypeInput, question: String, shouldAnswerSizeMatchSample: Boolean, type: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateReply(id: String, status: CommentStatus, text: String): Comment
   updateScore(id: String, score: Int): User

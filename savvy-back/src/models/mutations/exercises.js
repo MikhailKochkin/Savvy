@@ -45,8 +45,7 @@ function exercisesMutations(t) {
       goal: stringArg(),
       type: stringArg(),
       name: stringArg(),
-      instructorName: stringArg(),
-      image: stringArg(),
+      instructorId: stringArg(),
       ifRight: stringArg(),
       ifWrong: stringArg(),
     },
@@ -101,18 +100,6 @@ function exercisesMutations(t) {
           },
         },
       });
-      const miniForum = await ctx.prisma.miniForum.create({
-        data: {
-          user: {
-            connect: { id: ctx.res.req.userId },
-          },
-          lesson: {
-            connect: { id: lessonId },
-          },
-          value: newTest.id,
-          type: "NewTest",
-        },
-      });
 
       return newTest;
     },
@@ -135,8 +122,7 @@ function exercisesMutations(t) {
       goal: stringArg(),
       goalType: stringArg(),
       name: stringArg(),
-      instructorName: stringArg(),
-      image: stringArg(),
+      instructorId: stringArg(),
       next: arg({
         type: "NextTypeInput", // name should match the name you provided
       }),
@@ -465,9 +451,8 @@ function exercisesMutations(t) {
   t.field("createQuiz", {
     type: "Quiz",
     args: {
-      instructorName: stringArg(),
       name: stringArg(),
-      image: stringArg(),
+      instructorId: stringArg(),
       question: stringArg(),
       answer: stringArg(),
       lessonId: stringArg(),
@@ -502,18 +487,6 @@ function exercisesMutations(t) {
           },
         },
       });
-      const miniForum = await ctx.prisma.miniForum.create({
-        data: {
-          user: {
-            connect: { id: ctx.res.req.userId },
-          },
-          lesson: {
-            connect: { id: lessonId },
-          },
-          value: Quiz.id,
-          type: "Quiz",
-        },
-      });
       return Quiz;
     },
   });
@@ -535,9 +508,8 @@ function exercisesMutations(t) {
       check: stringArg(),
       goal: stringArg(),
       goalType: stringArg(),
-      instructorName: stringArg(),
       name: stringArg(),
-      image: stringArg(),
+      instructorId: stringArg(),
       isOrderOfAnswersImportant: booleanArg(),
       shouldAnswerSizeMatchSample: booleanArg(),
       answers: arg({
@@ -662,6 +634,7 @@ function exercisesMutations(t) {
       lessonId: stringArg(),
       text: stringArg(),
       name: stringArg(),
+      instructorId: stringArg(),
     },
     resolve: async (_, args, ctx) => {
       const lessonId = args.lessonId;
@@ -675,18 +648,6 @@ function exercisesMutations(t) {
             connect: { id: lessonId },
           },
           ...args,
-        },
-      });
-      const miniForum = await ctx.prisma.miniForum.create({
-        data: {
-          user: {
-            connect: { id: ctx.res.req.userId },
-          },
-          lesson: {
-            connect: { id: lessonId },
-          },
-          value: Note.id,
-          type: "Note",
         },
       });
       return Note;
@@ -703,8 +664,8 @@ function exercisesMutations(t) {
       complexity: intArg(),
       horizontal_image: stringArg(),
       vertical_image: stringArg(),
+      instructorId: stringArg(),
       name: stringArg(),
-      instructorName: stringArg(),
       next: arg({
         type: "NextTypeInput", // name should match the name you provided
       }),
