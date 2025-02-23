@@ -164,7 +164,7 @@ const TextBar = styled.div`
     text-decoration: underline;
   }
   @media (max-width: 800px) {
-    width: 90%;
+    width: 95%;
     padding: 2%;
     font-size: 1.6rem;
     #text {
@@ -314,12 +314,12 @@ const SingleProblem = (props) => {
               story={story}
               type={problem.type}
               jsonStoryString={props.jsonStoryString}
+              characters={props.characters}
               author={author}
               onFinish={onFinish}
               context={lesson.context ? lesson.context : ""}
             />
           )}
-
           {(!problem.steps || problem.steps.problemItems?.length == 0) && (
             <ResponseArea>
               <h2>{t("write_answer")}</h2>

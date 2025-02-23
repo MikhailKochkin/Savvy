@@ -198,7 +198,7 @@ const UpdateChat = (props) => {
           <select
             name="types"
             id="types"
-            defaultValue={type}
+            value={type}
             onChange={(e) => setType(e.target.value)}
           >
             <option value={null || undefined}>Undefined</option>
@@ -224,16 +224,16 @@ const UpdateChat = (props) => {
       </Row>
 
       {/* Button to add a new message at the beginning */}
-      <Row>
+      {/* <Row>
         <SecondaryButton
           onClick={(e) => {
             e.preventDefault();
             insertNewMessageAfter(0);
           }}
         >
-          +1 {t("message")} at beginning
+          +1 {t("message")}
         </SecondaryButton>
-      </Row>
+      </Row> */}
 
       {/* Render the list of messages */}
       {!generating &&
@@ -262,6 +262,7 @@ const UpdateChat = (props) => {
               name={m.name}
               image={m.image}
               me={props.me}
+              characterId={m.characterId}
               characters={props.characters}
               isAiAssistantOn={m.isAiAssistantOn}
               reactions={m.reactions}

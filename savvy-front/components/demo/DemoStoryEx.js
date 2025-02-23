@@ -317,7 +317,7 @@ const StoryEx = (props) => {
           comments={el.comments}
           true={el.correct}
           user={el.user.id}
-          instructorName={el.instructorName}
+          instructorId={el.instructorId}
           name={el.name}
           image={el.image}
           user_name={el.user}

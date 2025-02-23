@@ -4,11 +4,9 @@ import parse from "html-react-parser";
 import { TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import {
-  ResultCircle,
   MiniOpenQuestionFrame,
   MiniAIButton,
 } from "../../styles/commonElements/QuestionStyles";
-import { removeSpecialChars } from "../../SimulatorDevelopmentFunctions";
 
 const Styles = styled.div`
   font-size: 1.4rem;

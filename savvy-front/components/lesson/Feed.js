@@ -318,13 +318,15 @@ const Border = styled.div`
 `;
 
 const Block = styled.div`
-  min-height: 50vh;
+  min-height: 30vh;
+  margin-bottom: 50px;
   display: ${(props) => (props.show === "final" ? "none" : "flex")};
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: ${(props) => (props.open ? "70vw" : "100vw")};
   @media (max-width: 800px) {
+    margin-bottom: 20px;
     /* width: ${(props) => (props.open ? "0vw" : "95vw")}; */
   }
 `;

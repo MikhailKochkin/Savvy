@@ -30,42 +30,41 @@ const Styles = styled.div`
 `;
 
 const SingleQuiz = (props) => {
-  const [update, setUpdate] = useState(false);
+  const [isUpdateModeOn, setIsUpdateModeOn] = useState(false); // change quiz view to update view
   const [isMoveMade, setIsMoveMade] = useState(false);
 
   const { t } = useTranslation("lesson");
 
   const {
+    id,
+    lessonID,
     me,
+    name,
+    question,
+    answer,
+    answers,
     story,
     complexity,
     ifWrong,
     ifRight,
     check,
     author,
-    isOrderOfAnswersImportant,
-    shouldAnswerSizeMatchSample,
-    studentAnswerPassedFromAnotherComponent,
-    openQuestionType,
-    pushNextElementToProblem,
-    problemType,
-    type,
-    question,
-    answer,
-    answers,
-    goalType,
-    lessonID,
-    quizID,
-    image,
-    name,
-    jsonStoryString,
-    instructorId,
-    isScoringShown,
-    next,
-    passResultToTextEditor,
-    getResult: parentGetResult,
     lesson,
     characters,
+    instructorId,
+    jsonStoryString,
+    isOrderOfAnswersImportant,
+    shouldAnswerSizeMatchSample,
+    isScoringShown,
+    type,
+    openQuestionType,
+    problemType,
+    goalType,
+    next, // ???
+    studentAnswerPassedFromAnotherComponent,
+    passResultToTextEditor,
+    pushNextElementToProblem,
+    getResult: parentGetResult,
   } = props;
   useEffect(() => {
     smoothscroll.polyfill();
@@ -73,7 +72,7 @@ const SingleQuiz = (props) => {
 
   // Toggle update mode
   const toggleUpdate = useCallback(() => {
-    setUpdate((prev) => !prev);
+    setIsUpdateModeOn((prev) => !prev);
   }, []);
 
   // Move to next problem step
@@ -122,9 +121,9 @@ const SingleQuiz = (props) => {
     }
   };
 
-  const moveBranch = (data) => {
-    pushNextElementToProblem([true, next?.true || "finish"]);
-  };
+  // const moveBranch = (data) => {
+  //   pushNextElementToProblem([true, next?.true || "finish"]);
+  // };
 
   // Pass result up to parent component if needed
   const handleGetResult = (data, type = null) => {
@@ -134,26 +133,26 @@ const SingleQuiz = (props) => {
   };
 
   const width = props.questionFormat === "mini" ? "100%" : "570px";
-
   // Components map based on type
   const renderQuizComponent = () => {
     const commonProps = {
-      id: quizID,
-      question: question || "No question provided.",
+      id,
+      lessonId: lessonID,
+      quizId: id,
       author,
       me,
-      story,
-      goalType,
+      question: question || "No question provided.",
       answer,
       answers: answers || [],
       ifWrong,
       ifRight,
-      lessonId: lessonID,
-      quizId: quizID,
+      characters,
+      instructorId,
+      story,
+      goalType,
       passQuizDataToParent,
-      name,
-      image,
       isScoringShown,
+      problemType: problemType,
     };
 
     switch (type?.toLowerCase()) {
@@ -168,19 +167,17 @@ const SingleQuiz = (props) => {
           <Prompt
             {...commonProps}
             openQuestionType={openQuestionType}
-            instructorId={instructorId}
             studentAnswerPassedFromAnotherComponent={
               studentAnswerPassedFromAnotherComponent
             }
           />
         );
       case "findall":
-        return <FindAll {...commonProps} problemType={problemType} />;
+        return <FindAll {...commonProps} />;
       case "complex":
         return (
           <ComplexQuestion
             {...commonProps}
-            problemType={problemType}
             isOrderOfAnswersImportant={isOrderOfAnswersImportant}
             shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
             check={check}
@@ -195,7 +192,6 @@ const SingleQuiz = (props) => {
             {...commonProps}
             check={check}
             jsonStoryString={jsonStoryString}
-            instructorId={instructorId}
             studentAnswerPassedFromAnotherComponent={
               studentAnswerPassedFromAnotherComponent
             }
@@ -206,19 +202,19 @@ const SingleQuiz = (props) => {
   };
 
   return (
-    <Styles width={width} id={quizID}>
+    <Styles width={width} id={id}>
       {/* Admin Controls */}
+
       {me && !story && (
         <Buttons gap="20px" margin="20px 0">
           <SecondaryButton onClick={toggleUpdate}>
-            {update ? t("back") : t("update")}
+            {isUpdateModeOn ? t("back") : t("update")}
           </SecondaryButton>
-          <DeleteSingleQuiz id={me.id} quizID={quizID} lessonID={lessonID} />
+          <DeleteSingleQuiz id={me.id} quizID={id} lessonID={lessonID} />
         </Buttons>
       )}
-
       {/* Update Mode */}
-      {update && (
+      {isUpdateModeOn && (
         <UpdateQuiz
           quizId={props.id}
           lessonID={lessonID}
@@ -228,7 +224,7 @@ const SingleQuiz = (props) => {
           question={question || "No question provided."}
           name={name}
           characters={characters}
-          image={image}
+          instructorId={instructorId}
           type={type || undefined}
           isOrderOfAnswersImportant={isOrderOfAnswersImportant}
           shouldAnswerSizeMatchSample={shouldAnswerSizeMatchSample}
@@ -243,9 +239,8 @@ const SingleQuiz = (props) => {
           switchUpdate={toggleUpdate}
         />
       )}
-
       {/* Display Quiz Component based on Type */}
-      {!update && renderQuizComponent()}
+      {!isUpdateModeOn && renderQuizComponent()}
     </Styles>
   );
 };

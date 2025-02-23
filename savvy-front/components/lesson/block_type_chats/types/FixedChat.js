@@ -60,7 +60,6 @@ const Next = styled.div`
 `;
 
 const Messages = styled.div`
-  margin: 0 10px;
   /* filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")}; */
 `;
 
@@ -161,6 +160,7 @@ const FixedChat = (props) => {
                 {m.reactions && m.reactions.length > 0 && (
                   <Reaction
                     reactions={m.reactions}
+                    characters={props.characters}
                     me={me}
                     author={author}
                     m={m}

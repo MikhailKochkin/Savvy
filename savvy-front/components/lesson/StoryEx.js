@@ -222,7 +222,7 @@ const StoryEx = (props) => {
       } else if (item.type === "Forum") {
         content = lesson.forum.text;
       } else if (item.type === "Quiz") {
-        content = lesson.quizes.find((quiz) => quiz.id === item.id).question;
+        content = lesson.quizes.find((quiz) => quiz.id === item.id)?.question;
       } else if (item.type === "NewTest") {
         content = lesson.newTests.find((newTest) => newTest.id === item.id)
           .question[0];
@@ -251,6 +251,7 @@ const StoryEx = (props) => {
           total={total}
           author={lesson.user}
           instructorId={el.instructorId}
+          characters={props.characters}
           story={true}
           note={el}
           clicks={el.link_clicks}
@@ -295,6 +296,7 @@ const StoryEx = (props) => {
           true={el.correct}
           user={el.user.id}
           instructorId={el.instructorId}
+          characters={props.characters}
           name={el.name}
           image={el.image}
           user_name={el.user}
@@ -327,6 +329,8 @@ const StoryEx = (props) => {
           isOrderOfAnswersImportant={el.isOrderOfAnswersImportant}
           shouldAnswerSizeMatchSample={el.shouldAnswerSizeMatchSample}
           check={el.check}
+          instructorId={el.instructorId}
+          characters={props.characters}
           jsonStoryString={JSON.stringify(
             lesson.structure
               ? populateLessonStructure(lesson.structure?.lessonItems)
@@ -421,6 +425,7 @@ const StoryEx = (props) => {
           isSecret={el.isSecret}
           type={el.type}
           experience={experience}
+          characters={props.characters}
           total={total}
           clicks={el.link_clicks}
           me={me}
@@ -467,6 +472,7 @@ const StoryEx = (props) => {
           complexity={el.complexity}
           lessonID={lesson.id}
           me={me}
+          characters={props.characters}
           jsonStoryString={JSON.stringify(
             lesson.structure
               ? populateLessonStructure(lesson.structure?.lessonItems)

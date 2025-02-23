@@ -63,12 +63,14 @@ const OpenQuestion = (props) => {
     ifRight,
     ifWrong,
     quizId,
+    lessonId,
     goalType,
     challenge,
     openQuestionType,
     studentAnswerPassedFromAnotherComponent,
     isScoringShown,
     instructorId,
+    characters,
     context,
     image,
     jsonStoryString,
@@ -79,7 +81,7 @@ const OpenQuestion = (props) => {
   // const [correct, setCorrect] = useState(""); // is the answer by the student correct? Used to communicate with the student
   const [correctnessLevel, setCorrectnessLevel] = useState(); // more deep understanding of the correctness. Used to generate prompts
   const [result, setResult] = useState(null); // student's grade
-  const [results, setResults] = useState([]); // student's sciring for all elements from semantic cloud
+  const [results, setResults] = useState([]); // student's scoring for all elements from semantic cloud
   const [isAnswerBeingChecked, setIsAnswerBeingChecked] = useState(false);
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [serverComment, setServerComment] = useState(null);
@@ -134,8 +136,8 @@ const OpenQuestion = (props) => {
 
       createQuizResult({
         variables: {
-          quiz: props.quizId,
-          lessonId: props.lessonId,
+          quiz: quizId,
+          lessonId: lessonId,
           answer: answer,
           correct: isCorrect,
           type: "answer",
@@ -315,8 +317,8 @@ const OpenQuestion = (props) => {
     setResult(result);
     createQuizResult({
       variables: {
-        quiz: props.quizId,
-        lessonId: props.lessonId,
+        quiz: quizId,
+        lessonId: lessonId,
         answer: new_wording,
         correct: result > 58 ? true : false,
         type: "challenge",
@@ -351,8 +353,8 @@ const OpenQuestion = (props) => {
       setHints([...hints, hintGenerationResult.newHint]);
       createQuizResult({
         variables: {
-          quiz: props.quizId,
-          lessonId: props.lessonId,
+          quiz: quizId,
+          lessonId: lessonId,
           answer: answer,
           correct: false,
           type: "hint",
@@ -403,8 +405,8 @@ const OpenQuestion = (props) => {
 
     createQuizResult({
       variables: {
-        quiz: props.quizId,
-        lessonId: props.lessonId,
+        quiz: quizId,
+        lessonId: lessonId,
         answer: answer,
         type: "explanation",
         correct: false,
@@ -441,8 +443,8 @@ const OpenQuestion = (props) => {
     ]);
     createQuizResult({
       variables: {
-        quiz: props.quizId,
-        lessonId: props.lessonId,
+        quiz: quizId,
+        lessonId: lessonId,
         answer: answer,
         type: "improvement",
         correct: false,
@@ -462,8 +464,8 @@ const OpenQuestion = (props) => {
   const revealCorrectAnswer = () => {
     createQuizResult({
       variables: {
-        quiz: props.quizId,
-        lessonId: props.lessonId,
+        quiz: quizId,
+        lessonId: lessonId,
         answer: answer,
         correct: false,
         type: "answerReveal",
@@ -529,6 +531,7 @@ const OpenQuestion = (props) => {
       id={id}
       author={author}
       question={question}
+      characters={characters}
       story={story}
       inputColor={inputColor}
       correctAnswer={props.answer}
@@ -563,6 +566,7 @@ const OpenQuestion = (props) => {
       lessonId={props.lessonId}
       author={author}
       question={question}
+      characters={characters}
       story={story}
       inputColor={inputColor}
       correctAnswer={props.answer}

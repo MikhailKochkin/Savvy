@@ -8,7 +8,6 @@ import smoothscroll from "smoothscroll-polyfill";
 import { useRouter } from "next/router";
 import { autoResizeTextarea } from "../../SimulatorDevelopmentFunctions";
 import {
-  IconBlock,
   Question,
   Answer_text,
   ResultCircle,
@@ -23,6 +22,7 @@ import {
   getMatchingAnswers,
 } from "../functions/AIQuestionFunctions";
 import { getScore, getInputColor } from "../functions/RegularQuestionFunctions";
+import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -97,6 +97,8 @@ const Generate = (props) => {
     quizId,
     lessonId,
     problemType,
+    characters,
+    instructorId,
   } = props;
   const [ideas, setIdeas] = useState([""]);
   const [correctIdeas, setCorrectIdeas] = useState([]);
@@ -138,16 +140,11 @@ const Generate = (props) => {
       {/* 2.1 Question part */}
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
-        <IconBlock>
-          {author && author.image != null ? (
-            <img className="icon" src={author.image} />
-          ) : (
-            <img className="icon" src="../../static/hipster.svg" />
-          )}{" "}
-          <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
-          </div>
-        </IconBlock>{" "}
+        <IconBlockElement
+          instructorId={instructorId}
+          author={author}
+          characters={characters}
+        />
       </div>
       {generating && (
         <Progress2>
@@ -157,18 +154,7 @@ const Generate = (props) => {
       {/* 3. Generate ideas */}
       <>
         <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me && me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              )}
-            </div>{" "}
-            <div className="name">{me.name}</div>
-          </IconBlock>{" "}
+          <IconBlockElement me={me} />
           <Ideas>
             {ideas.map((idea, index) => {
               // 1. detemine the score in the circle in the right bottom corner
@@ -316,16 +302,11 @@ const Generate = (props) => {
             <div className="question_text">
               <p>{AIhint}</p>
             </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              instructorId={instructorId}
+              author={author}
+              characters={characters}
+            />
           </div>
         )}
 
@@ -354,30 +335,14 @@ const Generate = (props) => {
                   ) : null}
                 </p>
               </div>
-              <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
-                </div>
-              </IconBlock>
+              <IconBlockElement
+                instructorId={instructorId}
+                author={author}
+                characters={characters}
+              />
             </div>
             <div className="answer">
-              <IconBlock>
-                <div className="icon2">
-                  {me && me.image ? (
-                    <img className="icon" src={me.image} />
-                  ) : me.surname ? (
-                    `${me.name[0]}${me.surname[0]}`
-                  ) : (
-                    `${me.name[0]}${me.name[1]}`
-                  )}
-                </div>{" "}
-                <div className="name">{me.name}</div>
-              </IconBlock>
+              <IconBlockElement me={me} />
               <OptionsGroup>
                 <Option
                   onClick={(e) => {
@@ -419,16 +384,11 @@ const Generate = (props) => {
                 ))}
               </ul>
             </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              instructorId={instructorId}
+              author={author}
+              characters={characters}
+            />
           </div>
         )}
       </>

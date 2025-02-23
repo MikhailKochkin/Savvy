@@ -108,6 +108,12 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           accessibleLessons
           createdAt
         }
+        characters {
+          id
+          name
+          description
+          image
+        }
       }
     }
   }

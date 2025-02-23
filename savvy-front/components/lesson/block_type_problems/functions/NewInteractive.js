@@ -76,7 +76,7 @@ const Button = styled.div`
 `;
 
 const NewInteractive = (props) => {
-  const { problem, lesson, me, author } = props;
+  const { problem, lesson, me, author, characters } = props;
 
   const [componentList, setComponentList] = useState([]);
 
@@ -225,6 +225,7 @@ const NewInteractive = (props) => {
                   story={true}
                   author={author}
                   context={props.context}
+                  characters={characters}
                 />
               );
             } else if (com.type.toLowerCase() === "newtest") {
@@ -245,6 +246,7 @@ const NewInteractive = (props) => {
                   image={el.image}
                   complexTestAnswers={el.complexTestAnswers}
                   comments={el.comments}
+                  instructorId={el.instructorId}
                   type={el.type}
                   goalType={el.goalType}
                   problemType={props.type}
@@ -257,6 +259,7 @@ const NewInteractive = (props) => {
                   exam={true}
                   author={author}
                   context={props.context}
+                  characters={characters}
                 />
               );
             } else if (com.type.toLowerCase() === "note") {
@@ -283,6 +286,7 @@ const NewInteractive = (props) => {
             } else if (com.type.toLowerCase() === "chat") {
               let el = lesson.chats.filter((q) => q.id === com.id)[0];
               let libraryNotes = lesson.notes;
+              console.log("el", el);
               return (
                 <Chat
                   next={com.next}
@@ -294,7 +298,7 @@ const NewInteractive = (props) => {
                   author={author}
                   complexity={el.complexity}
                   messages={el.messages}
-                  characters={lesson.characters}
+                  characters={characters}
                   id={el.id}
                   lessonId={lesson.id}
                   story={true}

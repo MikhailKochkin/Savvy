@@ -1,10 +1,8 @@
-import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 import styled from "styled-components";
 
 import {
-  IconBlock,
   Options,
   TextBar,
   Group,
@@ -37,6 +35,7 @@ const Test = (props) => {
     answerState,
     commentsList,
     answerOptions,
+    characters,
   } = props;
   return (
     <Styles>
@@ -44,25 +43,13 @@ const Test = (props) => {
         <div className="question_box">
           <div className="question_text">{parse(props.question[0])}</div>
           <IconBlockElement
-            image={image}
             instructorId={instructorId}
             author={author}
+            characters={characters}
           />
         </div>
         <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me &&
-                (me.image ? (
-                  <img className="icon" src={me.image} />
-                ) : me.surname ? (
-                  `${me.name[0]}${me.surname[0]}`
-                ) : (
-                  `${me.name[0]}${me.name[1]}`
-                ))}
-            </div>
-            <div className="name">{me?.name}</div>
-          </IconBlock>
+          <IconBlockElement me={me} />
           <Options>
             {mes.map((answer, index) => (
               <AnswerOption
@@ -91,7 +78,6 @@ const Test = (props) => {
             />
           </div>
         )}
-
         {/* 3. Кнопка ответа  */}
         <Group>
           {answerState == "think" && (
@@ -119,9 +105,9 @@ const Test = (props) => {
                 })}
             </div>
             <IconBlockElement
-              image={image}
               instructorId={instructorId}
               author={author}
+              characters={characters}
             />
           </Question>
         )}

@@ -23,8 +23,11 @@ const CREATE_CHAT_MUTATION = gql`
       isSecret
       link_clicks
       complexity
+      type
       messages {
         messagesList {
+          id
+          characterId
           author
           name
           text
@@ -105,7 +108,6 @@ const CreateChat = (props) => {
     me,
     lessonData,
     initial_data,
-    simulationStory,
     jsonCharactersString,
     jsonStoryString,
     previousStories,
@@ -301,6 +303,7 @@ const CreateChat = (props) => {
             <CreateMessage
               index={i}
               m={m}
+              characterId={m.characterId}
               characters={props.characters}
               passUpdatedMessage={updateMessageProperties}
               insertNewMessageAfter={insertNewMessageAfter}

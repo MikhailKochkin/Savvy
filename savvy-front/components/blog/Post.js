@@ -378,13 +378,7 @@ const Post = (props) => {
                       BeSavvy is a go-to platform for building training
                       simualtions for law firms
                     </div>
-                    <button
-                      onClick={(e) =>
-                        router.push("/", {
-                          locale: "en",
-                        })
-                      }
-                    >
+                    <button onClick={() => router.push(`/`)}>
                       Learn about BeSavvy
                     </button>
                   </SideColumnBlock>
@@ -405,13 +399,7 @@ const Post = (props) => {
                         hard, soft, tech, and management skills needed to excel
                         in their careers.
                       </div>
-                      <button
-                        onClick={(e) =>
-                          router.push("/", {
-                            locale: "en",
-                          })
-                        }
-                      >
+                      <button onClick={() => router.push(`/`)}>
                         Learn about BeSavvy
                       </button>
                     </SideColumnBlock>

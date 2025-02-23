@@ -6,13 +6,12 @@ import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import smoothscroll from "smoothscroll-polyfill";
 import { autoResizeTextarea } from "../../SimulatorDevelopmentFunctions";
 import {
-  IconBlock,
   Question,
   Answer_text,
-  ResultCircle,
   Button1,
   Frame,
 } from "../../styles/commonElements/QuestionStyles";
+import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 import { getMatchingAnswers } from "../functions/AIQuestionFunctions";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
@@ -112,16 +111,11 @@ const Junction = (props) => {
       {/* 2.1 Question part */}
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
-        <IconBlock>
-          {author && author.image != null ? (
-            <img className="icon" src={author.image} />
-          ) : (
-            <img className="icon" src="../../static/hipster.svg" />
-          )}{" "}
-          <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
-          </div>
-        </IconBlock>{" "}
+        <IconBlockElement
+          instructorId={instructorId}
+          author={author}
+          characters={characters}
+        />
       </div>
       {generating && (
         <Progress2>
@@ -131,18 +125,7 @@ const Junction = (props) => {
       {/* 3.5. Generate ideas */}
       <>
         <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me && me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              )}
-            </div>{" "}
-            <div className="name">{me.name}</div>
-          </IconBlock>{" "}
+          <IconBlockElement me={me} />
           <Ideas>
             {ideas.map((idea, index) => {
               let inputColor = "#F3F3F3";

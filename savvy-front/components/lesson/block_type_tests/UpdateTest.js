@@ -13,6 +13,7 @@ import {
   MicroButton,
   SecondaryButton,
   Buttons,
+  MicroSelect,
 } from "../styles/DevPageStyles";
 
 const UPDATE_TEST_MUTATION = gql`
@@ -28,7 +29,6 @@ const UPDATE_TEST_MUTATION = gql`
     $type: String
     $instructorId: String
     $name: String
-    $image: String
     $ifRight: String
     $ifWrong: String
   ) {
@@ -46,7 +46,6 @@ const UPDATE_TEST_MUTATION = gql`
       type: $type
       instructorId: $instructorId
       name: $name
-      image: $image
     ) {
       id
       answers
@@ -66,7 +65,6 @@ const UPDATE_TEST_MUTATION = gql`
       question
       instructorId
       name
-      image
       createdAt
       user {
         id
@@ -156,9 +154,9 @@ const UpdateTest = (props) => {
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
-  const [image, setImage] = useState(props.image ? props.image : null);
+  // const [image, setImage] = useState(props.image ? props.image : null);
   const [name, setName] = useState(props.name ? props.name : null);
-  const [instructorId, setinstructorId] = useState(
+  const [instructorId, setInstructorId] = useState(
     props.instructorId ? props.instructorId : null
   );
   const { t } = useTranslation("lesson");
@@ -276,38 +274,45 @@ const UpdateTest = (props) => {
             <option value="TEST">{t("test")}</option>
             <option value="FORM">{t("form")}</option>
             <option value="BRANCH">{t("Branch")}</option>
-            <option value="MINI">{t("mini")}</option>
+            <option value="MINI">{t("Mini")}</option>
           </select>
           {/* <div className="explainer">The name will be used for navigation</div> */}
         </div>
       </Row>
-      <Row>
+      {/* <Row>
         <div className="description">Goal</div>
         <div className="action_area">
           <textarea onChange={(e) => setGoal(e.target.value)}>{goal}</textarea>
-          {/* <div className="explainer">The name will be used for navigation</div> */}
+          <div className="explainer">The name will be used for navigation</div>
         </div>
-      </Row>
-      <Row>
-        <div className="description">Instructor Name</div>
-        <div className="action_area">
-          <input
-            defaultValue={instructorId}
-            onChange={(e) => setinstructorId(e.target.value)}
-          />{" "}
-          {/* <div className="explainer">The name will be used for navigation</div> */}
-        </div>
-      </Row>
-      <Row>
-        <div className="description">Instructor Image</div>
-        <div className="action_area">
-          <input
-            defaultValue={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
-          {/* <div className="explainer">The name will be used for navigation</div> */}
-        </div>
-      </Row>
+      </Row> */}
+      {type !== "MINI" && (
+        <Row>
+          <div className="description">Instructor</div>
+          <div className="action_area">
+            <MicroSelect
+              // value={message.name}
+              onChange={(e) => {
+                let character = props.characters.find(
+                  (ch) => ch.id == e.target.value
+                );
+                if (character) {
+                  setInstructorId(character.id);
+                } else {
+                  setInstructorId(null);
+                }
+              }}
+            >
+              <option value={"undefined"}>Lesson Manager</option>
+              {props.characters?.map((character, index) => (
+                <option key={index} value={character.id}>
+                  {character.name}
+                </option>
+              ))}
+            </MicroSelect>
+          </div>
+        </Row>
+      )}
       <Row>
         <div className="description">Question</div>
         <div className="action_area">
@@ -481,13 +486,13 @@ const UpdateTest = (props) => {
               type,
               goal,
               name,
-              image,
+              instructorId,
               ifRight: ifRight,
               ifWrong: ifWrong,
             },
           });
-          props.getResult(res);
-          props.switchUpdate();
+          props.getResult ? props.getResult(res) : null;
+          props.switchUpdate ? props.switchUpdate() : null;
         }}
       >
         {loading ? t("saving") : t("save")}

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import parse from "html-react-parser";
 
+import IconBlockElement from "../../styles/commonElements/IconBlockElement";
+
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,6 +14,7 @@ const MessageRow = styled.div`
   flex-direction: row;
   justify-content: ${({ role }) =>
     role === "author" ? "flex-end" : "flex-start"};
+  align-items: flex-start;
   margin-bottom: 20px;
   /* Add slide-in animation */
   opacity: 0;
@@ -21,7 +24,10 @@ const MessageRow = styled.div`
     role === "author"
       ? "animate-slide-in-from-right 0.8s forwards"
       : "animate-slide-in-from-left 0.8s forwards"};
-
+  @media (max-width: 800px) {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
   /* Animation from the right */
   @keyframes animate-slide-in-from-right {
     0% {
@@ -71,6 +77,7 @@ const MessageRow = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    margin-top: 5px;
     p {
       margin: 5px 0;
       &.button_box {
@@ -115,58 +122,16 @@ const MessageRow = styled.div`
     outline: 0;
     resize: none;
     border-radius: 25px;
-    padding: 3% 4%;
+    padding: 2% 5%;
     line-height: 1.8;
     font-family: Montserrat;
     font-size: 1.6rem;
     margin-bottom: 20px;
+    margin-top: 5px;
     @media (max-width: 800px) {
       font-size: 1.6rem;
     }
   }
-`;
-
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 65px;
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-    line-height: 1.4;
-  }
-`;
-
-const Icon = styled.div`
-  margin: 5px;
-  border-radius: 50%;
-  background: ${({ hasImage }) => (hasImage ? "#fff" : "#2f80ed")};
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  height: 55px;
-  width: 55px;
-  object-fit: cover;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;
 
 const Message = ({ id, key, role, m, me, author, lessonId, characters }) => {
@@ -177,56 +142,27 @@ const Message = ({ id, key, role, m, me, author, lessonId, characters }) => {
     (character) => character.id === m.characterId
   );
 
-  if (active_character) {
-    image = active_character.image;
-    name = active_character.name;
-  } else {
-    if (m.image) {
-      image = m.image;
-    } else if (author && author.image) {
-      image = author.image;
-    } else if (role === "author") {
-      image = "../../static/hipster.svg";
-    } else {
-    }
-    if (m.name) {
-      name = m.name;
-    } else if (author && author.name) {
-      name = author.name;
-    } else {
-      name = "BeSavvy";
-    }
-  }
   return (
     <Styles id={id} key={key}>
       <MessageRow role={role}>
         {role === "author" && (
           <>
             <div className="author_text">{parse(modifiedText)}</div>
-            <IconBlock>
-              <img className="icon" src={image} />
-              <div className="name">{name}</div>
-            </IconBlock>
+            <IconBlockElement
+              instructorId={m.characterId}
+              author={author}
+              characters={characters}
+            />
           </>
         )}
         {role === "student" && (
           <>
-            <IconBlock>
-              <Icon className="icon2" hasImage={me.image !== null}>
-                {m.image && <img className="icon" src={m.image} />}
-                {!m.image &&
-                  (me && me.image ? (
-                    <img className="icon" src={me.image} />
-                  ) : me.surname ? (
-                    `${me.name[0]}${me.surname[0]}`
-                  ) : (
-                    `${me.name[0]}${me.name[1]}`
-                  ))}
-              </Icon>
-              <div className="name">
-                {m.name && m.name !== "student" ? m.name : me.name}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              me={m.characterId ? null : me}
+              instructorId={m.characterId}
+              author={author}
+              characters={characters}
+            />
             <div className="student_text">{parse(m.text)}</div>
           </>
         )}

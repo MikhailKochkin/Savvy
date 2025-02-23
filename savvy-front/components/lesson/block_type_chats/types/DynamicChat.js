@@ -88,6 +88,7 @@ const MessageRow = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+
     p {
       margin: 5px 0;
       &.button_box {
@@ -127,9 +128,7 @@ const MessageRow = styled.div`
     width: 60%;
     background: #fff;
     outline: 0;
-
     padding: 0px 15px;
-
     margin-bottom: 20px;
     textarea {
       padding: 15px;
@@ -193,12 +192,10 @@ const Icon = styled.div`
   justify-content: center;
 `;
 
-const Messages = styled.div`
-  margin: 0 10px;
-`;
+const Messages = styled.div``;
 
 const DynamicChat = (props) => {
-  const { messages, me, id, author, previousStories } = props;
+  const { messages, me, id, author, previousStories, characters } = props;
   const [dialogueMessages, setDialogueMessages] = useState([
     messages.messagesList[0],
   ]);
@@ -272,7 +269,8 @@ const DynamicChat = (props) => {
         "author": "author", // do not change this!
         "text": "... your answer ...",
         "name": "..."
-        "image": "..."
+        "image": "...",
+        "characterId": "..." // do not change this!
       }
       `;
 
@@ -316,6 +314,7 @@ const DynamicChat = (props) => {
             : "Sorry, I can’t respond. Can I help with anything else?",
         name: messages.messagesList[0].name,
         image: messages.messagesList[0].image,
+        characterId: messages.messagesList[0].characterId,
       },
     ]);
     setStudentResponse("");
@@ -339,6 +338,7 @@ const DynamicChat = (props) => {
                 m={m}
                 me={me}
                 author={author}
+                characters={characters}
               />
             );
           } else {
@@ -352,6 +352,7 @@ const DynamicChat = (props) => {
                 m={m}
                 me={me}
                 author={author}
+                characters={characters}
               />
             );
           }
@@ -376,7 +377,7 @@ const DynamicChat = (props) => {
           />
         </div>
         {!generatingResponse ? (
-          <Buttons margin="0px" gap="0px">
+          <Buttons margin="0px" gap="0px" width="10%">
             <MicroButton
               onClick={async (e) => {
                 setGeneratingResponse(true);
@@ -384,10 +385,6 @@ const DynamicChat = (props) => {
                   studentResponse,
                   messages.messagesList[3].text
                 );
-                // console.log(
-                //   "parseInt(relationTestResult.res)",
-                //   parseInt(relationTestResult.res)
-                // );
                 if (parseInt(relationTestResult.res) < 25) {
                   await addCommentToUnrelatedQuestion();
                 } else {

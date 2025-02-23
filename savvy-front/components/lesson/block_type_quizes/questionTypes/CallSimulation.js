@@ -1,7 +1,5 @@
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import parse from "html-react-parser";
-import { set } from "lodash";
 
 const Styles = styled.div`
   display: flex;

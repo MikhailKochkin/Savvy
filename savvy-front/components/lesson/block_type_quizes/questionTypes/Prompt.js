@@ -41,6 +41,8 @@ const Prompt = (props) => {
     image,
     openQuestionType,
     studentAnswerPassedFromAnotherComponent,
+    characters,
+    instructorId,
   } = props;
 
   const [answerText, setAnswerText] = useState(""); // The answer provided by the student
@@ -102,7 +104,7 @@ const Prompt = (props) => {
         let feedback = JSON.parse(data.result.content);
         createQuizResult({
           variables: {
-            quiz: props.quizId,
+            quiz: props.id,
             lessonId: props.lessonId,
             answer: answerText,
             correct: true,
@@ -121,7 +123,6 @@ const Prompt = (props) => {
       alert(error.message);
     }
   };
-
   return openQuestionType == "mini" ? (
     <MiniPrompt
       id={id}
@@ -144,8 +145,8 @@ const Prompt = (props) => {
       author={author}
       me={me}
       story={story}
-      name={name}
-      image={image}
+      characters={characters}
+      instructorId={instructorId}
       question={props.question}
       passAnswerText={getAnswerText}
       answerText={answerText}

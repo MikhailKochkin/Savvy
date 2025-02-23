@@ -5,6 +5,10 @@ export const IconBlock = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  width: 80px;
+  @media (max-width: 800px) {
+    width: 70px;
+  }
   .icon {
     margin: 5px;
     border-radius: 50%;
@@ -12,13 +16,13 @@ export const IconBlock = styled.div`
     width: 55px;
     display: flex;
     object-fit: cover;
-
     flex-direction: row;
     align-items: center;
     justify-content: center;
   }
   .icon2 {
-    margin: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
     border-radius: 50%;
     background: #642b73; /* fallback for old browsers */
     background: -webkit-linear-gradient(
@@ -85,6 +89,8 @@ export const Question = styled.div`
     background: #ffffff;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: flex-start;
+
     margin-bottom: 20px;
 
     /* Add slide-in animation from bottom */

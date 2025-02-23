@@ -6,12 +6,12 @@ import { useTranslation } from "next-i18next";
 
 import { autoResizeTextarea } from "../../SimulatorDevelopmentFunctions";
 import {
-  IconBlock,
   Question,
   Answer_text,
   Button1,
   Frame,
 } from "../../styles/commonElements/QuestionStyles";
+import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 
 const Group = styled.div`
   flex-direction: row;
@@ -36,11 +36,10 @@ const FullPrompt = (props) => {
     author,
     me,
     story,
-    name,
-    image,
+    instructorId,
+    characters,
     answerText,
     passAnswerText,
-    passFeedback,
   } = props;
   const [generating, setGenerating] = useState(false);
   const [hidden, setHidden] = useState(true); // is the answer to the question hidden?
@@ -53,18 +52,11 @@ const FullPrompt = (props) => {
       {/* 1 Question part */}
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
-        <IconBlock>
-          {image ? (
-            <img className="icon" src={image} />
-          ) : author && author.image != null ? (
-            <img className="icon" src={author.image} />
-          ) : (
-            <img className="icon" src="../../static/hipster.svg" />
-          )}{" "}
-          <div className="name">
-            {name ? name : author && author.name ? author.name : "BeSavvy"}
-          </div>
-        </IconBlock>{" "}
+        <IconBlockElement
+          instructorId={instructorId}
+          author={author}
+          characters={characters}
+        />
       </div>
       {generating && (
         <Progress2>
@@ -74,18 +66,7 @@ const FullPrompt = (props) => {
       {/* 2. Answer bubble part */}
       <>
         <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me && me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              )}
-            </div>{" "}
-            <div className="name">{me.name}</div>
-          </IconBlock>{" "}
+          <IconBlockElement me={me} />
           <Frame inputColor="#F3F3F3">
             <Answer_text
               type="text"
@@ -124,18 +105,11 @@ const FullPrompt = (props) => {
       {!hidden && (
         <div className="question_box" id={`ideal_answer_${props.id}`}>
           <div className="question_text">{recommendation}</div>
-          <IconBlock>
-            {image ? (
-              <img className="icon" src={image} />
-            ) : author && author.image != null ? (
-              <img className="icon" src={author.image} />
-            ) : (
-              <img className="icon" src="../../static/hipster.svg" />
-            )}{" "}
-            <div className="name">
-              {name ? name : author && author.name ? author.name : "BeSavvy"}
-            </div>
-          </IconBlock>{" "}
+          <IconBlockElement
+            instructorId={instructorId}
+            author={author}
+            characters={characters}
+          />
         </div>
       )}
     </Question>

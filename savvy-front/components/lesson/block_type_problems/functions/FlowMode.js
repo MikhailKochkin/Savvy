@@ -260,7 +260,7 @@ const NewInteractive = (props) => {
                   author={author}
                   complexity={el.complexity}
                   messages={el.messages}
-                  characters={lesson.characters}
+                  characters={characters}
                   id={el.id}
                   lessonId={lesson.id}
                   story={true}

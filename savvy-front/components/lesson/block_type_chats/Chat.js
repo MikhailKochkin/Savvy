@@ -81,7 +81,7 @@ const Styles = styled.div`
     cursor: pointer;
   }
   @media (max-width: 800px) {
-    width: 100%;
+    width: 95%;
     font-size: 1.6rem;
     .video {
       height: 356px;
@@ -118,7 +118,7 @@ const ArrowBox = styled.div`
 
 const Chat = (props) => {
   // Local state management
-  const [update, setUpdate] = useState(false);
+  const [isUpdateModeOn, setIsUpdateModeOn] = useState(false);
   const [num, setNum] = useState(1);
   const [moved, setMoved] = useState(false);
   const [clicks, setClicks] = useState(props.clicks);
@@ -149,24 +149,19 @@ const Chat = (props) => {
     problem,
     getResult,
   } = props;
+
   // Determine chat box width based on context (problem view, story view, or general)
   const width = problem || story ? "50%" : "90%";
 
   // Toggle update/edit mode
-  const toggleUpdate = () => setUpdate((prev) => !prev);
+  const toggleUpdate = () => setIsUpdateModeOn((prev) => !prev);
 
   // Push the next element to the problem flow
-  const handlePushNextElement = () => {
+  const handlePushNextElementToProblem = () => {
     if (!moved) {
       pushNextElementToProblem(next ? [true, next.true] : [true, undefined]);
       setMoved(true);
     }
-  };
-
-  // Used specifically for `VoiceChat` flow continuation
-  const handleFlowFurther = () => {
-    pushNextElementToProblem(next ? [true, next.true] : [true, undefined]);
-    setMoved(true);
   };
 
   // Pass number (progress in `FixedChat`)
@@ -182,20 +177,47 @@ const Chat = (props) => {
     }
   };
 
+  const renderChatComponent = () => {
+    const commonChatProps = {
+      messages,
+      me,
+      lessonId,
+      id,
+      characters,
+      author,
+      library,
+      isSecret,
+      moveNext,
+      story,
+      previousStories,
+    };
+
+    switch (type?.toLowerCase()) {
+      case "dynamicchat":
+        return <DynamicChat {...commonChatProps} />;
+      case "voicechat":
+        return <VoiceChat {...commonChatProps} />;
+      default:
+        return <FixedChat {...commonChatProps} passNum={handlePassNum} />;
+    }
+  };
+
   return (
     <Styles id={id} width={width} ref={chatRef} onClick={handleClickTracking}>
       {/* Admin control buttons (e.g., Update, Delete) */}
       {may_i_edit && (
         <Buttons gap="10px" margin="0 0 20px 0">
           <SecondaryButton onClick={toggleUpdate}>
-            {update ? t("back") : t("update")}
+            {isUpdateModeOn ? t("back") : t("update")}
           </SecondaryButton>
           <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
         </Buttons>
       )}
 
       {/* Update/Edit Mode */}
-      {update && (
+      {!isUpdateModeOn && renderChatComponent()}
+      {/* Update/Edit Mode */}
+      {isUpdateModeOn && (
         <UpdateChat
           id={id}
           name={name}
@@ -210,65 +232,13 @@ const Chat = (props) => {
         />
       )}
 
-      {/* Display chat based on type when NOT in edit mode */}
-      {!update && (
-        <>
-          {type === "dynamicchat" && (
-            <DynamicChat
-              messages={messages}
-              me={me}
-              lessonId={lessonId}
-              id={id}
-              author={author}
-              library={library}
-              isSecret={isSecret}
-              moveNext={moveNext}
-              story={story}
-              previousStories={previousStories}
-            />
-          )}
-
-          {type === "voicechat" && (
-            <VoiceChat
-              messages={messages}
-              me={me}
-              lessonId={lessonId}
-              id={id}
-              author={author}
-              library={library}
-              isSecret={isSecret}
-              moveNext={moveNext}
-              story={story}
-              previousStories={previousStories}
-              flowFurther={handleFlowFurther}
-            />
-          )}
-
-          {type !== "voicechat" && type !== "dynamicchat" && (
-            <FixedChat
-              messages={messages}
-              me={me}
-              lessonId={lessonId}
-              id={id}
-              characters={characters}
-              author={author}
-              library={library}
-              isSecret={isSecret}
-              moveNext={moveNext}
-              story={story}
-              passNum={handlePassNum}
-            />
-          )}
-        </>
-      )}
-
       {/* Arrow to progress to the next element in the problem flow */}
       {pushNextElementToProblem &&
         next?.true?.value &&
         !moved &&
         num === messages.messagesList.length && (
           <ArrowBox>
-            <div className="arrow_box" onClick={handlePushNextElement}>
+            <div className="arrow_box" onClick={handlePushNextElementToProblem}>
               <img
                 className="arrow"
                 src="../../static/down-arrow.svg"

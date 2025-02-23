@@ -7,6 +7,8 @@ import { InfinitySpin, TailSpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
 import PropTypes from "prop-types";
+
+import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 import {
   generateHint2,
   getMatchingAnswers,
@@ -14,7 +16,6 @@ import {
 import { getScore, getInputColor } from "../functions/RegularQuestionFunctions";
 import { autoResizeTextarea } from "../../SimulatorDevelopmentFunctions";
 import {
-  IconBlock,
   Question,
   Answer_text,
   ResultCircle,
@@ -98,6 +99,8 @@ const FindAll = (props) => {
     quizId,
     lessonId,
     problemType,
+    instructorId,
+    characters,
   } = props;
 
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
@@ -185,34 +188,18 @@ const FindAll = (props) => {
       {/* 2 Question bubble */}
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
-        <IconBlock>
-          {author && author.image != null ? (
-            <img className="icon" src={author.image} />
-          ) : (
-            <img className="icon" src="../../static/hipster.svg" />
-          )}{" "}
-          <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
-          </div>
-        </IconBlock>{" "}
+        <IconBlockElement
+          instructorId={instructorId}
+          author={author}
+          characters={characters}
+        />
       </div>
 
       <>
         {/* 3. Forms for writing down ideas / answers */}
 
         <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me && me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              )}
-            </div>{" "}
-            <div className="name">{me.name}</div>
-          </IconBlock>{" "}
+          <IconBlockElement me={me} />
           <Ideas>
             {ideas.map((idea, index) => {
               let score = getScore(idea, overallResults);
@@ -365,16 +352,11 @@ const FindAll = (props) => {
             <div className="question_text">
               <p>{AIhint}</p>
             </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              instructorId={instructorId}
+              author={author}
+              characters={characters}
+            />
           </div>
         )}
 
@@ -392,30 +374,14 @@ const FindAll = (props) => {
                   {t("what_are_we_doing_next")}
                 </p>
               </div>
-              <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
-                )}{" "}
-                <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
-                </div>
-              </IconBlock>
+              <IconBlockElement
+                instructorId={instructorId}
+                author={author}
+                characters={characters}
+              />
             </div>
             <div className="answer">
-              <IconBlock>
-                <div className="icon2">
-                  {me && me.image ? (
-                    <img className="icon" src={me.image} />
-                  ) : me.surname ? (
-                    `${me.name[0]}${me.surname[0]}`
-                  ) : (
-                    `${me.name[0]}${me.name[1]}`
-                  )}
-                </div>{" "}
-                <div className="name">{me.name}</div>
-              </IconBlock>
+              <IconBlockElement me={me} />
               <OptionsGroup>
                 {correctIdeas.length < props.answers.answerElements.length && (
                   <Option onClick={(e) => generateAnswerCountComment(e)}>
@@ -451,16 +417,11 @@ const FindAll = (props) => {
         {isAnswerCountShown && (
           <div className="question_box">
             <div className="question_text">{parse(answerCountText)}</div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              instructorId={instructorId}
+              author={author}
+              characters={characters}
+            />
           </div>
         )}
         {areIdeasShown && (
@@ -473,16 +434,11 @@ const FindAll = (props) => {
                 ))}
               </ul>
             </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              instructorId={instructorId}
+              author={author}
+              characters={characters}
+            />
           </div>
         )}
       </>

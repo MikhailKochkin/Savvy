@@ -45,6 +45,9 @@ const LOAD_LESSON_QUERY = gql`
         complexity
         messages {
           messagesList {
+            id
+            characterId
+            number
             author
             name
             text
@@ -283,10 +286,6 @@ const LessonDataLoad = (props) => {
       ...lessonData?.loadLessonData,
     };
   }
-
-  const passStep = (num) => {
-    props.passStep(num);
-  };
   return (
     lesson && (
       <StoryEx
@@ -296,6 +295,7 @@ const LessonDataLoad = (props) => {
         tasks={lesson.structure.lessonItems}
         me={props.me}
         lesson={lesson}
+        characters={lesson.coursePage.characters}
         // next={next}
         openSize={lesson.openSize}
         coursePageId={lesson.coursePageId}

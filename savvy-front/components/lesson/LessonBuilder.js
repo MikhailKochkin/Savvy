@@ -184,17 +184,13 @@ const LessonBuilder = (props) => {
     setElements(updatedItems);
   };
 
-  let combinedCharacters = lesson.coursePage.characters;
-
-  console.log("combinedCharacters", combinedCharacters);
-
+  let combinedCharacters = lesson?.coursePage?.characters;
   // INFO FOR NEW BLOCKS AI GENERATION
   // 1. Create character string
   const cleanedCharacters = combinedCharacters.map(
     ({ __typename, ...rest }) => rest
   );
   const jsonCharactersString = JSON.stringify(cleanedCharacters);
-
   // 2. Create lesson info string
   const populateLessonStructure = (items) => {
     const updatedItems = items.map((item) => {
@@ -221,7 +217,7 @@ const LessonBuilder = (props) => {
       } else if (item.type === "Forum") {
         content = lesson.forum.text;
       } else if (item.type === "Quiz") {
-        content = lesson.quizes.find((quiz) => quiz.id === item.id).question;
+        content = lesson.quizes.find((quiz) => quiz.id === item.id)?.question;
       } else if (item.type === "NewTest") {
         content = lesson.newTests.find((newTest) => newTest.id === item.id)
           ?.question[0];
@@ -272,7 +268,7 @@ const LessonBuilder = (props) => {
             structure={lesson.structure}
             elements={elements}
             lesson={lesson}
-            characters={lesson.characters}
+            characters={combinedCharacters}
           />
         )}
         {/* {elements ? (

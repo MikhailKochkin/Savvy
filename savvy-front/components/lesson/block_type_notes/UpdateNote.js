@@ -10,6 +10,8 @@ import {
   ActionButton,
   SecondaryButton,
   MicroButton,
+  MicroSelect,
+  Buttons,
 } from "../styles/DevPageStyles";
 import parse from "html-react-parser";
 
@@ -68,16 +70,9 @@ const Container = styled.div`
   p > a:hover {
     text-decoration: underline;
   }
-  select {
-    margin-bottom: 20px;
-    width: 250px;
-  }
 
   @media (max-width: 600px) {
     width: 100%;
-  }
-
-  input {
   }
 `;
 
@@ -127,7 +122,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 });
 
 const UpdateNote = (props) => {
-  const { id, lessonID } = props;
+  const { id, lessonID, characters } = props;
   const { t } = useTranslation("lesson");
 
   const [text, setText] = useState(props.text);
@@ -139,7 +134,9 @@ const UpdateNote = (props) => {
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
-  const [instructorId, setInstructorId] = useState(props.instructorId || "");
+  const [instructorId, setInstructorId] = useState(
+    props.instructorId ? props.instructorId : null
+  );
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
   const [breakBlocks, setBreakBlocks] = useState([]);
@@ -477,14 +474,30 @@ const UpdateNote = (props) => {
         </div>
       </Row>
       {type == "email" && (
-        <Row>
+        <Row width="100%">
           <div className="description">Sender Name</div>
           <div className="action_area">
-            <input
-              onChange={(e) => setinstructorId(e.target.value)}
+            <MicroSelect
               value={instructorId}
-              placeholder=""
-            />
+              onChange={(e) => {
+                let character = props.characters.find(
+                  (ch) => ch.id == e.target.value
+                );
+                if (character) {
+                  setInstructorId(character.id);
+                } else {
+                  setInstructorId(null);
+                }
+              }}
+            >
+              <option value={"undefined"}>Lesson Manager</option>
+              {characters?.map((character, index) => (
+                <option key={index} value={character.id}>
+                  {character.name}
+                </option>
+              ))}
+            </MicroSelect>
+            {console.log("characters", characters)}
           </div>
         </Row>
       )}
@@ -538,33 +551,35 @@ const UpdateNote = (props) => {
         <div className="description">Prompt</div>
         <div className="action_area">
           <textarea onChange={(e) => setPrompt(e.target.value)} />
-          <ActionButton
-            onClick={async (e) => {
-              setGenerating(true);
-              const res = await updateNoteWithAI(e, "regular");
-              setGenerating(false);
-            }}
-          >
-            {!generating ? "Update with AI" : "..."}
-          </ActionButton>
-          <ActionButton
-            onClick={async (e) => {
-              setGenerating(true);
-              const res = await updateNoteWithAI(e, "typesetting");
-              setGenerating(false);
-            }}
-          >
-            {!generating ? "Improve Typesetting" : "..."}
-          </ActionButton>
-          <ActionButton
-            onClick={async (e) => {
-              setGenerating(true);
-              const res = await breakNoteWithAI(e);
-              setGenerating(false);
-            }}
-          >
-            {!generating ? "Break apart" : "..."}
-          </ActionButton>
+          <Buttons gap="5px" margin="0px">
+            <MicroButton
+              onClick={async (e) => {
+                setGenerating(true);
+                const res = await updateNoteWithAI(e, "regular");
+                setGenerating(false);
+              }}
+            >
+              {!generating ? "Update with AI" : "..."}
+            </MicroButton>
+            <MicroButton
+              onClick={async (e) => {
+                setGenerating(true);
+                const res = await updateNoteWithAI(e, "typesetting");
+                setGenerating(false);
+              }}
+            >
+              {!generating ? "Improve Typesetting" : "..."}
+            </MicroButton>
+            <MicroButton
+              onClick={async (e) => {
+                setGenerating(true);
+                const res = await breakNoteWithAI(e);
+                setGenerating(false);
+              }}
+            >
+              {!generating ? "Break apart" : "..."}
+            </MicroButton>
+          </Buttons>
         </div>
       </Row>
       {breakBlocks.length > 0 &&
@@ -591,12 +606,14 @@ const UpdateNote = (props) => {
           </BreakRow>
         ))}
       <Row>
-        <SecondaryButton onClick={(e) => setOpenEditor(!openEditor)}>
-          {openEditor ? "Close Editor" : "Open Editor"}
-        </SecondaryButton>
-        <SecondaryButton onClick={(e) => setOpenHTML(!openHTML)}>
-          {openHTML ? "Close HTML" : "Open HTML"}
-        </SecondaryButton>
+        <Buttons gap="5px" margin="0px">
+          <SecondaryButton onClick={(e) => setOpenEditor(!openEditor)}>
+            {openEditor ? "Close Editor" : "Open Editor"}
+          </SecondaryButton>
+          <SecondaryButton onClick={(e) => setOpenHTML(!openHTML)}>
+            {openHTML ? "Close HTML" : "Open HTML"}
+          </SecondaryButton>
+        </Buttons>
       </Row>
       {!generating && openEditor && (
         <DynamicLoadedEditor getEditorText={getText} value={text} />

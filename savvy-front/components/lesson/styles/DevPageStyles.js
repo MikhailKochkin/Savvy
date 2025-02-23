@@ -32,9 +32,8 @@ export const MicroButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-width: 30px;
+  min-width: 55px;
   max-width: 140px;
-  margin-right: 10px;
   max-height: 50px;
   &:hover {
     background-color: #f2f2f2;

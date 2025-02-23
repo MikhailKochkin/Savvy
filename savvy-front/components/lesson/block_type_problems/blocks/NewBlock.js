@@ -121,6 +121,7 @@ const NewBlock = (props) => {
           complexity={data.complexity}
           lessonID={lesson.id}
           getResult={getResult}
+          may_i_edit={true}
         />
       )}
       {type == "Note" && (
@@ -138,6 +139,7 @@ const NewBlock = (props) => {
           messages={data.messages}
           name={data.name}
           me={me}
+          type={data.type}
           characters={props.characters}
           clicks={data.link_clicks}
           user={lesson.user.id}

@@ -115,12 +115,12 @@ const LessonBlock = (props) => {
     jsonCharactersString,
     jsonStoryString,
     may_i_edit,
+    characters,
   } = props;
   const [isSaved, setIsSaved] = useState(saved);
   const [isAdded, setIsAdded] = useState(saved);
   const [updated, setUpdated] = useState(false);
   const { t } = useTranslation("lesson");
-
   let d;
 
   if (el.type && el.type.toLowerCase() == "note" && !el.data) {
@@ -569,6 +569,7 @@ const LessonBlock = (props) => {
                 text={data.text}
                 name={data.name}
                 instructorId={data.instructorId}
+                characters={characters}
                 me={me}
                 clicks={data.link_clicks}
                 user={lesson.user.id}
@@ -629,7 +630,7 @@ const LessonBlock = (props) => {
                 jsonCharactersString={jsonCharactersString}
                 jsonStoryString={jsonStoryString}
                 previousStories={props.previousStories}
-                characters={props.characters}
+                characters={characters}
                 lessonID={lesson.id}
                 getResult={getResult}
                 lesson={lesson}
@@ -641,10 +642,11 @@ const LessonBlock = (props) => {
                 key={data.id}
                 problem={data}
                 complexity={data.complexity}
-                characters={props.characters}
+                characters={characters}
                 lessonID={lesson.id}
                 name={lesson.name}
                 context={lesson.context}
+                author={lesson.user}
                 me={me}
                 lesson={lesson}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
@@ -685,6 +687,7 @@ const LessonBlock = (props) => {
                 type={data.type}
                 ifRight={data.ifRight}
                 ifWrong={data.ifWrong}
+                characters={characters}
                 me={me}
                 lessonID={lesson.id}
                 length={Array(data.correct.length).fill(false)}
@@ -714,6 +717,7 @@ const LessonBlock = (props) => {
                 answer={data.answer}
                 answers={data.answers}
                 context={lesson.context}
+                characters={characters}
                 isOrderOfAnswersImportant={data.isOrderOfAnswersImportant}
                 shouldAnswerSizeMatchSample={data.shouldAnswerSizeMatchSample}
                 isScoringShown={data.isScoringShown}
@@ -833,7 +837,7 @@ const LessonBlock = (props) => {
                 lessonData={lessonData}
                 getResult={getResult}
                 isSaved={isSaved}
-                characters={props.characters}
+                characters={characters}
                 me={me}
                 simulationStory={simulationStory}
                 jsonCharactersString={jsonCharactersString}
@@ -847,13 +851,12 @@ const LessonBlock = (props) => {
                 }
               />
             )}
-
             {(isSaved || d != null) && data && data.__typename == "Chat" && (
               <Chat
                 name={data.name}
                 me={me}
                 author={lesson.user}
-                characters={props.lesson.coursePage.characters}
+                characters={characters}
                 previousStories={props.previousStories}
                 isSecret={data.isSecret}
                 type={data.type}

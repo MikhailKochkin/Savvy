@@ -34,6 +34,26 @@ const CREATE_COMMENT_MUTATION = gql`
   }
 `;
 
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION(
+    $subject: String
+    $name: String
+    $email: String
+    $connection: String
+    $type: String
+  ) {
+    sendBusinessEmail(
+      subject: $subject
+      name: $name
+      email: $email
+      connection: $connection
+      type: $type
+    ) {
+      name
+    }
+  }
+`;
+
 const DELETE_COMMENT_MUTATION = gql`
   mutation DELETE_COMMENT_MUTATION($id: String!) {
     deleteComment(id: $id) {
@@ -280,6 +300,8 @@ const CommentSection = (props) => {
     CREATE_COMMENT_MUTATION
   );
 
+  const [sendBusinessEmail] = useMutation(SEND_MESSAGE_MUTATION);
+
   const { t } = useTranslation("lesson");
 
   const [deleteComment] = useMutation(DELETE_COMMENT_MUTATION);
@@ -298,6 +320,21 @@ const CommentSection = (props) => {
         lessonId: props.lessonId,
       },
     });
+
+    sendBusinessEmail({
+      variables: {
+        subject: `New simulation comment`,
+        email: "mike@besavvy.app",
+        type: "internal",
+        name: "Mikhail",
+        connection: `<p>Author: ${res.data?.createComment?.user?.name} ${res.data?.createComment?.user?.surname}</p>
+                    <p>Read the comment: <a href="https://besavvy.app/dev?id=${res.data?.createComment?.lessonId}">https://besavvy.app/dev?id=${res.data?.createComment?.lessonId}</a></p> 
+         `,
+      },
+    }).catch((error) => {
+      console.error("Error sending email:", error);
+    });
+
     setComments([...comments, res.data.createComment]);
   };
 

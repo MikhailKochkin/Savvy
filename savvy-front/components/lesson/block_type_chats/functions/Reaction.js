@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 import { useMutation, gql } from "@apollo/client";
-import { useTranslation } from "next-i18next";
+import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 
 const CREATE_CHATRESULT_MUTATION = gql`
   mutation CREATE_CHATRESULT_MUTATION(
@@ -88,12 +88,15 @@ const Message = styled.div`
   transition: 0.2s ease-out;
   flex-direction: row;
   justify-content: flex-end;
+  align-items: flex-start;
   margin-bottom: 20px;
   p {
     margin: 5px 0;
   }
   &.student {
     justify-content: flex-start;
+    align-items: flex-start;
+
     /* justify-content: stretch; */
   }
   .author_text {
@@ -108,6 +111,7 @@ const Message = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    margin-top: 5px;
   }
   .student_text {
     background: #248bf5;
@@ -117,41 +121,12 @@ const Message = styled.div`
     outline: 0;
     resize: none;
     border-radius: 25px;
-    padding: 3% 4%;
+    padding: 2% 5%;
     line-height: 1.8;
     font-family: Montserrat;
     font-size: 1.6rem;
     margin-bottom: 20px;
-  }
-`;
-
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 55px;
-    width: 55px;
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-    line-height: 1.4;
+    margin-top: 5px;
   }
 `;
 
@@ -202,26 +177,10 @@ const StyledButton = styled.div`
   }
 `;
 
-const Icon = styled.div`
-  margin: 5px;
-  border-radius: 50%;
-  background: ${({ hasImage }) => (hasImage ? "#fff" : "#2f80ed")};
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  height: 55px;
-  width: 55px;
-  object-fit: cover;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
-
 const Reaction = (props) => {
   const [usedReactions, setUsedReactions] = useState([]);
   const [leftReactions, setLeftReactions] = useState(props.reactions);
-  const { me, author, m } = props;
+  const { me, author, m, characters } = props;
 
   const [createChatResult, { data: data2, loading: loading2, error: error2 }] =
     useMutation(CREATE_CHATRESULT_MUTATION);
@@ -232,61 +191,23 @@ const Reaction = (props) => {
         {usedReactions.map((lr, i) => (
           <div className="used">
             <Message key={i} time={i} className="student">
-              <IconBlock>
-                <Icon className="icon2" hasImage={me.image !== null}>
-                  {me.image && <img className="icon" src={me.image} />}
-                  {!me.image &&
-                    (me && me.image ? (
-                      <img className="icon" src={me.image} />
-                    ) : me.surname ? (
-                      `${me.name[0]}${me.surname[0]}`
-                    ) : (
-                      `${me.name[0]}${me.name[1]}`
-                    ))}
-                </Icon>
-                <div className="name">{me.name}</div>
-              </IconBlock>
+              <IconBlockElement me={me} />
               <div className="student_text">{parse(lr.reaction)}</div>
             </Message>
             <Message key={i} time={i} className="author">
               <div className="author_text">{parse(lr.comment)}</div>
-              <IconBlock>
-                {props.author_image && (
-                  <img className="icon" src={props.author_image} />
-                )}
-                {!props.author_image &&
-                  (author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  ))}
-                <div className="name">
-                  {props.author_name
-                    ? props.author_name
-                    : author && (author.name ? author.name : "BeSavvy")}
-                </div>
-              </IconBlock>
+              <IconBlockElement
+                instructorId={m.characterId}
+                author={author}
+                characters={characters}
+              />
             </Message>
           </div>
         ))}
         {leftReactions.length > 0 && (
           <>
             <Message className="student">
-              <IconBlock>
-                <Icon className="icon2" background={m.author}>
-                  {me.image && <img className="icon" src={me.image} />}
-                  {!me.image &&
-                    (me && me.image ? (
-                      <img className="icon" src={me.image} />
-                    ) : me.surname ? (
-                      `${me.name[0]}${me.surname[0]}`
-                    ) : (
-                      `${me.name[0]}${me.name[1]}`
-                    ))}
-                </Icon>
-                {/* <img className="icon" src="../../static/flash.svg" /> */}
-                <div className="name">{me.name}</div>
-              </IconBlock>
+              <IconBlockElement me={me} />
               <ReactionsList>
                 {leftReactions.map((lr, i) => (
                   <StyledButton
@@ -332,20 +253,7 @@ const Reaction = (props) => {
         )}
         {leftReactions.length > 0 && (
           <Message className="student">
-            <IconBlock>
-              <Icon className="icon2" background={m.author}>
-                {me.image && <img className="icon" src={me.image} />}
-                {!me.image &&
-                  (me && me.image ? (
-                    <img className="icon" src={me.image} />
-                  ) : me.surname ? (
-                    `${me.name[0]}${me.surname[0]}`
-                  ) : (
-                    `${me.name[0]}${me.name[1]}`
-                  ))}
-              </Icon>
-              <div className="name">{me.name}</div>
-            </IconBlock>
+            <IconBlockElement me={me} />
             <WaitingButton>
               <div class="stage">
                 <div class="dot-flashing"></div>

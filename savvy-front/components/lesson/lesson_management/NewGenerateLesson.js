@@ -533,7 +533,6 @@ const GenerateLesson = (props) => {
         </ActionButton>
         <ActionButton onClick={async (e) => {}}>Summarize</ActionButton>
       </Buttons>
-      {console.log("props.coursePageId", props.coursePageId)}
       <Title>Characters</Title>
       {[...characters].map((ch, index) => {
         return (

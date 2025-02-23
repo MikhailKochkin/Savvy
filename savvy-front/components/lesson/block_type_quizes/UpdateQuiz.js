@@ -12,6 +12,7 @@ import {
   MicroButton,
   NanoButton,
   Buttons,
+  MicroSelect,
 } from "../styles/DevPageStyles";
 import {
   autoResizeTextarea,
@@ -33,7 +34,6 @@ const UPDATE_QUIZ_MUTATION = gql`
     $instructorId: String
     $isScoringShown: Boolean
     $name: String
-    $image: String
     $isOrderOfAnswersImportant: Boolean
     $shouldAnswerSizeMatchSample: Boolean
   ) {
@@ -51,11 +51,11 @@ const UPDATE_QUIZ_MUTATION = gql`
       name: $name
       instructorId: $instructorId
       isScoringShown: $isScoringShown
-      image: $image
       isOrderOfAnswersImportant: $isOrderOfAnswersImportant
       shouldAnswerSizeMatchSample: $shouldAnswerSizeMatchSample
     ) {
       id
+      name
       question
       type
       complexity
@@ -73,8 +73,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       }
       goalType
       createdAt
-      name
-      image
+      instructorId
       isOrderOfAnswersImportant
       shouldAnswerSizeMatchSample
       isScoringShown
@@ -110,12 +109,10 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 });
 
 const UpdateQuiz = (props) => {
-  const { lessonID, quizId, lesson } = props;
+  const { lessonID, quizId, lesson, characters } = props;
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
   const [name, setName] = useState(props.name);
-  const [instructorId, setinstructorId] = useState(props.instructorId);
-  const [image, setImage] = useState(props.image);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
@@ -130,8 +127,8 @@ const UpdateQuiz = (props) => {
   const [isOrderOfAnswersImportant, setIsOrderOfAnswersImportant] = useState(
     props.isOrderOfAnswersImportant
   );
-  const [shouldAnswerSizeMatchSample, setShouldAnswerSizeMatchSample] =
-    useState(props.shouldAnswerSizeMatchSample);
+  // const [shouldAnswerSizeMatchSample, setShouldAnswerSizeMatchSample] =
+  //   useState(props.shouldAnswerSizeMatchSample);
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -139,6 +136,9 @@ const UpdateQuiz = (props) => {
   const [generating, setGenerating] = useState(false);
   const [checkingMode, setCheckingMode] = useState(
     props.check ? props.check : "IDEA"
+  );
+  const [instructorId, setInstructorId] = useState(
+    props.instructorId ? props.instructorId : null
   );
 
   const { t } = useTranslation("dev");
@@ -161,7 +161,6 @@ const UpdateQuiz = (props) => {
       type: type,
       instructorId: instructorId,
       name: name,
-      image: image,
       goalType: goalType,
       shouldAnswerSizeMatchSample: false,
       isOrderOfAnswersImportant: isOrderOfAnswersImportant,
@@ -605,7 +604,7 @@ const UpdateQuiz = (props) => {
           </div>
         </div>
       </Row> */}
-      <Row>
+      {/* <Row>
         <div className="description">{t("instructor_name")}</div>
         <div className="action_area">
           <input
@@ -620,6 +619,31 @@ const UpdateQuiz = (props) => {
         <div className="action_area">
           <input value={image} onChange={(e) => setImage(e.target.value)} />
           <div className="explainer"></div>
+        </div>
+      </Row> */}
+      <Row>
+        <div className="description">Instructor</div>
+        <div className="action_area">
+          <MicroSelect
+            value={instructorId}
+            onChange={(e) => {
+              let character = props.characters.find(
+                (ch) => ch.id == e.target.value
+              );
+              if (character) {
+                setInstructorId(character.id);
+              } else {
+                setInstructorId(null);
+              }
+            }}
+          >
+            <option value={"undefined"}>Lesson Manager</option>
+            {props.characters?.map((character, index) => (
+              <option key={index} value={character.id}>
+                {character.name}
+              </option>
+            ))}
+          </MicroSelect>
         </div>
       </Row>
       <Row>
@@ -690,7 +714,12 @@ const UpdateQuiz = (props) => {
                   onInput={autoResizeTextarea}
                   onLoad={(e) => autoResizeTextarea(e)}
                 />
-                <Buttons direction={"column"} gap={"5px"} margin={"0"}>
+                <Buttons
+                  width={"5%"}
+                  direction={"column"}
+                  gap={"5px"}
+                  margin={"0"}
+                >
                   <NanoButton onClick={() => removeRelatedAnswer(i)}>
                     -1
                   </NanoButton>
@@ -740,88 +769,90 @@ const UpdateQuiz = (props) => {
               </div>
             </div>
           ))}
-          <MicroButton
-            onClick={(e) => {
-              e.preventDefault();
-              if (answers.length > 0) {
-                const newAnswers = answers.slice(0, -1);
-                setAnswers(newAnswers);
-              }
-            }}
-          >
-            -1
-          </MicroButton>
-          <MicroButton
-            onClick={(e) => {
-              e.preventDefault();
-              return setAnswers([
-                ...answers,
-                {
-                  id: uuidv4(),
-                  answer: ``,
-                  next_id: "",
-                  next_type: "",
-                  index: answers.length,
-                },
-              ]);
-            }}
-          >
-            +1
-          </MicroButton>
-          {type !== "GENERATE" && type !== "FINDALL" && (
+          <Buttons margin="0 0 10px 0" gap="10px">
+            <MicroButton
+              onClick={(e) => {
+                e.preventDefault();
+                if (answers.length > 0) {
+                  const newAnswers = answers.slice(0, -1);
+                  setAnswers(newAnswers);
+                }
+              }}
+            >
+              -1
+            </MicroButton>
+            <MicroButton
+              onClick={(e) => {
+                e.preventDefault();
+                return setAnswers([
+                  ...answers,
+                  {
+                    id: uuidv4(),
+                    answer: ``,
+                    next_id: "",
+                    next_type: "",
+                    index: answers.length,
+                  },
+                ]);
+              }}
+            >
+              +1
+            </MicroButton>
+            {type !== "GENERATE" && type !== "FINDALL" && (
+              <MicroButton
+                onClick={async (e) => {
+                  e.preventDefault();
+                  setGenerating(true);
+                  await generateSemanticCloud(e);
+                  setGenerating(false);
+                }}
+              >
+                {generating ? "..." : t("generate_similar")}
+              </MicroButton>
+            )}
+            {type == "GENERATE" || type == "FINDALL" ? (
+              <MicroButton
+                onClick={async (e) => {
+                  e.preventDefault();
+                  setGenerating(true);
+                  await generateDifferentAnswers(e);
+                  setGenerating(false);
+                }}
+              >
+                {generating ? "..." : t("generate_different")}
+              </MicroButton>
+            ) : null}
+
             <MicroButton
               onClick={async (e) => {
                 e.preventDefault();
                 setGenerating(true);
-                await generateSemanticCloud(e);
+                let newAnswers = await Promise.all(
+                  answers.map(async (an) => {
+                    let new_an = { ...an }; // Make a copy of the object
+                    new_an.answer = await upgradeSampleAnswer(e, an);
+                    return new_an;
+                  })
+                );
+                setAnswers(newAnswers); // Logs the resolved values
                 setGenerating(false);
               }}
             >
-              {generating ? "..." : t("generate_similar")}
+              {generating ? "..." : t("upgrade_cloud")}
             </MicroButton>
-          )}
-          {type == "GENERATE" || type == "FINDALL" ? (
+
             <MicroButton
               onClick={async (e) => {
                 e.preventDefault();
                 setGenerating(true);
-                await generateDifferentAnswers(e);
+                const res = await extendSemanticCloud(e);
+                setAnswers(res);
                 setGenerating(false);
               }}
             >
-              {generating ? "..." : t("generate_different")}
+              {generating ? "..." : t("add_subanswers")}
             </MicroButton>
-          ) : null}
-
-          <MicroButton
-            onClick={async (e) => {
-              e.preventDefault();
-              setGenerating(true);
-              let newAnswers = await Promise.all(
-                answers.map(async (an) => {
-                  let new_an = { ...an }; // Make a copy of the object
-                  new_an.answer = await upgradeSampleAnswer(e, an);
-                  return new_an;
-                })
-              );
-              setAnswers(newAnswers); // Logs the resolved values
-              setGenerating(false);
-            }}
-          >
-            {generating ? "..." : t("upgrade_cloud")}
-          </MicroButton>
-
-          <MicroButton
-            onClick={async (e) => {
-              e.preventDefault();
-              setGenerating(true);
-              const res = await extendSemanticCloud(e);
-              setAnswers(res);
-              setGenerating(false);
-            }}
-          >
-            {generating ? "..." : t("add_subanswers")}
-          </MicroButton>
+          </Buttons>
           <div className="explainer">{t("cloud_description")}</div>
         </div>
       </Row>

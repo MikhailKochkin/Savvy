@@ -185,7 +185,7 @@ const Table = styled.table`
     border-bottom: none;
     border-right: none;
     position: relative;
-    min-width: 150px;
+    min-width: 30px;
     padding: 10px;
 
     p {
@@ -1399,6 +1399,7 @@ const App = (props) => {
               key={modalData}
               id={modalData}
               testID={modalData}
+              may_i_edit={true}
               lessonID={
                 props.lesson?.newTests.find((q) => q.id == modalData)?.lessonId
               }
@@ -1436,7 +1437,7 @@ const App = (props) => {
               }
               type={props.lesson?.newTests.find((q) => q.id == modalData)?.type}
               goalType={
-                props.lesson?.tests.find((q) => q.id == modalData)?.goalType
+                props.lesson?.newTests?.find((q) => q.id == modalData)?.goalType
               }
               me={props.me}
               length={Array(

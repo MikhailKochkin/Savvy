@@ -6,7 +6,6 @@ import { TailSpin } from "react-loader-spinner";
 import { v4 as uuidv4 } from "uuid";
 
 import {
-  IconBlock,
   Options,
   TextBar,
   Group,
@@ -18,6 +17,7 @@ import {
 
 import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 import AnswerOption from "../functions/AnswerOption";
+
 const removePTags = (str) => str.replace(/<\/?p>/g, "");
 
 const Styles = styled.div`
@@ -60,17 +60,17 @@ const Test = (props) => {
     correctAnswers,
     answerOptions,
     context,
+    characters,
   } = props;
-
   return (
     <Styles>
       <TextBar className="Test" story={story}>
         <div className="question_box">
           <div className="question_text">{parse(props.question[0])}</div>
           <IconBlockElement
-            image={image}
             instructorId={instructorId}
             author={author}
+            characters={characters}
           />
         </div>
         {/* 2 AI hints */}
@@ -81,33 +81,16 @@ const Test = (props) => {
                 <div className="question_text">
                   <p>{parse(hint)}</p>
                 </div>
-                <IconBlock>
-                  {author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}{" "}
-                  <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
-                  </div>
-                </IconBlock>
+                <IconBlockElement
+                  instructorId={instructorId}
+                  author={author}
+                  characters={characters}
+                />
               </div>
             );
           })}
         <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me &&
-                (me.image ? (
-                  <img className="icon" src={me.image} />
-                ) : me.surname ? (
-                  `${me.name[0]}${me.surname[0]}`
-                ) : (
-                  `${me.name[0]}${me.name[1]}`
-                ))}
-            </div>
-            <div className="name">{me?.name}</div>
-          </IconBlock>
+          <IconBlockElement me={me} />
           <Options>
             {mes.map((answer, index) => (
               <AnswerOption
@@ -130,9 +113,9 @@ const Test = (props) => {
           <div className="question_box">
             <div className="question_text">{t("choose_option")}</div>
             <IconBlockElement
-              image={image}
               instructorId={instructorId}
               author={author}
+              characters={characters}
             />
           </div>
         )}
@@ -185,9 +168,9 @@ const Test = (props) => {
               {ifRight && ifRight !== "<p></p>" && parse(ifRight)}{" "}
             </div>
             <IconBlockElement
-              image={image}
               instructorId={instructorId}
               author={author}
+              characters={characters}
             />
           </Question>
         )}
@@ -202,9 +185,9 @@ const Test = (props) => {
                 })}
             </div>
             <IconBlockElement
-              image={image}
               instructorId={instructorId}
               author={author}
+              characters={characters}
             />
           </Question>
         )}
@@ -214,27 +197,14 @@ const Test = (props) => {
             <div className="question_box">
               <div className="question_text">{t("show_correct")}</div>
               <IconBlockElement
-                image={image}
                 instructorId={instructorId}
                 author={author}
+                characters={characters}
               />
             </div>
 
             <div className="answer">
-              <IconBlock>
-                {/* <img className="icon" src="../../static/flash.svg" /> */}
-                <div className="icon2">
-                  {me &&
-                    (me.image ? (
-                      <img className="icon" src={me.image} />
-                    ) : me.surname ? (
-                      `${me.name[0]}${me.surname[0]}`
-                    ) : (
-                      `${me.name[0]}${me.name[1]}`
-                    ))}
-                </div>
-                <div className="name">{me?.name}</div>
-              </IconBlock>{" "}
+              <IconBlockElement me={me} />
               <OptionsGroup>
                 <Option
                   onClick={(e) => {
@@ -269,9 +239,9 @@ const Test = (props) => {
                   </ul>
                 </div>
                 <IconBlockElement
-                  image={image}
                   instructorId={instructorId}
                   author={author}
+                  characters={characters}
                 />
               </div>
             )}

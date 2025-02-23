@@ -54,30 +54,39 @@ const Styles = styled.div`
 
 const SingleTest = (props) => {
   const {
+    id,
+    lessonID,
+    question,
     story,
     ifWrong,
     ifRight,
     me,
     comments,
     author,
-    instructorId,
-    name,
-    image,
-    next,
     type,
+    context,
+    challenge,
+    problemType,
     passStudentAnswertoDocument,
     pushNextElementToProblem,
     may_i_edit,
+    characters,
+    instructorId,
   } = props;
-  const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
-  const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
-  const [answer, setAnswer] = useState([]); // what is the answer?
+
+  const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct? "right", "wrong", "think"
+  const [optionsChosenByStudentArray, setOptionsChosenByStudentArray] =
+    useState(props.length); // track currently chosn options
+  const [answer, setAnswer] = useState([]); // what is the student answer?
+  const [
+    indexesOfOptionsChosenByStudentsArray,
+    setIndexesOfOptionsChosenByStudentsArray,
+  ] = useState([]); // array with the indexes of the options chosen by the student
   const [attempts, setAttempts] = useState(0); // how many attempts to answer correctly did the student make?
-  const [answerNums, setAnswerNums] = useState([]); // what is the answer?
-  const [isExperienced, setIsExperienced] = useState(false); // has the student already given the correct answer?
-  const [inputColor, setInputColor] = useState("#f3f3f3");
-  const [update, setUpdate] = useState(false); // change quiz view to update view
-  const [sent, setSent] = useState(false);
+  const [hasCorrectAnswerBeenGiven, setHasCorrectAnswerBeenGiven] =
+    useState(false);
+  const [inputColor, setInputColor] = useState("#f3f3f3"); // the color of the borders of the bubble with the student answer
+  const [isUpdateModeOn, setIsUpdateModeOn] = useState(false); // change quiz view to update view
   const [zero, setZero] = useState(false); // zero – no answers have been provided by the student wheck clicking answer
   const [commentsList, setCommentsList] = useState([]);
   const [branchSourceId, setBranchSourceId] = useState(null);
@@ -85,6 +94,7 @@ const SingleTest = (props) => {
 
   const router = useRouter();
   const { t } = useTranslation("lesson");
+
   let correctAnswers = props.answers.filter((el, i) => props.true[i]);
 
   const [createTestResult, { data, loading, error }] = useMutation(
@@ -105,16 +115,19 @@ const SingleTest = (props) => {
 
   const handleAnswerSelected = async (number, student_answer) => {
     // 1. Create an array with true / false values to compare the answer of the student and the author
-    let answerVar = answerOptions;
+    let answerVar = optionsChosenByStudentArray;
+    console.log("answerVar", answerVar);
     // 2. Which option did the student choose?
     let int = parseInt(number);
-    if (!answerNums.includes(int)) {
-      let new_arr = [...answerNums];
+    if (!indexesOfOptionsChosenByStudentsArray.includes(int)) {
+      let new_arr = [...indexesOfOptionsChosenByStudentsArray];
       new_arr.push(int);
-      setAnswerNums(new_arr);
+      setIndexesOfOptionsChosenByStudentsArray(new_arr);
     } else {
-      let new_arr = answerNums.filter((el) => el != int);
-      setAnswerNums(new_arr);
+      let new_arr = indexesOfOptionsChosenByStudentsArray.filter(
+        (el) => el != int
+      );
+      setIndexesOfOptionsChosenByStudentsArray(new_arr);
     }
     // 3. Change the true / false value from step 1 according to the answer of the student in step 2
     answerVar[int] = !answerVar[int];
@@ -132,20 +145,22 @@ const SingleTest = (props) => {
     if (answerVar.includes(true)) {
       setZero(false);
     }
-    setAnswerOptions(answerVar);
+    setOptionsChosenByStudentArray(answerVar);
     setAnswer(answerText);
   };
 
   const handleAnswerSelectedinBranch = async (number, student_answer) => {
     // 1. Create a new array with false values
-    let newAnswerOptions = new Array(answerOptions.length).fill(false);
+    let newAnswerOptions = new Array(optionsChosenByStudentArray.length).fill(
+      false
+    );
     // 2. Which option did the student choose?
     let int = parseInt(number);
 
     // 3. Set the chosen option to true
     newAnswerOptions[int] = true;
 
-    // 4. Update answerNums to include only the chosen option
+    // 4. Update indexesOfOptionsChosenByStudentsArray to include only the chosen option
     let newAnswerNums = [int];
 
     // 5. Get the array of all the answers of the student
@@ -155,16 +170,18 @@ const SingleTest = (props) => {
     setZero(false);
 
     // 7. Update the state with the new answer options, answer text, and answer numbers
-    setAnswerOptions(newAnswerOptions);
+    setOptionsChosenByStudentArray(newAnswerOptions);
     setAnswer(newAnswerText);
-    setAnswerNums(newAnswerNums);
+    setIndexesOfOptionsChosenByStudentsArray(newAnswerNums);
   };
 
   // this function adds comments to test options after the student has given an answer
-  const addComments = (answerNums) => {
+  const addComments = (indexesOfOptionsChosenByStudentsArray) => {
     let comments_arr = [];
     if (comments && comments.length > 0) {
-      answerNums.map((num) => comments_arr.push(comments[num]));
+      indexesOfOptionsChosenByStudentsArray.map((num) =>
+        comments_arr.push(comments[num])
+      );
     }
     setCommentsList(comments_arr);
   };
@@ -177,7 +194,8 @@ const SingleTest = (props) => {
       pushNextElementToProblem([true, nextStep], "form");
     }
 
-    addComments(answerNums);
+    addComments(indexesOfOptionsChosenByStudentsArray);
+    setAnswerState("right");
     createTestResult({
       variables: {
         testID: props.id,
@@ -221,7 +239,7 @@ const SingleTest = (props) => {
       ? pushNextElementToProblem([true, branchSourceId], "branch")
       : null;
 
-    addComments(answerNums);
+    addComments(indexesOfOptionsChosenByStudentsArray);
     createTestResult({
       variables: {
         testID: props.id,
@@ -238,13 +256,14 @@ const SingleTest = (props) => {
     if (props.moveNext) props.moveNext(props.id);
 
     // Check if no answers are selected
-    if (answerOptions.every((el) => el === false)) {
+    if (optionsChosenByStudentArray.every((el) => el === false)) {
       setZero(true);
       return;
     }
 
     const isCorrect =
-      JSON.stringify(answerOptions) === JSON.stringify(props.true);
+      JSON.stringify(optionsChosenByStudentArray) ===
+      JSON.stringify(props.true);
     const result = isCorrect ? "true" : "false";
     const inputColor = isCorrect
       ? "rgba(50, 172, 102, 0.25)"
@@ -258,12 +277,15 @@ const SingleTest = (props) => {
     setInputColor(inputColor);
 
     // Handle data submission for the first attempt
-    if (pushNextElementToProblem && (!isExperienced || attempts === 0)) {
+    if (
+      pushNextElementToProblem &&
+      (!hasCorrectAnswerBeenGiven || attempts === 0)
+    ) {
       pushNextElementToProblem(nextData, "test");
     }
     // Save the result if not already experienced
-    if (!isExperienced) {
-      setIsExperienced(true);
+    if (!hasCorrectAnswerBeenGiven) {
+      setHasCorrectAnswerBeenGiven(true);
       createTestResult({
         variables: {
           testID: props.id,
@@ -276,9 +298,8 @@ const SingleTest = (props) => {
     }
 
     // Additional actions
-    addComments(answerNums);
+    addComments(indexesOfOptionsChosenByStudentsArray);
     if (props.problemType !== "ONLY_CORRECT") setAttempts(attempts + 1);
-    setSent(true);
     const firstCorrect = mes.find((el) => el[1] === true);
     if (isCorrect && passStudentAnswertoDocument) {
       passStudentAnswertoDocument(firstCorrect ? firstCorrect[0] : "");
@@ -310,13 +331,12 @@ const SingleTest = (props) => {
   };
 
   const switchUpdate = () => {
-    setUpdate(!update);
+    setIsUpdateModeOn(!isUpdateModeOn);
   };
 
   const getResult = (data) => {
-    props.getResult(data);
+    props.getResult ? props.getResult(data) : null;
   };
-  console.log("props", props);
   let mes;
   if (type == "BRANCH" && props.complexTestAnswers) {
     mes = _.zip(
@@ -341,12 +361,46 @@ const SingleTest = (props) => {
     width = "100%";
   }
 
+  // Define a common set of props for the TEST component
+  const commonTestProps = {
+    id,
+    lessonID,
+    instructorId,
+    story,
+    me,
+    author,
+    question, // props.question
+    true: props.true, // correctness
+    type,
+    problemType,
+    answerState,
+    challenge,
+    next,
+    characters,
+    mes,
+    getTestData,
+    zero,
+    passTestData,
+    inputColor,
+    commentsList,
+    ifRight,
+    ifWrong,
+    correctAnswers,
+    optionsChosenByStudentArray,
+    context,
+    answerOptions: optionsChosenByStudentArray,
+
+    getData: pushNextElementToProblem,
+    revealCorrectAnswer,
+    provideHint,
+  };
+
   return (
     <Styles width={width} id={props.id}>
       {may_i_edit && (
         <Buttons gap="10px" margin="0 0 20px 0">
-          <SecondaryButton onClick={(e) => setUpdate(!update)}>
-            {!update ? t("update") : t("back")}
+          <SecondaryButton onClick={(e) => setIsUpdateModeOn(!isUpdateModeOn)}>
+            {!isUpdateModeOn ? t("update") : t("back")}
           </SecondaryButton>
           <DeleteSingleTest
             id={me.id}
@@ -355,125 +409,18 @@ const SingleTest = (props) => {
           />
         </Buttons>
       )}
-      {!update && me && (
+      {!isUpdateModeOn && me && (
         <>
-          {(type == "TEST" || type == null) && (
-            <Test
-              story={story}
-              me={me}
-              image={image}
-              instructorId={instructorId}
-              author={author}
-              question={props.question}
-              true={props.true}
-              type={type}
-              answerState={answerState}
-              challenge={props.challenge}
-              problemType={props.problemType}
-              getData={pushNextElementToProblem}
-              next={props.next}
-              id={props.id}
-              lessonID={props.lessonID}
-              mes={mes}
-              getTestData={getTestData}
-              zero={zero}
-              passTestData={passTestData}
-              inputColor={inputColor}
-              commentsList={commentsList}
-              ifRight={ifRight}
-              ifWrong={ifWrong}
-              revealCorrectAnswer={revealCorrectAnswer}
-              correctAnswers={correctAnswers}
-              answerOptions={answerOptions}
-              context={props.context}
-              provideHint={provideHint}
-            />
-          )}
-          {type == "FORM" && (
-            <Form
-              story={story}
-              me={me}
-              image={image}
-              instructorId={instructorId}
-              author={author}
-              question={props.question}
-              true={props.true}
-              type={type}
-              answerState={answerState}
-              challenge={props.challenge}
-              problemType={props.problemType}
-              getData={pushNextElementToProblem}
-              next={props.next}
-              id={props.id}
-              lessonID={props.lessonID}
-              mes={mes}
-              getTestData={getTestData}
-              passTestData={passTestData}
-              zero={zero}
-              commentsList={commentsList}
-              answerOptions={answerOptions}
-            />
-          )}
-          {type == "BRANCH" && (
-            <Branch
-              story={story}
-              me={me}
-              image={image}
-              instructorId={instructorId}
-              author={author}
-              question={props.question}
-              true={props.true}
-              type={type}
-              answerState={answerState}
-              challenge={props.challenge}
-              problemType={props.problemType}
-              getData={pushNextElementToProblem}
-              next={props.next}
-              id={props.id}
-              lessonID={props.lessonID}
-              mes={mes}
-              getTestData={getTestData}
-              passTestData={passTestData}
-              zero={zero}
-              commentsList={commentsList}
-              answerOptions={answerOptions}
-            />
-          )}
-          {type == "MINI" && (
-            <MiniTest
-              story={story}
-              me={me}
-              image={image}
-              instructorId={instructorId}
-              author={author}
-              question={props.question}
-              true={props.true}
-              type={type}
-              answerState={answerState}
-              challenge={props.challenge}
-              problemType={props.problemType}
-              getData={pushNextElementToProblem}
-              next={props.next}
-              id={props.id}
-              lessonID={props.lessonID}
-              mes={mes}
-              getTestData={getTestData}
-              zero={zero}
-              passTestData={passTestData}
-              inputColor={inputColor}
-              commentsList={commentsList}
-              ifRight={ifRight}
-              ifWrong={ifWrong}
-              revealCorrectAnswer={revealCorrectAnswer}
-              correctAnswers={correctAnswers}
-              answerOptions={answerOptions}
-              context={props.context}
-              provideHint={provideHint}
-            />
-          )}
+          {(type === "TEST" || type == null) && <Test {...commonTestProps} />}
+
+          {type === "FORM" && <Form {...commonTestProps} />}
+
+          {type === "BRANCH" && <Branch {...commonTestProps} />}
+
+          {type === "MINI" && <MiniTest {...commonTestProps} />}
         </>
       )}
-      {update && (
+      {isUpdateModeOn && (
         <UpdateTest
           testID={props.id}
           lessonID={props.lessonID}
@@ -487,6 +434,8 @@ const SingleTest = (props) => {
           name={props.name}
           image={props.image}
           mes={mes}
+          characters={characters}
+          instructorId={instructorId}
           type={type}
           next={props.next}
           goal={props.goal}

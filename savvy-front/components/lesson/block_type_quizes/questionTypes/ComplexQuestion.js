@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import { useRouter } from "next/router";
 import parse from "html-react-parser";
 import { InfinitySpin } from "react-loader-spinner";
 import { useTranslation } from "next-i18next";
 import smoothscroll from "smoothscroll-polyfill";
+
 import {
   removeSpecialChars,
   autoResizeTextarea,
 } from "../../SimulatorDevelopmentFunctions";
-
+import IconBlockElement from "../../styles/commonElements/IconBlockElement";
 import {
   Question,
-  IconBlock,
   Button1,
   ResultCircle,
 } from "../../styles/commonElements/QuestionStyles";
@@ -191,7 +190,8 @@ const Answer_text = styled.textarea`
 `;
 
 const ComplexQuestion = (props) => {
-  const { author, me, story, passQuizDataToParent } = props;
+  const { author, me, story, passQuizDataToParent, instructorId, characters } =
+    props;
   const [ideas, setIdeas] = useState([""]); // ideas provided by the student
   const [correctIdeas, setCorrectIdeas] = useState([]); // ideas that match the correct answers
   const [overallResults, setOverallResults] = useState(null); // results of checking the ideas
@@ -532,32 +532,16 @@ const ComplexQuestion = (props) => {
       {/* 2.1 Question part */}
       <div className="question_box">
         <div className="question_text">{parse(props.question)}</div>
-        <IconBlock>
-          {author && author.image != null ? (
-            <img className="icon" src={author.image} />
-          ) : (
-            <img className="icon" src="../../static/hipster.svg" />
-          )}{" "}
-          <div className="name">
-            {author && author.name ? author.name : "BeSavvy"}
-          </div>
-        </IconBlock>{" "}
+        <IconBlockElement
+          instructorId={instructorId}
+          author={author}
+          characters={characters}
+        />
       </div>
       {/* 3.5. Generate ideas */}
       <>
         <div className="answer">
-          <IconBlock>
-            <div className="icon2">
-              {me && me.image ? (
-                <img className="icon" src={me.image} />
-              ) : me.surname ? (
-                `${me.name[0]}${me.surname[0]}`
-              ) : (
-                `${me.name[0]}${me.name[1]}`
-              )}
-            </div>{" "}
-            <div className="name">{me.name}</div>
-          </IconBlock>{" "}
+          <IconBlockElement me={me} />
           <Ideas>
             <HeadAnswerRow>
               <div id="your_answers">Your answer</div>
@@ -669,18 +653,7 @@ const ComplexQuestion = (props) => {
         {isFeedbackShown && (
           <>
             <div className="answer">
-              <IconBlock>
-                <div className="icon2">
-                  {me && me.image ? (
-                    <img className="icon" src={me.image} />
-                  ) : me.surname ? (
-                    `${me.name[0]}${me.surname[0]}`
-                  ) : (
-                    `${me.name[0]}${me.name[1]}`
-                  )}
-                </div>{" "}
-                <div className="name">{me.name}</div>
-              </IconBlock>
+              <IconBlockElement me={me} />
               <OptionsGroup>
                 <Option
                   onClick={(e) => {
@@ -690,9 +663,10 @@ const ComplexQuestion = (props) => {
                         quiz: props.quizId,
                         lessonId: props.lessonId,
                         ideasList: {
-                          quizIdeas: overallResults.map(
-                            ({ index, ...rest }) => rest
-                          ),
+                          quizIdeas: overallResults.map((idea) => ({
+                            ...idea,
+                            result: idea.result.toString(),
+                          })),
                         },
                         // comment: `Student opened correct answer`,
                         type: "answerReveal",
@@ -718,16 +692,11 @@ const ComplexQuestion = (props) => {
                 <p>{removeSpecialChars(idea.answer)}</p>
               ))}
             </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
+            <IconBlockElement
+              instructorId={instructorId}
+              author={author}
+              characters={characters}
+            />
           </div>
         )}
       </>

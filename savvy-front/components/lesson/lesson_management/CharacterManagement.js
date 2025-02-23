@@ -101,7 +101,6 @@ const CharacterManagement = (props) => {
     })
       .then((result) => {
         // Handle successful character creation
-        console.log("Character created:", result.data.createCharacter);
         passUpdatedCharacters(result.data.createCharacter);
         setName("");
         setDescription("");

@@ -65,7 +65,7 @@ const Note = (props) => {
     name,
     complexity,
     id,
-    miniforum,
+    characters,
     pushNextElementToProblem,
     lessonID,
     isFinal,
@@ -130,7 +130,8 @@ const Note = (props) => {
           vertical_image={note?.vertical_image}
           horizontal_image={note?.horizontal_image}
           name={name}
-          instructorId={note?.instructorId}
+          instructorId={instructorId}
+          characters={characters}
           lessonID={lessonID}
           getResult={handleGetResult}
           switchUpdate={toggleUpdate}
@@ -157,7 +158,6 @@ const Note = (props) => {
               total={total}
             />
           )}
-
           {/* Email Type */}
           {note?.type?.toLowerCase() === "email" && (
             <Email
@@ -166,6 +166,7 @@ const Note = (props) => {
               id={id}
               name={name}
               instructorId={instructorId}
+              characters={characters}
               getData={pushNextElementToProblem}
               isFinal={isFinal}
               problem={problem}
